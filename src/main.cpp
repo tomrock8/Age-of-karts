@@ -102,8 +102,12 @@ int main(){
 
     // Delta time
 //	u32 antes = device->getTimer()->getTime();
-    
-	
+    //---------------------//
+	//---CAMARA INICIAL----//
+	//---------------------//
+	 	vector3df cuboPos = pj1.getPosition(); 
+    	vector3df camPos( pj1.getPosition().X,  pj1.getPosition().Y + 10,  pj1.getPosition().Z - 25); 
+    	smgr->addCameraSceneNode(0, camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion 
     // -----------------------------
     //  GAME LOOP
     // -----------------------------
@@ -129,26 +133,20 @@ int main(){
            // const u32 ahora = device->getTimer()->getTime();
            // const f32 delta = (f32)(ahora - antes) / 1000.f;
 	
-			//---------------------//
-			//---CAMARA INICIAL----//
-			//---------------------//
-			 vector3df cuboPos = pj1.getPosition(); 
-    		 vector3df camPos( pj1.getPosition().X,  pj1.getPosition().Y + 10,  pj1.getPosition().Z - 25); 
-    		 smgr->addCameraSceneNode(0, camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion 
+		
+			
 			
 
             //variable para identificar el movimiento (activo o no)
             int checkMov=0;
-            //-------ENTRADA TECLADO INI----------//
+            //-------ENTRADA TECLADO ----------//
 			if(teclado.isKeyDown(KEY_ESCAPE)) {
 				device->closeDevice();
 				return 0;
 			} else if(teclado.isKeyDown(KEY_KEY_D)  ){
-				//checkMov=1;
-				//cuboPos.X+=4;
+				pj1.girarDerecha();
 			} else if(teclado.isKeyDown(KEY_KEY_A) ){
-                //checkMov=2;
-				//cuboPos.X-=4;
+                pj1.girarIzquierda();
 			}else if(teclado.isKeyDown(KEY_KEY_S)){
 				pj1.frenar();
 			}else if(teclado.isKeyDown(KEY_KEY_W)){
@@ -160,7 +158,7 @@ int main(){
 			//cuboNodo->setPosition(cuboPos);
 			//-------ENTRADA TECLADO FIN----------//
 			//-----------------------------//
-			// Movimiento de la camara     //
+			// MOVIMIENTO DE LA CAMARA     //
 			//---------------------------- //
             cuboPos = pj1.getPosition(); 
             camPos.X = pj1.getPosition().X; 
@@ -176,23 +174,9 @@ int main(){
 
 			driver->endScene();	
 
-			//-------RENDER FIN---------//
-			// Calcular los fps
-          //  int fpsAhora = driver->getFPS();
-          //  if (fpsAntes != fpsAhora)
-          //  {
-          //      
-          //      text += "] FPS: ";
-          //      text += fpsAhora;
-          //      text += " *TIMER: Antes: ";
-          //      text += antes;
-          //      text += " - Ahora: ";
-          //      text += ahora;
-//
-                device->setWindowCaption(text.c_str());
-          //      fpsAntes = fpsAhora;
-          //  }
-          //  antes = ahora;
+			//-----MOSTRAR VELOCIDAD Y POSICION EN VENTANA
+            device->setWindowCaption(text.c_str());
+
 			
 		} else{
 			device->yield();

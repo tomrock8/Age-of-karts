@@ -4,10 +4,10 @@
 
 
 corredor::corredor(ISceneManager* smgr, stringw rutaObj){
-     aZ        = 0.1; 		//aceleracion eje Z
-	 aZInversa = 0.05;	    //marcha atras
-	 Afrenado  = 0.3;		//aceleracion eje X
-	 t         = 0.5; 			//Tiempo 
+     aZ        = 0.1; 		     //aceleracion eje Z
+	 aZInversa = 0.15;	         //marcha atras
+	 Afrenado  = 0.15;		     //aceleracion eje X
+	 t         = 0.5; 			 //Tiempo 
 	 vIni      = 0;
 	 xIni 	   = 0;
 	 v 		   = 0;
@@ -61,18 +61,31 @@ float corredor::getEspacio(){
 //-----------------------\* 
  void corredor::acelerar(){
         //v=v0+a⋅t
-		//cout<<"velocidad marcha adelante: "<<v<<"  "<<endl;
+        //cout<<"velocidad marcha adelante: "<<v<<"  "<<endl;
+    
+
+   
 		if(v< 5){
 			v = vIni+aZ*t;
 		}
 		x = movimiento(xIni,vIni,aZ,t);
 		atras    = false;
         adelante = true;
-        //cuboPos.Z =x;
+       
     } 
+     
 
  void corredor::frenar(){
-    cout<<"velocidad marcha atras: "<<v<<"  "<<endl;
+     if(adelante ==true){
+         x = movimiento(xIni,vIni,-Afrenado,t); 
+         if(v>-2.5f){//Controla que no pase de 2.5 de velocidad en marcha atras cuando se frena
+			v = vIni - Afrenado*t;
+			//	v = v -0.3;
+		}
+         //v = vIni -Afrenado*t;
+     }
+     else{
+        cout<<"velocidad marcha atras: "<<v<<"  "<<endl;
 		atras    = true;
 		adelante = false;
 		if(v<2.5f){
@@ -80,22 +93,35 @@ float corredor::getEspacio(){
 			//	v = v -0.3;
 		}
 		x = movimiento(xIni,-vIni,aZInversa,t);
-		//cuboPos.Z =x;
+     }   
+    
+		
 					
-    }
+}
+void corredor::girarDerecha(){
+    vector3df rotation =  vector3df(0,15.0,0); 
+    cuboNodo->setRotation(rotation);
+}
+
+void corredor::girarIzquierda(){
+    vector3df rotation =  vector3df(0,-15.0,0); 
+    cuboNodo->setRotation(rotation);
+}
 void corredor::desacelerar(){
     //desaceleracion
 	//X = Xi + Vi . t - 1/2 . a . t² 
 	//V = Vi - a . t
 	if(v >0){
 		if(atras){
-			x = movimiento(xIni,-vIni,-aZ,t);
+			x = movimiento(xIni,-vIni,-aZInversa,t);
 		}
 		if(adelante){
-			x = movimiento(xIni,vIni,-aZ,t);						
+			x = movimiento(xIni,vIni,-aZInversa,t);						
 		}
-		v = vIni -aZ*t;
-		cuboPos.Z =x;
+        v = vIni -aZInversa*t;
+        vector3df rotation =  vector3df(0,0,0); 
+        cuboNodo->setRotation(rotation);
+		
     }
 }
  void corredor::escalar(float tam){

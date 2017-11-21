@@ -3,28 +3,29 @@
 //proyecto 3. Cargar modelo de mapa
 #include "irrlichtlib.hpp"
 #include "CTeclado.cpp"
+#include "corredor.h"
 #include <iostream>
 
 using namespace std;
 
-float movimiento(float pos,float vel,float accel,f32 delta){
-    pos = pos+vel*delta+(0.5*accel*(exp2(delta)));    //donde el 0 es la velocidad inicial
-    return pos;
-}
+//float movimiento(float pos,float vel,float accel,f32 delta){
+//    pos = pos+vel*delta+(0.5*accel*(exp2(delta)));    //donde el 0 es la velocidad inicial
+//    return pos;
+//}
 int main(){
     // -----------------------------
     //  VARIABLES COCHE
     // -----------------------------
-	float aZ        = 0.1; 		//aceleracion eje Z
-	float aZInversa = 0.05;	    //marcha atras
-	float Afrenado  = 0;		//aceleracion eje X
+	//float aZ        = 0.01; 		//aceleracion eje Z
+	//float aZInversa = 0.005;	    //marcha atras
+	//float Afrenado  = 0.03;		//aceleracion eje X
 	//float t         = 0.5; 			//Tiempo 
-	float vIni      = 0;
-	float xIni 		= 0;
-	float v 		= 0;
-	float x 		= 0;
-	bool back  		= false;
-	bool front 		= false;
+	//float vIni      = 0;
+	//float xIni 		= 0;
+	//float v 		= 0;
+	//float x 		= 0;
+	//bool back  		= false;
+	//bool front 		= false;
 	/*float fuerza=0;
 	float fuerza_frenado=0;
     float fuerzamax=150;
@@ -47,20 +48,24 @@ int main(){
 	
 
     // -----------------------------
-    //  GEOMETRIA CUBO
+    //  GEOMETRIA COCHE
     // -----------------------------
-
-	// Cargar modelo cubo
-	IMeshSceneNode *cuboNodo = smgr->addCubeSceneNode(10); // Anyadir directamente cubo a la escena de 5x5x5
-	// Cambiar a color rojo el cubo
-	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(),SColor(255,255,0,0));
-	
-		
-	// Desactivar la iluminacion del cubo
-	if(cuboNodo){
-		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-		cuboNodo->setPosition(vector3df(0,20,0));
-	}
+	corredor pj1(smgr, "sources/coche.obj");
+	pj1.escalar(5.0f);
+	//IMesh* coche = smgr->getMesh("sources/coche.obj");
+	//IMeshSceneNode *cuboNodo = smgr->addMeshSceneNode(coche);
+	////cambiar a color rojo del coche
+	//smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(),SColor(255,255,0,0));
+//
+	////escalar objeto
+	//core::vector3d<f32> factorEscalate(5,5,5);
+	//cuboNodo->setScale(factorEscalate);
+	//	
+	//// Desactivar la iluminacion del cubo
+	//if(cuboNodo){
+	//	cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
+	//	cuboNodo->setPosition(vector3df(0,20,0));
+	//}
 
     // -----------------------------
     //  IMPORTAR MALLA (MAPA)
@@ -86,37 +91,17 @@ int main(){
 	smgr->getMeshManipulator()->setVertexColors(mapaNodo->getMesh(),SColor(255,232,128,0));
 	if(mapaNodo){
         mapaNodo->setMaterialFlag(EMF_LIGHTING,false); // Desactivar iluminacion
-        mapaNodo->setPosition(vector3df(0,10,0));
+        mapaNodo->setPosition(vector3df(0,-20,-30));
 	}
 	
 
 
-	//------------mapa quake 3 -------------
-//
-//	device->getFileSystem()->addFileArchive("../media/map-20kdm2.pk3");
-//	
-//	//cargar mapa  QUAKE 3
-//	scene::IAnimatedMesh* mapa = smgr->getMesh("20kdm2.bsp");
-//	scene::ISceneNode* node = 0;
-//
-//	if(mapa) node = smgr->addOctreeSceneNode(mapa->getMesh(0),0,-1,1024);
-//	if(node) node->setPosition(core::vector3df(-1300,-144,-1249));
-//
-	//------------mapa quake 3 -------------
-
-
-	//camara
-	//vector3df cubop = cuboNodo->getPosition();
-
-	//camara para el mapa
-	//smgr->addCameraSceneNodeFPS();//camara que se mueve como si de un counter se tratase(magia)
-	//device->getCursorControl()->setVisible(false);//ocultar el cursor
-
+	
     // FPS
-    int fpsAntes = -1;
+  //  int fpsAntes = -1;
 
     // Delta time
-	u32 antes = device->getTimer()->getTime();
+//	u32 antes = device->getTimer()->getTime();
     
 	
     // -----------------------------
@@ -125,25 +110,32 @@ int main(){
 	while(device->run()){
 		
 	    if(device->isWindowActive()){
-			vIni = v;
-			xIni = x;
+			pj1.setVelocidad();
+			pj1.setEspacio();
+			//vIni = v;
+			//xIni = x;
 			
             //Mostrar la Posicion y Velocidad actuales.
             stringw text = L"Age Of Karts - ";
             
 			text = L"Velocidad v [";
-            text += v;
+            text += pj1.getVelocidad();
             text +="] posicion X: ";
-            text += x;
+            text += pj1.getEspacio();
 			
         
-			vector3df cuboPos =  cuboNodo->getPosition();
+			//vector3df cuboPos =  cuboNodo->getPosition();
             //Actualizar el valor del delta time
-            const u32 ahora = device->getTimer()->getTime();
-            const f32 delta = (f32)(ahora - antes) / 1000.f;
-
-			smgr->addCameraSceneNode(0,vector3df(cuboPos.X,cuboPos.Y+10, cuboPos.Z-25),cuboNodo->getPosition());//3 parametros =  nodopadre, posicion, direccion
-			//smgr->addCameraSceneNodeFPS(0);//camara que se mueve como si de un counter se tratase(magia)
+           // const u32 ahora = device->getTimer()->getTime();
+           // const f32 delta = (f32)(ahora - antes) / 1000.f;
+	
+			//---------------------//
+			//---CAMARA INICIAL----//
+			//---------------------//
+			 vector3df cuboPos = pj1.getPosition(); 
+    		 vector3df camPos( pj1.getPosition().X,  pj1.getPosition().Y + 10,  pj1.getPosition().Z - 25); 
+    		 smgr->addCameraSceneNode(0, camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion 
+			
 
             //variable para identificar el movimiento (activo o no)
             int checkMov=0;
@@ -152,55 +144,31 @@ int main(){
 				device->closeDevice();
 				return 0;
 			} else if(teclado.isKeyDown(KEY_KEY_D)  ){
-				checkMov=1;
-				cuboPos.X+=4;
+				//checkMov=1;
+				//cuboPos.X+=4;
 			} else if(teclado.isKeyDown(KEY_KEY_A) ){
-                checkMov=2;
-				cuboPos.X-=4;
-			}else if(teclado.isKeyDown(KEY_KEY_S)){//esto no esta bien
-				
-				if(v<2.5f){
-					v = vIni+aZInversa*delta;
-				}
-				x = movimiento(xIni,-vIni,aZInversa,delta);
-	
-				cuboPos.Z =x;
-				back = true;
-				front = false;		
+                //checkMov=2;
+				//cuboPos.X-=4;
+			}else if(teclado.isKeyDown(KEY_KEY_S)){
+				pj1.frenar();
 			}else if(teclado.isKeyDown(KEY_KEY_W)){
-				//v=v0+a⋅t
-				if(v< 5){
-					v = vIni+aZ*delta;
-				}
-				x = movimiento(xIni,vIni,aZ,delta);
-				cuboPos.Z =x;
-				back  = false;
-				front = true;
-			}else if(teclado.isKeyDown(KEY_SPACE)){
-				
-				v = vIni-Afrenado*delta;
-				x = movimiento(xIni,vIni,Afrenado,delta);
-				cuboPos.Z =x;
-				
-			}else{//desaceleracion
-				//X = Xi + Vi . t - 1/2 . a . t² 
-				//V = Vi - a . t
-				if(v >0){
-					if(back){
-						x = movimiento(xIni,-vIni,-aZ,delta);
-					}
-					if(front){
-						x = movimiento(xIni,vIni,-aZ,delta);						
-					}
-					v = vIni -aZ*delta;
-					cuboPos.Z =x;
-				}
-			
-
-
+				pj1.acelerar();
+			}else{
+				pj1.desacelerar();
 			}
-			cuboNodo->setPosition(cuboPos);
+			pj1.actualizarPos();
+			//cuboNodo->setPosition(cuboPos);
 			//-------ENTRADA TECLADO FIN----------//
+			//-----------------------------//
+			// Movimiento de la camara     //
+			//---------------------------- //
+            cuboPos = pj1.getPosition(); 
+            camPos.X = pj1.getPosition().X; 
+            camPos.Y = pj1.getPosition().Y + 10; 
+            camPos.Z = pj1.getPosition().Z - 25; 
+ 
+            smgr->getActiveCamera()->setPosition(camPos); 
+            smgr->getActiveCamera()->setTarget(cuboPos); 
 			//-------RENDER INI---------//
 			driver->beginScene(true,true,SColor(255,200,200,200));
 			smgr->drawAll();
@@ -210,21 +178,21 @@ int main(){
 
 			//-------RENDER FIN---------//
 			// Calcular los fps
-            int fpsAhora = driver->getFPS();
-            if (fpsAntes != fpsAhora)
-            {
-                
-                text += "] FPS: ";
-                text += fpsAhora;
-                text += " *TIMER: Antes: ";
-                text += antes;
-                text += " - Ahora: ";
-                text += ahora;
-
+          //  int fpsAhora = driver->getFPS();
+          //  if (fpsAntes != fpsAhora)
+          //  {
+          //      
+          //      text += "] FPS: ";
+          //      text += fpsAhora;
+          //      text += " *TIMER: Antes: ";
+          //      text += antes;
+          //      text += " - Ahora: ";
+          //      text += ahora;
+//
                 device->setWindowCaption(text.c_str());
-                fpsAntes = fpsAhora;
-            }
-            antes = ahora;
+          //      fpsAntes = fpsAhora;
+          //  }
+          //  antes = ahora;
 			
 		} else{
 			device->yield();

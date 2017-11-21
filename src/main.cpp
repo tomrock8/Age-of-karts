@@ -16,16 +16,16 @@ using namespace gui;		//Interfaz de usuario
 #include "Teclado.h"
 
 int main(){
-	float aZ = 0.1; 		//aceleracion eje Z
-	float aZInversa = 0.05;	//marcha atras
-	float aX = 0.15;		//aceleracion eje X
-	float t = 0.5; 			//Tiempo 
-	float vIni = 0;
-	float xIni = 0;
-	float v = 0;
-	float x = 0;
-	bool back = false;
-	bool front = false;
+	float aZ        = 0.01; 		//aceleracion eje Z
+	float aZInversa = 0.005;	    //marcha atras
+	float Afrenado  = 0;		//aceleracion eje X
+	float t         = 0.5; 			//Tiempo 
+	float vIni      = 0;
+	float xIni 		= 0;
+	float v 		= 0;
+	float x 		= 0;
+	bool back  		= false;
+	bool front 		= false;
 	//x = xIni + VIni*t + 1/2*a*t*t
 	//v=v0+a⋅t
 	Teclado teclado; 
@@ -38,8 +38,8 @@ int main(){
 										  &teclado);
 	if(!device) return 1;
 	
-	IVideoDriver* driver   =  device->getVideoDriver();
-	ISceneManager* smgr    =  device->getSceneManager();
+	IVideoDriver* driver    =  device->getVideoDriver();
+	ISceneManager* smgr     =  device->getSceneManager();
 	IGUIEnvironment* guienv =  device->getGUIEnvironment();
 	
 	//cargar modelo cubo
@@ -67,7 +67,7 @@ int main(){
 	}
 	IMeshSceneNode *mapaNodo = smgr->addMeshSceneNode(mapa);
 
-	smgr->getMeshManipulator()->setVertexColors(mapaNodo->getMesh(),SColor(255,0,0,0));
+	smgr->getMeshManipulator()->setVertexColors(mapaNodo->getMesh(),SColor(255,232,128,0));
 	if(mapaNodo){
 			 mapaNodo->setMaterialFlag(EMF_LIGHTING,false);//desactivar iluminacion
 			 mapaNodo->setPosition(vector3df(0,10,0));
@@ -100,7 +100,7 @@ int main(){
 	//smgr->addCameraSceneNodeFPS();//camara que se mueve como si de un counter se tratase(magia)
 	//device->getCursorControl()->setVisible(false);//ocultar el cursor
 
-	int lastFPS = -1; //quak3
+	
 	stringw text = "";
 
             
@@ -126,34 +126,39 @@ int main(){
 			if(teclado.isKeyDown(KEY_ESCAPE)) {
 				device->closeDevice();
 				return 0;
-			} else if(teclado.isKeyDown(KEY_KEY_D) && teclado.isKeyDown(KEY_KEY_W) ){
-				v = vIni+aZ*t;
-				x = xIni + vIni*t + 1/2*aZ*t*t;
-				cuboPos.Z =x;
-				v = vIni+aX*t;
-				x = xIni + vIni*t + 1/2*aX*t*t;
-				cuboPos.X = x;
-			} else if(teclado.isKeyDown(KEY_KEY_A)&& teclado.isKeyDown(KEY_KEY_W) ){
-				v = vIni+aZ*t;
-				x = xIni + vIni*t + 1/2*aZ*t*t;
-				cuboPos.Z =x;
-				v = vIni+aX*t;
-				x = xIni + vIni*t + 1/2*aX*t*t;
-				cuboPos.X = -x;
+			} else if(teclado.isKeyDown(KEY_KEY_D)  ){
+				
+				cuboPos.X +=4;
+			} else if(teclado.isKeyDown(KEY_KEY_A) ){
+			
+				cuboPos.X -= 4;
 			}else if(teclado.isKeyDown(KEY_KEY_S)){//esto no esta bien
-				v = vIni+aZInversa*t;
+				
+				if(v<2.5f){
+					v = vIni+aZInversa*t;
+				}
 				x =  xIni - v*t + 1/2*aZInversa*t*t;
 				cuboPos.Z =x;
 				back = true;
 				front = false;		
 			}else if(teclado.isKeyDown(KEY_KEY_W)){
 				//v=v0+a⋅t
-				v = vIni+aZ*t;
-				x = xIni + v *t + 1/2*aZ*t*t;
+				if(v< 5){
+					v = vIni+aZ*t;
+				}
+				
+				x = xIni + vIni *t + 1/2*aZ*t*t;
 				cuboPos.Z =x;
 				back  = false;
 				front = true;
-			}else{//desaceleracion
+			}else if(teclado.isKeyDown(KEY_SPACE)){
+				
+				v = vIni-Afrenado*t;
+				x = xIni + vIni *t + 1/2*Afrenado*t*t;
+				cuboPos.Z =x;
+				
+			}
+			else{//desaceleracion
 				//X = Xi + Vi . t - 1/2 . a . t² 
 				//V = Vi - a . t
 				if(v >0){
@@ -184,20 +189,7 @@ int main(){
 
 			//-------RENDER FIN---------//
 				
-			//------MOSTRAR MAPA INICIO----------//
-			int fps = driver->getFPS();
-				
-			if(lastFPS !=fps){
-				core::stringw str = L"Proyecto3 irrlicht - Carga mapa QUAKE3 [";
-				str += driver->getName();
-				str += "] FPS: ";
-				str += fps;
-
-				device->setWindowCaption(str.c_str());
-				lastFPS = fps;
-			}
 			
-			//-------MOSTRAR MAPA FIN----------//
 		} else{
 			device->yield();
 		}

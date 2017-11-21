@@ -1,80 +1,94 @@
 
 //proyecto 1. Cargar cubo y mover 
 //proyecto 3. Cargar modelo de mapa
-
-#include <irrlicht.h>
+#include "irrlichtlib.hpp"
+#include "CTeclado.cpp"
 #include <iostream>
+
 using namespace std;
-using namespace irr;
 
-using namespace core;		//proposito general
-using namespace scene;		//Escena 3D
-using namespace video;		//Driver y rendering
-using namespace io;			//Ficheros
-using namespace gui;		//Interfaz de usuario
-
-#include "Teclado.h"
-
+float movimiento(float pos,float vel,float accel,f32 delta){
+    pos = pos+vel*delta+(0.5*accel*(exp2(delta)));    //donde el 0 es la velocidad inicial
+    return pos;
+}
 int main(){
-	float aZ        = 0.01; 		//aceleracion eje Z
-	float aZInversa = 0.005;	    //marcha atras
+    // -----------------------------
+    //  VARIABLES COCHE
+    // -----------------------------
+	float aZ        = 0.1; 		//aceleracion eje Z
+	float aZInversa = 0.05;	    //marcha atras
 	float Afrenado  = 0;		//aceleracion eje X
-	float t         = 0.5; 			//Tiempo 
+	//float t         = 0.5; 			//Tiempo 
 	float vIni      = 0;
 	float xIni 		= 0;
 	float v 		= 0;
 	float x 		= 0;
 	bool back  		= false;
 	bool front 		= false;
-	//x = xIni + VIni*t + 1/2*a*t*t
-	//v=v0+a⋅t
-	Teclado teclado; 
-	IrrlichtDevice *device = createDevice(video::EDT_OPENGL, 
-										  dimension2d<u32>(640, 480),
-										  16,
-										  false,
-										  false,
-										  false,
-										  &teclado);
+	/*float fuerza=0;
+	float fuerza_frenado=0;
+    float fuerzamax=150;
+	int masa=100;
+    float aZ=fuerza/masa;*/
+
+	CTeclado teclado; 
+    // -----------------------------
+    //  PREPARAR LA VENTANA
+    // -----------------------------
+
+	IrrlichtDevice *device = createDevice(video::EDT_OPENGL, dimension2d<u32>(640, 480),16,false,false,false,&teclado);
 	if(!device) return 1;
 	
+    device->setWindowCaption(L"AGE OF KARTS");
+
 	IVideoDriver* driver    =  device->getVideoDriver();
 	ISceneManager* smgr     =  device->getSceneManager();
 	IGUIEnvironment* guienv =  device->getGUIEnvironment();
 	
-	//cargar modelo cubo
-	IMeshSceneNode *cuboNodo = smgr->addCubeSceneNode(10);//anyadir directamente cubo a la escena de 5x5x5
-	//cambiar a color rojo el cubo
+
+    // -----------------------------
+    //  GEOMETRIA CUBO
+    // -----------------------------
+
+	// Cargar modelo cubo
+	IMeshSceneNode *cuboNodo = smgr->addCubeSceneNode(10); // Anyadir directamente cubo a la escena de 5x5x5
+	// Cambiar a color rojo el cubo
 	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(),SColor(255,255,0,0));
 	
-	
-	//anyadir cubo a la escena
-	
-	//desactivar la iluminacion del cubo
+		
+	// Desactivar la iluminacion del cubo
 	if(cuboNodo){
-		cuboNodo->setMaterialFlag(EMF_LIGHTING, false);
+		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
 		cuboNodo->setPosition(vector3df(0,20,0));
 	}
-	//mapa cargado desde obj
+
+    // -----------------------------
+    //  IMPORTAR MALLA (MAPA)
+    // -----------------------------
+
+	// Mapa cargado desde obj
 	IMesh* mapa = smgr->getMesh("sources/mapaPr.obj");
 
 	if(!mapa){
-		cout<<"mierda pa ti"<<endl;
+		cout<<"Mierda pa ti"<<endl;
 		device->drop();
 		
 		return 1;
-
 	}
+
+    // -----------------------------
+    //  GEOMETRIA MAPA
+    // -----------------------------
+
+    // Cargar modelo mapa
 	IMeshSceneNode *mapaNodo = smgr->addMeshSceneNode(mapa);
 
 	smgr->getMeshManipulator()->setVertexColors(mapaNodo->getMesh(),SColor(255,232,128,0));
 	if(mapaNodo){
-			 mapaNodo->setMaterialFlag(EMF_LIGHTING,false);//desactivar iluminacion
-			 mapaNodo->setPosition(vector3df(0,10,0));
+        mapaNodo->setMaterialFlag(EMF_LIGHTING,false); // Desactivar iluminacion
+        mapaNodo->setPosition(vector3df(0,10,0));
 	}
 	
-	
-
 
 
 	//------------mapa quake 3 -------------
@@ -94,82 +108,91 @@ int main(){
 	//camara
 	//vector3df cubop = cuboNodo->getPosition();
 
-
-
-	//camara para el mapà
+	//camara para el mapa
 	//smgr->addCameraSceneNodeFPS();//camara que se mueve como si de un counter se tratase(magia)
 	//device->getCursorControl()->setVisible(false);//ocultar el cursor
 
+    // FPS
+    int fpsAntes = -1;
+
+    // Delta time
+	u32 antes = device->getTimer()->getTime();
+    
 	
-	stringw text = "";
-
-            
-
+    // -----------------------------
+    //  GAME LOOP
+    // -----------------------------
 	while(device->run()){
 		
-	if(device->isWindowActive()){
-		//-------Calculo de la posicion dependiendo de la velocidad en un T predefinido
-			//x = xIni + VIni*t + 1/2*a*t*t
+	    if(device->isWindowActive()){
 			vIni = v;
 			xIni = x;
 			
+            //Mostrar la Posicion y Velocidad actuales.
+            stringw text = L"Age Of Karts - ";
+            
 			text = L"Velocidad v [";
-                text += v;
-                text +="] posicion X: ";
-                text += x;
-			device->setWindowCaption(text.c_str());
-		//-------ENTRADA TECLADO INI----------//
+            text += v;
+            text +="] posicion X: ";
+            text += x;
+			
+        
 			vector3df cuboPos =  cuboNodo->getPosition();
+            //Actualizar el valor del delta time
+            const u32 ahora = device->getTimer()->getTime();
+            const f32 delta = (f32)(ahora - antes) / 1000.f;
+
 			smgr->addCameraSceneNode(0,vector3df(cuboPos.X,cuboPos.Y+10, cuboPos.Z-25),cuboNodo->getPosition());//3 parametros =  nodopadre, posicion, direccion
 			//smgr->addCameraSceneNodeFPS(0);//camara que se mueve como si de un counter se tratase(magia)
 
+            //variable para identificar el movimiento (activo o no)
+            int checkMov=0;
+            //-------ENTRADA TECLADO INI----------//
 			if(teclado.isKeyDown(KEY_ESCAPE)) {
 				device->closeDevice();
 				return 0;
 			} else if(teclado.isKeyDown(KEY_KEY_D)  ){
-				
-				cuboPos.X +=4;
+				checkMov=1;
+				cuboPos.X+=4;
 			} else if(teclado.isKeyDown(KEY_KEY_A) ){
-			
-				cuboPos.X -= 4;
+                checkMov=2;
+				cuboPos.X-=4;
 			}else if(teclado.isKeyDown(KEY_KEY_S)){//esto no esta bien
 				
 				if(v<2.5f){
-					v = vIni+aZInversa*t;
+					v = vIni+aZInversa*delta;
 				}
-				x =  xIni - v*t + 1/2*aZInversa*t*t;
+				x = movimiento(xIni,-vIni,aZInversa,delta);
+	
 				cuboPos.Z =x;
 				back = true;
 				front = false;		
 			}else if(teclado.isKeyDown(KEY_KEY_W)){
 				//v=v0+a⋅t
 				if(v< 5){
-					v = vIni+aZ*t;
+					v = vIni+aZ*delta;
 				}
-				
-				x = xIni + vIni *t + 1/2*aZ*t*t;
+				x = movimiento(xIni,vIni,aZ,delta);
 				cuboPos.Z =x;
 				back  = false;
 				front = true;
 			}else if(teclado.isKeyDown(KEY_SPACE)){
 				
-				v = vIni-Afrenado*t;
-				x = xIni + vIni *t + 1/2*Afrenado*t*t;
+				v = vIni-Afrenado*delta;
+				x = movimiento(xIni,vIni,Afrenado,delta);
 				cuboPos.Z =x;
 				
-			}
-			else{//desaceleracion
+			}else{//desaceleracion
 				//X = Xi + Vi . t - 1/2 . a . t² 
 				//V = Vi - a . t
 				if(v >0){
 					if(back){
-						x = xIni - vIni *t -1/2*aZ*t*t;
+						x = movimiento(xIni,-vIni,-aZ,delta);
 					}
 					if(front){
-						x = xIni + vIni *t -1/2*aZ*t*t;
-
+						x = movimiento(xIni,vIni,-aZ,delta);						
 					}
-					v = vIni -aZ*t;
+					v = vIni -aZ*delta;
 					cuboPos.Z =x;
 				}
 			
@@ -179,16 +202,29 @@ int main(){
 			cuboNodo->setPosition(cuboPos);
 			//-------ENTRADA TECLADO FIN----------//
 			//-------RENDER INI---------//
-			driver->beginScene(true,
-							true,
-							SColor(255,200,200,200));
+			driver->beginScene(true,true,SColor(255,200,200,200));
 			smgr->drawAll();
 			guienv->drawAll();
 
 			driver->endScene();	
 
 			//-------RENDER FIN---------//
-				
+			// Calcular los fps
+            int fpsAhora = driver->getFPS();
+            if (fpsAntes != fpsAhora)
+            {
+                
+                text += "] FPS: ";
+                text += fpsAhora;
+                text += " *TIMER: Antes: ";
+                text += antes;
+                text += " - Ahora: ";
+                text += ahora;
+
+                device->setWindowCaption(text.c_str());
+                fpsAntes = fpsAhora;
+            }
+            antes = ahora;
 			
 		} else{
 			device->yield();

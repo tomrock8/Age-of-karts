@@ -1,144 +1,212 @@
+
+//proyecto 1. Cargar cubo y mover 
+//proyecto 3. Cargar modelo de mapa
+
 #include <irrlicht.h>
-#include "CTeclado.cpp"
-
+#include <iostream>
+using namespace std;
 using namespace irr;
-using namespace core;
-using namespace scene;
-using namespace video;
-using namespace io;
-using namespace gui;
 
-#pragma comment(lib, "Irrlicht.lib")
+using namespace core;		//proposito general
+using namespace scene;		//Escena 3D
+using namespace video;		//Driver y rendering
+using namespace io;			//Ficheros
+using namespace gui;		//Interfaz de usuario
 
-const int W_WIDTH = 1024;
-const int H_WIDTH = 600;
+#include "Teclado.h"
 
-int main()
-{
-    int x = 0;
+int main(){
+	float aZ = 0.1; 		//aceleracion eje Z
+	float aZInversa = 0.05;	//marcha atras
+	float aX = 0.15;		//aceleracion eje X
+	float t = 0.5; 			//Tiempo 
+	float vIni = 0;
+	float xIni = 0;
+	float v = 0;
+	float x = 0;
+	bool back = false;
+	bool front = false;
+	//x = xIni + VIni*t + 1/2*a*t*t
+	//v=v0+a⋅t
+	Teclado teclado; 
+	IrrlichtDevice *device = createDevice(video::EDT_OPENGL, 
+										  dimension2d<u32>(640, 480),
+										  16,
+										  false,
+										  false,
+										  false,
+										  &teclado);
+	if(!device) return 1;
+	
+	IVideoDriver* driver   =  device->getVideoDriver();
+	ISceneManager* smgr    =  device->getSceneManager();
+	IGUIEnvironment* guienv =  device->getGUIEnvironment();
+	
+	//cargar modelo cubo
+	IMeshSceneNode *cuboNodo = smgr->addCubeSceneNode(10);//anyadir directamente cubo a la escena de 5x5x5
+	//cambiar a color rojo el cubo
+	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(),SColor(255,255,0,0));
+	
+	
+	//anyadir cubo a la escena
+	
+	//desactivar la iluminacion del cubo
+	if(cuboNodo){
+		cuboNodo->setMaterialFlag(EMF_LIGHTING, false);
+		cuboNodo->setPosition(vector3df(0,20,0));
+	}
+	//mapa cargado desde obj
+	IMesh* mapa = smgr->getMesh("sources/mapaPr.obj");
 
-    // -----------------------------
-    //  PREPARAR LA VENTANA
-    // -----------------------------
-    CTeclado teclado;
-    IrrlichtDevice *ventana = createDevice(EDT_OPENGL, dimension2d<u32>(W_WIDTH, H_WIDTH), 16, false, false, false, &teclado);
+	if(!mapa){
+		cout<<"mierda pa ti"<<endl;
+		device->drop();
+		
+		return 1;
 
-    if (!ventana)
-        return 1;
+	}
+	IMeshSceneNode *mapaNodo = smgr->addMeshSceneNode(mapa);
 
-    ventana->setWindowCaption(L"AGE OF KARTS");
+	smgr->getMeshManipulator()->setVertexColors(mapaNodo->getMesh(),SColor(255,0,0,0));
+	if(mapaNodo){
+			 mapaNodo->setMaterialFlag(EMF_LIGHTING,false);//desactivar iluminacion
+			 mapaNodo->setPosition(vector3df(0,10,0));
+	}
+	
+	
 
-    IVideoDriver *driver = ventana->getVideoDriver();
-    ISceneManager *escena = ventana->getSceneManager();
-    IGUIEnvironment *interfaz = ventana->getGUIEnvironment();
 
-    // -----------------------------
-    //  INTERFAZ
-    // -----------------------------
-    interfaz->addStaticText(L"ME GACODELKJAHNRE", rect<int>(10, 10, 200, 22), true);
 
-    // -----------------------------
-    //  GEOMETRIA
-    // -----------------------------
-    IMeshSceneNode *nodoCubo = escena->addCubeSceneNode(5.f);
-    escena->getMeshManipulator()->setVertexColors(nodoCubo->getMesh(), SColor(100, 255, 0, 0));
-    nodoCubo->setPosition(vector3df(10, 0, 10));
-    nodoCubo->setMaterialFlag(EMF_LIGHTING, false);
+	//------------mapa quake 3 -------------
+//
+//	device->getFileSystem()->addFileArchive("../media/map-20kdm2.pk3");
+//	
+//	//cargar mapa  QUAKE 3
+//	scene::IAnimatedMesh* mapa = smgr->getMesh("20kdm2.bsp");
+//	scene::ISceneNode* node = 0;
+//
+//	if(mapa) node = smgr->addOctreeSceneNode(mapa->getMesh(0),0,-1,1024);
+//	if(node) node->setPosition(core::vector3df(-1300,-144,-1249));
+//
+	//------------mapa quake 3 -------------
 
-    // -----------------------------
-    //  IMPORTAR MALLA
-    // -----------------------------
-    //Mapa
-    ventana->getFileSystem()->addFileArchive("./assets/map-20kdm2.pk3"); //Carga el arbol de elementos
-    IAnimatedMesh *mapa = escena->getMesh("20kdm2.bsp"); // Elige del arbol de elementos el mapa
-    ISceneNode *nodoPadre = 0;
 
-    if(mapa){
-        nodoPadre = escena->addOctreeSceneNode(mapa->getMesh(0), 0, -1, 1024);
-    }
+	//camara
+	//vector3df cubop = cuboNodo->getPosition();
 
-    //RISAS
-    //ISceneNodeAnimator *rotacionmapa = escena->createRotationAnimator(vector3df(1,1,1));
-    //nodoPadre->addAnimator(rotacionmapa);
 
-    //Personaje
-    IAnimatedMesh *malla = escena->getMesh("./assets/sydney.md2"); //Archivos validos: Quake2 (.md2), Maya(.obj), Quake3 map(.bsp), Milkshape(.ms3d)
-    IAnimatedMeshSceneNode *nodoPJ = escena->addAnimatedMeshSceneNode(malla);
-    nodoPJ->setScale(vector3df(0.5, 0.5, 0.5));
 
-    if (nodoPJ)
-    {
-        nodoPJ->setMaterialFlag(EMF_LIGHTING, false);
-        nodoPJ->setFrameLoop(0, 310); //Carga los frames del 0 al 310 (todos)
-        nodoPJ->setMaterialTexture(0, driver->getTexture("./assets/sydney.bmp"));
-    }
+	//camara para el mapà
+	//smgr->addCameraSceneNodeFPS();//camara que se mueve como si de un counter se tratase(magia)
+	//device->getCursorControl()->setVisible(false);//ocultar el cursor
 
-    // -----------------------------
-    //  CAMARAS
-    // -----------------------------
+	int lastFPS = -1; //quak3
+	stringw text = "";
 
-    //Camara Ortogonal
-    //vector3df camara_posicion(-10, 40, -10);
-    //escena->addCameraSceneNode(0, camara_posicion, nodoPJ->getPosition());
+            
 
-    //Camara FPS
-    escena->addCameraSceneNodeFPS();
-    ventana->getCursorControl()->setVisible(true); // Para no ver el raton
+	while(device->run()){
+		
+	if(device->isWindowActive()){
+		//-------Calculo de la posicion dependiendo de la velocidad en un T predefinido
+			//x = xIni + VIni*t + 1/2*a*t*t
+			vIni = v;
+			xIni = x;
+			
+			text = L"Velocidad v [";
+                text += v;
+                text +="] posicion X: ";
+                text += x;
+			device->setWindowCaption(text.c_str());
+		//-------ENTRADA TECLADO INI----------//
+			vector3df cuboPos =  cuboNodo->getPosition();
+			smgr->addCameraSceneNode(0,vector3df(cuboPos.X,cuboPos.Y+10, cuboPos.Z-25),cuboNodo->getPosition());//3 parametros =  nodopadre, posicion, direccion
+			//smgr->addCameraSceneNodeFPS(0);//camara que se mueve como si de un counter se tratase(magia)
 
-    // -----------------------------
-    //  TIEMPO
-    // -----------------------------
-    //Delta time
-    u32 antes = ventana->getTimer()->getTime();
+			if(teclado.isKeyDown(KEY_ESCAPE)) {
+				device->closeDevice();
+				return 0;
+			} else if(teclado.isKeyDown(KEY_KEY_D) && teclado.isKeyDown(KEY_KEY_W) ){
+				v = vIni+aZ*t;
+				x = xIni + vIni*t + 1/2*aZ*t*t;
+				cuboPos.Z =x;
+				v = vIni+aX*t;
+				x = xIni + vIni*t + 1/2*aX*t*t;
+				cuboPos.X = x;
+			} else if(teclado.isKeyDown(KEY_KEY_A)&& teclado.isKeyDown(KEY_KEY_W) ){
+				v = vIni+aZ*t;
+				x = xIni + vIni*t + 1/2*aZ*t*t;
+				cuboPos.Z =x;
+				v = vIni+aX*t;
+				x = xIni + vIni*t + 1/2*aX*t*t;
+				cuboPos.X = -x;
+			}else if(teclado.isKeyDown(KEY_KEY_S)){//esto no esta bien
+				v = vIni+aZInversa*t;
+				x =  xIni - v*t + 1/2*aZInversa*t*t;
+				cuboPos.Z =x;
+				back = true;
+				front = false;		
+			}else if(teclado.isKeyDown(KEY_KEY_W)){
+				//v=v0+a⋅t
+				v = vIni+aZ*t;
+				x = xIni + v *t + 1/2*aZ*t*t;
+				cuboPos.Z =x;
+				back  = false;
+				front = true;
+			}else{//desaceleracion
+				//X = Xi + Vi . t - 1/2 . a . t² 
+				//V = Vi - a . t
+				if(v >0){
+					if(back){
+						x = xIni - vIni *t -1/2*aZ*t*t;
+					}
+					if(front){
+						x = xIni + vIni *t -1/2*aZ*t*t;
 
-    //FPS
-    int fpsAntes = -1;
+					}
+					v = vIni -aZ*t;
+					cuboPos.Z =x;
+				}
+			
 
-    // -----------------------------
-    //  GAME LOOP
-    // -----------------------------
-    while (ventana->run())
-    {
-        if (ventana->isWindowActive())
-        {
-            //Actualizar el valor del delta time
-            const u32 ahora = ventana->getTimer()->getTime();
-            const f32 delta = (f32)(ahora - antes) / 1000.f;
-            antes = ahora;
 
-            if (teclado.isKeyDown(KEY_ESCAPE))
-            {
-                ventana->closeDevice();
-                return 0;
-            }
+			}
+			cuboNodo->setPosition(cuboPos);
+			//-------ENTRADA TECLADO FIN----------//
+			//-------RENDER INI---------//
+			driver->beginScene(true,
+							true,
+							SColor(255,200,200,200));
+			smgr->drawAll();
+			guienv->drawAll();
 
-            driver->beginScene(true, true, SColor(255, 100, 101, 140));
+			driver->endScene();	
 
-            escena->drawAll();
-            interfaz->drawAll();
+			//-------RENDER FIN---------//
+				
+			//------MOSTRAR MAPA INICIO----------//
+			int fps = driver->getFPS();
+				
+			if(lastFPS !=fps){
+				core::stringw str = L"Proyecto3 irrlicht - Carga mapa QUAKE3 [";
+				str += driver->getName();
+				str += "] FPS: ";
+				str += fps;
 
-            driver->endScene();
-
-            // Calcular los fps
-            int fpsAhora = driver->getFPS();
-            if(fpsAntes != fpsAhora){
-                stringw titulo = L"Age Of Karts [";
-                titulo += driver->getName();
-                titulo +="] FPS: ";
-                titulo += fpsAhora;
-
-                ventana->setWindowCaption(titulo.c_str());
-                fpsAntes = fpsAhora;
-            }
-        }
-        else
-        {
-            // Para el renderizado si la ventana no esta activa
-            ventana->yield();
-        }
-    }
-
-    ventana->drop(); // Se elimina el dispositivo de irrlicht
-
-    return 0;
+				device->setWindowCaption(str.c_str());
+				lastFPS = fps;
+			}
+			
+			//-------MOSTRAR MAPA FIN----------//
+		} else{
+			device->yield();
+		}
+		
+	}
+	device->drop();
+	
+	return 0;
+	
+	
+	
 }

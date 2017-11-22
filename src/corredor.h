@@ -24,6 +24,7 @@ public:
 	float getEspacio();
 	float getVelocidad();
 	vector3df getPosition();
+	vector3df getRotation();
 	
   private:
     float aZ,aZInversa,Afrenado, t, vIni, xIni, v, x;    		

@@ -50,8 +50,8 @@ int main(){
     // -----------------------------
     //  GEOMETRIA COCHE
     // -----------------------------
-	corredor pj1(smgr, "sources/coche.obj");
-	pj1.escalar(5.0f);
+	corredor* pj1=new corredor(smgr, "sources/coche.obj");
+	pj1->escalar(5.0f);
 	//IMesh* coche = smgr->getMesh("sources/coche.obj");
 	//IMeshSceneNode *cuboNodo = smgr->addMeshSceneNode(coche);
 	////cambiar a color rojo del coche
@@ -75,9 +75,7 @@ int main(){
 	IMesh* mapa = smgr->getMesh("sources/mapaPr.obj");
 
 	if(!mapa){
-		cout<<"Mierda pa ti"<<endl;
-		device->drop();
-		
+		device->drop();		
 		return 1;
 	}
 
@@ -97,16 +95,16 @@ int main(){
 
 
 	
-    // FPS
-  //  int fpsAntes = -1;
+    //--FPS y Delta time--// -> borrados
+  	// int fpsAntes = -1;
+	//	u32 antes = device->getTimer()->getTime();
 
-    // Delta time
-//	u32 antes = device->getTimer()->getTime();
     //---------------------//
 	//---CAMARA INICIAL----//
 	//---------------------//
-	 	vector3df cuboPos = pj1.getPosition(); 
-    	vector3df camPos( pj1.getPosition().X,  pj1.getPosition().Y + 10,  pj1.getPosition().Z - 25); 
+	 	vector3df cuboPos = pj1->getPosition(); 
+		vector3df cuboRot = pj1->getRotation();
+    	vector3df camPos( pj1->getPosition().X,  pj1->getPosition().Y + 10,  pj1->getPosition().Z - 25); 
     	smgr->addCameraSceneNode(0, camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion 
     // -----------------------------
     //  GAME LOOP
@@ -114,8 +112,8 @@ int main(){
 	while(device->run()){
 		
 	    if(device->isWindowActive()){
-			pj1.setVelocidad();
-			pj1.setEspacio();
+			pj1->setVelocidad();
+			pj1->setEspacio();
 			//vIni = v;
 			//xIni = x;
 			
@@ -123,15 +121,15 @@ int main(){
             stringw text = L"Age Of Karts - ";
             
 			text = L"Velocidad v [";
-            text += pj1.getVelocidad();
+            text += pj1->getVelocidad();
             text +="] posicion X: ";
-            text += pj1.getEspacio();
+            text += pj1->getEspacio();
 			
         
 			//vector3df cuboPos =  cuboNodo->getPosition();
             //Actualizar el valor del delta time
-           // const u32 ahora = device->getTimer()->getTime();
-           // const f32 delta = (f32)(ahora - antes) / 1000.f;
+            // const u32 ahora = device->getTimer()->getTime();
+            // const f32 delta = (f32)(ahora - antes) / 1000.f;
 	
 		
 			
@@ -144,26 +142,26 @@ int main(){
 				device->closeDevice();
 				return 0;
 			} else if(teclado.isKeyDown(KEY_KEY_D)  ){
-				pj1.girarDerecha();
+				pj1->girarDerecha();
 			} else if(teclado.isKeyDown(KEY_KEY_A) ){
-                pj1.girarIzquierda();
+                pj1->girarIzquierda();
 			}else if(teclado.isKeyDown(KEY_KEY_S)){
-				pj1.frenar();
+				pj1->frenar();
 			}else if(teclado.isKeyDown(KEY_KEY_W)){
-				pj1.acelerar();
+				pj1->acelerar();
 			}else{
-				pj1.desacelerar();
+				pj1->desacelerar();
 			}
-			pj1.actualizarPos();
+			pj1->actualizarPos();
 			//cuboNodo->setPosition(cuboPos);
 			//-------ENTRADA TECLADO FIN----------//
 			//-----------------------------//
 			// MOVIMIENTO DE LA CAMARA     //
 			//---------------------------- //
-            cuboPos = pj1.getPosition(); 
-            camPos.X = pj1.getPosition().X; 
-            camPos.Y = pj1.getPosition().Y + 10; 
-            camPos.Z = pj1.getPosition().Z - 25; 
+            cuboPos = pj1->getPosition(); 
+            camPos.X = pj1->getPosition().X; 
+            camPos.Y = pj1->getPosition().Y + 10; 
+            camPos.Z = pj1->getPosition().Z - 25; 
  
             smgr->getActiveCamera()->setPosition(camPos); 
             smgr->getActiveCamera()->setTarget(cuboPos); 

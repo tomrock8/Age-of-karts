@@ -2,7 +2,9 @@
 #include "corredor.h"
 
 
-
+//-------------------------\*
+//---CONSTRUCTOR CORREDOR--\*
+//-------------------------\* 
 corredor::corredor(ISceneManager* smgr, stringw rutaObj){
      aZ        = 0.1; 		     //aceleracion eje Z
 	 aZInversa = 0.15;	         //marcha atras
@@ -39,6 +41,9 @@ float corredor::movimiento(float pos,float vel,float accel,float delta){
 vector3df corredor::getPosition(){
     return cuboNodo->getPosition();
 }
+vector3df corredor::getRotation(){
+    return cuboNodo->getRotation();
+}
 void corredor::actualizarPos(){
     cuboPos.Z = x;
     cuboNodo->setPosition(cuboPos);
@@ -62,8 +67,6 @@ float corredor::getEspacio(){
  void corredor::acelerar(){
         //v=v0+a⋅t
         //cout<<"velocidad marcha adelante: "<<v<<"  "<<endl;
-    
-
    
 		if(v< 5){
 			v = vIni+aZ*t;
@@ -74,7 +77,9 @@ float corredor::getEspacio(){
        
     } 
      
-
+//-----------------------\*
+//---FRENADO JUGADOR---\*
+//-----------------------\* 
  void corredor::frenar(){
      if(adelante ==true){
          x = movimiento(xIni,vIni,-Afrenado,t); 
@@ -98,6 +103,9 @@ float corredor::getEspacio(){
 		
 					
 }
+//-----------------------\*
+//------GIRAR JUGADOR----\*
+//-----------------------\* 
 void corredor::girarDerecha(){
     vector3df rotation =  vector3df(0,15.0,0); 
     cuboNodo->setRotation(rotation);
@@ -107,6 +115,10 @@ void corredor::girarIzquierda(){
     vector3df rotation =  vector3df(0,-15.0,0); 
     cuboNodo->setRotation(rotation);
 }
+
+//-----------------------\*
+//---DESACELERAR JUGADOR--\*
+//-----------------------\* 
 void corredor::desacelerar(){
     //desaceleracion
 	//X = Xi + Vi . t - 1/2 . a . t² 

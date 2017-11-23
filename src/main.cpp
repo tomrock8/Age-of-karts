@@ -3,7 +3,7 @@
 //proyecto 3. Cargar modelo de mapa
 #include "irrlichtlib.hpp"
 #include "CTeclado.cpp"
-#include "corredor.h"
+#include "corredor.hpp"
 #include <iostream>
 
 using namespace std;
@@ -91,10 +91,7 @@ int main(){
         mapaNodo->setMaterialFlag(EMF_LIGHTING,false); // Desactivar iluminacion
         mapaNodo->setPosition(vector3df(0,-20,-30));
 	}
-	
-
-
-	
+		
     //--FPS y Delta time--// -> borrados
   	// int fpsAntes = -1;
 	//	u32 antes = device->getTimer()->getTime();
@@ -112,6 +109,7 @@ int main(){
 	while(device->run()){
 		
 	    if(device->isWindowActive()){
+			pj1->setAxis(smgr);
 			pj1->setVelocidad();
 			pj1->setEspacio();
 			//vIni = v;
@@ -123,7 +121,9 @@ int main(){
 			text = L"Velocidad v [";
             text += pj1->getVelocidad();
             text +="] posicion X: ";
-            text += pj1->getEspacio();
+            text += pj1->getEspacioX();
+			text +="] posicion Z: ";
+			text += pj1->getEspacioZ();
 			
         
 			//vector3df cuboPos =  cuboNodo->getPosition();
@@ -132,20 +132,20 @@ int main(){
             // const f32 delta = (f32)(ahora - antes) / 1000.f;
 	
 		
-			
-			
-
-            //variable para identificar el movimiento (activo o no)
-            int checkMov=0;
+            //variable para identificar la direccion de movimiento (activo o no)
+            int checkGiro=0;
             //-------ENTRADA TECLADO ----------//
 			if(teclado.isKeyDown(KEY_ESCAPE)) {
 				device->closeDevice();
 				return 0;
 			} else if(teclado.isKeyDown(KEY_KEY_D)  ){
 				pj1->girarDerecha();
+				checkGiro=1;
 			} else if(teclado.isKeyDown(KEY_KEY_A) ){
                 pj1->girarIzquierda();
-			}else if(teclado.isKeyDown(KEY_KEY_S)){
+				checkGiro=1;
+			}
+			if(teclado.isKeyDown(KEY_KEY_S)){
 				pj1->frenar();
 			}else if(teclado.isKeyDown(KEY_KEY_W)){
 				pj1->acelerar();
@@ -153,6 +153,9 @@ int main(){
 				pj1->desacelerar();
 			}
 			pj1->actualizarPos();
+			if (checkGiro==0){
+				pj1->resetGiro();
+			}
 			//cuboNodo->setPosition(cuboPos);
 			//-------ENTRADA TECLADO FIN----------//
 			//-----------------------------//
@@ -165,6 +168,9 @@ int main(){
  
             smgr->getActiveCamera()->setPosition(camPos); 
             smgr->getActiveCamera()->setTarget(cuboPos); 
+
+
+		
 			//-------RENDER INI---------//
 			driver->beginScene(true,true,SColor(255,200,200,200));
 			smgr->drawAll();

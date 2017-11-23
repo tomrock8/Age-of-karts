@@ -20,18 +20,23 @@ public:
 	void actualizarPos();
 	void setVelocidad();
 	void setEspacio();
+	void resetGiro();
+	void setAxis(ISceneManager *smgr);
 	//---recogida de variables
-	float getEspacio();
+	float getEspacioX();
+	float getEspacioZ();
 	float getVelocidad();
 	vector3df getPosition();
 	vector3df getRotation();
 	
+	
   private:
-    float aZ,aZInversa,Afrenado, t, vIni, xIni, v, x;    		
+    float aZ,aZInversa,Afrenado, t, vIni, xIni, zIni, v,vx,vz, x, z,r;    		
 	bool adelante, atras ;
 	IMesh* coche;
 	IMeshSceneNode *cuboNodo;
 	vector3df cuboPos;
+	vector3df cuboRot;
 		
 };
 

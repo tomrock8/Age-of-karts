@@ -1,6 +1,9 @@
 #include "irrlichtlib.hpp"
-#include "corredor.h"
-
+#include "corredor.hpp"
+#include "AxesSceneNode.cpp"
+#include <iostream>
+#include <cmath>
+using namespace std;
 
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
@@ -12,8 +15,13 @@ corredor::corredor(ISceneManager* smgr, stringw rutaObj){
 	 t         = 0.5; 			 //Tiempo 
 	 vIni      = 0;
 	 xIni 	   = 0;
+	 zIni	   = 0;
+	 vx 	   = 0;
+	 vz 	   = 0;
 	 v 		   = 0;
 	 x 		   = 0;
+	 z 		   = 0;
+	 r		   = 40;
 	 adelante  = false;
      atras 	   = false;
 
@@ -45,7 +53,8 @@ vector3df corredor::getRotation(){
     return cuboNodo->getRotation();
 }
 void corredor::actualizarPos(){
-    cuboPos.Z = x;
+    cuboPos.Z = z;
+	cuboPos.X = x;
     cuboNodo->setPosition(cuboPos);
 
 }
@@ -54,12 +63,21 @@ void corredor::setVelocidad(){
 }
 void corredor::setEspacio(){
     xIni = x;
+	zIni = z;
+}
+void corredor::setAxis(ISceneManager *smgr){
+	AxesSceneNode* axis = new AxesSceneNode(cuboNodo,smgr,-1);
+   	axis->setAxesScale(50); //  for the length of the axes
+  	axis->drop();
 }
 float corredor::getVelocidad(){
     return v;
 }
-float corredor::getEspacio(){
+float corredor::getEspacioX(){
     return x;
+}
+float corredor::getEspacioZ(){
+    return z;
 }
 //-----------------------\*
 //---MOVIMIENTO JUGADOR--\*
@@ -67,14 +85,32 @@ float corredor::getEspacio(){
  void corredor::acelerar(){
         //v=v0+a⋅t
         //cout<<"velocidad marcha adelante: "<<v<<"  "<<endl;
-   
+
 		if(v< 5){
 			v = vIni+aZ*t;
 		}
-		x = movimiento(xIni,vIni,aZ,t);
-		atras    = false;
-        adelante = true;
-       
+		if (vIni<0){
+			vIni=0;
+		}
+		cuboRot = cuboNodo->getRotation();
+		if (cuboRot.Y!=0){
+			if (cuboRot.Y<0){
+				z=zIni+r*cos((v/2*PI)*t);
+				x=xIni+r*sin((v/2*PI)*t);
+				
+			}else{
+				z=zIni+r*cos((-v/2*PI)*t);
+				x=xIni+r*sin((-v/2*PI)*t);
+
+			}
+
+				
+		}else{				
+			z = movimiento(zIni,vIni,aZ,t);
+
+        }
+			atras    = false;
+			adelante = true;
     } 
      
 //-----------------------\*
@@ -82,7 +118,7 @@ float corredor::getEspacio(){
 //-----------------------\* 
  void corredor::frenar(){
      if(adelante ==true){
-         x = movimiento(xIni,vIni,-Afrenado,t); 
+         z = movimiento(zIni,vIni,-Afrenado,t); 
          if(v>-2.5f){//Controla que no pase de 2.5 de velocidad en marcha atras cuando se frena
 			v = vIni - Afrenado*t;
 			//	v = v -0.3;
@@ -97,7 +133,7 @@ float corredor::getEspacio(){
 			v = vIni + Afrenado*t;
 			//	v = v -0.3;
 		}
-		x = movimiento(xIni,-vIni,aZInversa,t);
+		z = movimiento(zIni,-vIni,aZInversa,t);
      }   
     
 		
@@ -107,13 +143,31 @@ float corredor::getEspacio(){
 //------GIRAR JUGADOR----\*
 //-----------------------\* 
 void corredor::girarDerecha(){
-    vector3df rotation =  vector3df(0,15.0,0); 
-    cuboNodo->setRotation(rotation);
+    cuboRot = cuboNodo->getRotation();
+	if (cuboRot.Y<50)
+	cuboRot.Y+=0.5;
+	cuboNodo->setRotation(vector3df(cuboRot.X ,cuboRot.Y,cuboRot.Z));
+
 }
 
 void corredor::girarIzquierda(){
-    vector3df rotation =  vector3df(0,-15.0,0); 
-    cuboNodo->setRotation(rotation);
+    cuboRot = cuboNodo->getRotation();
+	if (cuboRot.Y>-50)
+	cuboRot.Y-=0.5;
+	cuboNodo->setRotation(vector3df(cuboRot.X ,cuboRot.Y,cuboRot.Z));
+
+}
+
+void corredor::resetGiro(){
+	if (cuboRot.Y>0){
+		cuboRot.Y-=0.5;
+	}
+	if (cuboRot.Y<0){
+		cuboRot.Y+=0.5;
+	}
+	cuboNodo->setRotation(vector3df(cuboRot.X ,cuboRot.Y,cuboRot.Z));
+
+
 }
 
 //-----------------------\*
@@ -125,10 +179,10 @@ void corredor::desacelerar(){
 	//V = Vi - a . t
 	if(v >0){
 		if(atras){
-			x = movimiento(xIni,-vIni,-aZInversa,t);
+			z = movimiento(zIni,-vIni,-aZInversa,t);
 		}
 		if(adelante){
-			x = movimiento(xIni,vIni,-aZInversa,t);						
+			z = movimiento(zIni,vIni,-aZInversa,t);						
 		}
         v = vIni -aZInversa*t;
         vector3df rotation =  vector3df(0,0,0); 

@@ -2,7 +2,30 @@
     "files.associations": {
         "iostream": "cpp",
         "iosfwd": "cpp",
+<<<<<<< Updated upstream
         "ostream": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
+=======
+        "ostream": "cpp",
+        "*.tcc": "cpp",
+        "cctype": "cpp",
+        "clocale": "cpp",
+        "cstdint": "cpp",
+        "cstdio": "cpp",
+        "cstdlib": "cpp",
+        "cwchar": "cpp",
+        "cwctype": "cpp",
+        "exception": "cpp",
+        "initializer_list": "cpp",
+        "istream": "cpp",
+        "limits": "cpp",
+        "new": "cpp",
+        "stdexcept": "cpp",
+        "streambuf": "cpp",
+        "system_error": "cpp",
+        "type_traits": "cpp",
+        "typeinfo": "cpp"
+    }
+>>>>>>> Stashed changes
 }

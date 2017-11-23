@@ -21,7 +21,7 @@ corredor::corredor(ISceneManager* smgr, stringw rutaObj){
 	 v 		   = 0;
 	 x 		   = 0;
 	 z 		   = 0;
-	 r		   = 40;
+	 r		   = 2;
 	 adelante  = false;
      atras 	   = false;
 
@@ -86,26 +86,28 @@ float corredor::getEspacioZ(){
         //v=v0+a⋅t
         //cout<<"velocidad marcha adelante: "<<v<<"  "<<endl;
 
-		if(v< 5){
-			v = vIni+aZ*t;
-		}
+	
 		if (vIni<0){
 			vIni=0;
 		}
 		cuboRot = cuboNodo->getRotation();
 		if (cuboRot.Y!=0){
+			cout << PI << endl;
 			if (cuboRot.Y<0){
-				z=zIni+r*cos((v/2*PI)*t);
-				x=xIni+r*sin((v/2*PI)*t);
+				z=zIni+r*cos((-vIni/2*PI)*t);
+				x=xIni+r*sin((-vIni/2*PI)*t);
 				
 			}else{
-				z=zIni+r*cos((-v/2*PI)*t);
-				x=xIni+r*sin((-v/2*PI)*t);
+				z=zIni+r*cos((vIni/2*PI)*t);
+				x=xIni+r*sin((vIni/2*PI)*t);
 
 			}
 
 				
-		}else{				
+		}else{			
+		if(v< 5){
+			v = vIni+aZ*t;
+		}	
 			z = movimiento(zIni,vIni,aZ,t);
 
         }

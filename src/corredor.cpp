@@ -21,11 +21,13 @@ corredor::corredor(ISceneManager* smgr, stringw rutaObj){
 	 v 		   = 0;
 	 x 		   = 0;
 	 z 		   = 0;
-	 r		   = 2;
+	 r		   = 10;
 	 adelante  = false;
      atras 	   = false;
 
     coche = smgr->getMesh(rutaObj);
+	//cuboNodo = smgr->addCubeSceneNode(5.0f);
+	//cuboNodo->setScale(vector3df(1,1,1));
 	cuboNodo = smgr->addMeshSceneNode(coche);
 	//cambiar a color rojo del coche
 	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(),SColor(255,255,0,0));
@@ -67,7 +69,7 @@ void corredor::setEspacio(){
 }
 void corredor::setAxis(ISceneManager *smgr){
 	AxesSceneNode* axis = new AxesSceneNode(cuboNodo,smgr,-1);
-   	axis->setAxesScale(50); //  for the length of the axes
+   	axis->setAxesScale(20); //  for the length of the axes
   	axis->drop();
 }
 float corredor::getVelocidad(){
@@ -91,26 +93,13 @@ float corredor::getEspacioZ(){
 			vIni=0;
 		}
 		cuboRot = cuboNodo->getRotation();
-		if (cuboRot.Y!=0){
-			cout << PI << endl;
-			if (cuboRot.Y<0){
-				z=zIni+r*cos((-vIni/2*PI)*t);
-				x=xIni+r*sin((-vIni/2*PI)*t);
-				
-			}else{
-				z=zIni+r*cos((vIni/2*PI)*t);
-				x=xIni+r*sin((vIni/2*PI)*t);
-
-			}
-
-				
-		}else{			
+		
 		if(v< 5){
 			v = vIni+aZ*t;
 		}	
 			z = movimiento(zIni,vIni,aZ,t);
 
-        }
+        
 			atras    = false;
 			adelante = true;
     } 
@@ -135,41 +124,46 @@ float corredor::getEspacioZ(){
 			v = vIni + Afrenado*t;
 			//	v = v -0.3;
 		}
-		z = movimiento(zIni,-vIni,aZInversa,t);
+		z = movimiento(zIni,-vIni,-aZInversa,t);
      }   
     
 		
 					
 }
-//-----------------------\*
-//------GIRAR JUGADOR----\*
-//-----------------------\* 
+//-----------------------*
+//------GIRAR JUGADOR----*
+//-----------------------* 
 void corredor::girarDerecha(){
-    cuboRot = cuboNodo->getRotation();
-	if (cuboRot.Y<50)
-	cuboRot.Y+=0.5;
-	cuboNodo->setRotation(vector3df(cuboRot.X ,cuboRot.Y,cuboRot.Z));
-
+    if(v!=0){
+	cuboRot = cuboNodo->getRotation();
+    
+    cuboRot.Y+=0.5;
+    cuboNodo->setRotation(vector3df(cuboRot.X ,cuboRot.Y,cuboRot.Z));
+    x = movimiento(xIni,vIni,aZ,t);
+	}
 }
 
 void corredor::girarIzquierda(){
-    cuboRot = cuboNodo->getRotation();
-	if (cuboRot.Y>-50)
-	cuboRot.Y-=0.5;
-	cuboNodo->setRotation(vector3df(cuboRot.X ,cuboRot.Y,cuboRot.Z));
+	if(v!=0){
 
+    cuboRot = cuboNodo->getRotation();
+    
+    cuboRot.Y-=0.5;
+    cuboNodo->setRotation(vector3df(cuboRot.X ,cuboRot.Y,cuboRot.Z));
+    x = movimiento(xIni,-vIni,aZ,t);
+
+	}	
 }
 
 void corredor::resetGiro(){
 	if (cuboRot.Y>0){
-		cuboRot.Y-=0.5;
+		cuboRot.Y-=1;
 	}
 	if (cuboRot.Y<0){
-		cuboRot.Y+=0.5;
+		cuboRot.Y+=1;
 	}
 	cuboNodo->setRotation(vector3df(cuboRot.X ,cuboRot.Y,cuboRot.Z));
-
-
+	
 }
 
 //-----------------------\*

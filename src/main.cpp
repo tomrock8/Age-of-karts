@@ -51,7 +51,7 @@ int main(){
     //  GEOMETRIA COCHE
     // -----------------------------
 	corredor* pj1=new corredor(smgr, "sources/coche.obj");
-	pj1->escalar(5.0f);
+		pj1->escalar(5.0f);
 	//IMesh* coche = smgr->getMesh("sources/coche.obj");
 	//IMeshSceneNode *cuboNodo = smgr->addMeshSceneNode(coche);
 	////cambiar a color rojo del coche

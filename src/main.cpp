@@ -3,7 +3,7 @@
 //proyecto 3. Cargar modelo de mapa
 #include "irrlichtlib.hpp"
 #include "CTeclado.cpp"
-#include "corredor.hpp"
+#include "corredor.h"
 #include <iostream>
 
 using namespace std;
@@ -51,7 +51,7 @@ int main(){
     //  GEOMETRIA COCHE
     // -----------------------------
 	corredor* pj1=new corredor(smgr, "sources/coche.obj");
-		pj1->escalar(5.0f);
+	pj1->escalar(5.0f);
 	//IMesh* coche = smgr->getMesh("sources/coche.obj");
 	//IMeshSceneNode *cuboNodo = smgr->addMeshSceneNode(coche);
 	////cambiar a color rojo del coche
@@ -124,6 +124,8 @@ int main(){
             text += pj1->getEspacioX();
 			text +="] posicion Z: ";
 			text += pj1->getEspacioZ();
+			text +="] rotacion : ";
+			text += pj1->getRotation().Y;
 			
         
 			//vector3df cuboPos =  cuboNodo->getPosition();
@@ -168,9 +170,6 @@ int main(){
  
             smgr->getActiveCamera()->setPosition(camPos); 
             smgr->getActiveCamera()->setTarget(cuboPos); 
-
-
-		
 			//-------RENDER INI---------//
 			driver->beginScene(true,true,SColor(255,200,200,200));
 			smgr->drawAll();

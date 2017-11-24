@@ -18,10 +18,10 @@ public:
 	//--actualizacion de variables----
 	void escalar (float tam);
 	void actualizarPos();
+	void setAxis(ISceneManager *smgr);
 	void setVelocidad();
 	void setEspacio();
 	void resetGiro();
-	void setAxis(ISceneManager *smgr);
 	//---recogida de variables
 	float getEspacioX();
 	float getEspacioZ();
@@ -31,7 +31,7 @@ public:
 	
 	
   private:
-    float aZ,aZInversa,Afrenado, t, vIni, xIni, zIni, v,vx,vz, x, z,r;    		
+    float aZ,aZInversa,Afrenado, t, vIni, xIni, zIni, v,vx,vz, x, z;    		
 	bool adelante, atras ;
 	IMesh* coche;
 	IMeshSceneNode *cuboNodo;

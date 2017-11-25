@@ -28,10 +28,11 @@ public:
 	float getVelocidad();
 	vector3df getPosition();
 	vector3df getRotation();
+	void moveCameraControl(IrrlichtDevice *device);
 	
 	
   private:
-    float aZ,aZInversa,Afrenado, t, vIni, xIni, zIni, v,vx,vz, x, z;    		
+    float aceleracionZ,aceleracionZInversa,aceleracionFrenado, tiempo, velocidadIni, posXIni, posZIni, velocidad,velocidadX,velocidadZ,velocidadMax, posX, posZ;    		
 	bool adelante, atras ;
 	IMesh* coche;
 	IMeshSceneNode *cuboNodo;

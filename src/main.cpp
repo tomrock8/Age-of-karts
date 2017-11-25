@@ -3,15 +3,12 @@
 //proyecto 3. Cargar modelo de mapa
 #include "irrlichtlib.hpp"
 #include "CTeclado.cpp"
-#include "corredor.h"
+#include "corredor.hpp"
 #include <iostream>
 
 using namespace std;
 
-//float movimiento(float pos,float vel,float accel,f32 delta){
-//    pos = pos+vel*delta+(0.5*accel*(exp2(delta)));    //donde el 0 es la velocidad inicial
-//    return pos;
-//}
+
 int main(){
     // -----------------------------
     //  VARIABLES COCHE
@@ -96,13 +93,17 @@ int main(){
   	// int fpsAntes = -1;
 	//	u32 antes = device->getTimer()->getTime();
 
+	//variable para identificar la direccion de movimiento (activo o no)
+    int checkGiro=0;
     //---------------------//
 	//---CAMARA INICIAL----//
 	//---------------------//
 	 	vector3df cuboPos = pj1->getPosition(); 
 		vector3df cuboRot = pj1->getRotation();
     	vector3df camPos( pj1->getPosition().X,  pj1->getPosition().Y + 10,  pj1->getPosition().Z - 25); 
+		vector3df camRot( pj1->getRotation()); 
     	smgr->addCameraSceneNode(0, camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion 
+
     // -----------------------------
     //  GAME LOOP
     // -----------------------------
@@ -133,9 +134,8 @@ int main(){
             // const u32 ahora = device->getTimer()->getTime();
             // const f32 delta = (f32)(ahora - antes) / 1000.f;
 	
-		
-            //variable para identificar la direccion de movimiento (activo o no)
-            int checkGiro=0;
+			checkGiro=0;
+            
             //-------ENTRADA TECLADO ----------//
 			if(teclado.isKeyDown(KEY_ESCAPE)) {
 				device->closeDevice();
@@ -167,8 +167,11 @@ int main(){
             camPos.X = pj1->getPosition().X; 
             camPos.Y = pj1->getPosition().Y + 10; 
             camPos.Z = pj1->getPosition().Z - 25; 
+			camRot.Y = pj1->getRotation().Y; 
  
             smgr->getActiveCamera()->setPosition(camPos); 
+			smgr->getActiveCamera()->setRotation(camRot); 
+			
             smgr->getActiveCamera()->setTarget(cuboPos); 
 			//-------RENDER INI---------//
 			driver->beginScene(true,true,SColor(255,200,200,200));

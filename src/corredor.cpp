@@ -7,20 +7,21 @@
 //---CONSTRUCTOR CORREDOR--\*
 //-------------------------\* 
 corredor::corredor(ISceneManager* smgr, stringw rutaObj){
-     aZ        = 0.1; 		     //aceleracion eje Z
-	 aZInversa = 0.15;	         //marcha atras
-	 Afrenado  = 0.15;		     //aceleracion eje X
-	 t         = 0.5; 			 //Tiempo 
-	 vIni      = 0;
-	 xIni 	   = 0;
-	 zIni	   = 0;
-	 vx 	   = 0;
-	 vz 	   = 0;
-	 v 		   = 0;
-	 x 		   = 0;
-	 z 		   = 0;
-	 adelante  = false;
-     atras 	   = false;
+     aceleracionZ = 0.1; 		     //aceleracion eje Z
+	 aceleracionZInversa = 0.05;	         //marcha atras
+	 aceleracionFrenado = 0.15;		     //aceleracion eje X
+	 tiempo = 0.5; 			 //Tiempo 
+	 velocidadIni = 0;
+	 posXIni = 0;
+	 posZIni = 0;
+	 velocidadX = 0;
+	 velocidadZ = 0;
+	 velocidad = 0;
+	 velocidadMax = 5;
+	 posX = 0;
+	 posZ = 0;
+	 adelante = false;
+     atras = false;
 
     coche = smgr->getMesh(rutaObj);
 	cuboNodo = smgr->addMeshSceneNode(coche);
@@ -50,10 +51,9 @@ vector3df corredor::getRotation(){
     return cuboNodo->getRotation();
 }
 void corredor::actualizarPos(){
-    cuboPos.Z = z;
-	cuboPos.X = x;
+    cuboPos.Z = posZ;
+	cuboPos.X = posX;
     cuboNodo->setPosition(cuboPos);
-
 }
 void corredor::setAxis(ISceneManager *smgr){
 	AxesSceneNode* axis = new AxesSceneNode(cuboNodo,smgr,-1);
@@ -61,20 +61,20 @@ void corredor::setAxis(ISceneManager *smgr){
   	axis->drop();
 }
 void corredor::setVelocidad(){
-    vIni = v;
+    velocidadIni = velocidad;
 }
 void corredor::setEspacio(){
-    xIni = x;
-	zIni = z;
+    posXIni = posX;
+	posZIni = posZ;
 }
 float corredor::getVelocidad(){
-    return v;
+    return velocidad;
 }
 float corredor::getEspacioX(){
-    return x;
+    return posX;
 }
 float corredor::getEspacioZ(){
-    return z;
+    return posZ;
 }
 //-----------------------\*
 //---MOVIMIENTO JUGADOR--\*
@@ -84,17 +84,17 @@ float corredor::getEspacioZ(){
         //cout<<"velocidad marcha adelante: "<<v<<"  "<<endl;
 
 		//esto da un ligero retroceso al arrancar de nuevo (sin ser excesivo con v=-2,5)
-		if (vIni<-1){
-			vIni=-1;
+		if (velocidadIni<0){
+			velocidadIni=0;
 		}
 		cuboRot = cuboNodo->getRotation();
 		//variamos la velocidad en funcion de la acceleracion (sin pasar de la velocidad max=5)
-		if(v< 5){
-			v = vIni+aZ*t;
+		if(velocidad< velocidadMax){
+			velocidad = velocidadIni+aceleracionZ*tiempo;
 		}
 		//calculamos el desplazamiento en z y x, en funcion del angulo (radianes)
-		z=zIni+v*cos((PI/180)*(cuboRot.Y));
-		x=xIni+v*sin((PI/180)*(cuboRot.Y));
+		posZ=posZIni+velocidad*cos((PI/180)*(cuboRot.Y));
+		posX=posXIni+velocidad*sin((PI/180)*(cuboRot.Y));
 		atras    = false;
 		adelante = true;
     } 
@@ -104,10 +104,10 @@ float corredor::getEspacioZ(){
 //-----------------------\* 
  void corredor::frenar(){
      if(adelante ==true){
-        z=zIni+v*cos((PI/180)*(cuboRot.Y));
-		x=xIni+v*sin((PI/180)*(cuboRot.Y));
-        if(v>-2.5f){	//Controla que no pase de 2.5 de velocidad en marcha atras cuando se frena
-			v = vIni - Afrenado*t;
+        posZ=posZIni+velocidad*cos((PI/180)*(cuboRot.Y));
+		posX=posXIni+velocidad*sin((PI/180)*(cuboRot.Y));
+        if(velocidad>-2.5f){	//Controla que no pase de 2.5 de velocidad en marcha atras cuando se frena
+			velocidad = velocidadIni - aceleracionFrenado*tiempo;
 			//	v = v -0.3;
 		}
          //v = vIni -Afrenado*t;
@@ -116,14 +116,14 @@ float corredor::getEspacioZ(){
         //cout<<"velocidad marcha atras: "<<v<<"  "<<endl;
 		atras    = true;
 		adelante = false;
-		if(v>-2.5f && v<2.5f){
+		if(velocidad>-2.5f && velocidad<2.5f){
 			//v = vIni + Afrenado*t;
-			v = vIni - aZInversa*t;
+			velocidad = velocidadIni - aceleracionZInversa*tiempo;
 			//	v = v -0.3;
 		}
 		
-		z=zIni+v*cos((PI/180)*(cuboRot.Y));
-		x=xIni+v*sin((PI/180)*(cuboRot.Y));
+		posZ=posZIni+velocidad*cos((PI/180)*(cuboRot.Y));
+		posX=posXIni+velocidad*sin((PI/180)*(cuboRot.Y));
      }   
     
 		
@@ -172,16 +172,16 @@ void corredor::desacelerar(){
     //desaceleracion
 	//X = Xi + Vi . t - 1/2 . a . t² 
 	//V = Vi - a . t
-	if(v >0){
-		 v = vIni -aZInversa*t;
+	if(velocidad >0){
+		velocidad = velocidadIni -aceleracionZInversa*tiempo;
 		if(atras){	//esta parte no se si entra alguna vez XD
 	
-			z=zIni-v*cos((PI/180)*(cuboRot.Y));
-			x=xIni-v*sin((PI/180)*(cuboRot.Y));
+			posZ=posZIni-velocidad*cos((PI/180)*(cuboRot.Y));
+			posX=posXIni-velocidad*sin((PI/180)*(cuboRot.Y));
 		}
 		if(adelante){ //desacelerar una vez el coche iba hacia adelante
-			z=zIni+v*cos((PI/180)*(cuboRot.Y));
-			x=xIni+v*sin((PI/180)*(cuboRot.Y));					
+			posZ=posZIni+velocidad*cos((PI/180)*(cuboRot.Y));
+			posX=posXIni+velocidad*sin((PI/180)*(cuboRot.Y));					
 		}
 		
     }

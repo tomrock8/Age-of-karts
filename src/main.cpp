@@ -95,6 +95,7 @@ int main(){
 
 	//variable para identificar la direccion de movimiento (activo o no)
     int checkGiro=0;
+	int checkMarchaAtras=0;
     //---------------------//
 	//---CAMARA INICIAL----//
 	//---------------------//
@@ -135,25 +136,37 @@ int main(){
             // const f32 delta = (f32)(ahora - antes) / 1000.f;
 	
 			checkGiro=0;
-            
+            checkMarchaAtras=0;
             //-------ENTRADA TECLADO ----------//
-			if(teclado.isKeyDown(KEY_ESCAPE)) {
-				device->closeDevice();
-				return 0;
-			} else if(teclado.isKeyDown(KEY_KEY_D)  ){
-				pj1->girarDerecha();
-				checkGiro=1;
-			} else if(teclado.isKeyDown(KEY_KEY_A) ){
-                pj1->girarIzquierda();
-				checkGiro=1;
-			}
 			if(teclado.isKeyDown(KEY_KEY_S)){
 				pj1->frenar();
+				checkMarchaAtras=1;
 			}else if(teclado.isKeyDown(KEY_KEY_W)){
 				pj1->acelerar();
 			}else{
 				pj1->desacelerar();
 			}
+			if(teclado.isKeyDown(KEY_ESCAPE)) {
+				device->closeDevice();
+				return 0;
+			} else if(teclado.isKeyDown(KEY_KEY_D)  ){
+				if (checkMarchaAtras==0){
+					pj1->girarDerecha();
+				}else{
+					pj1->girarIzquierda();
+				}
+				
+				checkGiro=1;
+			} else if(teclado.isKeyDown(KEY_KEY_A) ){
+				if (checkMarchaAtras==0){					
+					pj1->girarIzquierda();
+				}else{
+					pj1->girarDerecha();
+				}
+                
+				checkGiro=1;
+			}
+			
 			pj1->actualizarPos();
 			if (checkGiro==0){
 				pj1->resetGiro();

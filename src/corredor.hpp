@@ -32,12 +32,15 @@ public:
 	
 	
   private:
-    float aceleracionZ,aceleracionZInversa,aceleracionFrenado, tiempo, velocidadIni, posXIni, posZIni, velocidad,velocidadX,velocidadZ,velocidadMax, posX, posZ;    		
-	bool adelante, atras ;
+    float aceleracionZ,aceleracionZInversa,aceleracionFrenado, tiempo, velocidadIni, posXIni, posZIni, velocidad,velocidadX,velocidadZ,velocidadMax, posX, posZ, posY,anguloRotCoche,anguloRotRueda;    		
+	bool adelante, atras;
 	IMesh* coche;
 	IMeshSceneNode *cuboNodo;
+	IMeshSceneNode *ruedasDelanteras;
+	IMeshSceneNode *ruedasTraseras;
 	vector3df cuboPos;
 	vector3df cuboRot;
+	vector3df rotRuedas;
 		
 };
 

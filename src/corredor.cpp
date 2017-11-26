@@ -34,6 +34,7 @@ corredor::corredor(ISceneManager* smgr, stringw rutaObj){
 		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
 		cuboNodo->setPosition(vector3df(0,20,0));
 	} 
+
 	anguloRotCoche=cuboNodo->getRotation().Y;
 	ruedasDelanteras = smgr->addCubeSceneNode(2.0f);
 	ruedasTraseras = smgr->addCubeSceneNode(2.0f);
@@ -44,8 +45,15 @@ corredor::corredor(ISceneManager* smgr, stringw rutaObj){
 	ruedasTraseras->setRotation(cuboNodo->getRotation());
 }
 //-----------------------\*
+//---------NODO----------\*
+//-----------------------\*
+IMeshSceneNode* corredor::getNodo(){
+	return cuboNodo;
+}
+//-----------------------\*
 //---CALCULO MOVIMIENTO--\*
 //-----------------------\* 
+
 float corredor::movimiento(float pos,float vel,float accel,float delta){
     pos = pos+vel*delta+(0.5*accel*(exp2(delta)));    //donde el 0 es la velocidad inicial
     return pos;
@@ -147,19 +155,12 @@ float corredor::getEspacioZ(){
 //------GIRAR JUGADOR----\*
 //-----------------------\* 
 void corredor::girarDerecha(){
-    cuboRot = cuboNodo->getRotation();
-	rotRuedas = ruedasDelanteras->getRotation();
-	//cout<<rotRuedas.Y<<endl;
-	if (rotRuedas.Y<=cuboRot.Y+50){
-		//cout<<"HOLA_DERECHA"<<endl;
-		rotRuedas.Y+=1.4;
-		
-		if(cuboRot.Y==179){
-		rotRuedas.Y=rotRuedas.Y*-1;
-			//cout<<"HELLO_dcha"<<endl;
-		}
-
-		ruedasDelanteras->setRotation(rotRuedas);
+    if(velocidad!=0){
+	cuboRot = cuboNodo->getRotation();
+    
+    cuboRot.Y+=0.5;
+    cuboNodo->setRotation(vector3df(cuboRot.X ,cuboRot.Y,cuboRot.Z));
+    //x = movimiento(xIni,vIni,aZ,t);
 	}
 	
 	if (velocidad>=0.5 || velocidad<=-0.5){
@@ -178,11 +179,10 @@ void corredor::girarDerecha(){
 
 void corredor::girarIzquierda(){
     cuboRot = cuboNodo->getRotation();
-	rotRuedas = ruedasDelanteras->getRotation();
-	//cout<<rotRuedas.Y<<endl;
-	if (rotRuedas.Y>=cuboRot.Y-50){
-		//cout<<"HOLA_IZQUIERDA"<<endl;
-		rotRuedas.Y-=1.4;
+    
+    cuboRot.Y-=0.5;
+    cuboNodo->setRotation(vector3df(cuboRot.X ,cuboRot.Y,cuboRot.Z));
+    //x = movimiento(xIni,-vIni,aZ,t);
 
 		if(cuboRot.Y==-179){
 		rotRuedas.Y=rotRuedas.Y*-1;
@@ -190,9 +190,9 @@ void corredor::girarIzquierda(){
 		}
 
 		ruedasDelanteras->setRotation(rotRuedas);	
-	}
 	
-	if (velocidad>=0.5 || velocidad<=-0.5){
+	
+	if(velocidad>=0.5 || velocidad<=-0.5){
 		anguloRotCoche-=1;
 		cuboRot.Y=anguloRotCoche;
 		if(cuboRot.Y<-180){
@@ -204,8 +204,8 @@ void corredor::girarIzquierda(){
 		
 	}
 
-	
-}
+}	
+
 
 void corredor::resetGiro(){
 	if (rotRuedas.Y>cuboRot.Y){

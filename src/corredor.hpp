@@ -28,6 +28,7 @@ public:
 	float getVelocidad();
 	vector3df getPosition();
 	vector3df getRotation();
+	IMeshSceneNode* getNodo();
 	void moveCameraControl(IrrlichtDevice *device);
 	
 	

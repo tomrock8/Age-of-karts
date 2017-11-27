@@ -8,10 +8,7 @@
 
 using namespace std;
 
-//float movimiento(float pos,float vel,float accel,f32 delta){
-//    pos = pos+vel*delta+(0.5*accel*(exp2(delta)));    //donde el 0 es la velocidad inicial
-//    return pos;
-//}
+
 int main(){
     // -----------------------------
     //  VARIABLES COCHE
@@ -51,7 +48,7 @@ int main(){
     //  GEOMETRIA COCHE
     // -----------------------------
 	corredor* pj1=new corredor(smgr, "sources/coche.obj");
-		pj1->escalar(5.0f);
+	pj1->escalar(5.0f);
 	//IMesh* coche = smgr->getMesh("sources/coche.obj");
 	//IMeshSceneNode *cuboNodo = smgr->addMeshSceneNode(coche);
 	////cambiar a color rojo del coche
@@ -96,18 +93,19 @@ int main(){
   	// int fpsAntes = -1;
 	//	u32 antes = device->getTimer()->getTime();
 
+	//variable para identificar la direccion de movimiento (activo o no)
+    int checkGiro=0;
+	int checkMarchaAtras=0;
+	float checkVelocidad=0;
     //---------------------//
 	//---CAMARA INICIAL----//
 	//---------------------//
-	 	vector3df cuboPos = pj1->getPosition(); 
-		/*INI 26/11/2017  Camara fija*/
-		vector3df camPos( pj1->getPosition().X,  pj1->getPosition().Y-17 ,  pj1->getPosition().Z-5); 
-		//vector3df camPos( pj1->getPosition().X,  pj1->getPosition().Y + 10,  pj1->getPosition().Z - 25); 
-		//smgr->addCameraSceneNode(0, camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion 
-		 smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion 
-		/*FIN 26/11/2017  Camara fija*/
-		//smgr->getActiveCamera()-> bindTargetAndRotation(true);
-		float RotacionX = 0;
+	 	vector3df cuboPos = pj1->getPosicion(); 
+		//vector3df cuboRot = pj1->getRotation();
+    	vector3df camPos(0,3,-8); 
+		vector3df camRot = pj1->getRotacion(); 
+    	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion 
+
     // -----------------------------
     //  GAME LOOP
     // -----------------------------
@@ -115,8 +113,8 @@ int main(){
 		
 	    if(device->isWindowActive()){
 			pj1->setAxis(smgr);
-			pj1->setVelocidad();
-			pj1->setEspacio();
+			//pj1->setVelocidad();
+			//pj1->setEspacio();
 			//vIni = v;
 			//xIni = x;
 			
@@ -126,9 +124,13 @@ int main(){
 			text = L"Velocidad v [";
             text += pj1->getVelocidad();
             text +="] posicion X: ";
-            text += pj1->getEspacioX();
+            text += pj1->getPosicion().X;
 			text +="] posicion Z: ";
-			text += pj1->getEspacioZ();
+			text += pj1->getPosicion().Z;
+			text +="] rotacion: ";
+			text += pj1->getRotacion().Y;
+			//text +="] rotacion : ";
+			//text += pj1->getRotation().Y;
 			
         
 			//vector3df cuboPos =  cuboNodo->getPosition();
@@ -136,12 +138,15 @@ int main(){
             // const u32 ahora = device->getTimer()->getTime();
             // const f32 delta = (f32)(ahora - antes) / 1000.f;
 	
-		
-            //variable para identificar la direccion de movimiento (activo o no)
-			int checkGiro=0;
-			int checkMarchaAtras=0; 
+			checkGiro=0;
+			checkMarchaAtras=0;
+            checkVelocidad=pj1->getVelocidad();
+			
             //-------ENTRADA TECLADO ----------//
-			if(teclado.isKeyDown(KEY_KEY_S)){
+			if(teclado.isKeyDown(KEY_ESCAPE)) {
+				device->closeDevice();
+				return 0;
+			} else if(teclado.isKeyDown(KEY_KEY_S)){
 				pj1->frenar();
 				checkMarchaAtras=1;
 			}else if(teclado.isKeyDown(KEY_KEY_W)){
@@ -149,22 +154,26 @@ int main(){
 			}else{
 				pj1->desacelerar();
 			}
-			if(teclado.isKeyDown(KEY_ESCAPE)) {
-				device->closeDevice();
-				return 0;
-			} else if(teclado.isKeyDown(KEY_KEY_D)  ){
-				//RotacionX--;
-				smgr->getActiveCamera()->setRotation(vector3df(0,41110,0));
-				pj1->girarDerecha();
+			if(teclado.isKeyDown(KEY_KEY_D)  ){
+				if (checkMarchaAtras==0){
+					pj1->girarDerecha();
+				}else{
+					if (checkVelocidad<0.5){
+						pj1->girarIzquierda();
+					}
+				}
 				checkGiro=1;
 			} else if(teclado.isKeyDown(KEY_KEY_A) ){
-				//RotacionX++;
-				smgr->getActiveCamera()->setRotation(vector3df(0,10000,0));
-                pj1->girarIzquierda();
+                if (checkMarchaAtras==0){					
+					pj1->girarIzquierda();
+				}else{
+					if (checkVelocidad<0.5){
+						pj1->girarDerecha();
+					}
+				}
 				checkGiro=1;
 			}
-			
-			pj1->actualizarPos();
+			pj1->update();
 			if (checkGiro==0){
 				pj1->resetGiro();
 			}
@@ -173,21 +182,16 @@ int main(){
 			//-----------------------------//
 			// MOVIMIENTO DE LA CAMARA     //
 			//---------------------------- //
-			cuboPos = pj1->getPosition();
-			/* INI 26/11/2017  Camara fija*/
-			//camPos.X = pj1->getEspacioX();
-            //camPos.Y = pj1->getPosition().Y + 10; 
-            //camPos.Z = pj1->getEspacioZ()-25; 
-	
-			//cuboRot = pj1->getRotation();
+            cuboPos = pj1->getPosicion(); 
+            //camPos.X = cuboPos.X ; 
+            //camPos.Y = cuboPos.Y + 10; 
+            //camPos.Z =cuboPos.Z - 35 ; 
+			//camRot = pj1->getRotacion(); 
+ 
+            //smgr->getActiveCamera()->setPosition(camPos); 
+			//smgr->getActiveCamera()->setRotation(cuboPos); 
 			
-			//smgr->getActiveCamera()->setPosition(vector3df(camPos.X,camPos.Y,camPos.Z)); 
-			////smgr->getActiveCamera()->setRotation(cuboRot);
-			/* FIN  26/11/2017  Camara fija*/ 
             smgr->getActiveCamera()->setTarget(cuboPos); 
-			
-
-		
 			//-------RENDER INI---------//
 			driver->beginScene(true,true,SColor(255,200,200,200));
 			smgr->drawAll();

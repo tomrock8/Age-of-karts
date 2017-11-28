@@ -1,27 +1,14 @@
-#include <irrlicht.h>
+#include "irrlichtlib.hpp"
+#include "CTeclado.hpp"
 
-using namespace irr;
-using namespace core;
-using namespace scene;
-using namespace video;
-using namespace io;
-using namespace gui;
-
-class CTeclado : public IEventReceiver
-{
-  private:
-    bool KeyDown[KEY_KEY_CODES_COUNT];
-
-  public:
-    CTeclado()
-    {
-        for (int i = 0; i < KEY_KEY_CODES_COUNT; i++)
+CTeclado::CTeclado(){
+     for (int i = 0; i < KEY_KEY_CODES_COUNT; i++)
         {
             KeyDown[i] = false;
         }
+    
     }
-
-    virtual bool OnEvent(const SEvent &event)
+ bool CTeclado::OnEvent(const SEvent &event)
     {
         switch (event.EventType)
         {
@@ -35,13 +22,14 @@ class CTeclado : public IEventReceiver
         return false;
     }
 
-    virtual bool isKeyDown(EKEY_CODE keyCode) const
+ bool CTeclado::isKeyDown(EKEY_CODE keyCode) const
     {
         return KeyDown[keyCode];
     }
 
-    virtual bool isKeyup(EKEY_CODE keyCode) const
+ bool CTeclado::isKeyup(EKEY_CODE keyCode) const
     {
         return !KeyDown[keyCode];
     }
-};
+
+

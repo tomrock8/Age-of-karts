@@ -1,144 +1,256 @@
-#include <irrlicht.h>
-#include "CTeclado.cpp"
 
-using namespace irr;
-using namespace core;
-using namespace scene;
-using namespace video;
-using namespace io;
-using namespace gui;
 
-#pragma comment(lib, "Irrlicht.lib")
+#include "irrlichtlib.hpp"
+#include "CTeclado.hpp"
+#include "corredor.hpp"
+#include "ventana.hpp"
+#include <iostream>
 
-const int W_WIDTH = 1024;
-const int H_WIDTH = 600;
+using namespace std;
+
+// Ids para asignar a cada elemento.
+//  Seran analizados por el gestor de colisiones.
+enum
+{
+	// No colisionable, para evitar cogerlo por error
+	ID_NULO = 0,
+
+	// Objetos que pueden colisionar
+	ID_COLISION = 1 << 0,
+
+	// Objetos para iluminar
+	ID_ILUMINAR = 1 << 1
+};
 
 int main()
 {
-    int x = 0;
 
-    // -----------------------------
-    //  PREPARAR LA VENTANA
-    // -----------------------------
-    CTeclado teclado;
-    IrrlichtDevice *ventana = createDevice(EDT_OPENGL, dimension2d<u32>(W_WIDTH, H_WIDTH), 16, false, false, false, &teclado);
 
-    if (!ventana)
-        return 1;
+	CTeclado teclado;
+	// -----------------------------
+	//  PREPARAR LA VENTANA
+	// -----------------------------
 
-    ventana->setWindowCaption(L"AGE OF KARTS");
+	IrrlichtDevice *device = createDevice(video::EDT_OPENGL, dimension2d<u32>(640, 480), 16, false, false, false, &teclado);
+	if (!device)
+		return 1;
 
-    IVideoDriver *driver = ventana->getVideoDriver();
-    ISceneManager *escena = ventana->getSceneManager();
-    IGUIEnvironment *interfaz = ventana->getGUIEnvironment();
+	device->setWindowCaption(L"AGE OF KARTS");
 
-    // -----------------------------
-    //  INTERFAZ
-    // -----------------------------
-    interfaz->addStaticText(L"ME GACODELKJAHNRE", rect<int>(10, 10, 200, 22), true);
+	IVideoDriver *driver = device->getVideoDriver();
+	ISceneManager *smgr = device->getSceneManager();
+	IGUIEnvironment *guienv = device->getGUIEnvironment();
 
-    // -----------------------------
-    //  GEOMETRIA
-    // -----------------------------
-    IMeshSceneNode *nodoCubo = escena->addCubeSceneNode(5.f);
-    escena->getMeshManipulator()->setVertexColors(nodoCubo->getMesh(), SColor(100, 255, 0, 0));
-    nodoCubo->setPosition(vector3df(10, 0, 10));
-    nodoCubo->setMaterialFlag(EMF_LIGHTING, false);
+	//COLISIONES
+	ITriangleSelector *selector = 0; //Selector de triangulos para las colisiones
+	ISceneCollisionManager *gestorColisiones = smgr->getSceneCollisionManager();
 
-    // -----------------------------
-    //  IMPORTAR MALLA
-    // -----------------------------
-    //Mapa
-    ventana->getFileSystem()->addFileArchive("./assets/map-20kdm2.pk3"); //Carga el arbol de elementos
-    IAnimatedMesh *mapa = escena->getMesh("20kdm2.bsp"); // Elige del arbol de elementos el mapa
-    ISceneNode *nodoPadre = 0;
+	// -----------------------------
+	//  GEOMETRIA COCHE
+	// -----------------------------
+	corredor *pj1 = new corredor(smgr, "sources/coche.obj", ID_COLISION);
+	pj1->escalar(5.0f);
 
-    if(mapa){
-        nodoPadre = escena->addOctreeSceneNode(mapa->getMesh(0), 0, -1, 1024);
-    }
+	
+	// -----------------------------
+	//  IMPORTAR MALLA (MAPA)
+	// -----------------------------
 
-    //RISAS
-    //ISceneNodeAnimator *rotacionmapa = escena->createRotationAnimator(vector3df(1,1,1));
-    //nodoPadre->addAnimator(rotacionmapa);
+	// Mapa cargado desde obj
+	IMesh *mapa = smgr->getMesh("sources/mapaPr.obj");
 
-    //Personaje
-    IAnimatedMesh *malla = escena->getMesh("./assets/sydney.md2"); //Archivos validos: Quake2 (.md2), Maya(.obj), Quake3 map(.bsp), Milkshape(.ms3d)
-    IAnimatedMeshSceneNode *nodoPJ = escena->addAnimatedMeshSceneNode(malla);
-    nodoPJ->setScale(vector3df(0.5, 0.5, 0.5));
+	if (!mapa)
+	{
+		device->drop();
+		return 1;
+	}
 
-    if (nodoPJ)
-    {
-        nodoPJ->setMaterialFlag(EMF_LIGHTING, false);
-        nodoPJ->setFrameLoop(0, 310); //Carga los frames del 0 al 310 (todos)
-        nodoPJ->setMaterialTexture(0, driver->getTexture("./assets/sydney.bmp"));
-    }
+	// -----------------------------
+	//  GEOMETRIA MAPA
+	// -----------------------------
 
-    // -----------------------------
-    //  CAMARAS
-    // -----------------------------
+	// Cargar modelo mapa
+	IMeshSceneNode *mapaNodo = smgr->addMeshSceneNode(mapa, 0, ID_COLISION);
 
-    //Camara Ortogonal
-    //vector3df camara_posicion(-10, 40, -10);
-    //escena->addCameraSceneNode(0, camara_posicion, nodoPJ->getPosition());
+	smgr->getMeshManipulator()->setVertexColors(mapaNodo->getMesh(), SColor(255, 232, 128, 0));
+	if (mapaNodo)
+	{
+		mapaNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
+		mapaNodo->setPosition(vector3df(0, -20, -30));
+		selector = smgr->createTriangleSelector(mapa,0);
+        mapaNodo->setTriangleSelector(selector);
+        selector->drop();
+		mapaNodo->setName("MAPA");
+	}
 
-    //Camara FPS
-    escena->addCameraSceneNodeFPS();
-    ventana->getCursorControl()->setVisible(true); // Para no ver el raton
+	
+	//colisiones del jugador
+	if (selector)
+	{
+		const aabbox3d<f32> &cajaColision = pj1->getNodo()->getBoundingBox();
+		vector3df radioColision = cajaColision.MaxEdge - cajaColision.getCenter();
 
-    // -----------------------------
-    //  TIEMPO
-    // -----------------------------
-    //Delta time
-    u32 antes = ventana->getTimer()->getTime();
+		ISceneNodeAnimator *animacionColision = smgr->createCollisionResponseAnimator(
+			selector,			   // Selector de fisicas del mundo
+			pj1->getNodo(),		   // Objeto que tendra colisiones
+			radioColision,		   // Radio de elipse
+			vector3df(0, -10, 0),	// Gravedad
+			vector3df(0, 0, 0)); // Translacion
 
-    //FPS
-    int fpsAntes = -1;
+		selector->drop();
+		pj1->getNodo()->addAnimator(animacionColision);
+		animacionColision->drop();
+	}
 
-    // -----------------------------
-    //  GAME LOOP
-    // -----------------------------
-    while (ventana->run())
-    {
-        if (ventana->isWindowActive())
-        {
-            //Actualizar el valor del delta time
-            const u32 ahora = ventana->getTimer()->getTime();
-            const f32 delta = (f32)(ahora - antes) / 1000.f;
-            antes = ahora;
 
-            if (teclado.isKeyDown(KEY_ESCAPE))
+	//--FPS y Delta time--// -> borrados
+	// int fpsAntes = -1;
+	//	u32 antes = device->getTimer()->getTime();
+
+	//variable para identificar la direccion de movimiento (activo o no)
+	int checkGiro = 0;
+	int checkMarchaAtras = 0;
+	float checkVelocidad = 0;
+	//---------------------//
+	//---CAMARA INICIAL----//
+	//---------------------//
+	vector3df cuboPos = pj1->getPosicion();
+	vector3df camPos(0, 3, -8);
+	vector3df camRot = pj1->getRotacion();
+	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos, ID_NULO); //3 parametros =  nodopadre, posicion, direccion
+	
+	// -----------------------------
+	//  GAME LOOP
+	// -----------------------------
+	while (device->run())
+	{
+
+		if (device->isWindowActive())
+		{
+			pj1->setAxis(smgr);
+
+			// Linea que comprueba las colisiones del objeto
+			line3d<f32> rayo;
+			rayo.start = pj1->getPosicion();
+
+			vector3df radioColision = (pj1->getNodo()->getBoundingBox().MaxEdge - pj1->getNodo()->getBoundingBox().getCenter())+2;
+			rayo.end = rayo.start;
+			rayo.end.Y -= radioColision.Y;
+
+			vector3df interseccion;		// Analizar el punto de colision con la malla u objeto
+			triangle3df trianguloGolpe; // Para mostrar el triangulo de la colision
+
+			ISceneNode *nodoColision = gestorColisiones->getSceneNodeAndCollisionPointFromRay(
+				rayo, interseccion, trianguloGolpe, ID_COLISION, 0);
+
+
+			if (nodoColision)
             {
-                ventana->closeDevice();
-                return 0;
-            }
+				//cout << "CHOQUE" << endl;
+                cout << nodoColision->getName() << endl;
+			}	
+			
+			
 
-            driver->beginScene(true, true, SColor(255, 100, 101, 140));
+			//Mostrar la Posicion y Velocidad actuales.
+			stringw text = L"Age Of Karts - ";
 
-            escena->drawAll();
-            interfaz->drawAll();
+			text = L" v [";
+			text += pj1->getVelocidad();
+			text += "]  X: ";
+			text += pj1->getPosicion().X;
+			text += "]  Z: ";
+			text += pj1->getPosicion().Z;
+			text += "]  Y: ";
+			text += pj1->getPosicion().Y;
+			
+			//vector3df cuboPos =  cuboNodo->getPosition();
+			//Actualizar el valor del delta time
+			// const u32 ahora = device->getTimer()->getTime();
+			// const f32 delta = (f32)(ahora - antes) / 1000.f;
 
-            driver->endScene();
+			checkGiro = 0;
+			checkMarchaAtras = 0;
+			checkVelocidad = pj1->getVelocidad();
 
-            // Calcular los fps
-            int fpsAhora = driver->getFPS();
-            if(fpsAntes != fpsAhora){
-                stringw titulo = L"Age Of Karts [";
-                titulo += driver->getName();
-                titulo +="] FPS: ";
-                titulo += fpsAhora;
+			//-------ENTRADA TECLADO ----------//
+			if (teclado.isKeyDown(KEY_ESCAPE))
+			{
+				device->closeDevice();
+				return 0;
+			}
+			else if (teclado.isKeyDown(KEY_KEY_S))
+			{
+				pj1->frenar();
+				checkMarchaAtras = 1;
+			}
+			else if (teclado.isKeyDown(KEY_KEY_W))
+			{
+				pj1->acelerar();
+			}
+			else
+			{
+				pj1->desacelerar();
+			}
+			if (teclado.isKeyDown(KEY_KEY_D))
+			{
+				if (checkMarchaAtras == 0)
+				{
+					pj1->girarDerecha();
+				}
+				else
+				{
+					if (checkVelocidad < 0.5)
+					{
+						pj1->girarIzquierda();
+					}
+				}
+				checkGiro = 1;
+			}
+			else if (teclado.isKeyDown(KEY_KEY_A))
+			{
+				if (checkMarchaAtras == 0)
+				{
+					pj1->girarIzquierda();
+				}
+				else
+				{
+					if (checkVelocidad < 0.5)
+					{
+						pj1->girarDerecha();
+					}
+				}
+				checkGiro = 1;
+			}
+			pj1->update();
+			if (checkGiro == 0)
+			{
+				pj1->resetGiro();
+			}
+			//cuboNodo->setPosition(cuboPos);
+			//-------ENTRADA TECLADO FIN----------//
+			//-----------------------------//
+			// MOVIMIENTO DE LA CAMARA     //
+			//---------------------------- //
+			
+			smgr->getActiveCamera()->setTarget(pj1->getPosicion());
+			
+			//-------RENDER INI---------//
+			driver->beginScene(true, true, SColor(255, 200, 200, 200));
+			smgr->drawAll();
+			guienv->drawAll();
 
-                ventana->setWindowCaption(titulo.c_str());
-                fpsAntes = fpsAhora;
-            }
-        }
-        else
-        {
-            // Para el renderizado si la ventana no esta activa
-            ventana->yield();
-        }
-    }
+			driver->endScene();
 
-    ventana->drop(); // Se elimina el dispositivo de irrlicht
+			//-----MOSTRAR VELOCIDAD Y POSICION EN VENTANA
+			device->setWindowCaption(text.c_str());
+		}
+		else
+		{
+			device->yield();
+		}
+	}
+	device->drop();
 
-    return 0;
+	return 0;
 }

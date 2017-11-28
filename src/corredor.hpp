@@ -8,7 +8,7 @@ using namespace std;
 class corredor
 {
   public:
-	corredor(ISceneManager *smgr, stringw rutaObj);
+	corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision);
 	//--movimiento del corredor
 	void acelerar();
 	void frenar();

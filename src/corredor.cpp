@@ -2,10 +2,22 @@
 #include "corredor.hpp"
 #include "AxesSceneNode.cpp"
 
+
+enum
+{
+    // No colisionable, para evitar cogerlo por error
+    ID_NULO = 0,
+
+    // Objetos que pueden colisionar
+    ID_COLISION = 1 << 0,
+
+    // Objetos para iluminar
+    ID_ILUMINAR = 1 << 1
+};
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
 //-------------------------\*
-corredor::corredor(ISceneManager *smgr, stringw rutaObj)
+corredor::corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision)
 {
 	//aceleraciones
 	aceleracion = 0.1;		   //aceleracion eje Z
@@ -28,8 +40,8 @@ corredor::corredor(ISceneManager *smgr, stringw rutaObj)
 	posZ = 0;
 	posY = 0;
 	//rotaciones
-	Rotacionruedas = 1;
-	Rotacioncoche=2;
+	Rotacionruedas = 2;
+	Rotacioncoche=1;
 	rotRuedasY = 0;
 	rotCocheY = 0;
 	anguloMaxRuedas=50;
@@ -40,7 +52,8 @@ corredor::corredor(ISceneManager *smgr, stringw rutaObj)
 	atras = false;
 
 	coche = smgr->getMesh(rutaObj);
-	cuboNodo = smgr->addMeshSceneNode(coche);
+	cuboNodo = smgr->addMeshSceneNode(coche,0,id_colision);
+	cuboNodo->setName("Jugador");
 	//cambiar a color rojo del coche
 	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
 	// Desactivar la iluminacion del cubo
@@ -78,7 +91,10 @@ float corredor::movimiento(float pos, float vel, float accel, float delta)
 
 void corredor::updatePosicion()
 {
-	cuboNodo->setPosition(vector3df(posX, posY, posZ));
+	//posX+=this->getPosicion().X;
+	//posY+=this->getPosicion().Y;
+	//posZ+=this->getPosicion().Z;
+	cuboNodo->setPosition(vector3df(posX,posY,posZ));
 	//ruedasDelanteras->setPosition(vector3df(posX - 7, posY - 2 , posZ + 4));
 	//ruedasTraseras->setPosition(vector3df(posX - 7, posY - 2 , posZ - 4));
 }

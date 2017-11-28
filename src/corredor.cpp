@@ -95,6 +95,9 @@ float corredor::movimiento(float pos, float vel, float accel, float delta)
 
 void corredor::updatePosicion()
 {
+	posY=cuboNodo->getPosition().Y;
+	//posX+=cuboNodo->getPosition().X;
+	//posZ+=cuboNodo->getPosition().Z;
 	//posX+=this->getPosicion().X;
 	//posY+=this->getPosicion().Y;
 	//posZ+=this->getPosicion().Z;

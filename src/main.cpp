@@ -94,7 +94,7 @@ int main()
 			selector,			   // Selector de fisicas del mundo
 			pj1->getNodo(),		   // Objeto que tendra colisiones
 			radioColision,		   // Radio de elipse
-			vector3df(0, -20, 0),	// Gravedad
+			vector3df(0, -10, 0),	// Gravedad
 			vector3df(0, 0, 0)); // Translacion
 
 		selector->drop();
@@ -146,9 +146,8 @@ int main()
 
 			if (nodoColision)
             {
-				cout << "CHOQUE" << endl;
-				
-                //cout << nodoColision->getName() << endl;
+				//cout << "CHOQUE" << endl;
+                cout << nodoColision->getName() << endl;
 			}	
 			
 			

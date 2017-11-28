@@ -2,16 +2,17 @@ FUENTE := $(wildcard src/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
 LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11
 RUTAS := -I.
+CFLAGS := -ggdb
 
 .PHONY: objdir info all 
 
 all: objdir exec
 
 exec: $(OBJETOS)
-	g++ -o $@ $^ $(RUTAS) $(LIBRERIAS) 
+	g++ -o $@ $^ $(RUTAS) $(LIBRERIAS) $(CFLAGS)
 
 obj/%.o : src/%.cpp
-	g++ -o $@ -c $^ $(RUTAS)
+	g++ -o $@ -c $^ $(RUTAS) $(CFLAGS)
 
 objdir:
 	mkdir -p obj/

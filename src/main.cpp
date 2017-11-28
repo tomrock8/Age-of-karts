@@ -55,7 +55,7 @@ int main()
 	// -----------------------------
 
 	// Mapa cargado desde obj
-	IMesh *mapa = smgr->getMesh("assets/mapaPr.obj");
+	IMesh *mapa = smgr->getMesh("assets/mapa01.obj");
 
 	if (!mapa)
 	{
@@ -68,13 +68,14 @@ int main()
 	// -----------------------------
 
 	// Cargar modelo mapa
-	IMeshSceneNode *mapaNodo = smgr->addMeshSceneNode(mapa, 0, ID_COLISION);
+	IMeshSceneNode *mapaNodo = smgr->addOctreeSceneNode(mapa, 0, ID_COLISION);
 
 	smgr->getMeshManipulator()->setVertexColors(mapaNodo->getMesh(), SColor(255, 232, 128, 0));
 	if (mapaNodo)
 	{
 		mapaNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-		mapaNodo->setPosition(vector3df(0, -20, -30));
+		mapaNodo->setPosition(vector3df(0, 0, 0));
+		//mapaNodo->setScale(vector3df(25,25,25));
 		selector = smgr->createTriangleSelector(mapa, 0);
 		mapaNodo->setTriangleSelector(selector);
 		selector->drop();
@@ -91,7 +92,7 @@ int main()
 			selector,			  // Selector de fisicas del mundo
 			pj1->getNodo(),		  // Objeto que tendra colisiones
 			radioColision,		  // Radio de elipse
-			vector3df(0, -10, 0), // Gravedad
+			vector3df(0, -5, 0), // Gravedad
 			vector3df(0, 0, 0));  // Translacion
 
 		selector->drop();

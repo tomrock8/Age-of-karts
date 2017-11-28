@@ -21,7 +21,7 @@ corredor::corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision)
 {
 	//aceleraciones
 	aceleracion 	   = 0.1;   //aceleracion eje Z
-	aceleracionInversa = 0.05; //marcha atras
+	aceleracionInversa = 0.01; //marcha atras
 	aceleracionFrenado = 0.15; //aceleracion eje X
 	tiempo 			   = 0.5;
 
@@ -30,7 +30,7 @@ corredor::corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision)
 	velocidadX 		= 0;
 	velocidadZ 		= 0;
 	velocidad 		= 0;
-	velocidadMax 	= 5;
+	velocidadMax 	= 1.5;
 
 	//posiciones
 	posXIni = 0;
@@ -64,7 +64,7 @@ corredor::corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision)
 	if (cuboNodo)
 	{
 		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-		cuboNodo->setPosition(vector3df(0, 20, 0));
+		cuboNodo->setPosition(vector3df(230, 20, 0));
 	}
 
 	// una vez hemos establecido la posicion del coche establecemos sus posiciones x,z,y

@@ -1,77 +1,54 @@
 
-//proyecto 1. Cargar cubo y mover 
-//proyecto 3. Cargar modelo de mapa
+
 #include "irrlichtlib.hpp"
-#include "CTeclado.cpp"
+#include "CTeclado.hpp"
 #include "corredor.hpp"
+#include "ventana.hpp"
 #include <iostream>
 
 using namespace std;
 
 
 int main(){
-    // -----------------------------
-    //  VARIABLES COCHE
-    // -----------------------------
-	//float aZ        = 0.01; 		//aceleracion eje Z
-	//float aZInversa = 0.005;	    //marcha atras
-	//float Afrenado  = 0.03;		//aceleracion eje X
-	//float t         = 0.5; 			//Tiempo 
-	//float vIni      = 0;
-	//float xIni 		= 0;
-	//float v 		= 0;
-	//float x 		= 0;
-	//bool back  		= false;
-	//bool front 		= false;
-	/*float fuerza=0;
-	float fuerza_frenado=0;
-    float fuerzamax=150;
-	int masa=100;
-    float aZ=fuerza/masa;*/
+
 
 	CTeclado teclado; 
     // -----------------------------
     //  PREPARAR LA VENTANA
     // -----------------------------
+	//ventana*  window = new ventana(teclado);
 
+    //std::cout<<"entro a ventana"<<endl;
 	IrrlichtDevice *device = createDevice(video::EDT_OPENGL, dimension2d<u32>(640, 480),16,false,false,false,&teclado);
+	//IrrlichtDevice *device  = window->getDevice();
 	if(!device) return 1;
-	
-    device->setWindowCaption(L"AGE OF KARTS");
-
-	IVideoDriver* driver    =  device->getVideoDriver();
+	//
+   // device->setWindowCaption(L"AGE OF KARTS");
+    IVideoDriver* driver    =  device->getVideoDriver();
 	ISceneManager* smgr     =  device->getSceneManager();
 	IGUIEnvironment* guienv =  device->getGUIEnvironment();
 	
+	//BIVideoDriver* driver    = window->getDriver();
+	//ISceneManager* smgr     = window->getScene(); 
+	//IGUIEnvironment* guienv = window->getGUI();;
 
     // -----------------------------
     //  GEOMETRIA COCHE
-    // -----------------------------
+	// -----------------------------
+	
 	corredor* pj1=new corredor(smgr, "sources/coche.obj");
-	pj1->escalar(5.0f);
-	//IMesh* coche = smgr->getMesh("sources/coche.obj");
-	//IMeshSceneNode *cuboNodo = smgr->addMeshSceneNode(coche);
-	////cambiar a color rojo del coche
-	//smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(),SColor(255,255,0,0));
-//
-	////escalar objeto
-	//core::vector3d<f32> factorEscalate(5,5,5);
-	//cuboNodo->setScale(factorEscalate);
-	//	
-	//// Desactivar la iluminacion del cubo
-	//if(cuboNodo){
-	//	cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	//	cuboNodo->setPosition(vector3df(0,20,0));
-	//}
+		pj1->escalar(5.0f);
 
     // -----------------------------
     //  IMPORTAR MALLA (MAPA)
     // -----------------------------
 
 	// Mapa cargado desde obj
+	
 	IMesh* mapa = smgr->getMesh("sources/mapaPr.obj");
-
+  
 	if(!mapa){
+
 		device->drop();		
 		return 1;
 	}
@@ -80,8 +57,11 @@ int main(){
     //  GEOMETRIA MAPA
     // -----------------------------
 
-    // Cargar modelo mapa
+	// Cargar modelo mapa
+	   
+
 	IMeshSceneNode *mapaNodo = smgr->addMeshSceneNode(mapa);
+  
 
 	smgr->getMeshManipulator()->setVertexColors(mapaNodo->getMesh(),SColor(255,232,128,0));
 	if(mapaNodo){
@@ -101,11 +81,14 @@ int main(){
 	//---CAMARA INICIAL----//
 	//---------------------//
 	 	vector3df cuboPos = pj1->getPosicion(); 
-		//vector3df cuboRot = pj1->getRotation();
-    	vector3df camPos(0,3,-8); 
-		vector3df camRot = pj1->getRotacion(); 
-    	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion 
-
+		/*INI 26/11/2017  Camara fija*/
+		vector3df camPos(0,  2 ,  -5); 
+		//vector3df camPos( pj1->getPosition().X,  pj1->getPosition().Y + 10,  pj1->getPosition().Z - 25); 
+		//window->getScene()->addCameraSceneNode(0, camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion 
+		 smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion 
+		/*FIN 26/11/2017  Camara fija*/
+		//window->getScene()->getActiveCamera()-> bindTargetAndRotation(true);
+		float RotacionX = 0;
     // -----------------------------
     //  GAME LOOP
     // -----------------------------
@@ -188,8 +171,8 @@ int main(){
             //camPos.Z =cuboPos.Z - 35 ; 
 			//camRot = pj1->getRotacion(); 
  
-            //smgr->getActiveCamera()->setPosition(camPos); 
-			//smgr->getActiveCamera()->setRotation(cuboPos); 
+            //window->getScene()->getActiveCamera()->setPosition(camPos); 
+			//window->getScene()->getActiveCamera()->setRotation(cuboPos); 
 			
             smgr->getActiveCamera()->setTarget(cuboPos); 
 			//-------RENDER INI---------//
@@ -200,7 +183,7 @@ int main(){
 			driver->endScene();	
 
 			//-----MOSTRAR VELOCIDAD Y POSICION EN VENTANA
-            device->setWindowCaption(text.c_str());
+           device->setWindowCaption(text.c_str());
 
 			
 		} else{

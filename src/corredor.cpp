@@ -8,38 +8,41 @@
 corredor::corredor(ISceneManager *smgr, stringw rutaObj)
 {
 	//aceleraciones
-	aceleracion = 0.1;		   //aceleracion eje Z
+	aceleracion 	   = 0.1;   //aceleracion eje Z
 	aceleracionInversa = 0.05; //marcha atras
 	aceleracionFrenado = 0.15; //aceleracion eje X
-	tiempo = 0.5;
+	tiempo 			   = 0.5;
 
 	// velocidades
-	velocidadIni = 0;
-	velocidadX = 0;
-	velocidadZ = 0;
-	velocidad = 0;
-	velocidadMax = 5;
+	velocidadIni 	= 0;
+	velocidadX 		= 0;
+	velocidadZ 		= 0;
+	velocidad 		= 0;
+	velocidadMax 	= 5;
 
 	//posiciones
 	posXIni = 0;
 	posZIni = 0;
 	posYIni = 0;
-	posX = 0;
-	posZ = 0;
-	posY = 0;
+	posX 	= 0;
+	posZ 	= 0;
+	posY 	= 0;
 	//rotaciones
-	Rotacionruedas = 1;
-	Rotacioncoche=2;
-	rotRuedasY = 0;
-	rotCocheY = 0;
-	anguloMaxRuedas=50;
-	anguloMaxCoche=180;
+	Rotacionruedas 	= 3;
+	Rotacioncoche	= 2;
+	rotRuedasY 		= 0;
+	rotCocheY 		= 0;
+	anguloMaxRuedas = 50;
+	anguloMaxCoche  = 180;
 
 	// booleanos
 	adelante = false;
-	atras = false;
+	atras    = false;
+	std::cout<<"mierda para todos"<<endl;
+				
+	coche    = smgr->getMesh(rutaObj);
+		std::cout<<"mierda para todos: el retorno de la mierda"<<endl;
 
-	coche = smgr->getMesh(rutaObj);
 	cuboNodo = smgr->addMeshSceneNode(coche);
 	//cambiar a color rojo del coche
 	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
@@ -57,7 +60,7 @@ corredor::corredor(ISceneManager *smgr, stringw rutaObj)
 
 	// luego declaramos sus ruedas
 	ruedasDelanteras = smgr->addCubeSceneNode(0.5f);
-	ruedasTraseras = smgr->addCubeSceneNode(0.5f);
+	ruedasTraseras   = smgr->addCubeSceneNode(0.5f);
 	ruedasDelanteras->setParent(cuboNodo);
 	ruedasTraseras->setParent(cuboNodo);
 	// inicializamos la posicion de las ruedas

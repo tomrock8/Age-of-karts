@@ -25,7 +25,6 @@ enum
 int main()
 {
 
-
 	CTeclado teclado;
 	// -----------------------------
 	//  PREPARAR LA VENTANA
@@ -48,16 +47,15 @@ int main()
 	// -----------------------------
 	//  GEOMETRIA COCHE
 	// -----------------------------
-	corredor *pj1 = new corredor(smgr, "sources/coche.obj", ID_COLISION);
-	pj1->escalar(5.0f);
+	corredor *pj1 = new corredor(smgr, "assets/coche.obj", ID_COLISION);
+	pj1->escalar(2.0f);
 
-	
 	// -----------------------------
 	//  IMPORTAR MALLA (MAPA)
 	// -----------------------------
 
 	// Mapa cargado desde obj
-	IMesh *mapa = smgr->getMesh("sources/mapaPr.obj");
+	IMesh *mapa = smgr->getMesh("assets/mapaPr.obj");
 
 	if (!mapa)
 	{
@@ -77,13 +75,12 @@ int main()
 	{
 		mapaNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
 		mapaNodo->setPosition(vector3df(0, -20, -30));
-		selector = smgr->createTriangleSelector(mapa,0);
-        mapaNodo->setTriangleSelector(selector);
-        selector->drop();
+		selector = smgr->createTriangleSelector(mapa, 0);
+		mapaNodo->setTriangleSelector(selector);
+		selector->drop();
 		mapaNodo->setName("MAPA");
 	}
 
-	
 	//colisiones del jugador
 	if (selector)
 	{
@@ -91,21 +88,16 @@ int main()
 		vector3df radioColision = cajaColision.MaxEdge - cajaColision.getCenter();
 
 		ISceneNodeAnimator *animacionColision = smgr->createCollisionResponseAnimator(
-			selector,			   // Selector de fisicas del mundo
-			pj1->getNodo(),		   // Objeto que tendra colisiones
-			radioColision,		   // Radio de elipse
-			vector3df(0, -10, 0),	// Gravedad
-			vector3df(0, 0, 0)); // Translacion
+			selector,			  // Selector de fisicas del mundo
+			pj1->getNodo(),		  // Objeto que tendra colisiones
+			radioColision,		  // Radio de elipse
+			vector3df(0, -10, 0), // Gravedad
+			vector3df(0, 0, 0));  // Translacion
 
 		selector->drop();
 		pj1->getNodo()->addAnimator(animacionColision);
 		animacionColision->drop();
 	}
-
-
-	//--FPS y Delta time--// -> borrados
-	// int fpsAntes = -1;
-	//	u32 antes = device->getTimer()->getTime();
 
 	//variable para identificar la direccion de movimiento (activo o no)
 	int checkGiro = 0;
@@ -118,7 +110,7 @@ int main()
 	vector3df camPos(0, 3, -8);
 	vector3df camRot = pj1->getRotacion();
 	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos, ID_NULO); //3 parametros =  nodopadre, posicion, direccion
-	
+
 	// -----------------------------
 	//  GAME LOOP
 	// -----------------------------
@@ -133,7 +125,7 @@ int main()
 			line3d<f32> rayo;
 			rayo.start = pj1->getPosicion();
 
-			vector3df radioColision = (pj1->getNodo()->getBoundingBox().MaxEdge - pj1->getNodo()->getBoundingBox().getCenter())+2;
+			vector3df radioColision = (pj1->getNodo()->getBoundingBox().MaxEdge - pj1->getNodo()->getBoundingBox().getCenter()) + 2;
 			rayo.end = rayo.start;
 			rayo.end.Y -= radioColision.Y;
 
@@ -143,31 +135,24 @@ int main()
 			ISceneNode *nodoColision = gestorColisiones->getSceneNodeAndCollisionPointFromRay(
 				rayo, interseccion, trianguloGolpe, ID_COLISION, 0);
 
-
 			if (nodoColision)
-            {
+			{
 				//cout << "CHOQUE" << endl;
-                cout << nodoColision->getName() << endl;
-			}	
-			
-			
+				cout << "Colision con: " << nodoColision->getName() << endl;
+			}
 
 			//Mostrar la Posicion y Velocidad actuales.
 			stringw text = L"Age Of Karts - ";
 
-			text = L" v [";
+			text = L" V[";
 			text += pj1->getVelocidad();
-			text += "]  X: ";
+			text += "] POS[";
 			text += pj1->getPosicion().X;
-			text += "]  Z: ";
-			text += pj1->getPosicion().Z;
-			text += "]  Y: ";
+			text += ", ";
 			text += pj1->getPosicion().Y;
-			
-			//vector3df cuboPos =  cuboNodo->getPosition();
-			//Actualizar el valor del delta time
-			// const u32 ahora = device->getTimer()->getTime();
-			// const f32 delta = (f32)(ahora - antes) / 1000.f;
+			text += ", ";
+			text += pj1->getPosicion().Z;
+			text += "]";
 
 			checkGiro = 0;
 			checkMarchaAtras = 0;
@@ -227,14 +212,14 @@ int main()
 			{
 				pj1->resetGiro();
 			}
-			//cuboNodo->setPosition(cuboPos);
+
 			//-------ENTRADA TECLADO FIN----------//
 			//-----------------------------//
 			// MOVIMIENTO DE LA CAMARA     //
 			//---------------------------- //
-			
+
 			smgr->getActiveCamera()->setTarget(pj1->getPosicion());
-			
+
 			//-------RENDER INI---------//
 			driver->beginScene(true, true, SColor(255, 200, 200, 200));
 			smgr->drawAll();

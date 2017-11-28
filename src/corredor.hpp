@@ -46,7 +46,7 @@ class corredor
 	// rotaciones
 	float Rotacionruedas,Rotacioncoche, rotRuedasY, rotCocheY,anguloMaxRuedas,anguloMaxCoche;
 	//objetos
-	IMesh *coche;
+	IMesh          *coche;
 	IMeshSceneNode *cuboNodo;
 	IMeshSceneNode *ruedasDelanteras;
 	IMeshSceneNode *ruedasTraseras;

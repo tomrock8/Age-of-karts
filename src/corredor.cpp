@@ -20,36 +20,40 @@ enum
 corredor::corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision)
 {
 	//aceleraciones
-	aceleracion = 0.1;		   //aceleracion eje Z
+	aceleracion 	   = 0.1;   //aceleracion eje Z
 	aceleracionInversa = 0.05; //marcha atras
 	aceleracionFrenado = 0.15; //aceleracion eje X
-	tiempo = 0.5;
+	tiempo 			   = 0.5;
 
 	// velocidades
-	velocidadIni = 0;
-	velocidadX = 0;
-	velocidadZ = 0;
-	velocidad = 0;
-	velocidadMax = 5;
+	velocidadIni 	= 0;
+	velocidadX 		= 0;
+	velocidadZ 		= 0;
+	velocidad 		= 0;
+	velocidadMax 	= 5;
 
 	//posiciones
 	posXIni = 0;
 	posZIni = 0;
 	posYIni = 0;
-	posX = 0;
-	posZ = 0;
-	posY = 0;
+	posX 	= 0;
+	posZ 	= 0;
+	posY 	= 0;
 	//rotaciones
-	Rotacionruedas = 2;
-	Rotacioncoche=1;
-	rotRuedasY = 0;
-	rotCocheY = 0;
-	anguloMaxRuedas=50;
-	anguloMaxCoche=180;
+	Rotacionruedas 	= 3;
+	Rotacioncoche	= 2;
+	rotRuedasY 		= 0;
+	rotCocheY 		= 0;
+	anguloMaxRuedas = 50;
+	anguloMaxCoche  = 180;
 
 	// booleanos
 	adelante = false;
-	atras = false;
+	atras    = false;
+	std::cout<<"mierda para todos"<<endl;
+				
+	coche    = smgr->getMesh(rutaObj);
+		std::cout<<"mierda para todos: el retorno de la mierda"<<endl;
 
 	coche = smgr->getMesh(rutaObj);
 	cuboNodo = smgr->addMeshSceneNode(coche,0,id_colision);
@@ -70,7 +74,7 @@ corredor::corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision)
 
 	// luego declaramos sus ruedas
 	ruedasDelanteras = smgr->addCubeSceneNode(0.5f);
-	ruedasTraseras = smgr->addCubeSceneNode(0.5f);
+	ruedasTraseras   = smgr->addCubeSceneNode(0.5f);
 	ruedasDelanteras->setParent(cuboNodo);
 	ruedasTraseras->setParent(cuboNodo);
 	// inicializamos la posicion de las ruedas

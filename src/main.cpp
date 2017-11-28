@@ -1,9 +1,9 @@
 
-//proyecto 1. Cargar cubo y mover
-//proyecto 3. Cargar modelo de mapa
+
 #include "irrlichtlib.hpp"
-#include "CTeclado.cpp"
+#include "CTeclado.hpp"
 #include "corredor.hpp"
+#include "ventana.hpp"
 #include <iostream>
 
 using namespace std;

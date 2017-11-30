@@ -1,3 +1,16 @@
+# EJECUTABLES
+exec
+*.exe
+
+# COMPILADOS
 obj/
 *.o
-exec
+
+# VISUAL STUDIO
+*.sln
+*.vcxproj*
+*.VC*
+.vs/
+Debug/
+
+

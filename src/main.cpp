@@ -38,6 +38,7 @@ int main()
 	ISceneManager *smgr = device->getSceneManager();
 	IGUIEnvironment *guienv = device->getGUIEnvironment();
 
+
 	//COLISIONES
 	ITriangleSelector *selector = 0; //Selector de triangulos para las colisiones
 	ISceneCollisionManager *gestorColisiones = smgr->getSceneCollisionManager();
@@ -114,17 +115,29 @@ int main()
 	// -----------------------------
 	//  INTERFAZ
 	// -----------------------------
-	IGUIStaticText *textoUI= guienv->addStaticText(L"DEPURACION", rect<s32>(10,10,260,22), true);
-	stringw text; // PARA MODIFICACIONES FUTURAS
+	stringw text = L"Datos del jugador:\n"; // PARA MODIFICACIONES FUTURAS
+	IGUIFont *fuente = guienv->getFont("assets/fuente.bmp");
+	IGUIStaticText *textoUI= guienv->addStaticText(
+		text.c_str(),				// Texto
+		rect<s32>(10,10,260,150),	// Rectangulo de los bordes
+		false,						// Mostrar bordes
+		true, 						// Cortar en varias lineas
+		0, 							// Nodo padre
+		ID_NULO,					// Id del elemento
+		true);						// Rellenado (o transparente)
+	textoUI->setOverrideFont(fuente);
+	
 
 	// -----------------------------
 	//  GAME LOOP
 	// -----------------------------
 	while (device->run())
 	{
-
 		if (device->isWindowActive())
 		{
+			// PARA MODIFICACIONES DEBUG
+			text = L"Datos del jugador:\n"; 
+
 			pj1->setAxis(smgr);
 
 			// Linea que comprueba las colisiones del objeto
@@ -140,25 +153,24 @@ int main()
 
 			ISceneNode *nodoColision = gestorColisiones->getSceneNodeAndCollisionPointFromRay(
 				rayo, interseccion, trianguloGolpe, ID_COLISION, 0);
-
+			
 			if (nodoColision)
 			{
 				//cout << "CHOQUE" << endl;
-				text = L"Colision con: ";
+				text += "Colision con: ";
 				text += nodoColision->getName();
-				textoUI->setText(text.c_str()); 
 			}
 
 			//Mostrar la Posicion y Velocidad actuales.
-			//text = L" V[";
-			//text += pj1->getVelocidad();
-			//text += "] POS[";
-			//text += pj1->getPosicion().X;
-			//text += ", ";
-			//text += pj1->getPosicion().Y;
-			//text += ", ";
-			//text += pj1->getPosicion().Z;
-			//text += "]";
+			text += "\nVelocidad: ";
+			text += pj1->getVelocidad();
+			text += "\nPosicion [";
+			text += pj1->getPosicion().X;
+			text += ", ";
+			text += pj1->getPosicion().Y;
+			text += ", ";
+			text += pj1->getPosicion().Z;
+			text += "]\n";
 
 			checkGiro = 0;
 			checkMarchaAtras = 0;
@@ -220,6 +232,10 @@ int main()
 			}
 
 			//-------ENTRADA TECLADO FIN----------//
+
+
+			textoUI->setText(text.c_str()); 
+
 			//-----------------------------//
 			// MOVIMIENTO DE LA CAMARA     //
 			//---------------------------- //
@@ -233,8 +249,6 @@ int main()
 
 			driver->endScene();
 
-			//-----MOSTRAR VELOCIDAD Y POSICION EN VENTANA
-			device->setWindowCaption(text.c_str());
 		}
 		else
 		{

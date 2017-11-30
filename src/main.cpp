@@ -1,5 +1,3 @@
-
-
 #include "irrlichtlib.hpp"
 #include "CTeclado.hpp"
 #include "corredor.hpp"

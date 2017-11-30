@@ -1,15 +1,15 @@
-#ifndef VENTANA_H
-#define VENTANA_H
+#ifndef IVENTANA_H
+#define IVENTANA_H
 
 #include <iostream>
-#include "irrlichtlib.hpp"
+#include "IrrlichtLib.hpp"
 #include "CTeclado.hpp"
 using namespace std;
 
-class ventana
+class IVentana
 {
   public:
-	ventana(CTeclado  teclado);
+	IVentana(CTeclado &teclado);
 	
 	//metodos SET
 
@@ -27,4 +27,4 @@ class ventana
 	IGUIEnvironment* guienv;
 };
 
-#endif /* VENTANA_H */
+#endif /* IVENTANA_H */

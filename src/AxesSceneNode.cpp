@@ -1,4 +1,4 @@
-#include "irrlichtlib.hpp"
+#include "IrrlichtLib.hpp"
 
 class AxesSceneNode : public scene::ISceneNode
 {

@@ -1,7 +1,7 @@
-#include "irrlichtlib.hpp"
+#include "IrrlichtLib.hpp"
 #include "CTeclado.hpp"
-#include "corredor.hpp"
-#include "ventana.hpp"
+#include "Corredor.hpp"
+#include "IVentana.hpp"
 #include <iostream>
 
 using namespace std;
@@ -27,17 +27,12 @@ int main()
 	// -----------------------------
 	//  PREPARAR LA VENTANA
 	// -----------------------------
-
-	IrrlichtDevice *device = createDevice(video::EDT_OPENGL, dimension2d<u32>(640, 480), 16, false, false, false, &teclado);
-	if (!device)
-		return 1;
-
-	device->setWindowCaption(L"AGE OF KARTS");
-
-	IVideoDriver *driver = device->getVideoDriver();
-	ISceneManager *smgr = device->getSceneManager();
-	IGUIEnvironment *guienv = device->getGUIEnvironment();
-
+	IVentana *irrlicht = new IVentana(teclado);
+	IrrlichtDevice *device = irrlicht->getDevice();
+	IVideoDriver *driver = irrlicht->getDriver();
+	ISceneManager *smgr = irrlicht->getScene();
+	IGUIEnvironment *guienv = irrlicht->getGUI();
+	
 
 	//COLISIONES
 	ITriangleSelector *selector = 0; //Selector de triangulos para las colisiones
@@ -46,7 +41,7 @@ int main()
 	// -----------------------------
 	//  GEOMETRIA COCHE
 	// -----------------------------
-	corredor *pj1 = new corredor(smgr, "assets/coche.obj", ID_COLISION);
+	Corredor *pj1 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
 	pj1->escalar(2.0f);
 
 	// -----------------------------

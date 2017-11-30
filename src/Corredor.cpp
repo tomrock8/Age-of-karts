@@ -1,7 +1,6 @@
-#include "irrlichtlib.hpp"
-#include "corredor.hpp"
+#include "IrrlichtLib.hpp"
+#include "Corredor.hpp"
 #include "AxesSceneNode.cpp"
-
 
 enum
 {
@@ -17,7 +16,7 @@ enum
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
 //-------------------------\*
-corredor::corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision)
+Corredor::Corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision)
 {
 	//aceleraciones
 	aceleracion 	   = 0.1;   //aceleracion eje Z
@@ -84,7 +83,7 @@ corredor::corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision)
 //-----------------------\*
 //---CALCULO MOVIMIENTO--\*
 //-----------------------\*
-float corredor::movimiento(float pos, float vel, float accel, float delta)
+float Corredor::movimiento(float pos, float vel, float accel, float delta)
 {
 	pos = pos + vel * delta + (0.5 * accel * (exp2(delta))); //donde el 0 es la velocidad inicial
 	return pos;
@@ -93,7 +92,7 @@ float corredor::movimiento(float pos, float vel, float accel, float delta)
 //-------POSICION--------\*
 //-----------------------\*
 
-void corredor::updatePosicion()
+void Corredor::updatePosicion()
 {
 	posY=cuboNodo->getPosition().Y;
 	//posX+=cuboNodo->getPosition().X;
@@ -106,46 +105,46 @@ void corredor::updatePosicion()
 	//ruedasTraseras->setPosition(vector3df(posX - 7, posY - 2 , posZ - 4));
 }
 
-void corredor::updateVelocidadInicial()
+void Corredor::updateVelocidadInicial()
 {
 	velocidadIni = velocidad;
 }
 
-void corredor::updatePosicionInicial()
+void Corredor::updatePosicionInicial()
 {
 	posXIni = posX;
 	posZIni = posZ;
 }
 
-void corredor::update()
+void Corredor::update()
 {
 	updatePosicion();
 	updateVelocidadInicial();
 	updatePosicionInicial();
 }
 
-void corredor::setAxis(ISceneManager *smgr)
+void Corredor::setAxis(ISceneManager *smgr)
 {
 	AxesSceneNode *axis = new AxesSceneNode(cuboNodo, smgr, -1);
 	axis->setAxesScale(20); //  for the length of the axes
 	axis->drop();
 }
 
-float corredor::getVelocidad()
+float Corredor::getVelocidad()
 {
 	return velocidad;
 }
-vector3df corredor::getPosicion()
+vector3df Corredor::getPosicion()
 {
 	return cuboNodo->getPosition();
 }
 
-vector3df corredor::getRotacion()
+vector3df Corredor::getRotacion()
 {
 	return cuboNodo->getRotation();
 }
 
-IMeshSceneNode* corredor::getNodo()
+IMeshSceneNode* Corredor::getNodo()
 {
 
 	return cuboNodo;
@@ -154,7 +153,7 @@ IMeshSceneNode* corredor::getNodo()
 //-----------------------\*
 //---MOVIMIENTO JUGADOR--\*
 //-----------------------\*
-void corredor::acelerar()
+void Corredor::acelerar()
 {
 
 	//cout<<"velocidad marcha adelante: "<<v<<"  "<<endl;
@@ -180,7 +179,7 @@ void corredor::acelerar()
 //-----------------------\*
 //---FRENADO JUGADOR---\*
 //-----------------------\*
-void corredor::frenar()
+void Corredor::frenar()
 {
 	if (adelante == true)
 	{
@@ -213,7 +212,7 @@ void corredor::frenar()
 //-----------------------\*
 //------GIRAR JUGADOR----\*
 //-----------------------\*
-void corredor::girarDerecha()
+void Corredor::girarDerecha()
 {	
 	if (velocidad>=0.5 || velocidad<=-0.5){
 		rotCocheY += Rotacioncoche;
@@ -246,7 +245,7 @@ void corredor::girarDerecha()
 	cuboNodo->setRotation(vector3df(0, rotCocheY, 0));
 }
 
-void corredor::girarIzquierda()
+void Corredor::girarIzquierda()
 {
 	if (velocidad>=0.5 || velocidad<=-0.5){
 		rotCocheY -= Rotacioncoche;
@@ -277,7 +276,7 @@ void corredor::girarIzquierda()
 	cuboNodo->setRotation(vector3df(0, rotCocheY, 0));
 }
 
-void corredor::resetGiro()
+void Corredor::resetGiro()
 {
 	if (rotRuedasY>0){
 		rotRuedasY-=Rotacionruedas+0.5;
@@ -291,7 +290,7 @@ void corredor::resetGiro()
 //-----------------------\*
 //---DESACELERAR JUGADOR--\*
 //-----------------------\*
-void corredor::desacelerar()
+void Corredor::desacelerar()
 {
 	//desaceleracion
 	//X = Xi + Vi . t - 1/2 . a . t²
@@ -316,7 +315,7 @@ void corredor::desacelerar()
 		}
 	}
 }
-void corredor::escalar(float tam)
+void Corredor::escalar(float tam)
 {
 	core::vector3d<f32> factorEscalado(tam, tam, tam);
 	cuboNodo->setScale(factorEscalado);

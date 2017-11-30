@@ -2,7 +2,7 @@
 #define CTECLADO_H
 
 #include <iostream>
-#include "irrlichtlib.hpp"
+#include "IrrlichtLib.hpp"
 
 
 class CTeclado : public IEventReceiver

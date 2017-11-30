@@ -1,4 +1,4 @@
-#include "irrlichtlib.hpp"
+#include "IrrlichtLib.hpp"
 #include "CTeclado.hpp"
 
 CTeclado::CTeclado(){

@@ -2,13 +2,14 @@
 #define CORREDOR_H
 
 #include <iostream>
-#include "irrlichtlib.hpp"
+#include "IrrlichtLib.hpp"
+
 using namespace std;
 
-class corredor
+class Corredor
 {
   public:
-	corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision);
+	Corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision);
 	//--movimiento del corredor
 	void acelerar();
 	void frenar();

@@ -1,11 +1,11 @@
-#include "irrlichtlib.hpp"
-#include "ventana.hpp"
+#include "IrrlichtLib.hpp"
+#include "IVentana.hpp"
 
 
 //-------------------------\*
 //---CONSTRUCTOR VENTANA---\*
 //-------------------------\*
-ventana::ventana(CTeclado  teclado)
+IVentana::IVentana(CTeclado &teclado)
 {
 
 	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(640, 480),16,false,false,false,&teclado);
@@ -23,16 +23,16 @@ ventana::ventana(CTeclado  teclado)
 	
 }
 
-IrrlichtDevice* ventana::getDevice(){
+IrrlichtDevice* IVentana::getDevice(){
 	return device;
 }
-IVideoDriver* ventana::getDriver(){
+IVideoDriver* IVentana::getDriver(){
 	return driver;
 }
-ISceneManager* ventana::getScene(){
+ISceneManager* IVentana::getScene(){
 	std::cout<<"mierda pa ti"<<endl;
 	return smgr;
 }
-IGUIEnvironment* ventana::getGUI(){
+IGUIEnvironment* IVentana::getGUI(){
 	return guienv;
 };

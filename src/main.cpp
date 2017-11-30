@@ -110,6 +110,13 @@ int main()
 	vector3df camRot = pj1->getRotacion();
 	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos, ID_NULO); //3 parametros =  nodopadre, posicion, direccion
 
+
+	// -----------------------------
+	//  INTERFAZ
+	// -----------------------------
+	IGUIStaticText *textoUI= guienv->addStaticText(L"DEPURACION", rect<s32>(10,10,260,22), true);
+	stringw text; // PARA MODIFICACIONES FUTURAS
+
 	// -----------------------------
 	//  GAME LOOP
 	// -----------------------------
@@ -137,21 +144,21 @@ int main()
 			if (nodoColision)
 			{
 				//cout << "CHOQUE" << endl;
-				cout << "Colision con: " << nodoColision->getName() << endl;
+				text = L"Colision con: ";
+				text += nodoColision->getName();
+				textoUI->setText(text.c_str()); 
 			}
 
 			//Mostrar la Posicion y Velocidad actuales.
-			stringw text = L"Age Of Karts - ";
-
-			text = L" V[";
-			text += pj1->getVelocidad();
-			text += "] POS[";
-			text += pj1->getPosicion().X;
-			text += ", ";
-			text += pj1->getPosicion().Y;
-			text += ", ";
-			text += pj1->getPosicion().Z;
-			text += "]";
+			//text = L" V[";
+			//text += pj1->getVelocidad();
+			//text += "] POS[";
+			//text += pj1->getPosicion().X;
+			//text += ", ";
+			//text += pj1->getPosicion().Y;
+			//text += ", ";
+			//text += pj1->getPosicion().Z;
+			//text += "]";
 
 			checkGiro = 0;
 			checkMarchaAtras = 0;

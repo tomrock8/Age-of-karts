@@ -6,6 +6,11 @@
 
 using namespace std;
 
+#ifdef _MSC_VER
+#pragma comment(lib, "Irrlicht.lib")
+#endif
+
+
 // Ids para asignar a cada elemento.
 //  Seran analizados por el gestor de colisiones.
 enum
@@ -32,7 +37,7 @@ int main()
 	IVideoDriver *driver = irrlicht->getDriver();
 	ISceneManager *smgr = irrlicht->getScene();
 	IGUIEnvironment *guienv = irrlicht->getGUI();
-	
+
 
 	//COLISIONES
 	ITriangleSelector *selector = 0; //Selector de triangulos para las colisiones
@@ -112,16 +117,16 @@ int main()
 	// -----------------------------
 	stringw text = L"Datos del jugador:\n"; // PARA MODIFICACIONES FUTURAS
 	IGUIFont *fuente = guienv->getFont("assets/fuente.bmp");
-	IGUIStaticText *textoUI= guienv->addStaticText(
+	IGUIStaticText *textoUI = guienv->addStaticText(
 		text.c_str(),				// Texto
-		rect<s32>(10,10,260,150),	// Rectangulo de los bordes
+		rect<s32>(10, 10, 260, 150),	// Rectangulo de los bordes
 		false,						// Mostrar bordes
 		true, 						// Cortar en varias lineas
 		0, 							// Nodo padre
 		ID_NULO,					// Id del elemento
 		true);						// Rellenado (o transparente)
 	textoUI->setOverrideFont(fuente);
-	
+
 
 	// -----------------------------
 	//  GAME LOOP
@@ -131,7 +136,7 @@ int main()
 		if (device->isWindowActive())
 		{
 			// PARA MODIFICACIONES DEBUG
-			text = L"Datos del jugador:\n"; 
+			text = L"Datos del jugador:\n";
 
 			pj1->setAxis(smgr);
 
@@ -148,7 +153,7 @@ int main()
 
 			ISceneNode *nodoColision = gestorColisiones->getSceneNodeAndCollisionPointFromRay(
 				rayo, interseccion, trianguloGolpe, ID_COLISION, 0);
-			
+
 			if (nodoColision)
 			{
 				//cout << "CHOQUE" << endl;
@@ -229,7 +234,7 @@ int main()
 			//-------ENTRADA TECLADO FIN----------//
 
 
-			textoUI->setText(text.c_str()); 
+			textoUI->setText(text.c_str());
 
 			//-----------------------------//
 			// MOVIMIENTO DE LA CAMARA     //

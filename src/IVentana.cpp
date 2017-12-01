@@ -8,31 +8,28 @@
 IVentana::IVentana(CTeclado &teclado)
 {
 
-	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(640, 480),16,false,false,false,&teclado);
-	if(!device) std::cout<<"algo falla con device"<<std::endl;;
+	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(640, 480), 16, false, false, true, &teclado);
+	if (!device) std::cout << "algo falla con device" << std::endl;;
 
 
-	
-    device->setWindowCaption(L"AGE OF KARTS");
 
-	driver =  device->getVideoDriver();
-	smgr   =  device->getSceneManager();
-	guienv =  device->getGUIEnvironment();
-	std::cout<<"----------------------------------------------------------------esto lo hago"<<endl;
+	device->setWindowCaption(L"AGE OF KARTS");
 
-	
+	driver = device->getVideoDriver();
+	smgr = device->getSceneManager();
+	guienv = device->getGUIEnvironment();
 }
 
-IrrlichtDevice* IVentana::getDevice(){
+IrrlichtDevice* IVentana::getDevice() {
 	return device;
 }
-IVideoDriver* IVentana::getDriver(){
+IVideoDriver* IVentana::getDriver() {
 	return driver;
 }
-ISceneManager* IVentana::getScene(){
-	std::cout<<"mierda pa ti"<<endl;
+ISceneManager* IVentana::getScene() {
+	std::cout << "mierda pa ti" << endl;
 	return smgr;
 }
-IGUIEnvironment* IVentana::getGUI(){
+IGUIEnvironment* IVentana::getGUI() {
 	return guienv;
 };

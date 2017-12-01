@@ -4,58 +4,54 @@
 
 enum
 {
-    // No colisionable, para evitar cogerlo por error
-    ID_NULO = 0,
+	// No colisionable, para evitar cogerlo por error
+	ID_NULO = 0,
 
-    // Objetos que pueden colisionar
-    ID_COLISION = 1 << 0,
+	// Objetos que pueden colisionar
+	ID_COLISION = 1 << 0,
 
-    // Objetos para iluminar
-    ID_ILUMINAR = 1 << 1
+	// Objetos para iluminar
+	ID_ILUMINAR = 1 << 1
 };
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
 //-------------------------\*
-Corredor::Corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision)
+Corredor::Corredor(ISceneManager *smgr, stringw rutaObj, s32 id_colision)
 {
 	//aceleraciones
-	aceleracion 	   = 0.1;   //aceleracion eje Z
+	aceleracion = 0.1;   //aceleracion eje Z
 	aceleracionInversa = 0.01; //marcha atras
 	aceleracionFrenado = 0.15; //aceleracion eje X
-	tiempo 			   = 0.5;
+	tiempo = 0.5;
 
 	// velocidades
-	velocidadIni 	= 0;
-	velocidadX 		= 0;
-	velocidadZ 		= 0;
-	velocidad 		= 0;
-	velocidadMax 	= 1.5;
+	velocidadIni = 0;
+	velocidadX = 0;
+	velocidadZ = 0;
+	velocidad = 0;
+	velocidadMax = 1.5;
 
 	//posiciones
 	posXIni = 0;
 	posZIni = 0;
 	posYIni = 0;
-	posX 	= 0;
-	posZ 	= 0;
-	posY 	= 0;
+	posX = 0;
+	posZ = 0;
+	posY = 0;
 	//rotaciones
-	Rotacionruedas 	= 3;
-	Rotacioncoche	= 2;
-	rotRuedasY 		= 0;
-	rotCocheY 		= 0;
+	Rotacionruedas = 3;
+	Rotacioncoche = 2;
+	rotRuedasY = 0;
+	rotCocheY = 0;
 	anguloMaxRuedas = 50;
-	anguloMaxCoche  = 180;
+	anguloMaxCoche = 180;
 
 	// booleanos
 	adelante = false;
-	atras    = false;
-	std::cout<<"mierda para todos"<<endl;
-				
-	coche    = smgr->getMesh(rutaObj);
-		std::cout<<"mierda para todos: el retorno de la mierda"<<endl;
+	atras = false;
 
 	coche = smgr->getMesh(rutaObj);
-	cuboNodo = smgr->addMeshSceneNode(coche,0,id_colision);
+	cuboNodo = smgr->addMeshSceneNode(coche, 0, id_colision);
 	cuboNodo->setName("Jugador");
 	//cambiar a color rojo del coche
 	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
@@ -73,12 +69,12 @@ Corredor::Corredor(ISceneManager *smgr, stringw rutaObj,s32 id_colision)
 
 	// luego declaramos sus ruedas
 	ruedasDelanteras = smgr->addCubeSceneNode(0.5f);
-	ruedasTraseras   = smgr->addCubeSceneNode(0.5f);
+	ruedasTraseras = smgr->addCubeSceneNode(0.5f);
 	ruedasDelanteras->setParent(cuboNodo);
 	ruedasTraseras->setParent(cuboNodo);
 	// inicializamos la posicion de las ruedas
-	ruedasDelanteras->setPosition(vector3df(-1.2,-0.5,1));
-	ruedasTraseras->setPosition(vector3df(-1.2,-0.5,-1));
+	ruedasDelanteras->setPosition(vector3df(-1.2, -0.5, 1));
+	ruedasTraseras->setPosition(vector3df(-1.2, -0.5, -1));
 }
 //-----------------------\*
 //---CALCULO MOVIMIENTO--\*
@@ -94,13 +90,13 @@ float Corredor::movimiento(float pos, float vel, float accel, float delta)
 
 void Corredor::updatePosicion()
 {
-	posY=cuboNodo->getPosition().Y;
+	posY = cuboNodo->getPosition().Y;
 	//posX+=cuboNodo->getPosition().X;
 	//posZ+=cuboNodo->getPosition().Z;
 	//posX+=this->getPosicion().X;
 	//posY+=this->getPosicion().Y;
 	//posZ+=this->getPosicion().Z;
-	cuboNodo->setPosition(vector3df(posX,posY,posZ));
+	cuboNodo->setPosition(vector3df(posX, posY, posZ));
 	//ruedasDelanteras->setPosition(vector3df(posX - 7, posY - 2 , posZ + 4));
 	//ruedasTraseras->setPosition(vector3df(posX - 7, posY - 2 , posZ - 4));
 }
@@ -125,9 +121,11 @@ void Corredor::update()
 
 void Corredor::setAxis(ISceneManager *smgr)
 {
-	AxesSceneNode *axis = new AxesSceneNode(cuboNodo, smgr, -1);
-	axis->setAxesScale(20); //  for the length of the axes
-	axis->drop();
+
+	//AxesSceneNode *axis = new AxesSceneNode(cuboNodo, smgr, -1);
+	//axis->setAxesScale(20); //  for the length of the axes
+	//axis->drop();
+	
 }
 
 float Corredor::getVelocidad()
@@ -194,7 +192,7 @@ void Corredor::frenar()
 	}
 	else
 	{
-		
+
 		//cout<<"velocidad marcha atras: "<<v<<"  "<<endl;
 		atras = true;
 		adelante = false;
@@ -213,12 +211,12 @@ void Corredor::frenar()
 //------GIRAR JUGADOR----\*
 //-----------------------\*
 void Corredor::girarDerecha()
-{	
-	if (velocidad>=0.5 || velocidad<=-0.5){
+{
+	if (velocidad >= 0.5 || velocidad <= -0.5) {
 		rotCocheY += Rotacioncoche;
 
-		if(rotCocheY>180){
-			rotCocheY=-179;
+		if (rotCocheY > 180) {
+			rotCocheY = -179;
 		}
 	}
 	/*
@@ -227,19 +225,20 @@ void Corredor::girarDerecha()
 		rotCocheY=anguloMaxCoche;
 	}
 */
-	if (velocidad<0){
+	if (velocidad < 0) {
 		rotRuedasY -= Rotacionruedas;
 		if (rotRuedasY < -anguloMaxRuedas)
 		{
 			rotRuedasY = -anguloMaxRuedas;
 		}
-	}else{
+	}
+	else {
 		rotRuedasY += Rotacionruedas;
 		if (rotRuedasY > anguloMaxRuedas)
 		{
 			rotRuedasY = anguloMaxRuedas;
 		}
-		
+
 	}
 	ruedasDelanteras->setRotation(vector3df(0, rotRuedasY, 0));
 	cuboNodo->setRotation(vector3df(0, rotCocheY, 0));
@@ -247,10 +246,10 @@ void Corredor::girarDerecha()
 
 void Corredor::girarIzquierda()
 {
-	if (velocidad>=0.5 || velocidad<=-0.5){
+	if (velocidad >= 0.5 || velocidad <= -0.5) {
 		rotCocheY -= Rotacioncoche;
-		if(rotCocheY<-180){
-			rotCocheY=179;
+		if (rotCocheY < -180) {
+			rotCocheY = 179;
 		}
 	}
 	/*
@@ -259,13 +258,14 @@ void Corredor::girarIzquierda()
 		rotCocheY=-anguloMaxCoche;
 	}
 */
-	if (velocidad<0){
+	if (velocidad < 0) {
 		rotRuedasY += Rotacionruedas;
 		if (rotRuedasY > anguloMaxRuedas)
 		{
 			rotRuedasY = anguloMaxRuedas;
 		}
-	}else{
+	}
+	else {
 		rotRuedasY -= Rotacionruedas;
 		if (rotRuedasY < -anguloMaxRuedas)
 		{
@@ -278,13 +278,13 @@ void Corredor::girarIzquierda()
 
 void Corredor::resetGiro()
 {
-	if (rotRuedasY>0){
-		rotRuedasY-=Rotacionruedas+0.5;
+	if (rotRuedasY > 0) {
+		rotRuedasY -= Rotacionruedas + 0.5;
 	}
-	if (rotRuedasY<0){
-		rotRuedasY+=Rotacionruedas+0.5;
+	if (rotRuedasY < 0) {
+		rotRuedasY += Rotacionruedas + 0.5;
 	}
-	ruedasDelanteras->setRotation(vector3df(0 ,rotRuedasY,0));
+	ruedasDelanteras->setRotation(vector3df(0, rotRuedasY, 0));
 }
 
 //-----------------------\*
@@ -298,15 +298,16 @@ void Corredor::desacelerar()
 	velocidad = velocidadIni - aceleracionInversa * tiempo;
 	if (velocidad > 0)
 	{
-		
-		
+
+
 		if (adelante)
 		{ //desacelerar una vez el coche iba hacia adelante
 			posZ = posZIni + velocidad * cos((PI / 180) * (rotCocheY));
 			posX = posXIni + velocidad * sin((PI / 180) * (rotCocheY));
 		}
-	}else if (velocidad<0 && velocidad>-2.6){
-		velocidad =0;
+	}
+	else if (velocidad<0 && velocidad>-2.6) {
+		velocidad = 0;
 		if (atras)
 		{ //esta parte no se si entra alguna vez XD
 

@@ -131,6 +131,7 @@ int main()
 	// -----------------------------
 	//  GAME LOOP
 	// -----------------------------
+	int lastFPS = -1;
 	while (device->run())
 	{
 		if (device->isWindowActive())
@@ -232,14 +233,21 @@ int main()
 			}
 
 			//-------ENTRADA TECLADO FIN----------//
+			int fps = driver->getFPS();
+			if (lastFPS != fps)
+			{
+				core::stringw tmp(L"Age of karts [");
+				tmp += driver->getName();
+				tmp += L"] fps: ";
+				tmp += fps;
 
+				device->setWindowCaption(tmp.c_str());
+				lastFPS = fps;
+			}
 
 			textoUI->setText(text.c_str());
 
-			//-----------------------------//
 			// MOVIMIENTO DE LA CAMARA     //
-			//---------------------------- //
-
 			smgr->getActiveCamera()->setTarget(pj1->getPosicion());
 
 			//-------RENDER INI---------//

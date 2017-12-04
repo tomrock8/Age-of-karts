@@ -50,7 +50,7 @@ int main()
 	IMeshSceneNode *Jugador = pj1->getNodo();
 	Corredor *pj2 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
 	pj2->getNodo()->setPosition(vector3df(230, -50, 0));
-	pj2->changeColor(137,172,118,smgr);
+	pj2->cambiarColor(255,255,255,smgr);
 	IMeshSceneNode *IA = pj2->getNodo();
 
 
@@ -75,7 +75,7 @@ int main()
 		posanteriorZ= arrayWaypoints[i-1]->GetPosicion().Z;	
 		//arrayWaypoints[i]->SetPosicion(225,0, posanteriorZ + 30);
 		arrayWaypoints[i]->SetPosicion(posanteriorX -15,0, posanteriorZ + 30);	
-		}else if()
+		}
 
 	}
 

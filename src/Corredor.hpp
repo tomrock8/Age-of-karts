@@ -22,7 +22,7 @@ class Corredor
 	void escalar(float tam);
 	void setAxis(ISceneManager *smgr);
 	void moveCameraControl(IrrlichtDevice *device);
-	void changeColor(float valor1,float valor2,float valor3,ISceneManager *smgr);
+	void cambiarColor(float valor1,float valor2,float valor3,ISceneManager *smgr);
 	//Update
 	void updatePosicion();
 	void updateVelocidadInicial();

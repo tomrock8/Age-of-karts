@@ -321,7 +321,7 @@ void Corredor::escalar(float tam)
 }
 
 
-void Corredor::changeColor(float valor1,float valor2,float valor3,ISceneManager *smgr){
+void Corredor::cambiarColor(float valor1,float valor2,float valor3,ISceneManager *smgr){
 
 
 smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(valor1, valor2, valor3, 0));

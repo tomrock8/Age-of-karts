@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "IrrlichtLib.hpp"
+#include "Motor3d.hpp"
 
 using namespace std;
 
@@ -10,7 +11,7 @@ class Waypoint
 {
   public:
     //Constructor
-    Waypoint(ISceneManager *smgr);
+    Waypoint();
     //Destructor
     ~Waypoint();
 

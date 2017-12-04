@@ -20,6 +20,9 @@ class Motor3d
 	IGUIEnvironment* getGUI();
 	IrrlichtDevice* getDevice();
 	void setTeclado(CTeclado *teclado);
+	void dibujar();
+
+	void cerrar();
 
   private:
 	Motor3d(void);

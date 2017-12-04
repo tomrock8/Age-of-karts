@@ -30,7 +30,7 @@ int main()
 {
 
 	CTeclado *teclado = new CTeclado();
-	
+
 	// -----------------------------
 	//  PREPARAR LA VENTANA
 	// -----------------------------
@@ -48,19 +48,19 @@ int main()
 	// -----------------------------
 	//	MAPA
 	// -----------------------------
-	Pista *pista = new Pista(m->getDevice());
-	selector = pista->setColisiones(m->getDevice(), selector);
+	Pista *pista = new Pista();
+	selector = pista->setColisiones(selector);
 
 	// -----------------------------
 	//  CORREDORES
 	// -----------------------------
-	Corredor *pj1 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
+	Corredor *pj1 = new Corredor("assets/coche.obj", ID_COLISION);
 	//pj1->escalar(5.0f);
 	//colisiones del jugador
 	selector = pj1->setColisiones(m->getDevice(), selector);
 
 	IMeshSceneNode *Jugador = pj1->getNodo();
-	Corredor *pj2 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
+	Corredor *pj2 = new Corredor("assets/coche.obj", ID_COLISION);
 	selector = pj2->setColisiones(m->getDevice(), selector);
 	pj2->getNodo()->setPosition(vector3df(230, -50, 0));
 	pj2->cambiarColor(255, 255, 255, smgr);
@@ -76,7 +76,7 @@ int main()
 
 	for (int i = 0; i < 20; i++)
 	{
-		arrayWaypoints[i] = new Waypoint(smgr);
+		arrayWaypoints[i] = new Waypoint();
 
 		if (i == 0)
 		{
@@ -176,7 +176,7 @@ int main()
 			//-------ENTRADA TECLADO ----------//
 			if (teclado->isKeyDown(KEY_ESCAPE))
 			{
-				m->getDevice()->closeDevice();
+				m->cerrar();
 				return 0;
 			}
 			else if (teclado->isKeyDown(KEY_KEY_S))
@@ -243,21 +243,18 @@ int main()
 
 			textoUI->setText(text.c_str());
 
-			// MOVIMIENTO DE LA CAMARA     //
+			// MOVIMIENTO DE LA CAMARA
 			smgr->getActiveCamera()->setTarget(pj1->getPosicion());
 
-			//-------RENDER INI---------//
-			driver->beginScene(true, true, SColor(255, 200, 200, 200));
-			smgr->drawAll();
-			guienv->drawAll();
-
-			driver->endScene();
+			//	RENDER
+			m->dibujar();
 		}
 		else
 		{
 			m->getDevice()->yield();
 		}
 	}
+
 	m->getDevice()->drop();
 
 	return 0;

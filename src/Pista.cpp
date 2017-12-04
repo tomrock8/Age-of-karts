@@ -15,20 +15,21 @@ enum
     ID_ILUMINAR = 1 << 1
 };
 
-Pista::Pista(IrrlichtDevice *device)
+Pista::Pista()
 {
-    inicializar(device);
+    inicializar();
 }
 
-bool Pista::inicializar(IrrlichtDevice *device)
+bool Pista::inicializar()
 {
     // Mapa cargado desde obj
-    mapa = device->getSceneManager()->getMesh("assets/mapa01.obj");
+    Motor3d *m = Motor3d::getInstancia();
+    mapa = m->getScene()->getMesh("assets/mapa01.obj");
 
     if (!mapa)
     {
         cout << "Error al inicializar la malla del mapa." << endl;
-        device->drop();
+        m->getDevice()->drop();
         return false;
     }
 
@@ -37,7 +38,7 @@ bool Pista::inicializar(IrrlichtDevice *device)
     // -----------------------------
 
     // Cargar modelo mapa
-    mapaNodo = device->getSceneManager()->addOctreeSceneNode(mapa, 0, ID_COLISION);
+    mapaNodo = m->getScene()->addOctreeSceneNode(mapa, 0, ID_COLISION);
 
     if (!mapaNodo)
     {
@@ -52,15 +53,17 @@ bool Pista::inicializar(IrrlichtDevice *device)
     return true;
 }
 
-ITriangleSelector *Pista::setColisiones(IrrlichtDevice *device, ITriangleSelector *selector)
+ITriangleSelector *Pista::setColisiones(ITriangleSelector *selector)
 {
+    Motor3d *m = Motor3d::getInstancia();
+
     if (!mapaNodo)
     {
         cout << "Error al cargar el mapa. No se pueden inicializar las colisiones." << endl;
         return NULL;
     }
 
-    selector = device->getSceneManager()->createTriangleSelector(mapa, 0);
+    selector = m->getScene()->createTriangleSelector(mapa, 0);
     mapaNodo->setTriangleSelector(selector);
     selector->drop();
 

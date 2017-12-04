@@ -3,18 +3,19 @@
 
 #include <iostream>
 #include "IrrlichtLib.hpp"
+#include "Motor3d.hpp"
 
 class Pista
 {
   public:
-    Pista(IrrlichtDevice *device);
-    ITriangleSelector *setColisiones(IrrlichtDevice *device, ITriangleSelector *selector);
+    Pista();
+    ITriangleSelector *setColisiones(ITriangleSelector *selector);
 
   private:
     IMesh *mapa;
     IMeshSceneNode *mapaNodo;
 
-    bool inicializar(IrrlichtDevice *device);
+    bool inicializar();
 };
 
 #endif /* PISTA */

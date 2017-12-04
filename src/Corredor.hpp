@@ -3,13 +3,14 @@
 
 #include <iostream>
 #include "IrrlichtLib.hpp"
+#include "Motor3d.hpp"
 
 using namespace std;
 
 class Corredor
 {
   public:
-	Corredor(ISceneManager *smgr, stringw rutaObj, s32 id_colision);
+	Corredor(stringw rutaObj, s32 id_colision);
 	//--movimiento del corredor
 	void acelerar();
 	void frenar();

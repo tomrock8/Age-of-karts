@@ -16,7 +16,7 @@ enum
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
 //-------------------------\*
-Corredor::Corredor(ISceneManager *smgr, stringw rutaObj, s32 id_colision)
+Corredor::Corredor(stringw rutaObj, s32 id_colision)
 {
 	//aceleraciones
 	aceleracion = 0.1;		   //aceleracion eje Z
@@ -50,11 +50,13 @@ Corredor::Corredor(ISceneManager *smgr, stringw rutaObj, s32 id_colision)
 	adelante = false;
 	atras = false;
 
-	coche = smgr->getMesh(rutaObj);
-	cuboNodo = smgr->addMeshSceneNode(coche, 0, id_colision);
+	Motor3d *m = Motor3d::getInstancia();
+
+	coche = m->getScene()->getMesh(rutaObj);
+	cuboNodo = m->getScene()->addMeshSceneNode(coche, 0, id_colision);
 	cuboNodo->setName("Jugador");
 	//cambiar a color rojo del coche
-	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
+	m->getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
 	// Desactivar la iluminacion del cubo
 	if (cuboNodo)
 	{
@@ -68,8 +70,8 @@ Corredor::Corredor(ISceneManager *smgr, stringw rutaObj, s32 id_colision)
 	posY = cuboNodo->getPosition().Y;
 
 	// luego declaramos sus ruedas
-	ruedasDelanteras = smgr->addCubeSceneNode(0.5f);
-	ruedasTraseras = smgr->addCubeSceneNode(0.5f);
+	ruedasDelanteras = m->getScene()->addCubeSceneNode(0.5f);
+	ruedasTraseras = m->getScene()->addCubeSceneNode(0.5f);
 	ruedasDelanteras->setParent(cuboNodo);
 	ruedasTraseras->setParent(cuboNodo);
 	// inicializamos la posicion de las ruedas

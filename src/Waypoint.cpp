@@ -1,9 +1,10 @@
 #include "IrrlichtLib.hpp"
 #include "Waypoint.hpp"
 
-Waypoint::Waypoint(ISceneManager *smgr)
+Waypoint::Waypoint()
 {
-    waypoint = smgr->addCubeSceneNode(3.f);
+    Motor3d *m = Motor3d::getInstancia();
+    waypoint = m->getScene()->addCubeSceneNode(3.f);
 }
 
 void Waypoint::SetPosicion(float x, float y, float z)

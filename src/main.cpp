@@ -1,6 +1,7 @@
 #include "IrrlichtLib.hpp"
 #include "CTeclado.hpp"
 #include "Corredor.hpp"
+#include "Waypoint.hpp"
 #include "IVentana.hpp"
 #include <iostream>
 
@@ -45,11 +46,42 @@ int main()
 	//  GEOMETRIA COCHE
 	// -----------------------------
 	Corredor *pj1 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
-	pj1->escalar(2.0f);
-
+	//pj1->escalar(5.0f);
+	IMeshSceneNode *Jugador = pj1->getNodo();
 	Corredor *pj2 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
 	pj2->getNodo()->setPosition(vector3df(230, -50, 0));
+	pj2->changeColor(137,172,118,smgr);
+	IMeshSceneNode *IA = pj2->getNodo();
 
+
+
+	// array de Waypoints
+	Waypoint **arrayWaypoints;
+	arrayWaypoints = new Waypoint *[20];
+	float posanteriorZ=0;
+	float posanteriorX=0;
+
+	for(int i=0; i< 20 ; i++){
+
+		arrayWaypoints[i] = new Waypoint(smgr);
+		
+		if (i==0){
+		arrayWaypoints[i]->SetPosicion(235,-50,0);
+		}else if(i<12){
+		posanteriorZ= arrayWaypoints[i-1]->GetPosicion().Z;	
+		arrayWaypoints[i]->SetPosicion(235,0, posanteriorZ + 40);	
+		}else if(i>=12 && i<14){
+		posanteriorX= arrayWaypoints[i-1]->GetPosicion().X;	
+		posanteriorZ= arrayWaypoints[i-1]->GetPosicion().Z;	
+		//arrayWaypoints[i]->SetPosicion(225,0, posanteriorZ + 30);
+		arrayWaypoints[i]->SetPosicion(posanteriorX -15,0, posanteriorZ + 30);	
+		}else if()
+
+	}
+
+
+
+	//pj2->escalar(5.0f);
 	// -----------------------------
 	//  IMPORTAR MALLA (MAPA)
 	// -----------------------------
@@ -100,6 +132,25 @@ int main()
 		animacionColision->drop();
 	}
 
+
+	//colisiones de la IA 
+	if (selector)
+	{
+		const aabbox3d<f32> &cajaColision = pj2->getNodo()->getBoundingBox();
+		vector3df radioColision = cajaColision.MaxEdge - cajaColision.getCenter();
+
+		ISceneNodeAnimator *animacionColision = smgr->createCollisionResponseAnimator(
+			selector,			 // Selector de fisicas del mundo
+			pj2->getNodo(),		 // Objeto que tendra colisiones
+			radioColision,		 // Radio de elipse
+			vector3df(0, -5, 0), // Gravedad
+			vector3df(0, 0, 0)); // Translacion
+
+		selector->drop();
+		pj2->getNodo()->addAnimator(animacionColision);
+		animacionColision->drop();
+	}
+
 	//variable para identificar la direccion de movimiento (activo o no)
 	int checkGiro = 0;
 	int checkMarchaAtras = 0;
@@ -108,7 +159,7 @@ int main()
 	//---CAMARA INICIAL----//
 	//---------------------//
 	vector3df cuboPos = pj1->getPosicion();
-	vector3df camPos(0, 3, -8);
+	vector3df camPos(0, 200, -8);
 	vector3df camRot = pj1->getRotacion();
 	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos, ID_NULO); //3 parametros =  nodopadre, posicion, direccion
 

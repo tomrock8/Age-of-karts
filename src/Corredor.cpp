@@ -319,3 +319,11 @@ void Corredor::escalar(float tam)
 	core::vector3d<f32> factorEscalado(tam, tam, tam);
 	cuboNodo->setScale(factorEscalado);
 }
+
+
+void Corredor::changeColor(float valor1,float valor2,float valor3,ISceneManager *smgr){
+
+
+smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(valor1, valor2, valor3, 0));
+
+}

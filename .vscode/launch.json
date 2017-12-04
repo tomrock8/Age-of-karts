@@ -12,9 +12,10 @@
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
+            "miDebuggerPath": "${workspaceFolder}/exec",
             "environment": [],
             "externalConsole": true,
-            "MIMode": "gdb",
+            //"MIMode": "gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

@@ -57,7 +57,7 @@ int main()
 	Corredor *pj1 = new Corredor("assets/coche.obj", ID_COLISION);
 	//pj1->escalar(5.0f);
 	//colisiones del jugador
-	selector = pj1->setColisiones(m->getDevice(), selector);
+	//selector = pj1->setColisiones(m->getDevice(), selector);
 
 	IMeshSceneNode *Jugador = pj1->getNodo();
 	Corredor *pj2 = new Corredor("assets/coche.obj", ID_COLISION);
@@ -80,19 +80,19 @@ int main()
 
 		if (i == 0)
 		{
-			arrayWaypoints[i]->SetPosicion(235, -50, 0);
+			arrayWaypoints[i]->setPosicion(235, -50, 0);
 		}
 		else if (i < 12)
 		{
-			posanteriorZ = arrayWaypoints[i - 1]->GetPosicion().Z;
-			arrayWaypoints[i]->SetPosicion(235, 0, posanteriorZ + 40);
+			posanteriorZ = arrayWaypoints[i - 1]->getPosicion().Z;
+			arrayWaypoints[i]->setPosicion(235, 0, posanteriorZ + 40);
 		}
 		else if (i >= 12 && i < 14)
 		{
-			posanteriorX = arrayWaypoints[i - 1]->GetPosicion().X;
-			posanteriorZ = arrayWaypoints[i - 1]->GetPosicion().Z;
-			//arrayWaypoints[i]->SetPosicion(225,0, posanteriorZ + 30);
-			arrayWaypoints[i]->SetPosicion(posanteriorX - 15, 0, posanteriorZ + 30);
+			posanteriorX = arrayWaypoints[i - 1]->getPosicion().X;
+			posanteriorZ = arrayWaypoints[i - 1]->getPosicion().Z;
+			//arrayWaypoints[i]->setPosicion(225,0, posanteriorZ + 30);
+			arrayWaypoints[i]->setPosicion(posanteriorX - 15, 0, posanteriorZ + 30);
 		}
 	}
 
@@ -104,7 +104,8 @@ int main()
 	//---CAMARA INICIAL----//
 	//---------------------//
 	vector3df cuboPos = pj1->getPosicion();
-	vector3df camPos(0, 200, -8);
+	//vector3df camPos(0, 200, -8);
+	vector3df camPos(0, 3, -8);
 	vector3df camRot = pj1->getRotacion();
 	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos, ID_NULO); //3 parametros =  nodopadre, posicion, direccion
 
@@ -123,10 +124,15 @@ int main()
 		true);						 // Rellenado (o transparente)
 	textoUI->setOverrideFont(fuente);
 
+	int lastFPS = -1;
+
+
+
+	//driver->draw3DLine(vector3df(), vector3df(), SColor(255, 255, 255, 0));
+	driver->draw3DLine(vector3df(230, 0, 0), vector3df(230, 1000, 0), SColor(255, 255, 255, 0));
 	// -----------------------------
 	//  GAME LOOP
-	// -----------------------------
-	int lastFPS = -1;
+	// -----------------------------	
 	while (m->getDevice()->run())
 	{
 		if (m->getDevice()->isWindowActive())

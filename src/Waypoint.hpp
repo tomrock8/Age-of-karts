@@ -20,13 +20,18 @@ class Waypoint
     //Update
 
     //metodos SET
-    void SetPosicion(float x, float y, float z);
+    void setPosicion(float x, float y, float z);
+    void setSiguiente(Waypoint *siguiente);
+
     //metodos GET
-    IMeshSceneNode *GetWaypoint();
-    vector3df GetPosicion();
+    IMeshSceneNode *getWaypoint();
+    vector3df getPosicion();
 
   private:
     IMeshSceneNode *waypoint;
+
+    Waypoint *siguiente; // Siguiente punto
+
 };
 
 #endif /* WAYPOINT_H */

@@ -10,7 +10,6 @@ using namespace std;
 #pragma comment(lib, "Irrlicht.lib")
 #endif
 
-
 // Ids para asignar a cada elemento.
 //  Seran analizados por el gestor de colisiones.
 enum
@@ -38,7 +37,6 @@ int main()
 	ISceneManager *smgr = irrlicht->getScene();
 	IGUIEnvironment *guienv = irrlicht->getGUI();
 
-
 	//COLISIONES
 	ITriangleSelector *selector = 0; //Selector de triangulos para las colisiones
 	ISceneCollisionManager *gestorColisiones = smgr->getSceneCollisionManager();
@@ -48,6 +46,9 @@ int main()
 	// -----------------------------
 	Corredor *pj1 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
 	pj1->escalar(2.0f);
+
+	Corredor *pj2 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
+	pj2->getNodo()->setPosition(vector3df(230, -50, 0));
 
 	// -----------------------------
 	//  IMPORTAR MALLA (MAPA)
@@ -88,11 +89,11 @@ int main()
 		vector3df radioColision = cajaColision.MaxEdge - cajaColision.getCenter();
 
 		ISceneNodeAnimator *animacionColision = smgr->createCollisionResponseAnimator(
-			selector,			  // Selector de fisicas del mundo
-			pj1->getNodo(),		  // Objeto que tendra colisiones
-			radioColision,		  // Radio de elipse
+			selector,			 // Selector de fisicas del mundo
+			pj1->getNodo(),		 // Objeto que tendra colisiones
+			radioColision,		 // Radio de elipse
 			vector3df(0, -5, 0), // Gravedad
-			vector3df(0, 0, 0));  // Translacion
+			vector3df(0, 0, 0)); // Translacion
 
 		selector->drop();
 		pj1->getNodo()->addAnimator(animacionColision);
@@ -111,22 +112,20 @@ int main()
 	vector3df camRot = pj1->getRotacion();
 	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos, ID_NULO); //3 parametros =  nodopadre, posicion, direccion
 
-
 	// -----------------------------
 	//  INTERFAZ
 	// -----------------------------
 	stringw text = L"Datos del jugador:\n"; // PARA MODIFICACIONES FUTURAS
 	IGUIFont *fuente = guienv->getFont("assets/fuente.bmp");
 	IGUIStaticText *textoUI = guienv->addStaticText(
-		text.c_str(),				// Texto
-		rect<s32>(10, 10, 260, 150),	// Rectangulo de los bordes
-		false,						// Mostrar bordes
-		true, 						// Cortar en varias lineas
-		0, 							// Nodo padre
-		ID_NULO,					// Id del elemento
-		true);						// Rellenado (o transparente)
+		text.c_str(),				 // Texto
+		rect<s32>(10, 10, 260, 150), // Rectangulo de los bordes
+		false,						 // Mostrar bordes
+		true,						 // Cortar en varias lineas
+		0,							 // Nodo padre
+		ID_NULO,					 // Id del elemento
+		true);						 // Rellenado (o transparente)
 	textoUI->setOverrideFont(fuente);
-
 
 	// -----------------------------
 	//  GAME LOOP
@@ -139,7 +138,7 @@ int main()
 			// PARA MODIFICACIONES DEBUG
 			text = L"Datos del jugador:\n";
 
-			pj1->setAxis(smgr);
+			//pj1->setAxis(smgr);
 
 			// Linea que comprueba las colisiones del objeto
 			line3d<f32> rayo;
@@ -256,7 +255,6 @@ int main()
 			guienv->drawAll();
 
 			driver->endScene();
-
 		}
 		else
 		{

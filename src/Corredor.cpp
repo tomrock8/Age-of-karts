@@ -121,11 +121,9 @@ void Corredor::update()
 
 void Corredor::setAxis(ISceneManager *smgr)
 {
-
-	//AxesSceneNode *axis = new AxesSceneNode(cuboNodo, smgr, -1);
-	//axis->setAxesScale(20); //  for the length of the axes
-	//axis->drop();
-	
+	AxesSceneNode *axis = new AxesSceneNode(cuboNodo, smgr, -1);
+	axis->setAxesScale(20); //  for the length of the axes
+	axis->drop();	
 }
 
 float Corredor::getVelocidad()

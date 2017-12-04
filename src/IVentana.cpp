@@ -1,7 +1,6 @@
 #include "IrrlichtLib.hpp"
 #include "IVentana.hpp"
 
-
 //-------------------------\*
 //---CONSTRUCTOR VENTANA---\*
 //-------------------------\*
@@ -9,9 +8,8 @@ IVentana::IVentana(CTeclado &teclado)
 {
 
 	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(640, 480), 16, false, false, true, &teclado);
-	if (!device) std::cout << "algo falla con device" << std::endl;;
-
-
+	if (!device)
+		std::cout << "algo falla con device" << std::endl;
 
 	device->setWindowCaption(L"AGE OF KARTS");
 
@@ -20,16 +18,22 @@ IVentana::IVentana(CTeclado &teclado)
 	guienv = device->getGUIEnvironment();
 }
 
-IrrlichtDevice* IVentana::getDevice() {
+IrrlichtDevice *IVentana::getDevice()
+{
 	return device;
 }
-IVideoDriver* IVentana::getDriver() {
+
+IVideoDriver *IVentana::getDriver()
+{
 	return driver;
 }
-ISceneManager* IVentana::getScene() {
-	std::cout << "mierda pa ti" << endl;
+
+ISceneManager *IVentana::getScene()
+{
 	return smgr;
 }
-IGUIEnvironment* IVentana::getGUI() {
+
+IGUIEnvironment *IVentana::getGUI()
+{
 	return guienv;
 };

@@ -3,8 +3,8 @@
 #include "CTeclado.hpp"
 #include "Corredor.hpp"
 #include "Waypoint.hpp"
-#include "IVentana.hpp"
 #include "Pista.hpp"
+#include "Motor3d.hpp"
 
 using namespace std;
 
@@ -29,17 +29,17 @@ enum
 int main()
 {
 
-	CTeclado teclado;
+	CTeclado *teclado = new CTeclado();
+	
 	// -----------------------------
 	//  PREPARAR LA VENTANA
 	// -----------------------------
-	IVentana *irrlicht = new IVentana(teclado);
-	IrrlichtDevice *device = irrlicht->getDevice();
-	device->setEventReceiver(&teclado);
+	Motor3d *m = Motor3d::getInstancia();
+	m->setTeclado(teclado);
 
-	IVideoDriver *driver = irrlicht->getDriver();
-	ISceneManager *smgr = irrlicht->getScene();
-	IGUIEnvironment *guienv = irrlicht->getGUI();
+	IVideoDriver *driver = m->getDriver();
+	ISceneManager *smgr = m->getScene();
+	IGUIEnvironment *guienv = m->getGUI();
 
 	//COLISIONES
 	ITriangleSelector *selector = 0; //Selector de triangulos para las colisiones
@@ -48,8 +48,8 @@ int main()
 	// -----------------------------
 	//	MAPA
 	// -----------------------------
-	Pista *pista = new Pista(device);
-	selector = pista->setColisiones(device, selector);
+	Pista *pista = new Pista(m->getDevice());
+	selector = pista->setColisiones(m->getDevice(), selector);
 
 	// -----------------------------
 	//  CORREDORES
@@ -57,11 +57,11 @@ int main()
 	Corredor *pj1 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
 	//pj1->escalar(5.0f);
 	//colisiones del jugador
-	selector = pj1->setColisiones(device, selector);
+	selector = pj1->setColisiones(m->getDevice(), selector);
 
 	IMeshSceneNode *Jugador = pj1->getNodo();
 	Corredor *pj2 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
-	selector = pj2->setColisiones(device, selector);
+	selector = pj2->setColisiones(m->getDevice(), selector);
 	pj2->getNodo()->setPosition(vector3df(230, -50, 0));
 	pj2->cambiarColor(255, 255, 255, smgr);
 	IMeshSceneNode *IA = pj2->getNodo();
@@ -127,9 +127,9 @@ int main()
 	//  GAME LOOP
 	// -----------------------------
 	int lastFPS = -1;
-	while (device->run())
+	while (m->getDevice()->run())
 	{
-		if (device->isWindowActive())
+		if (m->getDevice()->isWindowActive())
 		{
 			// PARA MODIFICACIONES DEBUG
 			text = L"Datos del jugador:\n";
@@ -137,6 +137,7 @@ int main()
 			//pj1->setAxis(smgr);
 
 			// Linea que comprueba las colisiones del objeto
+
 			line3d<f32> rayo;
 			rayo.start = pj1->getPosicion();
 
@@ -173,17 +174,17 @@ int main()
 			checkVelocidad = pj1->getVelocidad();
 
 			//-------ENTRADA TECLADO ----------//
-			if (teclado.isKeyDown(KEY_ESCAPE))
+			if (teclado->isKeyDown(KEY_ESCAPE))
 			{
-				device->closeDevice();
+				m->getDevice()->closeDevice();
 				return 0;
 			}
-			else if (teclado.isKeyDown(KEY_KEY_S))
+			else if (teclado->isKeyDown(KEY_KEY_S))
 			{
 				pj1->frenar();
 				checkMarchaAtras = 1;
 			}
-			else if (teclado.isKeyDown(KEY_KEY_W))
+			else if (teclado->isKeyDown(KEY_KEY_W))
 			{
 				pj1->acelerar();
 			}
@@ -191,7 +192,7 @@ int main()
 			{
 				pj1->desacelerar();
 			}
-			if (teclado.isKeyDown(KEY_KEY_D))
+			if (teclado->isKeyDown(KEY_KEY_D))
 			{
 				if (checkMarchaAtras == 0)
 				{
@@ -206,7 +207,7 @@ int main()
 				}
 				checkGiro = 1;
 			}
-			else if (teclado.isKeyDown(KEY_KEY_A))
+			else if (teclado->isKeyDown(KEY_KEY_A))
 			{
 				if (checkMarchaAtras == 0)
 				{
@@ -236,7 +237,7 @@ int main()
 				tmp += L"] fps: ";
 				tmp += fps;
 
-				device->setWindowCaption(tmp.c_str());
+				m->getDevice()->setWindowCaption(tmp.c_str());
 				lastFPS = fps;
 			}
 
@@ -254,10 +255,10 @@ int main()
 		}
 		else
 		{
-			device->yield();
+			m->getDevice()->yield();
 		}
 	}
-	device->drop();
+	m->getDevice()->drop();
 
 	return 0;
 }

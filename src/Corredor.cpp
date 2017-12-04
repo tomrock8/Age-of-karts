@@ -19,7 +19,7 @@ enum
 Corredor::Corredor(ISceneManager *smgr, stringw rutaObj, s32 id_colision)
 {
 	//aceleraciones
-	aceleracion = 0.1;   //aceleracion eje Z
+	aceleracion = 0.1;		   //aceleracion eje Z
 	aceleracionInversa = 0.01; //marcha atras
 	aceleracionFrenado = 0.15; //aceleracion eje X
 	tiempo = 0.5;
@@ -123,7 +123,7 @@ void Corredor::setAxis(ISceneManager *smgr)
 {
 	AxesSceneNode *axis = new AxesSceneNode(cuboNodo, smgr, -1);
 	axis->setAxesScale(20); //  for the length of the axes
-	axis->drop();	
+	axis->drop();
 }
 
 float Corredor::getVelocidad()
@@ -140,7 +140,7 @@ vector3df Corredor::getRotacion()
 	return cuboNodo->getRotation();
 }
 
-IMeshSceneNode* Corredor::getNodo()
+IMeshSceneNode *Corredor::getNodo()
 {
 
 	return cuboNodo;
@@ -210,10 +210,12 @@ void Corredor::frenar()
 //-----------------------\*
 void Corredor::girarDerecha()
 {
-	if (velocidad >= 0.5 || velocidad <= -0.5) {
+	if (velocidad >= 0.5 || velocidad <= -0.5)
+	{
 		rotCocheY += Rotacioncoche;
 
-		if (rotCocheY > 180) {
+		if (rotCocheY > 180)
+		{
 			rotCocheY = -179;
 		}
 	}
@@ -223,20 +225,21 @@ void Corredor::girarDerecha()
 		rotCocheY=anguloMaxCoche;
 	}
 */
-	if (velocidad < 0) {
+	if (velocidad < 0)
+	{
 		rotRuedasY -= Rotacionruedas;
 		if (rotRuedasY < -anguloMaxRuedas)
 		{
 			rotRuedasY = -anguloMaxRuedas;
 		}
 	}
-	else {
+	else
+	{
 		rotRuedasY += Rotacionruedas;
 		if (rotRuedasY > anguloMaxRuedas)
 		{
 			rotRuedasY = anguloMaxRuedas;
 		}
-
 	}
 	ruedasDelanteras->setRotation(vector3df(0, rotRuedasY, 0));
 	cuboNodo->setRotation(vector3df(0, rotCocheY, 0));
@@ -244,9 +247,11 @@ void Corredor::girarDerecha()
 
 void Corredor::girarIzquierda()
 {
-	if (velocidad >= 0.5 || velocidad <= -0.5) {
+	if (velocidad >= 0.5 || velocidad <= -0.5)
+	{
 		rotCocheY -= Rotacioncoche;
-		if (rotCocheY < -180) {
+		if (rotCocheY < -180)
+		{
 			rotCocheY = 179;
 		}
 	}
@@ -256,14 +261,16 @@ void Corredor::girarIzquierda()
 		rotCocheY=-anguloMaxCoche;
 	}
 */
-	if (velocidad < 0) {
+	if (velocidad < 0)
+	{
 		rotRuedasY += Rotacionruedas;
 		if (rotRuedasY > anguloMaxRuedas)
 		{
 			rotRuedasY = anguloMaxRuedas;
 		}
 	}
-	else {
+	else
+	{
 		rotRuedasY -= Rotacionruedas;
 		if (rotRuedasY < -anguloMaxRuedas)
 		{
@@ -276,10 +283,12 @@ void Corredor::girarIzquierda()
 
 void Corredor::resetGiro()
 {
-	if (rotRuedasY > 0) {
+	if (rotRuedasY > 0)
+	{
 		rotRuedasY -= Rotacionruedas + 0.5;
 	}
-	if (rotRuedasY < 0) {
+	if (rotRuedasY < 0)
+	{
 		rotRuedasY += Rotacionruedas + 0.5;
 	}
 	ruedasDelanteras->setRotation(vector3df(0, rotRuedasY, 0));
@@ -297,14 +306,14 @@ void Corredor::desacelerar()
 	if (velocidad > 0)
 	{
 
-
 		if (adelante)
 		{ //desacelerar una vez el coche iba hacia adelante
 			posZ = posZIni + velocidad * cos((PI / 180) * (rotCocheY));
 			posX = posXIni + velocidad * sin((PI / 180) * (rotCocheY));
 		}
 	}
-	else if (velocidad<0 && velocidad>-2.6) {
+	else if (velocidad < 0 && velocidad > -2.6)
+	{
 		velocidad = 0;
 		if (atras)
 		{ //esta parte no se si entra alguna vez XD
@@ -320,10 +329,33 @@ void Corredor::escalar(float tam)
 	cuboNodo->setScale(factorEscalado);
 }
 
+void Corredor::cambiarColor(float valor1, float valor2, float valor3, ISceneManager *smgr)
+{
 
-void Corredor::cambiarColor(float valor1,float valor2,float valor3,ISceneManager *smgr){
+	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(valor1, valor2, valor3, 0));
+}
 
+ITriangleSelector *Corredor::setColisiones(IrrlichtDevice *device, ITriangleSelector *selector)
+{
+	if (!selector)
+	{
+		cout << "Error al crear las colisiones en el corredor." << endl;
+		return NULL;
+	}
 
-smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(valor1, valor2, valor3, 0));
+	const aabbox3d<f32> &cajaColision = getNodo()->getBoundingBox();
+	vector3df radioColision = cajaColision.MaxEdge - cajaColision.getCenter();
 
+	ISceneNodeAnimator *animacionColision = device->getSceneManager()->createCollisionResponseAnimator(
+		selector,			 // Selector de fisicas del mundo
+		getNodo(),			 // Objeto que tendra colisiones
+		radioColision,		 // Radio de elipse
+		vector3df(0, -5, 0), // Gravedad
+		vector3df(0, 0, 0)); // Translacion
+
+	selector->drop();
+	getNodo()->addAnimator(animacionColision);
+	animacionColision->drop();
+
+	return selector;
 }

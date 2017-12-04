@@ -10,23 +10,22 @@ class Waypoint
 {
   public:
     //Constructor
-	Waypoint(ISceneManager *smgr);
-	//Destructor
+    Waypoint(ISceneManager *smgr);
+    //Destructor
     ~Waypoint();
 
-	//auxiliares
+    //auxiliares
 
-	//Update
-	
-	//metodos SET
-    void SetPosicion(float x,float y,float z);
-	//metodos GET
-    IMeshSceneNode* GetWaypoint();
+    //Update
+
+    //metodos SET
+    void SetPosicion(float x, float y, float z);
+    //metodos GET
+    IMeshSceneNode *GetWaypoint();
     vector3df GetPosicion();
 
   private:
-	
-	IMeshSceneNode *waypoint;
+    IMeshSceneNode *waypoint;
 };
 
 #endif /* WAYPOINT_H */

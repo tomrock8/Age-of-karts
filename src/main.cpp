@@ -1,9 +1,10 @@
+#include <iostream>
 #include "IrrlichtLib.hpp"
 #include "CTeclado.hpp"
 #include "Corredor.hpp"
 #include "Waypoint.hpp"
 #include "IVentana.hpp"
-#include <iostream>
+#include "Pista.hpp"
 
 using namespace std;
 
@@ -34,6 +35,8 @@ int main()
 	// -----------------------------
 	IVentana *irrlicht = new IVentana(teclado);
 	IrrlichtDevice *device = irrlicht->getDevice();
+	device->setEventReceiver(&teclado);
+
 	IVideoDriver *driver = irrlicht->getDriver();
 	ISceneManager *smgr = irrlicht->getScene();
 	IGUIEnvironment *guienv = irrlicht->getGUI();
@@ -43,112 +46,54 @@ int main()
 	ISceneCollisionManager *gestorColisiones = smgr->getSceneCollisionManager();
 
 	// -----------------------------
-	//  GEOMETRIA COCHE
+	//	MAPA
+	// -----------------------------
+	Pista *pista = new Pista(device);
+	selector = pista->setColisiones(device, selector);
+
+	// -----------------------------
+	//  CORREDORES
 	// -----------------------------
 	Corredor *pj1 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
 	//pj1->escalar(5.0f);
+	//colisiones del jugador
+	selector = pj1->setColisiones(device, selector);
+
 	IMeshSceneNode *Jugador = pj1->getNodo();
 	Corredor *pj2 = new Corredor(smgr, "assets/coche.obj", ID_COLISION);
+	selector = pj2->setColisiones(device, selector);
 	pj2->getNodo()->setPosition(vector3df(230, -50, 0));
-	pj2->cambiarColor(255,255,255,smgr);
+	pj2->cambiarColor(255, 255, 255, smgr);
 	IMeshSceneNode *IA = pj2->getNodo();
 
-
-
-	// array de Waypoints
+	// -----------------------------
+	//	Waypoints
+	// -----------------------------
 	Waypoint **arrayWaypoints;
 	arrayWaypoints = new Waypoint *[20];
-	float posanteriorZ=0;
-	float posanteriorX=0;
+	float posanteriorZ = 0;
+	float posanteriorX = 0;
 
-	for(int i=0; i< 20 ; i++){
-
+	for (int i = 0; i < 20; i++)
+	{
 		arrayWaypoints[i] = new Waypoint(smgr);
-		
-		if (i==0){
-		arrayWaypoints[i]->SetPosicion(235,-50,0);
-		}else if(i<12){
-		posanteriorZ= arrayWaypoints[i-1]->GetPosicion().Z;	
-		arrayWaypoints[i]->SetPosicion(235,0, posanteriorZ + 40);	
-		}else if(i>=12 && i<14){
-		posanteriorX= arrayWaypoints[i-1]->GetPosicion().X;	
-		posanteriorZ= arrayWaypoints[i-1]->GetPosicion().Z;	
-		//arrayWaypoints[i]->SetPosicion(225,0, posanteriorZ + 30);
-		arrayWaypoints[i]->SetPosicion(posanteriorX -15,0, posanteriorZ + 30);	
+
+		if (i == 0)
+		{
+			arrayWaypoints[i]->SetPosicion(235, -50, 0);
 		}
-
-	}
-
-
-
-	//pj2->escalar(5.0f);
-	// -----------------------------
-	//  IMPORTAR MALLA (MAPA)
-	// -----------------------------
-
-	// Mapa cargado desde obj
-	IMesh *mapa = smgr->getMesh("assets/mapa01.obj");
-
-	if (!mapa)
-	{
-		device->drop();
-		return 1;
-	}
-
-	// -----------------------------
-	//  GEOMETRIA MAPA
-	// -----------------------------
-
-	// Cargar modelo mapa
-	IMeshSceneNode *mapaNodo = smgr->addOctreeSceneNode(mapa, 0, ID_COLISION);
-
-	smgr->getMeshManipulator()->setVertexColors(mapaNodo->getMesh(), SColor(255, 232, 128, 0));
-	if (mapaNodo)
-	{
-		mapaNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-		mapaNodo->setPosition(vector3df(0, 0, 0));
-		//mapaNodo->setScale(vector3df(25,25,25));
-		selector = smgr->createTriangleSelector(mapa, 0);
-		mapaNodo->setTriangleSelector(selector);
-		selector->drop();
-		mapaNodo->setName("MAPA");
-	}
-
-	//colisiones del jugador
-	if (selector)
-	{
-		const aabbox3d<f32> &cajaColision = pj1->getNodo()->getBoundingBox();
-		vector3df radioColision = cajaColision.MaxEdge - cajaColision.getCenter();
-
-		ISceneNodeAnimator *animacionColision = smgr->createCollisionResponseAnimator(
-			selector,			 // Selector de fisicas del mundo
-			pj1->getNodo(),		 // Objeto que tendra colisiones
-			radioColision,		 // Radio de elipse
-			vector3df(0, -5, 0), // Gravedad
-			vector3df(0, 0, 0)); // Translacion
-
-		selector->drop();
-		pj1->getNodo()->addAnimator(animacionColision);
-		animacionColision->drop();
-	}
-
-
-	//colisiones de la IA 
-	if (selector)
-	{
-		const aabbox3d<f32> &cajaColision = pj2->getNodo()->getBoundingBox();
-		vector3df radioColision = cajaColision.MaxEdge - cajaColision.getCenter();
-
-		ISceneNodeAnimator *animacionColision = smgr->createCollisionResponseAnimator(
-			selector,			 // Selector de fisicas del mundo
-			pj2->getNodo(),		 // Objeto que tendra colisiones
-			radioColision,		 // Radio de elipse
-			vector3df(0, -5, 0), // Gravedad
-			vector3df(0, 0, 0)); // Translacion
-
-		selector->drop();
-		pj2->getNodo()->addAnimator(animacionColision);
-		animacionColision->drop();
+		else if (i < 12)
+		{
+			posanteriorZ = arrayWaypoints[i - 1]->GetPosicion().Z;
+			arrayWaypoints[i]->SetPosicion(235, 0, posanteriorZ + 40);
+		}
+		else if (i >= 12 && i < 14)
+		{
+			posanteriorX = arrayWaypoints[i - 1]->GetPosicion().X;
+			posanteriorZ = arrayWaypoints[i - 1]->GetPosicion().Z;
+			//arrayWaypoints[i]->SetPosicion(225,0, posanteriorZ + 30);
+			arrayWaypoints[i]->SetPosicion(posanteriorX - 15, 0, posanteriorZ + 30);
+		}
 	}
 
 	//variable para identificar la direccion de movimiento (activo o no)

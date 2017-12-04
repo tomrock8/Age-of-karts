@@ -8,23 +8,23 @@ using namespace std;
 
 class IVentana
 {
-  public:
+public:
 	IVentana(CTeclado &teclado);
-	
+
 	//metodos SET
 
 	//metodos GET
 
-	IVideoDriver* getDriver();
-	ISceneManager* getScene();
-	IGUIEnvironment* getGUI();
-	IrrlichtDevice* getDevice();
+	IVideoDriver *getDriver();
+	ISceneManager *getScene();
+	IGUIEnvironment *getGUI();
+	IrrlichtDevice *getDevice();
 
-  private:
+private:
 	IrrlichtDevice *device;
-	IVideoDriver* driver;
-	ISceneManager* smgr; 
-	IGUIEnvironment* guienv;
+	IVideoDriver *driver;
+	ISceneManager *smgr;
+	IGUIEnvironment *guienv;
 };
 
 #endif /* IVENTANA_H */

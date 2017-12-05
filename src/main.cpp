@@ -1,7 +1,10 @@
 #include <iostream>
+#include <string>
+
 #include "IrrlichtLib.hpp"
 #include "CTeclado.hpp"
 #include "Corredor.hpp"
+#include "CorredorIA.hpp"
 #include "Waypoint.hpp"
 #include "Pista.hpp"
 #include "Motor3d.hpp"
@@ -28,7 +31,6 @@ enum
 
 int main()
 {
-
 	CTeclado *teclado = new CTeclado();
 
 	// -----------------------------
@@ -64,21 +66,23 @@ int main()
 	for (int i = 0; i < tamanyoArrayWaypoints; i++)
 	{
 		arrayWaypoints[i] = new Waypoint();
-		arrayWaypoints[i] -> setNombre(""+i);
-		if (i > 0 && i<(tamanyoArrayWaypoints-2))
+		arrayWaypoints[i]->setNombre(to_string(i));
+		if (i > 0 && i <= (tamanyoArrayWaypoints - 2))
 		{
-			arrayWaypoints[i-1]->setSiguiente(arrayWaypoints[i]);
-			
-		}else if (i == tamanyoArrayWaypoints-1){
+			arrayWaypoints[i - 1]->setSiguiente(arrayWaypoints[i]);
+
+		}
+		else if (i == tamanyoArrayWaypoints - 1) {
+			arrayWaypoints[i - 1]->setSiguiente(arrayWaypoints[i]);
 			arrayWaypoints[i]->setSiguiente(arrayWaypoints[0]);
 		}
 
 
-		if(i==0){
+		if (i == 0) {
 			arrayWaypoints[0]->setPosicion(235, -50, 0);
 		}
 
-		else if (i>0 && i < 12)
+		else if (i > 0 && i < 12)
 		{
 			posanteriorZ = arrayWaypoints[i - 1]->getPosicion().Z;
 			arrayWaypoints[i]->setPosicion(235, 0, posanteriorZ + 40);
@@ -93,26 +97,24 @@ int main()
 	}
 
 
-	arrayWaypoints[14]->setPosicion((arrayWaypoints[13]->getPosicion().X - 20),0,(arrayWaypoints[13]->getPosicion().Z +10));
-	arrayWaypoints[15]->setPosicion((arrayWaypoints[14]->getPosicion().X - 30),0,(arrayWaypoints[14]->getPosicion().Z +10));
-	arrayWaypoints[16]->setPosicion((arrayWaypoints[15]->getPosicion().X - 40),0,(arrayWaypoints[15]->getPosicion().Z +10));
-	arrayWaypoints[17]->setPosicion((arrayWaypoints[16]->getPosicion().X - 50),0,(arrayWaypoints[16]->getPosicion().Z + 5));
-	arrayWaypoints[18]->setPosicion((arrayWaypoints[17]->getPosicion().X - 60),0,(arrayWaypoints[17]->getPosicion().Z - 5));
-	arrayWaypoints[19]->setPosicion((arrayWaypoints[18]->getPosicion().X - 70),0,(arrayWaypoints[18]->getPosicion().Z - 50));
-
-
+	arrayWaypoints[14]->setPosicion((arrayWaypoints[13]->getPosicion().X - 20), 0, (arrayWaypoints[13]->getPosicion().Z + 10));
+	arrayWaypoints[15]->setPosicion((arrayWaypoints[14]->getPosicion().X - 30), 0, (arrayWaypoints[14]->getPosicion().Z + 10));
+	arrayWaypoints[16]->setPosicion((arrayWaypoints[15]->getPosicion().X - 40), 0, (arrayWaypoints[15]->getPosicion().Z + 10));
+	arrayWaypoints[17]->setPosicion((arrayWaypoints[16]->getPosicion().X - 50), 0, (arrayWaypoints[16]->getPosicion().Z + 5));
+	arrayWaypoints[18]->setPosicion((arrayWaypoints[17]->getPosicion().X - 60), 0, (arrayWaypoints[17]->getPosicion().Z - 5));
+	arrayWaypoints[19]->setPosicion((arrayWaypoints[18]->getPosicion().X - 70), 0, (arrayWaypoints[18]->getPosicion().Z - 50));
 
 
 	// -----------------------------
 	//  CORREDORES
 	// -----------------------------
-	Corredor *pj1 = new Corredor("assets/coche.obj", ID_COLISION,arrayWaypoints,tamanyoArrayWaypoints);
+	Corredor *pj1 = new Corredor("assets/coche.obj", ID_COLISION);
 	//pj1->escalar(5.0f);
 	//colisiones del jugador
 	selector = pj1->setColisiones(m->getDevice(), selector);
 
 	//IMeshSceneNode *Jugador = pj1->getNodo();
-	Corredor *pj2 = new Corredor("assets/coche.obj", ID_COLISION,arrayWaypoints,tamanyoArrayWaypoints);
+	CorredorIA *pj2 = new CorredorIA("assets/coche.obj", ID_COLISION, arrayWaypoints, tamanyoArrayWaypoints);
 	selector = pj2->setColisiones(m->getDevice(), selector);
 	pj2->getNodo()->setPosition(vector3df(230, -50, 0));
 	pj2->cambiarColor(255, 255, 255, smgr);
@@ -205,9 +207,9 @@ int main()
 			checkVelocidad = pj1->getVelocidad();
 
 
-			if(teclado->isKeyDown(KEY_KEY_R)){
-			
-			pj1->movimiento();
+			if (teclado->isKeyDown(KEY_KEY_R)) {
+
+				pj2->movimiento();
 
 			}
 			//-------ENTRADA TECLADO ----------//

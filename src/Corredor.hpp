@@ -10,8 +10,9 @@ using namespace std;
 
 class Corredor
 {
-  public:
-	Corredor(stringw rutaObj, s32 id_colision,Waypoint** arrayWaypoints,int tamanyoArray);
+public:
+	Corredor(stringw rutaObj, s32 id_colision);
+
 	//--movimiento del corredor
 	void acelerar();
 	void frenar();
@@ -25,12 +26,14 @@ class Corredor
 	void setAxis(ISceneManager *smgr);
 	void moveCameraControl(IrrlichtDevice *device);
 	void cambiarColor(float valor1, float valor2, float valor3, ISceneManager *smgr);
+
 	//Update
 	void updatePosicion();
 	void updateVelocidadInicial();
 	void updatePosicionInicial();
 	void update();
 	void resetGiro();
+
 	//metodos SET
 	ITriangleSelector *setColisiones(IrrlichtDevice *device, ITriangleSelector *selector);
 
@@ -39,24 +42,29 @@ class Corredor
 	vector3df getRotacion();
 	IMeshSceneNode *getNodo();
 	float getVelocidad();
-	std::string getNombreWaypoint();
 
-  private:
+
+protected:
+
 	// aceleraciones
 	float aceleracion, aceleracionInversa, aceleracionFrenado, tiempo;
+
 	//velocidades
 	float velocidadIni, velocidad, velocidadX, velocidadZ, velocidadMax;
+
 	//posiciones
 	float posXIni, posZIni, posYIni, posX, posZ, posY;
 	bool adelante, atras;
+
 	// rotaciones
 	float Rotacionruedas, Rotacioncoche, rotRuedasY, rotCocheY, anguloMaxRuedas, anguloMaxCoche;
+
 	//objetos
 	IMesh *coche;
 	IMeshSceneNode *cuboNodo;
 	IMeshSceneNode *ruedasDelanteras;
 	IMeshSceneNode *ruedasTraseras;
-	Waypoint * puntoActual;
+
 };
 
 #endif /* JUGADOR_H */

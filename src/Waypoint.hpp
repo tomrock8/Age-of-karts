@@ -26,7 +26,7 @@ class Waypoint
     //metodos GET
     IMeshSceneNode *getWaypoint();
     vector3df getPosicion();
-
+    Waypoint *getNextWaypoint();
   private:
     IMeshSceneNode *waypoint;
 

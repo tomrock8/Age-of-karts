@@ -4,21 +4,21 @@
 #include <iostream>
 #include "IrrlichtLib.hpp"
 #include "Motor3d.hpp"
-#include "WayPoint.hpp"
+#include "Waypoint.hpp"
 
 using namespace std;
 
 class Corredor
 {
   public:
-	Corredor(stringw rutaObj, s32 id_colision);
+	Corredor(stringw rutaObj, s32 id_colision,Waypoint** arrayWaypoints,int tamanyoArray);
 	//--movimiento del corredor
 	void acelerar();
 	void frenar();
 	void desacelerar();
 	void girarDerecha();
 	void girarIzquierda();
-	void movimiento(WayPoint** arrayWaypoints);
+	void movimiento();
 
 	//auxiliares
 	void escalar(float tam);
@@ -55,7 +55,7 @@ class Corredor
 	IMeshSceneNode *cuboNodo;
 	IMeshSceneNode *ruedasDelanteras;
 	IMeshSceneNode *ruedasTraseras;
-	WaypPoint * PuntoActual;
+	Waypoint * puntoActual;
 };
 
 #endif /* JUGADOR_H */

@@ -51,20 +51,6 @@ int main()
 	Pista *pista = new Pista();
 	selector = pista->setColisiones(selector);
 
-	// -----------------------------
-	//  CORREDORES
-	// -----------------------------
-	Corredor *pj1 = new Corredor("assets/coche.obj", ID_COLISION);
-	//pj1->escalar(5.0f);
-	//colisiones del jugador
-	//selector = pj1->setColisiones(m->getDevice(), selector);
-
-	IMeshSceneNode *Jugador = pj1->getNodo();
-	Corredor *pj2 = new Corredor("assets/coche.obj", ID_COLISION);
-	selector = pj2->setColisiones(m->getDevice(), selector);
-	pj2->getNodo()->setPosition(vector3df(230, -50, 0));
-	pj2->cambiarColor(255, 255, 255, smgr);
-	IMeshSceneNode *IA = pj2->getNodo();
 
 	// -----------------------------
 	//	Waypoints
@@ -114,6 +100,23 @@ int main()
 	arrayWaypoints[18]->setPosicion((arrayWaypoints[17]->getPosicion().X - 60),0,(arrayWaypoints[17]->getPosicion().Z - 5));
 	arrayWaypoints[19]->setPosicion((arrayWaypoints[18]->getPosicion().X - 70),0,(arrayWaypoints[18]->getPosicion().Z - 50));
 
+
+
+
+	// -----------------------------
+	//  CORREDORES
+	// -----------------------------
+	Corredor *pj1 = new Corredor("assets/coche.obj", ID_COLISION,arrayWaypoints,tamanyoArrayWaypoints);
+	//pj1->escalar(5.0f);
+	//colisiones del jugador
+	selector = pj1->setColisiones(m->getDevice(), selector);
+
+	//IMeshSceneNode *Jugador = pj1->getNodo();
+	Corredor *pj2 = new Corredor("assets/coche.obj", ID_COLISION,arrayWaypoints,tamanyoArrayWaypoints);
+	selector = pj2->setColisiones(m->getDevice(), selector);
+	pj2->getNodo()->setPosition(vector3df(230, -50, 0));
+	pj2->cambiarColor(255, 255, 255, smgr);
+	//IMeshSceneNode *IA = pj2->getNodo();
 
 
 	//variable para identificar la direccion de movimiento (activo o no)

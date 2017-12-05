@@ -25,3 +25,8 @@ vector3df Waypoint::getPosicion()
 void Waypoint::setSiguiente(Waypoint *siguiente){
     this->siguiente = siguiente;
 }
+
+Waypoint* Waypoint::getNextWaypoint(){
+
+    return siguiente;
+}

@@ -16,7 +16,7 @@ enum
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
 //-------------------------\*
-Corredor::Corredor(stringw rutaObj, s32 id_colision)
+Corredor::Corredor(stringw rutaObj, s32 id_colision, Waypoint** arrayWaypoints,int tamanyoArray)
 {
 	//aceleraciones
 	aceleracion = 0.1;		   //aceleracion eje Z
@@ -79,17 +79,34 @@ Corredor::Corredor(stringw rutaObj, s32 id_colision)
 	ruedasTraseras->setPosition(vector3df(-1.2, -0.5, -1));
 
 	//sacamos el waypoint más cercano
+	float diferenciaX=0;
+	float diferenciaZ=0;
+	for(int i=0;i<tamanyoArray;i++){
 
+		//puntoActual=arrayWaypoints[i];
+		if(i==0){
+			puntoActual=arrayWaypoints[i];
+				diferenciaX=abs(posX-arrayWaypoints[i]->getPosicion().X);
+				diferenciaZ=abs(posZ-arrayWaypoints[i]->getPosicion().Z);
 
+		}else{
 
+			if((abs(posX-arrayWaypoints[i]->getPosicion().X)) <= diferenciaX && (abs(posZ-arrayWaypoints[i]->getPosicion().Z)) <= diferenciaZ){
+				puntoActual=arrayWaypoints[i];
+				diferenciaX=abs(posX-arrayWaypoints[i]->getPosicion().X);
+				diferenciaZ=abs(posZ-arrayWaypoints[i]->getPosicion().Z);
+			}
 
+		}
+	}
 }
 //-----------------------\*
 //---CALCULO MOVIMIENTO--\*
 //-----------------------\*
-void Corredor::movimiento(WayPoint** arrayWaypoints))
+void Corredor::movimiento()
 {
 
+	
 
 }
 //-----------------------\*

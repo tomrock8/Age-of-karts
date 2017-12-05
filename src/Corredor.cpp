@@ -106,7 +106,39 @@ Corredor::Corredor(stringw rutaObj, s32 id_colision, Waypoint** arrayWaypoints,i
 void Corredor::movimiento()
 {
 
-	
+	bool acelerando;
+	acelerando = true;
+	//Cara A (alante)
+	if(acelerando)
+	acelerar();
+
+
+	if(posZ-(puntoActual->getPosicion().Z)>0){
+
+		puntoActual = puntoActual->getNextWaypoint();
+	}
+
+	if(posX-(puntoActual->getPosicion().X) < 0){
+
+		girarDerecha();
+
+	}else{
+
+		girarIzquierda();
+
+	}
+
+
+	//Cara B (atras)
+
+
+	//Cara C (derecha)
+
+
+
+	//Cara D (izquierda)
+
+
 
 }
 //-----------------------\*
@@ -169,6 +201,12 @@ IMeshSceneNode *Corredor::getNodo()
 {
 
 	return cuboNodo;
+}
+
+std::string Corredor::getNombreWaypoint(){
+
+	return puntoActual->getNombre();
+	
 }
 
 //-----------------------\*

@@ -39,6 +39,7 @@ class Corredor
 	vector3df getRotacion();
 	IMeshSceneNode *getNodo();
 	float getVelocidad();
+	std::string getNombreWaypoint();
 
   private:
 	// aceleraciones

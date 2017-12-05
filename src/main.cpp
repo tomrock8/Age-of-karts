@@ -64,12 +64,12 @@ int main()
 	for (int i = 0; i < tamanyoArrayWaypoints; i++)
 	{
 		arrayWaypoints[i] = new Waypoint();
-		
-		if (i > 0 && i<(tamanyoArrayWaypoints-1))
+		arrayWaypoints[i] -> setNombre(""+i);
+		if (i > 0 && i<(tamanyoArrayWaypoints-2))
 		{
 			arrayWaypoints[i-1]->setSiguiente(arrayWaypoints[i]);
 			
-		}else if (i == tamanyoArrayWaypoints){
+		}else if (i == tamanyoArrayWaypoints-1){
 			arrayWaypoints[i]->setSiguiente(arrayWaypoints[0]);
 		}
 
@@ -196,12 +196,20 @@ int main()
 			text += pj1->getPosicion().Y;
 			text += ", ";
 			text += pj1->getPosicion().Z;
-			text += "]\n";
+			text += "]\nNodoActual:";
+			text += pj2->getNombreWaypoint().c_str();
+			text += "\n";
 
 			checkGiro = 0;
 			checkMarchaAtras = 0;
 			checkVelocidad = pj1->getVelocidad();
 
+
+			if(teclado->isKeyDown(KEY_KEY_R)){
+			
+			pj1->movimiento();
+
+			}
 			//-------ENTRADA TECLADO ----------//
 			if (teclado->isKeyDown(KEY_ESCAPE))
 			{
@@ -252,6 +260,7 @@ int main()
 				checkGiro = 1;
 			}
 			pj1->update();
+			pj2->update();
 			if (checkGiro == 0)
 			{
 				pj1->resetGiro();

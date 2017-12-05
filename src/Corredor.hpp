@@ -4,6 +4,7 @@
 #include <iostream>
 #include "IrrlichtLib.hpp"
 #include "Motor3d.hpp"
+#include "WayPoint.hpp"
 
 using namespace std;
 
@@ -17,7 +18,7 @@ class Corredor
 	void desacelerar();
 	void girarDerecha();
 	void girarIzquierda();
-	float movimiento(float pos, float vel, float accel, float delta);
+	void movimiento(WayPoint** arrayWaypoints);
 
 	//auxiliares
 	void escalar(float tam);
@@ -54,6 +55,7 @@ class Corredor
 	IMeshSceneNode *cuboNodo;
 	IMeshSceneNode *ruedasDelanteras;
 	IMeshSceneNode *ruedasTraseras;
+	WaypPoint * PuntoActual;
 };
 
 #endif /* JUGADOR_H */

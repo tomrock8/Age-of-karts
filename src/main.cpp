@@ -69,20 +69,30 @@ int main()
 	// -----------------------------
 	//	Waypoints
 	// -----------------------------
+	int tamanyoArrayWaypoints = 20;
 	Waypoint **arrayWaypoints;
-	arrayWaypoints = new Waypoint *[20];
+	arrayWaypoints = new Waypoint *[tamanyoArrayWaypoints];
 	float posanteriorZ = 0;
 	float posanteriorX = 0;
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < tamanyoArrayWaypoints; i++)
 	{
 		arrayWaypoints[i] = new Waypoint();
-
-		if (i == 0)
+		
+		if (i > 0 && i<(tamanyoArrayWaypoints-1))
 		{
-			arrayWaypoints[i]->setPosicion(235, -50, 0);
+			arrayWaypoints[i-1]->setSiguiente(arrayWaypoints[i]);
+			
+		}else if (i == tamanyoArrayWaypoints){
+			arrayWaypoints[i]->setSiguiente(arrayWaypoints[0]);
 		}
-		else if (i < 12)
+
+
+		if(i==0){
+			arrayWaypoints[0]->setPosicion(235, -50, 0);
+		}
+
+		else if (i>0 && i < 12)
 		{
 			posanteriorZ = arrayWaypoints[i - 1]->getPosicion().Z;
 			arrayWaypoints[i]->setPosicion(235, 0, posanteriorZ + 40);
@@ -95,6 +105,16 @@ int main()
 			arrayWaypoints[i]->setPosicion(posanteriorX - 15, 0, posanteriorZ + 30);
 		}
 	}
+
+
+	arrayWaypoints[14]->setPosicion((arrayWaypoints[13]->getPosicion().X - 20),0,(arrayWaypoints[13]->getPosicion().Z +10));
+	arrayWaypoints[15]->setPosicion((arrayWaypoints[14]->getPosicion().X - 30),0,(arrayWaypoints[14]->getPosicion().Z +10));
+	arrayWaypoints[16]->setPosicion((arrayWaypoints[15]->getPosicion().X - 40),0,(arrayWaypoints[15]->getPosicion().Z +10));
+	arrayWaypoints[17]->setPosicion((arrayWaypoints[16]->getPosicion().X - 50),0,(arrayWaypoints[16]->getPosicion().Z + 5));
+	arrayWaypoints[18]->setPosicion((arrayWaypoints[17]->getPosicion().X - 60),0,(arrayWaypoints[17]->getPosicion().Z - 5));
+	arrayWaypoints[19]->setPosicion((arrayWaypoints[18]->getPosicion().X - 70),0,(arrayWaypoints[18]->getPosicion().Z - 50));
+
+
 
 	//variable para identificar la direccion de movimiento (activo o no)
 	int checkGiro = 0;

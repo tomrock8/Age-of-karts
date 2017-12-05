@@ -77,14 +77,20 @@ Corredor::Corredor(stringw rutaObj, s32 id_colision)
 	// inicializamos la posicion de las ruedas
 	ruedasDelanteras->setPosition(vector3df(-1.2, -0.5, 1));
 	ruedasTraseras->setPosition(vector3df(-1.2, -0.5, -1));
+
+	//sacamos el waypoint más cercano
+
+
+
+
 }
 //-----------------------\*
 //---CALCULO MOVIMIENTO--\*
 //-----------------------\*
-float Corredor::movimiento(float pos, float vel, float accel, float delta)
+void Corredor::movimiento(WayPoint** arrayWaypoints))
 {
-	pos = pos + vel * delta + (0.5 * accel * (exp2(delta))); //donde el 0 es la velocidad inicial
-	return pos;
+
+
 }
 //-----------------------\*
 //-------POSICION--------\*

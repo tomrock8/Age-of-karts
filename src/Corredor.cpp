@@ -142,51 +142,87 @@ void Corredor::updateDireccionGrados() {
 
 /*
 	Actualiza la posicion hacia la que mira el corredor
-	Tabla de grados - 
-	Norte    - 000
-	Noreste  - 045
-	Este	 - 090
-	SurEste  - 135
-	Sur		 - 180
-	SurOeste - 225
-	Oeste    - 270
-	NorOeste - 315
-
-	TODO: Mirar los rangos para asignar
-
+	Tabla de grados -
+		Norte    - 000 [341-20]
+		Noreste  - 045 [21-70]
+		Este	 - 090 [71-110]
+		SurEste  - 135 [111-160]
+		Sur		 - 180 [161-200]
+		SurOeste - 225 [201-250]
+		Oeste    - 270 [251-290]
+		NorOeste - 315 [291-340]
 */
 void Corredor::updateDireccion() {
 	updateDireccionGrados();
-	// Direccion del coche hacia delante (NORTE)
-	if (rotCocheY >= -20 && rotCocheY <= 20) {
+	// NORTE
+	if (direccionGrados <= 20 || direccionGrados >= 341) {
 		norte = true;
 		sur = false;
 		este = false;
 		oeste = false;
 	}
-
-	// Direccion del coche hacia atras (SUR)
-	if (rotCocheY <= 160 && rotCocheY >= -160) {
-		norte = false;
-		sur = true;
-		este = false;
-		oeste = false;
-	}
-
-	// Direccion del coche hacia la izquierda (OESTE)
-	if (rotCocheY<-20 && rotCocheY>-160) {
-		norte = false;
-		sur = false;
-		oeste = true;
-		este = false;
-	}
-
-	// Direccion del coche hacia la derecha (ESTE)
-	if (rotCocheY > 20 && rotCocheY < 160) {
-		norte = false;
-		sur = false;
-		este = true;
-		oeste = false;
+	else {
+		// NORESTE
+		if (direccionGrados >= 21 && direccionGrados <= 70) {
+			norte = true;
+			sur = false;
+			este = true;
+			oeste = false;
+		}
+		else {
+			// ESTE
+			if (direccionGrados >= 71 && direccionGrados <= 110) {
+				norte = false;
+				sur = false;
+				oeste = false;
+				este = true;
+			}
+			else {
+				// SURESTE
+				if (direccionGrados >= 111 && direccionGrados <= 160) {
+					norte = false;
+					sur = true;
+					este = true;
+					oeste = false;
+				}
+				else {
+					// SUR
+					if (direccionGrados >= 161 && direccionGrados <= 200) {
+						norte = false;
+						sur = true;
+						este = false;
+						oeste = false;
+					}
+					else {
+						// SUROESTE
+						if (direccionGrados >= 201 && direccionGrados <= 250) {
+							norte = false;
+							sur = true;
+							este = false;
+							oeste = true;
+						}
+						else {
+							// OESTE
+							if (direccionGrados >= 251 && direccionGrados <= 290) {
+								norte = false;
+								sur = false;
+								este = false;
+								oeste = true;
+							}
+							else {
+								// NOROESTE
+								if (direccionGrados >= 291 && direccionGrados <= 340) {
+									norte = true;
+									sur = false;
+									este = false;
+									oeste = true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
 

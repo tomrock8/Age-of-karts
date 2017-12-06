@@ -1,6 +1,7 @@
 #include "IrrlichtLib.hpp"
 #include "Corredor.hpp"
 #include "AxesSceneNode.cpp"
+#include <string>
 
 enum
 {
@@ -546,4 +547,25 @@ std::string Corredor::getDireccion() {
 
 int Corredor::getDireccionGrados() {
 	return direccionGrados;
+}
+
+std::string Corredor::toString() {
+	std::string text = "";
+	//Mostrar la Posicion y Velocidad actuales.
+	text += "\n Velocidad: ";
+	text += to_string(getVelocidad());
+	text += "\n Posicion [";
+	text += to_string(getPosicion().X);
+	text += ", ";
+	text += to_string(getPosicion().Y);
+	text += ", ";
+	text += to_string(getPosicion().Z);
+	text += "]\n";
+	text += " Direccion: ";
+	text += getDireccion();
+	text += " [ ";
+	text += to_string(getDireccionGrados());
+	text += " ]\n";
+
+	return text;
 }

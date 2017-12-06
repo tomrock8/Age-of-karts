@@ -142,8 +142,8 @@ int main()
 	//---CAMARA INICIAL----//
 	//---------------------//
 	vector3df cuboPos = pj1->getPosicion();
-	//vector3df camPos(0, 200, -8);
-	vector3df camPos(0, 3, -8);
+	vector3df camPos(0, 200, -8);
+	//vector3df camPos(0, 3, -8);
 	vector3df camRot = pj1->getRotacion();
 	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos, ID_NULO); //3 parametros =  nodopadre, posicion, direccion
 	//smgr->addCameraSceneNodeFPS();
@@ -155,7 +155,7 @@ int main()
 	IGUIFont *fuente = guienv->getFont("assets/fuente.bmp");
 	IGUIStaticText *textoUI = guienv->addStaticText(
 		text.c_str(),				 // Texto
-		rect<s32>(10, 10, 260, 150), // Rectangulo de los bordes
+		rect<s32>(10, 10, 260, 300), // Rectangulo de los bordes
 		false,						 // Mostrar bordes
 		true,						 // Cortar en varias lineas
 		0,							 // Nodo padre
@@ -202,33 +202,13 @@ int main()
 				text += " Colision con: ";
 				text += nodoColision->getName();
 			}
-
-			//Mostrar la Posicion y Velocidad actuales.
-			text += "\n Velocidad: ";
-			text += pj1->getVelocidad();
-			text += "\n Posicion [";
-			text += pj1->getPosicion().X;
-			text += ", ";
-			text += pj1->getPosicion().Y;
-			text += ", ";
-			text += pj1->getPosicion().Z;
-			text += "]\n";
-			text += " Direccion: ";
-			text += pj1->getDireccion().c_str();
-			text += " [ ";
-			text += pj1->getDireccionGrados();
-			text += " ]\n";
+			
+			text += pj1->toString().c_str();
 
 			text += "\n ---- CORREDOR 2 IA ----\n";
 			text += " Waypoint siguiente: ";
 			text += pj2->getNombreWaypoint().c_str();
-			text += "\n";
-			text += " Direccion: ";
-			text += pj2->getDireccion().c_str();
-			text += " [ ";
-			text += pj2->getDireccionGrados();
-			text += " ]\n";
-
+			text += pj2->toString().c_str();
 
 
 			//-------ENTRADA TECLADO ----------//

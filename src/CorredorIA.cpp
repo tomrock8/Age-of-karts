@@ -42,16 +42,33 @@ void CorredorIA::movimiento()
 	if (acelerando)
 		acelerar();
 
+	if (norte) {
+		//cout << "CONDICION NORTE" << endl;
+		if (posZ - (puntoActual->getPosicion().Z) > 0) {
+			puntoActual = puntoActual->getNextWaypoint();
+		}
 
-	if (posZ - (puntoActual->getPosicion().Z) > 0) {
-		puntoActual = puntoActual->getNextWaypoint();
-	}
-
-	if (posX - (puntoActual->getPosicion().X) < 0) {
-		girarDerecha();
+		if (posX - (puntoActual->getPosicion().X) < 0) {
+			girarDerecha();
+		}
+		else {
+			girarIzquierda();
+		}
 	}
 	else {
-		girarIzquierda();
+		if (sur) {
+			//cout << "CONDICION SUR" << endl;
+			if (posZ - (puntoActual->getPosicion().Z) < 0) {
+				puntoActual = puntoActual->getNextWaypoint();
+			}
+
+			if (posX - (puntoActual->getPosicion().X) < 0) {
+				girarIzquierda();
+			}
+			else {
+				girarDerecha();
+			}
+		}
 	}
 
 	//Cara B (SUR) - ATRAS

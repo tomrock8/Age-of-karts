@@ -43,6 +43,8 @@ public:
 	std::string getDireccion();
 	int getDireccionGrados();
 
+	std::string toString();
+
 
 protected:
 

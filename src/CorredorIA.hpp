@@ -16,7 +16,9 @@ public:
 
 	void movimiento();
 
+	//Metodos GET
 	std::string getNombreWaypoint();
+
 private:
 	Waypoint * puntoActual;
 };

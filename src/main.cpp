@@ -58,16 +58,18 @@ int main()
 	// -----------------------------
 	//	Waypoints
 	// -----------------------------
-	int tamanyoArrayWaypoints = 20;
+	int tamanyoArrayWaypoints = 33;
 	Waypoint **arrayWaypoints;
 	arrayWaypoints = new Waypoint *[tamanyoArrayWaypoints];
 	float posanteriorZ = 0;
 	float posanteriorX = 0;
+	float posY = -40;
 
 	for (int i = 0; i < tamanyoArrayWaypoints; i++)
 	{
 		arrayWaypoints[i] = new Waypoint();
-		arrayWaypoints[i]->setNombre(to_string(i));
+		arrayWaypoints[i]->setNombre(std::to_string(i));
+
 		if (i > 0 && i <= (tamanyoArrayWaypoints - 2))
 		{
 			arrayWaypoints[i - 1]->setSiguiente(arrayWaypoints[i]);
@@ -80,30 +82,44 @@ int main()
 
 
 		if (i == 0) {
-			arrayWaypoints[0]->setPosicion(235, -50, 0);
+			arrayWaypoints[0]->setPosicion(235, posY, 0);
 		}
 
 		else if (i > 0 && i < 12)
 		{
 			posanteriorZ = arrayWaypoints[i - 1]->getPosicion().Z;
-			arrayWaypoints[i]->setPosicion(235, 0, posanteriorZ + 40);
+			arrayWaypoints[i]->setPosicion(235, posY, posanteriorZ + 40);
 		}
 		else if (i >= 12 && i < 14)
 		{
 			posanteriorX = arrayWaypoints[i - 1]->getPosicion().X;
 			posanteriorZ = arrayWaypoints[i - 1]->getPosicion().Z;
 			//arrayWaypoints[i]->setPosicion(225,0, posanteriorZ + 30);
-			arrayWaypoints[i]->setPosicion(posanteriorX - 15, 0, posanteriorZ + 30);
+			arrayWaypoints[i]->setPosicion(posanteriorX - 15, posY, posanteriorZ + 30);
 		}
 	}
 
 
-	arrayWaypoints[14]->setPosicion((arrayWaypoints[13]->getPosicion().X - 20), 0, (arrayWaypoints[13]->getPosicion().Z + 10));
-	arrayWaypoints[15]->setPosicion((arrayWaypoints[14]->getPosicion().X - 30), 0, (arrayWaypoints[14]->getPosicion().Z + 10));
-	arrayWaypoints[16]->setPosicion((arrayWaypoints[15]->getPosicion().X - 40), 0, (arrayWaypoints[15]->getPosicion().Z + 10));
-	arrayWaypoints[17]->setPosicion((arrayWaypoints[16]->getPosicion().X - 50), 0, (arrayWaypoints[16]->getPosicion().Z + 5));
-	arrayWaypoints[18]->setPosicion((arrayWaypoints[17]->getPosicion().X - 60), 0, (arrayWaypoints[17]->getPosicion().Z - 5));
-	arrayWaypoints[19]->setPosicion((arrayWaypoints[18]->getPosicion().X - 70), 0, (arrayWaypoints[18]->getPosicion().Z - 50));
+	arrayWaypoints[14]->setPosicion((arrayWaypoints[13]->getPosicion().X - 20), posY, (arrayWaypoints[13]->getPosicion().Z + 10));
+	arrayWaypoints[15]->setPosicion((arrayWaypoints[14]->getPosicion().X - 30), posY, (arrayWaypoints[14]->getPosicion().Z + 10));
+	arrayWaypoints[16]->setPosicion((arrayWaypoints[15]->getPosicion().X - 40), posY, (arrayWaypoints[15]->getPosicion().Z + 10));
+	arrayWaypoints[17]->setPosicion((arrayWaypoints[16]->getPosicion().X - 50), posY, (arrayWaypoints[16]->getPosicion().Z + 5));
+	arrayWaypoints[18]->setPosicion((arrayWaypoints[17]->getPosicion().X - 60), posY, (arrayWaypoints[17]->getPosicion().Z - 5));
+	arrayWaypoints[19]->setPosicion((arrayWaypoints[18]->getPosicion().X - 70), posY, (arrayWaypoints[18]->getPosicion().Z - 50));
+	arrayWaypoints[20]->setPosicion((arrayWaypoints[19]->getPosicion().X - 10), posY, (arrayWaypoints[19]->getPosicion().Z - 100));
+	arrayWaypoints[21]->setPosicion((arrayWaypoints[20]->getPosicion().X), posY, (arrayWaypoints[20]->getPosicion().Z - 200));
+	arrayWaypoints[22]->setPosicion((arrayWaypoints[21]->getPosicion().X), posY, (arrayWaypoints[21]->getPosicion().Z - 200));
+	arrayWaypoints[23]->setPosicion((arrayWaypoints[22]->getPosicion().X), posY, (arrayWaypoints[22]->getPosicion().Z - 200));
+	arrayWaypoints[24]->setPosicion((arrayWaypoints[23]->getPosicion().X), posY, (arrayWaypoints[23]->getPosicion().Z - 200));
+	arrayWaypoints[25]->setPosicion((arrayWaypoints[24]->getPosicion().X + 10), posY, (arrayWaypoints[24]->getPosicion().Z - 55));
+	arrayWaypoints[26]->setPosicion((arrayWaypoints[25]->getPosicion().X + 50), posY, (arrayWaypoints[25]->getPosicion().Z - 40));
+	arrayWaypoints[27]->setPosicion((arrayWaypoints[26]->getPosicion().X + 60), posY, (arrayWaypoints[26]->getPosicion().Z - 25));
+	arrayWaypoints[28]->setPosicion((arrayWaypoints[27]->getPosicion().X + 60), posY, (arrayWaypoints[27]->getPosicion().Z));
+	arrayWaypoints[29]->setPosicion((arrayWaypoints[28]->getPosicion().X + 60), posY, (arrayWaypoints[28]->getPosicion().Z + 10));
+	arrayWaypoints[30]->setPosicion((arrayWaypoints[29]->getPosicion().X + 30), posY, (arrayWaypoints[29]->getPosicion().Z + 20));
+	arrayWaypoints[31]->setPosicion((arrayWaypoints[30]->getPosicion().X + 30), posY, (arrayWaypoints[30]->getPosicion().Z + 30));
+	arrayWaypoints[32]->setPosicion((arrayWaypoints[31]->getPosicion().X + 10), posY, (arrayWaypoints[31]->getPosicion().Z + 60));
+
 
 
 	// -----------------------------
@@ -118,7 +134,7 @@ int main()
 	CorredorIA *pj2 = new CorredorIA("assets/coche.obj", ID_COLISION, arrayWaypoints, tamanyoArrayWaypoints);
 	selector = pj2->setColisiones(selector);
 	//pj2->getNodo()->setPosition(vector3df(230, -50, 20));
-	pj2->cambiarColor(255, 255, 255);
+	pj2->setColor(255, 255, 255);
 	//IMeshSceneNode *IA = pj2->getNodo();
 
 
@@ -130,6 +146,7 @@ int main()
 	vector3df camPos(0, 3, -8);
 	vector3df camRot = pj1->getRotacion();
 	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos, ID_NULO); //3 parametros =  nodopadre, posicion, direccion
+	//smgr->addCameraSceneNodeFPS();
 
 	// -----------------------------
 	//  INTERFAZ
@@ -160,7 +177,7 @@ int main()
 		if (m->getDevice()->isWindowActive())
 		{
 			// PARA MODIFICACIONES DEBUG
-			text = L"Datos del jugador:\n";
+			text = L" ---- CORREDOR 1 PJ ----\n";
 
 			//pj1->setAxis();
 
@@ -182,24 +199,38 @@ int main()
 			if (nodoColision)
 			{
 				//cout << "CHOQUE" << endl;
-				text += "Colision con: ";
+				text += " Colision con: ";
 				text += nodoColision->getName();
 			}
 
 			//Mostrar la Posicion y Velocidad actuales.
-			text += "\nVelocidad: ";
+			text += "\n Velocidad: ";
 			text += pj1->getVelocidad();
-			text += "\nPosicion [";
+			text += "\n Posicion [";
 			text += pj1->getPosicion().X;
 			text += ", ";
 			text += pj1->getPosicion().Y;
 			text += ", ";
 			text += pj1->getPosicion().Z;
-			text += "]\nNodoActual:";
+			text += "]\n";
+			text += " Direccion: ";
+			text += pj1->getDireccion().c_str();
+			text += " [ ";
+			text += (int)pj1->getNodo()->getRotation().Y;
+			text += " ]\n";
+
+			text += "\n ---- CORREDOR 2 IA ----\n";
+			text += " Waypoint siguiente: ";
 			text += pj2->getNombreWaypoint().c_str();
 			text += "\n";
+			text += " Direccion: ";
+			text += pj2->getDireccion().c_str();
+			text += " [ ";
+			text += (int)pj2->getNodo()->getRotation().Y;
+			text += " ]\n";
 
-			
+
+
 
 			//-------ENTRADA TECLADO ----------//
 			if (teclado->isKeyDown(KEY_KEY_R)) {
@@ -211,11 +242,11 @@ int main()
 				m->cerrar();
 				return 0;
 			}
-			
-			
+
+
 			pj1->update();
 			pj2->update();
-			
+
 
 			//-------ENTRADA TECLADO FIN----------//
 			int fps = driver->getFPS();

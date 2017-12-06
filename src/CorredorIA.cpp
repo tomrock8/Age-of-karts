@@ -37,31 +37,26 @@ void CorredorIA::movimiento()
 
 	bool acelerando;
 	acelerando = true;
-	//Cara A (alante) - NORTE
+	//Cara A (NORTE) - DELANTE
 
 	if (acelerando)
 		acelerar();
 
 
 	if (posZ - (puntoActual->getPosicion().Z) > 0) {
-
 		puntoActual = puntoActual->getNextWaypoint();
 	}
 
 	if (posX - (puntoActual->getPosicion().X) < 0) {
-
 		girarDerecha();
-
 	}
 	else {
-
 		girarIzquierda();
-
 	}
 
-	//Cara B (atras) - 
-	//Cara C (derecha) - 
-	//Cara D (izquierda) - OESTE
+	//Cara B (SUR) - ATRAS
+	//Cara C (ESTE) - DRCH
+	//Cara D (OESTE) - IZQ
 
 
 
@@ -72,3 +67,6 @@ void CorredorIA::movimiento()
 std::string CorredorIA::getNombreWaypoint() {
 	return puntoActual->getNombre();
 }
+
+
+

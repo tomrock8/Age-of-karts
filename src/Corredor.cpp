@@ -120,35 +120,46 @@ void Corredor::update()
 	updatePosicion();
 	updateVelocidadInicial();
 	updatePosicionInicial();
+	updateDireccion();
 }
 
-void Corredor::setAxis()
-{
-	Motor3d *m = Motor3d::getInstancia();
-	AxesSceneNode *axis = new AxesSceneNode(cuboNodo, m->getScene(), -1);
-	axis->setAxesScale(20); //  for the length of the axes
-	axis->drop();
+/*
+	Actualiza la posicion hacia la que mira el corredor
+*/
+void Corredor::updateDireccion() {
+	// Direccion del coche hacia delante (NORTE)
+	if (rotCocheY >= -20 && rotCocheY <= 20) {
+		norte = true;
+		sur = false;
+		este = false;
+		oeste = false;
+	}
+
+	// Direccion del coche hacia atras (SUR)
+	if (rotCocheY <= 160 && rotCocheY >= -160) {
+		norte = false;
+		sur = true;
+		este = false;
+		oeste = false;
+	}
+
+	// Direccion del coche hacia la izquierda (OESTE)
+	if (rotCocheY<-20 && rotCocheY>-160) {
+		norte = false;
+		sur = false;
+		oeste = true;
+		este = false;
+	}
+
+	// Direccion del coche hacia la derecha (ESTE)
+	if (rotCocheY > 20 && rotCocheY < 160) {
+		norte = false;
+		sur = false;
+		este = true;
+		oeste = false;
+	}
 }
 
-float Corredor::getVelocidad()
-{
-	return velocidad;
-}
-vector3df Corredor::getPosicion()
-{
-	return cuboNodo->getPosition();
-}
-
-vector3df Corredor::getRotacion()
-{
-	return cuboNodo->getRotation();
-}
-
-IMeshSceneNode *Corredor::getNodo()
-{
-
-	return cuboNodo;
-}
 
 
 //-----------------------\*
@@ -328,13 +339,17 @@ void Corredor::desacelerar()
 		}
 	}
 }
-void Corredor::escalar(float tam)
+
+//	----------------------------------------------
+//		METODOS SET
+//	----------------------------------------------
+void Corredor::setEscala(float tam)
 {
 	core::vector3d<f32> factorEscalado(tam, tam, tam);
 	cuboNodo->setScale(factorEscalado);
 }
 
-void Corredor::cambiarColor(float valor1, float valor2, float valor3)
+void Corredor::setColor(float valor1, float valor2, float valor3)
 {
 	Motor3d *m = Motor3d::getInstancia();
 	m->getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(valor1, valor2, valor3, 0));
@@ -365,4 +380,51 @@ ITriangleSelector *Corredor::setColisiones(ITriangleSelector *selector)
 	animacionColision->drop();
 
 	return selector;
+}
+
+void Corredor::setAxis()
+{
+	Motor3d *m = Motor3d::getInstancia();
+	AxesSceneNode *axis = new AxesSceneNode(cuboNodo, m->getScene(), -1);
+	axis->setAxesScale(20); //  for the length of the axes
+	axis->drop();
+}
+
+//	----------------------------------------------
+//		METODOS GET
+//	----------------------------------------------
+
+float Corredor::getVelocidad()
+{
+	return velocidad;
+}
+vector3df Corredor::getPosicion()
+{
+	return cuboNodo->getPosition();
+}
+
+vector3df Corredor::getRotacion()
+{
+	return cuboNodo->getRotation();
+}
+
+IMeshSceneNode *Corredor::getNodo()
+{
+
+	return cuboNodo;
+}
+
+std::string Corredor::getDireccion() {
+
+	if (norte)
+		return "norte";
+
+	if (sur)
+		return "sur";
+
+	if (este)
+		return "este";
+
+	if (oeste)
+		return "oeste";
 }

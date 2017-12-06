@@ -19,13 +19,14 @@ public:
 	void desacelerar();
 	void girarDerecha();
 	void girarIzquierda();
-	void movimiento();
+
+	virtual void movimiento() {}; // A implementar por derivadas
 
 	//auxiliares
 	void escalar(float tam);
-	void setAxis(ISceneManager *smgr);
-	void moveCameraControl(IrrlichtDevice *device);
-	void cambiarColor(float valor1, float valor2, float valor3, ISceneManager *smgr);
+	void setAxis();
+	void moveCameraControl();
+	void cambiarColor(float valor1, float valor2, float valor3);
 
 	//Update
 	void updatePosicion();
@@ -35,7 +36,7 @@ public:
 	void resetGiro();
 
 	//metodos SET
-	ITriangleSelector *setColisiones(IrrlichtDevice *device, ITriangleSelector *selector);
+	ITriangleSelector *setColisiones(ITriangleSelector *selector);
 
 	//metodos GET
 	vector3df getPosicion();
@@ -64,6 +65,8 @@ protected:
 	IMeshSceneNode *cuboNodo;
 	IMeshSceneNode *ruedasDelanteras;
 	IMeshSceneNode *ruedasTraseras;
+
+	void enEscena(stringw rutaObj, s32 id_colision); // Implementa todos los elementos de irrlicht
 
 };
 

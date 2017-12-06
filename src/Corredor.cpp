@@ -50,6 +50,14 @@ Corredor::Corredor(stringw rutaObj, s32 id_colision)
 	adelante = false;
 	atras = false;
 
+	enEscena(rutaObj, id_colision);
+
+}
+
+/*
+	Implementa todos los elementos de irrlicht
+*/
+void Corredor::enEscena(stringw rutaObj, s32 id_colision) {
 	Motor3d *m = Motor3d::getInstancia();
 
 	coche = m->getScene()->getMesh(rutaObj);
@@ -77,7 +85,6 @@ Corredor::Corredor(stringw rutaObj, s32 id_colision)
 	// inicializamos la posicion de las ruedas
 	ruedasDelanteras->setPosition(vector3df(-1.2, -0.5, 1));
 	ruedasTraseras->setPosition(vector3df(-1.2, -0.5, -1));
-
 }
 
 //-----------------------\*
@@ -115,9 +122,10 @@ void Corredor::update()
 	updatePosicionInicial();
 }
 
-void Corredor::setAxis(ISceneManager *smgr)
+void Corredor::setAxis()
 {
-	AxesSceneNode *axis = new AxesSceneNode(cuboNodo, smgr, -1);
+	Motor3d *m = Motor3d::getInstancia();
+	AxesSceneNode *axis = new AxesSceneNode(cuboNodo, m->getScene(), -1);
 	axis->setAxesScale(20); //  for the length of the axes
 	axis->drop();
 }
@@ -326,13 +334,13 @@ void Corredor::escalar(float tam)
 	cuboNodo->setScale(factorEscalado);
 }
 
-void Corredor::cambiarColor(float valor1, float valor2, float valor3, ISceneManager *smgr)
+void Corredor::cambiarColor(float valor1, float valor2, float valor3)
 {
-
-	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(valor1, valor2, valor3, 0));
+	Motor3d *m = Motor3d::getInstancia();
+	m->getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(valor1, valor2, valor3, 0));
 }
 
-ITriangleSelector *Corredor::setColisiones(IrrlichtDevice *device, ITriangleSelector *selector)
+ITriangleSelector *Corredor::setColisiones(ITriangleSelector *selector)
 {
 	if (!selector)
 	{
@@ -340,10 +348,12 @@ ITriangleSelector *Corredor::setColisiones(IrrlichtDevice *device, ITriangleSele
 		return NULL;
 	}
 
+	Motor3d *m = Motor3d::getInstancia();
+
 	const aabbox3d<f32> &cajaColision = getNodo()->getBoundingBox();
 	vector3df radioColision = cajaColision.MaxEdge - cajaColision.getCenter();
 
-	ISceneNodeAnimator *animacionColision = device->getSceneManager()->createCollisionResponseAnimator(
+	ISceneNodeAnimator *animacionColision = m->getScene()->createCollisionResponseAnimator(
 		selector,			 // Selector de fisicas del mundo
 		getNodo(),			 // Objeto que tendra colisiones
 		radioColision,		 // Radio de elipse

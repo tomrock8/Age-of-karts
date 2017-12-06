@@ -5,6 +5,7 @@
 #include "CTeclado.hpp"
 #include "Corredor.hpp"
 #include "CorredorIA.hpp"
+#include "CorredorJugador.hpp"
 #include "Waypoint.hpp"
 #include "Pista.hpp"
 #include "Motor3d.hpp"
@@ -31,13 +32,13 @@ enum
 
 int main()
 {
-	CTeclado *teclado = new CTeclado();
+	CTeclado *teclado = CTeclado::getInstancia();
 
 	// -----------------------------
 	//  PREPARAR LA VENTANA
 	// -----------------------------
 	Motor3d *m = Motor3d::getInstancia();
-	m->setTeclado(teclado);
+	//m->setTeclado(teclado);
 
 	IVideoDriver *driver = m->getDriver();
 	ISceneManager *smgr = m->getScene();
@@ -108,23 +109,19 @@ int main()
 	// -----------------------------
 	//  CORREDORES
 	// -----------------------------
-	Corredor *pj1 = new Corredor("assets/coche.obj", ID_COLISION);
+	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", ID_COLISION);
 	//pj1->escalar(5.0f);
 	//colisiones del jugador
-	selector = pj1->setColisiones(m->getDevice(), selector);
+	selector = pj1->setColisiones(selector);
 
 	//IMeshSceneNode *Jugador = pj1->getNodo();
 	CorredorIA *pj2 = new CorredorIA("assets/coche.obj", ID_COLISION, arrayWaypoints, tamanyoArrayWaypoints);
-	selector = pj2->setColisiones(m->getDevice(), selector);
-	pj2->getNodo()->setPosition(vector3df(230, -50, 0));
-	pj2->cambiarColor(255, 255, 255, smgr);
+	selector = pj2->setColisiones(selector);
+	//pj2->getNodo()->setPosition(vector3df(230, -50, 20));
+	pj2->cambiarColor(255, 255, 255);
 	//IMeshSceneNode *IA = pj2->getNodo();
 
 
-	//variable para identificar la direccion de movimiento (activo o no)
-	int checkGiro = 0;
-	int checkMarchaAtras = 0;
-	float checkVelocidad = 0;
 	//---------------------//
 	//---CAMARA INICIAL----//
 	//---------------------//
@@ -165,7 +162,7 @@ int main()
 			// PARA MODIFICACIONES DEBUG
 			text = L"Datos del jugador:\n";
 
-			//pj1->setAxis(smgr);
+			//pj1->setAxis();
 
 			// Linea que comprueba las colisiones del objeto
 
@@ -202,71 +199,23 @@ int main()
 			text += pj2->getNombreWaypoint().c_str();
 			text += "\n";
 
-			checkGiro = 0;
-			checkMarchaAtras = 0;
-			checkVelocidad = pj1->getVelocidad();
+			
 
-
-			if (teclado->isKeyDown(KEY_KEY_R)) {
-
-				pj2->movimiento();
-
-			}
 			//-------ENTRADA TECLADO ----------//
+			if (teclado->isKeyDown(KEY_KEY_R)) {
+				pj2->movimiento();
+			}
+
 			if (teclado->isKeyDown(KEY_ESCAPE))
 			{
 				m->cerrar();
 				return 0;
 			}
-			else if (teclado->isKeyDown(KEY_KEY_S))
-			{
-				pj1->frenar();
-				checkMarchaAtras = 1;
-			}
-			else if (teclado->isKeyDown(KEY_KEY_W))
-			{
-				pj1->acelerar();
-			}
-			else
-			{
-				pj1->desacelerar();
-			}
-			if (teclado->isKeyDown(KEY_KEY_D))
-			{
-				if (checkMarchaAtras == 0)
-				{
-					pj1->girarDerecha();
-				}
-				else
-				{
-					if (checkVelocidad < 0.5)
-					{
-						pj1->girarIzquierda();
-					}
-				}
-				checkGiro = 1;
-			}
-			else if (teclado->isKeyDown(KEY_KEY_A))
-			{
-				if (checkMarchaAtras == 0)
-				{
-					pj1->girarIzquierda();
-				}
-				else
-				{
-					if (checkVelocidad < 0.5)
-					{
-						pj1->girarDerecha();
-					}
-				}
-				checkGiro = 1;
-			}
+			
+			
 			pj1->update();
 			pj2->update();
-			if (checkGiro == 0)
-			{
-				pj1->resetGiro();
-			}
+			
 
 			//-------ENTRADA TECLADO FIN----------//
 			int fps = driver->getFPS();

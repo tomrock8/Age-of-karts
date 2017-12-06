@@ -18,6 +18,9 @@ Motor3d::Motor3d()
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
+
+	CTeclado *teclado = CTeclado::getInstancia();
+	setTeclado(teclado);
 }
 
 Motor3d::~Motor3d() {}

@@ -38,7 +38,8 @@ Corredor::Corredor(stringw rutaObj, s32 id_colision)
 	posX = 0;
 	posZ = 0;
 	posY = 0;
-	//rotaciones
+
+	// Rotaciones
 	Rotacionruedas = 3;
 	Rotacioncoche = 2;
 	rotRuedasY = 0;
@@ -49,6 +50,10 @@ Corredor::Corredor(stringw rutaObj, s32 id_colision)
 	// booleanos
 	adelante = false;
 	atras = false;
+
+	//Direccion
+	norte = sur = este = oeste = false;
+	direccionGrados = 0;
 
 	enEscena(rutaObj, id_colision);
 
@@ -124,9 +129,34 @@ void Corredor::update()
 }
 
 /*
+	Identifica la rotacion del coche en grados
+*/
+void Corredor::updateDireccionGrados() {
+	int grados = rotCocheY;
+	if (grados < 0) {
+		grados = 180 + (180 + grados);
+	}
+
+	direccionGrados = grados;
+}
+
+/*
 	Actualiza la posicion hacia la que mira el corredor
+	Tabla de grados - 
+	Norte    - 000
+	Noreste  - 045
+	Este	 - 090
+	SurEste  - 135
+	Sur		 - 180
+	SurOeste - 225
+	Oeste    - 270
+	NorOeste - 315
+
+	TODO: Mirar los rangos para asignar
+
 */
 void Corredor::updateDireccion() {
+	updateDireccionGrados();
 	// Direccion del coche hacia delante (NORTE)
 	if (rotCocheY >= -20 && rotCocheY <= 20) {
 		norte = true;
@@ -415,16 +445,69 @@ IMeshSceneNode *Corredor::getNodo()
 }
 
 std::string Corredor::getDireccion() {
+	if (norte) {
+		if (este) {
+			return "noreste";
+		}
+		else {
+			if (oeste) {
+				return "noroeste";
+			}
+			else {
+				return "norte";
+			}
+		}
+	}
 
-	if (norte)
-		return "norte";
 
-	if (sur)
-		return "sur";
+	if (sur) {
+		if (este) {
+			return "sureste";
+		}
+		else {
+			if (oeste) {
+				return "suroeste";
+			}
+			else {
+				return "sur";
+			}
+		}
+	}
 
-	if (este)
-		return "este";
 
-	if (oeste)
-		return "oeste";
+	if (este) {
+		if (norte) {
+			return "noreste";
+		}
+		else {
+			if (sur) {
+				return "sureste";
+			}
+			else {
+				return "este";
+			}
+		}
+	}
+
+
+	if (oeste) {
+		if (norte) {
+			return "noroeste";
+		}
+		else {
+			if (sur) {
+				return "suroeste";
+			}
+			else {
+				return "oeste";
+			}
+		}
+	}
+
+	return "No Direccion";
+
+}
+
+int Corredor::getDireccionGrados() {
+	return direccionGrados;
 }

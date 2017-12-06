@@ -216,7 +216,7 @@ int main()
 			text += " Direccion: ";
 			text += pj1->getDireccion().c_str();
 			text += " [ ";
-			text += (int)pj1->getNodo()->getRotation().Y;
+			text += pj1->getDireccionGrados();
 			text += " ]\n";
 
 			text += "\n ---- CORREDOR 2 IA ----\n";
@@ -226,9 +226,8 @@ int main()
 			text += " Direccion: ";
 			text += pj2->getDireccion().c_str();
 			text += " [ ";
-			text += (int)pj2->getNodo()->getRotation().Y;
+			text += pj2->getDireccionGrados();
 			text += " ]\n";
-
 
 
 

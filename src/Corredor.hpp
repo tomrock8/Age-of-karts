@@ -41,6 +41,7 @@ public:
 
 	float getVelocidad();
 	std::string getDireccion();
+	int getDireccionGrados();
 
 
 protected:
@@ -60,6 +61,7 @@ protected:
 
 	// Direccion
 	bool norte, sur, este, oeste;
+	int direccionGrados;
 
 
 	// Objetos irrlicht
@@ -76,6 +78,8 @@ protected:
 	void desacelerar();
 	void girarDerecha();
 	void girarIzquierda();
+
+	void updateDireccionGrados();
 
 };
 

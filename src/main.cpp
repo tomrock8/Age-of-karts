@@ -60,7 +60,9 @@ int main()
 	mundo->setGravity(btVector3(0,-10,0));
 
 
-	//Debug BUllet
+	//----------------------------//
+	//---------DEBUG BULLET-------//
+	//----------------------------//
 	DebugDraw debugDraw(device);
 	debugDraw.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	mundo->setDebugDrawer(&debugDraw);
@@ -79,10 +81,10 @@ int main()
 	
 
 	//-----------------------------//
-	//-----GEOMETRIA COCHE---------//
+	//-----------JUGADORES---------//
 	//-----------------------------//
 	//Posicion del nodo y el bloque de colisiones centralizado:
-	vector3df pos(230,20,0);
+	vector3df pos(230,-50,0);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 	pj1->InicializarFisicas(objetos,mundo);
 	///////////////////////CAMARA///////////////////////////////////////////////
@@ -90,6 +92,11 @@ int main()
 
 	btVector3 cubopos1(240,20,10);
 	vector3df cuboescala1(5,5,5);
+
+
+	//----------------------------//
+	//---------OBJETOS------------//
+	//----------------------------//
 
 	CreateBox(cubopos1,cuboescala1,10);
 
@@ -174,8 +181,10 @@ int main()
 		true);						 // Rellenado (o transparente)
 	textoUI->setOverrideFont(fuente);
 
+
+
 	int lastFPS = -1;
-	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;	
+	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;
 	// -----------------------------
 	//  GAME LOOP
 	// -----------------------------	
@@ -216,8 +225,6 @@ int main()
 			}
 
 */
-			
-			//-------ENTRADA TECLADO FIN----------//
 			int fps = driver->getFPS();
 			if (lastFPS != fps)
 			{

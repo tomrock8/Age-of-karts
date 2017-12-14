@@ -22,8 +22,8 @@ void CorredorJugador::movimiento() {
 			}
 			if (teclado->isKeyDown(KEY_KEY_S))
 			{
-			vehiculo-> applyEngineForce ( -15000 , 2 );
-			vehiculo-> applyEngineForce ( -15000 , 3 );
+			vehiculo-> applyEngineForce ( FuerzaFrenado , 2 );
+			vehiculo-> applyEngineForce ( FuerzaFrenado , 3 );
 			vehiculo-> setSteeringValue ( btScalar (0), 0 );
 			vehiculo-> setSteeringValue ( btScalar (0), 1 );
 			//vehiculo-> set
@@ -31,31 +31,42 @@ void CorredorJugador::movimiento() {
 			}
 			if (teclado->isKeyDown(KEY_KEY_W))
 			{
-			vehiculo-> applyEngineForce ( 10000 , 2 );
-			vehiculo-> applyEngineForce ( 10000 , 3 );
-			vehiculo-> setSteeringValue ( 0, 0 );
-			vehiculo-> setSteeringValue ( 0, 1 );
+			vehiculo-> applyEngineForce ( Fuerza , 2 );
+			vehiculo-> applyEngineForce ( Fuerza , 3 );
+			vehiculo-> setSteeringValue ( btScalar (0), 0 );
+			vehiculo-> setSteeringValue ( btScalar (0), 1 );
 			mierda = true;
 			}
 			if (teclado->isKeyDown(KEY_KEY_D))
 			{
-			vehiculo-> setSteeringValue ( btScalar ( 0.3 ), 0 );
-			vehiculo-> setSteeringValue ( btScalar ( 0.3 ), 1 );
+			vehiculo-> setSteeringValue ( FuerzaGiro, 0 );
+			vehiculo-> setSteeringValue ( FuerzaGiro, 1 );
 			
 			mierda = true;
 			}
 			if (teclado->isKeyDown(KEY_KEY_A)){
 
-			vehiculo-> setSteeringValue ( btScalar (- 0.3 ), 0 );
-			vehiculo-> setSteeringValue ( btScalar (- 0.3 ), 1 );
+			vehiculo-> setSteeringValue ( -FuerzaGiro, 0 );
+			vehiculo-> setSteeringValue ( -FuerzaGiro, 1 );
 			
 			mierda = true;
 			}
 			
-			if(teclado->isKeyDown(KEY_KEY_K)){
+			if(teclado->isKeyDown(KEY_SPACE)){
 
-			vehiculo->setBrake(10000, 2);
-			vehiculo->setBrake(10000, 3);
+			vehiculo->setBrake(300, 2);
+			vehiculo->setBrake(300, 3);
+
+				
+				if(teclado->isKeyDown(KEY_KEY_D))
+				vehiculo->applyEngineForce(0,2);
+				if(teclado->isKeyDown(KEY_KEY_A))
+				vehiculo->applyEngineForce(0,3);
+
+				if(!teclado->isKeyDown(KEY_KEY_A) && ! teclado->isKeyDown(KEY_KEY_D)){
+				vehiculo->applyEngineForce(0,2);
+				vehiculo->applyEngineForce(0,3);
+				}
 			mierda = true;
 			}
 
@@ -67,8 +78,8 @@ void CorredorJugador::movimiento() {
 			vehiculo-> setSteeringValue ( 0, 0 );
 			vehiculo-> setSteeringValue ( 0, 1 );	
 
-			vehiculo->setBrake(20, 2);
-			vehiculo->setBrake(20, 3);
+			vehiculo->setBrake(60, 2);
+			vehiculo->setBrake(60, 3);
 
 			}
 	

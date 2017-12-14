@@ -59,11 +59,30 @@ protected:
 	btRaycastVehicle* vehiculo;
 	btDefaultMotionState *motionStateCoche;//interpolacion
 	btCollisionShape *FormaColision;//contorno
-	btScalar Masa;//masa
 	btRigidBody *CuerpoColisionChasis;
 	btCompoundShape* CentroGravedad;
 
 
+	btVector3 direccionRuedas;
+
+	btVector3 rotacionRuedas;
+
+	btScalar suspension;
+
+	btScalar anchoRueda;
+
+	btScalar radioRueda;
+
+	btScalar alturaConexionChasis;
+	
+	btScalar Masa;
+
+	btScalar Fuerza;
+	btScalar FuerzaFrenado;
+	//btScalar FuerzaFrenoMano;
+	btScalar FuerzaGiro;
+	//btScalar FuerzaFrenadoReposo;
+	
 	// Direccion
 	//bool norte, sur, este, oeste;
 	//int direccionGrados;

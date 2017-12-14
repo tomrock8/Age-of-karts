@@ -18,22 +18,34 @@ Corredor::Corredor(stringw rutaObj,vector3df pos)
 	cuboNodo->setName("Jugador");
 	//cambiar a color rojo del coche
 	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
-	cuboNodo->setScale(vector3df(1,1,1.5));
+	cuboNodo->setScale(vector3df(1,1,1));
 	// Desactivar la iluminacion del cubo
-		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-		cuboNodo->setPosition(pos);
-		//-------------bullet----------------
+	cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
+	cuboNodo->setPosition(pos);
+	
+	//CREAMOS LAS RUEDAS
 	rueda1 = smgr->addCubeSceneNode(1.f);
 	rueda2 = smgr->addCubeSceneNode(1.f);
 	rueda3 = smgr->addCubeSceneNode(1.f);
 	rueda4 = smgr->addCubeSceneNode(1.f);
 	
-	//smgr->getMeshManipulator()->setVertexColors(rueda1->getMesh(),SColor(255, 255, 0, 0));
 	rueda1->setMaterialFlag(EMF_LIGHTING, false);
 	rueda2->setMaterialFlag(EMF_LIGHTING, false);
 	rueda3->setMaterialFlag(EMF_LIGHTING, false);
 	rueda4->setMaterialFlag(EMF_LIGHTING, false);
 
+	direccionRuedas = btVector3(0,-1,0);
+	rotacionRuedas= btVector3(-1,0,0);
+	suspension=btScalar(0.9);
+	Fuerza=btScalar(10000);
+	anchoRueda=btScalar(0.4);
+	radioRueda=btScalar(0.5);
+	alturaConexionChasis=btScalar(1.2);
+	Masa =btScalar(2000);
+	FuerzaFrenado=btScalar(-15000);
+	FuerzaGiro=btScalar(0.3);
+	//FuerzaFrenoMano=btScalar(500);
+	//FuerzaFrenadoReposo=20;
 }
 
 
@@ -41,13 +53,12 @@ Corredor::Corredor(stringw rutaObj,vector3df pos)
 void Corredor::InicializarFisicas(list<btRigidBody*> &objetos, btDiscreteDynamicsWorld *mundo){
 
 	//posicion inicial
-		btTransform transCoche;
-		transCoche.setIdentity();
-		btVector3 posTransCoche =  btVector3(cuboNodo->getPosition().X,cuboNodo->getPosition().Y,cuboNodo->getPosition().Z);
-		transCoche.setOrigin(posTransCoche);
+		btTransform PosInicial;
+		PosInicial.setIdentity();
+		PosInicial.setOrigin(btVector3(cuboNodo->getPosition().X,cuboNodo->getPosition().Y,cuboNodo->getPosition().Z));
 
 		//Motionstate
-		motionStateCoche = new btDefaultMotionState(transCoche);//motionState = interpolacion
+		motionStateCoche = new btDefaultMotionState(PosInicial);//motionState = interpolacion
 		
 
 		//establecemos su centro de gravedad
@@ -57,16 +68,13 @@ void Corredor::InicializarFisicas(list<btRigidBody*> &objetos, btDiscreteDynamic
 		CentroGravedad = new btCompoundShape();
 
 
-
 		//Forma Colision
 		btVector3 TamanyoFormaColision(cuboNodo->getScale().X,cuboNodo->getScale().Y,cuboNodo->getScale().Z);
-		//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
 		FormaColision = new btBoxShape(TamanyoFormaColision);
 		//masa coche
-		Masa = 2000;
+		
 		btVector3 Inercia(0,0,0);
 		FormaColision->calculateLocalInertia(Masa, Inercia);
-		
 
 		CentroGravedad->addChildShape(localTransform,FormaColision);
 
@@ -74,35 +82,29 @@ void Corredor::InicializarFisicas(list<btRigidBody*> &objetos, btDiscreteDynamic
 		//rigidbody del coche
 		CuerpoColisionChasis = new btRigidBody(Masa, motionStateCoche, CentroGravedad, Inercia);
 
+		//Asignamos el nodo irrlich al rigidbody
 		CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
-		//CuerpoColisionChasis->setGravity(btVector3(0,-20,0));
+		//Rigidbody en el mundo
 		mundo->addRigidBody(CuerpoColisionChasis);
 
 		//RaycastDel Coche
 		btVehicleRaycaster* RayCastVehiculo = new btDefaultVehicleRaycaster(mundo);
 		btRaycastVehicle::btVehicleTuning tuning;
 
+		//se crea el coche y se le pasa tunin y raycast
 		vehiculo = new btRaycastVehicle(tuning,CuerpoColisionChasis,RayCastVehiculo);
-
+		//se establece el sistemas de coordenadas
+		vehiculo->setCoordinateSystem(0, 1, 2); // 0, 1, 2
+		//actualizamos este cuerpo siempre para la fisicas
 		CuerpoColisionChasis->setActivationState(DISABLE_DEACTIVATION);
+		//se pone el coche en el mundo
 		mundo->addVehicle(vehiculo);
-		//vehiculo->setActivationState(DISABLE_DEACTIVATION);
-		//almacenar el puntero al nodo irrlicht  para poder actualizar sus valores
-		
+
+		//metemos el rigidbody en el array para actualizar el nodo		
 		objetos.push_back(CuerpoColisionChasis);
-		
-		
-	
+
 		CrearRuedas(vehiculo,tuning);
-		//rigidBody->applyGravity();
-
-
-	// luego declaramos sus ruedas
 	
-	// inicializamos la posicion de las ruedas
-	
-
-
 }
 
 
@@ -115,22 +117,12 @@ void Corredor::BorrarFisicas(){
 
 void Corredor::CrearRuedas(btRaycastVehicle* vehiculo,btRaycastVehicle::btVehicleTuning tuning){
 
-btVector3 direccionRuedas(0,-1,0);
 
-btVector3 rotacionRuedas(-1,0,0);
 
-btScalar suspension(0.9);
 
-btScalar anchoRueda(0.4);
-
-btScalar radioRueda(0.5);
-
-btScalar alturaConexionChasis(1.2);
-
-//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
 btVector3 puntoConexionChasis(cuboNodo->getScale().X-radioRueda,alturaConexionChasis,cuboNodo->getScale().Z-anchoRueda);
 
-vehiculo->setCoordinateSystem(0, 1, 2); // 0, 1, 2
+
 
 // Agrega las ruedas delanteras
 	vehiculo-> addWheel ((puntoConexionChasis * btVector3 (4 , 1 , 2 )), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);

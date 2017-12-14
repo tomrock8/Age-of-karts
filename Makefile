@@ -1,6 +1,6 @@
 FUENTE := $(wildcard src/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
-LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11
+LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lGL -lSDL_image -lGLU -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody
 RUTAS := -I. -I/usr/local/include/bullet/
 CFLAGS := -ggdb
 

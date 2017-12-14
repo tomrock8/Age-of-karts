@@ -1,71 +1,153 @@
+
 #include "Pista.hpp"
-#include "IrrlichtLib.hpp"
 
-using namespace std;
 
-enum
-{
-    // No colisionable, para evitar cogerlo por error
-    ID_NULO = 0,
+Pista::Pista(vector3df Posicion,vector3df Scala){
 
-    // Objetos que pueden colisionar
-    ID_COLISION = 1 << 0,
 
-    // Objetos para iluminar
-    ID_ILUMINAR = 1 << 1
-};
+    Motor3d *m = Motor3d::getInstancia();
+    ISceneManager *smgr = m->getScene();
+	IMesh *mapa = smgr->getMesh("assets/mapa01.obj");
+	//countMesh = mapa->getMeshBufferCount();
 
-Pista::Pista()
-{
-    inicializar();
+
+	// -----------------------------
+	//  GEOMETRIA MAPA
+	// -----------------------------
+	//!!!Declaracion de escala y llamada al metodo getBulletTriangleMesh, obteniendo todos los triangulos descompuestos del mapa para realizar colisiones
+	btTriangleMesh *btm = getBulletTriangleMesh(mapa, Scala);
+	//En vez de btBoxShape usamos btBvhTriangleMeshShape (solo para el terreno)
+	FormaColision = new btBvhTriangleMeshShape(btm, true);
+
+	// Cargar modelo mapa
+	MapaNodo = smgr->addOctreeSceneNode(mapa);
+	ITriangleSelector *selector = 0;
+	//smgr->getMeshManipulator()->setVertexColors(mapaNodo->getMesh(), SColor(255, 232, 128, 0));
+	//selector=smgr->createTriangleSelector(mapa,0);
+	//mapaNodo->setTriangleSelector(selector);
+	//countTriangle = selector->getTriangleCount();
+
+
+	MapaNodo->setScale(Scala);
+	MapaNodo->setMaterialFlag(EMF_LIGHTING, false); // iluminacion
+	MapaNodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+
+	
+	//}
 }
 
-bool Pista::inicializar()
-{
-    // Mapa cargado desde obj
-    Motor3d *m = Motor3d::getInstancia();
-    mapa = m->getScene()->getMesh("assets/mapa01.obj");
 
-    if (!mapa)
-    {
-        cout << "Error al inicializar la malla del mapa." << endl;
-        m->getDevice()->drop();
-        return false;
-    }
+Pista::~Pista(){
 
-    // -----------------------------
-    //  GEOMETRIA MAPA
-    // -----------------------------
 
-    // Cargar modelo mapa
-    mapaNodo = m->getScene()->addOctreeSceneNode(mapa, 0, ID_COLISION);
-
-    if (!mapaNodo)
-    {
-        cout << "Error al cargar el mapa." << endl;
-        return false;
-    }
-
-    mapaNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-    mapaNodo->setPosition(vector3df(0, 0, 0));
-    mapaNodo->setName("MAPA");
-
-    return true;
 }
 
-ITriangleSelector *Pista::setColisiones(ITriangleSelector *selector)
+void Pista::InicializarFisicas(list<btRigidBody*> &objetos, btDiscreteDynamicsWorld *mundo){
+
+
+Masa = 0;
+//posicion inicial del objeto
+	btVector3 posicionMapa(0, 0, 0);
+	btTransform mapaTransformacion;
+	mapaTransformacion.setIdentity();
+	mapaTransformacion.setOrigin(posicionMapa);
+
+	//motionState por defecto
+	MotionState = new btDefaultMotionState(mapaTransformacion);
+
+	//crear la forma del mapa, el escalado ya se ha aplicado previamente en la funcion de triangleshape
+	//btVector3 mapaExtension(escala.X, escala.Y, escala.Z);
+
+	// Add mass
+	btVector3 localInertia;
+	FormaColision->calculateLocalInertia(Masa, localInertia);
+
+	//creacion del objeto
+	CuerpoColisionMapa = new btRigidBody(Masa, MotionState, FormaColision, localInertia);
+	//almacenar en puntero al nodo irrlich para poder actualizar( en caso de ser  necesario)
+	CuerpoColisionMapa->setUserPointer((void *)(MapaNodo));
+
+	//add al mundo
+	//mundo->addRigidBody(cuerpoMapa);
+	//objetos.push_back(cuerpoMapa);
+
+	MapaNodo->setName("MAPA1");
+
+mundo->addRigidBody(CuerpoColisionMapa);
+objetos.push_back(CuerpoColisionMapa);
+
+}
+
+
+void Pista::BorrarFisicas(){
+
+// a implementar
+
+}
+
+btTriangleMesh* Pista::getBulletTriangleMesh(IMesh *const mesh, vector3df escala)
 {
-    Motor3d *m = Motor3d::getInstancia();
+	btVector3 vertices[3];
+	u32 i, j, k;
+	s32 index, numVertices;
+	u16 *mb_indices;
 
-    if (!mapaNodo)
-    {
-        cout << "Error al cargar el mapa. No se pueden inicializar las colisiones." << endl;
-        return NULL;
-    }
+	btTriangleMesh *pTriMesh = new btTriangleMesh();
 
-    selector = m->getScene()->createTriangleSelector(mapa, 0);
-    mapaNodo->setTriangleSelector(selector);
-    selector->drop();
+	for (i = 0; i < mesh->getMeshBufferCount(); i++)
+	{
+		irr::scene::IMeshBuffer *mb = mesh->getMeshBuffer(i);
 
-    return selector;
+		//////////////////////////////////////////////////////////////////////////
+		// Extract vertex data                                                  //
+		// Because the vertices are stored as structs with no common base class,//
+		// We need to handle each type separately                               //
+		//////////////////////////////////////////////////////////////////////////
+		if (mb->getVertexType() == irr::video::EVT_STANDARD)
+		{
+			irr::video::S3DVertex *mb_vertices = (irr::video::S3DVertex *)mb->getVertices();
+			mb_indices = mb->getIndices();
+			numVertices = mb->getVertexCount();
+			for (j = 0; j < mb->getIndexCount(); j += 3)
+			{ //get index into vertex list
+				for (k = 0; k < 3; k++)
+				{
+					//three verts per triangle
+					index = mb_indices[j + k];
+					if (index > numVertices)
+						continue;
+					//convert to btVector3
+					vertices[k] = btVector3(mb_vertices[index].Pos.X * escala.X, mb_vertices[index].Pos.Y * escala.Y, mb_vertices[index].Pos.Z * escala.Z); // 1100
+				}
+				pTriMesh->addTriangle(vertices[0], vertices[1], vertices[2]);
+			}
+		}
+		else if (mb->getVertexType() == irr::video::EVT_2TCOORDS)
+		{
+			// Same but for S3DVertex2TCoords data
+			irr::video::S3DVertex2TCoords *mb_vertices = (irr::video::S3DVertex2TCoords *)mb->getVertices();
+			u16 *mb_indices = mb->getIndices();
+			s32 numVertices = mb->getVertexCount();
+			for (j = 0; j < mb->getIndexCount(); j += 3)
+			{ //index into irrlicht data
+				for (k = 0; k < 3; k++)
+				{
+					s32 index = mb_indices[j + k];
+					if (index > numVertices)
+						continue;
+					vertices[k] = btVector3(mb_vertices[index].Pos.X * escala.X, mb_vertices[index].Pos.Y * escala.Y, mb_vertices[index].Pos.Z * escala.Z);
+				}
+				pTriMesh->addTriangle(vertices[0], vertices[1], vertices[2]);
+			}
+		}
+
+		// Does not handle the EVT_TANGENTS type
+	}
+
+	if (pTriMesh)
+	{
+		return pTriMesh;
+	}
+
+	return NULL;
 }

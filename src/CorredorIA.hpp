@@ -12,8 +12,7 @@ using namespace std;
 class CorredorIA : public Corredor
 {
 public:
-	CorredorIA(stringw rutaObj, s32 id_colision, Waypoint** arrayWaypoints, int tamanyoArray);
-
+	CorredorIA(stringw rutaObj,vector3df pos,Waypoint** arrayWaypoints, int tamanyoArray);
 	void movimiento();
 
 	//Metodos GET

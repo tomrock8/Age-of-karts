@@ -1,7 +1,7 @@
 FUENTE := $(wildcard src/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
 LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11
-RUTAS := -I.
+RUTAS := -I. -I/usr/local/include/bullet/
 CFLAGS := -ggdb
 
 .PHONY: objdir info all 

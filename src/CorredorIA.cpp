@@ -1,11 +1,11 @@
 #include "CorredorIA.hpp"
 
 
-CorredorIA::CorredorIA(stringw rutaObj, s32 id_colision, Waypoint** arrayWaypoints, int tamanyoArray) :
-	Corredor(rutaObj, id_colision) {
+CorredorIA::CorredorIA(stringw rutaObj,vector3df pos,Waypoint** arrayWaypoints, int tamanyoArray) :
+	Corredor(rutaObj,pos) {
 
-
-	//sacamos el waypoint más cercano
+/*
+	//sacamos el waypoint mï¿½s cercano
 	float diferenciaX = 0;
 	float diferenciaZ = 0;
 	for (int i = 0; i < tamanyoArray; i++) {
@@ -27,6 +27,7 @@ CorredorIA::CorredorIA(stringw rutaObj, s32 id_colision, Waypoint** arrayWaypoin
 
 		}
 	}
+*/
 }
 
 //-----------------------\*
@@ -35,6 +36,7 @@ CorredorIA::CorredorIA(stringw rutaObj, s32 id_colision, Waypoint** arrayWaypoin
 void CorredorIA::movimiento()
 {
 
+/*
 	bool acelerando;
 	acelerando = true;
 	//Cara A (NORTE) - DELANTE
@@ -75,7 +77,7 @@ void CorredorIA::movimiento()
 	//Cara C (ESTE) - DRCH
 	//Cara D (OESTE) - IZQ
 
-
+*/
 
 }
 

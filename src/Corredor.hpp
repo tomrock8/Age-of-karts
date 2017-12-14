@@ -5,83 +5,77 @@
 #include "IrrlichtLib.hpp"
 #include "Motor3d.hpp"
 #include "Waypoint.hpp"
+#include "btBulletDynamicsCommon.h"
+#include "btBulletCollisionCommon.h"
 
 using namespace std;
 
 class Corredor
 {
 public:
-	Corredor(stringw rutaObj, s32 id_colision);
 
+	Corredor(stringw rutaObj,vector3df pos);
+	void InicializarFisicas(list<btRigidBody*> &objetos, btDiscreteDynamicsWorld *mundo);
+	void BorrarFisicas();
+	void CrearRuedas(btRaycastVehicle* vehiculo,btRaycastVehicle::btVehicleTuning tuning);
 
+	//--movimiento del corredor
 	virtual void movimiento() {}; // A implementar por derivadas
 
-	// Auxiliares
-	void moveCameraControl();
-	void resetGiro();
+	//Update
+	void actualizarRuedas();
+	void actualizarMotionState();
 
-	// Update
-	void updatePosicion();
-	void updateVelocidadInicial();
-	void updatePosicionInicial();
-	void update();
-	void updateDireccion();
-
+	//metodos GET
+	IMeshSceneNode* getNodo();
+	float getVelocidad();
+	btRaycastVehicle* getVehiculo();
+	btRigidBody * getRigidBody();
 
 	// Metodos SET
-	void setAxis();
-	void setEscala(float tam);
-	void setColor(float valor1, float valor2, float valor3);
-	ITriangleSelector *setColisiones(ITriangleSelector *selector);
+	//void setAxis();
 
 	// Metodos GET
-	vector3df getPosicion();
-	vector3df getRotacion();
-	IMeshSceneNode *getNodo();
 
-	float getVelocidad();
-	std::string getDireccion();
-	int getDireccionGrados();
+	//std::string getDireccion();
+	//int getDireccionGrados();
 
-	std::string toString();
+	//std::string toString();
 
 
 protected:
 
-	// Aceleraciones
-	float aceleracion, aceleracionInversa, aceleracionFrenado, tiempo;
 
-	// Velocidades
-	float velocidadIni, velocidad, velocidadX, velocidadZ, velocidadMax;
+	//objetos
+	IMesh          *coche;
+	IMeshSceneNode *cuboNodo;
+	ISceneNode* rueda1;
+	ISceneNode*	rueda2;
+	ISceneNode* rueda3;
+	ISceneNode* rueda4;
+	//list<ISceneNode*> Ruedas;
 
-	// Posiciones
-	float posXIni, posZIni, posYIni, posX, posZ, posY;
-	bool adelante, atras;
+	//bullet
+	btRaycastVehicle* vehiculo;
+	btDefaultMotionState *motionStateCoche;//interpolacion
+	btCollisionShape *FormaColision;//contorno
+	btScalar Masa;//masa
+	btRigidBody *CuerpoColisionChasis;
+	btCompoundShape* CentroGravedad;
 
-	// Rotaciones
-	float Rotacionruedas, Rotacioncoche, rotRuedasY, rotCocheY, anguloMaxRuedas, anguloMaxCoche;
 
 	// Direccion
-	bool norte, sur, este, oeste;
-	int direccionGrados;
-
-
-	// Objetos irrlicht
-	IMesh *coche;
-	IMeshSceneNode *cuboNodo;
-	IMeshSceneNode *ruedasDelanteras;
-	IMeshSceneNode *ruedasTraseras;
-	void enEscena(stringw rutaObj, s32 id_colision); // Implementa todos los elementos de irrlicht
-
+	//bool norte, sur, este, oeste;
+	//int direccionGrados;
 
 	// Movimiento del corredor
-	void acelerar();
-	void frenar();
-	void desacelerar();
-	void girarDerecha();
-	void girarIzquierda();
+	//void acelerar();
+	//void frenar();
+	//void desacelerar();
+	//void girarDerecha();
+	//void girarIzquierda();
 
-	void updateDireccionGrados();
+	//void updateDireccionGrados();
 
 };
 

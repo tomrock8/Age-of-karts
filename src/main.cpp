@@ -9,6 +9,10 @@
 #include "Waypoint.hpp"
 #include "Pista.hpp"
 #include "Motor3d.hpp"
+#include "btBulletDynamicsCommon.h"
+#include "btBulletCollisionCommon.h"
+#include "Camara3persona.hpp"
+#include "DebugFisicas.hpp" 
 
 using namespace std;
 
@@ -16,19 +20,17 @@ using namespace std;
 #pragma comment(lib, "Irrlicht.lib")
 #endif
 
-// Ids para asignar a cada elemento.
-//  Seran analizados por el gestor de colisiones.
-enum
-{
-	// No colisionable, para evitar cogerlo por error
-	ID_NULO = 0,
+//funciones
+static void UpdatePhysics(u32 TDeltaTime);
+static void UpdateRender(btRigidBody *TObject);
+static void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass);
 
-	// Objetos que pueden colisionar
-	ID_COLISION = 1 << 0,
 
-	// Objetos para iluminar
-	ID_ILUMINAR = 1 << 1
-};
+	static btDiscreteDynamicsWorld *mundo;
+	static core::list<btRigidBody *> objetos;
+	static ITimer *irrTimer;
+	static ILogger *irrLog;
+
 
 int main()
 {
@@ -43,17 +45,53 @@ int main()
 	IVideoDriver *driver = m->getDriver();
 	ISceneManager *smgr = m->getScene();
 	IGUIEnvironment *guienv = m->getGUI();
+	IrrlichtDevice  *device = m->getDevice();
+    irrTimer = device->getTimer();
+	//----------------------------//
+	//---------BULLET-------------//
+	//----------------------------//
 
-	//COLISIONES
-	ITriangleSelector *selector = 0; //Selector de triangulos para las colisiones
-	ISceneCollisionManager *gestorColisiones = smgr->getSceneCollisionManager();
+	//inicializar mundo bullet
+	btBroadphaseInterface *broadPhase =  new btAxisSweep3(btVector3(-1000,1000,-1000), btVector3(1000,1000,1000));//limites del mundo
+	btDefaultCollisionConfiguration *confColision = new btDefaultCollisionConfiguration();
+	btCollisionDispatcher *dispatcher = new btCollisionDispatcher(confColision);
+	btSequentialImpulseConstraintSolver *solver = new btSequentialImpulseConstraintSolver();
+	mundo = new btDiscreteDynamicsWorld(dispatcher, broadPhase, solver, confColision);//creacion del mundo
+	mundo->setGravity(btVector3(0,-10,0));
 
-	// -----------------------------
-	//	MAPA
-	// -----------------------------
-	Pista *pista = new Pista();
-	selector = pista->setColisiones(selector);
 
+	//Debug BUllet
+	DebugDraw debugDraw(device);
+	debugDraw.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+	mundo->setDebugDrawer(&debugDraw);
+
+	//-----------------------------//
+	//-----ESCENARIO MAPA----------//
+	//-----------------------------//
+	smgr->addLightSceneNode(0,core::vector3df(2,5,-2), SColorf(4,4,4,1));//luz para experimentos nazis
+	vector3df escala(1,1,1);
+	vector3df posicion(0,0,0);
+	Pista *Mapa1= new Pista(posicion,escala);
+	Mapa1->InicializarFisicas(objetos,mundo);
+	if (!Mapa1){
+		return 1;		//error no se ha cargado el mapa
+	}
+	
+
+	//-----------------------------//
+	//-----GEOMETRIA COCHE---------//
+	//-----------------------------//
+	//Posicion del nodo y el bloque de colisiones centralizado:
+	vector3df pos(230,20,0);
+	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
+	pj1->InicializarFisicas(objetos,mundo);
+	///////////////////////CAMARA///////////////////////////////////////////////
+	Camara3persona *camara = new Camara3persona(smgr);
+
+	btVector3 cubopos1(240,20,10);
+	vector3df cuboescala1(5,5,5);
+
+	CreateBox(cubopos1,cuboescala1,10);
 
 	// -----------------------------
 	//	Waypoints
@@ -121,33 +159,6 @@ int main()
 	arrayWaypoints[32]->setPosicion((arrayWaypoints[31]->getPosicion().X + 10), posY, (arrayWaypoints[31]->getPosicion().Z + 60));
 
 
-
-	// -----------------------------
-	//  CORREDORES
-	// -----------------------------
-	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", ID_COLISION);
-	//pj1->escalar(5.0f);
-	//colisiones del jugador
-	selector = pj1->setColisiones(selector);
-
-	//IMeshSceneNode *Jugador = pj1->getNodo();
-	CorredorIA *pj2 = new CorredorIA("assets/coche.obj", ID_COLISION, arrayWaypoints, tamanyoArrayWaypoints);
-	selector = pj2->setColisiones(selector);
-	//pj2->getNodo()->setPosition(vector3df(230, -50, 20));
-	pj2->setColor(255, 255, 255);
-	//IMeshSceneNode *IA = pj2->getNodo();
-
-
-	//---------------------//
-	//---CAMARA INICIAL----//
-	//---------------------//
-	vector3df cuboPos = pj1->getPosicion();
-	vector3df camPos(0, 200, -8);
-	//vector3df camPos(0, 3, -8);
-	vector3df camRot = pj1->getRotacion();
-	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos, ID_NULO); //3 parametros =  nodopadre, posicion, direccion
-	//smgr->addCameraSceneNodeFPS();
-
 	// -----------------------------
 	//  INTERFAZ
 	// -----------------------------
@@ -159,16 +170,12 @@ int main()
 		false,						 // Mostrar bordes
 		true,						 // Cortar en varias lineas
 		0,							 // Nodo padre
-		ID_NULO,					 // Id del elemento
+		0,					 // Id del elemento
 		true);						 // Rellenado (o transparente)
 	textoUI->setOverrideFont(fuente);
 
 	int lastFPS = -1;
-
-
-
-	//driver->draw3DLine(vector3df(), vector3df(), SColor(255, 255, 255, 0));
-	driver->draw3DLine(vector3df(230, 0, 0), vector3df(230, 1000, 0), SColor(255, 255, 255, 0));
+	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;	
 	// -----------------------------
 	//  GAME LOOP
 	// -----------------------------	
@@ -176,34 +183,20 @@ int main()
 	{
 		if (m->getDevice()->isWindowActive())
 		{
-			// PARA MODIFICACIONES DEBUG
-			text = L" ---- CORREDOR 1 PJ ----\n";
-
-			//pj1->setAxis();
-
-			// Linea que comprueba las colisiones del objeto
-
-			line3d<f32> rayo;
-			rayo.start = pj1->getPosicion();
-
-			vector3df radioColision = (pj1->getNodo()->getBoundingBox().MaxEdge - pj1->getNodo()->getBoundingBox().getCenter()) + 2;
-			rayo.end = rayo.start;
-			rayo.end.Y -= radioColision.Y;
-
-			vector3df interseccion;		// Analizar el punto de colision con la malla u objeto
-			triangle3df trianguloGolpe; // Para mostrar el triangulo de la colision
-
-			ISceneNode *nodoColision = gestorColisiones->getSceneNodeAndCollisionPointFromRay(
-				rayo, interseccion, trianguloGolpe, ID_COLISION, 0);
-
-			if (nodoColision)
-			{
-				//cout << "CHOQUE" << endl;
-				text += " Colision con: ";
-				text += nodoColision->getName();
-			}
 			
-			text += pj1->toString().c_str();
+		
+			DeltaTime = irrTimer->getTime() - TimeStamp;
+			TimeStamp = irrTimer->getTime();
+			UpdatePhysics(DeltaTime);
+
+
+			pj1->movimiento();
+
+			pj1->actualizarRuedas();
+			camara->moveCameraControl(pj1,device);
+
+/*
+			//text += pj1->toString().c_str();
 
 			text += "\n ---- CORREDOR 2 IA ----\n";
 			text += " Waypoint siguiente: ";
@@ -222,11 +215,8 @@ int main()
 				return 0;
 			}
 
-
-			pj1->update();
-			pj2->update();
-
-
+*/
+			
 			//-------ENTRADA TECLADO FIN----------//
 			int fps = driver->getFPS();
 			if (lastFPS != fps)
@@ -242,11 +232,17 @@ int main()
 
 			textoUI->setText(text.c_str());
 
-			// MOVIMIENTO DE LA CAMARA
-			smgr->getActiveCamera()->setTarget(pj1->getPosicion());
 
 			//	RENDER
 			m->dibujar();
+
+			SMaterial debugMat;
+			debugMat.Lighting = true;
+			driver->setMaterial(debugMat);
+			driver->setTransform(ETS_WORLD, IdentityMatrix);
+			mundo->debugDrawWorld();
+
+
 		}
 		else
 		{
@@ -257,4 +253,80 @@ int main()
 	m->getDevice()->drop();
 
 	return 0;
+}
+
+
+
+void UpdatePhysics(u32 TDeltaTime) {
+
+	mundo->stepSimulation(TDeltaTime * 0.001f, 60);
+
+	for(list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
+		
+		UpdateRender(*Iterator);
+	}	
+}
+// Passes bullet's orientation to irrlicht
+void UpdateRender(btRigidBody *TObject) {
+	
+	ISceneNode *Node = static_cast<ISceneNode *>(TObject->getUserPointer());
+
+	//cout << Node->getName() << endl;
+	// Set position
+	btVector3 Point = TObject->getCenterOfMassPosition();
+	
+	//btTransform t;
+	//TObject->getMotionState()->getWorldTransform(t);	
+	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
+	if(strcmp(Node->getName(),"Jugador") == 0)
+	Node->setPosition(vector3df((f32)Point[0],(f32)Point[1]+1,(f32)Point[2]));
+	else
+	Node->setPosition(vector3df((f32)Point[0],(f32)Point[1],(f32)Point[2]));
+	// Set rotation
+	vector3df Euler;
+	const btQuaternion& TQuat = TObject->getOrientation();
+	quaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	q.toEuler(Euler);
+	Euler *= RADTODEG;
+	Node->setRotation(Euler);
+
+}
+
+
+void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass) {
+
+
+	Motor3d *m = Motor3d::getInstancia();
+	
+	ISceneNode *Node = m->getScene()->addCubeSceneNode(1.0f);
+	Node->setScale(TScale);
+	Node->setMaterialFlag(EMF_LIGHTING, 1);
+	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/rust.png"));
+	
+	// Set the initial position of the object
+	btTransform Transform;
+	Transform.setIdentity();
+	Transform.setOrigin(TPosition);
+
+	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
+
+	// Create the shape
+	btVector3 HalfExtents(TScale.X * 0.5f, TScale.Y * 0.5f, TScale.Z * 0.5f);
+	btCollisionShape *Shape = new btBoxShape(HalfExtents);
+
+	// Add mass
+	btVector3 LocalInertia;
+	Shape->calculateLocalInertia(TMass, LocalInertia);
+
+	// Create the rigid body object
+	btRigidBody *RigidBody = new btRigidBody(TMass, MotionState, Shape, LocalInertia);
+
+	RigidBody->setActivationState(DISABLE_DEACTIVATION);
+	// Store a pointer to the irrlicht node so we can update it later
+	RigidBody->setUserPointer((void *)(Node));
+
+	// Add it to the world
+	mundo->addRigidBody(RigidBody);
+	objetos.push_back(RigidBody);
 }

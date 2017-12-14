@@ -11,7 +11,7 @@ class CorredorJugador : public Corredor
 {
 public:
 
-	CorredorJugador(stringw rutaObj, s32 id_colision);
+	CorredorJugador(stringw rutaObj,vector3df pos);
 
 	void movimiento();
 	void update();

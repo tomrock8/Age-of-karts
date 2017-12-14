@@ -1,7 +1,7 @@
 #include "CorredorJugador.hpp"
 
-CorredorJugador::CorredorJugador(stringw rutaObj, s32 id_colision) :
-	Corredor(rutaObj, id_colision) {
+CorredorJugador::CorredorJugador(stringw rutaObj,vector3df pos) :
+	Corredor(rutaObj,pos) {
 
 }
 
@@ -11,62 +11,70 @@ CorredorJugador::CorredorJugador(stringw rutaObj, s32 id_colision) :
 */
 void CorredorJugador::movimiento() {
 	CTeclado *teclado = CTeclado::getInstancia();
+	Motor3d *m = Motor3d::getInstancia();
+	bool mierda=false;
 
-	int checkGiro = 0;
-	int checkMarchaAtras = 0;
-	float checkVelocidad = getVelocidad();
-
-	if (teclado->isKeyDown(KEY_KEY_S))
-	{
-		frenar();
-		checkMarchaAtras = 1;
-	}
-	else if (teclado->isKeyDown(KEY_KEY_W))
-	{
-		acelerar();
-	}
-	else
-	{
-		desacelerar();
-	}
-	if (teclado->isKeyDown(KEY_KEY_D))
-	{
-		if (checkMarchaAtras == 0)
-		{
-			girarDerecha();
-		}
-		else
-		{
-			if (checkVelocidad < 0.5)
+			//-------ENTRADA TECLADO ----------//
+			if (teclado->isKeyDown(KEY_ESCAPE))
 			{
-				girarIzquierda();
+				m->getDevice()->closeDevice();
+				
 			}
-		}
-		checkGiro = 1;
-	}
-	else if (teclado->isKeyDown(KEY_KEY_A))
-	{
-		if (checkMarchaAtras == 0)
-		{
-			girarIzquierda();
-		}
-		else
-		{
-			if (checkVelocidad < 0.5)
+			if (teclado->isKeyDown(KEY_KEY_S))
 			{
-				girarDerecha();
+			vehiculo-> applyEngineForce ( -15000 , 2 );
+			vehiculo-> applyEngineForce ( -15000 , 3 );
+			vehiculo-> setSteeringValue ( btScalar (0), 0 );
+			vehiculo-> setSteeringValue ( btScalar (0), 1 );
+			//vehiculo-> set
+			mierda = true;
 			}
-		}
-		checkGiro = 1;
-	}
+			if (teclado->isKeyDown(KEY_KEY_W))
+			{
+			vehiculo-> applyEngineForce ( 10000 , 2 );
+			vehiculo-> applyEngineForce ( 10000 , 3 );
+			vehiculo-> setSteeringValue ( 0, 0 );
+			vehiculo-> setSteeringValue ( 0, 1 );
+			mierda = true;
+			}
+			if (teclado->isKeyDown(KEY_KEY_D))
+			{
+			vehiculo-> setSteeringValue ( btScalar ( 0.3 ), 0 );
+			vehiculo-> setSteeringValue ( btScalar ( 0.3 ), 1 );
+			
+			mierda = true;
+			}
+			if (teclado->isKeyDown(KEY_KEY_A)){
 
-	if (checkGiro == 0)
-	{
-		resetGiro();
-	}
+			vehiculo-> setSteeringValue ( btScalar (- 0.3 ), 0 );
+			vehiculo-> setSteeringValue ( btScalar (- 0.3 ), 1 );
+			
+			mierda = true;
+			}
+			
+			if(teclado->isKeyDown(KEY_KEY_K)){
+
+			vehiculo->setBrake(10000, 2);
+			vehiculo->setBrake(10000, 3);
+			mierda = true;
+			}
+
+
+			if(!mierda){
+			vehiculo-> applyEngineForce ( 0 , 2 );
+			vehiculo-> applyEngineForce ( 0 , 3 );
+			
+			vehiculo-> setSteeringValue ( 0, 0 );
+			vehiculo-> setSteeringValue ( 0, 1 );	
+
+			vehiculo->setBrake(20, 2);
+			vehiculo->setBrake(20, 3);
+
+			}
+	
 }
 
 void CorredorJugador::update() {
-	Corredor::update();
+	
 	movimiento();
 }

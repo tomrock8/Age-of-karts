@@ -4,7 +4,7 @@
 CorredorIA::CorredorIA(stringw rutaObj,vector3df pos,Waypoint** arrayWaypoints, int tamanyoArray) :
 	Corredor(rutaObj,pos) {
 
-/*
+
 	//sacamos el waypoint m�s cercano
 	float diferenciaX = 0;
 	float diferenciaZ = 0;
@@ -13,21 +13,21 @@ CorredorIA::CorredorIA(stringw rutaObj,vector3df pos,Waypoint** arrayWaypoints, 
 		//puntoActual=arrayWaypoints[i];
 		if (i == 0) {
 			puntoActual = arrayWaypoints[i];
-			diferenciaX = abs(posX - arrayWaypoints[i]->getPosicion().X);
-			diferenciaZ = abs(posZ - arrayWaypoints[i]->getPosicion().Z);
+			diferenciaX = abs(cuboNodo->getPosition().X - arrayWaypoints[i]->getPosicion().X);
+			diferenciaZ = abs(cuboNodo->getPosition().Z - arrayWaypoints[i]->getPosicion().Z);
 
 		}
 		else {
 
-			if ((abs(posX - arrayWaypoints[i]->getPosicion().X)) <= diferenciaX && (abs(posZ - arrayWaypoints[i]->getPosicion().Z)) <= diferenciaZ) {
+			if ((abs(cuboNodo->getPosition().X - arrayWaypoints[i]->getPosicion().X)) <= diferenciaX && (abs(cuboNodo->getPosition().Z - arrayWaypoints[i]->getPosicion().Z)) <= diferenciaZ) {
 				puntoActual = arrayWaypoints[i];
-				diferenciaX = abs(posX - arrayWaypoints[i]->getPosicion().X);
-				diferenciaZ = abs(posZ - arrayWaypoints[i]->getPosicion().Z);
+				diferenciaX = abs(cuboNodo->getPosition().X - arrayWaypoints[i]->getPosicion().X);
+				diferenciaZ = abs(cuboNodo->getPosition().Z - arrayWaypoints[i]->getPosicion().Z);
 			}
 
 		}
 	}
-*/
+
 }
 
 //-----------------------\*
@@ -36,7 +36,7 @@ CorredorIA::CorredorIA(stringw rutaObj,vector3df pos,Waypoint** arrayWaypoints, 
 void CorredorIA::movimiento()
 {
 
-/*
+
 	bool acelerando;
 	acelerando = true;
 	//Cara A (NORTE) - DELANTE
@@ -44,18 +44,19 @@ void CorredorIA::movimiento()
 	if (acelerando)
 		acelerar();
 
-	if (norte) {
+	//if (norte) {
 		//cout << "CONDICION NORTE" << endl;
-		if (posZ - (puntoActual->getPosicion().Z) > 0) {
+		if (cuboNodo->getPosition().Z - (puntoActual->getPosicion().Z) > 0) {
 			puntoActual = puntoActual->getNextWaypoint();
 		}
 
-		if (posX - (puntoActual->getPosicion().X) < 0) {
+		if (cuboNodo->getPosition().X - (puntoActual->getPosicion().X) < 0) {
 			girarDerecha();
 		}
 		else {
 			girarIzquierda();
 		}
+/*
 	}
 	else {
 		if (sur) {

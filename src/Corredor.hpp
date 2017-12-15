@@ -25,7 +25,7 @@ public:
 	//Update
 	void actualizarRuedas();
 	void actualizarMotionState();
-
+	void Pedazodemierda();
 	//metodos GET
 	IMeshSceneNode* getNodo();
 	float getVelocidad();
@@ -45,7 +45,11 @@ public:
 
 protected:
 
+	//orientacion
+	vector3df orientacion;
 
+	//Mascaras de colision
+	
 	//objetos
 	IMesh          *coche;
 	IMeshSceneNode *cuboNodo;
@@ -62,21 +66,14 @@ protected:
 	btRigidBody *CuerpoColisionChasis;
 	btCompoundShape* CentroGravedad;
 
-
-	btVector3 direccionRuedas;
-
-	btVector3 rotacionRuedas;
-
-	btScalar suspension;
-
-	btScalar anchoRueda;
-
-	btScalar radioRueda;
-
-	btScalar alturaConexionChasis;
 	
+	btVector3 direccionRuedas;
+	btVector3 rotacionRuedas;
+	btScalar suspension;
+	btScalar anchoRueda;
+	btScalar radioRueda;
+	btScalar alturaConexionChasis;
 	btScalar Masa;
-
 	btScalar Fuerza;
 	btScalar FuerzaFrenado;
 	//btScalar FuerzaFrenoMano;
@@ -88,12 +85,12 @@ protected:
 	//int direccionGrados;
 
 	// Movimiento del corredor
-	//void acelerar();
-	//void frenar();
-	//void desacelerar();
-	//void girarDerecha();
-	//void girarIzquierda();
-
+	void acelerar();
+	void frenar();
+	void desacelerar();
+	void girarDerecha();
+	void girarIzquierda();
+	void frenodemano();
 	//void updateDireccionGrados();
 
 };

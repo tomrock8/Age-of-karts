@@ -14,7 +14,6 @@ public:
 	CorredorJugador(stringw rutaObj,vector3df pos);
 
 	void movimiento();
-	void update();
 
 private:
 

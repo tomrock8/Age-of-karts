@@ -64,7 +64,7 @@ void Corredor::InicializarFisicas(list<btRigidBody*> &objetos, btDiscreteDynamic
 		//establecemos su centro de gravedad
 		btTransform localTransform;
 		localTransform.setIdentity();
-		localTransform.setOrigin(btVector3(0,1,0));
+		localTransform.setOrigin(btVector3(0,1,1));
 		CentroGravedad = new btCompoundShape();
 
 
@@ -139,11 +139,13 @@ btVector3 puntoConexionChasis(cuboNodo->getScale().X-radioRueda,alturaConexionCh
 for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo& wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = 20;
+		wheel.m_suspensionStiffness = 40;
 		wheel.m_wheelsDampingCompression =2.3f;
 		wheel.m_wheelsDampingRelaxation = 4.4f;
 		wheel.m_frictionSlip = 100;
 		wheel.m_rollInfluence = 0.1f;
+		//wheel.m_maxSuspensionForce = 2000.f;
+		//wheel.m_maxSuspensionTravelCm = 10;
 	
 	}
 
@@ -169,6 +171,18 @@ IMeshSceneNode *Corredor::getNodo()
 }
 
 
+void Corredor::Pedazodemierda(){
+
+	orientacion = vector3df(sin( ( cuboNodo->getRotation().Y ) * PI/180.0f ), 0, cos( ( cuboNodo->getRotation().Y  ) * PI/180.0f ) );
+
+
+	//cout<< "Rotacion en Y=="<< cuboNodo->getRotation().Y << endl;  
+	//cout<< "ORIENTACION X=="<< orientacion.X << "ORIENTACION Z==" << orientacion.Z << endl;
+	orientacion.normalize();
+	//cout<< "ORIENTACION XNORMAL=="<< orientacion.X << "ORIENTACION ZNORMAL==" << orientacion.Z << endl;
+
+
+}
 
 void Corredor::actualizarRuedas(){
 
@@ -196,8 +210,61 @@ void Corredor::actualizarRuedas(){
 
 
 
+void Corredor::acelerar(){
+
+			vehiculo-> applyEngineForce ( Fuerza , 2 );
+			vehiculo-> applyEngineForce ( Fuerza , 3 );
+			vehiculo-> setSteeringValue ( btScalar (0), 0 );
+			vehiculo-> setSteeringValue ( btScalar (0), 1 );
+}
 
 
+void Corredor::frenar(){
+
+			vehiculo-> applyEngineForce ( FuerzaFrenado , 2 );
+			vehiculo-> applyEngineForce ( FuerzaFrenado , 3 );
+			vehiculo-> setSteeringValue ( btScalar (0), 0 );
+			vehiculo-> setSteeringValue ( btScalar (0), 1 );
+}
+
+
+void Corredor::girarDerecha(){
+
+			vehiculo-> setSteeringValue ( FuerzaGiro, 0 );
+			vehiculo-> setSteeringValue ( FuerzaGiro, 1 );
+
+
+}
+
+
+void Corredor::girarIzquierda(){
+
+			vehiculo-> setSteeringValue ( -FuerzaGiro, 0 );
+			vehiculo-> setSteeringValue ( -FuerzaGiro, 1 );
+
+}
+
+
+void Corredor::desacelerar(){
+
+			vehiculo-> applyEngineForce ( 0 , 2 );
+			vehiculo-> applyEngineForce ( 0 , 3 );
+			
+			vehiculo-> setSteeringValue ( 0, 0 );
+			vehiculo-> setSteeringValue ( 0, 1 );	
+
+			vehiculo->setBrake(60, 2);
+			vehiculo->setBrake(60, 3);
+
+}
+
+
+void Corredor::frenodemano(){
+
+				vehiculo->setBrake(300, 2);
+				vehiculo->setBrake(300, 3);
+
+}
 
 
 

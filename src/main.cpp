@@ -57,7 +57,7 @@ int main()
 	btCollisionDispatcher *dispatcher = new btCollisionDispatcher(confColision);
 	btSequentialImpulseConstraintSolver *solver = new btSequentialImpulseConstraintSolver();
 	mundo = new btDiscreteDynamicsWorld(dispatcher, broadPhase, solver, confColision);//creacion del mundo
-	mundo->setGravity(btVector3(0,-10,0));
+	mundo->setGravity(btVector3(0,-15,0));
 
 
 	//----------------------------//
@@ -166,6 +166,10 @@ int main()
 	arrayWaypoints[32]->setPosicion((arrayWaypoints[31]->getPosicion().X + 10), posY, (arrayWaypoints[31]->getPosicion().Z + 60));
 
 
+
+	vector3df posIA(220,-50,0);
+	CorredorIA *pj2 = new CorredorIA("assets/coche.obj",posIA,arrayWaypoints,tamanyoArrayWaypoints);
+	pj2->InicializarFisicas(objetos,mundo);
 	// -----------------------------
 	//  INTERFAZ
 	// -----------------------------
@@ -193,24 +197,26 @@ int main()
 		if (m->getDevice()->isWindowActive())
 		{
 			
-		
+			text = "";
 			DeltaTime = irrTimer->getTime() - TimeStamp;
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
 
 
 			pj1->movimiento();
+			pj1->Pedazodemierda();
+			//pj2->movimiento();
 
 			pj1->actualizarRuedas();
+			//pj2->actualizarRuedas();
 			camara->moveCameraControl(pj1,device);
 
-/*
-			//text += pj1->toString().c_str();
 
+			//text += pj1->toString().c_str();
 			text += "\n ---- CORREDOR 2 IA ----\n";
 			text += " Waypoint siguiente: ";
 			text += pj2->getNombreWaypoint().c_str();
-			text += pj2->toString().c_str();
+			//text += pj2->toString().c_str();
 
 
 			//-------ENTRADA TECLADO ----------//
@@ -218,13 +224,8 @@ int main()
 				pj2->movimiento();
 			}
 
-			if (teclado->isKeyDown(KEY_ESCAPE))
-			{
-				m->cerrar();
-				return 0;
-			}
 
-*/
+
 			int fps = driver->getFPS();
 			if (lastFPS != fps)
 			{

@@ -22,70 +22,39 @@ void CorredorJugador::movimiento() {
 			}
 			if (teclado->isKeyDown(KEY_KEY_S))
 			{
-			vehiculo-> applyEngineForce ( FuerzaFrenado , 2 );
-			vehiculo-> applyEngineForce ( FuerzaFrenado , 3 );
-			vehiculo-> setSteeringValue ( btScalar (0), 0 );
-			vehiculo-> setSteeringValue ( btScalar (0), 1 );
+			frenar();
 			//vehiculo-> set
 			mierda = true;
 			}
 			if (teclado->isKeyDown(KEY_KEY_W))
 			{
-			vehiculo-> applyEngineForce ( Fuerza , 2 );
-			vehiculo-> applyEngineForce ( Fuerza , 3 );
-			vehiculo-> setSteeringValue ( btScalar (0), 0 );
-			vehiculo-> setSteeringValue ( btScalar (0), 1 );
+			acelerar();
 			mierda = true;
 			}
 			if (teclado->isKeyDown(KEY_KEY_D))
 			{
-			vehiculo-> setSteeringValue ( FuerzaGiro, 0 );
-			vehiculo-> setSteeringValue ( FuerzaGiro, 1 );
+			girarDerecha();
 			
 			mierda = true;
 			}
 			if (teclado->isKeyDown(KEY_KEY_A)){
 
-			vehiculo-> setSteeringValue ( -FuerzaGiro, 0 );
-			vehiculo-> setSteeringValue ( -FuerzaGiro, 1 );
+			girarIzquierda();
 			
 			mierda = true;
 			}
 			
 			if(teclado->isKeyDown(KEY_SPACE)){
 
-			vehiculo->setBrake(300, 2);
-			vehiculo->setBrake(300, 3);
-
+			frenodemano();
 				
-				if(teclado->isKeyDown(KEY_KEY_D))
-				vehiculo->applyEngineForce(0,2);
-				if(teclado->isKeyDown(KEY_KEY_A))
-				vehiculo->applyEngineForce(0,3);
-
-				if(!teclado->isKeyDown(KEY_KEY_A) && ! teclado->isKeyDown(KEY_KEY_D)){
-				vehiculo->applyEngineForce(0,2);
-				vehiculo->applyEngineForce(0,3);
-				}
 			mierda = true;
 			}
 
 
 			if(!mierda){
-			vehiculo-> applyEngineForce ( 0 , 2 );
-			vehiculo-> applyEngineForce ( 0 , 3 );
 			
-			vehiculo-> setSteeringValue ( 0, 0 );
-			vehiculo-> setSteeringValue ( 0, 1 );	
-
-			vehiculo->setBrake(60, 2);
-			vehiculo->setBrake(60, 3);
-
+				desacelerar();
 			}
 	
-}
-
-void CorredorJugador::update() {
-	
-	movimiento();
 }

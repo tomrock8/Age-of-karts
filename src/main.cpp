@@ -250,6 +250,7 @@ int main()
 			driver->setTransform(ETS_WORLD, IdentityMatrix);
 			mundo->debugDrawWorld();
 
+			driver->endScene();
 
 		}
 		else

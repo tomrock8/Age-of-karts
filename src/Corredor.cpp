@@ -44,8 +44,8 @@ Corredor::Corredor(stringw rutaObj,vector3df pos)
 	Masa =btScalar(2000);
 	FuerzaFrenado=btScalar(-15000);
 	FuerzaGiro=btScalar(0.3);
-	//FuerzaFrenoMano=btScalar(500);
-	//FuerzaFrenadoReposo=20;
+	FuerzaFrenoMano=btScalar(500);
+	FuerzaFrenadoReposo=20;
 }
 
 
@@ -174,8 +174,6 @@ IMeshSceneNode *Corredor::getNodo()
 void Corredor::Pedazodemierda(){
 
 	orientacion = vector3df(sin( ( cuboNodo->getRotation().Y ) * PI/180.0f ), 0, cos( ( cuboNodo->getRotation().Y  ) * PI/180.0f ) );
-
-
 	//cout<< "Rotacion en Y=="<< cuboNodo->getRotation().Y << endl;  
 	//cout<< "ORIENTACION X=="<< orientacion.X << "ORIENTACION Z==" << orientacion.Z << endl;
 	orientacion.normalize();

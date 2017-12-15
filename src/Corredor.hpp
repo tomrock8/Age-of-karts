@@ -76,9 +76,9 @@ protected:
 	btScalar Masa;
 	btScalar Fuerza;
 	btScalar FuerzaFrenado;
-	//btScalar FuerzaFrenoMano;
+	btScalar FuerzaFrenoMano;
 	btScalar FuerzaGiro;
-	//btScalar FuerzaFrenadoReposo;
+	btScalar FuerzaFrenadoReposo;
 	
 	// Direccion
 	//bool norte, sur, este, oeste;

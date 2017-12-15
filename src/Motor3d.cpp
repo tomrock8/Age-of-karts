@@ -65,7 +65,7 @@ void Motor3d::dibujar()
 	smgr->drawAll();
 	guienv->drawAll();
 
-	driver->endScene();
+	//driver->endScene();
 }
 
 void Motor3d::cerrar(){

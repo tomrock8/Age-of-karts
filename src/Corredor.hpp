@@ -16,33 +16,20 @@ public:
 
 	Corredor(stringw rutaObj,vector3df pos);
 	void InicializarFisicas(list<btRigidBody*> &objetos, btDiscreteDynamicsWorld *mundo);
-	void BorrarFisicas();
-	void CrearRuedas(btRaycastVehicle* vehiculo,btRaycastVehicle::btVehicleTuning tuning);
-
-	//--movimiento del corredor
-	virtual void movimiento() {}; // A implementar por derivadas
-
+	std::string toString();
+	
 	//Update
-	void actualizarRuedas();
-	void actualizarMotionState();
-	void Pedazodemierda();
-	//metodos GET
-	IMeshSceneNode* getNodo();
-	float getVelocidad();
-	btRaycastVehicle* getVehiculo();
-	btRigidBody * getRigidBody();
-
-	// Metodos SET
-	//void setAxis();
-
-	// Metodos GET
-
-	//std::string getDireccion();
-	//int getDireccionGrados();
-
-	//std::string toString();
-
-
+	void update();
+	
+	
+	//Metodos GET
+	IMeshSceneNode 		*getNodo();
+	float 				getVelocidad();
+	btRaycastVehicle   	*getVehiculo();
+	btRigidBody 		*getRigidBody();
+	std::string 		getDireccion();
+	int 				getDireccionGrados();
+	
 protected:
 
 	//orientacion
@@ -53,18 +40,17 @@ protected:
 	//objetos
 	IMesh          *coche;
 	IMeshSceneNode *cuboNodo;
-	ISceneNode* rueda1;
-	ISceneNode*	rueda2;
-	ISceneNode* rueda3;
-	ISceneNode* rueda4;
-	//list<ISceneNode*> Ruedas;
+	ISceneNode *rueda1;
+	ISceneNode *rueda2;
+	ISceneNode *rueda3;
+	ISceneNode *rueda4;
 
 	//bullet
-	btRaycastVehicle* vehiculo;
+	btRaycastVehicle *vehiculo;
 	btDefaultMotionState *motionStateCoche;//interpolacion
 	btCollisionShape *FormaColision;//contorno
 	btRigidBody *CuerpoColisionChasis;
-	btCompoundShape* CentroGravedad;
+	btCompoundShape *CentroGravedad;
 
 	
 	btVector3 direccionRuedas;
@@ -81,8 +67,13 @@ protected:
 	btScalar FuerzaFrenadoReposo;
 	
 	// Direccion
-	//bool norte, sur, este, oeste;
-	//int direccionGrados;
+	bool norte, sur, este, oeste;
+	float direccionGrados;
+
+
+	void CrearRuedas(btRaycastVehicle* vehiculo,btRaycastVehicle::btVehicleTuning tuning);
+	void BorrarFisicas();
+	
 
 	// Movimiento del corredor
 	void acelerar();
@@ -91,7 +82,17 @@ protected:
 	void girarDerecha();
 	void girarIzquierda();
 	void frenodemano();
-	//void updateDireccionGrados();
+	
+
+	// UPDATES
+	void actualizarRuedas();
+	void updateDireccion();
+	void Pedazodemierda();
+	void updateDireccionGrados();
+
+	//--movimiento del corredor
+	virtual void movimiento() {}; // A implementar por derivadas
+
 
 };
 

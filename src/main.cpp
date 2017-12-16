@@ -203,20 +203,19 @@ int main()
 			UpdatePhysics(DeltaTime);
 
 
-			pj1->movimiento();
-			pj1->Pedazodemierda();
+			pj1->update();
 			//pj2->movimiento();
 
-			pj1->actualizarRuedas();
+
 			//pj2->actualizarRuedas();
 			camara->moveCameraControl(pj1,device);
 
 
-			//text += pj1->toString().c_str();
+			text += pj1->toString().c_str();
 			text += "\n ---- CORREDOR 2 IA ----\n";
 			text += " Waypoint siguiente: ";
 			text += pj2->getNombreWaypoint().c_str();
-			//text += pj2->toString().c_str();
+			text += pj2->toString().c_str();
 
 
 			//-------ENTRADA TECLADO ----------//

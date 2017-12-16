@@ -1,20 +1,25 @@
+<<<<<<< HEAD
 #include <iostream>
 #include <string>
 
+=======
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 #include "IrrlichtLib.hpp"
 #include "CTeclado.hpp"
 #include "Corredor.hpp"
-#include "CorredorIA.hpp"
-#include "CorredorJugador.hpp"
-#include "Waypoint.hpp"
-#include "Pista.hpp"
-#include "Motor3d.hpp"
+#include "IVentana.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
+<<<<<<< HEAD
 #include "Camara3persona.hpp"
 #include "DebugFisicas.hpp"
+=======
+#include <cstdlib>
+#include <iostream>
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 
 using namespace std;
+using namespace irr;
 
 #ifdef _MSC_VER
 #pragma comment(lib, "Irrlicht.lib")
@@ -23,17 +28,45 @@ using namespace std;
 //funciones
 static void UpdatePhysics(u32 TDeltaTime);
 static void UpdateRender(btRigidBody *TObject);
-static void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass);
+static void ClearObjects();
+static void crearEscenario();
 
+<<<<<<< HEAD
 static btDiscreteDynamicsWorld *mundo;
 static core::list<btRigidBody *> objetos;
 static ITimer *irrTimer;
 static ILogger *irrLog;
 
+=======
+//-------------------------//
+//--------GLOBALES---------//
+//-------------------------//
+	static  btDiscreteDynamicsWorld *mundo;
+	static core::list<btRigidBody *> objetos;
+	static ITimer *irrTimer;
+	static ILogger *irrLog;
+	static CTeclado teclado;
+	static IVentana *irrlicht ;
+	static IrrlichtDevice *device ;
+	static IVideoDriver *driver;
+	static ISceneManager *smgr ;
+	static IGUIEnvironment *guienv ;
+	
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 int main()
 {
-	CTeclado *teclado = CTeclado::getInstancia();
+	//----------------------------//
+	//----PREPARAR LA VENTANA-----//
+	//----------------------------//
+	 irrlicht = new IVentana(teclado);
+ 	 device = irrlicht->getDevice();
+	 driver = irrlicht->getDriver();
+	 smgr = irrlicht->getScene();
+	 guienv = irrlicht->getGUI();
+     irrTimer = device->getTimer();
 
+
+<<<<<<< HEAD
 	// -----------------------------
 	//  PREPARAR LA VENTANA
 	// -----------------------------
@@ -45,10 +78,13 @@ int main()
 	IGUIEnvironment *guienv = m->getGUI();
 	IrrlichtDevice *device = m->getDevice();
 	irrTimer = device->getTimer();
+=======
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 	//----------------------------//
 	//---------BULLET-------------//
 	//----------------------------//
 
+<<<<<<< HEAD
 	//inicializar mundo bullet
 	btBroadphaseInterface *broadPhase = new btAxisSweep3(btVector3(-1000, 1000, -1000), btVector3(1000, 1000, 1000)); //limites del mundo
 	btDefaultCollisionConfiguration *confColision = new btDefaultCollisionConfiguration();
@@ -63,10 +99,19 @@ int main()
 	DebugDraw debugDraw(device);
 	debugDraw.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	mundo->setDebugDrawer(&debugDraw);
+=======
+	//inicializar bullet
+	btBroadphaseInterface *broadPhase =  new btAxisSweep3(btVector3(-1000,1000,-1000), btVector3(1000,1000,1000));//limites del mundo
+	btDefaultCollisionConfiguration *confColision = new btDefaultCollisionConfiguration();
+	btCollisionDispatcher *dispatcher = new btCollisionDispatcher(confColision);
+	btSequentialImpulseConstraintSolver *solver = new btSequentialImpulseConstraintSolver();
+	mundo = new btDiscreteDynamicsWorld(dispatcher, broadPhase, solver, confColision);//creacion del mundo
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 
 	//-----------------------------//
 	//-----ESCENARIO MAPA----------//
 	//-----------------------------//
+<<<<<<< HEAD
 	smgr->addLightSceneNode(0, core::vector3df(2, 5, -2), SColorf(4, 4, 4, 1)); //luz para experimentos nazis
 	vector3df escala(1, 1, 1);
 	vector3df posicion(0, 0, 0);
@@ -77,9 +122,14 @@ int main()
 		return 1; //error no se ha cargado el mapa
 	}
 
+=======
+	smgr->addLightSceneNode(0,core::vector3df(2,5,-2), SColorf(4,4,4,1));//luz para experimentos nazis
+	crearEscenario();
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 	//-----------------------------//
 	//-----------JUGADORES---------//
 	//-----------------------------//
+<<<<<<< HEAD
 	//Posicion del nodo y el bloque de colisiones centralizado:
 	vector3df pos(230, -50, 0);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
@@ -139,6 +189,30 @@ int main()
 			arrayWaypoints[i]->setPosicion(posanteriorX - 15, posY, posanteriorZ + 30);
 		}
 	}
+=======
+	btVector3 pos =  btVector3(230,20,0);
+	Corredor *pj1 = new Corredor(smgr, "assets/coche.obj",  pos);
+	btRigidBody *pj1Ridigbody = pj1->getRigidBody();
+	mundo->addRigidBody(pj1Ridigbody);
+	objetos.push_back(pj1Ridigbody);
+	
+	pj1->escalar(2.0f);
+
+	//---------------------------//
+	//-------CAMARA INICIAL------//
+	//---------------------------//
+	vector3df cuboPos = pj1->getPosicion();
+	vector3df camPos(0, 3, -8);
+	vector3df camRot = pj1->getRotacion();
+	smgr->addCameraSceneNode(pj1->getNodo(), camPos, cuboPos); //3 parametros =  nodopadre, posicion, direccion
+
+	//variable para identificar la direccion de movimiento (activo o no)
+	int checkGiro = 0;
+	int checkMarchaAtras = 0;
+	float checkVelocidad = 0;
+	
+
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 
 	arrayWaypoints[14]->setPosicion((arrayWaypoints[13]->getPosicion().X - 20), posY, (arrayWaypoints[13]->getPosicion().Z + 10));
 	arrayWaypoints[15]->setPosicion((arrayWaypoints[14]->getPosicion().X - 30), posY, (arrayWaypoints[14]->getPosicion().Z + 10));
@@ -169,6 +243,7 @@ int main()
 	stringw text = L"Datos del jugador:\n"; // PARA MODIFICACIONES FUTURAS
 	IGUIFont *fuente = guienv->getFont("assets/fuente.bmp");
 	IGUIStaticText *textoUI = guienv->addStaticText(
+<<<<<<< HEAD
 		text.c_str(),				 // Texto
 		rect<s32>(10, 10, 260, 300), // Rectangulo de los bordes
 		false,						 // Mostrar bordes
@@ -184,9 +259,28 @@ int main()
 	//  GAME LOOP
 	// -----------------------------
 	while (m->getDevice()->run())
+=======
+		text.c_str(),				// Texto
+		rect<s32>(10, 10, 260, 150),	// Rectangulo de los bordes
+		false,						// Mostrar bordes
+		true, 						// Cortar en varias lineas
+		0, 							// Nodo padre
+		0,					// Id del elemento
+		true);						// Rellenado (o transparente)
+	textoUI->setOverrideFont(fuente);
+
+
+	// -----------------------------
+	//  GAME LOOP
+	// -----------------------------
+	int lastFPS = -1;
+	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;
+	while (device->run())
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 	{
-		if (m->getDevice()->isWindowActive())
+		if (device->isWindowActive())
 		{
+<<<<<<< HEAD
 
 			text = "";
 			DeltaTime = irrTimer->getTime() - TimeStamp;
@@ -209,8 +303,91 @@ int main()
 			if (teclado->isKeyDown(KEY_KEY_R))
 			{
 				pj2->movimiento();
+=======
+			
+
+			// PARA MODIFICACIONES DEBUG
+			text = L"Datos del jugador:\n";
+
+			pj1->setAxis(smgr);
+
+		
+
+			//Mostrar la Posicion y Velocidad actuales.
+			text += "\nVelocidad: ";
+			text += pj1->getVelocidad();
+			text += "\nPosicion [";
+			text += pj1->getPosicion().X;
+			text += ", ";
+			text += pj1->getPosicion().Y;
+			text += ", ";
+			text += pj1->getPosicion().Z;
+			text += "]\n";
+
+			checkGiro = 0;
+			checkMarchaAtras = 0;
+			checkVelocidad = pj1->getVelocidad();
+
+			//-------ENTRADA TECLADO ----------//
+			if (teclado.isKeyDown(KEY_ESCAPE))
+			{
+				device->closeDevice();
+				return 0;
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
+			}
+			else if (teclado.isKeyDown(KEY_KEY_S))
+			{
+				pj1->frenar();
+				checkMarchaAtras = 1;
+			}
+			else if (teclado.isKeyDown(KEY_KEY_W))
+			{
+				pj1->acelerar();
+			}
+			else
+			{
+				pj1->desacelerar();
+			}
+			if (teclado.isKeyDown(KEY_KEY_D))
+			{
+				if (checkMarchaAtras == 0)
+				{
+					pj1->girarDerecha();
+				}
+				else
+				{
+					if (checkVelocidad < 0.5)
+					{
+						pj1->girarIzquierda();
+					}
+				}
+				checkGiro = 1;
+			}
+			else if (teclado.isKeyDown(KEY_KEY_A))
+			{
+				if (checkMarchaAtras == 0)
+				{
+					pj1->girarIzquierda();
+				}
+				else
+				{
+					if (checkVelocidad < 0.5)
+					{
+						pj1->girarDerecha();
+					}
+				}
+				checkGiro = 1;
+			}
+			pj1->update();
+			if (checkGiro == 0)
+			{
+				pj1->resetGiro();
 			}
 
+<<<<<<< HEAD
+=======
+			//-------ENTRADA TECLADO FIN----------//
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 			int fps = driver->getFPS();
 			if (lastFPS != fps)
 			{
@@ -219,12 +396,13 @@ int main()
 				tmp += L"] fps: ";
 				tmp += fps;
 
-				m->getDevice()->setWindowCaption(tmp.c_str());
+				device->setWindowCaption(tmp.c_str());
 				lastFPS = fps;
 			}
 
 			textoUI->setText(text.c_str());
 
+<<<<<<< HEAD
 			//	RENDER
 			m->dibujar();
 
@@ -235,18 +413,44 @@ int main()
 			mundo->debugDrawWorld();
 
 			driver->endScene();
+=======
+			// MOVIMIENTO DE LA CAMARA     //
+			smgr->getActiveCamera()->setTarget(pj1->getPosicion());
+			DeltaTime = irrTimer->getTime() - TimeStamp;
+			TimeStamp = irrTimer->getTime();
+			//------actualizar Fisicas---------//
+	
+			UpdatePhysics(DeltaTime);
+
+
+			//-------RENDER INI---------//
+			
+			driver->beginScene(true, true, SColor(255, 200, 200, 200));
+			smgr->drawAll();
+			guienv->drawAll();
+
+			driver->endScene();
+
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 		}
 		else
 		{
-			m->getDevice()->yield();
+			device->yield();
 		}
 	}
-
-	m->getDevice()->drop();
+	//borrarObjetos
+	ClearObjects();
+	delete mundo;
+	delete solver;
+	delete dispatcher;
+	delete broadPhase;
+	delete confColision;
+	device->drop();
 
 	return 0;
 }
 
+<<<<<<< HEAD
 void UpdatePhysics(u32 TDeltaTime)
 {
 
@@ -254,19 +458,31 @@ void UpdatePhysics(u32 TDeltaTime)
 
 	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator)
 	{
+=======
+void UpdatePhysics(u32 TDeltaTime) {
+
+	mundo->stepSimulation(TDeltaTime * 0.001f, 60);
+
+	// Relay the object's orientation to irrlicht
+	for(list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 
 		UpdateRender(*Iterator);
 	}
 }
 // Passes bullet's orientation to irrlicht
+<<<<<<< HEAD
 void UpdateRender(btRigidBody *TObject)
 {
 
+=======
+void UpdateRender(btRigidBody *TObject) {
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 	ISceneNode *Node = static_cast<ISceneNode *>(TObject->getUserPointer());
 
-	//cout << Node->getName() << endl;
 	// Set position
 	btVector3 Point = TObject->getCenterOfMassPosition();
+<<<<<<< HEAD
 
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);
@@ -275,6 +491,10 @@ void UpdateRender(btRigidBody *TObject)
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 1, (f32)Point[2]));
 	else
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));
+=======
+	Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));
+
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
 	// Set rotation
 	vector3df Euler;
 	const btQuaternion &TQuat = TObject->getOrientation();
@@ -282,6 +502,7 @@ void UpdateRender(btRigidBody *TObject)
 	q.toEuler(Euler);
 	Euler *= RADTODEG;
 	Node->setRotation(Euler);
+<<<<<<< HEAD
 }
 
 void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass)
@@ -299,25 +520,88 @@ void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMa
 	btTransform Transform;
 	Transform.setIdentity();
 	Transform.setOrigin(TPosition);
+=======
+}
+void ClearObjects() {
 
-	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
+	for(list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
+		btRigidBody *Object = *Iterator;
 
-	// Create the shape
-	btVector3 HalfExtents(TScale.X * 0.5f, TScale.Y * 0.5f, TScale.Z * 0.5f);
-	btCollisionShape *Shape = new btBoxShape(HalfExtents);
+		// Delete irrlicht node
+		ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
+		Node->remove();
 
-	// Add mass
-	btVector3 LocalInertia;
-	Shape->calculateLocalInertia(TMass, LocalInertia);
+		// Remove the object from the world
+		mundo->removeRigidBody(Object);
 
-	// Create the rigid body object
-	btRigidBody *RigidBody = new btRigidBody(TMass, MotionState, Shape, LocalInertia);
+		// Free memory
+		delete Object->getMotionState();
+		delete Object->getCollisionShape();
+		delete Object;
+	}
 
-	RigidBody->setActivationState(DISABLE_DEACTIVATION);
-	// Store a pointer to the irrlicht node so we can update it later
-	RigidBody->setUserPointer((void *)(Node));
+	objetos.clear();
+}
 
-	// Add it to the world
-	mundo->addRigidBody(RigidBody);
-	objetos.push_back(RigidBody);
+void crearEscenario(){
+	ClearObjects();
+	// -----------------------------
+	//  IMPORTAR MALLA (MAPA)
+	// -----------------------------
+	// Mapa cargado desde obj
+	IMesh *mapa = smgr->getMesh("assets/mapa01.obj");
+
+	//if (!mapa)
+	//{
+	//	device->drop();
+	//	return 1;
+	//}
+
+	// -----------------------------
+	//  GEOMETRIA MAPA
+	// -----------------------------
+
+	// Cargar modelo mapa
+	IMeshSceneNode *mapaNodo = smgr->addOctreeSceneNode(mapa);
+
+	//smgr->getMeshManipulator()->setVertexColors(mapaNodo->getMesh(), SColor(255, 232, 128, 0));
+	//if (mapaNodo)
+	//{
+		vector3df escala(1,1,1);
+		btVector3 posicionMapa(0,0,0);
+		mapaNodo->setScale(escala);
+		mapaNodo->setMaterialFlag(EMF_LIGHTING, false); // iluminacion
+		mapaNodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+
+		//posicion inicial del objeto
+		btTransform mapaTransformacion;
+		mapaTransformacion.setIdentity();
+		mapaTransformacion.setOrigin(posicionMapa);
+
+		//motionState por defecto
+		btDefaultMotionState *motionState = new btDefaultMotionState(mapaTransformacion);
+
+		//crear la forma del mapa
+		btVector3 mapaExtension(escala.X * 0.5f, escala.Y * 0.5f, escala.Z * 0.5f );
+		btCollisionShape *formaMapa = new btBoxShape(mapaExtension);
+		
+		// Add mass 
+		btVector3 localInertia;
+		formaMapa->calculateLocalInertia(0, localInertia);
+>>>>>>> parent of af9063b... Se lee un .obj con las direcciones de un NurbsPath, se crean y se muestran los waypoints a traves del fichero .obj.
+
+		//creacion del objeto
+		btRigidBody *cuerpoMapa = new btRigidBody(0,motionState, formaMapa, localInertia);
+		//almacenar en puntero al nodo irrlich para poder actualizar( en caso de ser  necesario)
+		cuerpoMapa->setUserPointer((void *)(mapaNodo));
+
+		//add al mundo
+		mundo->addRigidBody(cuerpoMapa);
+		objetos.push_back(cuerpoMapa);
+
+
+
+		mapaNodo->setName("MAPA");
+	//}
+
 }

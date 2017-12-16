@@ -68,6 +68,7 @@ void Motor3d::dibujar()
 	//driver->endScene();
 }
 
-void Motor3d::cerrar(){
+void Motor3d::cerrar()
+{
 	device->closeDevice();
 }

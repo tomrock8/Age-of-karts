@@ -9,15 +9,12 @@ using namespace std;
 
 class CorredorJugador : public Corredor
 {
-public:
-
-	CorredorJugador(stringw rutaObj,vector3df pos);
+  public:
+	CorredorJugador(stringw rutaObj, vector3df pos);
 
 	void movimiento();
 
-private:
-
-
+  private:
 };
 
 #endif /* CORREDORJUGADOR_H */

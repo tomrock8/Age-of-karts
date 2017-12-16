@@ -12,33 +12,30 @@ using namespace std;
 
 class Corredor
 {
-public:
-
-	Corredor(stringw rutaObj,vector3df pos);
-	void InicializarFisicas(list<btRigidBody*> &objetos, btDiscreteDynamicsWorld *mundo);
+  public:
+	Corredor(stringw rutaObj, vector3df pos);
+	void InicializarFisicas(list<btRigidBody *> &objetos, btDiscreteDynamicsWorld *mundo);
 	std::string toString();
-	
+
 	//Update
 	void update();
-	
-	
-	//Metodos GET
-	IMeshSceneNode 		*getNodo();
-	float 				getVelocidad();
-	btRaycastVehicle   	*getVehiculo();
-	btRigidBody 		*getRigidBody();
-	std::string 		getDireccion();
-	int 				getDireccionGrados();
-	
-protected:
 
+	//Metodos GET
+	IMeshSceneNode *getNodo();
+	float getVelocidad();
+	btRaycastVehicle *getVehiculo();
+	btRigidBody *getRigidBody();
+	std::string getDireccion();
+	int getDireccionGrados();
+
+  protected:
 	//orientacion
 	vector3df orientacion;
 
 	//Mascaras de colision
-	
+
 	//objetos
-	IMesh          *coche;
+	IMesh *coche;
 	IMeshSceneNode *cuboNodo;
 	ISceneNode *rueda1;
 	ISceneNode *rueda2;
@@ -47,12 +44,11 @@ protected:
 
 	//bullet
 	btRaycastVehicle *vehiculo;
-	btDefaultMotionState *motionStateCoche;//interpolacion
-	btCollisionShape *FormaColision;//contorno
+	btDefaultMotionState *motionStateCoche; //interpolacion
+	btCollisionShape *FormaColision;		//contorno
 	btRigidBody *CuerpoColisionChasis;
 	btCompoundShape *CentroGravedad;
 
-	
 	btVector3 direccionRuedas;
 	btVector3 rotacionRuedas;
 	btScalar suspension;
@@ -65,15 +61,13 @@ protected:
 	btScalar FuerzaFrenoMano;
 	btScalar FuerzaGiro;
 	btScalar FuerzaFrenadoReposo;
-	
+
 	// Direccion
 	bool norte, sur, este, oeste;
 	float direccionGrados;
 
-
-	void CrearRuedas(btRaycastVehicle* vehiculo,btRaycastVehicle::btVehicleTuning tuning);
+	void CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning);
 	void BorrarFisicas();
-	
 
 	// Movimiento del corredor
 	void acelerar();
@@ -82,7 +76,6 @@ protected:
 	void girarDerecha();
 	void girarIzquierda();
 	void frenodemano();
-	
 
 	// UPDATES
 	void actualizarRuedas();
@@ -91,9 +84,7 @@ protected:
 	void updateDireccionGrados();
 
 	//--movimiento del corredor
-	virtual void movimiento() {}; // A implementar por derivadas
-
-
+	virtual void movimiento(){}; // A implementar por derivadas
 };
 
 #endif /* JUGADOR_H */

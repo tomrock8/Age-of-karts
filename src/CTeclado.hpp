@@ -4,26 +4,23 @@
 #include <iostream>
 #include "IrrlichtLib.hpp"
 
-
 class CTeclado : public IEventReceiver
 {
-public:
-
+  public:
 	bool isKeyDown(EKEY_CODE keyCode) const;
 	bool isKeyup(EKEY_CODE keyCode) const;
 	bool OnEvent(const SEvent &event);
 
 	//metodos GET
-	static CTeclado* getInstancia();
+	static CTeclado *getInstancia();
 
 	//metodos SET
 
-private:
+  private:
 	bool KeyDown[KEY_KEY_CODES_COUNT];
-	static CTeclado* instancia;
+	static CTeclado *instancia;
 
 	CTeclado();
 };
 
 #endif /* CTECLADO */
-

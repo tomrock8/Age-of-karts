@@ -36,16 +36,16 @@ Corredor::Corredor(stringw rutaObj,vector3df pos)
 
 	direccionRuedas = btVector3(0,-1,0);
 	rotacionRuedas= btVector3(-1,0,0);
-	suspension=btScalar(0.9);
-	Fuerza=btScalar(10000);
-	anchoRueda=btScalar(0.4);
-	radioRueda=btScalar(0.5);
-	alturaConexionChasis=btScalar(1.2);
-	Masa =btScalar(2000);
-	FuerzaFrenado=btScalar(-15000);
-	FuerzaGiro=btScalar(0.3);
-	FuerzaFrenoMano=btScalar(500);
-	FuerzaFrenadoReposo=20;
+	suspension=btScalar(1.0);	// Este valor tiene que ser ese... sino peta
+	Fuerza=btScalar(6000);
+	anchoRueda=btScalar(0.4);	//0.4
+	radioRueda=btScalar(0.5);	//No menor de 0.4 sino ni se mueve (ruedas pequenyas)
+	alturaConexionChasis=btScalar(1.2); //influye mucho en la acceleracion de salida
+	Masa =btScalar(1100);
+	FuerzaFrenado=btScalar(-10000);
+	FuerzaGiro=btScalar(0.3);		//manejo a la hora de girar
+	FuerzaFrenoMano=btScalar(800);
+	FuerzaFrenadoReposo=btScalar(60);
 }
 
 
@@ -139,14 +139,28 @@ btVector3 puntoConexionChasis(cuboNodo->getScale().X-radioRueda,alturaConexionCh
 for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo& wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = 40;
-		wheel.m_wheelsDampingCompression =2.3f;
-		wheel.m_wheelsDampingRelaxation = 4.4f;
-		wheel.m_frictionSlip = 100;
-		wheel.m_rollInfluence = 0.1f;
-		//wheel.m_maxSuspensionForce = 2000.f;
-		//wheel.m_maxSuspensionTravelCm = 10;
-	
+		wheel.m_suspensionStiffness = 60;	//tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo
+		wheel.m_wheelsDampingCompression = 20; //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f;
+		wheel.m_wheelsDampingRelaxation = 20; //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f;
+		wheel.m_frictionSlip = btScalar(1.2); //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover
+		wheel.m_rollInfluence = 0.1; //0.1f;	//Empieza a rodar muy loco, si el valor es alto
+		//wheel.m_maxSuspensionForce = 40000.f;	//A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa)
+		wheel.m_maxSuspensionTravelCm = 8000.f;	//Nose muy bien que funcion tiene, pero si el valor es muy bajo el coche no avanza
+		
+/*
+	PARAMETROS EN RUEDAS DISPONIBLES
+	wheel.m_chassisConnectionCS = connectionPointCS;
+	wheel.m_wheelDirectionCS = wheelDirectionCS0;
+	wheel.m_wheelAxleCS = wheelAxleCS;
+	wheel.m_suspensionRestLength = suspensionRestLength;
+	wheel.m_wheelRadius = wheelRadius;
+	wheel.m_suspensionStiffness = tuning.m_suspensionStiffness;
+	wheel.m_wheelsDampingCompression = tuning.m_suspensionCompression;
+	wheel.m_wheelsDampingRelaxation = tuning.m_suspensionDamping;
+	wheel.m_frictionSlip = tuning.m_frictionSlip;
+	wheel.m_bIsFrontWheel = isFrontWheel;
+	wheel.m_maxSuspensionTravelCm = tuning.m_maxSuspensionTravelCm;
+	wheel.m_maxSuspensionForce = tuning.m_maxSuspensionForce;*/
 	}
 
 }
@@ -174,6 +188,8 @@ IMeshSceneNode *Corredor::getNodo()
 void Corredor::Pedazodemierda(){
 
 	orientacion = vector3df(sin( ( cuboNodo->getRotation().Y ) * PI/180.0f ), 0, cos( ( cuboNodo->getRotation().Y  ) * PI/180.0f ) );
+
+
 	//cout<< "Rotacion en Y=="<< cuboNodo->getRotation().Y << endl;  
 	//cout<< "ORIENTACION X=="<< orientacion.X << "ORIENTACION Z==" << orientacion.Z << endl;
 	orientacion.normalize();
@@ -251,16 +267,16 @@ void Corredor::desacelerar(){
 			vehiculo-> setSteeringValue ( 0, 0 );
 			vehiculo-> setSteeringValue ( 0, 1 );	
 
-			vehiculo->setBrake(60, 2);
-			vehiculo->setBrake(60, 3);
+			vehiculo->setBrake(FuerzaFrenadoReposo, 2);
+			vehiculo->setBrake(FuerzaFrenadoReposo, 3);
 
 }
 
 
 void Corredor::frenodemano(){
 
-				vehiculo->setBrake(300, 2);
-				vehiculo->setBrake(300, 3);
+				vehiculo->setBrake(FuerzaFrenoMano, 2);
+				vehiculo->setBrake(FuerzaFrenoMano, 3);
 
 }
 

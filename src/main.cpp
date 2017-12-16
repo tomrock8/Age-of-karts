@@ -84,7 +84,7 @@ int main()
 	//-----------JUGADORES---------//
 	//-----------------------------//
 	//Posicion del nodo y el bloque de colisiones centralizado:
-	vector3df pos(230,-50,0);
+	vector3df pos(0,10,0);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 	pj1->InicializarFisicas(objetos,mundo);
 	///////////////////////CAMARA///////////////////////////////////////////////

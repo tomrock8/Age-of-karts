@@ -353,15 +353,20 @@ void Corredor::update()
 //Identifica la rotacion del coche en grados
 void Corredor::updateDireccionGrados()
 {
-	float grados = cuboNodo->getRotation().Y * 180 / PI; //cambiar rotacion
+	//cout << "ORI Y; " << orientacion.getSphericalCoordinateAngles().Y << " --- " << orientacion.getAs3Values().Y << endl;
+	float grados = orientacion.getSphericalCoordinateAngles().Y * 2; //ROTACION OBTENIDA
+	
+	// ----------------------------
+	// 	PROBLEMON: 0 grados es a la derecha, no enfrente D:
+	// ----------------------------
 
-	cout << "ROTATION: " << cuboNodo->getRotation().Y << " == GRADOS: " << grados << endl;
+	//cout << "ROTATION: " << cuboNodo->getRotation().Y << " == GRADOS: " << grados << endl;
 	/*
-	if (grados < 0) {
+	if (grados < 0)
+	{
 		grados = 180 + (180 + grados);
 	}
 	*/
-
 	direccionGrados = grados;
 }
 

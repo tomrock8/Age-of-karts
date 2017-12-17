@@ -12,7 +12,7 @@ CorredorJugador::CorredorJugador(stringw rutaObj,vector3df pos) :
 void CorredorJugador::movimiento() {
 	CTeclado *teclado = CTeclado::getInstancia();
 	Motor3d *m = Motor3d::getInstancia();
-	bool mierda=false;
+	bool comprobadorMovimiento=false;
 
 			//-------ENTRADA TECLADO ----------//
 			if (teclado->isKeyDown(KEY_ESCAPE))
@@ -24,54 +24,57 @@ void CorredorJugador::movimiento() {
 			{
 			frenar();
 			//vehiculo-> set
-			mierda = true;
-			}
-			if (teclado->isKeyDown(KEY_KEY_W))
+			comprobadorMovimiento = true;
+			}else if (teclado->isKeyDown(KEY_KEY_W))
 			{
 			acelerar();
-			mierda = true;
+			comprobadorMovimiento = true;
 			}
 			if (teclado->isKeyDown(KEY_KEY_D))
 			{
 			girarDerecha();
 			
-			mierda = true;
-			}
-			if (teclado->isKeyDown(KEY_KEY_A)){
+			comprobadorMovimiento = true;
+			}else if (teclado->isKeyDown(KEY_KEY_A)){
 
 			girarIzquierda();
 			
-			mierda = true;
+			comprobadorMovimiento = true;
 			}
 			
 			if(teclado->isKeyDown(KEY_SPACE)){
 
 			frenodemano();
 				
-			mierda = true;
+			comprobadorMovimiento = true;
 			}
 
-			if(!mierda){
+			if(!comprobadorMovimiento){
 			
 				desacelerar();
 			}
 	
 }
+
+/*
+	Comprueba si el jugador pulsa P para crear un item y lanzarlo
+*/
 Proyectil* CorredorJugador::actualizarItem(int &id,btDiscreteDynamicsWorld* mundo,core::list<btRigidBody *> objetos){
 	CTeclado *teclado = CTeclado::getInstancia();
 	Motor3d *m = Motor3d::getInstancia();
 	if (teclado->isKeyup(KEY_KEY_P))
 	{
-	vector3df cam(cuboNodo->getPosition().X, cuboNodo->getPosition().Y + 10, cuboNodo->getPosition().Z);
-	//if P is pressed, shoot a box
-	if (checkItem == true)
-	{
-		Proyectil *item = new Proyectil(m, cam, id);
-		id++;
-		lanzarItem(item,mundo,objetos);
-		
-		checkItem = false;
-	}
+		vector3df cam(cuboNodo->getPosition().X, cuboNodo->getPosition().Y + 10, cuboNodo->getPosition().Z);
+		//if P is pressed, shoot a box
+		if (checkItem == true)
+		{
+			Proyectil *item = new Proyectil(m, cam, id);
+			id++;
+			//Llama a la funcion de la clase padre
+			lanzarItem(item,mundo,objetos);
+			
+			checkItem = false;
+		}
 	}else if (teclado->isKeyDown(KEY_KEY_P)){
 		if (cargador > 0)
 		{

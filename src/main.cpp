@@ -112,6 +112,7 @@ int main()
 	vector3df tamObj2(5.f, 20.f, 20.f);
 	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000);
 	ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
+	//El problema esta en que estas variables no cambian las variables de obje2
 	nodoObj2->setID(id);
 	nodoObj2->setName("Destruible");
 	id++;
@@ -351,8 +352,11 @@ btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btSc
 	
 	ISceneNode *Node = m->getScene()->addCubeSceneNode(1.0f);
 	Node->setScale(TScale);
+	//----------------------------------
+	//Chapuza momentanea para solucionar el core dumped al colisionar con proyectil
 	Node->setName("Destruible");
 	Node->setID(2);
+	//----------------------------------
 	Node->setMaterialFlag(EMF_LIGHTING, 1);
 	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));

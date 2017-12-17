@@ -280,6 +280,9 @@ void Corredor::frenodemano(){
 
 }
 
+/*
+	Crea un item proyectil, lo añade al mundo,  a la lista de objetos y le da velocidad linear
+*/
 void Corredor::lanzarItem(Proyectil *&item,btDiscreteDynamicsWorld *mundo,core::list<btRigidBody *> &objetos){
 	
 	btRigidBody *rigidItem = item->inicializarFisicas();

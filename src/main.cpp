@@ -102,7 +102,19 @@ int main()
 	//----------------------------//
 
 	Proyectil *item;
-	btRigidBody *obje1=CreateBox(cubopos1,cuboescala1,10);
+	//btRigidBody *obje1=CreateBox(cubopos1,cuboescala1,10);
+
+	//
+	// Caja destruible WIP
+	//
+
+	btVector3 posObj2(40.f, 10.f, 0.f);
+	vector3df tamObj2(5.f, 20.f, 20.f);
+	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000);
+	ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
+	nodoObj2->setID(id);
+	nodoObj2->setName("Destruible");
+	id++;
 
 	//----------
 	// Cajas de municion
@@ -120,17 +132,6 @@ int main()
 		id++;
 	}
 
-	//
-	// Caja destruible WIP
-	//
-
-	btVector3 posObj2(40.f, 10.f, 0.f);
-	vector3df tamObj2(5.f, 20.f, 20.f);
-	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 1);
-	ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
-	nodoObj2->setID(id);
-	nodoObj2->setName("Destruible");
-	id++;
 
 	
 	//----------------------------//
@@ -350,6 +351,8 @@ btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btSc
 	
 	ISceneNode *Node = m->getScene()->addCubeSceneNode(1.0f);
 	Node->setScale(TScale);
+	Node->setName("Destruible");
+	Node->setID(2);
 	Node->setMaterialFlag(EMF_LIGHTING, 1);
 	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));

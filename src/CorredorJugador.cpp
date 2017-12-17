@@ -51,10 +51,31 @@ void CorredorJugador::movimiento() {
 			mierda = true;
 			}
 
-
 			if(!mierda){
 			
 				desacelerar();
 			}
 	
+}
+Proyectil* CorredorJugador::actualizarItem(int &id,btDiscreteDynamicsWorld* mundo,core::list<btRigidBody *> objetos){
+	CTeclado *teclado = CTeclado::getInstancia();
+	Motor3d *m = Motor3d::getInstancia();
+	if (teclado->isKeyup(KEY_KEY_P))
+	{
+	vector3df cam(cuboNodo->getPosition().X, cuboNodo->getPosition().Y + 10, cuboNodo->getPosition().Z);
+	//if P is pressed, shoot a box
+	if (checkItem == true)
+	{
+		Proyectil *item = new Proyectil(m, cam, id);
+		id++;
+		lanzarItem(item,mundo,objetos);
+		
+		checkItem = false;
+	}
+	}else if (teclado->isKeyDown(KEY_KEY_P)){
+		if (cargador > 0)
+		{
+		checkItem = true;
+		}
+	}
 }

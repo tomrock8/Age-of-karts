@@ -280,7 +280,18 @@ void Corredor::frenodemano(){
 
 }
 
-
+void Corredor::lanzarItem(Proyectil *&item,btDiscreteDynamicsWorld *mundo,core::list<btRigidBody *> &objetos){
+	
+	btRigidBody *rigidItem = item->inicializarFisicas();
+	mundo->addRigidBody(rigidItem);
+	objetos.push_back(rigidItem);
+	
+	//item->lanzarItem(this);
+	float rotDisparo = cuboNodo->getRotation().Y * PI / 180;
+    rigidItem->setLinearVelocity(btVector3(sin(rotDisparo) * 100, 5.0f, cos(rotDisparo) * 100));
+    std::cout << "Disparo " << std::endl;
+    decCargador();
+}
 
 /*
 

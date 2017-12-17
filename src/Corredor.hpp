@@ -5,6 +5,7 @@
 #include "IrrlichtLib.hpp"
 #include "Motor3d.hpp"
 #include "Waypoint.hpp"
+#include "Proyectil.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 
@@ -18,7 +19,6 @@ public:
 	void InicializarFisicas(list<btRigidBody*> &objetos, btDiscreteDynamicsWorld *mundo);
 	void BorrarFisicas();
 	void CrearRuedas(btRaycastVehicle* vehiculo,btRaycastVehicle::btVehicleTuning tuning);
-
 	//--movimiento del corredor
 	virtual void movimiento() {}; // A implementar por derivadas
 
@@ -26,11 +26,15 @@ public:
 	void actualizarRuedas();
 	void actualizarMotionState();
 	void Pedazodemierda();
+	void lanzarItem(Proyectil *&item,btDiscreteDynamicsWorld *mundo,core::list<btRigidBody *> &objetos);
 	//metodos GET
 	IMeshSceneNode* getNodo();
 	float getVelocidad();
 	btRaycastVehicle* getVehiculo();
 	btRigidBody * getRigidBody();
+	int getCargador(){return cargador;};
+	void incCargador(){cargador++;};
+	void decCargador(){cargador--;};
 
 	// Metodos SET
 	//void setAxis();
@@ -65,6 +69,7 @@ protected:
 	btCollisionShape *FormaColision;//contorno
 	btRigidBody *CuerpoColisionChasis;
 	btCompoundShape* CentroGravedad;
+	int cargador=0;
 
 	
 	btVector3 direccionRuedas;

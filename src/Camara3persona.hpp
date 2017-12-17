@@ -10,7 +10,7 @@
 class Camara3persona
 {
 public:
-  Camara3persona(ISceneManager *smgr);
+  Camara3persona();
   ~Camara3persona();
   void moveCameraControl(Corredor *pj1, IrrlichtDevice *device);
 

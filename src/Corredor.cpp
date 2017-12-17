@@ -315,7 +315,7 @@ int Corredor::getDireccionGrados()
 
 std::string Corredor::toString()
 {
-	std::string text = "";
+	std::string text = " -- CORREDOR -- ";
 
 	//Mostrar la Posicion y Velocidad actuales.
 	/*
@@ -333,8 +333,8 @@ std::string Corredor::toString()
 	text += getDireccion();
 	text += " [ ";
 	text += to_string(getDireccionGrados());
-	text += " ]\n";
-
+	text += " ]";
+	
 	return text;
 }
 
@@ -354,7 +354,7 @@ void Corredor::update()
 void Corredor::updateDireccionGrados()
 {
 	//cout << "ORI Y; " << orientacion.getSphericalCoordinateAngles().Y << " --- " << orientacion.getAs3Values().Y << endl;
-	float grados = orientacion.getSphericalCoordinateAngles().Y * 2; //ROTACION OBTENIDA
+	float grados = orientacion.Y; //ROTACION OBTENIDA
 	
 	// ----------------------------
 	// 	PROBLEMON: 0 grados es a la derecha, no enfrente D:

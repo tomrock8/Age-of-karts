@@ -58,3 +58,28 @@ void CorredorJugador::movimiento()
 		desacelerar();
 	}
 }
+
+std::string CorredorJugador::toString()
+{
+
+	std::string text = Corredor::toString();
+	text += "\n -- CORREDOR JUGADOR -- ";
+
+	text += "\nVector: X[" + to_string(vehiculo->getForwardVector().getX()) +
+			"] , Y[" + to_string(vehiculo->getForwardVector().getY()) +
+			"] , Z[" + to_string(vehiculo->getForwardVector().getZ()) + "]";
+
+	btQuaternion aux = vehiculo->getChassisWorldTransform().getRotation();
+
+	text += "\nRotation Quaternion: X[" + to_string(vehiculo->getChassisWorldTransform().getRotation().getX()) +
+			"] , Y[" + to_string(vehiculo->getChassisWorldTransform().getRotation().getY()) +
+			"] , Z[" + to_string(vehiculo->getChassisWorldTransform().getRotation().getZ()) + "]";
+
+	btScalar yawZ, pitchY, rollX;
+	vehiculo->getChassisWorldTransform().getRotation().getEulerZYX(yawZ, pitchY, rollX);
+	text += "\nRotation EULER: yawZ[" + to_string(yawZ) +
+			"] , pitchY[" + to_string(pitchY) +
+			"] , rollX[" + to_string(rollX) + "]";
+
+	return text;
+}

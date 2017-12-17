@@ -11,7 +11,8 @@ class CorredorJugador : public Corredor
 {
   public:
 	CorredorJugador(stringw rutaObj, vector3df pos);
-
+  std::string toString();
+  
 	void movimiento();
 
   private:

@@ -85,7 +85,7 @@ int main()
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 	pj1->InicializarFisicas(objetos, mundo);
 	///////////////////////CAMARA///////////////////////////////////////////////
-	Camara3persona *camara = new Camara3persona(smgr);
+	Camara3persona *camara = new Camara3persona();
 
 	btVector3 cubopos1(240, 20, 10);
 	vector3df cuboescala1(5, 5, 5);
@@ -170,7 +170,7 @@ int main()
 	IGUIFont *fuente = guienv->getFont("assets/fuente.bmp");
 	IGUIStaticText *textoUI = guienv->addStaticText(
 		text.c_str(),				 // Texto
-		rect<s32>(10, 10, 260, 300), // Rectangulo de los bordes
+		rect<s32>(10, 10, 400, 300), // Rectangulo de los bordes
 		false,						 // Mostrar bordes
 		true,						 // Cortar en varias lineas
 		0,							 // Nodo padre
@@ -198,12 +198,12 @@ int main()
 
 			//pj2->actualizarRuedas();
 			camara->moveCameraControl(pj1, device);
-
+			
+			text += "\n ---- CORREDOR 1 JUGADOR ----\n";
 			text += pj1->toString().c_str();
-			text += "\n ---- CORREDOR 2 IA ----\n";
-			text += " Waypoint siguiente: ";
-			text += pj2->getNombreWaypoint().c_str();
-			text += pj2->toString().c_str();
+			
+			//text += "\n\n ---- CORREDOR 2 IA ----\n";
+			//text += pj2->toString().c_str();
 
 			//-------ENTRADA TECLADO ----------//
 			if (teclado->isKeyDown(KEY_KEY_R))

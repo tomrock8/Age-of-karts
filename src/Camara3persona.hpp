@@ -9,15 +9,16 @@
 
 class Camara3persona
 {
-public:
-  Camara3persona(ISceneManager *smgr);
-  ~Camara3persona();
-  void moveCameraControl(Corredor *pj1, IrrlichtDevice *device);
-
-private:
-  float direction;
-  float zdirection;
-  ICameraSceneNode *camera;
+  public:
+	
+    Camara3persona(ISceneManager *smgr);
+    ~Camara3persona();
+    void moveCameraControl(Corredor *pj1,IrrlichtDevice *device);
+  private:
+    float direction;
+    float zdirection;
+    ICameraSceneNode* camera; 
 };
+
 
 #endif /* CAMARA3PERSONA_H */

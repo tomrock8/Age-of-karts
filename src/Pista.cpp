@@ -1,13 +1,15 @@
 
 #include "Pista.hpp"
 
-Pista::Pista(vector3df Posicion, vector3df Scala)
-{
 
-	Motor3d *m = Motor3d::getInstancia();
-	ISceneManager *smgr = m->getScene();
+Pista::Pista(vector3df Posicion,vector3df Scala){
+
+
+    Motor3d *m = Motor3d::getInstancia();
+    ISceneManager *smgr = m->getScene();
 	IMesh *mapa = smgr->getMesh("assets/mapa01.obj");
 	//countMesh = mapa->getMeshBufferCount();
+
 
 	// -----------------------------
 	//  GEOMETRIA MAPA
@@ -25,22 +27,26 @@ Pista::Pista(vector3df Posicion, vector3df Scala)
 	//mapaNodo->setTriangleSelector(selector);
 	//countTriangle = selector->getTriangleCount();
 
+
 	MapaNodo->setScale(Scala);
 	MapaNodo->setMaterialFlag(EMF_LIGHTING, false); // iluminacion
 	MapaNodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 
+	
 	//}
 }
 
-Pista::~Pista()
-{
+
+Pista::~Pista(){
+
+
 }
 
-void Pista::InicializarFisicas(list<btRigidBody *> &objetos, btDiscreteDynamicsWorld *mundo)
-{
+void Pista::InicializarFisicas(list<btRigidBody*> &objetos, btDynamicsWorld *mundo){
 
-	Masa = 0;
-	//posicion inicial del objeto
+
+Masa = 0;
+//posicion inicial del objeto
 	btVector3 posicionMapa(0, 0, 0);
 	btTransform mapaTransformacion;
 	mapaTransformacion.setIdentity();
@@ -67,17 +73,19 @@ void Pista::InicializarFisicas(list<btRigidBody *> &objetos, btDiscreteDynamicsW
 
 	MapaNodo->setName("MAPA1");
 
-	mundo->addRigidBody(CuerpoColisionMapa);
-	objetos.push_back(CuerpoColisionMapa);
+mundo->addRigidBody(CuerpoColisionMapa);
+objetos.push_back(CuerpoColisionMapa);
+
 }
 
-void Pista::BorrarFisicas()
-{
 
-	// a implementar
+void Pista::BorrarFisicas(){
+
+// a implementar
+
 }
 
-btTriangleMesh *Pista::getBulletTriangleMesh(IMesh *const mesh, vector3df escala)
+btTriangleMesh* Pista::getBulletTriangleMesh(IMesh *const mesh, vector3df escala)
 {
 	btVector3 vertices[3];
 	u32 i, j, k;

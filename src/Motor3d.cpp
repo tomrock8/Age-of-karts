@@ -63,12 +63,9 @@ void Motor3d::dibujar()
 {
 	driver->beginScene(true, true, SColor(255, 200, 200, 200));
 	smgr->drawAll();
-	guienv->drawAll();
 
-	//driver->endScene();
 }
 
-void Motor3d::cerrar()
-{
+void Motor3d::cerrar(){
 	device->closeDevice();
 }

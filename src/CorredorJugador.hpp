@@ -4,17 +4,20 @@
 #include <iostream>
 #include "IrrlichtLib.hpp"
 #include "Corredor.hpp"
-
 using namespace std;
 
 class CorredorJugador : public Corredor
 {
-  public:
-	CorredorJugador(stringw rutaObj, vector3df pos);
+public:
+
+	CorredorJugador(stringw rutaObj,vector3df pos);
 
 	void movimiento();
+	void update();
 
-  private:
+private:
+
+
 };
 
 #endif /* CORREDORJUGADOR_H */

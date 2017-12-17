@@ -9,30 +9,30 @@ using namespace std;
 
 class Waypoint
 {
-public:
-  //Constructor
-  Waypoint();
-  //Destructor
-  ~Waypoint();
+  public:
+    //Constructor
+    Waypoint();
+    //Destructor
+    ~Waypoint();
 
-  //auxiliares
+    //auxiliares
 
-  //Update
+    //Update
 
-  //metodos SET
-  void setPosicion(float x, float y, float z);
-  void setSiguiente(Waypoint *siguiente);
-  void setNombre(std::string nombre);
-  //metodos GET
-  IMeshSceneNode *getWaypoint();
-  vector3df getPosicion();
-  Waypoint *getNextWaypoint();
-  std::string getNombre();
+    //metodos SET
+    void setPosicion(float x, float y, float z);
+    void setSiguiente(Waypoint *siguiente);
+    void setNombre(std::string nombre);
+    //metodos GET
+    IMeshSceneNode *getWaypoint();
+    vector3df getPosicion();
+    Waypoint *getNextWaypoint();
+    std::string getNombre();
+  private:
+    IMeshSceneNode *waypoint;
+    std::string nombre;
+    Waypoint *siguiente; // Siguiente punto
 
-private:
-  IMeshSceneNode *waypoint;
-  std::string nombre;
-  Waypoint *siguiente; // Siguiente punto
 };
 
 #endif /* WAYPOINT_H */

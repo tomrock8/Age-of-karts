@@ -18,9 +18,9 @@ void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[], Pr
 		nodoA = static_cast<ISceneNode *>(obA->getUserPointer());
 		nodoB = static_cast<ISceneNode *>(obB->getUserPointer());
         if(nodoA != 0 && nodoB != 0){
-            JugadorCaja(cajas);
-            JugadorTurbo();
-            objetoDestruible();
+            if(JugadorCaja(cajas)) continue;
+            if(JugadorTurbo()) continue;
+            if(objetoDestruible()) continue;
         }
 
     }
@@ -30,16 +30,18 @@ void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[], Pr
 //
 // Comprobar colisiones entre Jugador y Caja
 //
-void GestorColisiones::JugadorCaja(Caja *cajas[]){
+bool GestorColisiones::JugadorCaja(Caja *cajas[]){
     bool reorganizar=false;
     MotorFisicas *bullet = MotorFisicas::getInstancia();
     btDynamicsWorld *mundo = bullet->getMundo();
     core::list<btRigidBody *> objetos = bullet->getObjetos();
+    bool colision=false;
     
     if (strcmp("Jugador", nodoA->getName()) == 0)
     {
         if (strcmp("Caja", nodoB->getName()) == 0)
         {
+            colision=true;
             cout << "Jug - Caja\n";
             int idB = nodoB->getID();
             for(int i=0; i< TAMANYOCAJAS; i++){
@@ -58,41 +60,46 @@ void GestorColisiones::JugadorCaja(Caja *cajas[]){
                 }
             }
         }
-		
     }
+		return colision;
 }
 
 //
 // Comprobar colisiones entre Jugador y turbo
 //
-void GestorColisiones::JugadorTurbo(){
+bool GestorColisiones::JugadorTurbo(){
     MotorFisicas *bullet = MotorFisicas::getInstancia();
     btDynamicsWorld *mundo = bullet->getMundo();
     core::list<btRigidBody *> objetos = bullet->getObjetos();
+    bool colision=false;
     
     if (strcmp("Jugador", nodoA->getName()) == 0)
     {
         if (strcmp("Turbo", nodoB->getName()) == 0)
         {
+            colision=true;
             cout << "Jugador - Turbo\n";
         }
 
     }
+    return colision;
 }
 
 
 //
 // Comprobar colisiones entre proyectil y objeto destruible
 //
-void GestorColisiones::objetoDestruible(){
+bool GestorColisiones::objetoDestruible(){
     MotorFisicas *bullet = MotorFisicas::getInstancia();
     btDynamicsWorld *mundo = bullet->getMundo();
     core::list<btRigidBody *> objetos = bullet->getObjetos();
+    bool colision = false;
     
     if (strcmp("Proyectil", nodoA->getName()) == 0)
     {
         if (strcmp("Destruible", nodoB->getName()) == 0)
         {
+            colision = true;
             cout << "Destruible - Item\n";
             //int idB = nodoB->getID();
             item->Delete();
@@ -114,5 +121,5 @@ void GestorColisiones::objetoDestruible(){
             }*/
         }
     }
-    
+    return colision;
 }    

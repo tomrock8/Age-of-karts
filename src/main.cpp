@@ -91,6 +91,13 @@ int main()
 
 	//CreateBox(cubopos1,cuboescala1,10);
 
+
+
+	//----------------------------//
+	//---------OBJETOS------------//
+	//----------------------------//
+	int id =1;
+
 	//---------------------------//
 	//----------TURBO------------//
 	//---------------------------//
@@ -100,6 +107,9 @@ int main()
 	turbo->setScale(escala);
 	turbo->setMaterialFlag(EMF_LIGHTING, false);
 	turbo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+	turbo->setName("Turbo");
+	turbo->setID(id);
+	id++;
 		smgr->getMeshManipulator()->setVertexColors(turbo->getMesh(), SColor(255, 255, 0, 0));
 	//Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/rust.png"));
 	
@@ -133,10 +143,6 @@ int main()
 	
 
 //-----------------------------------------------------------------------------------------------------------------------------------------//
-//----------------------------//
-	//---------OBJETOS------------//
-	//----------------------------//
-	int id =1;
 	Proyectil *item;
 	//btRigidBody *obje1=CreateBox(cubopos1,cuboescala1,10);
 
@@ -144,31 +150,31 @@ int main()
 	// Caja destruible WIP
 	//
 	//cout<<"------------->"<<pj1->getNodo()->getPosition().Z<<endl;
-	////cubopos1 = vector3df(std::stof(pj1->getNodo()->getPosition().X),std::stof(pj1->getNodo()->getPosition().Y), std::stof(pj1->getNodo()->getPosition().Z+5));
+	//cubopos1 = vector3df(std::stof(pj1->getNodo()->getPosition().X),std::stof(pj1->getNodo()->getPosition().Y), std::stof(pj1->getNodo()->getPosition().Z+5));
 	//vector3df tamObj2(5.f, 20.f, 20.f);
 	//CreateBox(cubopos1,cuboescala1,10);
-	////ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
-	//////El problema esta en que estas variables no cambian las variables de obje2
-	////nodoObj2->setID(id);
-	////nodoObj2->setName("Destruible");
+	//ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
+	////El problema esta en que estas variables no cambian las variables de obje2
+	//nodoObj2->setID(id);
+	//nodoObj2->setName("Destruible");
 	//id++;
 
 	//----------
 	// Cajas de municion
 	//----------
-	//btRigidBody* rigidCaja;
-	//Caja** cajas;
-	//cajas = new Caja*[TAMANYOCAJAS];
-	//vector3df posCaja(20.f, 10.f, -10.f);
-	//for (int i=0; i<10; i++){
-	//	posCaja.Z+=10;
-	//	cajas[i]= new Caja(m,posCaja,id);
-	//	rigidCaja = cajas[i]->inicializarFisicas();
-	//	mundo->addRigidBody(rigidCaja);
-	//	objetos.push_back(rigidCaja);
-	//	bullet->setObjetos(objetos);
-	//	id++;
-	//}
+	btRigidBody* rigidCaja;
+	Caja** cajas;
+	cajas = new Caja*[TAMANYOCAJAS];
+	vector3df posCaja(20.f, 10.f, -10.f);
+	for (int i=0; i<10; i++){
+		posCaja.Z+=10;
+		cajas[i]= new Caja(m,posCaja,id);
+		rigidCaja = cajas[i]->inicializarFisicas();
+		mundo->addRigidBody(rigidCaja);
+		objetos.push_back(rigidCaja);
+		bullet->setObjetos(objetos);
+		id++;
+	}
 //
 
 	
@@ -208,13 +214,11 @@ int main()
 			DeltaTime = irrTimer->getTime() - TimeStamp;
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
-
-
 			pj1->movimiento();
 			pj1->actualizarItem(item,id);
-
 			pj1->actualizarRuedas();
 			camara->moveCameraControl(pj1,device);
+			//colisiones->ComprobarColisiones(pj1, cajas, item);
 
 /*
 			//text += pj1->toString().c_str();

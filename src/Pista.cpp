@@ -62,7 +62,7 @@ void Pista::InicializarFisicas(){
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
-
+	
 	Masa = 0;
 	//posicion inicial del objeto
 	btVector3 posicionMapa(0, 0, 0);

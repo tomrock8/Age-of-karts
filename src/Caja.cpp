@@ -72,6 +72,7 @@ void Caja::Delete(Corredor *pj1Col){
 			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
 
 			if (strcmp("Caja", Node->getName())==0){
+
 				if(pj1Col->getCargador()==0)
 				pj1Col->incCargador();
 			}

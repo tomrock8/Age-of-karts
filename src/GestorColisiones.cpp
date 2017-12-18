@@ -17,8 +17,10 @@ void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[], Pr
         pj1Col=pj1Col_1;
 		nodoA = static_cast<ISceneNode *>(obA->getUserPointer());
 		nodoB = static_cast<ISceneNode *>(obB->getUserPointer());
-        JugadorCaja(cajas);
-        objetoDestruible();
+        if(nodoA != 0 && nodoB != 0){
+            JugadorCaja(cajas);
+            objetoDestruible();
+        }
 
     }
 
@@ -29,7 +31,6 @@ void GestorColisiones::JugadorCaja(Caja *cajas[]){
     MotorFisicas *bullet = MotorFisicas::getInstancia();
     btDynamicsWorld *mundo = bullet->getMundo();
     core::list<btRigidBody *> objetos = bullet->getObjetos();
-
     
     if (strcmp("Jugador", nodoA->getName()) == 0)
     {
@@ -37,7 +38,6 @@ void GestorColisiones::JugadorCaja(Caja *cajas[]){
         {
             cout << "Jug - Caja\n";
             int idB = nodoB->getID();
-            
             for(int i=0; i< TAMANYOCAJAS; i++){
                 if(cajas[i]!=NULL){
                     if(cajas[i]->getIDCaja()==idB){

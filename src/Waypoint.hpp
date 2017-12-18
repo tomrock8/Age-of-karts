@@ -27,10 +27,10 @@ class Waypoint
     IMeshSceneNode *getWaypoint();
     vector3df getPosicion();
     Waypoint *getNextWaypoint();
-    stringw getNombre();
+    std::string getNombre();
   private:
     IMeshSceneNode *waypoint;
-    stringw nombre;
+    std::string nombre;
     Waypoint *siguiente; // Siguiente punto
 
 };

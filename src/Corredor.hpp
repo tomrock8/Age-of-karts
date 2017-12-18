@@ -22,18 +22,14 @@ class Corredor
 
 	//Metodos GET
 	IMeshSceneNode *getNodo();
-	float getVelocidad();
 	btRaycastVehicle *getVehiculo();
 	btRigidBody *getRigidBody();
 	std::string getDireccion();
 	int getDireccionGrados();
+	vector3df getVectorDireccion();
 
   protected:
-	//orientacion
-	vector3df orientacion;
-
-	//Mascaras de colision
-
+	
 	//objetos
 	IMesh *coche;
 	IMeshSceneNode *cuboNodo;
@@ -62,9 +58,10 @@ class Corredor
 	btScalar FuerzaGiro;
 	btScalar FuerzaFrenadoReposo;
 
-	// Direccion
+	// Direccion - Orientacion
 	bool norte, sur, este, oeste;
 	float direccionGrados;
+	vector3df orientacion;
 
 	void CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning);
 	void BorrarFisicas();
@@ -80,7 +77,7 @@ class Corredor
 	// UPDATES
 	void actualizarRuedas();
 	void updateDireccion();
-	void Pedazodemierda();
+	void updateVectorDireccion();
 	void updateDireccionGrados();
 
 	//--movimiento del corredor

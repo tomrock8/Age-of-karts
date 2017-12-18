@@ -133,30 +133,6 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	}
 }
 
-btRaycastVehicle *Corredor::getVehiculo()
-{
-	return vehiculo;
-}
-
-btRigidBody *Corredor::getRigidBody()
-{
-	return CuerpoColisionChasis;
-}
-
-IMeshSceneNode *Corredor::getNodo()
-{
-	return cuboNodo;
-}
-
-void Corredor::Pedazodemierda()
-{
-	orientacion = vector3df(sin((cuboNodo->getRotation().Y) * PI / 180.0f), 0, cos((cuboNodo->getRotation().Y) * PI / 180.0f));
-	//cout<< "Rotacion en Y=="<< cuboNodo->getRotation().Y << endl;
-	//cout<< "ORIENTACION X=="<< orientacion.X << "ORIENTACION Z==" << orientacion.Z << endl;
-	orientacion.normalize();
-	//cout<< "ORIENTACION XNORMAL=="<< orientacion.X << "ORIENTACION ZNORMAL==" << orientacion.Z << endl;
-}
-
 void Corredor::actualizarRuedas()
 {
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
@@ -227,90 +203,29 @@ void Corredor::frenodemano()
 //		METODOS GET
 //	----------------------------------------------
 
-std::string Corredor::getDireccion()
+btRaycastVehicle *Corredor::getVehiculo()
 {
-	if (norte)
-	{
-		if (este)
-		{
-			return "noreste";
-		}
-		else
-		{
-			if (oeste)
-			{
-				return "noroeste";
-			}
-			else
-			{
-				return "norte";
-			}
-		}
-	}
+	return vehiculo;
+}
 
-	if (sur)
-	{
-		if (este)
-		{
-			return "sureste";
-		}
-		else
-		{
-			if (oeste)
-			{
-				return "suroeste";
-			}
-			else
-			{
-				return "sur";
-			}
-		}
-	}
+btRigidBody *Corredor::getRigidBody()
+{
+	return CuerpoColisionChasis;
+}
 
-	if (este)
-	{
-		if (norte)
-		{
-			return "noreste";
-		}
-		else
-		{
-			if (sur)
-			{
-				return "sureste";
-			}
-			else
-			{
-				return "este";
-			}
-		}
-	}
-
-	if (oeste)
-	{
-		if (norte)
-		{
-			return "noroeste";
-		}
-		else
-		{
-			if (sur)
-			{
-				return "suroeste";
-			}
-			else
-			{
-				return "oeste";
-			}
-		}
-	}
-
-	return "No Direccion";
+IMeshSceneNode *Corredor::getNodo()
+{
+	return cuboNodo;
 }
 
 int Corredor::getDireccionGrados()
 {
 	return direccionGrados;
+}
+
+vector3df Corredor::getVectorDireccion()
+{
+	return orientacion;
 }
 
 std::string Corredor::toString()
@@ -334,7 +249,9 @@ std::string Corredor::toString()
 	text += " [ ";
 	text += to_string(getDireccionGrados());
 	text += " ]";
-	
+	text += "\n Vector direccion(Orientacion) X[ " + to_string(orientacion.X) + " ] Y[ " + to_string(orientacion.Z) + "]";
+	text += "\n Velocidad (km/h): " + to_string(vehiculo->getCurrentSpeedKmHour());
+
 	return text;
 }
 
@@ -345,33 +262,43 @@ std::string Corredor::toString()
 void Corredor::update()
 {
 	movimiento();
-	Pedazodemierda();
 	actualizarRuedas();
 	updateDireccion();
 }
 
-//Identifica la rotacion del coche en grados
+/**
+ * Identifica la rotacion del coche en grados
+*/
 void Corredor::updateDireccionGrados()
 {
-	//cout << "ORI Y; " << orientacion.getSphericalCoordinateAngles().Y << " --- " << orientacion.getAs3Values().Y << endl;
-	//float grados = orientacion.Y; //ROTACION OBTENIDA
 	btTransform centerOfMassWorldTrans;
 	motionStateCoche->getWorldTransform(centerOfMassWorldTrans);
 
 	float radianes = centerOfMassWorldTrans.getRotation().getY(); //ROTACION OBTENIDA
-	float grados = radianes * 180 ;
-	// ----------------------------
-	// 	PROBLEMON: 0 grados es a la derecha, no enfrente D:
-	// ----------------------------
+	float grados = radianes * 180;
 
-	//cout << "ROTATION: " << cuboNodo->getRotation().Y << " == GRADOS: " << grados << endl;
-	
 	if (grados < 0)
 	{
 		grados = 180 + (180 + grados);
 	}
-	
+
 	direccionGrados = grados;
+}
+
+/**
+ * Actualiza el vector direccion del corredor.
+ */
+void Corredor::updateVectorDireccion()
+{
+	btQuaternion quaternion = CuerpoColisionChasis->getOrientation();
+	float anguloZ = quaternion.getAngle();
+	float anguloX = cuboNodo->getRotation().Y * PI / 180;
+
+	//cout<< "Rotacion en Y=="<< anguloZ  * 180/PI << endl;
+	orientacion = vector3df(sin(anguloX), 0, -cos(anguloZ));
+
+	orientacion.normalize();
+	//cout<< "ORIENTACION XNORMAL=="<< orientacion.X << " ORIENTACION ZNORMAL=="<< orientacion.Z  << endl;
 }
 
 /*
@@ -388,7 +315,9 @@ Tabla de grados -
 */
 void Corredor::updateDireccion()
 {
+	updateVectorDireccion();
 	updateDireccionGrados();
+
 	// NORTE
 	if (direccionGrados <= 20 || direccionGrados >= 341)
 	{
@@ -474,4 +403,89 @@ void Corredor::updateDireccion()
 			}
 		}
 	}
+}
+
+/**
+ * Mediante los boleanos de la clase, se obtiene la direccion
+ * 	respecto de los ejes
+*/
+std::string Corredor::getDireccion()
+{
+	if (norte)
+	{
+		if (este)
+		{
+			return "noreste";
+		}
+		else
+		{
+			if (oeste)
+			{
+				return "noroeste";
+			}
+			else
+			{
+				return "norte";
+			}
+		}
+	}
+
+	if (sur)
+	{
+		if (este)
+		{
+			return "sureste";
+		}
+		else
+		{
+			if (oeste)
+			{
+				return "suroeste";
+			}
+			else
+			{
+				return "sur";
+			}
+		}
+	}
+
+	if (este)
+	{
+		if (norte)
+		{
+			return "noreste";
+		}
+		else
+		{
+			if (sur)
+			{
+				return "sureste";
+			}
+			else
+			{
+				return "este";
+			}
+		}
+	}
+
+	if (oeste)
+	{
+		if (norte)
+		{
+			return "noroeste";
+		}
+		else
+		{
+			if (sur)
+			{
+				return "suroeste";
+			}
+			else
+			{
+				return "oeste";
+			}
+		}
+	}
+
+	return "No Direccion";
 }

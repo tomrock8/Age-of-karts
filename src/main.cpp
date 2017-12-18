@@ -29,7 +29,7 @@ using namespace std;
 //funciones
 static void UpdatePhysics(u32 TDeltaTime);
 static void UpdateRender(btRigidBody *TObject);
-static void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass);
+static btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass);
 
 
 
@@ -98,6 +98,14 @@ int main()
 	//----------------------------//
 	int id =1;
 
+	btVector3 posObj2(0,10,50);
+	vector3df tamObj2(5.f, 20.f, 20.f);
+	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000);
+	ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
+	//El problema esta en que estas variables no cambian las variables de obje2
+	nodoObj2->setID(id);
+	nodoObj2->setName("Destruible");
+	id++;
 	//---------------------------//
 	//----------TURBO------------//
 	//---------------------------//
@@ -165,7 +173,7 @@ int main()
 	btRigidBody* rigidCaja;
 	Caja** cajas;
 	cajas = new Caja*[TAMANYOCAJAS];
-	vector3df posCaja(20.f, 10.f, -10.f);
+	vector3df posCaja(5.f, 10.f, -100.f);
 	for (int i=0; i<10; i++){
 		posCaja.Z+=10;
 		cajas[i]= new Caja(m,posCaja,id);
@@ -324,7 +332,7 @@ void UpdateRender(btRigidBody *TObject) {
 }
 
 
-void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass) {
+btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass) {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -363,4 +371,6 @@ void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMa
 	mundo->addRigidBody(RigidBody);
 	objetos.push_back(RigidBody);
 	bullet->setObjetos(objetos);
+
+	return RigidBody;
 }

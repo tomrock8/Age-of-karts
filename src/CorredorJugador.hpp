@@ -5,6 +5,7 @@
 #include "IrrlichtLib.hpp"
 #include "Corredor.hpp"
 
+
 using namespace std;
 
 class CorredorJugador : public Corredor
@@ -14,8 +15,11 @@ class CorredorJugador : public Corredor
   std::string toString();
   
 	void movimiento();
+	Proyectil* actualizarItem(int &id,btDiscreteDynamicsWorld *mundo,core::list<btRigidBody *> objetos);
+  
+private:
+	bool checkItem=false;
 
-  private:
 };
 
 #endif /* CORREDORJUGADOR_H */

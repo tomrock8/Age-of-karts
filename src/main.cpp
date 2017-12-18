@@ -12,7 +12,11 @@
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "Camara3persona.hpp"
-#include "DebugFisicas.hpp"
+#include "DebugFisicas.hpp" 
+#include "Caja.hpp"
+#include "Item.hpp"
+#include "GestorColisiones.hpp"
+
 
 using namespace std;
 
@@ -23,12 +27,14 @@ using namespace std;
 //funciones
 static void UpdatePhysics(u32 TDeltaTime);
 static void UpdateRender(btRigidBody *TObject);
-static void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass);
 
-static btDiscreteDynamicsWorld *mundo;
-static core::list<btRigidBody *> objetos;
-static ITimer *irrTimer;
-static ILogger *irrLog;
+  static btRigidBody* CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass);
+	static btDiscreteDynamicsWorld *mundo;
+	static core::list<btRigidBody *> objetos;
+	static ITimer *irrTimer;
+	static ILogger *irrLog;
+
+#define TAMANYOCAJAS 10
 
 int main()
 {
@@ -77,13 +83,18 @@ int main()
 		return 1; //error no se ha cargado el mapa
 	}
 
+	int id = 1;
+
 	//-----------------------------//
 	//-----------JUGADORES---------//
 	//-----------------------------//
 	//Posicion del nodo y el bloque de colisiones centralizado:
-	vector3df pos(230, -50, 0);
+
+	vector3df pos(0,10,0);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
-	pj1->InicializarFisicas(objetos, mundo);
+	id++;
+	pj1->InicializarFisicas(objetos,mundo);
+
 	///////////////////////CAMARA///////////////////////////////////////////////
 	Camara3persona *camara = new Camara3persona();
 
@@ -94,7 +105,47 @@ int main()
 	//---------OBJETOS------------//
 	//----------------------------//
 
-	CreateBox(cubopos1, cuboescala1, 10);
+
+	Proyectil *item;
+	//btRigidBody *obje1=CreateBox(cubopos1,cuboescala1,10);
+
+	//
+	// Caja destruible WIP
+	//
+
+	btVector3 posObj2(40.f, 10.f, 0.f);
+	vector3df tamObj2(5.f, 20.f, 20.f);
+	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000);
+	ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
+	//El problema esta en que estas variables no cambian las variables de obje2
+	nodoObj2->setID(id);
+	nodoObj2->setName("Destruible");
+	id++;
+
+	//----------
+	// Cajas de municion
+	//----------
+	btRigidBody* rigidCaja;
+	Caja** cajas;
+	cajas = new Caja*[TAMANYOCAJAS];
+	vector3df posCaja(20.f, 10.f, -10.f);
+	for (int i=0; i<10; i++){
+		posCaja.Z+=10;
+		cajas[i]= new Caja(m,posCaja,id);
+		rigidCaja = cajas[i]->inicializarFisicas();
+		mundo->addRigidBody(rigidCaja);
+		objetos.push_back(rigidCaja);
+		id++;
+	}
+
+
+	
+	//----------------------------//
+	//------GESTOR COLISIONES------//
+	//----------------------------//
+
+	GestorColisiones *colisiones= new GestorColisiones();
+
 
 	// -----------------------------
 	//	Waypoints
@@ -193,15 +244,21 @@ int main()
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
 
-			pj1->update();
+
+
+			item=pj1->actualizarItem(id,mundo,objetos);
+      pj1->update();
 			//pj2->movimiento();
 
 			//pj2->actualizarRuedas();
+
 			camara->moveCameraControl(pj1, device);
 			
 			text += "\n ---- CORREDOR 1 JUGADOR ----\n";
 			text += pj1->toString().c_str();
 			
+			colisiones->ComprobarColisiones(objetos, mundo, pj1, cajas, item);
+      
 			//text += "\n\n ---- CORREDOR 2 IA ----\n";
 			//text += pj2->toString().c_str();
 
@@ -284,16 +341,25 @@ void UpdateRender(btRigidBody *TObject)
 	Node->setRotation(Euler);
 }
 
-void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass)
-{
+
+
+btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass) {
+
 
 	Motor3d *m = Motor3d::getInstancia();
 
 	ISceneNode *Node = m->getScene()->addCubeSceneNode(1.0f);
 	Node->setScale(TScale);
+	//----------------------------------
+	//Chapuza momentanea para solucionar el core dumped al colisionar con proyectil
+	Node->setName("Destruible");
+	Node->setID(2);
+	//----------------------------------
 	Node->setMaterialFlag(EMF_LIGHTING, 1);
 	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/rust.png"));
+
+	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
+	
 
 	// Set the initial position of the object
 	btTransform Transform;
@@ -320,4 +386,6 @@ void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMa
 	// Add it to the world
 	mundo->addRigidBody(RigidBody);
 	objetos.push_back(RigidBody);
+	return RigidBody;
 }
+

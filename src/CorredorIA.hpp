@@ -11,15 +11,16 @@ using namespace std;
 
 class CorredorIA : public Corredor
 {
-public:
-	CorredorIA(stringw rutaObj,vector3df pos,Waypoint** arrayWaypoints, int tamanyoArray);
+  public:
+	CorredorIA(stringw rutaObj, vector3df pos, Waypoint **arrayWaypoints, int tamanyoArray);
 	void movimiento();
+	std::string toString();
 
 	//Metodos GET
 	std::string getNombreWaypoint();
 
-private:
-	Waypoint * puntoActual;
+  private:
+	Waypoint *puntoActual;
 };
 
 #endif /* CORREDORIA_H */

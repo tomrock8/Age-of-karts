@@ -3,15 +3,16 @@
 
 CTeclado *CTeclado::instancia = NULL;
 
-CTeclado::CTeclado() {
+CTeclado::CTeclado()
+{
 	for (int i = 0; i < KEY_KEY_CODES_COUNT; i++)
 	{
 		KeyDown[i] = false;
 	}
-
 }
 
-CTeclado *CTeclado::getInstancia() {
+CTeclado *CTeclado::getInstancia()
+{
 	if (instancia == NULL)
 		instancia = new CTeclado();
 
@@ -41,5 +42,3 @@ bool CTeclado::isKeyup(EKEY_CODE keyCode) const
 {
 	return !KeyDown[keyCode];
 }
-
-

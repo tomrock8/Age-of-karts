@@ -17,6 +17,7 @@
 #include "Item.hpp"
 #include "GestorColisiones.hpp"
 
+
 using namespace std;
 
 #ifdef _MSC_VER
@@ -26,7 +27,8 @@ using namespace std;
 //funciones
 static void UpdatePhysics(u32 TDeltaTime);
 static void UpdateRender(btRigidBody *TObject);
-static btRigidBody* CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass);
+
+  static btRigidBody* CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass);
 	static btDiscreteDynamicsWorld *mundo;
 	static core::list<btRigidBody *> objetos;
 	static ITimer *irrTimer;
@@ -47,20 +49,19 @@ int main()
 	IVideoDriver *driver = m->getDriver();
 	ISceneManager *smgr = m->getScene();
 	IGUIEnvironment *guienv = m->getGUI();
-	IrrlichtDevice  *device = m->getDevice();
-    irrTimer = device->getTimer();
+	IrrlichtDevice *device = m->getDevice();
+	irrTimer = device->getTimer();
 	//----------------------------//
 	//---------BULLET-------------//
 	//----------------------------//
 
 	//inicializar mundo bullet
-	btBroadphaseInterface *broadPhase =  new btAxisSweep3(btVector3(-1000,1000,-1000), btVector3(1000,1000,1000));//limites del mundo
+	btBroadphaseInterface *broadPhase = new btAxisSweep3(btVector3(-1000, 1000, -1000), btVector3(1000, 1000, 1000)); //limites del mundo
 	btDefaultCollisionConfiguration *confColision = new btDefaultCollisionConfiguration();
 	btCollisionDispatcher *dispatcher = new btCollisionDispatcher(confColision);
 	btSequentialImpulseConstraintSolver *solver = new btSequentialImpulseConstraintSolver();
-	mundo = new btDiscreteDynamicsWorld(dispatcher, broadPhase, solver, confColision);//creacion del mundo
-	mundo->setGravity(btVector3(0,-15,0));
-
+	mundo = new btDiscreteDynamicsWorld(dispatcher, broadPhase, solver, confColision); //creacion del mundo
+	mundo->setGravity(btVector3(0, -15, 0));
 
 	//----------------------------//
 	//---------DEBUG BULLET-------//
@@ -72,34 +73,38 @@ int main()
 	//-----------------------------//
 	//-----ESCENARIO MAPA----------//
 	//-----------------------------//
-	smgr->addLightSceneNode(0,core::vector3df(2,5,-2), SColorf(4,4,4,1));//luz para experimentos nazis
-	vector3df escala(1,1,1);
-	vector3df posicion(0,0,0);
-	Pista *Mapa1= new Pista(posicion,escala);
-	Mapa1->InicializarFisicas(objetos,mundo);
-	if (!Mapa1){
-		return 1;		//error no se ha cargado el mapa
+	smgr->addLightSceneNode(0, core::vector3df(2, 5, -2), SColorf(4, 4, 4, 1)); //luz para experimentos nazis
+	vector3df escala(1, 1, 1);
+	vector3df posicion(0, 0, 0);
+	Pista *Mapa1 = new Pista(posicion, escala);
+	Mapa1->InicializarFisicas(objetos, mundo);
+	if (!Mapa1)
+	{
+		return 1; //error no se ha cargado el mapa
 	}
-	
+
 	int id = 1;
+
 	//-----------------------------//
 	//-----------JUGADORES---------//
 	//-----------------------------//
 	//Posicion del nodo y el bloque de colisiones centralizado:
+
 	vector3df pos(0,10,0);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 	id++;
 	pj1->InicializarFisicas(objetos,mundo);
+
 	///////////////////////CAMARA///////////////////////////////////////////////
-	Camara3persona *camara = new Camara3persona(smgr);
+	Camara3persona *camara = new Camara3persona();
 
-	btVector3 cubopos1(240,20,10);
-	vector3df cuboescala1(5,5,5);
-
+	btVector3 cubopos1(240, 20, 10);
+	vector3df cuboescala1(5, 5, 5);
 
 	//----------------------------//
 	//---------OBJETOS------------//
 	//----------------------------//
+
 
 	Proyectil *item;
 	//btRigidBody *obje1=CreateBox(cubopos1,cuboescala1,10);
@@ -141,6 +146,7 @@ int main()
 
 	GestorColisiones *colisiones= new GestorColisiones();
 
+
 	// -----------------------------
 	//	Waypoints
 	// -----------------------------
@@ -159,15 +165,15 @@ int main()
 		if (i > 0 && i <= (tamanyoArrayWaypoints - 2))
 		{
 			arrayWaypoints[i - 1]->setSiguiente(arrayWaypoints[i]);
-
 		}
-		else if (i == tamanyoArrayWaypoints - 1) {
+		else if (i == tamanyoArrayWaypoints - 1)
+		{
 			arrayWaypoints[i - 1]->setSiguiente(arrayWaypoints[i]);
 			arrayWaypoints[i]->setSiguiente(arrayWaypoints[0]);
 		}
 
-
-		if (i == 0) {
+		if (i == 0)
+		{
 			arrayWaypoints[0]->setPosicion(235, posY, 0);
 		}
 
@@ -184,7 +190,6 @@ int main()
 			arrayWaypoints[i]->setPosicion(posanteriorX - 15, posY, posanteriorZ + 30);
 		}
 	}
-
 
 	arrayWaypoints[14]->setPosicion((arrayWaypoints[13]->getPosicion().X - 20), posY, (arrayWaypoints[13]->getPosicion().Z + 10));
 	arrayWaypoints[15]->setPosicion((arrayWaypoints[14]->getPosicion().X - 30), posY, (arrayWaypoints[14]->getPosicion().Z + 10));
@@ -206,11 +211,9 @@ int main()
 	arrayWaypoints[31]->setPosicion((arrayWaypoints[30]->getPosicion().X + 30), posY, (arrayWaypoints[30]->getPosicion().Z + 30));
 	arrayWaypoints[32]->setPosicion((arrayWaypoints[31]->getPosicion().X + 10), posY, (arrayWaypoints[31]->getPosicion().Z + 60));
 
-
-
-	vector3df posIA(220,-50,0);
-	CorredorIA *pj2 = new CorredorIA("assets/coche.obj",posIA,arrayWaypoints,tamanyoArrayWaypoints);
-	pj2->InicializarFisicas(objetos,mundo);
+	vector3df posIA(220, -50, 0);
+	CorredorIA *pj2 = new CorredorIA("assets/coche.obj", posIA, arrayWaypoints, tamanyoArrayWaypoints);
+	pj2->InicializarFisicas(objetos, mundo);
 	// -----------------------------
 	//  INTERFAZ
 	// -----------------------------
@@ -218,56 +221,52 @@ int main()
 	IGUIFont *fuente = guienv->getFont("assets/fuente.bmp");
 	IGUIStaticText *textoUI = guienv->addStaticText(
 		text.c_str(),				 // Texto
-		rect<s32>(10, 10, 260, 300), // Rectangulo de los bordes
+		rect<s32>(10, 10, 400, 300), // Rectangulo de los bordes
 		false,						 // Mostrar bordes
 		true,						 // Cortar en varias lineas
 		0,							 // Nodo padre
-		0,					 // Id del elemento
+		0,							 // Id del elemento
 		true);						 // Rellenado (o transparente)
 	textoUI->setOverrideFont(fuente);
-
-
 
 	int lastFPS = -1;
 	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;
 	// -----------------------------
 	//  GAME LOOP
-	// -----------------------------	
+	// -----------------------------
 	while (m->getDevice()->run())
 	{
 		if (m->getDevice()->isWindowActive())
 		{
-			
+
 			text = "";
 			DeltaTime = irrTimer->getTime() - TimeStamp;
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
 
 
-			pj1->movimiento();
+
 			item=pj1->actualizarItem(id,mundo,objetos);
-			pj1->Pedazodemierda();
+      pj1->update();
 			//pj2->movimiento();
 
-			pj1->actualizarRuedas();
 			//pj2->actualizarRuedas();
-			camara->moveCameraControl(pj1,device);
 
+			camara->moveCameraControl(pj1, device);
+			
+			text += "\n ---- CORREDOR 1 JUGADOR ----\n";
+			text += pj1->toString().c_str();
+			
 			colisiones->ComprobarColisiones(objetos, mundo, pj1, cajas, item);
-
-			//text += pj1->toString().c_str();
-			text += "\n ---- CORREDOR 2 IA ----\n";
-			text += " Waypoint siguiente: ";
-			text += pj2->getNombreWaypoint().c_str();
+      
+			//text += "\n\n ---- CORREDOR 2 IA ----\n";
 			//text += pj2->toString().c_str();
 
-
 			//-------ENTRADA TECLADO ----------//
-			if (teclado->isKeyDown(KEY_KEY_R)) {
+			if (teclado->isKeyDown(KEY_KEY_R))
+			{
 				pj2->movimiento();
 			}
-
-
 
 			int fps = driver->getFPS();
 			if (lastFPS != fps)
@@ -283,7 +282,6 @@ int main()
 
 			textoUI->setText(text.c_str());
 
-
 			//	RENDER
 			m->dibujar();
 
@@ -294,7 +292,6 @@ int main()
 			mundo->debugDrawWorld();
 
 			driver->endScene();
-
 		}
 		else
 		{
@@ -307,49 +304,50 @@ int main()
 	return 0;
 }
 
-
-
-void UpdatePhysics(u32 TDeltaTime) {
+void UpdatePhysics(u32 TDeltaTime)
+{
 
 	mundo->stepSimulation(TDeltaTime * 0.001f, 60);
 
-	for(list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
-		
+	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator)
+	{
+
 		UpdateRender(*Iterator);
-	}	
+	}
 }
 // Passes bullet's orientation to irrlicht
-void UpdateRender(btRigidBody *TObject) {
-	
+void UpdateRender(btRigidBody *TObject)
+{
+
 	ISceneNode *Node = static_cast<ISceneNode *>(TObject->getUserPointer());
 
 	//cout << Node->getName() << endl;
 	// Set position
 	btVector3 Point = TObject->getCenterOfMassPosition();
-	
+
 	//btTransform t;
-	//TObject->getMotionState()->getWorldTransform(t);	
+	//TObject->getMotionState()->getWorldTransform(t);
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if(strcmp(Node->getName(),"Jugador") == 0)
-	Node->setPosition(vector3df((f32)Point[0],(f32)Point[1]+1,(f32)Point[2]));
+	if (strcmp(Node->getName(), "Jugador") == 0)
+		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 1, (f32)Point[2]));
 	else
-	Node->setPosition(vector3df((f32)Point[0],(f32)Point[1],(f32)Point[2]));
+		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));
 	// Set rotation
 	vector3df Euler;
-	const btQuaternion& TQuat = TObject->getOrientation();
+	const btQuaternion &TQuat = TObject->getOrientation();
 	quaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
 	q.toEuler(Euler);
 	Euler *= RADTODEG;
 	Node->setRotation(Euler);
-
 }
+
 
 
 btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass) {
 
 
 	Motor3d *m = Motor3d::getInstancia();
-	
+
 	ISceneNode *Node = m->getScene()->addCubeSceneNode(1.0f);
 	Node->setScale(TScale);
 	//----------------------------------
@@ -359,8 +357,10 @@ btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btSc
 	//----------------------------------
 	Node->setMaterialFlag(EMF_LIGHTING, 1);
 	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+
 	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
 	
+
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();

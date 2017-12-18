@@ -12,22 +12,21 @@ Waypoint::Waypoint()
     siguiente = NULL; // Referenciar despues con la funcion
 }
 
-
-
 // MEtodos SET
 void Waypoint::setPosicion(float x, float y, float z)
 {
     waypoint->setPosition(vector3df(x, y, z));
 }
 
-void Waypoint::setSiguiente(Waypoint *siguiente){
+void Waypoint::setSiguiente(Waypoint *siguiente)
+{
     this->siguiente = siguiente;
 }
 
-void Waypoint::setNombre(std::string nombre){
+void Waypoint::setNombre(std::string nombre)
+{
 
     this->nombre = nombre;
-
 }
 
 // Metodos GET
@@ -36,14 +35,14 @@ vector3df Waypoint::getPosicion()
     return waypoint->getPosition();
 }
 
-Waypoint* Waypoint::getNextWaypoint(){
+Waypoint *Waypoint::getNextWaypoint()
+{
 
     return siguiente;
 }
 
-std::string Waypoint::getNombre(){
+std::string Waypoint::getNombre()
+{
 
     return nombre;
 }
-
-

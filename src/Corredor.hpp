@@ -13,6 +13,13 @@ using namespace std;
 
 class Corredor
 {
+  public:
+	Corredor(stringw rutaObj, vector3df pos);
+	void InicializarFisicas(list<btRigidBody *> &objetos, btDiscreteDynamicsWorld *mundo);
+	std::string toString();
+
+	//Update
+	void update();
 public:
 
 	Corredor(stringw rutaObj,vector3df pos);
@@ -27,51 +34,39 @@ public:
 	void actualizarMotionState();
 	void Pedazodemierda();
 	void lanzarItem(Proyectil *&item,btDiscreteDynamicsWorld *mundo,core::list<btRigidBody *> &objetos);
-	//metodos GET
+	
+  //metodos GET
 	IMeshSceneNode* getNodo();
-	float getVelocidad();
 	btRaycastVehicle* getVehiculo();
 	btRigidBody * getRigidBody();
+  std::string getDireccion();
+	int getDireccionGrados();
+	vector3df getVectorDireccion();
 	int getCargador(){return cargador;};
 	void incCargador(){cargador++;};
 	void decCargador(){cargador--;};
 
-	// Metodos SET
-	//void setAxis();
 
-	// Metodos GET
-
-	//std::string getDireccion();
-	//int getDireccionGrados();
-
-	//std::string toString();
-
-
-protected:
-
-	//orientacion
-	vector3df orientacion;
-
-	//Mascaras de colision
+  protected:
 	
 	//objetos
-	IMesh          *coche;
+	IMesh *coche;
 	IMeshSceneNode *cuboNodo;
-	ISceneNode* rueda1;
-	ISceneNode*	rueda2;
-	ISceneNode* rueda3;
-	ISceneNode* rueda4;
-	//list<ISceneNode*> Ruedas;
+	ISceneNode *rueda1;
+	ISceneNode *rueda2;
+	ISceneNode *rueda3;
+	ISceneNode *rueda4;
 
 	//bullet
-	btRaycastVehicle* vehiculo;
-	btDefaultMotionState *motionStateCoche;//interpolacion
-	btCollisionShape *FormaColision;//contorno
+	btRaycastVehicle *vehiculo;
+	btDefaultMotionState *motionStateCoche; //interpolacion
+	btCollisionShape *FormaColision;		//contorno
 	btRigidBody *CuerpoColisionChasis;
-	btCompoundShape* CentroGravedad;
+
+	btCompoundShape *CentroGravedad;
 	int cargador=0;
 
-	
+
 	btVector3 direccionRuedas;
 	btVector3 rotacionRuedas;
 	btScalar suspension;
@@ -84,10 +79,14 @@ protected:
 	btScalar FuerzaFrenoMano;
 	btScalar FuerzaGiro;
 	btScalar FuerzaFrenadoReposo;
-	
-	// Direccion
-	//bool norte, sur, este, oeste;
-	//int direccionGrados;
+
+	// Direccion - Orientacion
+	bool norte, sur, este, oeste;
+	float direccionGrados;
+	vector3df orientacion;
+
+	void CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning);
+	void BorrarFisicas();
 
 	// Movimiento del corredor
 	void acelerar();
@@ -96,8 +95,15 @@ protected:
 	void girarDerecha();
 	void girarIzquierda();
 	void frenodemano();
-	//void updateDireccionGrados();
 
+	// UPDATES
+	void actualizarRuedas();
+	void updateDireccion();
+	void updateVectorDireccion();
+	void updateDireccionGrados();
+
+	//--movimiento del corredor
+	virtual void movimiento(){}; // A implementar por derivadas
 };
 
 #endif /* JUGADOR_H */

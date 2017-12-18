@@ -1,17 +1,18 @@
 #include "CorredorJugador.hpp"
 
-CorredorJugador::CorredorJugador(stringw rutaObj,vector3df pos) :
-	Corredor(rutaObj,pos) {
-
+CorredorJugador::CorredorJugador(stringw rutaObj, vector3df pos) : Corredor(rutaObj, pos)
+{
 }
 
 /**
 	Movimiento del jugador controlado por el teclado
 	TODO: Modificar para detectar el input que se recibe.
 */
-void CorredorJugador::movimiento() {
+void CorredorJugador::movimiento()
+{
 	CTeclado *teclado = CTeclado::getInstancia();
 	Motor3d *m = Motor3d::getInstancia();
+
 	bool comprobadorMovimiento=false;
 
 			//-------ENTRADA TECLADO ----------//
@@ -53,7 +54,6 @@ void CorredorJugador::movimiento() {
 			
 				desacelerar();
 			}
-	
 }
 
 /*

@@ -8,29 +8,28 @@ using namespace std;
 
 class Motor3d
 {
-public:
-
+  public:
 	//Destructor
 	~Motor3d(void);
 	//metodos GET
 	static Motor3d *getInstancia();
 
-	IVideoDriver* getDriver();
-	ISceneManager* getScene();
-	IGUIEnvironment* getGUI();
-	IrrlichtDevice* getDevice();
+	IVideoDriver *getDriver();
+	ISceneManager *getScene();
+	IGUIEnvironment *getGUI();
+	IrrlichtDevice *getDevice();
 	void setTeclado(CTeclado *teclado);
 	void dibujar();
 
 	void cerrar();
 
-private:
+  private:
 	Motor3d(void);
-	static Motor3d* instancia;
-	IrrlichtDevice* device;
-	IVideoDriver* driver;
-	ISceneManager* smgr;
-	IGUIEnvironment* guienv;
+	static Motor3d *instancia;
+	IrrlichtDevice *device;
+	IVideoDriver *driver;
+	ISceneManager *smgr;
+	IGUIEnvironment *guienv;
 };
 
 #endif /* MOTOR3D_H */

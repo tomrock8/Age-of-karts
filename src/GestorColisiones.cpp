@@ -95,9 +95,9 @@ bool GestorColisiones::objetoDestruible(){
     core::list<btRigidBody *> objetos = bullet->getObjetos();
     bool colision = false;
     
-    if (strcmp("Proyectil", nodoA->getName()) == 0)
+    if (strcmp("Destruible", nodoA->getName()) == 0)
     {
-        if (strcmp("Destruible", nodoB->getName()) == 0)
+        if (strcmp("Proyectil", nodoB->getName()) == 0)
         {
             colision = true;
             cout << "Destruible - Item\n";

@@ -29,7 +29,7 @@ using namespace std;
 //funciones
 static void UpdatePhysics(u32 TDeltaTime);
 static void UpdateRender(btRigidBody *TObject);
-static btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass);
+static btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass, int id);
 
 
 
@@ -100,11 +100,11 @@ int main()
 
 	btVector3 posObj2(0,10,70);
 	vector3df tamObj2(5.f, 20.f, 20.f);
-	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000);
+	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000, id);
 	ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
 	//El problema esta en que estas variables no cambian las variables de obje2
-	nodoObj2->setID(id);
-	nodoObj2->setName("Destruible");
+	//nodoObj2->setID(id);
+	//nodoObj2->setName("Destruible");
 	id++;
 	//---------------------------//
 	//----------TURBO------------//
@@ -331,7 +331,7 @@ void UpdateRender(btRigidBody *TObject) {
 }
 
 
-btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass) {
+btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass, int id) {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -343,6 +343,8 @@ btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btSc
 	Node->setMaterialFlag(EMF_LIGHTING, 1);
 	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/rust.png"));
+	Node->setName("Destruible");
+	Node->setID(id);
 	
 	// Set the initial position of the object
 	btTransform Transform;

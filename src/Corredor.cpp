@@ -9,7 +9,7 @@
 //-------------------------\*
 Corredor::Corredor(stringw rutaObj,vector3df pos)
 {
-
+	cargador = 100;
 	Motor3d *m = Motor3d::getInstancia();
 	ISceneManager *smgr = m->getScene();
 	coche = smgr->getMesh(rutaObj);
@@ -22,7 +22,7 @@ Corredor::Corredor(stringw rutaObj,vector3df pos)
 	// Desactivar la iluminacion del cubo
 		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
 		cuboNodo->setPosition(pos);
-		//-------------bullet----------------
+	//-------------bullet----------------
 	rueda1 = smgr->addCubeSceneNode(1.f);
 	rueda2 = smgr->addCubeSceneNode(1.f);
 	rueda3 = smgr->addCubeSceneNode(1.f);
@@ -41,7 +41,7 @@ Corredor::Corredor(stringw rutaObj,vector3df pos)
 void Corredor::InicializarFisicas(){
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-		irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
+	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 
 	//posicion inicial
 		btTransform transCoche;
@@ -208,9 +208,25 @@ void Corredor::actualizarRuedas(){
 }
 
 
+	int Corredor::getCargador(){return cargador;};
+	void  Corredor::incCargador(){cargador++;};
+	void  Corredor::decCargador(){cargador--;};
 
 
 
+void Corredor::lanzarItem(Proyectil *item){
+	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	btDynamicsWorld *mundo = bullet->getMundo();
+	core::list<btRigidBody *> objetos = bullet->getObjetos();
+	
+	btRigidBody *rigidItem = item->inicializarFisicas();
+
+	//item->lanzarItem(this);
+	float rotDisparo = cuboNodo->getRotation().Y * PI / 180;
+    item->getRigidBody()->setLinearVelocity(btVector3(sin(rotDisparo) * 100, 5.0f, cos(rotDisparo) * 100));
+    std::cout << "Disparo " << std::endl;
+    decCargador();
+}
 
 
 

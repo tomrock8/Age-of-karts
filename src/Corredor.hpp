@@ -8,6 +8,7 @@
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "MotorFisicas.hpp"
+#include "Proyectil.hpp"
 using namespace std;
 
 class Corredor
@@ -25,12 +26,16 @@ public:
 	//Update
 	void actualizarRuedas();
 	void actualizarMotionState();
-
+	void lanzarItem(Proyectil *item);
 	//metodos GET
 	IMeshSceneNode* getNodo();
 	float getVelocidad();
 	btRaycastVehicle* getVehiculo();
 	btRigidBody * getRigidBody();
+
+	int getCargador();
+	void incCargador();
+	void decCargador();
 
 	// Metodos SET
 	//void setAxis();
@@ -62,7 +67,7 @@ protected:
 	btScalar Masa;//masa
 	btRigidBody *CuerpoColisionChasis;
 	btCompoundShape* CentroGravedad;
-
+	int cargador;
 
 	// Direccion
 	//bool norte, sur, este, oeste;

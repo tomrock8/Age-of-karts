@@ -2,7 +2,7 @@
 
 CorredorJugador::CorredorJugador(stringw rutaObj,vector3df pos) :
 	Corredor(rutaObj,pos) {
-
+			checkItem = false;
 }
 
 /**
@@ -77,4 +77,33 @@ void CorredorJugador::movimiento() {
 void CorredorJugador::update() {
 	
 	movimiento();
+}
+
+void CorredorJugador::actualizarItem(Proyectil *item,int &id){
+
+	
+	CTeclado *teclado = CTeclado::getInstancia();
+	Motor3d *m = Motor3d::getInstancia();
+	
+	if (teclado->isKeyup(KEY_KEY_P))
+	{
+		
+		vector3df posDisparo(cuboNodo->getPosition().X, cuboNodo->getPosition().Y , cuboNodo->getPosition().Z+5);
+		//if P is pressed, shoot a box
+		if (checkItem == true)
+		{
+			item = new Proyectil(m, posDisparo, id);
+			id++;
+			//Llama a la funcion de la clase padre
+			lanzarItem(item);
+			
+			checkItem = false;
+		}
+	}else if (teclado->isKeyDown(KEY_KEY_P)){
+		if (cargador > 0)
+		{
+		checkItem = true;
+		}
+	}
+
 }

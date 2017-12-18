@@ -17,38 +17,23 @@ class Corredor
 	Corredor(stringw rutaObj, vector3df pos);
 	void InicializarFisicas(list<btRigidBody *> &objetos, btDiscreteDynamicsWorld *mundo);
 	std::string toString();
+	void lanzarItem(Proyectil *&item, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> &objetos);
 
 	//Update
 	void update();
-public:
 
-	Corredor(stringw rutaObj,vector3df pos);
-	void InicializarFisicas(list<btRigidBody*> &objetos, btDiscreteDynamicsWorld *mundo);
-	void BorrarFisicas();
-	void CrearRuedas(btRaycastVehicle* vehiculo,btRaycastVehicle::btVehicleTuning tuning);
-	//--movimiento del corredor
-	virtual void movimiento() {}; // A implementar por derivadas
-
-	//Update
-	void actualizarRuedas();
-	void actualizarMotionState();
-	void Pedazodemierda();
-	void lanzarItem(Proyectil *&item,btDiscreteDynamicsWorld *mundo,core::list<btRigidBody *> &objetos);
-	
-  //metodos GET
-	IMeshSceneNode* getNodo();
-	btRaycastVehicle* getVehiculo();
-	btRigidBody * getRigidBody();
-  std::string getDireccion();
+	//metodos GET
+	IMeshSceneNode *getNodo();
+	btRaycastVehicle *getVehiculo();
+	btRigidBody *getRigidBody();
+	std::string getDireccion();
 	int getDireccionGrados();
 	vector3df getVectorDireccion();
-	int getCargador(){return cargador;};
-	void incCargador(){cargador++;};
-	void decCargador(){cargador--;};
-
+	int getCargador() { return cargador; };
+	void incCargador() { cargador++; };
+	void decCargador() { cargador--; };
 
   protected:
-	
 	//objetos
 	IMesh *coche;
 	IMeshSceneNode *cuboNodo;
@@ -64,8 +49,7 @@ public:
 	btRigidBody *CuerpoColisionChasis;
 
 	btCompoundShape *CentroGravedad;
-	int cargador=0;
-
+	int cargador = 0;
 
 	btVector3 direccionRuedas;
 	btVector3 rotacionRuedas;

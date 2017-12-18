@@ -11,7 +11,7 @@ using namespace std;
 
 class CorredorIA : public Corredor
 {
-  public:
+public:
 	CorredorIA(stringw rutaObj, vector3df pos, Waypoint **arrayWaypoints, int tamanyoArray);
 	void movimiento();
 	std::string toString();
@@ -19,7 +19,7 @@ class CorredorIA : public Corredor
 	//Metodos GET
 	std::string getNombreWaypoint();
 
-  private:
+private:
 	Waypoint *puntoActual;
 };
 

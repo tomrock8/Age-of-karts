@@ -14,18 +14,17 @@ using namespace std;
 
 class GestorColisiones
 {
-  public:
-    GestorColisiones(){};
-    void ComprobarColisiones(core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWorld *mundoMetodo, Corredor *pj1Col_1, Caja *cajas[], Proyectil *item_1);
-    void JugadorCaja(Caja *cajas[], core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWorld *mundoMetodo);
-    void objetoDestruible(core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWorld *mundoMetodo);
+public:
+  GestorColisiones(){};
+  void ComprobarColisiones(core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWorld *mundoMetodo, Corredor *pj1Col_1, Caja *cajas[], Proyectil *item_1);
+  void JugadorCaja(Caja *cajas[], core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWorld *mundoMetodo);
+  void objetoDestruible(core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWorld *mundoMetodo);
 
-  private:
+private:
   Corredor *pj1Col;
   Proyectil *item;
   ISceneNode *nodoA;
   ISceneNode *nodoB;
-  
 };
 
 #endif

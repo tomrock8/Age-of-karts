@@ -6,7 +6,7 @@
 
 class CTeclado : public IEventReceiver
 {
-  public:
+public:
 	bool isKeyDown(EKEY_CODE keyCode) const;
 	bool isKeyup(EKEY_CODE keyCode) const;
 	bool OnEvent(const SEvent &event);
@@ -16,7 +16,7 @@ class CTeclado : public IEventReceiver
 
 	//metodos SET
 
-  private:
+private:
 	bool KeyDown[KEY_KEY_CODES_COUNT];
 	static CTeclado *instancia;
 

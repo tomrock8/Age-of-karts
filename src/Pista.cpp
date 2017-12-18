@@ -4,7 +4,6 @@
 Pista::Pista(vector3df Posicion, vector3df Scala)
 {
 
-
 	Motor3d *m = Motor3d::getInstancia();
 	ISceneManager *smgr = m->getScene();
 	//IMesh *mapa = smgr->getMesh("assets/mapa01.obj");

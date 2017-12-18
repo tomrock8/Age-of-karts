@@ -8,7 +8,7 @@ using namespace std;
 
 class Motor3d
 {
-  public:
+public:
 	//Destructor
 	~Motor3d(void);
 	//metodos GET
@@ -23,7 +23,7 @@ class Motor3d
 
 	void cerrar();
 
-  private:
+private:
 	Motor3d(void);
 	static Motor3d *instancia;
 	IrrlichtDevice *device;

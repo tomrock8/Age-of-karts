@@ -13,53 +13,58 @@ void CorredorJugador::movimiento()
 	CTeclado *teclado = CTeclado::getInstancia();
 	Motor3d *m = Motor3d::getInstancia();
 
-	bool comprobadorMovimiento=false;
+	bool comprobadorMovimiento = false;
 
-			//-------ENTRADA TECLADO ----------//
-			if (teclado->isKeyDown(KEY_ESCAPE))
-			{
-				m->getDevice()->closeDevice();
-				
-			}
-			if (teclado->isKeyDown(KEY_KEY_S))
-			{
-			frenar();
-			//vehiculo-> set
-			comprobadorMovimiento = true;
-			}else if (teclado->isKeyDown(KEY_KEY_W))
-			{
-			acelerar();
-			comprobadorMovimiento = true;
-			}
-			if (teclado->isKeyDown(KEY_KEY_D))
-			{
-			girarDerecha();
-			
-			comprobadorMovimiento = true;
-			}else if (teclado->isKeyDown(KEY_KEY_A)){
+	//-------ENTRADA TECLADO ----------//
+	if (teclado->isKeyDown(KEY_ESCAPE))
+	{
+		m->getDevice()->closeDevice();
+	}
+	if (teclado->isKeyDown(KEY_KEY_S))
+	{
+		frenar();
+		//vehiculo-> set
+		comprobadorMovimiento = true;
+	}
+	else if (teclado->isKeyDown(KEY_KEY_W))
+	{
+		acelerar();
+		comprobadorMovimiento = true;
+	}
+	if (teclado->isKeyDown(KEY_KEY_D))
+	{
+		girarDerecha();
 
-			girarIzquierda();
-			
-			comprobadorMovimiento = true;
-			}
-			
-			if(teclado->isKeyDown(KEY_SPACE)){
+		comprobadorMovimiento = true;
+	}
+	else if (teclado->isKeyDown(KEY_KEY_A))
+	{
 
-			frenodemano();
-				
-			comprobadorMovimiento = true;
-			}
+		girarIzquierda();
 
-			if(!comprobadorMovimiento){
-			
-				desacelerar();
-			}
+		comprobadorMovimiento = true;
+	}
+
+	if (teclado->isKeyDown(KEY_SPACE))
+	{
+
+		frenodemano();
+
+		comprobadorMovimiento = true;
+	}
+
+	if (!comprobadorMovimiento)
+	{
+
+		desacelerar();
+	}
 }
 
 /*
 	Comprueba si el jugador pulsa P para crear un item y lanzarlo
 */
-Proyectil* CorredorJugador::actualizarItem(int &id,btDiscreteDynamicsWorld* mundo,core::list<btRigidBody *> objetos){
+Proyectil *CorredorJugador::actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos)
+{
 	CTeclado *teclado = CTeclado::getInstancia();
 	Motor3d *m = Motor3d::getInstancia();
 	if (teclado->isKeyup(KEY_KEY_P))
@@ -71,14 +76,23 @@ Proyectil* CorredorJugador::actualizarItem(int &id,btDiscreteDynamicsWorld* mund
 			Proyectil *item = new Proyectil(m, cam, id);
 			id++;
 			//Llama a la funcion de la clase padre
-			lanzarItem(item,mundo,objetos);
-			
+			lanzarItem(item, mundo, objetos);
+
 			checkItem = false;
 		}
-	}else if (teclado->isKeyDown(KEY_KEY_P)){
+	}
+	else if (teclado->isKeyDown(KEY_KEY_P))
+	{
 		if (cargador > 0)
 		{
-		checkItem = true;
+			checkItem = true;
 		}
 	}
+}
+
+std::string CorredorJugador::toString()
+{
+	std::string text = Corredor::toString();
+ 	text += "\n -- CORREDOR JUGADOR -- ";	
+	return text;
 }

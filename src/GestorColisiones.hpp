@@ -19,6 +19,7 @@ class GestorColisiones
     GestorColisiones(){};
     void ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[], Proyectil *item_1);
     void JugadorCaja(Caja *cajas[]);
+    void JugadorTurbo();
     void objetoDestruible();
 
   private:

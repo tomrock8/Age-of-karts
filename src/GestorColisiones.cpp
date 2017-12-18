@@ -19,6 +19,7 @@ void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[], Pr
 		nodoB = static_cast<ISceneNode *>(obB->getUserPointer());
         if(nodoA != 0 && nodoB != 0){
             JugadorCaja(cajas);
+            JugadorTurbo();
             objetoDestruible();
         }
 
@@ -26,6 +27,9 @@ void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[], Pr
 
 }
 
+//
+// Comprobar colisiones entre Jugador y Caja
+//
 void GestorColisiones::JugadorCaja(Caja *cajas[]){
     bool reorganizar=false;
     MotorFisicas *bullet = MotorFisicas::getInstancia();
@@ -58,6 +62,28 @@ void GestorColisiones::JugadorCaja(Caja *cajas[]){
     }
 }
 
+//
+// Comprobar colisiones entre Jugador y turbo
+//
+void GestorColisiones::JugadorTurbo(){
+    MotorFisicas *bullet = MotorFisicas::getInstancia();
+    btDynamicsWorld *mundo = bullet->getMundo();
+    core::list<btRigidBody *> objetos = bullet->getObjetos();
+    
+    if (strcmp("Jugador", nodoA->getName()) == 0)
+    {
+        if (strcmp("Turbo", nodoB->getName()) == 0)
+        {
+            cout << "Jugador - Turbo\n";
+        }
+
+    }
+}
+
+
+//
+// Comprobar colisiones entre proyectil y objeto destruible
+//
 void GestorColisiones::objetoDestruible(){
     MotorFisicas *bullet = MotorFisicas::getInstancia();
     btDynamicsWorld *mundo = bullet->getMundo();

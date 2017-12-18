@@ -98,7 +98,7 @@ int main()
 	//----------------------------//
 	int id =1;
 
-	btVector3 posObj2(0,10,50);
+	btVector3 posObj2(0,10,70);
 	vector3df tamObj2(5.f, 20.f, 20.f);
 	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000);
 	ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
@@ -111,7 +111,7 @@ int main()
 	//---------------------------//
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	IMeshSceneNode *turbo = smgr->addCubeSceneNode(5.0f);
-	vector3df escala = vector3df(2.5f,0.0f,1.25f);
+	vector3df escala = vector3df(2.5f,0.2f,1.25f);
 	turbo->setScale(escala);
 	turbo->setMaterialFlag(EMF_LIGHTING, false);
 	turbo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
@@ -141,6 +141,8 @@ int main()
 	btRigidBody *RigidBody = new btRigidBody(0, MotionState, Shape, LocalInertia);
 
 	RigidBody->setActivationState(DISABLE_DEACTIVATION);
+	//ACTIVA LA COLISION SIN COLISIONAR CON EL OBJETO
+	RigidBody->setCollisionFlags(RigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	// Store a pointer to the irrlicht node so we can update it later
 	RigidBody->setUserPointer((void *)(turbo));
 
@@ -298,10 +300,7 @@ void UpdatePhysics(u32 TDeltaTime) {
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	mundo->stepSimulation(TDeltaTime * 0.001f, 60);
-	int d=0;
 	for(list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
-		d++;
-		cout<<"NUM OBJETOS= "<<d<<endl;
 		UpdateRender(*Iterator);
 	}	
 }

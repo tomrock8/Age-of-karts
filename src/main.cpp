@@ -31,7 +31,7 @@ static void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btSca
 
 
 
-	static core::list<btRigidBody *> objetos;
+	static core::list<btRigidBody *> objetosm;
 	static ITimer *irrTimer;
 	static ILogger *irrLog;
 
@@ -44,7 +44,7 @@ int main()
 	//  PREPARAR LA VENTANA
 	// -----------------------------
 	Motor3d *m = Motor3d::getInstancia();
-	//m->setTeclado(teclado);
+
 
 	IVideoDriver *driver = m->getDriver();
 	ISceneManager *smgr = m->getScene();
@@ -58,7 +58,6 @@ int main()
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	btBulletWorldImporter* fileLoader = new btBulletWorldImporter(mundo);
-	fileLoader->loadFile("fisicas/carretera.bullet");
 	mundo->setGravity(btVector3(0,-10,0));
 
 
@@ -70,19 +69,10 @@ int main()
 	//-----------------------------//
 	//-----ESCENARIO MAPA----------//
 	//-----------------------------//
-	//smgr->addLightSceneNode(0,core::vector3df(2,5,-2), SColorf(4,4,4,1));//luz para experimentos nazis
-	//vector3df escala(1,1,1);
-	//vector3df posicion(0,0,0);
-	//Pista *Mapa1= new Pista(posicion,escala);
-	//Mapa1->InicializarFisicas(objetos,mundo);
-	//if (!Mapa1){
-	//	return 1;		//error no se ha cargado el mapa
-	//}
+
+	Pista *pistaca = Pista::getInstancia();
+	pistaca->setMapa("assets/carreteraprueba.obj","fisicas/carretera.bullet","assets/MapaPAth.obj");
 	
-	ISceneNode *Mapa1 = smgr->addMeshSceneNode(smgr->getMesh("assets/carreteraprueba.obj"));
-	if(Mapa1) {
-		Mapa1->setMaterialFlag(EMF_LIGHTING, false);
-	}
 
 	//-----------------------------//
 	//-----GEOMETRIA COCHE---------//
@@ -90,64 +80,16 @@ int main()
 	//Posicion del nodo y el bloque de colisiones centralizado:
 	vector3df pos(0,20,20);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
-	pj1->InicializarFisicas(objetos,mundo);
+	pj1->InicializarFisicas();
 	///////////////////////CAMARA///////////////////////////////////////////////
 	Camara3persona *camara = new Camara3persona(smgr);
 
-	btVector3 cubopos1(240,20,10);
+	btVector3 cubopos1(0,20,40);
 	vector3df cuboescala1(5,5,5);
 
 	CreateBox(cubopos1,cuboescala1,10);
 
-	// ----------------------------//
-	// ---------Waypoints----------//
-	// ----------------------------//
-//lectura de fichero
-
-std::string line;
-
-int j;
-std::string wX, wY, wZ;
-int tamanyoArrayWaypoints = 0;
-Waypoint **arrayWaypoints;
-
-  ifstream myfile ("assets/MapaPAth.obj");
-  if (myfile.is_open())
-  {
-	 getline(myfile, line); 
 	
-			//crear el array de waypoints para almacenar el path
-			tamanyoArrayWaypoints = stoi(line);
-			arrayWaypoints = new Waypoint *[tamanyoArrayWaypoints];	
-			//se crea un array con las posiciones de los waypoints que se recogeran del fichero
-
-			  for (int j = 0 ;j<tamanyoArrayWaypoints; j++){
-			  		cout<<"cuanto tengo: "<<tamanyoArrayWaypoints<<"\n";
-					//seteamos los Waypoins
-					arrayWaypoints[j] = new Waypoint();
-					arrayWaypoints[j]->setNombre(std::to_string(j));
-					if(j ==0){//si es el primero apuntara al ultimo
-						arrayWaypoints[j]->setSiguiente(arrayWaypoints[tamanyoArrayWaypoints-1]);
-					}
-					else if(j==tamanyoArrayWaypoints-2){//si es el ultimo apuntara al primero
-							arrayWaypoints[j]->setSiguiente(arrayWaypoints[0]);
-					} else arrayWaypoints[j]->setSiguiente(arrayWaypoints[j+1]);
-					getline(myfile, wX, ' ');
-					getline(myfile, wY, ' ');
-					getline(myfile, wZ);
-					//cambiar a float y almacenar array de waypoints
-					arrayWaypoints[j]->setPosicion(std::stof(wX),std::stof(wY),std::stof(wZ));
-					//incrementar la j para los waypoints
-					
-					cout << "x: " << std::stof(wX) <<"y: "<<std::stof(wY)<<"z: "<< std::stof(wZ) << '\n';
-		}
-
-   
-    myfile.close();
-  }
-
-  else cout << "Error abriendo archivo";	
-
 	// -----------------------------
 	//  INTERFAZ
 	// -----------------------------
@@ -252,6 +194,7 @@ Waypoint **arrayWaypoints;
 void UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
+	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	mundo->stepSimulation(TDeltaTime * 0.001f, 60);
 
 	for(list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
@@ -291,8 +234,9 @@ void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMa
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	Motor3d *m = Motor3d::getInstancia();
+	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	
-	ISceneNode *Node = m->getScene()->addCubeSceneNode(1.0f);
+	ISceneNode *Node = m->getScene()->addMeshSceneNode(m->getScene()->getMesh("assets/coche.obj"));
 	Node->setScale(TScale);
 	Node->setMaterialFlag(EMF_LIGHTING, 1);
 	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
@@ -323,4 +267,5 @@ void CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMa
 	// Add it to the world
 	mundo->addRigidBody(RigidBody);
 	objetos.push_back(RigidBody);
+	bullet->setObjetos(objetos);
 }

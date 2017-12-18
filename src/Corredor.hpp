@@ -7,7 +7,7 @@
 #include "Waypoint.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
-
+#include "MotorFisicas.hpp"
 using namespace std;
 
 class Corredor
@@ -15,7 +15,7 @@ class Corredor
 public:
 
 	Corredor(stringw rutaObj,vector3df pos);
-	void InicializarFisicas(list<btRigidBody*> &objetos, btDynamicsWorld *mundo);
+	void InicializarFisicas();
 	void BorrarFisicas();
 	void CrearRuedas(btRaycastVehicle* vehiculo,btRaycastVehicle::btVehicleTuning tuning);
 

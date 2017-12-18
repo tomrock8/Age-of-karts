@@ -38,7 +38,10 @@ Corredor::Corredor(stringw rutaObj,vector3df pos)
 
 
 
-void Corredor::InicializarFisicas(list<btRigidBody*> &objetos, btDynamicsWorld *mundo){
+void Corredor::InicializarFisicas(){
+	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	btDynamicsWorld *mundo = bullet->getMundo();
+		irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 
 	//posicion inicial
 		btTransform transCoche;
@@ -75,15 +78,15 @@ void Corredor::InicializarFisicas(list<btRigidBody*> &objetos, btDynamicsWorld *
 		CuerpoColisionChasis = new btRigidBody(Masa, motionStateCoche, CentroGravedad, Inercia);
 
 		CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
-		//CuerpoColisionChasis->setGravity(btVector3(0,-20,0));
-		mundo->addRigidBody(CuerpoColisionChasis);
-
+		
+		
+		
 		//RaycastDel Coche
 		btVehicleRaycaster* RayCastVehiculo = new btDefaultVehicleRaycaster(mundo);
 		btRaycastVehicle::btVehicleTuning tuning;
 
 		vehiculo = new btRaycastVehicle(tuning,CuerpoColisionChasis,RayCastVehiculo);
-
+		
 		CuerpoColisionChasis->setActivationState(DISABLE_DEACTIVATION);
 		mundo->addVehicle(vehiculo);
 		//vehiculo->setActivationState(DISABLE_DEACTIVATION);
@@ -94,6 +97,8 @@ void Corredor::InicializarFisicas(list<btRigidBody*> &objetos, btDynamicsWorld *
 		
 	
 		CrearRuedas(vehiculo,tuning);
+		mundo->addRigidBody(CuerpoColisionChasis);
+		bullet->setObjetos(objetos);
 		//rigidBody->applyGravity();
 
 

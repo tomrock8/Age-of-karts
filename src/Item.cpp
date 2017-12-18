@@ -90,6 +90,7 @@ void Item::Delete(){
 			delete Object;
 
 			Iterator = objetos.erase(Iterator);
+			bullet->setObjetos(objetos);
 			break;
 		}
 	}

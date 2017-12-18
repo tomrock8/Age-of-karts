@@ -218,7 +218,7 @@ int main()
 			pj1->actualizarItem(item,id);
 			pj1->actualizarRuedas();
 			camara->moveCameraControl(pj1,device);
-			//colisiones->ComprobarColisiones(pj1, cajas, item);
+			colisiones->ComprobarColisiones(pj1, cajas, item);
 
 /*
 			//text += pj1->toString().c_str();
@@ -290,9 +290,10 @@ void UpdatePhysics(u32 TDeltaTime) {
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	mundo->stepSimulation(TDeltaTime * 0.001f, 60);
-
+	int d=0;
 	for(list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
-		
+		d++;
+		cout<<"NUM OBJETOS= "<<d<<endl;
 		UpdateRender(*Iterator);
 	}	
 }

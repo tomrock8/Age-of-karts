@@ -87,6 +87,7 @@ void Caja::Delete(Corredor *pj1Col){
 			delete Object;
 
 			Iterator = objetos.erase(Iterator);
+			bullet->setObjetos(objetos);
 			break;
 		}
 	}

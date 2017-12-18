@@ -81,5 +81,12 @@ std::string CorredorJugador::toString()
 			"] , pitchY[" + to_string(pitchY) +
 			"] , rollX[" + to_string(rollX) + "]";
 
+	//cout « "ORI Y; " « orientacion.getSphericalCoordinateAngles().Y « " —- " « orientacion.getAs3Values().Y « endl;
+	//btTransform centerOfMassWorldTrans;
+	//motionStateCoche->getWorldTransform(centerOfMassWorldTrans);
+	//float radianes = centerOfMassWorldTrans.getRotation().getY(); //ROTACION OBTENIDA
+	//float grados = radianes * 180 ;
+	//cout << grados<<endl;
+
 	return text;
 }

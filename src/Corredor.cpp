@@ -354,19 +354,23 @@ void Corredor::update()
 void Corredor::updateDireccionGrados()
 {
 	//cout << "ORI Y; " << orientacion.getSphericalCoordinateAngles().Y << " --- " << orientacion.getAs3Values().Y << endl;
-	float grados = orientacion.Y; //ROTACION OBTENIDA
-	
+	//float grados = orientacion.Y; //ROTACION OBTENIDA
+	btTransform centerOfMassWorldTrans;
+	motionStateCoche->getWorldTransform(centerOfMassWorldTrans);
+
+	float radianes = centerOfMassWorldTrans.getRotation().getY(); //ROTACION OBTENIDA
+	float grados = radianes * 180 ;
 	// ----------------------------
 	// 	PROBLEMON: 0 grados es a la derecha, no enfrente D:
 	// ----------------------------
 
 	//cout << "ROTATION: " << cuboNodo->getRotation().Y << " == GRADOS: " << grados << endl;
-	/*
+	
 	if (grados < 0)
 	{
 		grados = 180 + (180 + grados);
 	}
-	*/
+	
 	direccionGrados = grados;
 }
 

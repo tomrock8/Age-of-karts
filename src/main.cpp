@@ -342,7 +342,7 @@ btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btSc
 	Node->setScale(TScale);
 	Node->setMaterialFlag(EMF_LIGHTING, 1);
 	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/rust.png"));
+	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
 	
 	// Set the initial position of the object
 	btTransform Transform;

@@ -15,7 +15,7 @@ Item::Item(Motor3d *ventana, vector3df posicionItem, int idItem)
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	nodo->setMaterialTexture(0, ventana->getDriver()->getTexture("assets/textures/rust.png"));
+	nodo->setMaterialTexture(0, ventana->getDriver()->getTexture("assets/textures/gust.png"));
 
     nombre = "Item";
     nodo->setName(nombre);

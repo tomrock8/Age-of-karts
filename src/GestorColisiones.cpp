@@ -91,6 +91,8 @@ bool GestorColisiones::JugadorTurbo(){
         if (strcmp("Turbo", nodoB->getName()) == 0)
         {
             colision=true;
+            pj1Col->getVehiculo()->applyEngineForce ( 80000 , 2 );
+			pj1Col->getVehiculo()->applyEngineForce ( 80000 , 3 );
             cout << "Jugador - Turbo\n";
         }
 

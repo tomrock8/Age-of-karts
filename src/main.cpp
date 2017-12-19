@@ -73,7 +73,7 @@ int main()
 	//-----------------------------//
 
 	Pista *pistaca = Pista::getInstancia();
-	pistaca->setMapa("assets/carreteraprueba.obj","fisicas/carretera.bullet","assets/MapaPAth.obj");
+	pistaca->setMapa("assets/carretera2.obj","fisicas/carretera2.bullet","assets/MapaPAth.obj");
 	
 
 	//-----------------------------//
@@ -100,14 +100,14 @@ int main()
 	//----------------------------//
 	
 
-	btVector3 posObj2(0,10,70);
-	vector3df tamObj2(5.f, 20.f, 20.f);
-	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000, id);
-	ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
-	//El problema esta en que estas variables no cambian las variables de obje2
-	//nodoObj2->setID(id);
-	//nodoObj2->setName("Destruible");
-	id++;
+	//btVector3 posObj2(0,10,70);
+	//vector3df tamObj2(5.f, 20.f, 20.f);
+	//btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000, id);
+	//ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
+	////El problema esta en que estas variables no cambian las variables de obje2
+	////nodoObj2->setID(id);
+	////nodoObj2->setName("Destruible");
+	//id++;
 	//---------------------------//
 	//----------TURBO------------//
 	//---------------------------//
@@ -126,13 +126,13 @@ int main()
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
-	Transform.setOrigin(btVector3(0.0f,-4.5f,50.0f));
+	Transform.setOrigin(btVector3(25.0f,-4.5f,50.0f));
 	
 
 	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
 
 	// Create the shape
-	btVector3 HalfExtents(escala.X*2,escala.Y,escala.Z*2);
+	btVector3 HalfExtents(escala.X*2,escala.Y+5,escala.Z*2);
 	btCollisionShape *Shape = new btBoxShape(HalfExtents);
 
 	// Add mass

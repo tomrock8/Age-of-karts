@@ -1,9 +1,10 @@
 #include "Item.hpp"
 
-Item::Item(Motor3d *ventana, vector3df posicionItem, int idItem)
+Item::Item(vector3df posicionItem, int idItem)
 {
+	Motor3d *m = Motor3d::getInstancia();
     tamanyo = 1.0f;
-    nodo = ventana->getScene()->addCubeSceneNode(tamanyo);
+    nodo = m->getScene()->addCubeSceneNode(tamanyo);
 
     escala.X = 3.f;
     escala.Y = 3.f;
@@ -15,7 +16,7 @@ Item::Item(Motor3d *ventana, vector3df posicionItem, int idItem)
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	nodo->setMaterialTexture(0, ventana->getDriver()->getTexture("assets/textures/gust.png"));
+	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/gust.png"));
 
     nombre = "Item";
     nodo->setName(nombre);

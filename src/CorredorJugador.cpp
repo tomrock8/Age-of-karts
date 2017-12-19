@@ -82,8 +82,7 @@ void CorredorJugador::update() {
 Proyectil *CorredorJugador::actualizarItem(Proyectil *item,int &id){
 
 	CTeclado *teclado = CTeclado::getInstancia();
-	Motor3d *m = Motor3d::getInstancia();
-	
+
 	if (teclado->isKeyup(KEY_KEY_P))
 	{
 		
@@ -91,7 +90,7 @@ Proyectil *CorredorJugador::actualizarItem(Proyectil *item,int &id){
 		//if P is pressed, shoot a box
 		if (checkItem == true)
 		{
-			item = new Proyectil(m, posDisparo,id);
+			item = new Proyectil(posDisparo,id);
 			//Llama a la funcion de la clase padre
 			lanzarItem(item);
 			id++;

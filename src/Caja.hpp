@@ -14,7 +14,7 @@ using namespace std;
 class Caja
 {
   public:
-    Caja(Motor3d *ventana, vector3df posicionCaja, int idCaja);
+    Caja(vector3df posicionCaja, int idCaja);
     btRigidBody* inicializarFisicas();
     ISceneNode* getNodo(){return nodo;};
     btRigidBody* getRigidBody(){return rigidBody;};

@@ -156,6 +156,7 @@ int main()
 
 //-----------------------------------------------------------------------------------------------------------------------------------------//
 	Proyectil *item;
+	Proyectil **items;
 	//btRigidBody *obje1=CreateBox(cubopos1,cuboescala1,10);
 
 	//
@@ -178,9 +179,9 @@ int main()
 	Caja** cajas;
 	cajas = new Caja*[TAMANYOCAJAS];
 	vector3df posCaja(5.f, 10.f, -100.f);
-	for (int i=0; i<10; i++){
+	for (int i=0; i<TAMANYOCAJAS; i++){
 		posCaja.Z+=10;
-		cajas[i]= new Caja(m,posCaja,id);
+		cajas[i]= new Caja(posCaja,id);
 		rigidCaja = cajas[i]->inicializarFisicas();
 		mundo->addRigidBody(rigidCaja);
 		objetos.push_back(rigidCaja);
@@ -227,7 +228,6 @@ int main()
 			pj1->movimiento();
 			item=pj1->actualizarItem(item,id);
 
-			
 			pj1->actualizarRuedas();
 			camara->moveCameraControl(pj1,device);
 			colisiones->ComprobarColisiones(pj1, cajas, item);

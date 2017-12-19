@@ -9,7 +9,7 @@
 //-------------------------\*
 Corredor::Corredor(stringw rutaObj,vector3df pos)
 {
-	cargador = 0;
+	cargador = 10;
 	Motor3d *m = Motor3d::getInstancia();
 	ISceneManager *smgr = m->getScene();
 	coche = smgr->getMesh(rutaObj);

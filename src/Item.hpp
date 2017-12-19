@@ -13,7 +13,7 @@ using namespace std;
 class Item
 {
   public:
-    Item(Motor3d *ventana, vector3df posicionItem, int idItem);
+    Item(vector3df posicionItem, int idItem);
     btRigidBody* inicializarFisicas();
     void lanzarItem();
     bool Delete();

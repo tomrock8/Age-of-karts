@@ -1,9 +1,10 @@
 #include "Caja.hpp"
 
-Caja::Caja(Motor3d *ventana, vector3df posicionCaja, int idCaja)
+Caja::Caja(vector3df posicionCaja, int idCaja)
 {
+	Motor3d *m = Motor3d::getInstancia();
     tamanyo = 1.0f;
-    nodo = ventana->getScene()->addCubeSceneNode(tamanyo);
+    nodo = m->getScene()->addCubeSceneNode(tamanyo);
 
     escala.X = 5.f;
     escala.Y = 5.f;
@@ -15,7 +16,7 @@ Caja::Caja(Motor3d *ventana, vector3df posicionCaja, int idCaja)
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	nodo->setMaterialTexture(0, ventana->getDriver()->getTexture("assets/textures/rust.png"));
+	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
 
     nombre = "Caja";
     nodo->setName(nombre);

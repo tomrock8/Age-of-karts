@@ -10,6 +10,7 @@
 Corredor::Corredor(stringw rutaObj,vector3df pos)
 {
 	cargador = 10;
+	fuerzaVelocidad = 10000;
 	Motor3d *m = Motor3d::getInstancia();
 	ISceneManager *smgr = m->getScene();
 	coche = smgr->getMesh(rutaObj);
@@ -228,7 +229,9 @@ void Corredor::lanzarItem(Proyectil *item){
     decCargador();
 }
 
-
+void Corredor::SetFuerzaVelocidad(int turbo){
+	fuerzaVelocidad = turbo;
+}
 
 /*
 

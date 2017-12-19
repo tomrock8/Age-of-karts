@@ -31,8 +31,8 @@ void CorredorJugador::movimiento() {
 			}
 			if (teclado->isKeyDown(KEY_KEY_W))
 			{
-			vehiculo-> applyEngineForce ( 10000 , 2 );
-			vehiculo-> applyEngineForce ( 10000 , 3 );
+			vehiculo-> applyEngineForce ( fuerzaVelocidad , 2 );
+			vehiculo-> applyEngineForce ( fuerzaVelocidad , 3 );
 			vehiculo-> setSteeringValue ( 0, 0 );
 			vehiculo-> setSteeringValue ( 0, 1 );
 			mierda = true;

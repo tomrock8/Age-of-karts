@@ -85,15 +85,21 @@ bool GestorColisiones::JugadorTurbo(){
     btDynamicsWorld *mundo = bullet->getMundo();
     core::list<btRigidBody *> objetos = bullet->getObjetos();
     bool colision=false;
+    Motor3d *m = Motor3d::getInstancia();
+     ITimer *irrTimer;
+     irrTimer = m->getDevice()->getTimer();
+    u32 TimeStamp = irrTimer->getTime();
+    
+    cout<<TimeStamp<<endl;
     
     if (strcmp("Jugador", nodoA->getName()) == 0)
     {
         if (strcmp("Turbo", nodoB->getName()) == 0)
         {
             colision=true;
-            pj1Col->getVehiculo()->applyEngineForce ( 80000 , 2 );
-			pj1Col->getVehiculo()->applyEngineForce ( 80000 , 3 );
-            cout << "Jugador - Turbo\n";
+            pj1Col->SetFuerzaVelocidad(30000);
+          
+            //cout << "Jugador - Turbo\n";
         }
 
     }

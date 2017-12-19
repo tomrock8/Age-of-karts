@@ -30,6 +30,7 @@ public:
 	//metodos GET
 	IMeshSceneNode* getNodo();
 	float getVelocidad();
+	void SetFuerzaVelocidad(int turbo);
 	btRaycastVehicle* getVehiculo();
 	btRigidBody * getRigidBody();
 
@@ -68,6 +69,8 @@ protected:
 	btRigidBody *CuerpoColisionChasis;
 	btCompoundShape* CentroGravedad;
 	int cargador;
+	//fuerza de movimiento
+	int fuerzaVelocidad;
 
 	// Direccion
 	//bool norte, sur, este, oeste;

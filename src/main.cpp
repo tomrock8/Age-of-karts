@@ -80,15 +80,17 @@ int main()
 	//-----GEOMETRIA COCHE---------//
 	//-----------------------------//
 	//Posicion del nodo y el bloque de colisiones centralizado:
+	int id=0;
 	vector3df pos(0,20,20);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 	pj1->InicializarFisicas();
+	pj1->getNodo()->setID(id);
 	///////////////////////CAMARA///////////////////////////////////////////////
 	Camara3persona *camara = new Camara3persona(smgr);
 
 	btVector3 cubopos1(0,20,40);
 	vector3df cuboescala1(5,5,5);
-
+	id++;
 	//CreateBox(cubopos1,cuboescala1,10);
 
 
@@ -96,7 +98,7 @@ int main()
 	//----------------------------//
 	//---------OBJETOS------------//
 	//----------------------------//
-	int id =1;
+	
 
 	btVector3 posObj2(0,10,70);
 	vector3df tamObj2(5.f, 20.f, 20.f);
@@ -219,13 +221,13 @@ int main()
 	{
 		if (m->getDevice()->isWindowActive())
 		{
-			
-		
 			DeltaTime = irrTimer->getTime() - TimeStamp;
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
 			pj1->movimiento();
-			pj1->actualizarItem(item,id);
+			item=pj1->actualizarItem(item,id);
+
+			
 			pj1->actualizarRuedas();
 			camara->moveCameraControl(pj1,device);
 			colisiones->ComprobarColisiones(pj1, cajas, item);
@@ -300,16 +302,18 @@ void UpdatePhysics(u32 TDeltaTime) {
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	mundo->stepSimulation(TDeltaTime * 0.001f, 60);
+	int c=0;
 	for(list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
+		c++;
+	
 		UpdateRender(*Iterator);
 	}	
+
 }
 // Passes bullet's orientation to irrlicht
 void UpdateRender(btRigidBody *TObject) {
 	
 	ISceneNode *Node = static_cast<ISceneNode *>(TObject->getUserPointer());
-
-	//cout << Node->getName() << endl;
 	// Set position
 	btVector3 Point = TObject->getCenterOfMassPosition();
 	

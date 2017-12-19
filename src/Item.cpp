@@ -63,7 +63,7 @@ btRigidBody* Item::inicializarFisicas()
 	return rigidBody;
 }
 
-void Item::Delete(){
+bool Item::Delete(){
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
@@ -85,16 +85,21 @@ void Item::Delete(){
 			mundo->removeRigidBody(Object);
 
 			// Free memory
-			delete Object->getMotionState();
+			
 			delete Object->getCollisionShape();
+			delete Object->getMotionState();
 			delete Object;
 
 			Iterator = objetos.erase(Iterator);
 			bullet->setObjetos(objetos);
-			break;
+			return true;
 		}
 	}
+	return false;
 }
 btRigidBody *Item::getRigidBody(){
 	return rigidBody;
+}
+ISceneNode *Item::getNodo(){
+	return nodo;
 }

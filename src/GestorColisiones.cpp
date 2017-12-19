@@ -6,18 +6,31 @@ void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[], Pr
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
     btDynamicsWorld *mundo = bullet->getMundo();
     core::list<btRigidBody *> objetos = bullet->getObjetos();
-
+    item=item_1;
+    pj1Col=pj1Col_1;
     int numManifolds = mundo->getDispatcher()->getNumManifolds();
 	for (int i = 0; i < numManifolds; i++)
 	{
 		btPersistentManifold *contactManifold = mundo->getDispatcher()->getManifoldByIndexInternal(i);
 		const btCollisionObject *obA = contactManifold->getBody0();
 		const btCollisionObject *obB = contactManifold->getBody1();
-        item=item_1;
-        pj1Col=pj1Col_1;
+   
 		nodoA = static_cast<ISceneNode *>(obA->getUserPointer());
 		nodoB = static_cast<ISceneNode *>(obB->getUserPointer());
+        
+      
+
         if(nodoA != 0 && nodoB != 0){
+
+           /* if (strcmp("Proyectil", nodoB->getName()) == 0){
+               cout<<"------------------------ID PROYECTIL: "<<nodoB->getID()<<endl;
+               if (item->getNodo() !=NULL){
+                   cout<<"------------------------ID PROYECTIL ITEM: "<<item->getNodo()->getID()<<endl;
+               }else{
+                   cout<<"------------------------ID PROYECTIL ITEM CORRUPTO: ";
+               }
+            }*/
+
             if(JugadorCaja(cajas)) continue;
             if(JugadorTurbo()) continue;
             if(objetoDestruible()) continue;
@@ -102,8 +115,9 @@ bool GestorColisiones::objetoDestruible(){
             colision = true;
             cout << "Destruible - Item\n";
             //int idB = nodoB->getID();
-            item->Delete();
-            delete item;
+            if (item->Delete()){
+                delete item;
+            }
             /*for(int i=0; i< TAMANYOCAJAS; i++){
                 if(cajas[i]!=NULL){
                     if(cajas[i]->getIDCaja()==idB){

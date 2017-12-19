@@ -16,7 +16,8 @@ class Item
     Item(Motor3d *ventana, vector3df posicionItem, int idItem);
     btRigidBody* inicializarFisicas();
     void lanzarItem();
-    void Delete();
+    bool Delete();
+    ISceneNode *getNodo();
     btRigidBody *getRigidBody();
   protected:
     ISceneNode *nodo;

@@ -220,7 +220,7 @@ void Corredor::lanzarItem(Proyectil *item){
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	
 	btRigidBody *rigidItem = item->inicializarFisicas();
-
+	
 	//item->lanzarItem(this);
 	float rotDisparo = cuboNodo->getRotation().Y * PI / 180;
     item->getRigidBody()->setLinearVelocity(btVector3(sin(rotDisparo) * 100, 5.0f, cos(rotDisparo) * 100));

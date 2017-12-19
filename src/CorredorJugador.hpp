@@ -11,7 +11,7 @@ class CorredorJugador : public Corredor
 public:
 
 	CorredorJugador(stringw rutaObj,vector3df pos);
-	void actualizarItem(Proyectil *item,int &id);
+	Proyectil *actualizarItem(Proyectil *item,int &id);
 	void movimiento();
 	void update();
 

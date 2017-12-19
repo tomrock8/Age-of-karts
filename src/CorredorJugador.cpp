@@ -79,9 +79,8 @@ void CorredorJugador::update() {
 	movimiento();
 }
 
-void CorredorJugador::actualizarItem(Proyectil *item,int &id){
+Proyectil *CorredorJugador::actualizarItem(Proyectil *item,int &id){
 
-	
 	CTeclado *teclado = CTeclado::getInstancia();
 	Motor3d *m = Motor3d::getInstancia();
 	
@@ -92,12 +91,12 @@ void CorredorJugador::actualizarItem(Proyectil *item,int &id){
 		//if P is pressed, shoot a box
 		if (checkItem == true)
 		{
-			item = new Proyectil(m, posDisparo, id);
-			id++;
+			item = new Proyectil(m, posDisparo,id);
 			//Llama a la funcion de la clase padre
 			lanzarItem(item);
-			
+			id++;
 			checkItem = false;
+
 		}
 	}else if (teclado->isKeyDown(KEY_KEY_P)){
 		if (cargador > 0)
@@ -105,5 +104,5 @@ void CorredorJugador::actualizarItem(Proyectil *item,int &id){
 		checkItem = true;
 		}
 	}
-
+	return item;
 }

@@ -22,6 +22,7 @@ class GestorColisiones
     bool JugadorTurbo();
     bool objetoDestruible();
 
+
   private:
   Corredor *pj1Col;
   Proyectil *item;

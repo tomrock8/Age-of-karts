@@ -73,7 +73,7 @@ Proyectil *CorredorJugador::actualizarItem(int &id, btDiscreteDynamicsWorld *mun
 		//if P is pressed, shoot a box
 		if (checkItem == true)
 		{
-			Proyectil *item = new Proyectil(m, cam, id);
+			Proyectil *item = new Proyectil(cam, id);
 			id++;
 			//Llama a la funcion de la clase padre
 			lanzarItem(item, mundo, objetos);

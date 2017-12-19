@@ -18,7 +18,7 @@ Caja::Caja(Motor3d *ventana, vector3df posicionCaja, int idCaja)
 	nodo->setMaterialTexture(0, ventana->getDriver()->getTexture("assets/textures/rust.png"));
 
 	nombre = "Caja";
-	nodo->setName(nombre);
+	nodo->setName("Caja");
 
 	id = idCaja;
 	nodo->setID(id);

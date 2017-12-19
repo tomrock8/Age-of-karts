@@ -1,33 +1,34 @@
 #include "Item.hpp"
 
-Item::Item(Motor3d *ventana, vector3df posicionItem, int idItem)
+Item::Item(vector3df posicionItem, int idItem)
 {
-    tamanyo = 1.0f;
-    nodo = ventana->getScene()->addCubeSceneNode(tamanyo);
+	Motor3d *m = Motor3d::getInstancia();
 
-    escala.X = 3.f;
-    escala.Y = 3.f;
-    escala.Z = 3.f;
+	tamanyo = 1.0f;
+	nodo = m->getScene()->addCubeSceneNode(tamanyo);
+
+	escala.X = 3.f;
+	escala.Y = 3.f;
+	escala.Z = 3.f;
 	nodo->setScale(escala);
 
-    posicion = posicionItem;
+	posicion = posicionItem;
 	nodo->setPosition(posicion);
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	nodo->setMaterialTexture(0, ventana->getDriver()->getTexture("assets/textures/rust.png"));
+	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
 
-    nombre = "Item";
-    nodo->setName(nombre);
+	nombre = "Item";
+	nodo->setName("Item");
 
-    id = idItem;
-    nodo->setID(id);
-
+	id = idItem;
+	nodo->setID(id);
 }
 
-btRigidBody* Item::inicializarFisicas()
+btRigidBody *Item::inicializarFisicas()
 {
-    // Set the initial position of the object
+	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
 	Transform.setOrigin(btVector3(posicion.X, posicion.Y, posicion.Z));
@@ -39,14 +40,14 @@ btRigidBody* Item::inicializarFisicas()
 
 	// Add mass
 	btVector3 LocalInertia;
-    masa = 1;
+	masa = 1;
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
 	// Create the rigid body object
 	rigidBody = new btRigidBody(masa, MotionState, Shape, LocalInertia);
 	btTransform t;
 	rigidBody->getMotionState()->getWorldTransform(t);
-	
+
 	// Store a pointer to the irrlicht node so we can update it later
 	rigidBody->setUserPointer((void *)(nodo));
 	if (masa != 0)
@@ -55,7 +56,8 @@ btRigidBody* Item::inicializarFisicas()
 	return rigidBody;
 }
 
-void Item::Delete(core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWorld *mundoMetodo){
+void Item::Delete(core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWorld *mundoMetodo)
+{
 	for (list<btRigidBody *>::Iterator Iterator = objetosMundo.begin(); Iterator != objetosMundo.end(); ++Iterator)
 	{
 		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(*Iterator)->getUserPointer());
@@ -82,6 +84,17 @@ void Item::Delete(core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWor
 		}
 	}
 }
-btRigidBody *Item::getRigidBody(){
+btRigidBody *Item::getRigidBody()
+{
 	return rigidBody;
+}
+
+std::string Item::getNombre()
+{
+	return nombre;
+}
+
+ISceneNode *Item::getNodo()
+{
+	return nodo;
 }

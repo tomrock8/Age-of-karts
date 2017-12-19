@@ -1,9 +1,9 @@
 #include "Proyectil.hpp"
 
-Proyectil::Proyectil(Motor3d *ventana, vector3df posicionItem, int idItem) : Item(ventana, posicionItem, idItem)
+Proyectil::Proyectil(vector3df posicionItem, int idItem) : Item(posicionItem, idItem)
 {
     nombre = "Proyectil";
-    nodo->setName(nombre);
+    nodo->setName("Proyectil");
 }
 
 void Proyectil::lanzarItem()

@@ -15,20 +15,24 @@ class Caja
 public:
   Caja(Motor3d *ventana, vector3df posicionCaja, int idCaja);
   btRigidBody *inicializarFisicas();
+  
   ISceneNode *getNodo() { return nodo; };
   btRigidBody *getRigidBody() { return rigidBody; };
-  char *getNombre() { return nombre; };
+  std::string getNombre() { return nombre; };
   int getIDCaja() { return id; };
+
   void Delete(core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWorld *mundoMetodo, Corredor *pj1Col);
 
 private:
   ISceneNode *nodo;
+  
   btRigidBody *rigidBody;
   btScalar masa;
+  
   f32 tamanyo;
   vector3df escala;
   vector3df posicion;
-  char *nombre;
+  std::string nombre;
   int id;
 };
 

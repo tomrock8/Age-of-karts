@@ -9,18 +9,25 @@ CFLAGS := -ggdb -std=c++11
 all: objdir exec
 
 exec: $(OBJETOS)
-	g++ -o $@ $^ $(RUTAS) $(LIBRERIAS) $(CFLAGS) 
+	g++ -o $@ $^ $(RUTAS) $(LIBRERIAS) $(CFLAGS)
+#	echo "Generado ejecutable."
 
 obj/%.o : src/%.cpp
 	g++ -o $@ -c $^ $(RUTAS) $(CFLAGS)
+#	echo "Compilado."
 
 objdir:
 	mkdir -p obj/
+#	echo "Creando carpeta de compilados."
 
 info:
 	$(info $(FUENTE))
 	$(info $(OBJETOS))
 
+clean:
+	rm -f -r obj/
+	rm -f exec
+#	echo "Limpiando resultado de compilacion."
 
 #TODO:
 #  Comandos para compilar en release

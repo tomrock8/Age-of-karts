@@ -10,10 +10,8 @@ Pista *Pista::instancia = NULL;
 
 Pista::Pista(){
 
-
     m = Motor3d::getInstancia();
     smgr = m->getScene();
-	
 	//countMesh = mapa->getMeshBufferCount();
 
 

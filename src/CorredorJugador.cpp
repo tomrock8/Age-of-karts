@@ -12,67 +12,38 @@ CorredorJugador::CorredorJugador(stringw rutaObj,vector3df pos) :
 void CorredorJugador::movimiento() {
 	CTeclado *teclado = CTeclado::getInstancia();
 	Motor3d *m = Motor3d::getInstancia();
-	bool mierda=false;
 
-			//-------ENTRADA TECLADO ----------//
-			if (teclado->isKeyDown(KEY_ESCAPE))
-			{
-				m->getDevice()->closeDevice();
-				
-			}
-			if (teclado->isKeyDown(KEY_KEY_S))
-			{
-			vehiculo-> applyEngineForce ( -15000 , 2 );
-			vehiculo-> applyEngineForce ( -15000 , 3 );
-			vehiculo-> setSteeringValue ( btScalar (0), 0 );
-			vehiculo-> setSteeringValue ( btScalar (0), 1 );
-			//vehiculo-> set
-			mierda = true;
-			}
-			if (teclado->isKeyDown(KEY_KEY_W))
-			{
-			vehiculo-> applyEngineForce ( fuerzaVelocidad , 2 );
-			vehiculo-> applyEngineForce ( fuerzaVelocidad , 3 );
-			vehiculo-> setSteeringValue ( 0, 0 );
-			vehiculo-> setSteeringValue ( 0, 1 );
-			mierda = true;
-			}
-			if (teclado->isKeyDown(KEY_KEY_D))
-			{
-			vehiculo-> setSteeringValue ( btScalar ( 0.3 ), 0 );
-			vehiculo-> setSteeringValue ( btScalar ( 0.3 ), 1 );
-			
-			mierda = true;
-			}
-			if (teclado->isKeyDown(KEY_KEY_A)){
+	bool comprobadorMovimiento = false;
 
-			vehiculo-> setSteeringValue ( btScalar (- 0.3 ), 0 );
-			vehiculo-> setSteeringValue ( btScalar (- 0.3 ), 1 );
-			
-			mierda = true;
-			}
-			
-			if(teclado->isKeyDown(KEY_KEY_K)){
+	//-------ENTRADA TECLADO ----------//
+	if (teclado->isKeyDown(KEY_ESCAPE))
+	{
+		m->getDevice()->closeDevice();
+	}
+	if (teclado->isKeyDown(KEY_KEY_S))
+	{
+		frenar();
+		//vehiculo-> set
+		comprobadorMovimiento = true;
+	}
+	else if (teclado->isKeyDown(KEY_KEY_W))
+	{
+		acelerar();
+		comprobadorMovimiento = true;
+	}
+	if (teclado->isKeyDown(KEY_KEY_D))
+	{
+		girarDerecha();
 
-			vehiculo->setBrake(10000, 2);
-			vehiculo->setBrake(10000, 3);
-			mierda = true;
-			}
-
-
-			if(!mierda){
-			vehiculo-> applyEngineForce ( 0 , 2 );
-			vehiculo-> applyEngineForce ( 0 , 3 );
-			
-			vehiculo-> setSteeringValue ( 0, 0 );
-			vehiculo-> setSteeringValue ( 0, 1 );	
-
-			vehiculo->setBrake(20, 2);
-			vehiculo->setBrake(20, 3);
-
+		comprobadorMovimiento = true;
+	}
+	else if (teclado->isKeyDown(KEY_KEY_A))
+	{
+    girarIzquierda();
+		comprobadorMovimiento = true;
+	}
 			}
 	
-}
 
 void CorredorJugador::update() {
 	
@@ -108,4 +79,15 @@ Proyectil *CorredorJugador::actualizarItem(Proyectil *item,int &id){
 		}
 	}
 	return item;
+
+}
+
+/*
+	Comprueba si el jugador pulsa P para crear un item y lanzarlo
+*/
+std::string CorredorJugador::toString()
+{
+	std::string text = Corredor::toString();
+ 	text += "\n -- CORREDOR JUGADOR -- ";	
+	return text;
 }

@@ -44,6 +44,7 @@ btRigidBody* Item::inicializarFisicas()
 
 	// Add mass
 	btVector3 LocalInertia;
+
     masa = 1;
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
@@ -51,7 +52,6 @@ btRigidBody* Item::inicializarFisicas()
 	rigidBody = new btRigidBody(masa, MotionState, Shape, LocalInertia);
 	btTransform t;
 	rigidBody->getMotionState()->getWorldTransform(t);
-	
 	// Store a pointer to the irrlicht node so we can update it later
 	rigidBody->setUserPointer((void *)(nodo));
 	if (masa != 0)

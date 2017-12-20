@@ -28,7 +28,7 @@ class GestorColisiones
   Corredor *pj1Col;
   ISceneNode *nodoA;
   ISceneNode *nodoB;
-  
+
 };
 
 #endif

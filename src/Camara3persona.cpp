@@ -1,11 +1,11 @@
 #include "Camara3persona.hpp"
 
-
-Camara3persona::Camara3persona(ISceneManager *smgr){
-
-camera = smgr->addCameraSceneNode(0, core::vector3df(0.0f,0.0f,0.0f) , core::vector3df(0.0f,0.0f,0.0f), -1);
-direction=0;
-zdirection=0;
+Camara3persona::Camara3persona()
+{
+    Motor3d *m = Motor3d::getInstancia();
+    camera = m->getScene()->addCameraSceneNode(0, core::vector3df(0.0f, 0.0f, 0.0f), core::vector3df(0.0f, 0.0f, 0.0f), -1);
+    direction = 0;
+    zdirection = 0;
 }
 
 void Camara3persona::moveCameraControl(Corredor *pj1,IrrlichtDevice *device)

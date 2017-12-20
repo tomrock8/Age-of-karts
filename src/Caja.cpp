@@ -1,5 +1,6 @@
 #include "Caja.hpp"
 
+
 Caja::Caja(vector3df posicionCaja, int idCaja)
 {
 	Motor3d *m = Motor3d::getInstancia();
@@ -16,11 +17,10 @@ Caja::Caja(vector3df posicionCaja, int idCaja)
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
 
+	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
 	nombre = "Caja";
 	nodo->setName(nombre);
-
 	id = idCaja;
 	nodo->setID(id);
 }
@@ -55,6 +55,7 @@ btRigidBody *Caja::inicializarFisicas()
 	return rigidBody;
 }
 
+
 void Caja::Delete(Corredor *pj1Col)
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
@@ -86,9 +87,9 @@ void Caja::Delete(Corredor *pj1Col)
 			delete Object->getMotionState();
 			delete Object->getCollisionShape();
 			delete Object;
-
 			Iterator = objetos.erase(Iterator);
 			bullet->setObjetos(objetos);
+
 			break;
 		}
 	}

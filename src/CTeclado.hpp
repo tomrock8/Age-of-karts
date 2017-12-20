@@ -8,7 +8,6 @@
 class CTeclado : public IEventReceiver
 {
 public:
-
 	bool isKeyDown(EKEY_CODE keyCode) const;
 	bool isKeyup(EKEY_CODE keyCode) const;
 	bool OnEvent(const SEvent &event);

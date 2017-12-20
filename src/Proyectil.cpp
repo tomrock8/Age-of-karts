@@ -4,7 +4,7 @@ Proyectil::Proyectil(vector3df posicionItem, int idItem):
     Item(posicionItem, idItem)
 {
     nombre = "Proyectil";
-    nodo->setName(nombre);
+nodo->setName("Proyectil");
 
     id = idItem;
     nodo->setID(id);

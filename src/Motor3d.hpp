@@ -9,7 +9,6 @@ using namespace std;
 class Motor3d
 {
 public:
-
 	//Destructor
 	~Motor3d(void);
 	//metodos GET

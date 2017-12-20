@@ -80,6 +80,7 @@ bool GestorColisiones::JugadorCaja(Caja *cajas[])
     core::list<btRigidBody *> objetos = bullet->getObjetos();
     bool colision = false;
 
+
     if (strcmp("Jugador", nodoA->getName()) == 0)
     {
         if (strcmp("Caja", nodoB->getName()) == 0)
@@ -108,6 +109,7 @@ bool GestorColisiones::JugadorCaja(Caja *cajas[])
             }
         }
     }
+
     return colision;
 }
 
@@ -149,6 +151,19 @@ bool GestorColisiones::objetoDestruible()
                 delete item;
             }
             for(int i=0; i< TAMANYOCAJAS; i++){
+}
+
+void GestorColisiones::objetoDestruible(core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWorld *mundoMetodo)
+{
+    if (strcmp("Proyectil", nodoA->getName()) == 0)
+    {
+        if (strcmp("Destruible", nodoB->getName()) == 0)
+        {
+            cout << "Destruible - Item\n";
+            //int idB = nodoB->getID();
+            item->Delete(objetosMundo, mundoMetodo);
+            delete item;
+            /*for(int i=0; i< TAMANYOCAJAS; i++){
                 if(cajas[i]!=NULL){
                     if(cajas[i]->getIDCaja()==idB){
                         cajas[i]->Delete(objetosMundo, mundoMetodo, pj1Col);

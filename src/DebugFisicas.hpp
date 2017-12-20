@@ -10,7 +10,6 @@
 
 using namespace std;
 
-
 class DebugDraw : public btIDebugDraw {
 private:
  int mode;

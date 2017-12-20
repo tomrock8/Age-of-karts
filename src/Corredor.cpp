@@ -34,6 +34,18 @@ Corredor::Corredor(stringw rutaObj,vector3df pos)
 	rueda3->setMaterialFlag(EMF_LIGHTING, false);
 	rueda4->setMaterialFlag(EMF_LIGHTING, false);
 
+	direccionRuedas = btVector3(0, -1, 0);
+	rotacionRuedas = btVector3(-1, 0, 0);
+	suspension = btScalar(1.0); // Este valor tiene que ser ese... sino peta
+	Fuerza = btScalar(6000);
+	anchoRueda = btScalar(0.4);			  //0.4
+	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
+	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
+	Masa = btScalar(1100);
+	FuerzaFrenado = btScalar(-10000);
+	FuerzaGiro = btScalar(0.3); //manejo a la hora de girar
+	FuerzaFrenoMano = btScalar(800);
+	FuerzaFrenadoReposo = btScalar(60);
 }
 
 
@@ -151,41 +163,35 @@ vehiculo->setCoordinateSystem(0, 1, 2); // 0, 1, 2
 
 for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
-		btWheelInfo& wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = 20;
-		wheel.m_wheelsDampingCompression =2.3f;
-		wheel.m_wheelsDampingRelaxation = 4.4f;
-		wheel.m_frictionSlip = 100;
-		wheel.m_rollInfluence = 0.1f;
-	
+		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
+		wheel.m_suspensionStiffness = 60;	  //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo
+		wheel.m_wheelsDampingCompression = 20; //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f;
+		wheel.m_wheelsDampingRelaxation = 20;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f;
+		wheel.m_frictionSlip = btScalar(1.2);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover
+		wheel.m_rollInfluence = 0.1;		   //0.1f;	//Empieza a rodar muy loco, si el valor es alto
+		//wheel.m_maxSuspensionForce = 40000.f;	//A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa)
+		wheel.m_maxSuspensionTravelCm = 8000.f; //Nose muy bien que funcion tiene, pero si el valor es muy bajo el coche no avanza
+
+		/*
+	 * PARAMETROS EN RUEDAS DISPONIBLES
+	 * wheel.m_chassisConnectionCS = connectionPointCS;
+	 * wheel.m_wheelDirectionCS = wheelDirectionCS0;
+	 * wheel.m_wheelAxleCS = wheelAxleCS;
+	 * wheel.m_suspensionRestLength = suspensionRestLength;
+	 * wheel.m_wheelRadius = wheelRadius;
+	 * wheel.m_suspensionStiffness = tuning.m_suspensionStiffness;
+	 * wheel.m_wheelsDampingCompression = tuning.m_suspensionCompression;
+	 * wheel.m_wheelsDampingRelaxation = tuning.m_suspensionDamping;
+	 * wheel.m_frictionSlip = tuning.m_frictionSlip;
+	 * wheel.m_bIsFrontWheel = isFrontWheel;
+	 * wheel.m_maxSuspensionTravelCm = tuning.m_maxSuspensionTravelCm;
+	 * wheel.m_maxSuspensionForce = tuning.m_maxSuspensionForce;
+    */
 	}
 
 }
 
-
-btRaycastVehicle* Corredor::getVehiculo(){
-
-	return vehiculo;
-
-}
-
-btRigidBody * Corredor::getRigidBody(){
-
-	return CuerpoColisionChasis;
-}
-
-
-IMeshSceneNode *Corredor::getNodo()
-{
-
-	return cuboNodo;
-}
-
-
-
-void Corredor::actualizarRuedas(){
-
-		
+void Corredor::actualizarRuedas(){		
 			btTransform ruedas= vehiculo->getWheelTransformWS(0);
 
 			rueda1->setPosition(vector3df(ruedas.getOrigin().getX(),ruedas.getOrigin().getY(),ruedas.getOrigin().getZ()));
@@ -202,9 +208,7 @@ void Corredor::actualizarRuedas(){
 			ruedas= vehiculo->getWheelTransformWS(3);
 
 			rueda4->setPosition(vector3df(ruedas.getOrigin().getX(),ruedas.getOrigin().getY(),ruedas.getOrigin().getZ()));
-			rueda4->setRotation(vector3df(ruedas.getRotation().getX(),ruedas.getRotation().getY(),ruedas.getRotation().getZ()));
-		
-				
+			rueda4->setRotation(vector3df(ruedas.getRotation().getX(),ruedas.getRotation().getY(),ruedas.getRotation().getZ()));				
 }
 
 
@@ -229,78 +233,19 @@ void Corredor::SetFuerzaVelocidad(int turbo){
 	fuerzaVelocidad = turbo;
 }
 
-/*
-
-std::string Corredor::getDireccion() {
-	if (norte) {
-		if (este) {
-			return "noreste";
-		}
-		else {
-			if (oeste) {
-				return "noroeste";
-			}
-			else {
-				return "norte";
-			}
-		}
-	}
-
-
-	if (sur) {
-		if (este) {
-			return "sureste";
-		}
-		else {
-			if (oeste) {
-				return "suroeste";
-			}
-			else {
-				return "sur";
-			}
-		}
-	}
-
-
-	if (este) {
-		if (norte) {
-			return "noreste";
-		}
-		else {
-			if (sur) {
-				return "sureste";
-			}
-			else {
-				return "este";
-			}
-		}
-	}
-
-
-	if (oeste) {
-		if (norte) {
-			return "noroeste";
-		}
-		else {
-			if (sur) {
-				return "suroeste";
-			}
-			else {
-				return "oeste";
-			}
-		}
-	}
-
-	return "No Direccion";
-
-}
-
 int Corredor::getDireccionGrados() {
 	return direccionGrados;
 }
 
-std::string Corredor::toString() {
-	std::string text = "";
+void Corredor::frenodemano()
+{
+	vehiculo->setBrake(FuerzaFrenoMano, 2);
+	vehiculo->setBrake(FuerzaFrenoMano, 3);
+}
+
+std::string Corredor::toString()
+{
+	std::string text = " -- CORREDOR -- ";
 	//Mostrar la Posicion y Velocidad actuales.
 	text += "\n Velocidad: ";
 	text += to_string(getVelocidad());
@@ -315,40 +260,106 @@ std::string Corredor::toString() {
 	text += getDireccion();
 	text += " [ ";
 	text += to_string(getDireccionGrados());
-	text += " ]\n";
+	text += " ]";
+	text += "\n Vector direccion(Orientacion) X[ " + to_string(orientacion.X) + " ] Y[ " + to_string(orientacion.Z) + "]";
+	text += "\n Velocidad (km/h): " + to_string(vehiculo->getCurrentSpeedKmHour());
 
 	return text;
 }
 
+//	----------------------------------------------
+//		METODOS GET
+//	----------------------------------------------
+
+btRaycastVehicle *Corredor::getVehiculo()
+{
+	return vehiculo;
+}
+
+btRigidBody *Corredor::getRigidBody()
+{
+	return CuerpoColisionChasis;
+}
+
+IMeshSceneNode *Corredor::getNodo()
+{
+	return cuboNodo;
+}
+
+int Corredor::getDireccionGrados()
+{
+	return direccionGrados;
+}
 
 
+vector3df Corredor::getVectorDireccion()
+{
+	return orientacion;
+}
 
+//	----------------------------------------------
+//		METODOS UPDATE
+//	----------------------------------------------
 
-	Identifica la rotacion del coche en grados
+void Corredor::update()
+{
+	movimiento();
+	actualizarRuedas();
+	updateDireccion();
+}
 
-void Corredor::updateDireccionGrados() {
-	int grados = rotCocheY; //cambiar rotacion
-	if (grados < 0) {
+/**
+ * Identifica la rotacion del coche en grados
+*/
+void Corredor::updateDireccionGrados()
+{
+	btTransform centerOfMassWorldTrans;
+	motionStateCoche->getWorldTransform(centerOfMassWorldTrans);
+
+	float radianes = centerOfMassWorldTrans.getRotation().getY(); //ROTACION OBTENIDA
+	float grados = radianes * 180;
+
+	if (grados < 0)
+	{
 		grados = 180 + (180 + grados);
 	}
 
 	direccionGrados = grados;
 }
 
-/*
-	Actualiza la posicion hacia la que mira el corredor
-	Tabla de grados -
-		Norte    - 000 [341-20]
-		Noreste  - 045 [21-70]
-		Este	 - 090 [71-110]
-		SurEste  - 135 [111-160]
-		Sur		 - 180 [161-200]
-		SurOeste - 225 [201-250]
-		Oeste    - 270 [251-290]
-		NorOeste - 315 [291-340]
+/**
+ * Actualiza el vector direccion del corredor.
+ */
+void Corredor::updateVectorDireccion()
+{
+	btQuaternion quaternion = CuerpoColisionChasis->getOrientation();
+	float anguloZ = quaternion.getAngle();
+	float anguloX = cuboNodo->getRotation().Y * PI / 180;
 
-void Corredor::updateDireccion() {
+	//cout<< "Rotacion en Y=="<< anguloZ  * 180/PI << endl;
+	orientacion = vector3df(sin(anguloX), 0, -cos(anguloZ));
+
+	orientacion.normalize();
+	//cout<< "ORIENTACION XNORMAL=="<< orientacion.X << " ORIENTACION ZNORMAL=="<< orientacion.Z  << endl;
+}
+
+/**
+ * Actualiza la posicion hacia la que mira el corredor
+ * Tabla de grados -
+ * Norte    - 000 [341-20]
+ * Noreste  - 045 [21-70]
+ * Este	 - 090 [71-110]
+ * SurEste  - 135 [111-160]
+ * Sur		 - 180 [161-200]
+ * SurOeste - 225 [201-250]
+ * Oeste    - 270 [251-290]
+ * NorOeste - 315 [291-340]
+*/
+void Corredor::updateDireccion()
+{
+	updateVectorDireccion();
 	updateDireccionGrados();
+
 	// NORTE
 	if (direccionGrados <= 20 || direccionGrados >= 341) {
 		norte = true;
@@ -422,19 +433,87 @@ void Corredor::updateDireccion() {
 }
 
 
-
-
-
-void Corredor::setAxis()
-{
-	Motor3d *m = Motor3d::getInstancia();
-	AxesSceneNode *axis = new AxesSceneNode(cuboNodo, m->getScene(), -1);
-	axis->setAxesScale(20); //  for the length of the axes
-	axis->drop();
-}
-
-//	----------------------------------------------
-//		METODOS GET
-//	----------------------------------------------
-
+/**
+ * Mediante los boleanos de la clase, se obtiene la direccion
+ * 	respecto de los ejes
 */
+std::string Corredor::getDireccion()
+{
+	if (norte)
+	{
+		if (este)
+		{
+			return "noreste";
+		}
+		else
+		{
+			if (oeste)
+			{
+				return "noroeste";
+			}
+			else
+			{
+				return "norte";
+			}
+		}
+	}
+
+	if (sur)
+	{
+		if (este)
+		{
+			return "sureste";
+		}
+		else
+		{
+			if (oeste)
+			{
+				return "suroeste";
+			}
+			else
+			{
+				return "sur";
+			}
+		}
+	}
+
+	if (este)
+	{
+		if (norte)
+		{
+			return "noreste";
+		}
+		else
+		{
+			if (sur)
+			{
+				return "sureste";
+			}
+			else
+			{
+				return "este";
+			}
+		}
+	}
+
+	if (oeste)
+	{
+		if (norte)
+		{
+			return "noroeste";
+		}
+		else
+		{
+			if (sur)
+			{
+				return "suroeste";
+			}
+			else
+			{
+				return "oeste";
+			}
+		}
+	}
+
+	return "No Direccion";
+}

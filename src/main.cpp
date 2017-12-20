@@ -18,6 +18,8 @@
 #include "DebugFisicas.hpp" 
 #include "BulletWorldImporter/btBulletWorldImporter.h"
 #include "Proyectil.hpp"
+#include "Caja.hpp"
+#include "Item.hpp"
 #include "GestorColisiones.hpp"
 
 using namespace std;
@@ -29,6 +31,7 @@ using namespace std;
 //funciones
 static void UpdatePhysics(u32 TDeltaTime);
 static void UpdateRender(btRigidBody *TObject);
+
 static btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass, int id);
 
 
@@ -37,6 +40,8 @@ static btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScal
 	static ITimer *irrTimer;
 	static ILogger *irrLog;
 
+
+#define TAMANYOCAJAS 10
 
 int main()
 {
@@ -80,13 +85,14 @@ int main()
 	//-----GEOMETRIA COCHE---------//
 	//-----------------------------//
 	//Posicion del nodo y el bloque de colisiones centralizado:
+
 	int id=0;
 	vector3df pos(0,20,20);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 	pj1->InicializarFisicas();
 	pj1->getNodo()->setID(id);
 	///////////////////////CAMARA///////////////////////////////////////////////
-	Camara3persona *camara = new Camara3persona(smgr);
+	Camara3persona *camara = new Camara3persona();
 
 	btVector3 cubopos1(0,20,40);
 	vector3df cuboescala1(5,5,5);
@@ -128,7 +134,6 @@ int main()
 	Transform.setIdentity();
 	Transform.setOrigin(btVector3(25.0f,-4.5f,50.0f));
 	
-
 	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
 
 	// Create the shape
@@ -205,7 +210,7 @@ int main()
 	IGUIFont *fuente = guienv->getFont("assets/fuente.bmp");
 	IGUIStaticText *textoUI = guienv->addStaticText(
 		text.c_str(),				 // Texto
-		rect<s32>(10, 10, 260, 300), // Rectangulo de los bordes
+		rect<s32>(10, 10, 400, 300), // Rectangulo de los bordes
 		false,						 // Mostrar bordes
 		true,						 // Cortar en varias lineas
 		0,							 // Nodo padre
@@ -225,20 +230,27 @@ int main()
 			DeltaTime = irrTimer->getTime() - TimeStamp;
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
-			pj1->movimiento();
+			//pj1->movimiento();
 			item=pj1->actualizarItem(item,id);
 			items.push_back(item);
-			pj1->actualizarRuedas();
+			//pj1->actualizarRuedas();
 			camara->moveCameraControl(pj1,device);
 			colisiones->ComprobarColisiones(pj1, cajas);
 
-/*
-			//text += pj1->toString().c_str();
+			
+			pj1->update();
 
-			text += "\n ---- CORREDOR 2 IA ----\n";
-			text += " Waypoint siguiente: ";
-			text += pj2->getNombreWaypoint().c_str();
-			text += pj2->toString().c_str();
+			//pj2->movimiento();
+			camara->moveCameraControl(pj1, device);
+
+			text += "\n ---- CORREDOR 1 JUGADOR ----\n";
+			text += pj1->toString().c_str();
+
+			colisiones->ComprobarColisiones(objetos, mundo, pj1, cajas, item);
+
+			//text += "\n\n ---- CORREDOR 2 IA ----\n";
+			//text += pj2->toString();
+
 
 
 			//-------ENTRADA TECLADO ----------//
@@ -252,7 +264,7 @@ int main()
 				return 0;
 			}
 
-*/
+
 			
 			//-------ENTRADA TECLADO FIN----------//
 			int fps = driver->getFPS();
@@ -334,7 +346,6 @@ void UpdateRender(btRigidBody *TObject) {
 
 }
 
-
 btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass, int id) {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
@@ -344,13 +355,18 @@ btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btSc
 	
 	ISceneNode *Node = m->getScene()->addCubeSceneNode(1.0f);
 	Node->setScale(TScale);
+	//----------------------------------
+	//Chapuza momentanea para solucionar el core dumped al colisionar con proyectil
+	Node->setName("Destruible");
+	Node->setID(2);
+	//----------------------------------
 	Node->setMaterialFlag(EMF_LIGHTING, 1);
+
 	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true); 
 	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/rust.png")); 
   	Node->setName("Destruible"); 
   	Node->setID(id);
 	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
-	
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();

@@ -1,6 +1,5 @@
 #include "IrrlichtLib.hpp"
 #include "Corredor.hpp"
-#include "AxesSceneNode.cpp"
 #include <string>
 
 
@@ -216,9 +215,6 @@ void Corredor::actualizarRuedas(){
 
 
 void Corredor::lanzarItem(Proyectil *item){
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
-	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	
 	btRigidBody *rigidItem = item->inicializarFisicas();
 	

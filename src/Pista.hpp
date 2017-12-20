@@ -6,6 +6,7 @@
 #include "btBulletDynamicsCommon.h"
 #include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
+#include "Item.hpp"
 #include <string>
 #include <fstream>
 #include "Waypoint.hpp"
@@ -24,7 +25,9 @@ class Pista
   //btTriangleMesh *getBulletTriangleMesh(IMesh *const mesh, vector3df escala);
   void BorrarFisicas();
   void setMapa(stringw mapa, const char* fisicas, const char* waypoint);
-  
+  core::list<Item *> getItems();
+void setItems(irr::core::list<Item *> itemMetodo);
+
   private:
   Pista(void);
 	static Pista* instancia;
@@ -38,7 +41,7 @@ class Pista
     btScalar Masa;
   ISceneNode *Mapa; 
 
-
+  irr::core::list<Item *> Items;
 };
 
 #endif /* PISTA_H */

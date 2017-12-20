@@ -6,6 +6,7 @@
 #include "Caja.hpp"
 #include "Item.hpp"
 #include "Proyectil.hpp"
+#include "Pista.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "MotorFisicas.hpp"
@@ -17,7 +18,7 @@ class GestorColisiones
 {
   public:
     GestorColisiones(){};
-    void ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[], Proyectil *item_1);
+    void ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[]);
     bool JugadorCaja(Caja *cajas[]);
     bool JugadorTurbo();
     bool objetoDestruible();
@@ -25,7 +26,6 @@ class GestorColisiones
 
   private:
   Corredor *pj1Col;
-  Proyectil *item;
   ISceneNode *nodoA;
   ISceneNode *nodoB;
   

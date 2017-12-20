@@ -82,6 +82,8 @@ void CorredorJugador::update() {
 Proyectil *CorredorJugador::actualizarItem(Proyectil *item,int &id){
 
 	CTeclado *teclado = CTeclado::getInstancia();
+	Pista *pista = Pista::getInstancia();
+	core::list<Item *> items=pista->getItems();
 
 	if (teclado->isKeyup(KEY_KEY_P))
 	{
@@ -91,6 +93,8 @@ Proyectil *CorredorJugador::actualizarItem(Proyectil *item,int &id){
 		if (checkItem == true)
 		{
 			item = new Proyectil(posDisparo,id);
+			items.push_back(item);
+			pista->setItems(items);
 			//Llama a la funcion de la clase padre
 			lanzarItem(item);
 			id++;

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "IrrlichtLib.hpp"
+#include "Pista.hpp"
 #include "Corredor.hpp"
 using namespace std;
 

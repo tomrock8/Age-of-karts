@@ -100,14 +100,14 @@ int main()
 	//----------------------------//
 	
 
-	//btVector3 posObj2(0,10,70);
-	//vector3df tamObj2(5.f, 20.f, 20.f);
-	//btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000, id);
+	btVector3 posObj2(0,10,70);
+	vector3df tamObj2(5.f, 20.f, 20.f);
+	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000, id);
 	//ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
 	////El problema esta en que estas variables no cambian las variables de obje2
 	////nodoObj2->setID(id);
 	////nodoObj2->setName("Destruible");
-	//id++;
+	id++;
 	//---------------------------//
 	//----------TURBO------------//
 	//---------------------------//
@@ -156,7 +156,7 @@ int main()
 
 //-----------------------------------------------------------------------------------------------------------------------------------------//
 	Proyectil *item;
-	Proyectil **items;
+	core::list<Item *> items;
 	//btRigidBody *obje1=CreateBox(cubopos1,cuboescala1,10);
 
 	//
@@ -227,10 +227,10 @@ int main()
 			UpdatePhysics(DeltaTime);
 			pj1->movimiento();
 			item=pj1->actualizarItem(item,id);
-
+			items.push_back(item);
 			pj1->actualizarRuedas();
 			camara->moveCameraControl(pj1,device);
-			colisiones->ComprobarColisiones(pj1, cajas, item);
+			colisiones->ComprobarColisiones(pj1, cajas);
 
 /*
 			//text += pj1->toString().c_str();

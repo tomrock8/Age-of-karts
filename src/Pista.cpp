@@ -164,6 +164,14 @@ void Pista::BorrarFisicas(){
 
 }
 
+irr::core::list<Item *> Pista::getItems(){
+	return Items;
+}
+
+void Pista::setItems(irr::core::list<Item *> itemMetodo){
+		 Items = itemMetodo;
+}
+
 /*btTriangleMesh* Pista::getBulletTriangleMesh(IMesh *const mesh, vector3df escala)
 {
 	btVector3 vertices[3];

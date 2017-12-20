@@ -8,24 +8,25 @@ CFLAGS := -ggdb -std=c++11
 all: objdir exec
 
 exec: $(OBJETOS)
-	g++ -o $@ $^ $(RUTAS) $(LIBRERIAS) $(CFLAGS)
-#	echo "Generado ejecutable."
+	@g++ -o $@ $^ $(RUTAS) $(LIBRERIAS) $(CFLAGS)
+	@echo "Generado ejecutable. Ejecutar ./$@"
 
 obj/%.o : src/%.cpp
-	g++ -o $@ -c $^ $(RUTAS) $(CFLAGS)
-#	echo "Compilado."
+	@echo "Compilando $@..."
+	@g++ -o $@ -c $^ $(RUTAS) $(CFLAGS)
 
 objdir:
-	mkdir -p obj/
-#	echo "Creando carpeta de compilados."
+	@mkdir -p obj/
+	@echo "Creando carpeta de compilados."
 
 info:
 	$(info $(FUENTE))
 	$(info $(OBJETOS))
 
 clean:
-	rm -f -r obj/
-	rm -f exec
+	@rm -f -r obj/
+	@rm -f exec
+	@echo "Limpieza completada."
 #	echo "Limpiando resultado de compilacion."
 
 #TODO:

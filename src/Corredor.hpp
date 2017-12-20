@@ -2,6 +2,7 @@
 #define CORREDOR_H
 
 #include <iostream>
+#include <string>
 #include "IrrlichtLib.hpp"
 #include "Motor3d.hpp"
 #include "Waypoint.hpp"
@@ -14,32 +15,17 @@ using namespace std;
 
 class Corredor
 {
-public:
-	
-	Corredor(stringw rutaObj,vector3df pos);
+  public:
+	Corredor(stringw rutaObj, vector3df pos);
 	void InicializarFisicas();
-	void BorrarFisicas();
-	void CrearRuedas(btRaycastVehicle* vehiculo,btRaycastVehicle::btVehicleTuning tuning);
-
-	//--movimiento del corredor
-	virtual void movimiento() {}; // A implementar por derivadas
-
-	//Update
-	void actualizarRuedas();
-	void actualizarMotionState();
 	void lanzarItem(Proyectil *item);
-	//metodos GET
-	IMeshSceneNode* getNodo();
-	float getVelocidad();
-	void SetFuerzaVelocidad(int turbo);
-	btRaycastVehicle* getVehiculo();
-	btRigidBody * getRigidBody();
-
-	int getCargador();
 	void incCargador();
 	void decCargador();
-
+	void SetFuerzaVelocidad(int turbo);
 	std::string toString();
+
+	//Update
+	void update();
 
 	//metodos GET
 	IMeshSceneNode *getNodo();
@@ -48,25 +34,21 @@ public:
 	std::string getDireccion();
 	int getDireccionGrados();
 	vector3df getVectorDireccion();
-	int getCargador() { return cargador; };
-	void incCargador() { cargador++; };
-	void decCargador() { cargador--; };
+	int getCargador();
 
   protected:
 	//objetos
-	IMesh          *coche;
+	IMesh *coche;
 	IMeshSceneNode *cuboNodo;
-	ISceneNode* rueda1;
-	ISceneNode*	rueda2;
-	ISceneNode* rueda3;
-	ISceneNode* rueda4;
-	//list<ISceneNode*> Ruedas;
+	ISceneNode *rueda1;
+	ISceneNode *rueda2;
+	ISceneNode *rueda3;
+	ISceneNode *rueda4;
 
 	//bullet
-	btRaycastVehicle* vehiculo;
-	btDefaultMotionState *motionStateCoche;//interpolacion
-	btCollisionShape *FormaColision;//contorno
-	btScalar Masa;//masa
+	btRaycastVehicle *vehiculo;
+	btDefaultMotionState *motionStateCoche; //interpolacion
+	btCollisionShape *FormaColision;		//contornoB
 	btRigidBody *CuerpoColisionChasis;
 
 	int fuerzaVelocidad;
@@ -102,14 +84,13 @@ public:
 	void girarDerecha();
 	void girarIzquierda();
 	void frenodemano();
+	virtual void movimiento(){}; // A implementar por derivadas
 
 	// UPDATES
 	void actualizarRuedas();
 	void updateDireccion();
 	void updateVectorDireccion();
 	void updateDireccionGrados();
-
-
 };
 
 #endif /* JUGADOR_H */

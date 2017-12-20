@@ -3,36 +3,35 @@
 Item::Item(vector3df posicionItem, int idItem)
 {
 	Motor3d *m = Motor3d::getInstancia();
-    tamanyo = 1.0f;
-    nodo = m->getScene()->addCubeSceneNode(tamanyo);
+	tamanyo = 1.0f;
+	nodo = m->getScene()->addCubeSceneNode(tamanyo);
 
-    escala.X = 3.f;
-    escala.Y = 3.f;
-    escala.Z = 3.f;
+	escala.X = 3.f;
+	escala.Y = 3.f;
+	escala.Z = 3.f;
 	nodo->setScale(escala);
 
-    posicion = posicionItem;
+	posicion = posicionItem;
 	nodo->setPosition(posicion);
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/gust.png"));
 
-    nombre = "Item";
-    nodo->setName(nombre);
+	nombre = "Item";
+	nodo->setName(nombre);
 
-    id = idItem;
-    nodo->setID(id);
-
+	id = idItem;
+	nodo->setID(id);
 }
 
-btRigidBody* Item::inicializarFisicas()
+btRigidBody *Item::inicializarFisicas()
 {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
-    // Set the initial position of the object
+	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
 	Transform.setOrigin(btVector3(posicion.X, posicion.Y, posicion.Z));
@@ -45,7 +44,7 @@ btRigidBody* Item::inicializarFisicas()
 	// Add mass
 	btVector3 LocalInertia;
 
-    masa = 1;
+	masa = 1;
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
 	// Create the rigid body object
@@ -64,11 +63,12 @@ btRigidBody* Item::inicializarFisicas()
 	return rigidBody;
 }
 
-bool Item::Delete(){
+bool Item::Delete()
+{
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
-	
+
 	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator)
 	{
 		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(*Iterator)->getUserPointer());
@@ -86,7 +86,7 @@ bool Item::Delete(){
 			mundo->removeRigidBody(Object);
 
 			// Free memory
-			
+
 			delete Object->getCollisionShape();
 			delete Object->getMotionState();
 			delete Object;
@@ -98,9 +98,11 @@ bool Item::Delete(){
 	}
 	return false;
 }
-btRigidBody *Item::getRigidBody(){
+btRigidBody *Item::getRigidBody()
+{
 	return rigidBody;
 }
-ISceneNode *Item::getNodo(){
+ISceneNode *Item::getNodo()
+{
 	return nodo;
 }

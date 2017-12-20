@@ -1,10 +1,9 @@
 #include "CorredorIA.hpp"
 
+CorredorIA::CorredorIA(stringw rutaObj, vector3df pos, Waypoint **arrayWaypoints, int tamanyoArray) : Corredor(rutaObj, pos)
+{
 
-CorredorIA::CorredorIA(stringw rutaObj,vector3df pos,Waypoint** arrayWaypoints, int tamanyoArray) :
-	Corredor(rutaObj,pos) {
-
-/*
+	/*
 	//sacamos el waypoint m�s cercano
 	float diferenciaX = 0;
 	float diferenciaZ = 0;
@@ -36,7 +35,7 @@ CorredorIA::CorredorIA(stringw rutaObj,vector3df pos,Waypoint** arrayWaypoints, 
 void CorredorIA::movimiento()
 {
 
-/*
+	/*
 	bool acelerando;
 	acelerando = true;
 	//Cara A (NORTE) - DELANTE
@@ -78,12 +77,10 @@ void CorredorIA::movimiento()
 	//Cara D (OESTE) - IZQ
 
 */
-
 }
 
-
-
-std::string CorredorIA::getNombreWaypoint() {
+std::string CorredorIA::getNombreWaypoint()
+{
 	return puntoActual->getNombre();
 }
 
@@ -95,21 +92,6 @@ std::string CorredorIA::toString()
 
 	text += "\n Waypoint siguiente: ";
 	text += getNombreWaypoint().c_str();
-
-	int aux = 0;
-
-	aux = vehiculo->getForwardAxis();
-	text += "\n INDEX: getForwardAxis: " + to_string(aux);
-
-	aux = vehiculo->getUpAxis();
-	text += "\n INDEX: getUpAxis: " + to_string(aux);
-
-	aux = vehiculo->getRightAxis();
-	text += "\n INDEX: getRightAxis: " + to_string(aux);
-
-	text += "\nVector: X[" + to_string(vehiculo->getForwardVector().getX()) +
-			"] , Y[" + to_string(vehiculo->getForwardVector().getY()) +
-			"] , Z[" + to_string(vehiculo->getForwardVector().getZ()) + "]";
 
 	return text;
 }

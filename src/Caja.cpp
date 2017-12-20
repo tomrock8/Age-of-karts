@@ -1,6 +1,5 @@
 #include "Caja.hpp"
 
-
 Caja::Caja(vector3df posicionCaja, int idCaja)
 {
 	Motor3d *m = Motor3d::getInstancia();
@@ -54,7 +53,6 @@ btRigidBody *Caja::inicializarFisicas()
 	// Add it to the world
 	return rigidBody;
 }
-
 
 void Caja::Delete(Corredor *pj1Col)
 {

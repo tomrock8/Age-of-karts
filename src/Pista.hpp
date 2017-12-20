@@ -16,30 +16,30 @@ using namespace std;
 class Pista
 {
 
-  public:
-//Destructor
-	~Pista(void);
-	//metodos GET
-	static Pista *getInstancia();
+public:
+  //Destructor
+  ~Pista(void);
+  //metodos GET
+  static Pista *getInstancia();
   void InicializarFisicas();
   //btTriangleMesh *getBulletTriangleMesh(IMesh *const mesh, vector3df escala);
   void BorrarFisicas();
-  void setMapa(stringw mapa, const char* fisicas, const char* waypoint);
+  void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
   core::list<Item *> getItems();
-void setItems(irr::core::list<Item *> itemMetodo);
+  void setItems(irr::core::list<Item *> itemMetodo);
 
-  private:
+private:
   Pista(void);
-	static Pista* instancia;
+  static Pista *instancia;
   //mundo
   Motor3d *m;
   ISceneManager *smgr;
-  btRigidBody* CuerpoColisionMapa;
+  btRigidBody *CuerpoColisionMapa;
   btCollisionShape *FormaColision;
   btDefaultMotionState *MotionState; // posicion del cuerpo de colision
-  
-    btScalar Masa;
-  ISceneNode *Mapa; 
+
+  btScalar Masa;
+  ISceneNode *Mapa;
 
   irr::core::list<Item *> Items;
 };

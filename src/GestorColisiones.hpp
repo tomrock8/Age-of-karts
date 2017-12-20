@@ -16,19 +16,17 @@ using namespace std;
 
 class GestorColisiones
 {
-  public:
-    GestorColisiones(){};
-    void ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[]);
-    bool JugadorCaja(Caja *cajas[]);
-    bool JugadorTurbo();
-    bool objetoDestruible();
+public:
+  GestorColisiones(){};
+  void ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[]);
+  bool JugadorCaja(Caja *cajas[]);
+  bool JugadorTurbo();
+  bool objetoDestruible();
 
-
-  private:
+private:
   Corredor *pj1Col;
   ISceneNode *nodoA;
   ISceneNode *nodoB;
-
 };
 
 #endif

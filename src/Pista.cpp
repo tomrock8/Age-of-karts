@@ -7,13 +7,12 @@
 
 Pista *Pista::instancia = NULL;
 
+Pista::Pista()
+{
 
-Pista::Pista(){
-
-    m = Motor3d::getInstancia();
-    smgr = m->getScene();
+	m = Motor3d::getInstancia();
+	smgr = m->getScene();
 	//countMesh = mapa->getMeshBufferCount();
-
 
 	// -----------------------------
 	//  GEOMETRIA MAPA
@@ -41,12 +40,9 @@ Pista::Pista(){
 	*/
 }
 
-
-Pista::~Pista(){
-
-
+Pista::~Pista()
+{
 }
-
 
 Pista *Pista::getInstancia()
 {
@@ -56,11 +52,12 @@ Pista *Pista::getInstancia()
 	return instancia;
 }
 
-void Pista::InicializarFisicas(){
+void Pista::InicializarFisicas()
+{
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
-	
+
 	Masa = 0;
 	//posicion inicial del objeto
 	btVector3 posicionMapa(0, 0, 0);
@@ -87,18 +84,17 @@ void Pista::InicializarFisicas(){
 	//mundo->addRigidBody(cuerpoMapa);
 	//objetos.push_back(cuerpoMapa);
 
-	
-
 	mundo->addRigidBody(CuerpoColisionMapa);
 	objetos.push_back(CuerpoColisionMapa);
 	bullet->setObjetos(objetos);
-
 }
 
-void Pista::setMapa(stringw mapa, const char* fisicas, const char* waypoints){
+void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
+{
 	Mapa = smgr->addMeshSceneNode(smgr->getMesh(mapa));
 	Mapa->setName("MAPA1");
-	if(Mapa) {
+	if (Mapa)
+	{
 		Mapa->setMaterialFlag(EMF_LIGHTING, false);
 	}
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
@@ -117,57 +113,63 @@ void Pista::setMapa(stringw mapa, const char* fisicas, const char* waypoints){
 	int tamanyoArrayWaypoints = 0;
 	Waypoint **arrayWaypoints;
 
-	  ifstream myfile (waypoints);
-	  if (myfile.is_open())
-	  {
-		 getline(myfile, line); 
+	ifstream myfile(waypoints);
+	if (myfile.is_open())
+	{
+		getline(myfile, line);
 
-				//crear el array de waypoints para almacenar el path
-				tamanyoArrayWaypoints = stoi(line);
-				arrayWaypoints = new Waypoint *[tamanyoArrayWaypoints];	
-				//se crea un array con las posiciones de los waypoints que se recogeran del fichero
+		//crear el array de waypoints para almacenar el path
+		tamanyoArrayWaypoints = stoi(line);
+		arrayWaypoints = new Waypoint *[tamanyoArrayWaypoints];
+		//se crea un array con las posiciones de los waypoints que se recogeran del fichero
 
-				  for (int j = 0 ;j<tamanyoArrayWaypoints; j++){
-				  		cout<<"cuanto tengo: "<<tamanyoArrayWaypoints<<"\n";
-						//seteamos los Waypoins
-						arrayWaypoints[j] = new Waypoint();
-						arrayWaypoints[j]->setNombre(std::to_string(j));
-						if(j ==0){//si es el primero apuntara al ultimo
-							arrayWaypoints[j]->setSiguiente(arrayWaypoints[tamanyoArrayWaypoints-1]);
-						}
-						else if(j==tamanyoArrayWaypoints-2){//si es el ultimo apuntara al primero
-								arrayWaypoints[j]->setSiguiente(arrayWaypoints[0]);
-						} else arrayWaypoints[j]->setSiguiente(arrayWaypoints[j+1]);
-						getline(myfile, wX, ' ');
-						getline(myfile, wY, ' ');
-						getline(myfile, wZ);
-						//cambiar a float y almacenar array de waypoints
-						arrayWaypoints[j]->setPosicion(std::stof(wX),std::stof(wY),std::stof(wZ));
-						//incrementar la j para los waypoints
-
-						cout << "x: " << std::stof(wX) <<"y: "<<std::stof(wY)<<"z: "<< std::stof(wZ) << '\n';
+		for (int j = 0; j < tamanyoArrayWaypoints; j++)
+		{
+			cout << "cuanto tengo: " << tamanyoArrayWaypoints << "\n";
+			//seteamos los Waypoins
+			arrayWaypoints[j] = new Waypoint();
+			arrayWaypoints[j]->setNombre(std::to_string(j));
+			if (j == 0)
+			{ //si es el primero apuntara al ultimo
+				arrayWaypoints[j]->setSiguiente(arrayWaypoints[tamanyoArrayWaypoints - 1]);
 			}
+			else if (j == tamanyoArrayWaypoints - 2)
+			{ //si es el ultimo apuntara al primero
+				arrayWaypoints[j]->setSiguiente(arrayWaypoints[0]);
+			}
+			else
+				arrayWaypoints[j]->setSiguiente(arrayWaypoints[j + 1]);
+			getline(myfile, wX, ' ');
+			getline(myfile, wY, ' ');
+			getline(myfile, wZ);
+			//cambiar a float y almacenar array de waypoints
+			arrayWaypoints[j]->setPosicion(std::stof(wX), std::stof(wY), std::stof(wZ));
+			//incrementar la j para los waypoints
 
-		
-	    myfile.close();
-	  }
+			cout << "x: " << std::stof(wX) << "y: " << std::stof(wY) << "z: " << std::stof(wZ) << '\n';
+		}
 
-	  else cout << "Error abriendo archivo";	
-
+		myfile.close();
 	}
 
-void Pista::BorrarFisicas(){
-
-// a implementar
-
+	else
+		cout << "Error abriendo archivo";
 }
 
-irr::core::list<Item *> Pista::getItems(){
+void Pista::BorrarFisicas()
+{
+
+	// a implementar
+}
+
+irr::core::list<Item *> Pista::getItems()
+{
 	return Items;
 }
 
-void Pista::setItems(irr::core::list<Item *> itemMetodo){
-		 Items = itemMetodo;
+void Pista::setItems(irr::core::list<Item *> itemMetodo)
+{
+	Items = itemMetodo;
 }
 
 /*btTriangleMesh* Pista::getBulletTriangleMesh(IMesh *const mesh, vector3df escala)

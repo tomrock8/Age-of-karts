@@ -20,5 +20,4 @@ private:
   ICameraSceneNode *camera;
 };
 
-
 #endif /* CAMARA3PERSONA_H */

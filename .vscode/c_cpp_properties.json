@@ -35,7 +35,10 @@
                 "/usr/include/x86_64-linux-gnu",
                 "/usr/include",
                 "${workspaceRoot}",
-                "/usr/local/include/bullet"
+                "/usr/local/include/bullet",
+                "/usr/include/c++/5",
+                "/usr/include/x86_64-linux-gnu/c++/5",
+                "/usr/include/c++/5/tr1"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",

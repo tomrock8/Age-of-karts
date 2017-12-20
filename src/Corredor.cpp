@@ -2,11 +2,10 @@
 #include "Corredor.hpp"
 #include <string>
 
-
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
 //-------------------------\*
-Corredor::Corredor(stringw rutaObj,vector3df pos)
+Corredor::Corredor(stringw rutaObj, vector3df pos)
 {
 	cargador = 10;
 	fuerzaVelocidad = 10000;
@@ -18,16 +17,16 @@ Corredor::Corredor(stringw rutaObj,vector3df pos)
 	cuboNodo->setName("Jugador");
 	//cambiar a color rojo del coche
 	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
-	cuboNodo->setScale(vector3df(1,1,1.5));
+	cuboNodo->setScale(vector3df(1, 1, 1.5));
 	// Desactivar la iluminacion del cubo
-		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-		cuboNodo->setPosition(pos);
+	cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
+	cuboNodo->setPosition(pos);
 	//-------------bullet----------------
 	rueda1 = smgr->addCubeSceneNode(1.f);
 	rueda2 = smgr->addCubeSceneNode(1.f);
 	rueda3 = smgr->addCubeSceneNode(1.f);
 	rueda4 = smgr->addCubeSceneNode(1.f);
-	
+
 	//smgr->getMeshManipulator()->setVertexColors(rueda1->getMesh(),SColor(255, 255, 0, 0));
 	rueda1->setMaterialFlag(EMF_LIGHTING, false);
 	rueda2->setMaterialFlag(EMF_LIGHTING, false);
@@ -48,120 +47,101 @@ Corredor::Corredor(stringw rutaObj,vector3df pos)
 	FuerzaFrenadoReposo = btScalar(60);
 }
 
-
-
-void Corredor::InicializarFisicas(){
+void Corredor::InicializarFisicas()
+{
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 
 	//posicion inicial
-		btTransform transCoche;
-		transCoche.setIdentity();
-		btVector3 posTransCoche =  btVector3(cuboNodo->getPosition().X,cuboNodo->getPosition().Y,cuboNodo->getPosition().Z);
-		transCoche.setOrigin(posTransCoche);
+	btTransform transCoche;
+	transCoche.setIdentity();
+	btVector3 posTransCoche = btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+	transCoche.setOrigin(posTransCoche);
 
-		//Motionstate
-		motionStateCoche = new btDefaultMotionState(transCoche);//motionState = interpolacion
-		
+	//Motionstate
+	motionStateCoche = new btDefaultMotionState(transCoche); //motionState = interpolacion
 
-		//establecemos su centro de gravedad
-		btTransform localTransform;
-		localTransform.setIdentity();
-		localTransform.setOrigin(btVector3(0,1,0));
-		CentroGravedad = new btCompoundShape();
+	//establecemos su centro de gravedad
+	btTransform localTransform;
+	localTransform.setIdentity();
+	localTransform.setOrigin(btVector3(0, 1, 0));
+	CentroGravedad = new btCompoundShape();
 
+	//Forma Colision
+	btVector3 TamanyoFormaColision(cuboNodo->getScale().X, cuboNodo->getScale().Y, cuboNodo->getScale().Z);
+	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
+	FormaColision = new btBoxShape(TamanyoFormaColision);
+	//masa coche
+	Masa = 2000;
+	btVector3 Inercia(0, 0, 0);
+	FormaColision->calculateLocalInertia(Masa, Inercia);
 
+	CentroGravedad->addChildShape(localTransform, FormaColision);
 
-		//Forma Colision
-		btVector3 TamanyoFormaColision(cuboNodo->getScale().X,cuboNodo->getScale().Y,cuboNodo->getScale().Z);
-		//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
-		FormaColision = new btBoxShape(TamanyoFormaColision);
-		//masa coche
-		Masa = 2000;
-		btVector3 Inercia(0,0,0);
-		FormaColision->calculateLocalInertia(Masa, Inercia);
-		
+	//rigidbody del coche
+	CuerpoColisionChasis = new btRigidBody(Masa, motionStateCoche, CentroGravedad, Inercia);
 
-		CentroGravedad->addChildShape(localTransform,FormaColision);
+	CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
 
-		
-		//rigidbody del coche
-		CuerpoColisionChasis = new btRigidBody(Masa, motionStateCoche, CentroGravedad, Inercia);
+	//RaycastDel Coche
+	btVehicleRaycaster *RayCastVehiculo = new btDefaultVehicleRaycaster(mundo);
+	btRaycastVehicle::btVehicleTuning tuning;
 
-		CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
-		
-		
-		
-		//RaycastDel Coche
-		btVehicleRaycaster* RayCastVehiculo = new btDefaultVehicleRaycaster(mundo);
-		btRaycastVehicle::btVehicleTuning tuning;
+	vehiculo = new btRaycastVehicle(tuning, CuerpoColisionChasis, RayCastVehiculo);
 
-		vehiculo = new btRaycastVehicle(tuning,CuerpoColisionChasis,RayCastVehiculo);
-		
-		CuerpoColisionChasis->setActivationState(DISABLE_DEACTIVATION);
-		mundo->addVehicle(vehiculo);
-		//vehiculo->setActivationState(DISABLE_DEACTIVATION);
-		//almacenar el puntero al nodo irrlicht  para poder actualizar sus valores
-		
-		objetos.push_back(CuerpoColisionChasis);
-		
-		
-	
-		CrearRuedas(vehiculo,tuning);
-		mundo->addRigidBody(CuerpoColisionChasis);
-		bullet->setObjetos(objetos);
-		//rigidBody->applyGravity();
+	CuerpoColisionChasis->setActivationState(DISABLE_DEACTIVATION);
+	mundo->addVehicle(vehiculo);
+	//vehiculo->setActivationState(DISABLE_DEACTIVATION);
+	//almacenar el puntero al nodo irrlicht  para poder actualizar sus valores
 
+	objetos.push_back(CuerpoColisionChasis);
+
+	CrearRuedas(vehiculo, tuning);
+	mundo->addRigidBody(CuerpoColisionChasis);
+	bullet->setObjetos(objetos);
+	//rigidBody->applyGravity();
 
 	// luego declaramos sus ruedas
-	
+
 	// inicializamos la posicion de las ruedas
-	
-
-
 }
 
-
-void Corredor::BorrarFisicas(){
-
-
-
+void Corredor::BorrarFisicas()
+{
 }
 
+void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning)
+{
 
-void Corredor::CrearRuedas(btRaycastVehicle* vehiculo,btRaycastVehicle::btVehicleTuning tuning){
+	btVector3 direccionRuedas(0, -1, 0);
 
-btVector3 direccionRuedas(0,-1,0);
+	btVector3 rotacionRuedas(-1, 0, 0);
 
-btVector3 rotacionRuedas(-1,0,0);
+	btScalar suspension(0.9);
 
-btScalar suspension(0.9);
+	btScalar anchoRueda(0.4);
 
-btScalar anchoRueda(0.4);
+	btScalar radioRueda(0.5);
 
-btScalar radioRueda(0.5);
+	btScalar alturaConexionChasis(1.2);
 
-btScalar alturaConexionChasis(1.2);
+	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
+	btVector3 puntoConexionChasis(cuboNodo->getScale().X - radioRueda, alturaConexionChasis, cuboNodo->getScale().Z - anchoRueda);
 
-//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
-btVector3 puntoConexionChasis(cuboNodo->getScale().X-radioRueda,alturaConexionChasis,cuboNodo->getScale().Z-anchoRueda);
+	vehiculo->setCoordinateSystem(0, 1, 2); // 0, 1, 2
 
-vehiculo->setCoordinateSystem(0, 1, 2); // 0, 1, 2
+	// Agrega las ruedas delanteras
+	vehiculo->addWheel((puntoConexionChasis * btVector3(4, 1, 2)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);
 
-// Agrega las ruedas delanteras
-	vehiculo-> addWheel ((puntoConexionChasis * btVector3 (4 , 1 , 2 )), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);
-
-	vehiculo-> addWheel ((puntoConexionChasis * btVector3 (-4 , 1 , 2 )), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true );
+	vehiculo->addWheel((puntoConexionChasis * btVector3(-4, 1, 2)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);
 
 	// Agrega las ruedas traseras
-	vehiculo-> addWheel ((puntoConexionChasis * btVector3 ( 4 , 1 , -2 )), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, false );
+	vehiculo->addWheel((puntoConexionChasis * btVector3(4, 1, -2)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, false);
 
-	vehiculo-> addWheel ((puntoConexionChasis * btVector3 (-4 , 1 , -2 )), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, false );
+	vehiculo->addWheel((puntoConexionChasis * btVector3(-4, 1, -2)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, false);
 
-
-
-for (int i = 0; i < vehiculo->getNumWheels(); i++)
+	for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
 		wheel.m_suspensionStiffness = 60;	  //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo
@@ -188,80 +168,110 @@ for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	 * wheel.m_maxSuspensionForce = tuning.m_maxSuspensionForce;
     */
 	}
-
 }
 
-void Corredor::actualizarRuedas(){		
-			btTransform ruedas= vehiculo->getWheelTransformWS(0);
+void Corredor::actualizarRuedas()
+{
+	btTransform ruedas = vehiculo->getWheelTransformWS(0);
 
-			rueda1->setPosition(vector3df(ruedas.getOrigin().getX(),ruedas.getOrigin().getY(),ruedas.getOrigin().getZ()));
-			rueda1->setRotation(vector3df(ruedas.getRotation().getX(),ruedas.getRotation().getY(),ruedas.getRotation().getZ()));
-			ruedas= vehiculo->getWheelTransformWS(1);
-			
-			
-			rueda2->setPosition(vector3df(ruedas.getOrigin().getX(),ruedas.getOrigin().getY(),ruedas.getOrigin().getZ()));
-			rueda2->setRotation(vector3df(ruedas.getRotation().getX(),ruedas.getRotation().getY(),ruedas.getRotation().getZ()));
-			ruedas= vehiculo->getWheelTransformWS(2);
+	rueda1->setPosition(vector3df(ruedas.getOrigin().getX(), ruedas.getOrigin().getY(), ruedas.getOrigin().getZ()));
+	rueda1->setRotation(vector3df(ruedas.getRotation().getX(), ruedas.getRotation().getY(), ruedas.getRotation().getZ()));
+	ruedas = vehiculo->getWheelTransformWS(1);
 
-			rueda3->setPosition(vector3df(ruedas.getOrigin().getX(),ruedas.getOrigin().getY(),ruedas.getOrigin().getZ()));
-			rueda3->setRotation(vector3df(ruedas.getRotation().getX(),ruedas.getRotation().getY(),ruedas.getRotation().getZ()));
-			ruedas= vehiculo->getWheelTransformWS(3);
+	rueda2->setPosition(vector3df(ruedas.getOrigin().getX(), ruedas.getOrigin().getY(), ruedas.getOrigin().getZ()));
+	rueda2->setRotation(vector3df(ruedas.getRotation().getX(), ruedas.getRotation().getY(), ruedas.getRotation().getZ()));
+	ruedas = vehiculo->getWheelTransformWS(2);
 
-			rueda4->setPosition(vector3df(ruedas.getOrigin().getX(),ruedas.getOrigin().getY(),ruedas.getOrigin().getZ()));
-			rueda4->setRotation(vector3df(ruedas.getRotation().getX(),ruedas.getRotation().getY(),ruedas.getRotation().getZ()));				
+	rueda3->setPosition(vector3df(ruedas.getOrigin().getX(), ruedas.getOrigin().getY(), ruedas.getOrigin().getZ()));
+	rueda3->setRotation(vector3df(ruedas.getRotation().getX(), ruedas.getRotation().getY(), ruedas.getRotation().getZ()));
+	ruedas = vehiculo->getWheelTransformWS(3);
+
+	rueda4->setPosition(vector3df(ruedas.getOrigin().getX(), ruedas.getOrigin().getY(), ruedas.getOrigin().getZ()));
+	rueda4->setRotation(vector3df(ruedas.getRotation().getX(), ruedas.getRotation().getY(), ruedas.getRotation().getZ()));
 }
 
+int Corredor::getCargador() { return cargador; };
+void Corredor::incCargador() { cargador++; };
+void Corredor::decCargador() { cargador--; };
 
-	int Corredor::getCargador(){return cargador;};
-	void  Corredor::incCargador(){cargador++;};
-	void  Corredor::decCargador(){cargador--;};
+void Corredor::lanzarItem(Proyectil *item)
+{
 
-
-
-void Corredor::lanzarItem(Proyectil *item){
-	
 	btRigidBody *rigidItem = item->inicializarFisicas();
-	
+
 	//item->lanzarItem(this);
 	float rotDisparo = cuboNodo->getRotation().Y * PI / 180;
-    item->getRigidBody()->setLinearVelocity(btVector3(sin(rotDisparo) * 100, 5.0f, cos(rotDisparo) * 100));
-    std::cout << "Disparo " << std::endl;
-    decCargador();
+	item->getRigidBody()->setLinearVelocity(btVector3(sin(rotDisparo) * 100, 5.0f, cos(rotDisparo) * 100));
+	std::cout << "Disparo " << std::endl;
+	decCargador();
 }
 
-void Corredor::SetFuerzaVelocidad(int turbo){
+void Corredor::SetFuerzaVelocidad(int turbo)
+{
 	fuerzaVelocidad = turbo;
 }
-
-int Corredor::getDireccionGrados() {
-	return direccionGrados;
+void Corredor::acelerar()
+{
+	vehiculo->applyEngineForce(Fuerza, 2);
+	vehiculo->applyEngineForce(Fuerza, 3);
+	vehiculo->setSteeringValue(btScalar(0), 0);
+	vehiculo->setSteeringValue(btScalar(0), 1);
 }
 
+void Corredor::frenar()
+{
+	vehiculo->applyEngineForce(FuerzaFrenado, 2);
+	vehiculo->applyEngineForce(FuerzaFrenado, 3);
+	vehiculo->setSteeringValue(btScalar(0), 0);
+	vehiculo->setSteeringValue(btScalar(0), 1);
+}
+
+void Corredor::girarDerecha()
+{
+	vehiculo->setSteeringValue(FuerzaGiro, 0);
+	vehiculo->setSteeringValue(FuerzaGiro, 1);
+}
+
+void Corredor::girarIzquierda()
+{
+	vehiculo->setSteeringValue(-FuerzaGiro, 0);
+	vehiculo->setSteeringValue(-FuerzaGiro, 1);
+}
 void Corredor::frenodemano()
 {
 	vehiculo->setBrake(FuerzaFrenoMano, 2);
 	vehiculo->setBrake(FuerzaFrenoMano, 3);
+}
+void Corredor::desacelerar()
+{
+	vehiculo->applyEngineForce(0, 2);
+	vehiculo->applyEngineForce(0, 3);
+
+	vehiculo->setSteeringValue(0, 0);
+	vehiculo->setSteeringValue(0, 1);
+
+	vehiculo->setBrake(60, 2);
+	vehiculo->setBrake(60, 3);
 }
 
 std::string Corredor::toString()
 {
 	std::string text = " -- CORREDOR -- ";
 	//Mostrar la Posicion y Velocidad actuales.
-	text += "\n Velocidad: ";
-	text += to_string(getVelocidad());
 	text += "\n Posicion [";
-	text += to_string(getPosicion().X);
+	text += to_string(getNodo()->getPosition().X);
 	text += ", ";
-	text += to_string(getPosicion().Y);
+	text += to_string(getNodo()->getPosition().Y);
 	text += ", ";
-	text += to_string(getPosicion().Z);
+	text += to_string(getNodo()->getPosition().Z);
 	text += "]\n";
 	text += " Direccion: ";
 	text += getDireccion();
 	text += " [ ";
 	text += to_string(getDireccionGrados());
 	text += " ]";
-	text += "\n Vector direccion(Orientacion) X[ " + to_string(orientacion.X) + " ] Y[ " + to_string(orientacion.Z) + "]";
+	text += "\n Vector direccion(Orientacion) X[ " + to_string(orientacion.X) +
+			" ] Y[ " + to_string(orientacion.Z) + "]";
 	text += "\n Velocidad (km/h): " + to_string(vehiculo->getCurrentSpeedKmHour());
 
 	return text;
@@ -290,7 +300,6 @@ int Corredor::getDireccionGrados()
 {
 	return direccionGrados;
 }
-
 
 vector3df Corredor::getVectorDireccion()
 {
@@ -361,63 +370,78 @@ void Corredor::updateDireccion()
 	updateDireccionGrados();
 
 	// NORTE
-	if (direccionGrados <= 20 || direccionGrados >= 341) {
+	if (direccionGrados <= 20 || direccionGrados >= 341)
+	{
 		norte = true;
 		sur = false;
 		este = false;
 		oeste = false;
 	}
-	else {
+	else
+	{
 		// NORESTE
-		if (direccionGrados >= 21 && direccionGrados <= 70) {
+		if (direccionGrados >= 21 && direccionGrados <= 70)
+		{
 			norte = true;
 			sur = false;
 			este = true;
 			oeste = false;
 		}
-		else {
+		else
+		{
 			// ESTE
-			if (direccionGrados >= 71 && direccionGrados <= 110) {
+			if (direccionGrados >= 71 && direccionGrados <= 110)
+			{
 				norte = false;
 				sur = false;
 				oeste = false;
 				este = true;
 			}
-			else {
+			else
+			{
 				// SURESTE
-				if (direccionGrados >= 111 && direccionGrados <= 160) {
+				if (direccionGrados >= 111 && direccionGrados <= 160)
+				{
 					norte = false;
 					sur = true;
 					este = true;
 					oeste = false;
 				}
-				else {
+				else
+				{
 					// SUR
-					if (direccionGrados >= 161 && direccionGrados <= 200) {
+					if (direccionGrados >= 161 && direccionGrados <= 200)
+					{
 						norte = false;
 						sur = true;
 						este = false;
 						oeste = false;
 					}
-					else {
+					else
+					{
 						// SUROESTE
-						if (direccionGrados >= 201 && direccionGrados <= 250) {
+						if (direccionGrados >= 201 && direccionGrados <= 250)
+						{
 							norte = false;
 							sur = true;
 							este = false;
 							oeste = true;
 						}
-						else {
+						else
+						{
 							// OESTE
-							if (direccionGrados >= 251 && direccionGrados <= 290) {
+							if (direccionGrados >= 251 && direccionGrados <= 290)
+							{
 								norte = false;
 								sur = false;
 								este = false;
 								oeste = true;
 							}
-							else {
+							else
+							{
 								// NOROESTE
-								if (direccionGrados >= 291 && direccionGrados <= 340) {
+								if (direccionGrados >= 291 && direccionGrados <= 340)
+								{
 									norte = true;
 									sur = false;
 									este = false;
@@ -431,7 +455,6 @@ void Corredor::updateDireccion()
 		}
 	}
 }
-
 
 /**
  * Mediante los boleanos de la clase, se obtiene la direccion

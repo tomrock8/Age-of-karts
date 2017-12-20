@@ -15,7 +15,7 @@
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "Camara3persona.hpp"
-#include "DebugFisicas.hpp" 
+#include "DebugFisicas.hpp"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
 #include "Proyectil.hpp"
 #include "Caja.hpp"
@@ -34,12 +34,9 @@ static void UpdateRender(btRigidBody *TObject);
 
 static btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass, int id);
 
-
-
-	static core::list<btRigidBody *> objetosm;
-	static ITimer *irrTimer;
-	static ILogger *irrLog;
-
+static core::list<btRigidBody *> objetosm;
+static ITimer *irrTimer;
+static ILogger *irrLog;
 
 #define TAMANYOCAJAS 10
 
@@ -52,21 +49,19 @@ int main()
 	// -----------------------------
 	Motor3d *m = Motor3d::getInstancia();
 
-
 	IVideoDriver *driver = m->getDriver();
 	ISceneManager *smgr = m->getScene();
 	IGUIEnvironment *guienv = m->getGUI();
-	IrrlichtDevice  *device = m->getDevice();
-    irrTimer = device->getTimer();
+	IrrlichtDevice *device = m->getDevice();
+	irrTimer = device->getTimer();
 	//----------------------------//
 	//---------BULLET-------------//
 	//----------------------------//
 	//inicializar mundo bullet
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	btBulletWorldImporter* fileLoader = new btBulletWorldImporter(mundo);
-	mundo->setGravity(btVector3(0,-10,0));
-
+	btBulletWorldImporter *fileLoader = new btBulletWorldImporter(mundo);
+	mundo->setGravity(btVector3(0, -10, 0));
 
 	//Debug BUllet
 	DebugDraw debugDraw(device);
@@ -78,35 +73,31 @@ int main()
 	//-----------------------------//
 
 	Pista *pistaca = Pista::getInstancia();
-	pistaca->setMapa("assets/carretera2.obj","fisicas/carretera2.bullet","assets/MapaPAth.obj");
-	
+	pistaca->setMapa("assets/carretera2.obj", "fisicas/carretera2.bullet", "assets/MapaPAth.obj");
 
 	//-----------------------------//
 	//-----GEOMETRIA COCHE---------//
 	//-----------------------------//
 	//Posicion del nodo y el bloque de colisiones centralizado:
 
-	int id=0;
-	vector3df pos(0,20,20);
+	int id = 0;
+	vector3df pos(0, 20, 20);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 	pj1->InicializarFisicas();
 	pj1->getNodo()->setID(id);
 	///////////////////////CAMARA///////////////////////////////////////////////
 	Camara3persona *camara = new Camara3persona();
 
-	btVector3 cubopos1(0,20,40);
-	vector3df cuboescala1(5,5,5);
+	btVector3 cubopos1(0, 20, 40);
+	vector3df cuboescala1(5, 5, 5);
 	id++;
 	//CreateBox(cubopos1,cuboescala1,10);
-
-
 
 	//----------------------------//
 	//---------OBJETOS------------//
 	//----------------------------//
-	
 
-	btVector3 posObj2(0,10,70);
+	btVector3 posObj2(0, 10, 70);
 	vector3df tamObj2(5.f, 20.f, 20.f);
 	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000, id);
 	//ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
@@ -119,25 +110,25 @@ int main()
 	//---------------------------//
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	IMeshSceneNode *turbo = smgr->addCubeSceneNode(5.0f);
-	vector3df escala = vector3df(2.5f,0.2f,1.25f);
+	vector3df escala = vector3df(2.5f, 0.2f, 1.25f);
 	turbo->setScale(escala);
 	turbo->setMaterialFlag(EMF_LIGHTING, false);
 	turbo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	turbo->setName("Turbo");
 	turbo->setID(id);
 	id++;
-		smgr->getMeshManipulator()->setVertexColors(turbo->getMesh(), SColor(255, 255, 0, 0));
+	smgr->getMeshManipulator()->setVertexColors(turbo->getMesh(), SColor(255, 255, 0, 0));
 	//Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/rust.png"));
-	
+
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
-	Transform.setOrigin(btVector3(25.0f,-4.5f,50.0f));
-	
+	Transform.setOrigin(btVector3(25.0f, -4.5f, 50.0f));
+
 	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
 
 	// Create the shape
-	btVector3 HalfExtents(escala.X*2,escala.Y+5,escala.Z*2);
+	btVector3 HalfExtents(escala.X * 2, escala.Y + 5, escala.Z * 2);
 	btCollisionShape *Shape = new btBoxShape(HalfExtents);
 
 	// Add mass
@@ -157,9 +148,8 @@ int main()
 	mundo->addRigidBody(RigidBody);
 	objetos.push_back(RigidBody);
 	bullet->setObjetos(objetos);
-	
 
-//-----------------------------------------------------------------------------------------------------------------------------------------//
+	//-----------------------------------------------------------------------------------------------------------------------------------------//
 	Proyectil *item;
 	core::list<Item *> items;
 	//btRigidBody *obje1=CreateBox(cubopos1,cuboescala1,10);
@@ -180,30 +170,29 @@ int main()
 	//----------
 	// Cajas de municion
 	//----------
-	btRigidBody* rigidCaja;
-	Caja** cajas;
-	cajas = new Caja*[TAMANYOCAJAS];
+	btRigidBody *rigidCaja;
+	Caja **cajas;
+	cajas = new Caja *[TAMANYOCAJAS];
 	vector3df posCaja(5.f, 10.f, -100.f);
-	for (int i=0; i<TAMANYOCAJAS; i++){
-		posCaja.Z+=10;
-		cajas[i]= new Caja(posCaja,id);
+	for (int i = 0; i < TAMANYOCAJAS; i++)
+	{
+		posCaja.Z += 10;
+		cajas[i] = new Caja(posCaja, id);
 		rigidCaja = cajas[i]->inicializarFisicas();
 		mundo->addRigidBody(rigidCaja);
 		objetos.push_back(rigidCaja);
 		bullet->setObjetos(objetos);
 		id++;
 	}
-//
+	//
 
-	
 	//----------------------------//
 	//------GESTOR COLISIONES------//
 	//----------------------------//
 
-	GestorColisiones *colisiones= new GestorColisiones();
+	GestorColisiones *colisiones = new GestorColisiones();
 
-
-//-----------------------------------------------------------------------------------------------------------------------------------------//
+	//-----------------------------------------------------------------------------------------------------------------------------------------//
 	// -----------------------------//  INTERFAZ
 	// -----------------------------
 	stringw text = L"Datos del jugador:\n"; // PARA MODIFICACIONES FUTURAS
@@ -214,30 +203,30 @@ int main()
 		false,						 // Mostrar bordes
 		true,						 // Cortar en varias lineas
 		0,							 // Nodo padre
-		0,					 // Id del elemento
+		0,							 // Id del elemento
 		true);						 // Rellenado (o transparente)
 	textoUI->setOverrideFont(fuente);
 
 	int lastFPS = -1;
-	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;	
-// -----------------------------
+	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;
+	// -----------------------------
 	//  GAME LOOP
-	// -----------------------------	
+	// -----------------------------
 	while (m->getDevice()->run())
 	{
 		if (m->getDevice()->isWindowActive())
 		{
+			text = "";
 			DeltaTime = irrTimer->getTime() - TimeStamp;
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
 			//pj1->movimiento();
-			item=pj1->actualizarItem(item,id);
+			item = pj1->actualizarItem(item, id);
 			items.push_back(item);
 			//pj1->actualizarRuedas();
-			camara->moveCameraControl(pj1,device);
+			camara->moveCameraControl(pj1, device);
 			colisiones->ComprobarColisiones(pj1, cajas);
 
-			
 			pj1->update();
 
 			//pj2->movimiento();
@@ -246,17 +235,16 @@ int main()
 			text += "\n ---- CORREDOR 1 JUGADOR ----\n";
 			text += pj1->toString().c_str();
 
-			colisiones->ComprobarColisiones(objetos, mundo, pj1, cajas, item);
-
 			//text += "\n\n ---- CORREDOR 2 IA ----\n";
 			//text += pj2->toString();
 
-
-
 			//-------ENTRADA TECLADO ----------//
-			if (teclado->isKeyDown(KEY_KEY_R)) {
+			/*
+			if (teclado->isKeyDown(KEY_KEY_R))
+			{
 				pj2->movimiento();
 			}
+			*/
 
 			if (teclado->isKeyDown(KEY_ESCAPE))
 			{
@@ -264,8 +252,6 @@ int main()
 				return 0;
 			}
 
-
-			
 			//-------ENTRADA TECLADO FIN----------//
 			int fps = driver->getFPS();
 			if (lastFPS != fps)
@@ -281,7 +267,6 @@ int main()
 
 			textoUI->setText(text.c_str());
 
-
 			//	RENDER
 			m->dibujar();
 
@@ -290,11 +275,9 @@ int main()
 			driver->setMaterial(debugMat);
 			driver->setTransform(ETS_WORLD, IdentityMatrix);
 			mundo->debugDrawWorld();
-				guienv->drawAll();
+			guienv->drawAll();
 
 			driver->endScene();
-
-
 		}
 		else
 		{
@@ -307,52 +290,52 @@ int main()
 	return 0;
 }
 
-
-
-void UpdatePhysics(u32 TDeltaTime) {
+void UpdatePhysics(u32 TDeltaTime)
+{
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	mundo->stepSimulation(TDeltaTime * 0.001f, 60);
-	int c=0;
-	for(list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
+	int c = 0;
+	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator)
+	{
 		c++;
-	
-		UpdateRender(*Iterator);
-	}	
 
+		UpdateRender(*Iterator);
+	}
 }
 // Passes bullet's orientation to irrlicht
-void UpdateRender(btRigidBody *TObject) {
-	
+void UpdateRender(btRigidBody *TObject)
+{
+
 	ISceneNode *Node = static_cast<ISceneNode *>(TObject->getUserPointer());
 	// Set position
 	btVector3 Point = TObject->getCenterOfMassPosition();
-	
+
 	//btTransform t;
-	//TObject->getMotionState()->getWorldTransform(t);	
+	//TObject->getMotionState()->getWorldTransform(t);
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if(strcmp(Node->getName(),"Jugador") == 0)
-	Node->setPosition(vector3df((f32)Point[0],(f32)Point[1]+1,(f32)Point[2]));
+	if (strcmp(Node->getName(), "Jugador") == 0)
+		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 1, (f32)Point[2]));
 	else
-	Node->setPosition(vector3df((f32)Point[0],(f32)Point[1],(f32)Point[2]));
+		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));
 	// Set rotation
 	vector3df Euler;
-	const btQuaternion& TQuat = TObject->getOrientation();
+	const btQuaternion &TQuat = TObject->getOrientation();
 	quaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
 	q.toEuler(Euler);
 	Euler *= RADTODEG;
 	Node->setRotation(Euler);
-
 }
 
-btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass, int id) {
+btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass, int id)
+{
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	Motor3d *m = Motor3d::getInstancia();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
-	
+
 	ISceneNode *Node = m->getScene()->addCubeSceneNode(1.0f);
 	Node->setScale(TScale);
 	//----------------------------------
@@ -362,10 +345,10 @@ btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btSc
 	//----------------------------------
 	Node->setMaterialFlag(EMF_LIGHTING, 1);
 
-	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true); 
-	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/rust.png")); 
-  	Node->setName("Destruible"); 
-  	Node->setID(id);
+	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/rust.png"));
+	Node->setName("Destruible");
+	Node->setID(id);
 	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
 	// Set the initial position of the object
 	btTransform Transform;

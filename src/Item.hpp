@@ -26,7 +26,7 @@ class Item
     f32 tamanyo;
     vector3df escala;
     vector3df posicion;
-    char *nombre;
+    const char *nombre;
     int id;
 };
 

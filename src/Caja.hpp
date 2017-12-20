@@ -18,7 +18,7 @@ class Caja
     btRigidBody* inicializarFisicas();
     ISceneNode* getNodo(){return nodo;};
     btRigidBody* getRigidBody(){return rigidBody;};
-    char* getNombre(){return nombre;};
+    const char* getNombre(){return nombre;};
     int getIDCaja(){return id;};
     void Delete(Corredor *pj1Col);
 
@@ -29,7 +29,7 @@ class Caja
     f32 tamanyo;
     vector3df escala;
     vector3df posicion;
-    char *nombre;
+    const char* nombre;
     int id;
 };
 

@@ -2,7 +2,7 @@ FUENTE := $(wildcard src/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
 LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lGL -lSDL_image -lGLU -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader
 RUTAS := -I. -I/usr/local/include/bullet/
-CFLAGS := -ggdb 
+CFLAGS := -ggdb -std=c++11
 .PHONY: objdir info all 
 
 all: objdir exec

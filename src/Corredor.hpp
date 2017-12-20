@@ -54,7 +54,7 @@ class Corredor
 	int fuerzaVelocidad;
 
 	btCompoundShape *CentroGravedad;
-	int cargador = 0;
+	int cargador = 100;
 
 	btVector3 direccionRuedas;
 	btVector3 rotacionRuedas;

@@ -200,8 +200,8 @@ void Corredor::lanzarItem(Proyectil *item)
 	btRigidBody *rigidItem = item->inicializarFisicas();
 
 	//item->lanzarItem(this);
-	float rotDisparo = cuboNodo->getRotation().Y * PI / 180;
-	item->getRigidBody()->setLinearVelocity(btVector3(sin(rotDisparo) * 100, 5.0f, cos(rotDisparo) * 100));
+
+	item->getRigidBody()->setLinearVelocity(btVector3(orientacion.X * 100, 5.0f, orientacion.Z * 100));
 	std::cout << "Disparo " << std::endl;
 	decCargador();
 }
@@ -346,7 +346,7 @@ void Corredor::updateVectorDireccion()
 	float anguloX = cuboNodo->getRotation().Y * PI / 180;
 
 	//cout<< "Rotacion en Y=="<< anguloZ  * 180/PI << endl;
-	orientacion = vector3df(sin(anguloX), 0, -cos(anguloZ));
+	orientacion = vector3df(sin(anguloX), 0, cos(anguloZ));
 
 	orientacion.normalize();
 	//cout<< "ORIENTACION XNORMAL=="<< orientacion.X << " ORIENTACION ZNORMAL=="<< orientacion.Z  << endl;

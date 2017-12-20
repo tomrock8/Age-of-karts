@@ -5,14 +5,13 @@
 
 using namespace std;
 
-class Proyectil: public Item
+class Proyectil : public Item
 {
-  public:
-    Proyectil(vector3df posicionItem, int idItem);
-    void lanzarItem();
-    
-  private:
+public:
+  Proyectil(vector3df posicionItem, int idItem);
+  void lanzarItem();
 
+private:
 };
 
 #endif

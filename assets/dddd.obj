@@ -1,0 +1,19 @@
+# Blender v2.78 (sub 0) OBJ File: 'carretera2.0.blend'
+# www.blender.org
+mtllib dddd.mtl
+v -136.319000 -5.332397 15.637197
+v -140.923294 -5.332397 15.637197
+g Turbo
+cstype bspline
+deg 1
+curv 0.0 1.0 -1 -2
+parm u 0.000000 0.000000 1.000000 1.000000
+end
+v -17.428152 -5.332397 -70.454430
+v -19.426895 -5.332397 -70.454430
+g Turbo.001
+cstype bspline
+deg 1
+curv 0.0 1.0 -1 -2
+parm u 0.000000 0.000000 1.000000 1.000000
+end

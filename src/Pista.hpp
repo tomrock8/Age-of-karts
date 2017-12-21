@@ -11,6 +11,7 @@
 #include <fstream>
 #include "Waypoint.hpp"
 #include "Turbo.hpp"
+#include "Caja.hpp"
 
 using namespace std;
 
@@ -41,6 +42,7 @@ private:
   btDefaultMotionState *MotionState; // posicion del cuerpo de colision
   Waypoint **arrayWaypoints;
   Turbo    **arrayTurbos;
+  Caja     **arrayCajas;
   btScalar Masa;
   ISceneNode *Mapa;
   Turbo *t;

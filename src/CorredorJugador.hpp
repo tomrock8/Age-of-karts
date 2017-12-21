@@ -6,6 +6,7 @@
 #include "Pista.hpp"
 #include "Corredor.hpp"
 #include "Turbo.hpp"
+#include "Caja.hpp"
 using namespace std;
 
 class CorredorJugador : public Corredor

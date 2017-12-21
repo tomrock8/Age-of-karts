@@ -73,7 +73,7 @@ int main()
 	//-----------------------------//
 
 	Pista *pistaca = Pista::getInstancia();
-	pistaca->setMapa("assets/carretera2.0.obj", "fisicas/carretera2.bullet", "assets/MapaPAth.obj");
+	pistaca->setMapa("assets/carretera2.0.obj", "fisicas/carretera2.bullet", "assets/MapaItems.obj");
 	
 	pistaca->getArrayWaypoints();
 	

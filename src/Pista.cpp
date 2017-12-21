@@ -81,6 +81,8 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	int j;
 	std::string wX, wY, wZ;
 	int tamanyoArrayWaypoints = 0;
+	int tamanyoArrayCajas = 0;
+	int tamanyoArrayTurbo = 0;
 	ifstream myfile(waypoints);
 	if (myfile.is_open())
 	{
@@ -88,7 +90,14 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 		//crear el array de waypoints para almacenar el path
 		tamanyoArrayWaypoints = stoi(line);
+		//getline(myfile, tamanyoArrayWaypoints, ' ');
+		//getline(myfile, tamanyoArrayCajas, ' ');
+		//getline(myfile, tamanyoArrayTurbo, ' ');
 		arrayWaypoints = new Waypoint *[tamanyoArrayWaypoints];
+		//arrayTurbos    = new Turbo    *[tamanyoArrayTurbo];
+		//arrayCajas     = new Caja     *[tamanyoArrayCajas];
+
+		cout<<"waypoints:"<<tamanyoArrayWaypoints<<"turbo: "<<tamanyoArrayTurbo<<"caja: "<<tamanyoArrayCajas<<endl;
 		//se crea un array con las posiciones de los waypoints que se recogeran del fichero
 
 		for (int j = 0; j < tamanyoArrayWaypoints; j++)

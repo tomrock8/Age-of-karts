@@ -95,6 +95,7 @@ Item *CorredorJugador::actualizarItem(Item *item, int &id)
 				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
 				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
 				Estatico *est = new Estatico(posDisparo, id);
+				est->inicializarFisicas();
 				soltarItem(est);
 				items.push_back(est);
 			}

@@ -15,6 +15,7 @@ public:
     Turbo(int id, btVector3 pos, bool estado);
     bool getTurboActivo();
     void setTurboActivo(Corredor *corredor, bool s);   
+    void setFrenadaActivo(Corredor *corredor, bool s);   
     int getTiempoTurbo();
     void setTurbo(bool);
     void quitarTurbo();

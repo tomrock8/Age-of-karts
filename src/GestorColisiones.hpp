@@ -22,6 +22,7 @@ public:
   bool JugadorCaja(Caja *cajas[]);
   bool JugadorTurbo();
   bool objetoDestruible();
+  bool JugadorEstatico();
 
 private:
   Corredor *pj1Col;

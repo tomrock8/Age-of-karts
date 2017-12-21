@@ -33,6 +33,7 @@ void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[])
             if (JugadorCaja(cajas))continue;
             if (JugadorTurbo())continue;
             if (objetoDestruible())continue;
+            if (JugadorEstatico())continue;
         }
     }
 }
@@ -51,6 +52,46 @@ bool GestorColisiones::JugadorTurbo()
         {
             Turbo *t = mapa->getTurbo();
             t->setTurboActivo(pj1Col, true);
+
+            //cout << "Jugador - Turbo\n";
+        }
+    }
+}
+
+//
+// Comprobar colisiones entre Jugador y turbo
+//
+bool GestorColisiones::JugadorEstatico()
+{   
+    MotorFisicas *bullet = MotorFisicas::getInstancia();
+    Pista *pista = Pista::getInstancia();
+    btDynamicsWorld *mundo = bullet->getMundo();
+    core::list<Item *> items = pista->getItems();
+    core::list<btRigidBody *> objetos = bullet->getObjetos();
+    Pista *mapa = Pista::getInstancia();
+    //cout << TimeStamp << endl;
+
+    if (strcmp("Jugador", nodoA->getName()) == 0)
+    {
+        if (strcmp("Estatico", nodoB->getName()) == 0)
+        {
+            Turbo *t = mapa->getTurbo();
+            t->setFrenadaActivo(pj1Col, true);
+            int idB = nodoB->getID();
+            for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
+            {
+                Item *item = *Iterator;
+                //cout << "NodoB: " << idB << " == NodoItem: " << item->getNodo()->getID() << endl;
+                if (item->getNodo()->getID() == idB)
+                {
+                    cout << "Entro\n";
+                    item->Delete();
+                    Iterator = items.erase(Iterator);
+                    pista->setItems(items);
+
+                    return true;
+                }
+            }
 
             //cout << "Jugador - Turbo\n";
         }

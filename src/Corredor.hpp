@@ -11,6 +11,7 @@
 #include "btBulletCollisionCommon.h"
 #include "MotorFisicas.hpp"
 #include "Proyectil.hpp"
+#include "Estatico.hpp"
 using namespace std;
 
 class Corredor
@@ -19,10 +20,12 @@ class Corredor
 	Corredor(stringw rutaObj, vector3df pos);
 	void InicializarFisicas();
 	void lanzarItem(Proyectil *item, int direcionItem);
+	void soltarItem(Estatico *item);
 	void incCargador();
 	void decCargador();
 	void SetFuerzaVelocidad(int turbo);
 	std::string toString();
+	void setTipoObj();
 
 	//Update
 	void update();
@@ -35,6 +38,7 @@ class Corredor
 	int getDireccionGrados();
 	vector3df getVectorDireccion();
 	int getCargador();
+	int getTipoObj();
 
   protected:
 	//objetos
@@ -55,6 +59,7 @@ class Corredor
 
 	btCompoundShape *CentroGravedad;
 	int cargador = 0;
+	int tipoObj = 0;
 
 	btVector3 posicion;
 	btVector3 direccionRuedas;

@@ -68,7 +68,9 @@ void Caja::romper(Corredor *pj1Col){
 			// Delete irrlicht node
 			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
 			Node->setVisible(false);
-			if(pj1Col->getCargador()==0) pj1Col->incCargador();
+			if(pj1Col->getTipoObj()==0){
+				pj1Col->setTipoObj();
+			}
 
 			break;
 		}

@@ -156,7 +156,7 @@ int main()
 	bullet->setObjetos(objetos);
 
 	//-----------------------------------------------------------------------------------------------------------------------------------------//
-	Proyectil *item;
+	Item *item;
 	core::list<Item *> items;
 	//btRigidBody *obje1=CreateBox(cubopos1,cuboescala1,10);
 

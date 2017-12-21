@@ -194,9 +194,16 @@ void Corredor::actualizarRuedas()
 }
 
 int Corredor::getCargador() { return cargador; };
+int Corredor::getTipoObj() { return tipoObj; };
 void Corredor::incCargador() { cargador++; };
 void Corredor::decCargador() { cargador--; };
 
+void Corredor::setTipoObj()
+{
+	srand(time(NULL));
+	tipoObj = rand() % 2 + 1;
+	cout << "Random ------>"<< tipoObj << endl;
+}
 
 /*
 	Recibe un item de jugadorCorredor o jugadorIA y le aplica una velocidad para lanzarlo 
@@ -207,12 +214,18 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 {
 
 	btRigidBody *rigidItem = item->inicializarFisicas();
-	if(direccionItem==1)
+	if (direccionItem == 1)
 		item->getRigidBody()->setLinearVelocity(btVector3(orientacion.X * 100, 5.0f, orientacion.Z * 100));
-	else if(direccionItem==-1)
+	else if (direccionItem == -1)
 		item->getRigidBody()->setLinearVelocity(btVector3(-orientacion.X * 100, 5.0f, -orientacion.Z * 100));
 	std::cout << "Disparo " << std::endl;
+	tipoObj = 0;
 	decCargador();
+}
+
+void Corredor::soltarItem(Estatico *item)
+{
+	tipoObj = 0;
 }
 
 void Corredor::SetFuerzaVelocidad(int turbo)

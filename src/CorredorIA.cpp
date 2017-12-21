@@ -13,17 +13,17 @@ CorredorIA::CorredorIA(stringw rutaObj, vector3df pos, Waypoint **arrayWaypoints
 		//puntoActual=arrayWaypoints[i];
 		if (i == 0) {
 			puntoActual = arrayWaypoints[i];
-			diferenciaX = abs(posicion.getX() - arrayWaypoints[i]->getPosicion().X);
-			diferenciaZ = abs(posicion.getZ() - arrayWaypoints[i]->getPosicion().Z);
+			//diferenciaX = std::abs(posicion.getX() - arrayWaypoints[i]->getPosicion().X);
+			//diferenciaZ = std::abs(posicion.getZ() - arrayWaypoints[i]->getPosicion().Z);
 
 		}else {
-
-			if ((abs(posicion.getX() - arrayWaypoints[i]->getPosicion().X)) <= diferenciaX && (abs(posicion.getZ() - arrayWaypoints[i]->getPosicion().Z)) <= diferenciaZ) {
+			/*
+			if ((std::abs(posicion.getX() - arrayWaypoints[i]->getPosicion().X)) <= diferenciaX && (std::abs(posicion.getZ() - arrayWaypoints[i]->getPosicion().Z)) <= diferenciaZ) {
 				puntoActual = arrayWaypoints[i];
-				diferenciaX = abs(posicion.getX() - arrayWaypoints[i]->getPosicion().X);
-				diferenciaZ = abs(posicion.getZ() - arrayWaypoints[i]->getPosicion().Z);
+				//diferenciaX = std::abs(posicion.getX() - arrayWaypoints[i]->getPosicion().X);
+				//diferenciaZ = std::abs(posicion.getZ() - arrayWaypoints[i]->getPosicion().Z);
 			}
-
+			*/
 		}
 	}
 

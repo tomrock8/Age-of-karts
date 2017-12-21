@@ -11,7 +11,7 @@ class CorredorJugador : public Corredor
 {
   public:
 	CorredorJugador(stringw rutaObj, vector3df pos);
-	Proyectil *actualizarItem(Proyectil *item, int &id);
+	Item *actualizarItem(Item *item, int &id);
 	void movimiento();
 	std::string toString();
 
@@ -19,7 +19,7 @@ class CorredorJugador : public Corredor
 
   private:
 	bool checkItem;
-	Proyectil *actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos);
+	//Item *actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos);
 };
 
 #endif /* CORREDORJUGADOR_H */

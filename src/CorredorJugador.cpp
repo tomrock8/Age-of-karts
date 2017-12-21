@@ -61,7 +61,7 @@ Item *CorredorJugador::actualizarItem(Item *item, int &id)
 	Pista *pista = Pista::getInstancia();
 	core::list<Item *> items = pista->getItems();
 	int direccionItem = 1;
-	vector3df posDisparo(cuboNodo->getPosition().X + orientacion.X * 2, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.Z * 2);
+	vector3df posDisparo(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.Z * 5);
 
 	if (teclado->isKeyup(KEY_KEY_P))
 	{
@@ -79,8 +79,8 @@ Item *CorredorJugador::actualizarItem(Item *item, int &id)
 			checkItem = true;
 			if (teclado->isKeyDown(KEY_DOWN))
 			{
-				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 2;
-				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 2;
+				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
+				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
 				direccionItem = -1;
 			}
 
@@ -90,8 +90,10 @@ Item *CorredorJugador::actualizarItem(Item *item, int &id)
 				lanzarItem(pro, direccionItem);
 				items.push_back(pro);
 			}
-			else
+			else if(tipoObj == 2)
 			{
+				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
+				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
 				Estatico *est = new Estatico(posDisparo, id);
 				soltarItem(est);
 				items.push_back(est);

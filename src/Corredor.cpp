@@ -7,7 +7,7 @@
 //-------------------------\*
 Corredor::Corredor(stringw rutaObj, vector3df pos)
 {
-	cargador = 0;
+	cargador = 10;
 	fuerzaVelocidad = 10000;
 	Motor3d *m = Motor3d::getInstancia();
 	ISceneManager *smgr = m->getScene();
@@ -197,14 +197,20 @@ int Corredor::getCargador() { return cargador; };
 void Corredor::incCargador() { cargador++; };
 void Corredor::decCargador() { cargador--; };
 
-void Corredor::lanzarItem(Proyectil *item)
+
+/*
+	Recibe un item de jugadorCorredor o jugadorIA y le aplica una velocidad para lanzarlo 
+	direccionItem: 1=Delante
+				  -1=Atras
+*/
+void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 {
 
 	btRigidBody *rigidItem = item->inicializarFisicas();
-
-	//item->lanzarItem(this);
-
-	item->getRigidBody()->setLinearVelocity(btVector3(orientacion.X * 100, 5.0f, orientacion.Z * 100));
+	if(direccionItem==1)
+		item->getRigidBody()->setLinearVelocity(btVector3(orientacion.X * 100, 5.0f, orientacion.Z * 100));
+	else if(direccionItem==-1)
+		item->getRigidBody()->setLinearVelocity(btVector3(-orientacion.X * 100, 5.0f, -orientacion.Z * 100));
 	std::cout << "Disparo " << std::endl;
 	decCargador();
 }
@@ -340,7 +346,7 @@ void Corredor::updateDireccionGrados()
 	}
 
 	direccionGrados = grados;
-	cout<<"X: "<<direccionGrados<<endl;
+	//cout<<"X: "<<direccionGrados<<endl;
 }
 
 /**

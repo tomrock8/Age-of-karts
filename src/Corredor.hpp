@@ -18,7 +18,7 @@ class Corredor
   public:
 	Corredor(stringw rutaObj, vector3df pos);
 	void InicializarFisicas();
-	void lanzarItem(Proyectil *item);
+	void lanzarItem(Proyectil *item, int direcionItem);
 	void incCargador();
 	void decCargador();
 	void SetFuerzaVelocidad(int turbo);

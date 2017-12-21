@@ -135,38 +135,6 @@ bool GestorColisiones::objetoDestruible()
                     return true;
                 }
             }
-            /*
-            if (item->Delete()){
-                delete item;
-            }
-            for(int i=0; i< TAMANYOCAJAS; i++){
-}
-
-void GestorColisiones::objetoDestruible(core::list<btRigidBody *> &objetosMundo, btDiscreteDynamicsWorld *mundoMetodo)
-{
-    if (strcmp("Proyectil", nodoA->getName()) == 0)
-    {
-        if (strcmp("Destruible", nodoB->getName()) == 0)
-        {
-            cout << "Destruible - Item\n";
-            //int idB = nodoB->getID();
-            item->Delete(objetosMundo, mundoMetodo);
-            delete item;
-            /*for(int i=0; i< TAMANYOCAJAS; i++){
-                if(cajas[i]!=NULL){
-                    if(cajas[i]->getIDCaja()==idB){
-                        cajas[i]->Delete(objetosMundo, mundoMetodo, pj1Col);
-                        delete cajas[i];
-                        reorganizar=true;
-                    }
-                    if(reorganizar){
-                        if(i<TAMANYOCAJAS-1)
-                            cajas[i]=cajas[i+1];
-                        else
-                            cajas[i] = NULL;
-                    }
-                }
-            }*/
         }
     }
     return colision;

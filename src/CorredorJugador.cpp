@@ -62,28 +62,34 @@ Proyectil *CorredorJugador::actualizarItem(Proyectil *item, int &id)
 	CTeclado *teclado = CTeclado::getInstancia();
 	Pista *pista = Pista::getInstancia();
 	core::list<Item *> items = pista->getItems();
+	int direccionItem = 1;
+	vector3df posDisparo(cuboNodo->getPosition().X+orientacion.X*2, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z+orientacion.Z*2);
 
 	if (teclado->isKeyup(KEY_KEY_P))
 	{
 		
-		vector3df posDisparo(cuboNodo->getPosition().X+orientacion.X*2, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z+orientacion.Z*2);
 		//if P is pressed, shoot a box
 		if (checkItem == true)
 		{
-			item = new Proyectil(posDisparo, id);
-			items.push_back(item);
-			pista->setItems(items);
-			//Llama a la funcion de la clase padre
-			lanzarItem(item);
-			id++;
 			checkItem = false;
 		}
 	}
 	else if (teclado->isKeyDown(KEY_KEY_P))
 	{
-		if (cargador > 0)
+		if (cargador > 0 && !checkItem)
 		{
 			checkItem = true;
+			if(teclado->isKeyDown(KEY_DOWN)){
+				posDisparo.X = cuboNodo->getPosition().X-orientacion.X*2;
+				posDisparo.Z = cuboNodo->getPosition().Z-orientacion.Z*2;
+				direccionItem=-1;
+			}
+				item = new Proyectil(posDisparo, id);
+				lanzarItem(item, direccionItem);
+			items.push_back(item);
+			pista->setItems(items);
+			//Llama a la funcion de la clase padre
+			id++;
 		}
 	}
 	return item;

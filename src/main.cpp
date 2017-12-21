@@ -73,7 +73,7 @@ int main()
 	//-----------------------------//
 
 	Pista *pistaca = Pista::getInstancia();
-	pistaca->setMapa("assets/carretera2.obj", "fisicas/carretera2.bullet", "assets/MapaPAth.obj");
+	pistaca->setMapa("assets/carretera2.0.obj", "fisicas/carretera2.bullet", "assets/MapaPAth.obj");
 	
 	pistaca->getArrayWaypoints();
 	
@@ -156,14 +156,13 @@ int main()
 	//
 
 	//----------------------------//
-	//------GESTOR COLISIONES------//
+	//------GESTOR COLISIONES-----//
 	//----------------------------//
 
 	GestorColisiones *colisiones = new GestorColisiones();
-
-	//-----------------------------------------------------------------------------------------------------------------------------------------//
-	// -----------------------------//  INTERFAZ
-	// -----------------------------
+	// -----------------------------//
+	// -----------INTERFAZ----------//
+	// -----------------------------//
 	stringw text = L"Datos del jugador:\n"; // PARA MODIFICACIONES FUTURAS
 	IGUIFont *fuente = guienv->getFont("assets/fuente.bmp");
 	IGUIStaticText *textoUI = guienv->addStaticText(
@@ -178,9 +177,9 @@ int main()
 
 	int lastFPS = -1;
 	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;
-	// -----------------------------
-	//  GAME LOOP
-	// -----------------------------
+	// -----------------------------//
+	// ----------GAME LOOP----------//
+	// -----------------------------//
 	while (m->getDevice()->run())
 	{
 		if (m->getDevice()->isWindowActive())
@@ -298,7 +297,7 @@ void UpdateRender(btRigidBody *TObject)
 
 			if(mapa->getTurbo()->getTiempoTurbo() + 2000 == m->getTime()){
 				cout<<"ha pasado dos segundos"<<endl;
-			
+				mapa->getTurbo()->quitarTurbo();
 			}
 		}
 	}else

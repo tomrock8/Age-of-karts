@@ -17,7 +17,9 @@ public:
     void setTurboActivo(Corredor *corredor, bool s);   
     int getTiempoTurbo();
     void setTurbo(bool);
+    void quitarTurbo();
 private:
+    Corredor *corredor;
     IMeshSceneNode *turbo;
     vector3df escala;
     btTransform transform;

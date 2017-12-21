@@ -76,18 +76,11 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	btDynamicsWorld *mundo = bullet->getMundo();
 	//bullet->setFisicas(fisicas);---------------------------------------------------------------Comentado por error, segmentation fault
 	//lectura de waypoints y creacion de los menesteres pertinentes
-	// ----------------------------//
-	// ---------Waypoints----------//
-	// ----------------------------//
 	//lectura de fichero
-
 	std::string line;
-
 	int j;
 	std::string wX, wY, wZ;
 	int tamanyoArrayWaypoints = 0;
-	
-
 	ifstream myfile(waypoints);
 	if (myfile.is_open())
 	{

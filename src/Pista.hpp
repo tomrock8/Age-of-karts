@@ -40,6 +40,7 @@ private:
   btCollisionShape *FormaColision;
   btDefaultMotionState *MotionState; // posicion del cuerpo de colision
   Waypoint **arrayWaypoints;
+  Turbo    **arrayTurbos;
   btScalar Masa;
   ISceneNode *Mapa;
   Turbo *t;

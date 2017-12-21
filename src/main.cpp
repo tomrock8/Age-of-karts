@@ -173,12 +173,14 @@ int main()
 	btRigidBody *rigidCaja;
 	Caja **cajas;
 	cajas = new Caja *[TAMANYOCAJAS];
-	vector3df posCaja(5.f, 10.f, -100.f);
+	vector3df posCaja(5.f, -1.f, -100.f);
 	for (int i = 0; i < TAMANYOCAJAS; i++)
 	{
 		posCaja.Z += 10;
 		cajas[i] = new Caja(posCaja, id);
 		rigidCaja = cajas[i]->inicializarFisicas();
+		rigidCaja->setCollisionFlags(RigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	
 		mundo->addRigidBody(rigidCaja);
 		objetos.push_back(rigidCaja);
 		bullet->setObjetos(objetos);

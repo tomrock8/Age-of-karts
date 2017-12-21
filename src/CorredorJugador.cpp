@@ -63,8 +63,8 @@ Proyectil *CorredorJugador::actualizarItem(Proyectil *item, int &id)
 
 	if (teclado->isKeyup(KEY_KEY_P))
 	{
-
-		vector3df posDisparo(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + 5);
+		
+		vector3df posDisparo(cuboNodo->getPosition().X+orientacion.X*2, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z+orientacion.Z*2);
 		//if P is pressed, shoot a box
 		if (checkItem == true)
 		{

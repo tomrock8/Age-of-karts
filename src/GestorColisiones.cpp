@@ -74,7 +74,6 @@ bool GestorColisiones::JugadorTurbo()
 //
 bool GestorColisiones::JugadorCaja(Caja *cajas[])
 {
-    bool reorganizar = false;
     MotorFisicas *bullet = MotorFisicas::getInstancia();
     btDynamicsWorld *mundo = bullet->getMundo();
     core::list<btRigidBody *> objetos = bullet->getObjetos();
@@ -82,7 +81,7 @@ bool GestorColisiones::JugadorCaja(Caja *cajas[])
 
     if (strcmp("Jugador", nodoA->getName()) == 0)
     {
-        if (strcmp("Caja", nodoB->getName()) == 0)
+        if (strcmp("Caja", nodoB->getName()) == 0 && nodoB->isVisible())
         {
             colision = true;
             cout << "Jug - Caja\n";
@@ -93,16 +92,7 @@ bool GestorColisiones::JugadorCaja(Caja *cajas[])
                 {
                     if (cajas[i]->getIDCaja() == idB)
                     {
-                        cajas[i]->Delete(pj1Col);
-                        delete cajas[i];
-                        reorganizar = true;
-                    }
-                    if (reorganizar)
-                    {
-                        if (i < TAMANYOCAJAS - 1)
-                            cajas[i] = cajas[i + 1];
-                        else
-                            cajas[i] = NULL;
+                        cajas[i]->romper(pj1Col);
                     }
                 }
             }
@@ -134,7 +124,7 @@ bool GestorColisiones::objetoDestruible()
             for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
             {
                 Item *item = *Iterator;
-                cout << "NodoB: " << idB << " == NodoItem: " << item->getNodo()->getID() << endl;
+                //cout << "NodoB: " << idB << " == NodoItem: " << item->getNodo()->getID() << endl;
                 if (item->getNodo()->getID() == idB)
                 {
                     cout << "Entro\n";

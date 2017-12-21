@@ -54,7 +54,28 @@ btRigidBody *Caja::inicializarFisicas()
 	return rigidBody;
 }
 
-void Caja::Delete(Corredor *pj1Col)
+void Caja::romper(Corredor *pj1Col){
+	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	core::list<btRigidBody *> objetos = bullet->getObjetos();
+
+	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator)
+	{
+		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(*Iterator)->getUserPointer());
+		if (nodoActual->getID() == id)
+		{
+			btRigidBody *Object = *Iterator;
+
+			// Delete irrlicht node
+			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
+			Node->setVisible(false);
+			if(pj1Col->getCargador()==0) pj1Col->incCargador();
+
+			break;
+		}
+	}
+}
+
+void Caja::Delete()
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -71,11 +92,6 @@ void Caja::Delete(Corredor *pj1Col)
 			// Delete irrlicht node
 			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
 
-			if (strcmp("Caja", Node->getName()) == 0)
-			{
-				if (pj1Col->getCargador() == 0)
-					pj1Col->incCargador();
-			}
 			Node->remove();
 
 			// Remove the object from the world

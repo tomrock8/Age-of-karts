@@ -7,7 +7,7 @@
 //-------------------------\*
 Corredor::Corredor(stringw rutaObj, vector3df pos)
 {
-	cargador = 10;
+	cargador = 0;
 	fuerzaVelocidad = 10000;
 	Motor3d *m = Motor3d::getInstancia();
 	ISceneManager *smgr = m->getScene();

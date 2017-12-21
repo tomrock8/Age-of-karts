@@ -27,7 +27,7 @@ public:
   void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
   core::list<Item *> getItems();
   void setItems(irr::core::list<Item *> itemMetodo);
-
+  Waypoint **getArrayWaypoints();
 private:
   Pista(void);
   static Pista *instancia;
@@ -37,7 +37,7 @@ private:
   btRigidBody *CuerpoColisionMapa;
   btCollisionShape *FormaColision;
   btDefaultMotionState *MotionState; // posicion del cuerpo de colision
-
+  Waypoint **arrayWaypoints;
   btScalar Masa;
   ISceneNode *Mapa;
 

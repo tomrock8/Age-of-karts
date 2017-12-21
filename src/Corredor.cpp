@@ -21,6 +21,9 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	// Desactivar la iluminacion del cubo
 	cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
 	cuboNodo->setPosition(pos);
+	posicion.setX(pos.X);
+	posicion.setY(pos.Y);
+	posicion.setZ(pos.Z);
 	//-------------bullet----------------
 	rueda1 = smgr->addCubeSceneNode(1.f);
 	rueda2 = smgr->addCubeSceneNode(1.f);
@@ -313,6 +316,9 @@ vector3df Corredor::getVectorDireccion()
 void Corredor::update()
 {
 	movimiento();
+	posicion.setX(cuboNodo->getPosition().X);
+	posicion.setY(cuboNodo->getPosition().Y);
+	posicion.setZ(cuboNodo->getPosition().Z);
 	actualizarRuedas();
 	updateDireccion();
 }
@@ -334,6 +340,7 @@ void Corredor::updateDireccionGrados()
 	}
 
 	direccionGrados = grados;
+	cout<<"X: "<<direccionGrados<<endl;
 }
 
 /**
@@ -370,7 +377,7 @@ void Corredor::updateDireccion()
 	updateDireccionGrados();
 
 	// NORTE
-	if (direccionGrados <= 20 || direccionGrados >= 341)
+	if (direccionGrados <= 20 && direccionGrados >= 341)
 	{
 		norte = true;
 		sur = false;

@@ -111,7 +111,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	int j;
 	std::string wX, wY, wZ;
 	int tamanyoArrayWaypoints = 0;
-	Waypoint **arrayWaypoints;
+	
 
 	ifstream myfile(waypoints);
 	if (myfile.is_open())
@@ -170,6 +170,9 @@ irr::core::list<Item *> Pista::getItems()
 void Pista::setItems(irr::core::list<Item *> itemMetodo)
 {
 	Items = itemMetodo;
+}
+Waypoint **Pista::getArrayWaypoints(){
+	return arrayWaypoints;
 }
 
 /*btTriangleMesh* Pista::getBulletTriangleMesh(IMesh *const mesh, vector3df escala)

@@ -46,6 +46,8 @@ void CorredorJugador::movimiento()
 
 	if (!comprobadorMovimiento)
 		desacelerar();
+
+
 }
 
 void CorredorJugador::update()

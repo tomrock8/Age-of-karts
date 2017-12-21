@@ -74,7 +74,9 @@ int main()
 
 	Pista *pistaca = Pista::getInstancia();
 	pistaca->setMapa("assets/carretera2.obj", "fisicas/carretera2.bullet", "assets/MapaPAth.obj");
-
+	
+	pistaca->getArrayWaypoints();
+	
 	//-----------------------------//
 	//-----GEOMETRIA COCHE---------//
 	//-----------------------------//
@@ -85,6 +87,10 @@ int main()
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 	pj1->InicializarFisicas();
 	pj1->getNodo()->setID(id);
+
+	//CorredorIA *pj2 = new CorredorIA("assets/coche.obj", pos);
+	//pj2->InicializarFisicas();
+	//pj2->getNodo()->setID(id);
 	///////////////////////CAMARA///////////////////////////////////////////////
 	Camara3persona *camara = new Camara3persona();
 

@@ -38,7 +38,7 @@ btRigidBody *Caja::inicializarFisicas()
 
 	// Add mass
 	btVector3 LocalInertia;
-	masa = 1;
+	masa = 0;
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
 	// Create the rigid body object
@@ -54,7 +54,18 @@ btRigidBody *Caja::inicializarFisicas()
 	return rigidBody;
 }
 
+void Caja::comprobarRespawn(){
+	Motor3d *mundo = Motor3d::getInstancia();
+	if(!nodo->isVisible()){
+		if(mundo->getTime()-timer >= 5000){
+			cout<<"Visible\n";
+			nodo->setVisible(true);
+		}
+	}
+}
+
 void Caja::romper(Corredor *pj1Col){
+	Motor3d *mundo = Motor3d::getInstancia();
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 
@@ -68,6 +79,7 @@ void Caja::romper(Corredor *pj1Col){
 			// Delete irrlicht node
 			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
 			Node->setVisible(false);
+			timer = mundo->getTime();
 			if(pj1Col->getTipoObj()==0){
 				pj1Col->setTipoObj();
 			}

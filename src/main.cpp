@@ -146,7 +146,7 @@ int main()
 		posCaja.Z += 10;
 		cajas[i] = new Caja(posCaja, id);
 		rigidCaja = cajas[i]->inicializarFisicas();
-		//rigidCaja->setCollisionFlags(RigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		rigidCaja->setCollisionFlags(rigidCaja->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	
 		mundo->addRigidBody(rigidCaja);
 		objetos.push_back(rigidCaja);
@@ -189,6 +189,12 @@ int main()
 			DeltaTime = irrTimer->getTime() - TimeStamp;
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
+
+			for (int i = 0; i < TAMANYOCAJAS; i++)
+			{
+				cajas[i]->comprobarRespawn();
+			}
+
 			//pj1->movimiento();
 			item = pj1->actualizarItem(item, id);
 			items.push_back(item);

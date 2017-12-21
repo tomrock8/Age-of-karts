@@ -22,6 +22,7 @@ public:
   const char *getNombre() { return nombre; };
   int getIDCaja() { return id; };
   void romper(Corredor *pj1Col);
+  void comprobarRespawn();
   void Delete();
 
 private:
@@ -33,6 +34,7 @@ private:
   vector3df posicion;
   const char *nombre;
   int id;
+  int timer;
 };
 
 #endif

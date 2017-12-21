@@ -30,12 +30,9 @@ void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[])
                }
             }*/
 
-            if (JugadorCaja(cajas))
-                continue;
-            if (JugadorTurbo())
-                continue;
-            if (objetoDestruible())
-                continue;
+            if (JugadorCaja(cajas))continue;
+            if (JugadorTurbo())continue;
+            if (objetoDestruible())continue;
         }
     }
 }
@@ -45,28 +42,19 @@ void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[])
 //
 bool GestorColisiones::JugadorTurbo()
 {
-    MotorFisicas *bullet = MotorFisicas::getInstancia();
-    btDynamicsWorld *mundo = bullet->getMundo();
-    core::list<btRigidBody *> objetos = bullet->getObjetos();
-    bool colision = false;
-    Motor3d *m = Motor3d::getInstancia();
-    ITimer *irrTimer;
-    irrTimer = m->getDevice()->getTimer();
-    u32 TimeStamp = irrTimer->getTime();
-
+    Pista *mapa = Pista::getInstancia();
     //cout << TimeStamp << endl;
 
     if (strcmp("Jugador", nodoA->getName()) == 0)
     {
         if (strcmp("Turbo", nodoB->getName()) == 0)
         {
-            colision = true;
-            pj1Col->SetFuerzaVelocidad(30000);
+            Turbo *t = mapa->getTurbo();
+            t->setTurboActivo(pj1Col, true);
 
             //cout << "Jugador - Turbo\n";
         }
     }
-    return colision;
 }
 
 //

@@ -10,6 +10,7 @@
 #include <string>
 #include <fstream>
 #include "Waypoint.hpp"
+#include "Turbo.hpp"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ public:
   //btTriangleMesh *getBulletTriangleMesh(IMesh *const mesh, vector3df escala);
   void BorrarFisicas();
   void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
+  Turbo* getTurbo();
   core::list<Item *> getItems();
   void setItems(irr::core::list<Item *> itemMetodo);
   Waypoint **getArrayWaypoints();
@@ -40,7 +42,7 @@ private:
   Waypoint **arrayWaypoints;
   btScalar Masa;
   ISceneNode *Mapa;
-
+  Turbo *t;
   irr::core::list<Item *> Items;
 };
 

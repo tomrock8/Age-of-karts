@@ -26,7 +26,7 @@ class Corredor
 	void SetFuerzaVelocidad(int turbo);
 	std::string toString();
 	void setTipoObj();
-
+	
 	//Update
 	void update();
 
@@ -55,7 +55,6 @@ class Corredor
 	btCollisionShape *FormaColision;		//contornoB
 	btRigidBody *CuerpoColisionChasis;
 
-	int fuerzaVelocidad;
 
 	btCompoundShape *CentroGravedad;
 	int cargador = 0;
@@ -99,4 +98,4 @@ class Corredor
 	void updateDireccionGrados();
 };
 
-#endif /* JUGADOR_H */
+#endif /* CORREDOR_H */

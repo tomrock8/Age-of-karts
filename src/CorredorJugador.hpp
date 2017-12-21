@@ -5,6 +5,7 @@
 #include "IrrlichtLib.hpp"
 #include "Pista.hpp"
 #include "Corredor.hpp"
+#include "Turbo.hpp"
 using namespace std;
 
 class CorredorJugador : public Corredor

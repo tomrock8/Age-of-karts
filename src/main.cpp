@@ -115,46 +115,7 @@ int main()
 	//----------TURBO------------//
 	//---------------------------//
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
-	IMeshSceneNode *turbo = smgr->addCubeSceneNode(5.0f);
-	vector3df escala = vector3df(2.5f, 0.2f, 1.25f);
-	turbo->setScale(escala);
-	turbo->setMaterialFlag(EMF_LIGHTING, false);
-	turbo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	turbo->setName("Turbo");
-	turbo->setID(id);
-	id++;
-	smgr->getMeshManipulator()->setVertexColors(turbo->getMesh(), SColor(255, 255, 0, 0));
-	//Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/rust.png"));
-
-	// Set the initial position of the object
-	btTransform Transform;
-	Transform.setIdentity();
-	Transform.setOrigin(btVector3(25.0f, -4.5f, 50.0f));
-
-	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
-
-	// Create the shape
-	btVector3 HalfExtents(escala.X * 2, escala.Y + 5, escala.Z * 2);
-	btCollisionShape *Shape = new btBoxShape(HalfExtents);
-
-	// Add mass
-	btVector3 LocalInertia;
-	Shape->calculateLocalInertia(0, LocalInertia);
-
-	// Create the rigid body object
-	btRigidBody *RigidBody = new btRigidBody(0, MotionState, Shape, LocalInertia);
-
-	RigidBody->setActivationState(DISABLE_DEACTIVATION);
-	//ACTIVA LA COLISION SIN COLISIONAR CON EL OBJETO
-	RigidBody->setCollisionFlags(RigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	// Store a pointer to the irrlicht node so we can update it later
-	RigidBody->setUserPointer((void *)(turbo));
-
-	// Add it to the world
-	mundo->addRigidBody(RigidBody);
-	objetos.push_back(RigidBody);
-	bullet->setObjetos(objetos);
-
+	
 	//-----------------------------------------------------------------------------------------------------------------------------------------//
 	Item *item;
 	core::list<Item *> items;
@@ -185,7 +146,7 @@ int main()
 		posCaja.Z += 10;
 		cajas[i] = new Caja(posCaja, id);
 		rigidCaja = cajas[i]->inicializarFisicas();
-		rigidCaja->setCollisionFlags(RigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		//rigidCaja->setCollisionFlags(RigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	
 		mundo->addRigidBody(rigidCaja);
 		objetos.push_back(rigidCaja);
@@ -315,25 +276,35 @@ void UpdatePhysics(u32 TDeltaTime)
 // Passes bullet's orientation to irrlicht
 void UpdateRender(btRigidBody *TObject)
 {
-
+	Motor3d *m = Motor3d::getInstancia();
 	ISceneNode *Node = static_cast<ISceneNode *>(TObject->getUserPointer());
 	// Set position
 	btVector3 Point = TObject->getCenterOfMassPosition();
 
+	Pista *mapa = Pista::getInstancia();
+	
 	//btTransform t;
-	//TObject->getMotionState()->getWorldTransform(t);
+	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if (strcmp(Node->getName(), "Jugador") == 0)
-		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 1, (f32)Point[2]));
-	else
-		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));
+	if(strcmp(Node->getName(),"Jugador") == 0){
+		Node->setPosition(vector3df((f32)Point[0],(f32)Point[1]+1,(f32)Point[2]));
+		if(mapa->getTurbo()->getTurboActivo()){
+
+			if(mapa->getTurbo()->getTiempoTurbo() + 2000 == m->getTime()){
+				cout<<"ha pasado dos segundos"<<endl;
+			
+			}
+		}
+	}else
+	Node->setPosition(vector3df((f32)Point[0],(f32)Point[1],(f32)Point[2]));
 	// Set rotation
 	vector3df Euler;
-	const btQuaternion &TQuat = TObject->getOrientation();
+	const btQuaternion& TQuat = TObject->getOrientation();
 	quaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
 	q.toEuler(Euler);
 	Euler *= RADTODEG;
 	Node->setRotation(Euler);
+
 }
 
 btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass, int id)

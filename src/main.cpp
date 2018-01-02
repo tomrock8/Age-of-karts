@@ -21,6 +21,7 @@
 #include "Caja.hpp"
 #include "Item.hpp"
 #include "GestorColisiones.hpp"
+#include "TextoPantalla.hpp"
 
 using namespace std;
 
@@ -74,9 +75,9 @@ int main()
 
 	Pista *pistaca = Pista::getInstancia();
 	pistaca->setMapa("assets/carretera2.0.obj", "fisicas/carretera2.bullet", "assets/MapaItems.obj");
-	
+
 	pistaca->getArrayWaypoints();
-	
+
 	//-----------------------------//
 	//-----GEOMETRIA COCHE---------//
 	//-----------------------------//
@@ -85,7 +86,7 @@ int main()
 	int id = 0;
 	vector3df pos(0, 20, 20);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
-	pj1->InicializarFisicas();
+
 	pj1->getNodo()->setID(id);
 
 	//CorredorIA *pj2 = new CorredorIA("assets/coche.obj", pos);
@@ -115,9 +116,9 @@ int main()
 	//----------TURBO------------//
 	//---------------------------//
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
-	
+
 	//-----------------------------------------------------------------------------------------------------------------------------------------//
-	Item *item;
+	Item *item = NULL;
 	core::list<Item *> items;
 	//btRigidBody *obje1=CreateBox(cubopos1,cuboescala1,10);
 
@@ -147,7 +148,7 @@ int main()
 		cajas[i] = new Caja(posCaja, id);
 		rigidCaja = cajas[i]->inicializarFisicas();
 		rigidCaja->setCollisionFlags(rigidCaja->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	
+
 		mundo->addRigidBody(rigidCaja);
 		objetos.push_back(rigidCaja);
 		bullet->setObjetos(objetos);
@@ -160,20 +161,7 @@ int main()
 	//----------------------------//
 
 	GestorColisiones *colisiones = new GestorColisiones();
-	// -----------------------------//
-	// -----------INTERFAZ----------//
-	// -----------------------------//
-	stringw text = L"Datos del jugador:\n"; // PARA MODIFICACIONES FUTURAS
-	IGUIFont *fuente = guienv->getFont("assets/fuente.bmp");
-	IGUIStaticText *textoUI = guienv->addStaticText(
-		text.c_str(),				 // Texto
-		rect<s32>(10, 10, 400, 300), // Rectangulo de los bordes
-		false,						 // Mostrar bordes
-		true,						 // Cortar en varias lineas
-		0,							 // Nodo padre
-		0,							 // Id del elemento
-		true);						 // Rellenado (o transparente)
-	textoUI->setOverrideFont(fuente);
+	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 
 	int lastFPS = -1;
 	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;
@@ -184,7 +172,8 @@ int main()
 	{
 		if (m->getDevice()->isWindowActive())
 		{
-			text = "";
+			textoDebug->limpiar();
+
 			DeltaTime = irrTimer->getTime() - TimeStamp;
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
@@ -194,23 +183,22 @@ int main()
 				cajas[i]->comprobarRespawn();
 			}
 
-			//pj1->movimiento();
 			item = pj1->actualizarItem(item, id);
 			items.push_back(item);
-			//pj1->actualizarRuedas();
+
 			camara->moveCameraControl(pj1, device);
 			colisiones->ComprobarColisiones(pj1, cajas);
 
 			pj1->update();
 
-			//pj2->movimiento();
+			//pj2->update();
 			camara->moveCameraControl(pj1, device);
 
-			text += "\n ---- CORREDOR 1 JUGADOR ----\n";
-			text += pj1->toString().c_str();
+			textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
+			textoDebug->agregar(pj1->toString());
 
-			//text += "\n\n ---- CORREDOR 2 IA ----\n";
-			//text += pj2->toString();
+			//textoDebug->agregar("\n\n ---- CORREDOR 2 IA ----\n");
+			//textoDebug->agregar(pj2->toString());
 
 			//-------ENTRADA TECLADO ----------//
 			/*
@@ -238,9 +226,6 @@ int main()
 				m->getDevice()->setWindowCaption(tmp.c_str());
 				lastFPS = fps;
 			}
-
-			textoUI->setText(text.c_str());
-
 			//	RENDER
 			m->dibujar();
 
@@ -287,21 +272,22 @@ void UpdateRender(btRigidBody *TObject)
 	btVector3 Point = TObject->getCenterOfMassPosition();
 
 	Pista *mapa = Pista::getInstancia();
-	
+
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if(strcmp(Node->getName(),"Jugador") == 0){
-		Node->setPosition(vector3df((f32)Point[0],(f32)Point[1]+1,(f32)Point[2]));
-		if(mapa->getTurbo()->getTurboActivo()){
+	if (strcmp(Node->getName(), "Jugador") == 0) {
+		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 1, (f32)Point[2]));
+		if (mapa->getTurbo()->getTurboActivo()) {
 
-			if(mapa->getTurbo()->getTiempoTurbo() + 2000 == m->getTime()){
-				cout<<"ha pasado dos segundos"<<endl;
+			if (mapa->getTurbo()->getTiempoTurbo() + 2000 == m->getTime()) {
+				cout << "ha pasado dos segundos" << endl;
 				mapa->getTurbo()->quitarTurbo();
 			}
 		}
-	}else
-	Node->setPosition(vector3df((f32)Point[0],(f32)Point[1],(f32)Point[2]));
+	}
+	else
+		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));
 	// Set rotation
 	vector3df Euler;
 	const btQuaternion& TQuat = TObject->getOrientation();

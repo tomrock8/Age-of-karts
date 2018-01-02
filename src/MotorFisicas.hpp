@@ -21,7 +21,7 @@ class MotorFisicas
 	btDynamicsWorld *getMundo();
 	irr::core::list<btRigidBody *> getObjetos();
 	void setObjetos(irr::core::list<btRigidBody *> objetos);
-	void *setFisicas(const char *pene);
+	void setFisicas(const char *f);
 
   private:
 	MotorFisicas(void);

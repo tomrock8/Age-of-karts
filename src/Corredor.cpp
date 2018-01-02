@@ -1,6 +1,8 @@
 #include "IrrlichtLib.hpp"
 #include "Corredor.hpp"
 #include <string>
+#include <time.h>
+
 
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
@@ -13,13 +15,16 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	coche = smgr->getMesh(rutaObj);
 	cuboNodo = smgr->addMeshSceneNode(coche, 0);
 	//cuboNodo = smgr->addCubeSceneNode(1.5f);
-	cuboNodo->setName("Jugador");
-	//cambiar a color rojo del coche
-	smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
-	cuboNodo->setScale(vector3df(1, 1, 1.5));
-	// Desactivar la iluminacion del cubo
-	cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	cuboNodo->setPosition(pos);
+	if (cuboNodo) {
+		cuboNodo->setName("Jugador");
+		//cambiar a color rojo del coche
+		smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
+		cuboNodo->setScale(vector3df(1, 1, 1.5));
+		// Desactivar la iluminacion del cubo
+		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
+		cuboNodo->setPosition(pos);
+	}
+
 	posicion.setX(pos.X);
 	posicion.setY(pos.Y);
 	posicion.setZ(pos.Z);
@@ -47,6 +52,9 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	FuerzaGiro = btScalar(0.3); //manejo a la hora de girar
 	FuerzaFrenoMano = btScalar(800);
 	FuerzaFrenadoReposo = btScalar(60);
+
+	if (cuboNodo)
+		InicializarFisicas();
 }
 
 void Corredor::InicializarFisicas()
@@ -107,6 +115,7 @@ void Corredor::InicializarFisicas()
 	// luego declaramos sus ruedas
 
 	// inicializamos la posicion de las ruedas
+
 }
 
 void Corredor::BorrarFisicas()
@@ -168,7 +177,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	 * wheel.m_bIsFrontWheel = isFrontWheel;
 	 * wheel.m_maxSuspensionTravelCm = tuning.m_maxSuspensionTravelCm;
 	 * wheel.m_maxSuspensionForce = tuning.m_maxSuspensionForce;
-    */
+	*/
 	}
 }
 
@@ -201,11 +210,11 @@ void Corredor::setTipoObj()
 {
 	srand(time(NULL));
 	tipoObj = rand() % 2 + 1;
-	cout << "Random ------>"<< tipoObj << endl;
+	cout << "Random ------>" << tipoObj << endl;
 }
 
 /*
-	Recibe un item de jugadorCorredor o jugadorIA y le aplica una velocidad para lanzarlo 
+	Recibe un item de jugadorCorredor o jugadorIA y le aplica una velocidad para lanzarlo
 	direccionItem: 1=Delante
 				  -1=Atras
 */
@@ -292,7 +301,7 @@ std::string Corredor::toString()
 	text += to_string(getDireccionGrados());
 	text += " ]";
 	text += "\n Vector direccion(Orientacion) X[ " + to_string(orientacion.X) +
-			" ] Y[ " + to_string(orientacion.Z) + "]";
+		" ] Y[ " + to_string(orientacion.Z) + "]";
 	text += "\n Velocidad (km/h): " + to_string(vehiculo->getCurrentSpeedKmHour());
 
 	return text;

@@ -67,9 +67,9 @@ void Pista::InicializarFisicas()
 void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 {
 	Mapa = smgr->addMeshSceneNode(smgr->getMesh(mapa));
-	Mapa->setName("MAPA1");
 	if (Mapa)
 	{
+		Mapa->setName("MAPA1");
 		Mapa->setMaterialFlag(EMF_LIGHTING, false);
 	}
 	MotorFisicas *bullet = MotorFisicas::getInstancia();

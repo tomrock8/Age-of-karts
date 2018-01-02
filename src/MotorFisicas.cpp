@@ -43,7 +43,7 @@ void MotorFisicas::setObjetos(irr::core::list<btRigidBody *> obj)
 	objetos = obj;
 }
 
-void *MotorFisicas::setFisicas(const char *f)
+void MotorFisicas::setFisicas(const char *f)
 {
 	cout << f << endl;
 	fisicas = f;

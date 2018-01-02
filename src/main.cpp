@@ -272,7 +272,6 @@ void UpdateRender(btRigidBody *TObject)
 	btVector3 Point = TObject->getCenterOfMassPosition();
 
 	Pista *mapa = Pista::getInstancia();
-
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));

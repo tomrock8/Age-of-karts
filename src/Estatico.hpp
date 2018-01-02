@@ -10,8 +10,10 @@ class Estatico : public Item
   public:
     Estatico(vector3df posicionItem, int idItem);
     void soltarItem();
+    btRigidBody *inicializarFisicas();
 
   private:
+    bool colision;
 };
 
 #endif

@@ -64,18 +64,7 @@ void Turbo::setTurboActivo(Corredor *c, bool s){
 
 
 }
-void Turbo::setFrenadaActivo(Corredor *c, bool s){
-    corredor = c;
-    Motor3d *m = Motor3d::getInstancia();
-    turboActivo = s;
-    if(turboActivo){//si esta activo almacenamos tiempo y aumentamos fuerza
-            corredor->SetFuerzaVelocidad(-5000);
-            tiempo = m->getDevice()->getTimer()->getTime();
-    }  
-    else corredor->SetFuerzaVelocidad(10000);
 
-
-}
 void Turbo::quitarTurbo(){
     turboActivo = false;
     corredor->SetFuerzaVelocidad(6000);

@@ -19,6 +19,8 @@ public:
   bool Delete();
   ISceneNode *getNodo();
   btRigidBody *getRigidBody();
+    void setColision(bool b);
+    bool getColision();
 
 protected:
   ISceneNode *nodo;
@@ -29,6 +31,7 @@ protected:
   vector3df posicion;
   const char *nombre;
   int id;
+  bool colision;
 };
 
 #endif

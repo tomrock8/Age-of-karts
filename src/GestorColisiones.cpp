@@ -77,19 +77,21 @@ bool GestorColisiones::JugadorEstatico()
 	{
 		if (strcmp("Estatico", nodoB->getName()) == 0)
 		{
-			Turbo *t = mapa->getTurbo();
-			t->setFrenadaActivo(pj1Col, true);
+			//Turbo *t = mapa->getTurbo();
+			//t->setFrenadaActivo(pj1Col, true);
 			int idB = nodoB->getID();
 			for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
 			{
 				Item *item = *Iterator;
-				//cout << "NodoB: " << idB << " == NodoItem: " << item->getNodo()->getID() << endl;
 				if (item->getNodo()->getID() == idB)
 				{
-					cout << "Entro\n";
-					item->Delete();
-					Iterator = items.erase(Iterator);
-					pista->setItems(items);
+					if(item->getColision()){
+						item->Delete();
+						Iterator = items.erase(Iterator);
+						pista->setItems(items);
+					}else{
+						item->setColision(true);
+					}
 
 					return true;
 				}

@@ -23,6 +23,8 @@ Item::Item(vector3df posicionItem, int idItem)
 
 	id = idItem;
 	nodo->setID(id);
+
+	colision=false;
 }
 
 btRigidBody *Item::inicializarFisicas()
@@ -61,6 +63,15 @@ btRigidBody *Item::inicializarFisicas()
 	bullet->setObjetos(objetos);
 
 	return rigidBody;
+}
+
+void Item::setColision(bool b){
+    colision=b;
+}
+
+bool Item::getColision()
+{
+    return colision;
 }
 
 bool Item::Delete()

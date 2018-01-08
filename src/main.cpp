@@ -29,6 +29,7 @@ using namespace std;
 #pragma comment(lib, "Irrlicht.lib")
 #endif
 #define TAMANYOCAJAS 10
+#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 //funciones
 static void UpdatePhysics(u32 TDeltaTime);
 static void UpdateRender(btRigidBody *TObject);
@@ -74,8 +75,9 @@ int main()
 	//-----------------------------//
 
 	Pista *pistaca = Pista::getInstancia();
-	pistaca->setMapa("assets/carretera2.0.obj", "fisicas/carretera2.bullet", "assets/MapaItems.obj");
-
+	cout<<" voy a criar el mapa"<<endl;
+	pistaca->setMapa("assets/Mapa01/MapaIsla.obj", "fisicas/MapaIsla.bullet", "assets/Mapa01/WPTrbBox.obj");
+	
 	pistaca->getArrayWaypoints();
 
 	//-----------------------------//
@@ -84,7 +86,7 @@ int main()
 	//Posicion del nodo y el bloque de colisiones centralizado:
 
 	int id = 0;
-	vector3df pos(0, 20, 20);
+	vector3df pos(0, 40, 300);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 
 	pj1->getNodo()->setID(id);
@@ -103,7 +105,7 @@ int main()
 	//----------------------------//
 	//---------OBJETOS------------//
 	//----------------------------//
-
+	//---------------------------------------------------------------------------------------DESDE AQUI 
 	btVector3 posObj2(0, 10, 70);
 	vector3df tamObj2(5.f, 20.f, 20.f);
 	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000, id);
@@ -112,28 +114,14 @@ int main()
 	////nodoObj2->setID(id);
 	////nodoObj2->setName("Destruible");
 	id++;
-	//---------------------------//
-	//----------TURBO------------//
-	//---------------------------//
+
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 
-	//-----------------------------------------------------------------------------------------------------------------------------------------//
+	
 	Item *item = NULL;
+		
+	//Item *item;
 	core::list<Item *> items;
-	//btRigidBody *obje1=CreateBox(cubopos1,cuboescala1,10);
-
-	//
-	// Caja destruible WIP
-	//
-	//cout<<"------------->"<<pj1->getNodo()->getPosition().Z<<endl;
-	//cubopos1 = vector3df(std::stof(pj1->getNodo()->getPosition().X),std::stof(pj1->getNodo()->getPosition().Y), std::stof(pj1->getNodo()->getPosition().Z+5));
-	//vector3df tamObj2(5.f, 20.f, 20.f);
-	//CreateBox(cubopos1,cuboescala1,10);
-	//ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
-	////El problema esta en que estas variables no cambian las variables de obje2
-	//nodoObj2->setID(id);
-	//nodoObj2->setName("Destruible");
-	//id++;
 
 	//----------
 	// Cajas de municion
@@ -154,8 +142,8 @@ int main()
 		bullet->setObjetos(objetos);
 		id++;
 	}
-	//
-
+	
+	//---------------------------------------------------------------------------------------HASTA AQUI ( si se borra el turbo y las cajas no funcionan, cosa que no entiendo porque las cajas ya no las creo aqui)
 	//----------------------------//
 	//------GESTOR COLISIONES-----//
 	//----------------------------//
@@ -168,26 +156,32 @@ int main()
 	// -----------------------------//
 	// ----------GAME LOOP----------//
 	// -----------------------------//
+		 driver->beginScene(true, true, video::SColor(255,32,223,255));
+
 	while (m->getDevice()->run())
 	{
 		if (m->getDevice()->isWindowActive())
 		{
+		
 			textoDebug->limpiar();
 
 			DeltaTime = irrTimer->getTime() - TimeStamp;
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
-
-			for (int i = 0; i < TAMANYOCAJAS; i++)
+		
+				for (int i = 0; i < ARRAY_SIZE(pistaca->getArrayCaja())-1; i++)
 			{
-				cajas[i]->comprobarRespawn();
+				cout<<"hola que haces: "<<pistaca->getArrayCaja()[i]->getIDCaja()<<endl;
 			}
+			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
+			
 
 			item = pj1->actualizarItem(item, id);
 			items.push_back(item);
 
 			camara->moveCameraControl(pj1, device);
-			colisiones->ComprobarColisiones(pj1, cajas);
+			colisiones->ComprobarColisiones(pj1, cajas);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
 			pj1->update();
 
@@ -275,12 +269,12 @@ void UpdateRender(btRigidBody *TObject)
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if (strcmp(Node->getName(), "Jugador") == 0) {
-		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 1, (f32)Point[2]));
-		if (mapa->getTurbo()->getTurboActivo()) {
-
-			if (mapa->getTurbo()->getTiempoTurbo() + 2000 == m->getTime()) {
-				cout << "ha pasado dos segundos" << endl;
+	if(strcmp(Node->getName(),"Jugador") == 0){
+		Node->setPosition(vector3df((f32)Point[0],(f32)Point[1]+1,(f32)Point[2]));
+		if(mapa->getTurbo()->getTurboActivo()){
+			cout<<"turbo Activo"<<endl;
+			if(mapa->getTurbo()->getTiempoTurbo() + 2000 > m->getTime()-100 && mapa->getTurbo()->getTiempoTurbo() + 2000 < m->getTime()+100){
+				cout<<"ha pasado dos segundos"<<endl;
 				mapa->getTurbo()->quitarTurbo();
 			}
 		}

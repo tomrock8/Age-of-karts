@@ -2,6 +2,7 @@
 //el turbo se creara con una id y una posicion que se recojera por fichero 
 Turbo::Turbo(int id, btVector3 pos, bool estado){
     turboActivo = estado;
+    turboTocado = estado;
     MotorFisicas *bullet = MotorFisicas::getInstancia();
     irr:core::list<btRigidBody *> objetos = bullet->getObjetos();
     Motor3d *m = Motor3d::getInstancia();
@@ -53,22 +54,32 @@ bool Turbo::getTurboActivo(){
     return turboActivo;
 } 
 void Turbo::setTurboActivo(Corredor *c, bool s){
+    cout<<"entro al turbo"<<endl;
     corredor = c;
     Motor3d *m = Motor3d::getInstancia();
     turboActivo = s;
-    if(turboActivo){//si esta activo almacenamos tiempo y aumentamos fuerza
-            corredor->SetFuerzaVelocidad(30000);
-            tiempo = m->getDevice()->getTimer()->getTime();
-    }  
+    turboTocado = s;
+    if(turboActivo && turboTocado){//si esta activo almacenamos tiempo y aumentamos fuerza
+            corredor->SetFuerzaVelocidad(15000);
+            corredor->acelerar();
+          
+           tiempo = m->getDevice()->getTimer()->getTime();
+        
+    }
     else corredor->SetFuerzaVelocidad(10000);
 
-
+    turboTocado= false;      
 }
 
 void Turbo::quitarTurbo(){
     turboActivo = false;
+    turboTocado = false;
     corredor->SetFuerzaVelocidad(6000);
+    //corredor->acelerar();
 }
 int Turbo::getTiempoTurbo(){
     return tiempo;
+}
+void Turbo::setTurboTocado(bool s){
+    s = turboTocado;
 }

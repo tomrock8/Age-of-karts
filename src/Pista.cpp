@@ -1,5 +1,6 @@
 
 #include "Pista.hpp"
+#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 
 //------------------------------\*
 //---CONSTRUCTOR pista----------\*
@@ -79,61 +80,81 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	//lectura de fichero
 	std::string line;
 	int j;
-	std::string wX, wY, wZ;
-	int tamanyoArrayWaypoints = 0;
-	int tamanyoArrayCajas = 0;
-	int tamanyoArrayTurbo = 0;
+	std::string tipo, pX, pY, pZ;
+	std::string tamanyoArrayWaypoints;
+	std::string tamanyoArrayCajas;
+	std::string tamanyoArrayTurbo;
+	int tipoObj;
+	int wp = 0;
+	int turbos = 0;
+	int cajas = 0;
 	ifstream myfile(waypoints);
+
 	if (myfile.is_open())
 	{
-		getline(myfile, line);
+		
 
 		//crear el array de waypoints para almacenar el path
-		tamanyoArrayWaypoints = stoi(line);
-		//getline(myfile, tamanyoArrayWaypoints, ' ');
-		//getline(myfile, tamanyoArrayCajas, ' ');
-		//getline(myfile, tamanyoArrayTurbo, ' ');
-		arrayWaypoints = new Waypoint *[tamanyoArrayWaypoints];
-		//arrayTurbos    = new Turbo    *[tamanyoArrayTurbo];
-		//arrayCajas     = new Caja     *[tamanyoArrayCajas];
+		getline(myfile, tamanyoArrayWaypoints, ' ');
+		getline(myfile, tamanyoArrayTurbo, ' ');
+		getline(myfile, tamanyoArrayCajas, ' ');
 
-		cout<<"waypoints:"<<tamanyoArrayWaypoints<<"turbo: "<<tamanyoArrayTurbo<<"caja: "<<tamanyoArrayCajas<<endl;
-		//se crea un array con las posiciones de los waypoints que se recogeran del fichero
+		arrayWaypoints = new Waypoint *[stoi(tamanyoArrayWaypoints)];
+		arrayTurbos    = new Turbo *[stoi(tamanyoArrayTurbo)];
+		arrayCajas     = new Caja *[stoi(tamanyoArrayCajas)];
+		
+		//cout<<"waypoints:"<<wp<<"turbo: "<<turbos<<"caja: "<<cajas<<endl;
+				
+	
+	
+		while(!myfile.eof()) {
+			getline(myfile, tipo, ' ');//caja turbo o waypoint
+			getline(myfile, pX, ' ');//posiciones
+			getline(myfile, pY, ' ');//posiciones
+			getline(myfile, pZ, ' ');//posiciones
+		
+		
+		 	tipoObj = stoi(tipo);
+			if (tipoObj==0){//WAYPOINT
+				//seteamos los Waypoins
+				arrayWaypoints[wp] = new Waypoint();
+				arrayWaypoints[wp]->setNombre(std::to_string(wp));
+				if (wp == 0)
+				{ //si es el primero apuntara al ultimo
+					arrayWaypoints[wp]->setSiguiente(arrayWaypoints[stoi(tamanyoArrayWaypoints) + 1]);
+				}
+				else if (wp == stoi(tamanyoArrayWaypoints) - 2)
+				{ //si es el ultimo apuntara al primero
+					arrayWaypoints[wp]->setSiguiente(arrayWaypoints[0]);
+				}
+				else arrayWaypoints[wp]->setSiguiente(arrayWaypoints[wp + 1]);
 
-		for (int j = 0; j < tamanyoArrayWaypoints; j++)
-		{
-			cout << "cuanto tengo: " << tamanyoArrayWaypoints << "\n";
-			//seteamos los Waypoins
-			arrayWaypoints[j] = new Waypoint();
-			arrayWaypoints[j]->setNombre(std::to_string(j));
-			if (j == 0)
-			{ //si es el primero apuntara al ultimo
-				arrayWaypoints[j]->setSiguiente(arrayWaypoints[tamanyoArrayWaypoints - 1]);
+				//cambiar a float y almacenar array de waypoints
+				arrayWaypoints[wp]->setPosicion(stof(pX),stof(pY),stof(pZ));
+				wp++;
 			}
-			else if (j == tamanyoArrayWaypoints - 2)
-			{ //si es el ultimo apuntara al primero
-				arrayWaypoints[j]->setSiguiente(arrayWaypoints[0]);
+			if (tipoObj==1){//CAJA
+								arrayCajas[wp]= new Caja(vector3df(stof(pX),stof(pY),stof(pZ)),cajas);
+				cajas++;
+				
 			}
-			else
-				arrayWaypoints[j]->setSiguiente(arrayWaypoints[j + 1]);
-			getline(myfile, wX, ' ');
-			getline(myfile, wY, ' ');
-			getline(myfile, wZ);
-			//cambiar a float y almacenar array de waypoints
-			arrayWaypoints[j]->setPosicion(std::stof(wX), std::stof(wY), std::stof(wZ));
-			//incrementar la j para los waypoints
+			if (tipoObj==2){//TURBO
+				arrayTurbos[turbos]= new Turbo(turbos, btVector3(stof(pX),stof(pY),stof(pZ)),false);
+				turbos++;
+			}
+      		cout << line << endl;
+   		}
 
-			cout << "x: " << std::stof(wX) << "y: " << std::stof(wY) << "z: " << std::stof(wZ) << '\n';
-		}
-
+		
 		myfile.close();
 	}
 
 	else
 		cout << "Error abriendo archivo";
-		t = new Turbo(100, btVector3(25.0f,-4.5f,50.0f),false);
+	
 
-}
+	}
+	
 
 void Pista::BorrarFisicas()
 {
@@ -153,7 +174,19 @@ void Pista::setItems(irr::core::list<Item *> itemMetodo)
 Waypoint **Pista::getArrayWaypoints(){
 	return arrayWaypoints;
 }
+Caja **Pista::getArrayCaja(){
+	return arrayCajas;
+}
+Turbo **Pista::getArrayTurbo(){
+	return arrayTurbos;
+}
 
 Turbo *Pista::getTurbo(){
-	return t;
+
+	for (int i = 0 ; i<ARRAY_SIZE(arrayTurbos)-1;i++){
+		if(arrayTurbos[i]->getTurboActivo()== true){
+			return arrayTurbos[i];
+		}
+	}
+	
 }

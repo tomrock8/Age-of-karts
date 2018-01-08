@@ -26,7 +26,8 @@ class Corredor
 	void SetFuerzaVelocidad(int turbo);
 	std::string toString();
 	void setTipoObj();
-	
+	void acelerar();
+
 	//Update
 	void update();
 
@@ -83,7 +84,7 @@ class Corredor
 	void BorrarFisicas();
 
 	// Movimiento del corredor
-	void acelerar();
+	//void acelerar();
 	void frenar();
 	void desacelerar();
 	void girarDerecha();

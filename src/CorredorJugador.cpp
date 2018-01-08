@@ -116,3 +116,6 @@ std::string CorredorJugador::toString()
 	text += "\n -- CORREDOR JUGADOR -- ";
 	return text;
 }
+bool CorredorJugador::setComprobadorMovimiento(bool s){
+	s = comprobadorMovimiento;
+}

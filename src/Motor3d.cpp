@@ -15,6 +15,7 @@ Motor3d::Motor3d()
 
 	device->setWindowCaption(L"AGE OF KARTS");
 
+
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();

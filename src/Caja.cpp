@@ -3,6 +3,10 @@
 Caja::Caja(vector3df posicionCaja, int idCaja)
 {
 	Motor3d *m = Motor3d::getInstancia();
+
+	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	btDynamicsWorld *mundo = bullet->getMundo();
+	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	tamanyo = 1.0f;
 	nodo = m->getScene()->addCubeSceneNode(tamanyo);
 
@@ -22,6 +26,11 @@ Caja::Caja(vector3df posicionCaja, int idCaja)
 	nodo->setName(nombre);
 	id = idCaja;
 	nodo->setID(id);
+	rigidBody = inicializarFisicas();
+	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	mundo->addRigidBody(rigidBody);
+	objetos.push_back(rigidBody);
+	bullet->setObjetos(objetos);
 }
 
 btRigidBody *Caja::inicializarFisicas()
@@ -122,3 +131,6 @@ void Caja::Delete()
 		}
 	}
 }
+int Caja::getIDCaja() {
+	 return id; 
+	}

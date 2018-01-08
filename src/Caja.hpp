@@ -20,7 +20,7 @@ public:
   ISceneNode *getNodo() { return nodo; };
   btRigidBody *getRigidBody() { return rigidBody; };
   const char *getNombre() { return nombre; };
-  int getIDCaja() { return id; };
+  int getIDCaja();
   void romper(Corredor *pj1Col);
   void comprobarRespawn();
   void Delete();

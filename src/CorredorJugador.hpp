@@ -16,11 +16,12 @@ class CorredorJugador : public Corredor
 	Item *actualizarItem(Item *item, int &id);
 	void movimiento();
 	std::string toString();
-
+	bool setComprobadorMovimiento(bool s);
 	void update();
 
   private:
 	bool checkItem;
+	bool comprobadorMovimiento;
 	//Item *actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos);
 };
 

@@ -18,6 +18,7 @@ public:
     void setFrenadaActivo(Corredor *corredor, bool s);   
     int getTiempoTurbo();
     void setTurbo(bool);
+    void setTurboTocado(bool s);
     void quitarTurbo();
 private:
     Corredor *corredor;
@@ -30,6 +31,7 @@ private:
     btVector3 localInertia;
     btRigidBody * rigidBody;
     bool turboActivo;
+    bool turboTocado;//para que solo se active la comprobacion 1 vez
     int tiempo;
 
 

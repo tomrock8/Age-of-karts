@@ -30,6 +30,8 @@ public:
   Turbo* getTurbo();
   core::list<Item *> getItems();
   void setItems(irr::core::list<Item *> itemMetodo);
+  Turbo **getArrayTurbo();
+  Caja **getArrayCaja();
   Waypoint **getArrayWaypoints();
 private:
   Pista(void);
@@ -45,7 +47,7 @@ private:
   Caja     **arrayCajas;
   btScalar Masa;
   ISceneNode *Mapa;
-  Turbo *t;
+
   irr::core::list<Item *> Items;
 };
 

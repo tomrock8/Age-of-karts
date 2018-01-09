@@ -30,7 +30,6 @@ using namespace std;
 #endif
 
 #define TAMANYOCAJAS 10
-#define DEBUG 0
 
 //funciones
 static void UpdatePhysics(u32 TDeltaTime);
@@ -56,6 +55,9 @@ int main()
 	IGUIEnvironment *guienv = m->getGUI();
 	IrrlichtDevice *device = m->getDevice();
 	irrTimer = device->getTimer();
+
+	int debug = 0;
+
 	//----------------------------//
 	//---------BULLET-------------//
 	//----------------------------//
@@ -148,13 +150,13 @@ int main()
 			DeltaTime = irrTimer->getTime() - TimeStamp;
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
-			/*
-			for (int i = 0; i < ARRAY_SIZE(pistaca->getArrayCaja())-1; i++)
+
+			for (int i = 0; i < pistaca->getTamCajas(); i++)
 			{
-				cout<<"hola que haces: "<<pistaca->getArrayCaja()[i]->getIDCaja()<<endl;
+				pistaca->getArrayCaja()[i]->comprobarRespawn();
 			}
 			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
-			*/
+
 
 			pj1->actualizarItem(id);
 
@@ -186,6 +188,15 @@ int main()
 				return 0;
 			}
 
+			if (teclado->isKeyDown(KEY_KEY_0))
+			{
+				debug = 0;
+			}
+			if (teclado->isKeyDown(KEY_KEY_9))
+			{
+				debug = 1;
+			}
+
 			//-------ENTRADA TECLADO FIN----------//
 			int fps = driver->getFPS();
 			if (lastFPS != fps)
@@ -205,10 +216,10 @@ int main()
 			debugMat.Lighting = true;
 			driver->setMaterial(debugMat);
 			driver->setTransform(ETS_WORLD, IdentityMatrix);
-			if (DEBUG) {
+			if (debug) {
 				mundo->debugDrawWorld();
-				guienv->drawAll();
 			}
+			guienv->drawAll();
 			driver->endScene();
 		}
 		else

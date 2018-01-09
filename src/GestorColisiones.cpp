@@ -88,11 +88,12 @@ bool GestorColisiones::JugadorEstatico()
 				Item *item = *Iterator;
 				if (item->getNodo()->getID() == idB)
 				{
-					if(item->getColision()){
+					if (item->getColision()) {
 						item->Delete();
 						Iterator = items.erase(Iterator);
 						pista->setItems(items);
-					}else{
+					}
+					else {
 						item->setColision(true);
 					}
 
@@ -129,15 +130,15 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 			{
 				if (cajas[i] != NULL)
 				{
-					cout<< "Llego aqui1: " << cajas[i]->getIDCaja() <<endl;
+					cout << "Llego aqui1: " << cajas[i]->getIDCaja() << endl;
 					if (cajas[i]->getIDCaja() == idB)
 					{
-					cout<< "Llego aqui2\n";
+						cout << "Llego aqui2\n";
 						cajas[i]->romper(pj1Col);
-					cout<< "Llego aqui3\n";
+						cout << "Llego aqui3\n";
 					}
 				}
-				cout << "Entro " <<  i << endl;
+				cout << "Entro " << i << endl;
 			}
 			pista->setArrayCaja(cajas);
 		}

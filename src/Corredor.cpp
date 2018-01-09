@@ -143,7 +143,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
 		wheel.m_suspensionStiffness = 50;	  //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo
-		wheel.m_wheelsDampingCompression = 0.2f; //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f;
+		wheel.m_wheelsDampingCompression = btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f;
 		wheel.m_wheelsDampingRelaxation = 0.3f;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f;
 		wheel.m_frictionSlip = btScalar(10.0f);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover
 		wheel.m_rollInfluence = 0.3;		   //0.1f;	//Empieza a rodar muy loco, si el valor es alto

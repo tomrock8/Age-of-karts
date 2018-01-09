@@ -184,9 +184,8 @@ int main()
 			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
 			pj1->update();
-
 			//pj2->update();
-			camara->moveCameraControl(pj1, device);
+
 
 			textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 			textoDebug->agregar(pj1->toString());

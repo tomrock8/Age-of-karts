@@ -13,6 +13,7 @@ public:
   Camara3persona();
   ~Camara3persona();
   void moveCameraControl(Corredor *pj1, IrrlichtDevice *device);
+  void moveCameraControlPointer(Corredor *pj1, IrrlichtDevice *device);
 
 private:
   float direction;

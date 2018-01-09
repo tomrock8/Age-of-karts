@@ -13,7 +13,7 @@ Pista::Pista()
 
 	m = Motor3d::getInstancia();
 	smgr = m->getScene();
-	
+
 }
 
 Pista::~Pista()
@@ -92,7 +92,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 	if (myfile.is_open())
 	{
-		
+
 
 		//crear el array de waypoints para almacenar el path
 		getline(myfile, tamanyoArrayWaypoints, ' ');
@@ -100,22 +100,22 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 		getline(myfile, tamanyoArrayCajas, ' ');
 
 		arrayWaypoints = new Waypoint *[stoi(tamanyoArrayWaypoints)];
-		arrayTurbos    = new Turbo *[stoi(tamanyoArrayTurbo)];
-		arrayCajas     = new Caja *[stoi(tamanyoArrayCajas)];
-		
+		arrayTurbos = new Turbo *[stoi(tamanyoArrayTurbo)];
+		arrayCajas = new Caja *[stoi(tamanyoArrayCajas)];
+
 		//cout<<"waypoints:"<<wp<<"turbo: "<<turbos<<"caja: "<<cajas<<endl;
-				
-	
-	
-		while(!myfile.eof()) {
+
+
+
+		while (!myfile.eof()) {
 			getline(myfile, tipo, ' ');//caja turbo o waypoint
 			getline(myfile, pX, ' ');//posiciones
 			getline(myfile, pY, ' ');//posiciones
 			getline(myfile, pZ, ' ');//posiciones
-		
-		
-		 	tipoObj = stoi(tipo);
-			if (tipoObj==0){//WAYPOINT
+
+
+			tipoObj = stoi(tipo);
+			if (tipoObj == 0) {//WAYPOINT
 				//seteamos los Waypoins
 				arrayWaypoints[wp] = new Waypoint();
 				arrayWaypoints[wp]->setNombre(std::to_string(wp));
@@ -130,31 +130,31 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				else arrayWaypoints[wp]->setSiguiente(arrayWaypoints[wp + 1]);
 
 				//cambiar a float y almacenar array de waypoints
-				arrayWaypoints[wp]->setPosicion(stof(pX),stof(pY),stof(pZ));
+				arrayWaypoints[wp]->setPosicion(stof(pX), stof(pY), stof(pZ));
 				wp++;
 			}
-			if (tipoObj==1){//CAJA
-								arrayCajas[wp]= new Caja(vector3df(stof(pX),stof(pY),stof(pZ)),cajas);
+			if (tipoObj == 1) {//CAJA
+				arrayCajas[wp] = new Caja(vector3df(stof(pX), stof(pY), stof(pZ)), cajas);
 				cajas++;
-				
+
 			}
-			if (tipoObj==2){//TURBO
-				arrayTurbos[turbos]= new Turbo(turbos, btVector3(stof(pX),stof(pY),stof(pZ)),false);
+			if (tipoObj == 2) {//TURBO
+				arrayTurbos[turbos] = new Turbo(turbos, btVector3(stof(pX), stof(pY), stof(pZ)), false);
 				turbos++;
 			}
-      		cout << line << endl;
-   		}
+			cout << line << endl;
+		}
 
-		
+
 		myfile.close();
 	}
 
 	else
 		cout << "Error abriendo archivo";
-	
 
-	}
-	
+
+}
+
 
 void Pista::BorrarFisicas()
 {
@@ -171,22 +171,24 @@ void Pista::setItems(irr::core::list<Item *> itemMetodo)
 {
 	Items = itemMetodo;
 }
-Waypoint **Pista::getArrayWaypoints(){
+Waypoint **Pista::getArrayWaypoints() {
 	return arrayWaypoints;
 }
-Caja **Pista::getArrayCaja(){
+Caja **Pista::getArrayCaja() {
 	return arrayCajas;
 }
-Turbo **Pista::getArrayTurbo(){
+Turbo **Pista::getArrayTurbo() {
 	return arrayTurbos;
 }
 
-Turbo *Pista::getTurbo(){
+Turbo *Pista::getTurbo() {
+	int nTurbos = 1;
 
-	for (int i = 0 ; i<ARRAY_SIZE(arrayTurbos)-1;i++){
-		if(arrayTurbos[i]->getTurboActivo()== true){
+	for (int i = 0; i < nTurbos; i++) {
+		if (arrayTurbos[i]->getTurboActivo() == true) {
 			return arrayTurbos[i];
 		}
 	}
-	
+
+	return NULL;
 }

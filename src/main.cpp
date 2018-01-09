@@ -28,8 +28,10 @@ using namespace std;
 #ifdef _MSC_VER
 #pragma comment(lib, "Irrlicht.lib")
 #endif
+
 #define TAMANYOCAJAS 10
-#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
+#define DEBUG 1
+
 //funciones
 static void UpdatePhysics(u32 TDeltaTime);
 static void UpdateRender(btRigidBody *TObject);
@@ -39,8 +41,6 @@ static btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScal
 static core::list<btRigidBody *> objetosm;
 static ITimer *irrTimer;
 static ILogger *irrLog;
-
-#define TAMANYOCAJAS 10
 
 int main()
 {
@@ -75,9 +75,9 @@ int main()
 	//-----------------------------//
 
 	Pista *pistaca = Pista::getInstancia();
-	cout<<" voy a criar el mapa"<<endl;
+	cout << " voy a criar el mapa" << endl;
 	pistaca->setMapa("assets/Mapa01/MapaIsla.obj", "fisicas/MapaIsla.bullet", "assets/Mapa01/WPTrbBox.obj");
-	
+
 	pistaca->getArrayWaypoints();
 
 	//-----------------------------//
@@ -117,9 +117,9 @@ int main()
 
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 
-	
+
 	Item *item = NULL;
-		
+
 	//Item *item;
 	core::list<Item *> items;
 
@@ -142,7 +142,7 @@ int main()
 		bullet->setObjetos(objetos);
 		id++;
 	}
-	
+
 	//---------------------------------------------------------------------------------------HASTA AQUI ( si se borra el turbo y las cajas no funcionan, cosa que no entiendo porque las cajas ya no las creo aqui)
 	//----------------------------//
 	//------GESTOR COLISIONES-----//
@@ -156,25 +156,25 @@ int main()
 	// -----------------------------//
 	// ----------GAME LOOP----------//
 	// -----------------------------//
-		 driver->beginScene(true, true, video::SColor(255,32,223,255));
+	driver->beginScene(true, true, video::SColor(255, 32, 223, 255));
 
 	while (m->getDevice()->run())
 	{
 		if (m->getDevice()->isWindowActive())
 		{
-		
+
 			textoDebug->limpiar();
 
 			DeltaTime = irrTimer->getTime() - TimeStamp;
 			TimeStamp = irrTimer->getTime();
 			UpdatePhysics(DeltaTime);
-		
-				for (int i = 0; i < ARRAY_SIZE(pistaca->getArrayCaja())-1; i++)
+			/*
+			for (int i = 0; i < ARRAY_SIZE(pistaca->getArrayCaja())-1; i++)
 			{
 				cout<<"hola que haces: "<<pistaca->getArrayCaja()[i]->getIDCaja()<<endl;
 			}
 			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
-			
+			*/
 
 			item = pj1->actualizarItem(item, id);
 			items.push_back(item);
@@ -227,9 +227,10 @@ int main()
 			debugMat.Lighting = true;
 			driver->setMaterial(debugMat);
 			driver->setTransform(ETS_WORLD, IdentityMatrix);
-			mundo->debugDrawWorld();
-			guienv->drawAll();
-
+			if (DEBUG) {
+				mundo->debugDrawWorld();
+				guienv->drawAll();
+			}
 			driver->endScene();
 		}
 		else
@@ -269,13 +270,15 @@ void UpdateRender(btRigidBody *TObject)
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if(strcmp(Node->getName(),"Jugador") == 0){
-		Node->setPosition(vector3df((f32)Point[0],(f32)Point[1]+1,(f32)Point[2]));
-		if(mapa->getTurbo()->getTurboActivo()){
-			cout<<"turbo Activo"<<endl;
-			if(mapa->getTurbo()->getTiempoTurbo() + 2000 > m->getTime()-100 && mapa->getTurbo()->getTiempoTurbo() + 2000 < m->getTime()+100){
-				cout<<"ha pasado dos segundos"<<endl;
-				mapa->getTurbo()->quitarTurbo();
+	if (strcmp(Node->getName(), "Jugador") == 0) {
+		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 1, (f32)Point[2]));
+		if (mapa->getTurbo()) {
+			if (mapa->getTurbo()->getTurboActivo()) {
+				cout << "turbo Activo" << endl;
+				if (mapa->getTurbo()->getTiempoTurbo() + 2000 > m->getTime() - 100 && mapa->getTurbo()->getTiempoTurbo() + 2000 < m->getTime() + 100) {
+					cout << "ha pasado dos segundos" << endl;
+					mapa->getTurbo()->quitarTurbo();
+				}
 			}
 		}
 	}

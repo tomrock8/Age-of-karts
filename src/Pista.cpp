@@ -87,7 +87,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	int tipoObj;
 	int wp = 0;
 	int turbos = 0;
-	int cajas = 0;
+	tamCajas = 0;
 	ifstream myfile(waypoints);
 
 	if (myfile.is_open())
@@ -133,10 +133,10 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				arrayWaypoints[wp]->setPosicion(stof(pX), stof(pY), stof(pZ));
 				wp++;
 			}
-			if (tipoObj == 1) {//CAJA
-				arrayCajas[wp] = new Caja(vector3df(stof(pX), stof(pY), stof(pZ)), cajas);
-				cajas++;
-
+			if (tipoObj==1){//CAJA
+				arrayCajas[wp]= new Caja(vector3df(stof(pX),stof(pY),stof(pZ)),tamCajas);
+				tamCajas++;
+				
 			}
 			if (tipoObj == 2) {//TURBO
 				arrayTurbos[turbos] = new Turbo(turbos, btVector3(stof(pX), stof(pY), stof(pZ)), false);
@@ -177,7 +177,15 @@ Waypoint **Pista::getArrayWaypoints() {
 Caja **Pista::getArrayCaja() {
 	return arrayCajas;
 }
-Turbo **Pista::getArrayTurbo() {
+int Pista::getTamCajas(){
+	return tamCajas;
+}
+
+void Pista::setArrayCaja(Caja **cajas){
+	arrayCajas = cajas;
+}
+
+Turbo **Pista::getArrayTurbo(){
 	return arrayTurbos;
 }
 

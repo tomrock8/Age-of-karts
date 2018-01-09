@@ -54,7 +54,7 @@ void CorredorJugador::update()
 	movimiento();
 }
 
-Item *CorredorJugador::actualizarItem(Item *item, int &id)
+void CorredorJugador::actualizarItem(int &id)
 {
 
 	CTeclado *teclado = CTeclado::getInstancia();
@@ -104,7 +104,6 @@ Item *CorredorJugador::actualizarItem(Item *item, int &id)
 			id++;
 		}
 	}
-	return item;
 }
 
 /*

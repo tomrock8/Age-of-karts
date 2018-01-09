@@ -13,7 +13,7 @@ class CorredorJugador : public Corredor
 {
   public:
 	CorredorJugador(stringw rutaObj, vector3df pos);
-	Item *actualizarItem(Item *item, int &id);
+	void actualizarItem(int &id);
 	void movimiento();
 	std::string toString();
 	bool setComprobadorMovimiento(bool s);

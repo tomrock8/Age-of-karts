@@ -18,7 +18,7 @@ class GestorColisiones
 {
 public:
   GestorColisiones(){};
-  void ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[]);
+  void ComprobarColisiones(Corredor *pj1Col_1);
   bool JugadorCaja(Caja *cajas[]);
   bool JugadorTurbo();
   bool objetoDestruible();

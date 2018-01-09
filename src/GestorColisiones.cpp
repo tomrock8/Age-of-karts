@@ -1,10 +1,13 @@
 #include "GestorColisiones.hpp"
 
 #define TAMANYOCAJAS 10
+#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 
-void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1, Caja *cajas[])
+void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1)
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	Pista *pista = Pista::getInstancia();
+	Caja** cajas = pista->getArrayCaja();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	pj1Col = pj1Col_1;
@@ -105,10 +108,12 @@ bool GestorColisiones::JugadorEstatico()
 //
 // Comprobar colisiones entre Jugador y Caja
 //
-bool GestorColisiones::JugadorCaja(Caja *cajas[])
+bool GestorColisiones::JugadorCaja(Caja **cajas)
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
+	Pista *pista = Pista::getInstancia();
+	int tamCajas = pista->getTamCajas();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	bool colision = false;
 
@@ -119,16 +124,22 @@ bool GestorColisiones::JugadorCaja(Caja *cajas[])
 			colision = true;
 			cout << "Jug - Caja\n";
 			int idB = nodoB->getID();
-			for (int i = 0; i < TAMANYOCAJAS; i++)
+			cout << "Tam Cajas: " << tamCajas << "- " << idB << endl;
+			for (int i = 0; i < tamCajas; i++)
 			{
 				if (cajas[i] != NULL)
 				{
+					cout<< "Llego aqui1: " << cajas[i]->getIDCaja() <<endl;
 					if (cajas[i]->getIDCaja() == idB)
 					{
+					cout<< "Llego aqui2\n";
 						cajas[i]->romper(pj1Col);
+					cout<< "Llego aqui3\n";
 					}
 				}
+				cout << "Entro " <<  i << endl;
 			}
+			pista->setArrayCaja(cajas);
 		}
 	}
 

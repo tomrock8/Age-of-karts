@@ -118,30 +118,10 @@ int main()
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 
 
-	Item *item = NULL;
-
-	//Item *item;
-	core::list<Item *> items;
-
 	//----------
 	// Cajas de municion
 	//----------
-	btRigidBody *rigidCaja;
-	Caja **cajas;
-	cajas = new Caja *[TAMANYOCAJAS];
-	vector3df posCaja(5.f, -1.f, -100.f);
-	for (int i = 0; i < TAMANYOCAJAS; i++)
-	{
-		posCaja.Z += 10;
-		cajas[i] = new Caja(posCaja, id);
-		rigidCaja = cajas[i]->inicializarFisicas();
-		rigidCaja->setCollisionFlags(rigidCaja->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-
-		mundo->addRigidBody(rigidCaja);
-		objetos.push_back(rigidCaja);
-		bullet->setObjetos(objetos);
-		id++;
-	}
+	//Ha pasado a mejor vida
 
 	//---------------------------------------------------------------------------------------HASTA AQUI ( si se borra el turbo y las cajas no funcionan, cosa que no entiendo porque las cajas ya no las creo aqui)
 	//----------------------------//
@@ -176,11 +156,10 @@ int main()
 			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 			*/
 
-			item = pj1->actualizarItem(item, id);
-			items.push_back(item);
+			pj1->actualizarItem(id);
 
 			camara->moveCameraControl(pj1, device);
-			colisiones->ComprobarColisiones(pj1, cajas);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+			colisiones->ComprobarColisiones(pj1);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
 			pj1->update();

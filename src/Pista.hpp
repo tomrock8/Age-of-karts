@@ -32,6 +32,8 @@ public:
   void setItems(irr::core::list<Item *> itemMetodo);
   Turbo **getArrayTurbo();
   Caja **getArrayCaja();
+  void setArrayCaja(Caja **cajas);
+  int getTamCajas();
   Waypoint **getArrayWaypoints();
 private:
   Pista(void);
@@ -45,6 +47,7 @@ private:
   Waypoint **arrayWaypoints;
   Turbo    **arrayTurbos;
   Caja     **arrayCajas;
+  int tamCajas;
   btScalar Masa;
   ISceneNode *Mapa;
 

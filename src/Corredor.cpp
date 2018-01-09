@@ -42,12 +42,12 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.0); // Este valor tiene que ser ese... sino peta
+	suspension = btScalar(0.9); // Este valor tiene que ser ese... sino peta
 	Fuerza = btScalar(6000);
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
-	Masa = btScalar(1100);
+	Masa = btScalar(1500);
 	FuerzaFrenado = btScalar(-10000);
 	FuerzaGiro = btScalar(0.3); //manejo a la hora de girar
 	FuerzaFrenoMano = btScalar(800);
@@ -83,7 +83,6 @@ void Corredor::InicializarFisicas()
 	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
 	FormaColision = new btBoxShape(TamanyoFormaColision);
 	//masa coche
-	Masa = 2000;
 	btVector3 Inercia(0, 0, 0);
 	FormaColision->calculateLocalInertia(Masa, Inercia);
 
@@ -125,18 +124,6 @@ void Corredor::BorrarFisicas()
 void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning)
 {
 
-	btVector3 direccionRuedas(0, -1, 0);
-
-	btVector3 rotacionRuedas(-1, 0, 0);
-
-	btScalar suspension(0.9);
-
-	btScalar anchoRueda(0.4);
-
-	btScalar radioRueda(0.5);
-
-	btScalar alturaConexionChasis(1.2);
-
 	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
 	btVector3 puntoConexionChasis(cuboNodo->getScale().X - radioRueda, alturaConexionChasis, cuboNodo->getScale().Z - anchoRueda);
 
@@ -155,13 +142,13 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = 60;	  //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo
-		wheel.m_wheelsDampingCompression = 20; //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f;
-		wheel.m_wheelsDampingRelaxation = 20;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f;
-		wheel.m_frictionSlip = btScalar(1.2);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover
-		wheel.m_rollInfluence = 0.1;		   //0.1f;	//Empieza a rodar muy loco, si el valor es alto
+		wheel.m_suspensionStiffness = 50;	  //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo
+		wheel.m_wheelsDampingCompression = 0.2f; //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f;
+		wheel.m_wheelsDampingRelaxation = 0.3f;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f;
+		wheel.m_frictionSlip = btScalar(10.0f);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover
+		wheel.m_rollInfluence = 0.3;		   //0.1f;	//Empieza a rodar muy loco, si el valor es alto
 		//wheel.m_maxSuspensionForce = 40000.f;	//A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa)
-		wheel.m_maxSuspensionTravelCm = 8000.f; //Nose muy bien que funcion tiene, pero si el valor es muy bajo el coche no avanza
+		wheel.m_maxSuspensionTravelCm = 800.f; //Nose muy bien que funcion tiene, pero si el valor es muy bajo el coche no avanza
 
 		/*
 	 * PARAMETROS EN RUEDAS DISPONIBLES

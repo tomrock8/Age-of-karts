@@ -30,7 +30,7 @@ using namespace std;
 #endif
 
 #define TAMANYOCAJAS 10
-#define DEBUG 1
+#define DEBUG 0
 
 //funciones
 static void UpdatePhysics(u32 TDeltaTime);

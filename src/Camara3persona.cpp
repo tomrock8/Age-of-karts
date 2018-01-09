@@ -19,20 +19,20 @@ void Camara3persona::moveCameraControl(Corredor *pj1, IrrlichtDevice *device)
 	
 
 	if (teclado->isKeyDown(KEY_UP)){
-		change_y = 10.0f;
+		change_y = 1.0f;
 	}
 	else {
 		if (teclado->isKeyDown(KEY_DOWN)) {
-			change_y = -10.0f;
+			change_y = -1.0f;
 		}
 	}
 
 	if (teclado->isKeyDown(KEY_LEFT)) {
-		change_x = -10.0f;
+		change_x = -1.0f;
 	}
 	else {
 		if (teclado->isKeyDown(KEY_RIGHT)) {
-			change_x = 10.0f;
+			change_x = 1.0f;
 		}
 	}
 

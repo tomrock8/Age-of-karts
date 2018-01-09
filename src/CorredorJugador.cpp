@@ -90,7 +90,7 @@ void CorredorJugador::actualizarItem(int &id)
 				lanzarItem(pro, direccionItem);
 				items.push_back(pro);
 			}
-			else if(tipoObj == 2)
+			else if (tipoObj == 2)
 			{
 				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
 				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
@@ -115,7 +115,7 @@ std::string CorredorJugador::toString()
 	text += "\n -- CORREDOR JUGADOR -- ";
 	return text;
 }
-bool CorredorJugador::setComprobadorMovimiento(bool s){
+bool CorredorJugador::setComprobadorMovimiento(bool s) {
 	comprobadorMovimiento = s;
 	return comprobadorMovimiento;
 }

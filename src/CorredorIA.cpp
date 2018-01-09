@@ -3,11 +3,11 @@
 CorredorIA::CorredorIA(stringw rutaObj, vector3df pos, Waypoint **arrayWaypoints, int tamanyoArray) : Corredor(rutaObj, pos)
 {
 
-	
+
 	//sacamos el waypoint m�s cercano
 	float diferenciaX = 0;
 	float diferenciaZ = 0;
-	
+
 	for (int i = 0; i < tamanyoArray; i++) {
 
 		//puntoActual=arrayWaypoints[i];
@@ -16,7 +16,8 @@ CorredorIA::CorredorIA(stringw rutaObj, vector3df pos, Waypoint **arrayWaypoints
 			//diferenciaX = std::abs(posicion.getX() - arrayWaypoints[i]->getPosicion().X);
 			//diferenciaZ = std::abs(posicion.getZ() - arrayWaypoints[i]->getPosicion().Z);
 
-		}else {
+		}
+		else {
 			/*
 			if ((std::abs(posicion.getX() - arrayWaypoints[i]->getPosicion().X)) <= diferenciaX && (std::abs(posicion.getZ() - arrayWaypoints[i]->getPosicion().Z)) <= diferenciaZ) {
 				puntoActual = arrayWaypoints[i];
@@ -49,10 +50,12 @@ void CorredorIA::movimiento()
 
 		if (posicion.getX() - (puntoActual->getPosicion().X) < 0) {
 			girarDerecha();
-		}else if (posicion.getX() - (puntoActual->getPosicion().X) > 0){
+		}
+		else if (posicion.getX() - (puntoActual->getPosicion().X) > 0) {
 			girarIzquierda();
 		}
-	}else if (sur) {
+	}
+	else if (sur) {
 		//cout << "CONDICION SUR" << endl;
 		if (posicion.getZ() - (puntoActual->getPosicion().Z) < 0) {	//si la posicion en Z del waypoint es mayor que posz cambiamos al siguiente waypoint
 			puntoActual = puntoActual->getNextWaypoint();
@@ -60,29 +63,34 @@ void CorredorIA::movimiento()
 
 		if (posicion.getX() - (puntoActual->getPosicion().X) > 0) {
 			girarIzquierda();
-		}else if (posicion.getX() - (puntoActual->getPosicion().X) < 0){
+		}
+		else if (posicion.getX() - (puntoActual->getPosicion().X) < 0) {
 			girarDerecha();
 		}
 
-	}else if (este) {
+	}
+	else if (este) {
 		//cout << "CONDICION ESTE" << endl;
 		if (posicion.getX() - (puntoActual->getPosicion().X) > 0) {	//si la posicion en X del waypoint es menor que pozx cambiamos al siguiente waypoint
 			puntoActual = puntoActual->getNextWaypoint();
 		}
 		if (posicion.getZ() - (puntoActual->getPosicion().Z) < 0) {
 			girarIzquierda();
-		}else if (posicion.getZ() - (puntoActual->getPosicion().Z) > 0){
+		}
+		else if (posicion.getZ() - (puntoActual->getPosicion().Z) > 0) {
 			girarDerecha();
 		}
 
-	}else if (oeste) {
+	}
+	else if (oeste) {
 		//cout << "CONDICION OESTE" << endl;
 		if (posicion.getX() - (puntoActual->getPosicion().X) < 0) {	//si la posicion en X del waypoint es mayor que posx cambiamos al siguiente waypoint
 			puntoActual = puntoActual->getNextWaypoint();
 		}
 		if (posicion.getZ() - (puntoActual->getPosicion().Z) > 0) {
 			girarIzquierda();
-		}else if (posicion.getZ() - (puntoActual->getPosicion().Z) < 0){
+		}
+		else if (posicion.getZ() - (puntoActual->getPosicion().Z) < 0) {
 			girarDerecha();
 		}
 	}

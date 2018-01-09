@@ -71,6 +71,6 @@ void Motor3d::cerrar()
 {
 	device->closeDevice();
 }
-int Motor3d::getTime(){
+int Motor3d::getTime() {
 	return irrTimer->getTime();
 }

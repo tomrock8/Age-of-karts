@@ -65,10 +65,12 @@ btRigidBody *Caja::inicializarFisicas()
 
 void Caja::comprobarRespawn() {
 	Motor3d *mundo = Motor3d::getInstancia();
-	if (!nodo->isVisible()) {
-		if (mundo->getTime() - timer >= 5000) {
-			cout << "Visible\n";
-			nodo->setVisible(true);
+	if (nodo) {
+		if (!nodo->isVisible()) {
+			if (mundo->getTime() - timer >= 5000) {
+				cout << "Visible\n";
+				nodo->setVisible(true);
+			}
 		}
 	}
 }

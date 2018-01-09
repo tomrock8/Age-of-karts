@@ -2,11 +2,11 @@
 
 Estatico::Estatico(vector3df posicionItem, int idItem) : Item(posicionItem, idItem)
 {
-    nombre = "Estatico";
-    nodo->setName("Estatico");
+	nombre = "Estatico";
+	nodo->setName("Estatico");
 
-    id = idItem;
-    nodo->setID(id);
+	id = idItem;
+	nodo->setID(id);
 }
 
 btRigidBody *Estatico::inicializarFisicas()
@@ -49,5 +49,5 @@ btRigidBody *Estatico::inicializarFisicas()
 
 void Estatico::soltarItem()
 {
-    //otro que se fue al corredor bitches :(
+	//otro que se fue al corredor bitches :(
 }

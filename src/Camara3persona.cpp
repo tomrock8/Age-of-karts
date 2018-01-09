@@ -16,9 +16,9 @@ void Camara3persona::moveCameraControl(Corredor *pj1, IrrlichtDevice *device)
 
 	float change_x = 0.0f;
 	float change_y = 0.0f;
-	
 
-	if (teclado->isKeyDown(KEY_UP)){
+
+	if (teclado->isKeyDown(KEY_UP)) {
 		change_y = 1.0f;
 	}
 	else {
@@ -42,7 +42,7 @@ void Camara3persona::moveCameraControl(Corredor *pj1, IrrlichtDevice *device)
 		zdirection = -90;
 	else if (zdirection > 90)
 		zdirection = 90;
-	
+
 
 	core::vector3df playerPos = pj1->getNodo()->getPosition();
 
@@ -63,7 +63,7 @@ void Camara3persona::moveCameraControlPointer(Corredor *pj1, IrrlichtDevice *dev
 
 	float change_x = (cursorPos.X - 0.5) * 256.0f;
 	float change_y = (cursorPos.Y - 0.5) * 256.0f;
-	
+
 	direction += change_x;
 	zdirection -= change_y;
 

@@ -29,7 +29,11 @@ public:
 	// METODOS SET
 	void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
 	void setItems(irr::core::list<Item *> itemMetodo);
+<<<<<<< refs/remotes/origin/WaypointLecturaFichero
 
+=======
+	void setIdsObjetosCaja(int i); //almacenar las ids de los objetos que se crean/destruyen cuando se recoje una caja
+>>>>>>> Jesusito de mi vida a ver si va esto ya. Mapa nuevo
 	// METODOS GET
 	core::list<Item *> getItems();
 	Turbo **getArrayTurbo();
@@ -39,6 +43,10 @@ public:
 	Waypoint **getArrayWaypoints();
 	Turbo* getTurbo();
 	Turbo* getTurbo(int id);
+<<<<<<< refs/remotes/origin/WaypointLecturaFichero
+=======
+	int  getIdsObjetosCaja();
+>>>>>>> Jesusito de mi vida a ver si va esto ya. Mapa nuevo
 
 private:
 	Pista(void);
@@ -62,6 +70,11 @@ private:
 	ISceneNode *Mapa;
 
 	irr::core::list<Item *> Items;
+<<<<<<< refs/remotes/origin/WaypointLecturaFichero
+=======
+
+	int idObjCajas;
+>>>>>>> Jesusito de mi vida a ver si va esto ya. Mapa nuevo
 };
 
 #endif /* PISTA_H */

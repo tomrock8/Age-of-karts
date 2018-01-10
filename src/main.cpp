@@ -87,7 +87,7 @@ int main()
 	//-----------------------------//
 	//Posicion del nodo y el bloque de colisiones centralizado:
 
-	int id = 0;
+	int id = 999;// estaba int id = 0; . Se cambia a 999 para evitar posibles conflictos con ids 0 creadas en mapa 
 	vector3df pos(0, 40, 300);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 
@@ -99,25 +99,25 @@ int main()
 	///////////////////////CAMARA///////////////////////////////////////////////
 	Camara3persona *camara = new Camara3persona();
 
-	btVector3 cubopos1(0, 20, 40);
+	/*btVector3 cubopos1(0, 20, 40);
 	vector3df cuboescala1(5, 5, 5);
-	id++;
+	id++;*/
 	//CreateBox(cubopos1,cuboescala1,10);
 
 	//----------------------------//
 	//---------OBJETOS------------//
 	//----------------------------//
 	//---------------------------------------------------------------------------------------DESDE AQUI 
-	btVector3 posObj2(0, 10, 70);
+	/*btVector3 posObj2(0, 10, 70);
 	vector3df tamObj2(5.f, 20.f, 20.f);
 	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000, id);
 	//ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
 	////El problema esta en que estas variables no cambian las variables de obje2
 	////nodoObj2->setID(id);
 	////nodoObj2->setName("Destruible");
-	id++;
+	id++;*/
 
-	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
+	//irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 
 
 	//----------
@@ -158,7 +158,7 @@ int main()
 			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 
 
-			pj1->actualizarItem(id);
+			pj1->actualizarItem();
 
 			camara->moveCameraControl(pj1, device);
 			colisiones->ComprobarColisiones(pj1);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista

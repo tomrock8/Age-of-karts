@@ -62,6 +62,10 @@ void Pista::InicializarFisicas()
 
 void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 {
+<<<<<<< refs/remotes/origin/WaypointLecturaFichero
+=======
+	idObjCajas=100;//variable inicializada al principio para poner los ids de los objetos que aparecen random en las cajas
+>>>>>>> Jesusito de mi vida a ver si va esto ya. Mapa nuevo
 	Motor3d *m = Motor3d::getInstancia();
 	Mapa = m->getScene()->addMeshSceneNode(m->getScene()->getMesh(mapa));
 	if (Mapa)
@@ -185,9 +189,25 @@ Turbo **Pista::getArrayTurbo() {
 	return arrayTurbos;
 }
 
+<<<<<<< refs/remotes/origin/WaypointLecturaFichero
 Turbo *Pista::getTurbo() {
 	for (int i = 0; i < tamTurbos; i++) {
 		if (arrayTurbos[i]->getTurboActivo() == true) {
+			return arrayTurbos[i];
+		}
+	}
+
+	return NULL;
+}
+
+Turbo *Pista::getTurbo(int id) {
+	for (int i = 0; i < tamTurbos; i++) {
+		if (arrayTurbos[i]->getId() == id) {
+=======
+Turbo *Pista::getTurbo() {
+	for (int i = 0; i < tamTurbos; i++) {
+		if (arrayTurbos[i]->getTurboActivo() == true) {
+>>>>>>> Jesusito de mi vida a ver si va esto ya. Mapa nuevo
 			return arrayTurbos[i];
 		}
 	}
@@ -203,4 +223,11 @@ Turbo *Pista::getTurbo(int id) {
 	}
 
 	return NULL;
+}
+//RECOGER Y ASIGNAR IDS A LOS OBJETOS RANDOM DE LAS CAJAS
+void Pista::setIdsObjetosCaja(int i){
+	idObjCajas = i;
+}
+int Pista::getIdsObjetosCaja(){
+	return idObjCajas;
 }

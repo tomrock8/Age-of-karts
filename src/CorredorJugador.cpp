@@ -54,7 +54,7 @@ void CorredorJugador::update()
 	movimiento();
 }
 
-void CorredorJugador::actualizarItem(int &id)
+void CorredorJugador::actualizarItem()
 {
 
 	CTeclado *teclado = CTeclado::getInstancia();
@@ -62,6 +62,8 @@ void CorredorJugador::actualizarItem(int &id)
 	core::list<Item *> items = pista->getItems();
 	int direccionItem = 1;
 	vector3df posDisparo(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.Z * 5);
+	Pista *mapa = Pista::getInstancia();
+	int idObjMapa = pista->getIdsObjetosCaja();
 
 	if (teclado->isKeyup(KEY_KEY_P))
 	{
@@ -86,7 +88,7 @@ void CorredorJugador::actualizarItem(int &id)
 
 			if (tipoObj == 1)
 			{
-				Proyectil *pro = new Proyectil(posDisparo, id);
+				Proyectil *pro = new Proyectil(posDisparo, idObjMapa);
 				lanzarItem(pro, direccionItem);
 				items.push_back(pro);
 			}
@@ -94,14 +96,15 @@ void CorredorJugador::actualizarItem(int &id)
 			{
 				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
 				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
-				Estatico *est = new Estatico(posDisparo, id);
+				Estatico *est = new Estatico(posDisparo, idObjMapa);
 				est->inicializarFisicas();
 				soltarItem(est);
 				items.push_back(est);
 			}
 			pista->setItems(items);
 			//Llama a la funcion de la clase padre
-			id++;
+			idObjMapa++;
+			pista->setIdsObjetosCaja(idObjMapa);
 		}
 	}
 }

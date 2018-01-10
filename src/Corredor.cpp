@@ -9,7 +9,10 @@
 //-------------------------\*
 Corredor::Corredor(stringw rutaObj, vector3df pos)
 {
-	cargador = 10;
+	cargador = 0;
+	tipoObj= 0;
+	turboActivado = false;
+	timerTurbo = 0;
 	Motor3d *m = Motor3d::getInstancia();
 	ISceneManager *smgr = m->getScene();
 	coche = smgr->getMesh(rutaObj);
@@ -43,7 +46,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
 	suspension = btScalar(0.9); // Este valor tiene que ser ese... sino peta
-	Fuerza = btScalar(4000);
+	Fuerza = btScalar(500);
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -196,8 +199,14 @@ void Corredor::decCargador() { cargador--; };
 void Corredor::setTipoObj()
 {
 	srand(time(NULL));
-	tipoObj = rand() % 2 + 1;
-	cout << "Random ------>" << tipoObj << endl;
+	tipoObj = rand() % 3 + 1;
+	//cout << "Random ------>" << tipoObj << endl;
+}
+
+void Corredor::setTipoObj(int i)
+{
+	tipoObj = i;
+	//cout << "Random ------>" << tipoObj << endl;
 }
 
 /*
@@ -213,7 +222,7 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 		item->getRigidBody()->setLinearVelocity(btVector3(orientacion.X * 100, 5.0f, orientacion.Z * 100));
 	else if (direccionItem == -1)
 		item->getRigidBody()->setLinearVelocity(btVector3(-orientacion.X * 100, 5.0f, -orientacion.Z * 100));
-	std::cout << "Disparo " << std::endl;
+	//std::cout << "Disparo " << std::endl;
 	tipoObj = 0;
 	decCargador();
 }
@@ -221,6 +230,23 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 void Corredor::soltarItem(Estatico *item)
 {
 	tipoObj = 0;
+}
+
+void Corredor::setTurbo(bool activo){
+	turboActivado = activo;
+	if(activo){
+		Motor3d *m = Motor3d::getInstancia();
+		SetFuerzaVelocidad(6000);
+		acelerar();
+		timerTurbo = m->getDevice()->getTimer()->getTime();
+		tipoObj = 0;
+	}else{
+		SetFuerzaVelocidad(1000);
+	}
+}
+
+bool Corredor::getTurbo(){
+	return turboActivado;
 }
 
 void Corredor::SetFuerzaVelocidad(int turbo)
@@ -299,6 +325,19 @@ std::string Corredor::toString()
 		" ] Y[ " + to_string(orientacion.Z) + "]";
 	text += "\n Velocidad (km/h): " + to_string(vehiculo->getCurrentSpeedKmHour());
 	text += "\n Fuerza Motor: " + to_string(vehiculo->getWheelInfo(0).m_engineForce);
+	text += "\n Tipo Objeto: ";
+	if(getTipoObj()==0){
+		text += "Nada";
+	}else if(getTipoObj()==1){
+		text += "Proyectil";
+	}else if(getTipoObj()==2){
+		text += "Estatico";
+	}else if(getTipoObj()==3){
+		text += "Turbo";
+	}
+	text += "\nTurbo: ";
+	if(turboActivado) text += "Activado";
+	else text += "Desactivado";
 
 	return text;
 }
@@ -346,7 +385,14 @@ void Corredor::update()
 {
 	//if(vehiculo->getCurrentSpeedKmHour() > 0)
 	//	Fuerza = btScalar(4000 / vehiculo->getCurrentSpeedKmHour());
-
+	if(turboActivado){
+		Motor3d *mundo = Motor3d::getInstancia();
+		if (mundo->getTime() - timerTurbo >= 2000) {
+			cout << "Se acaba el turbo\n";
+			setTurbo(false);
+		}
+	}else if(vehiculo->getCurrentSpeedKmHour() > 0)
+        Fuerza = btScalar(4000 * (50 / vehiculo->getCurrentSpeedKmHour()));
 	movimiento();
 	posicion.setX(cuboNodo->getPosition().X);
 	posicion.setY(cuboNodo->getPosition().Y);

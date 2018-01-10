@@ -65,7 +65,7 @@ int main()
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	btBulletWorldImporter *fileLoader = new btBulletWorldImporter(mundo);
-	mundo->setGravity(btVector3(0, -10, 0));
+	mundo->setGravity(btVector3(0, -15, 0));
 
 	//Debug BUllet
 	DebugDraw debugDraw(device);
@@ -78,7 +78,7 @@ int main()
 
 	Pista *pistaca = Pista::getInstancia();
 	cout << " voy a criar el mapa" << endl;
-	pistaca->setMapa("assets/Mapa01/mapaIsla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/WPTrbBox2.obj");
+	pistaca->setMapa("assets/Mapa01/MapaIsla.obj", "fisicas/MapaIsla.bullet", "assets/Mapa01/WPTrbBox.obj");
 
 	pistaca->getArrayWaypoints();
 

@@ -1,2 +1,0 @@
-import PhysicsConstraints
-PhysicsConstraints.exportBulletFile("/home/santi/Escritorio/gitProject/Age-of-karts/assets/Mapa01/FisicasMapaIsla.bullet")

@@ -62,6 +62,11 @@ void CorredorJugador::actualizarItem()
 	core::list<Item *> items = pista->getItems();
 	int direccionItem = 1;
 	vector3df posDisparo(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.Z * 5);
+	
+	if(teclado->isKeyDown(KEY_KEY_1)) setTipoObj(1);
+	if(teclado->isKeyDown(KEY_KEY_2)) setTipoObj(2);
+	if(teclado->isKeyDown(KEY_KEY_3)) setTipoObj(3);
+	
 	Pista *mapa = Pista::getInstancia();
 	int idObjMapa = pista->getIdsObjetosCaja();
 
@@ -100,6 +105,10 @@ void CorredorJugador::actualizarItem()
 				est->inicializarFisicas();
 				soltarItem(est);
 				items.push_back(est);
+			}
+			else if (tipoObj == 3)
+			{
+				setTurbo(true);
 			}
 			pista->setItems(items);
 			//Llama a la funcion de la clase padre

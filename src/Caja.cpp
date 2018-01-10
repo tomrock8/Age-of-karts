@@ -68,7 +68,7 @@ void Caja::comprobarRespawn() {
 	if (nodo) {
 		if (!nodo->isVisible()) {
 			if (mundo->getTime() - timer >= 5000) {
-				cout << "Visible\n";
+				//cout << "Visible\n";
 				nodo->setVisible(true);
 			}
 		}

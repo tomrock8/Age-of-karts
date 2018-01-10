@@ -136,7 +136,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 				//cambiar a float y almacenar array de waypoints
 				arrayWaypoints[wp]->setPosicion(stof(pX), stof(pY), stof(pZ));
-				arrayWaypoints[wp]->setOrientacion(orientacion);
+				arrayWaypoints[wp]->setOrientacion(orientacion);//orientacion del waypoint
 				wp++;
 			}
 			if (tipoObj == 1) {//CAJA

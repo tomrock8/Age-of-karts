@@ -43,7 +43,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
 	suspension = btScalar(0.9); // Este valor tiene que ser ese... sino peta
-	Fuerza = btScalar(6000);
+	Fuerza = btScalar(4000);
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -229,6 +229,8 @@ void Corredor::SetFuerzaVelocidad(int turbo)
 }
 void Corredor::acelerar()
 {
+	vehiculo->applyEngineForce(Fuerza, 0);
+	vehiculo->applyEngineForce(Fuerza, 1);
 	vehiculo->applyEngineForce(Fuerza, 2);
 	vehiculo->applyEngineForce(Fuerza, 3);
 	vehiculo->setSteeringValue(btScalar(0), 0);
@@ -237,6 +239,8 @@ void Corredor::acelerar()
 
 void Corredor::frenar()
 {
+	vehiculo->applyEngineForce(FuerzaFrenado, 0);
+	vehiculo->applyEngineForce(FuerzaFrenado, 1);
 	vehiculo->applyEngineForce(FuerzaFrenado, 2);
 	vehiculo->applyEngineForce(FuerzaFrenado, 3);
 	vehiculo->setSteeringValue(btScalar(0), 0);
@@ -261,12 +265,16 @@ void Corredor::frenodemano()
 }
 void Corredor::desacelerar()
 {
+	vehiculo->applyEngineForce(0, 0);
+	vehiculo->applyEngineForce(0, 1);
 	vehiculo->applyEngineForce(0, 2);
 	vehiculo->applyEngineForce(0, 3);
 
 	vehiculo->setSteeringValue(0, 0);
 	vehiculo->setSteeringValue(0, 1);
 
+	vehiculo->setBrake(60, 0);
+	vehiculo->setBrake(60, 1);
 	vehiculo->setBrake(60, 2);
 	vehiculo->setBrake(60, 3);
 }
@@ -290,8 +298,15 @@ std::string Corredor::toString()
 	text += "\n Vector direccion(Orientacion) X[ " + to_string(orientacion.X) +
 		" ] Y[ " + to_string(orientacion.Z) + "]";
 	text += "\n Velocidad (km/h): " + to_string(vehiculo->getCurrentSpeedKmHour());
+	text += "\n Fuerza Motor: " + to_string(vehiculo->getWheelInfo(0).m_engineForce);
 
 	return text;
+}
+
+void Corredor::setFriccion(btScalar valor) {
+	for (int i = 0; i < vehiculo->getNumWheels(); i++) {
+		vehiculo->getWheelInfo(i).m_frictionSlip = btScalar(10.0f);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover	
+	}
 }
 
 //	----------------------------------------------
@@ -329,6 +344,9 @@ vector3df Corredor::getVectorDireccion()
 
 void Corredor::update()
 {
+	//if(vehiculo->getCurrentSpeedKmHour() > 0)
+	//	Fuerza = btScalar(4000 / vehiculo->getCurrentSpeedKmHour());
+
 	movimiento();
 	posicion.setX(cuboNodo->getPosition().X);
 	posicion.setY(cuboNodo->getPosition().Y);

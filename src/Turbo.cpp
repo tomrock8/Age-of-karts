@@ -45,8 +45,12 @@ irr:core::list<btRigidBody *> objetos = bullet->getObjetos();
 	objetos.push_back(rigidBody);
 	bullet->setObjetos(objetos);
 
+	this->id = id;
 
+}
 
+int Turbo::getId() {
+	return id;
 }
 
 bool Turbo::getTurboActivo() {
@@ -54,7 +58,7 @@ bool Turbo::getTurboActivo() {
 	return turboActivo;
 }
 void Turbo::setTurboActivo(Corredor *c, bool s) {
-	cout << "entro al turbo" << endl;
+	cout << "TURBO ACTIVADO" << endl;
 	corredor = c;
 	Motor3d *m = Motor3d::getInstancia();
 	turboActivo = s;

@@ -27,6 +27,7 @@ class Corredor
 	std::string toString();
 	void setTipoObj();
 	void acelerar();
+	void setFriccion(btScalar valor);
 
 	//Update
 	void update();

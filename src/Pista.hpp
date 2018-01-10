@@ -19,39 +19,49 @@ class Pista
 {
 
 public:
-  //Destructor
-  ~Pista(void);
-  //metodos GET
-  static Pista *getInstancia();
-  void InicializarFisicas();
-  //btTriangleMesh *getBulletTriangleMesh(IMesh *const mesh, vector3df escala);
-  void BorrarFisicas();
-  void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
-  Turbo* getTurbo();
-  core::list<Item *> getItems();
-  void setItems(irr::core::list<Item *> itemMetodo);
-  Turbo **getArrayTurbo();
-  Caja **getArrayCaja();
-  void setArrayCaja(Caja **cajas);
-  int getTamCajas();
-  Waypoint **getArrayWaypoints();
-private:
-  Pista(void);
-  static Pista *instancia;
-  //mundo
-  Motor3d *m;
-  ISceneManager *smgr;
-  btRigidBody *CuerpoColisionMapa;
-  btCollisionShape *FormaColision;
-  btDefaultMotionState *MotionState; // posicion del cuerpo de colision
-  Waypoint **arrayWaypoints;
-  Turbo    **arrayTurbos;
-  Caja     **arrayCajas;
-  int tamCajas;
-  btScalar Masa;
-  ISceneNode *Mapa;
+	//Destructor
+	~Pista(void);
+	
+	static Pista *getInstancia();
+	void InicializarFisicas();
+	void BorrarFisicas();
+	
+	// METODOS SET
+	void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
+	void setItems(irr::core::list<Item *> itemMetodo);
 
-  irr::core::list<Item *> Items;
+	// METODOS GET
+	core::list<Item *> getItems();
+	Turbo **getArrayTurbo();
+	Caja **getArrayCaja();
+	void setArrayCaja(Caja **cajas);
+	int getTamCajas();
+	Waypoint **getArrayWaypoints();
+	Turbo* getTurbo();
+	Turbo* getTurbo(int id);
+
+private:
+	Pista(void);
+	static Pista *instancia;
+	
+	//MUNDO
+	btRigidBody *CuerpoColisionMapa;
+	btCollisionShape *FormaColision;
+	btDefaultMotionState *MotionState; // posicion del cuerpo de colision
+	
+	int tamWaypoints;
+	Waypoint **arrayWaypoints;
+
+	int tamTurbos;
+	Turbo    **arrayTurbos;
+	
+	int tamCajas;
+	Caja     **arrayCajas;
+	
+	btScalar Masa;
+	ISceneNode *Mapa;
+
+	irr::core::list<Item *> Items;
 };
 
 #endif /* PISTA_H */

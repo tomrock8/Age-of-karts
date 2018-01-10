@@ -53,8 +53,11 @@ bool GestorColisiones::JugadorTurbo()
 	{
 		if (strcmp("Turbo", nodoB->getName()) == 0)
 		{
-			Turbo *t = mapa->getTurbo();
-			t->setTurboActivo(pj1Col, true);
+			Turbo *t = mapa->getTurbo(nodoB->getID());
+			if (t) {
+				t->setTurboActivo(pj1Col, true);
+			}
+			
 
 			//cout << "Jugador - Turbo\n";
 			return true;
@@ -123,22 +126,22 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 		if (strcmp("Caja", nodoB->getName()) == 0 && nodoB->isVisible())
 		{
 			colision = true;
-			cout << "Jug - Caja\n";
+			//cout << "Jug - Caja\n";
 			int idB = nodoB->getID();
-			cout << "Tam Cajas: " << tamCajas << "- " << idB << endl;
+			//cout << "Tam Cajas: " << tamCajas << "- " << idB << endl;
 			for (int i = 0; i < tamCajas; i++)
 			{
 				if (cajas[i] != NULL)
 				{
-					cout << "Llego aqui1: " << cajas[i]->getIDCaja() << endl;
+					//cout << "Llego aqui1: " << cajas[i]->getIDCaja() << endl;
 					if (cajas[i]->getIDCaja() == idB)
 					{
-						cout << "Llego aqui2\n";
+						//cout << "Llego aqui2\n";
 						cajas[i]->romper(pj1Col);
-						cout << "Llego aqui3\n";
+						//cout << "Llego aqui3\n";
 					}
 				}
-				cout << "Entro " << i << endl;
+				//cout << "Entro " << i << endl;
 			}
 			pista->setArrayCaja(cajas);
 		}
@@ -164,7 +167,7 @@ bool GestorColisiones::objetoDestruible()
 		if (strcmp("Proyectil", nodoB->getName()) == 0)
 		{
 			colision = true;
-			cout << "Destruible - Item\n";
+			//cout << "Destruible - Item\n";
 			int idB = nodoB->getID();
 			for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
 			{
@@ -172,7 +175,7 @@ bool GestorColisiones::objetoDestruible()
 				//cout << "NodoB: " << idB << " == NodoItem: " << item->getNodo()->getID() << endl;
 				if (item->getNodo()->getID() == idB)
 				{
-					cout << "Entro\n";
+					//cout << "Entro\n";
 					item->Delete();
 					Iterator = items.erase(Iterator);
 					pista->setItems(items);

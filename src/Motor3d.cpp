@@ -9,7 +9,7 @@ Motor3d *Motor3d::instancia = NULL;
 Motor3d::Motor3d()
 {
 
-	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(640, 480), 16, false, false, true, 0);
+	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(1280, 720), 16, false, false, true, 0);
 	if (!device)
 		std::cout << "algo falla con device" << std::endl;
 

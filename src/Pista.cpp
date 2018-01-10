@@ -80,13 +80,14 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	//lectura de fichero
 	std::string line;
 	int j;
-	std::string tipo, pX, pY, pZ;
+	std::string tipo, pX, pY, pZ,orientacionWp;
 	std::string tamanyoArrayWaypoints;
 	std::string tamanyoArrayCajas;
 	std::string tamanyoArrayTurbo;
 	int tipoObj;
 	int wp = 0;
 	int turbos = 0;
+	float orientacion = 0.0f;
 	tamCajas = 0;
 	ifstream myfile(waypoints);
 
@@ -108,15 +109,19 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 
 		while (!myfile.eof()) {
+				
 			getline(myfile, tipo, ' ');//caja turbo o waypoint
 			getline(myfile, pX, ' ');//posiciones
 			getline(myfile, pY, ' ');//posiciones
 			getline(myfile, pZ, ' ');//posiciones
-
+			
 
 			tipoObj = stoi(tipo);
 			if (tipoObj == 0) {//WAYPOINT
 				//seteamos los Waypoins
+				getline(myfile, orientacionWp, ' ');//orientacion con respecto a la carretera	
+				orientacion = stoi(orientacionWp);
+				cout <<"orientacion: "<<orientacion<<endl;
 				arrayWaypoints[wp] = new Waypoint();
 				arrayWaypoints[wp]->setNombre(std::to_string(wp));
 				if (wp == 0)
@@ -131,6 +136,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 				//cambiar a float y almacenar array de waypoints
 				arrayWaypoints[wp]->setPosicion(stof(pX), stof(pY), stof(pZ));
+				arrayWaypoints[wp]->setOrientacion(orientacion);
 				wp++;
 			}
 			if (tipoObj == 1) {//CAJA

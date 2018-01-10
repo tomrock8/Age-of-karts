@@ -21,6 +21,7 @@ public:
 
   //metodos SET
   void setPosicion(float x, float y, float z);
+  void setOrientacion(float grados);
   void setSiguiente(Waypoint *siguiente);
   void setNombre(std::string nombre);
   //metodos GET

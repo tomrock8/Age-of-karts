@@ -53,11 +53,7 @@ bool GestorColisiones::JugadorTurbo()
 	{
 		if (strcmp("Turbo", nodoB->getName()) == 0)
 		{
-			Turbo *t = mapa->getTurbo(nodoB->getID());
-			if (t) {
-				t->setTurboActivo(pj1Col, true);
-			}
-			
+			pj1Col->setTurbo(true);
 
 			//cout << "Jugador - Turbo\n";
 			return true;

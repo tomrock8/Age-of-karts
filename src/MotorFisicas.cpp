@@ -15,7 +15,7 @@ MotorFisicas::MotorFisicas()
 	btSequentialImpulseConstraintSolver *solver = new btSequentialImpulseConstraintSolver();
 	mundo = new btDiscreteDynamicsWorld(dispatcher, broadPhase, solver, confColision); //creacion del mundo
 	btBulletWorldImporter *fileLoader = new btBulletWorldImporter(mundo);
-	fileLoader->loadFile("fisicas/MapaIsla.bullet"); //no recoge bien el const char con la ruta del fichero si se le pasas por parametro
+	fileLoader->loadFile("assets/Mapa01/FisicasMapaIsla.bullet"); //no recoge bien el const char con la ruta del fichero si se le pasas por parametro
 }
 
 MotorFisicas::~MotorFisicas() {}

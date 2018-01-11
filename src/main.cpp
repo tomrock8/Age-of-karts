@@ -78,7 +78,7 @@ int main()
 
 	Pista *pistaca = Pista::getInstancia();
 	cout << " voy a criar el mapa" << endl;
-	pistaca->setMapa("assets/Mapa01/MapaIsla.obj", "fisicas/MapaIsla.bullet", "assets/Mapa01/WPTrbBox.obj");
+	pistaca->setMapa("assets/Mapa01/mapaIsla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/WPTrbBox2.obj");
 
 	pistaca->getArrayWaypoints();
 
@@ -88,7 +88,7 @@ int main()
 	//Posicion del nodo y el bloque de colisiones centralizado:
 
 	int id = 999;// estaba int id = 0; . Se cambia a 999 para evitar posibles conflictos con ids 0 creadas en mapa 
-	vector3df pos(0, 40, 300);
+	vector3df pos(0, 0, 300);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 
 	pj1->getNodo()->setID(id);
@@ -261,15 +261,7 @@ void UpdateRender(btRigidBody *TObject)
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
 	if (strcmp(Node->getName(), "Jugador") == 0) {
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 1, (f32)Point[2]));
-		if (mapa->getTurbo()) {
-			if (mapa->getTurbo()->getTurboActivo()) {
-				cout << "turbo Activo" << endl;
-				if (mapa->getTurbo()->getTiempoTurbo() + 2000 > m->getTime() - 100 && mapa->getTurbo()->getTiempoTurbo() + 2000 < m->getTime() + 100) {
-					cout << "ha pasado dos segundos" << endl;
-					mapa->getTurbo()->quitarTurbo();
-				}
-			}
-		}
+		
 	}
 	else
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));

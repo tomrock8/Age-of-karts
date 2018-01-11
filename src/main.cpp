@@ -88,7 +88,7 @@ int main()
 	//Posicion del nodo y el bloque de colisiones centralizado:
 
 	int id = 999;// estaba int id = 0; . Se cambia a 999 para evitar posibles conflictos con ids 0 creadas en mapa 
-	vector3df pos(0, 40, 300);
+	vector3df pos(0, 0, 300);
 	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
 
 	pj1->getNodo()->setID(id);

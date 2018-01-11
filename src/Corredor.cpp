@@ -23,6 +23,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 		// Desactivar la iluminacion del cubo
 		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
 		cuboNodo->setPosition(pos);
+		cuboNodo->setRotation(vector3df(0.0f,90.0f,0.0f));
 	}
 
 	posicion.setX(pos.X);

@@ -10,7 +10,7 @@
 Corredor::Corredor(stringw rutaObj, vector3df pos)
 {
 	cargador = 0;
-	tipoObj= 0;
+	tipoObj = 0;
 	turboActivado = false;
 	timerTurbo = 0;
 	Motor3d *m = Motor3d::getInstancia();
@@ -26,7 +26,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 		// Desactivar la iluminacion del cubo
 		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
 		cuboNodo->setPosition(pos);
-		cuboNodo->setRotation(vector3df(0.0f,90.0f,0.0f));
+		cuboNodo->setRotation(vector3df(0.0f, 90.0f, 0.0f));
 	}
 
 	posicion.setX(pos.X);
@@ -234,20 +234,21 @@ void Corredor::soltarItem(Estatico *item)
 	tipoObj = 0;
 }
 
-void Corredor::setTurbo(bool activo, bool objeto){
+void Corredor::setTurbo(bool activo, bool objeto) {
 	turboActivado = activo;
-	if(activo){
+	if (activo) {
 		Motor3d *m = Motor3d::getInstancia();
 		SetFuerzaVelocidad(6000);
 		acelerar();
 		timerTurbo = m->getDevice()->getTimer()->getTime();
-		if(objeto) tipoObj = 0;
-	}else{
+		if (objeto) tipoObj = 0;
+	}
+	else {
 		SetFuerzaVelocidad(1000);
 	}
 }
 
-bool Corredor::getTurbo(){
+bool Corredor::getTurbo() {
 	return turboActivado;
 }
 
@@ -328,17 +329,21 @@ std::string Corredor::toString()
 	text += "\n Velocidad (km/h): " + to_string(vehiculo->getCurrentSpeedKmHour());
 	text += "\n Fuerza Motor: " + to_string(vehiculo->getWheelInfo(0).m_engineForce);
 	text += "\n Tipo Objeto: ";
-	if(getTipoObj()==0){
+
+	if (getTipoObj() == 0) {
 		text += "Nada";
-	}else if(getTipoObj()==1){
+	}
+	else if (getTipoObj() == 1) {
 		text += "Proyectil";
-	}else if(getTipoObj()==2){
+	}
+	else if (getTipoObj() == 2) {
 		text += "Estatico";
-	}else if(getTipoObj()==3){
+	}
+	else if (getTipoObj() == 3) {
 		text += "Turbo";
 	}
 	text += "\nTurbo: ";
-	if(turboActivado) text += "Activado";
+	if (turboActivado) text += "Activado";
 	else text += "Desactivado";
 
 	return text;
@@ -385,14 +390,15 @@ vector3df Corredor::getVectorDireccion()
 
 void Corredor::update()
 {
-	if(turboActivado){
+	if (turboActivado) {
 		Motor3d *mundo = Motor3d::getInstancia();
 		if (mundo->getTime() - timerTurbo >= 2000) {
 			cout << "Se acaba el turbo\n";
 			setTurbo(false, false);
 		}
-	}else if(vehiculo->getCurrentSpeedKmHour() > 0)
-        Fuerza = btScalar(FuerzaMaxima * (50 / vehiculo->getCurrentSpeedKmHour()));
+	}
+	else if (vehiculo->getCurrentSpeedKmHour() > 1)
+		Fuerza = btScalar(FuerzaMaxima * (50 / vehiculo->getCurrentSpeedKmHour()));
 	movimiento();
 	posicion.setX(cuboNodo->getPosition().X);
 	posicion.setY(cuboNodo->getPosition().Y);

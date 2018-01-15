@@ -62,7 +62,7 @@ void Pista::InicializarFisicas()
 
 void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 {
-	idObjCajas=100;//variable inicializada al principio para poner los ids de los objetos que aparecen random en las cajas
+	idObjCajas = 100;//variable inicializada al principio para poner los ids de los objetos que aparecen random en las cajas
 	Motor3d *m = Motor3d::getInstancia();
 	Mapa = m->getScene()->addMeshSceneNode(m->getScene()->getMesh(mapa));
 	if (Mapa)
@@ -77,7 +77,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	//lectura de fichero
 	std::string line;
 	int j;
-	std::string tipo, pX, pY, pZ,orientacionWp;
+	std::string tipo, pX, pY, pZ, orientacionWp;
 	std::string tamanyoArrayWaypoints;
 	std::string tamanyoArrayCajas;
 	std::string tamanyoArrayTurbo;
@@ -106,19 +106,19 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 
 		while (!myfile.eof()) {
-				
+
 			getline(myfile, tipo, ' ');//caja turbo o waypoint
 			getline(myfile, pX, ' ');//posiciones
 			getline(myfile, pY, ' ');//posiciones
 			getline(myfile, pZ, ' ');//posiciones
-			
+
 
 			tipoObj = stoi(tipo);
 			if (tipoObj == 0) {//WAYPOINT
 				//seteamos los Waypoins
 				getline(myfile, orientacionWp, ' ');//orientacion con respecto a la carretera	
 				orientacion = stoi(orientacionWp);
-				cout <<"orientacion: "<<orientacion<<endl;
+				//cout << "orientacion: " << orientacion << endl;
 				arrayWaypoints[wp] = new Waypoint();
 				arrayWaypoints[wp]->setNombre(std::to_string(wp));
 				if (wp == 0)
@@ -145,7 +145,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				arrayTurbos[turbos] = new Turbo(turbos, btVector3(stof(pX), stof(pY), stof(pZ)), false);
 				turbos++;
 			}
-			cout << line << endl;
+			//cout << line << endl;
 		}
 
 
@@ -204,7 +204,8 @@ Turbo *Pista::getTurbo() {
 
 Turbo *Pista::getTurbo(int id) {
 	for (int i = 0; i < tamTurbos; i++) {
-		if (arrayTurbos[i]->getId() == id) {			return arrayTurbos[i];
+		if (arrayTurbos[i]->getId() == id) {
+			return arrayTurbos[i];
 		}
 	}
 
@@ -213,9 +214,9 @@ Turbo *Pista::getTurbo(int id) {
 
 
 //RECOGER Y ASIGNAR IDS A LOS OBJETOS RANDOM DE LAS CAJAS
-void Pista::setIdsObjetosCaja(int i){
+void Pista::setIdsObjetosCaja(int i) {
 	idObjCajas = i;
 }
-int Pista::getIdsObjetosCaja(){
+int Pista::getIdsObjetosCaja() {
 	return idObjCajas;
 }

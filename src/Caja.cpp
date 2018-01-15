@@ -98,7 +98,6 @@ void Caja::romper(Corredor *pj1Col) {
 			break;
 		}
 	}
-	cout << "Entro\n";
 }
 
 void Caja::Delete()

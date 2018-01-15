@@ -89,9 +89,14 @@ int main()
 
 	int id = 999;// estaba int id = 0; . Se cambia a 999 para evitar posibles conflictos con ids 0 creadas en mapa 
 	vector3df pos(0, 0, 300);
-	CorredorJugador *pj1 = new CorredorJugador("assets/coche.obj", pos);
+	vector3df pos2(0, 0, 320);
+	CorredorJugador **pj= new CorredorJugador*[2];
+	pj[0] = new CorredorJugador("assets/coche.obj", pos);
+	pj[1] = new CorredorJugador("assets/coche.obj", pos2);
 
-	pj1->getNodo()->setID(id);
+	pj[0]->getNodo()->setID(id);
+	id++;
+	pj[1]->getNodo()->setID(id);
 
 	//CorredorIA *pj2 = new CorredorIA("assets/coche.obj", pos);
 	//pj2->InicializarFisicas();
@@ -158,18 +163,18 @@ int main()
 			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 
 
-			pj1->actualizarItem();
+			pj[0]->actualizarItem();
 
-			camara->moveCameraControl(pj1, device);
-			colisiones->ComprobarColisiones(pj1);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+			camara->moveCameraControl(pj[0], device);
+			colisiones->ComprobarColisiones(pj);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
-			pj1->update();
-			//pj2->update();
+			pj[0]->update();
+			//pj[1]->update();
 
 
 			textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-			textoDebug->agregar(pj1->toString());
+			textoDebug->agregar(pj[0]->toString());
 
 			//textoDebug->agregar("\n\n ---- CORREDOR 2 IA ----\n");
 			//textoDebug->agregar(pj2->toString());

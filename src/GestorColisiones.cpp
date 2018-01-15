@@ -3,14 +3,14 @@
 #define TAMANYOCAJAS 10
 #define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 
-void GestorColisiones::ComprobarColisiones(Corredor *pj1Col_1)
+void GestorColisiones::ComprobarColisiones(CorredorJugador **pj)
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	Pista *pista = Pista::getInstancia();
 	Caja** cajas = pista->getArrayCaja();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
-	pj1Col = pj1Col_1;
+	pj1 = pj;
 	int numManifolds = mundo->getDispatcher()->getNumManifolds();
 	for (int i = 0; i < numManifolds; i++)
 	{
@@ -53,7 +53,9 @@ bool GestorColisiones::JugadorTurbo()
 	{
 		if (strcmp("Turbo", nodoB->getName()) == 0)
 		{
-			pj1Col->setTurbo(true, false);
+			for( int i = 0; i< 2; i++)
+				if(nodoA->getID() == pj1[i]->getNodo()->getID())
+					pj1[i]->setTurbo(true, false);
 
 			//cout << "Jugador - Turbo\n";
 			return true;
@@ -129,12 +131,12 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 			{
 				if (cajas[i] != NULL)
 				{
-					//cout << "Llego aqui1: " << cajas[i]->getIDCaja() << endl;
 					if (cajas[i]->getIDCaja() == idB)
 					{
-						//cout << "Llego aqui2\n";
-						cajas[i]->romper(pj1Col);
-						//cout << "Llego aqui3\n";
+						for(int j = 0; j<2; j++)
+							if(nodoA->getID()== pj1[j]->getNodo()->getID()){
+								cajas[i]->romper(pj1[j]);
+							}
 					}
 				}
 				//cout << "Entro " << i << endl;

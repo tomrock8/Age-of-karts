@@ -3,6 +3,7 @@
 
 #include "IrrlichtLib.hpp"
 #include "Corredor.hpp"
+#include "CorredorJugador.hpp"
 #include "Caja.hpp"
 #include "Item.hpp"
 #include "Proyectil.hpp"
@@ -18,14 +19,14 @@ class GestorColisiones
 {
 public:
   GestorColisiones(){};
-  void ComprobarColisiones(Corredor *pj1Col_1);
+  void ComprobarColisiones(CorredorJugador **pj);
   bool JugadorCaja(Caja *cajas[]);
   bool JugadorTurbo();
   bool objetoDestruible();
   bool JugadorEstatico();
 
 private:
-  Corredor *pj1Col;
+  CorredorJugador **pj1;
   ISceneNode *nodoA;
   ISceneNode *nodoB;
 };

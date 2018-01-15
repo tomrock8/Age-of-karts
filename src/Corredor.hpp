@@ -26,8 +26,10 @@ class Corredor
 	void SetFuerzaVelocidad(int turbo);
 	std::string toString();
 	void setTipoObj();
+	void setTipoObj(int i);
 	void acelerar();
 	void setFriccion(btScalar valor);
+	void setTurbo(bool activo);
 
 	//Update
 	void update();
@@ -41,6 +43,7 @@ class Corredor
 	vector3df getVectorDireccion();
 	int getCargador();
 	int getTipoObj();
+	bool getTurbo();
 
   protected:
 	//objetos
@@ -59,8 +62,12 @@ class Corredor
 
 
 	btCompoundShape *CentroGravedad;
-	int cargador = 0;
-	int tipoObj = 0;
+
+	//Objetos
+	int cargador;
+	int tipoObj;
+	bool turboActivado;
+	int timerTurbo;
 
 	btVector3 posicion;
 	btVector3 direccionRuedas;

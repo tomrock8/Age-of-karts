@@ -65,7 +65,7 @@ int main()
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	btBulletWorldImporter *fileLoader = new btBulletWorldImporter(mundo);
-	mundo->setGravity(btVector3(0, -10, 0));
+	mundo->setGravity(btVector3(0, -15, 0));
 
 	//Debug BUllet
 	DebugDraw debugDraw(device);
@@ -261,15 +261,7 @@ void UpdateRender(btRigidBody *TObject)
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
 	if (strcmp(Node->getName(), "Jugador") == 0) {
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 1, (f32)Point[2]));
-		if (mapa->getTurbo()) {
-			if (mapa->getTurbo()->getTurboActivo()) {
-				cout << "turbo Activo" << endl;
-				if (mapa->getTurbo()->getTiempoTurbo() + 2000 > m->getTime() - 100 && mapa->getTurbo()->getTiempoTurbo() + 2000 < m->getTime() + 100) {
-					cout << "ha pasado dos segundos" << endl;
-					mapa->getTurbo()->quitarTurbo();
-				}
-			}
-		}
+		
 	}
 	else
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));

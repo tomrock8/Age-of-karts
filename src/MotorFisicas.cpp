@@ -9,7 +9,7 @@ MotorFisicas *MotorFisicas::instancia = NULL;
 MotorFisicas::MotorFisicas()
 {
 
-	btBroadphaseInterface *broadPhase = new btAxisSweep3(btVector3(-1000, 1000, -1000), btVector3(1000, 1000, 1000)); //limites del mundo
+	btBroadphaseInterface *broadPhase = new btAxisSweep3(btVector3(-1000, -1000, -1000), btVector3(1000, 1000, 1000)); //limites del mundo
 	btDefaultCollisionConfiguration *confColision = new btDefaultCollisionConfiguration();
 	btCollisionDispatcher *dispatcher = new btCollisionDispatcher(confColision);
 	btSequentialImpulseConstraintSolver *solver = new btSequentialImpulseConstraintSolver();

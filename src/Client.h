@@ -1,6 +1,7 @@
 
 #include <iostream>
-#include "CTeclado.cpp"
+#include "RaknetIncludes.h"
+#include "IrrlichtLib.hpp"
 
 #define MAX_PLAYERS 10
 
@@ -29,7 +30,7 @@ class Client
     void ShutDownClient();
     int ReceivePackets(ISceneManager *escena);
     void SpawnPlayer(ISceneManager *escena);
-    void UpdateNetworkKeyboard(CTeclado *teclado);
+    //void UpdateNetworkKeyboard(CTeclado *teclado);
 
     RakNet::RakPeerInterface *client;
 

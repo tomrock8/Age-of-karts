@@ -20,6 +20,10 @@ info:
 	$(info $(FUENTE))
 	$(info $(OBJETOS))
 
+clean:
+	@rm -f -r obj/
+	@rm -f exec
+	@echo "Limpieza completada."
 
 #TODO:
 #  Comandos para compilar en release

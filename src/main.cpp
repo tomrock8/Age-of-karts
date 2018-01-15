@@ -22,7 +22,7 @@
 #include "Item.hpp"
 #include "GestorColisiones.hpp"
 #include "TextoPantalla.hpp"
-#include "Client.hpp"
+#include "Client.h"
 
 using namespace std;
 
@@ -49,8 +49,8 @@ int main()
 	Client *client;
 	client = new Client(8);
 	client->CreateClientInterface();
-	client->setIP();
-	client->ClientStartuo();
+	client->SetIP();
+	client->ClientStartup();
 
 	// -----------------------------
 	//  PREPARAR LA VENTANA

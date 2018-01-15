@@ -286,12 +286,12 @@ int Client::ReceivePackets(ISceneManager *escena)
 			bsIn.Read(playerDisconnect);
 
 			//player[playerDisconnect]->deleteMesh();
-			delete player[playerDisconnect];
+			//delete player[playerDisconnect];
 			for(int i=0; i<numPlayers; i++){	//Recorre todos los players
 				if(playerDisconnect<=i){		//Si se encuentra con playerDisconnect asigna la posicion siguiente a esta
-					if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
+					//if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
 						//player[i]=player[i+1];
-					else
+					//else
 						//player[i]=NULL;
 				}
 			}

@@ -108,7 +108,7 @@ void CorredorJugador::actualizarItem()
 			}
 			else if (tipoObj == 3)
 			{
-				setTurbo(true);
+				setTurbo(true, true);
 			}
 			pista->setItems(items);
 			//Llama a la funcion de la clase padre

@@ -29,7 +29,7 @@ class Corredor
 	void setTipoObj(int i);
 	void acelerar();
 	void setFriccion(btScalar valor);
-	void setTurbo(bool activo);
+	void setTurbo(bool activo, bool objeto);
 
 	//Update
 	void update();

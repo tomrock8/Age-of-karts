@@ -233,14 +233,14 @@ void Corredor::soltarItem(Estatico *item)
 	tipoObj = 0;
 }
 
-void Corredor::setTurbo(bool activo){
+void Corredor::setTurbo(bool activo, bool objeto){
 	turboActivado = activo;
 	if(activo){
 		Motor3d *m = Motor3d::getInstancia();
 		SetFuerzaVelocidad(6000);
 		acelerar();
 		timerTurbo = m->getDevice()->getTimer()->getTime();
-		tipoObj = 0;
+		if(objeto) tipoObj = 0;
 	}else{
 		SetFuerzaVelocidad(1000);
 	}
@@ -390,7 +390,7 @@ void Corredor::update()
 		Motor3d *mundo = Motor3d::getInstancia();
 		if (mundo->getTime() - timerTurbo >= 2000) {
 			cout << "Se acaba el turbo\n";
-			setTurbo(false);
+			setTurbo(false, false);
 		}
 	}else if(vehiculo->getCurrentSpeedKmHour() > 0)
         Fuerza = btScalar(4000 * (50 / vehiculo->getCurrentSpeedKmHour()));

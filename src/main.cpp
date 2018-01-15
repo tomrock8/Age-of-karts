@@ -65,7 +65,7 @@ int main()
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	btBulletWorldImporter *fileLoader = new btBulletWorldImporter(mundo);
-	mundo->setGravity(btVector3(0, -15, 0));
+	mundo->setGravity(btVector3(0, -25, 0));
 
 	//Debug BUllet
 	DebugDraw debugDraw(device);

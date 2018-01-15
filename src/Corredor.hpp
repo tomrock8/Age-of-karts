@@ -78,6 +78,7 @@ class Corredor
 	btScalar alturaConexionChasis;
 	btScalar Masa;
 	btScalar Fuerza;
+	btScalar FuerzaMaxima;
 	btScalar FuerzaFrenado;
 	btScalar FuerzaFrenoMano;
 	btScalar FuerzaGiro;

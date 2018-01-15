@@ -45,7 +45,7 @@ void MotorFisicas::setObjetos(irr::core::list<btRigidBody *> obj)
 
 void MotorFisicas::setFisicas(const char *f)
 {
-	cout << f << endl;
+	//cout << f << endl;
 	fisicas = f;
 	//fileLoader->loadFile("fisicas/carretera.bullet");
 	fileLoader->loadFile(f);

@@ -118,7 +118,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				//seteamos los Waypoins
 				getline(myfile, orientacionWp, ' ');//orientacion con respecto a la carretera	
 				orientacion = stoi(orientacionWp);
-				//cout << "orientacion: " << orientacion << endl;
+				//cout <<"orientacion: "<<orientacion<<endl;
 				arrayWaypoints[wp] = new Waypoint();
 				arrayWaypoints[wp]->setNombre(std::to_string(wp));
 				if (wp == 0)
@@ -152,8 +152,8 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 		myfile.close();
 	}
 
-	else
-		cout << "Error abriendo archivo";
+	//else
+		//cout << "Error abriendo archivo";
 
 
 }

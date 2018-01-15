@@ -54,7 +54,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
 	Masa = btScalar(800);
 	FuerzaFrenado = btScalar(-10000);
-	FuerzaGiro = btScalar(0.3); //manejo a la hora de girar
+	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
 	FuerzaFrenoMano = btScalar(800);
 	FuerzaFrenadoReposo = btScalar(60);
 
@@ -147,11 +147,11 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = 40;	  //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo
-		wheel.m_wheelsDampingCompression = 2.4f; // btScalar(0.2) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f;
-		wheel.m_wheelsDampingRelaxation = 2.3f;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f;
+		wheel.m_suspensionStiffness = 10;	  //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo
+		wheel.m_wheelsDampingCompression = btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f;
+		wheel.m_wheelsDampingRelaxation = 0.3f;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f;
 		wheel.m_frictionSlip = btScalar(10000.0f);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover
-		wheel.m_rollInfluence = 0.2;		   //0.1f;	//Empieza a rodar muy loco, si el valor es alto
+		wheel.m_rollInfluence = 0.03;		   //0.1f;	//Empieza a rodar muy loco, si el valor es alto
 		//wheel.m_maxSuspensionForce = 40000.f;	//A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa)
 		wheel.m_maxSuspensionTravelCm = 800.f; //Nose muy bien que funcion tiene, pero si el valor es muy bajo el coche no avanza
 
@@ -287,10 +287,25 @@ void Corredor::girarIzquierda()
 	vehiculo->setSteeringValue(-FuerzaGiro, 0);
 	vehiculo->setSteeringValue(-FuerzaGiro, 1);
 }
-void Corredor::frenodemano()
-{
-	vehiculo->setBrake(FuerzaFrenoMano, 2);
-	vehiculo->setBrake(FuerzaFrenoMano, 3);
+void Corredor::frenodemano(bool activo)
+{	
+	int friccion = 3.0f; 
+	if (activo){
+		FuerzaGiro = btScalar(0.36);
+
+		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(friccion+0.5); 
+		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(friccion+0.5); 
+
+		vehiculo->getWheelInfo(2).m_frictionSlip = btScalar(friccion); 
+		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(friccion); 
+	}else{
+		FuerzaGiro = btScalar(0.1);
+		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(10000.0f);
+		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(10000.0f);
+
+		vehiculo->getWheelInfo(2).m_frictionSlip = btScalar(10000.0f);
+		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(10000.0f);
+	}	
 }
 void Corredor::desacelerar()
 {
@@ -393,7 +408,7 @@ void Corredor::update()
 	if (turboActivado) {
 		Motor3d *mundo = Motor3d::getInstancia();
 		if (mundo->getTime() - timerTurbo >= 2000) {
-			cout << "Se acaba el turbo\n";
+			//cout << "Se acaba el turbo\n";
 			setTurbo(false, false);
 		}
 	}

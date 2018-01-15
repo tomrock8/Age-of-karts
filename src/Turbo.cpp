@@ -58,7 +58,7 @@ bool Turbo::getTurboActivo() {
 	return turboActivo;
 }
 void Turbo::setTurboActivo(Corredor *c, bool s) {
-	cout << "TURBO ACTIVADO" << endl;
+	//cout << "TURBO ACTIVADO" << endl;
 	corredor = c;
 	Motor3d *m = Motor3d::getInstancia();
 	turboActivo = s;

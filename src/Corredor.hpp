@@ -98,7 +98,7 @@ class Corredor
 	void desacelerar();
 	void girarDerecha();
 	void girarIzquierda();
-	void frenodemano();
+	void frenodemano(bool activo);
 	virtual void movimiento(){}; // A implementar por derivadas
 
 	// UPDATES

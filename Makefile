@@ -1,26 +1,33 @@
 FUENTE := $(wildcard src/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
-LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11
-RUTAS := -I.
-CFLAGS := -ggdb
-
+LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lGL -lSDL_image -lGLU -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader
+RUTAS := -I. -I/usr/local/include/bullet/
+CFLAGS := -ggdb -std=c++11
 .PHONY: objdir info all 
 
 all: objdir exec
 
 exec: $(OBJETOS)
-	g++ -o $@ $^ $(RUTAS) $(LIBRERIAS) $(CFLAGS)
+	@g++ -o $@ $^ $(RUTAS) $(LIBRERIAS) $(CFLAGS)
+	@echo "Generado ejecutable. Ejecutar ./$@"
 
 obj/%.o : src/%.cpp
-	g++ -o $@ -c $^ $(RUTAS) $(CFLAGS)
+	@echo "Compilando $@..."
+	@g++ -o $@ -c $^ $(RUTAS) $(CFLAGS)
 
 objdir:
-	mkdir -p obj/
+	@mkdir -p obj/
+	@echo "Creando carpeta de compilados."
 
 info:
 	$(info $(FUENTE))
 	$(info $(OBJETOS))
 
+clean:
+	@rm -f -r obj/
+	@rm -f exec
+	@echo "Limpieza completada."
+#	echo "Limpiando resultado de compilacion."
 
 #TODO:
 #  Comandos para compilar en release

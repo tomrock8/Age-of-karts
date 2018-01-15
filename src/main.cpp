@@ -22,6 +22,7 @@
 #include "Item.hpp"
 #include "GestorColisiones.hpp"
 #include "TextoPantalla.hpp"
+#include "Client.hpp"
 
 using namespace std;
 
@@ -44,6 +45,12 @@ static ILogger *irrLog;
 int main()
 {
 	CTeclado *teclado = CTeclado::getInstancia();
+
+	Client *client;
+	client = new Client(8);
+	client->CreateClientInterface();
+	client->setIP();
+	client->ClientStartuo();
 
 	// -----------------------------
 	//  PREPARAR LA VENTANA
@@ -147,90 +154,86 @@ int main()
 
 	while (m->getDevice()->run())
 	{
-		if (m->getDevice()->isWindowActive())
+		client->ReceivePackets(smgr);
+
+		textoDebug->limpiar();
+
+		DeltaTime = irrTimer->getTime() - TimeStamp;
+		TimeStamp = irrTimer->getTime();
+		UpdatePhysics(DeltaTime);
+
+		for (int i = 0; i < pistaca->getTamCajas(); i++)
 		{
-
-			textoDebug->limpiar();
-
-			DeltaTime = irrTimer->getTime() - TimeStamp;
-			TimeStamp = irrTimer->getTime();
-			UpdatePhysics(DeltaTime);
-
-			for (int i = 0; i < pistaca->getTamCajas(); i++)
-			{
-				pistaca->getArrayCaja()[i]->comprobarRespawn();
-			}
-			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
-
-
-			pj[0]->actualizarItem();
-
-			camara->moveCameraControl(pj[0], device);
-			colisiones->ComprobarColisiones(pj);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
-			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
-
-			pj[0]->update();
-			//pj[1]->update();
-
-
-			textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-			textoDebug->agregar(pj[0]->toString());
-
-			//textoDebug->agregar("\n\n ---- CORREDOR 2 IA ----\n");
-			//textoDebug->agregar(pj2->toString());
-
-			//-------ENTRADA TECLADO ----------//
-			/*
-			if (teclado->isKeyDown(KEY_KEY_R))
-			{
-				pj2->movimiento();
-			}
-			*/
-
-			if (teclado->isKeyDown(KEY_ESCAPE))
-			{
-				m->cerrar();
-				return 0;
-			}
-
-			if (teclado->isKeyDown(KEY_KEY_0))
-			{
-				debug = 0;
-			}
-			if (teclado->isKeyDown(KEY_KEY_9))
-			{
-				debug = 1;
-			}
-
-			//-------ENTRADA TECLADO FIN----------//
-			int fps = driver->getFPS();
-			if (lastFPS != fps)
-			{
-				core::stringw tmp(L"Age of karts [");
-				tmp += driver->getName();
-				tmp += L"] fps: ";
-				tmp += fps;
-
-				m->getDevice()->setWindowCaption(tmp.c_str());
-				lastFPS = fps;
-			}
-			//	RENDER
-			m->dibujar();
-
-			SMaterial debugMat;
-			debugMat.Lighting = true;
-			driver->setMaterial(debugMat);
-			driver->setTransform(ETS_WORLD, IdentityMatrix);
-			if (debug) {
-				mundo->debugDrawWorld();
-			}
-			guienv->drawAll();
-			driver->endScene();
+			pistaca->getArrayCaja()[i]->comprobarRespawn();
 		}
-		else
+		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
+
+
+		pj[0]->actualizarItem();
+
+		camara->moveCameraControl(pj[0], device);
+		colisiones->ComprobarColisiones(pj);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
+
+		pj[0]->update();
+		//pj[1]->update();
+
+
+		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
+		textoDebug->agregar(pj[0]->toString());
+
+		//textoDebug->agregar("\n\n ---- CORREDOR 2 IA ----\n");
+		//textoDebug->agregar(pj2->toString());
+
+		//-------ENTRADA TECLADO ----------//
+		/*
+		if (teclado->isKeyDown(KEY_KEY_R))
 		{
-			m->getDevice()->yield();
+			pj2->movimiento();
 		}
+		*/
+
+		if (teclado->isKeyDown(KEY_ESCAPE))
+		{
+			client->ShutDownClient();
+			m->cerrar();
+			return 0;
+		}
+
+		if (teclado->isKeyDown(KEY_KEY_0))
+		{
+			debug = 0;
+		}
+		if (teclado->isKeyDown(KEY_KEY_9))
+		{
+			debug = 1;
+		}
+
+		//-------ENTRADA TECLADO FIN----------//
+		int fps = driver->getFPS();
+		if (lastFPS != fps)
+		{
+			core::stringw tmp(L"Age of karts [");
+			tmp += driver->getName();
+			tmp += L"] fps: ";
+			tmp += fps;
+
+			m->getDevice()->setWindowCaption(tmp.c_str());
+			lastFPS = fps;
+		}
+		//	RENDER
+		m->dibujar();
+
+		SMaterial debugMat;
+		debugMat.Lighting = true;
+		driver->setMaterial(debugMat);
+		driver->setTransform(ETS_WORLD, IdentityMatrix);
+		if (debug) {
+			mundo->debugDrawWorld();
+		}
+		guienv->drawAll();
+		driver->endScene();
+	
 	}
 
 	m->getDevice()->drop();

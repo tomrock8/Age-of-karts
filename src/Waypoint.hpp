@@ -23,6 +23,7 @@ public:
   void setPosicion(float x, float y, float z);
   void setSiguiente(Waypoint *siguiente);
   void setNombre(std::string nombre);
+  void setOrientacion(float grados);
   //metodos GET
   IMeshSceneNode *getWaypoint();
   vector3df getPosicion();

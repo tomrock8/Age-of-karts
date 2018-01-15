@@ -77,14 +77,15 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	//lectura de fichero
 	std::string line;
 	int j;
-	std::string tipo, pX, pY, pZ;
+	std::string tipo, pX, pY, pZ,orientacionWp;
 	std::string tamanyoArrayWaypoints;
 	std::string tamanyoArrayCajas;
 	std::string tamanyoArrayTurbo;
 	int tipoObj;
-
-
-	tamCajas = tamTurbos = tamWaypoints = 0;
+	int wp = 0;
+	int turbos = 0;
+	float orientacion = 0.0f;
+	tamCajas = 0;
 	ifstream myfile(waypoints);
 
 	if (myfile.is_open())
@@ -105,30 +106,35 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 
 		while (!myfile.eof()) {
+				
 			getline(myfile, tipo, ' ');//caja turbo o waypoint
 			getline(myfile, pX, ' ');//posiciones
 			getline(myfile, pY, ' ');//posiciones
 			getline(myfile, pZ, ' ');//posiciones
-
+			
 
 			tipoObj = stoi(tipo);
 			if (tipoObj == 0) {//WAYPOINT
 				//seteamos los Waypoins
-				arrayWaypoints[tamWaypoints] = new Waypoint();
-				arrayWaypoints[tamWaypoints]->setNombre(std::to_string(tamWaypoints));
-				if (tamWaypoints == 0)
+				getline(myfile, orientacionWp, ' ');//orientacion con respecto a la carretera	
+				orientacion = stoi(orientacionWp);
+				cout <<"orientacion: "<<orientacion<<endl;
+				arrayWaypoints[wp] = new Waypoint();
+				arrayWaypoints[wp]->setNombre(std::to_string(wp));
+				if (wp == 0)
 				{ //si es el primero apuntara al ultimo
-					arrayWaypoints[tamWaypoints]->setSiguiente(arrayWaypoints[stoi(tamanyoArrayWaypoints) + 1]);
+					arrayWaypoints[wp]->setSiguiente(arrayWaypoints[stoi(tamanyoArrayWaypoints) + 1]);
 				}
-				else if (tamWaypoints == stoi(tamanyoArrayWaypoints) - 2)
+				else if (wp == stoi(tamanyoArrayWaypoints) - 2)
 				{ //si es el ultimo apuntara al primero
-					arrayWaypoints[tamWaypoints]->setSiguiente(arrayWaypoints[0]);
+					arrayWaypoints[wp]->setSiguiente(arrayWaypoints[0]);
 				}
-				else arrayWaypoints[tamWaypoints]->setSiguiente(arrayWaypoints[tamWaypoints + 1]);
+				else arrayWaypoints[wp]->setSiguiente(arrayWaypoints[wp + 1]);
 
 				//cambiar a float y almacenar array de waypoints
-				arrayWaypoints[tamWaypoints]->setPosicion(stof(pX), stof(pY), stof(pZ));
-				tamWaypoints++;
+				arrayWaypoints[wp]->setPosicion(stof(pX), stof(pY), stof(pZ));
+				arrayWaypoints[wp]->setOrientacion(orientacion);//orientacion del waypoint
+				wp++;
 			}
 			if (tipoObj == 1) {//CAJA
 				arrayCajas[tamCajas] = new Caja(vector3df(stof(pX), stof(pY), stof(pZ)), tamCajas);
@@ -136,8 +142,8 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 			}
 			if (tipoObj == 2) {//TURBO
-				arrayTurbos[tamTurbos] = new Turbo(tamTurbos, btVector3(stof(pX), stof(pY), stof(pZ)), false);
-				tamTurbos++;
+				arrayTurbos[turbos] = new Turbo(turbos, btVector3(stof(pX), stof(pY), stof(pZ)), false);
+				turbos++;
 			}
 			cout << line << endl;
 		}

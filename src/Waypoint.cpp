@@ -7,7 +7,7 @@ Waypoint::Waypoint()
 	waypoint = m->getScene()->addCubeSceneNode(0.1f);
 	waypoint->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
 	m->getScene()->getMeshManipulator()->setVertexColors(waypoint->getMesh(), SColor(255, 200, 100, 100));
-	waypoint->setScale(vector3df(1, 1000, 1));
+	waypoint->setScale(vector3df(950, 150, 05));
 	nombre = "";
 	siguiente = NULL; // Referenciar despues con la funcion
 }
@@ -45,4 +45,9 @@ std::string Waypoint::getNombre()
 {
 
 	return nombre;
+}
+void Waypoint::setOrientacion(float grado)
+{
+
+	waypoint->setRotation(vector3df(0.0f,grado,0.0f));
 }

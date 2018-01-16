@@ -52,6 +52,7 @@ void CorredorJugador::movimiento()
 	}
 
 	if (!comprobadorMovimiento)
+		if (!turboActivado)
 		desacelerar();
 }
 

@@ -151,10 +151,9 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 		myfile.close();
 	}
-	else {
+
+	else
 		cout << "Error abriendo archivo";
-	}
-		
 
 
 }

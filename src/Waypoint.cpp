@@ -49,5 +49,5 @@ std::string Waypoint::getNombre()
 void Waypoint::setOrientacion(float grado)
 {
 
-	waypoint->setRotation(vector3df(0.0f, grado, 0.0f));
+	waypoint->setRotation(vector3df(0.0f,grado,0.0f));
 }

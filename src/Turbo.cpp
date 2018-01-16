@@ -64,14 +64,13 @@ void Turbo::setTurboActivo(Corredor *c, bool s) {
 	turboActivo = s;
 	turboTocado = s;
 	if (turboActivo && turboTocado) {//si esta activo almacenamos tiempo y aumentamos fuerza
-		corredor->SetFuerzaVelocidad(15000);
+		corredor->SetFuerzaVelocidad(150000);
 		corredor->acelerar();
 
 		tiempo = m->getDevice()->getTimer()->getTime();
-
 	}
-	else corredor->SetFuerzaVelocidad(10000);
-
+	else corredor->SetFuerzaVelocidad(100000);
+	
 	turboTocado = false;
 }
 

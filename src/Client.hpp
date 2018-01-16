@@ -1,7 +1,6 @@
 
 #include <iostream>
-#include "RaknetIncludes.h"
-#include "IrrlichtLib.hpp"
+#include "CorredorRed.hpp"
 
 #define MAX_PLAYERS 10
 
@@ -38,7 +37,7 @@ class Client
     std::string clientPort;
     std::string serverIP;
 
-    //PlayerClient *player[MAX_PLAYERS];
+    CorredorRed *player[MAX_PLAYERS];
     int controlPlayer;
     int numPlayers;
     bool spawned;

@@ -1,5 +1,5 @@
-#include "Client.h"
-#include "NetworkEnums.h"
+#include "Client.hpp"
+#include "NetworkEnums.hpp"
 #include <iostream>
 
 #define DEBUG_BUILD

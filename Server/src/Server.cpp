@@ -1,6 +1,6 @@
-#include "Server.h"
+#include "Server.hpp"
 #include <iostream>
-#include "NetworkEnums.h"
+#include "NetworkEnums.hpp"
 
 #define MAX_PLAYERS 10 //numero maximo de jugadores conectados al servidor
 

@@ -1,7 +1,6 @@
 
 #include <iostream>
-#include "PlayerServer.h"
-#include "CTeclado.cpp"
+#include "PlayerServer.hpp"
 
 #define MAX_CLIENTS 10
 #define MAX_PLAYERS 10

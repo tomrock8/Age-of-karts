@@ -22,7 +22,7 @@
 #include "Item.hpp"
 #include "GestorColisiones.hpp"
 #include "TextoPantalla.hpp"
-#include "Client.h"
+#include "Client.hpp"
 
 using namespace std;
 

@@ -1,5 +1,5 @@
 #include <irrlicht.h>
-#include "Server.h"
+#include "Server.hpp"
 
 using namespace irr;
 using namespace core;

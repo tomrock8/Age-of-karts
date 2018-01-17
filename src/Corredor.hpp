@@ -133,7 +133,6 @@ class Corredor
 	void actualizarRuedas();
 	void updateDireccion();
 	void updateVectorDireccion();
-	void updateDireccionGrados();
 };
 
 #endif /* CORREDOR_H */

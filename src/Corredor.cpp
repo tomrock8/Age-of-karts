@@ -780,24 +780,7 @@ void Corredor::update()
 	logicaDifusa();
 }
 
- * Identifica la rotacion del coche en grados
-*/
-void Corredor::updateDireccionGrados()
-{
-	btTransform centerOfMassWorldTrans;
-	motionStateCoche->getWorldTransform(centerOfMassWorldTrans);
 
-	float radianes = centerOfMassWorldTrans.getRotation().getY(); //ROTACION OBTENIDA
-	float grados = radianes * 180;
-
-	if (grados < 0)
-	{
-		grados = 180 + (180 + grados);
-	}
-
-	direccionGrados = grados;
-	//cout<<"X: "<<direccionGrados<<endl;
-}
 
 /**
  * Actualiza el vector direccion del corredor.
@@ -830,7 +813,8 @@ void Corredor::updateVectorDireccion()
 void Corredor::updateDireccion()
 {
 	updateVectorDireccion();
-	updateDireccionGrados();
+	float orientacionZ = round(orientacion.Z);
+	float orientacionX = round(orientacion.X);
 
 	// NORTE
 	if (direccionGrados <= 20 && direccionGrados >= 341)

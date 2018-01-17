@@ -25,7 +25,8 @@ public:
 	bool getTurboActivo();
 	int getTiempoTurbo();
 	int getId();
-
+	//destructor
+	~Turbo();
 private:
 	Corredor * corredor;
 	IMeshSceneNode *turbo;

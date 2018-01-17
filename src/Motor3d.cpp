@@ -25,7 +25,9 @@ Motor3d::Motor3d()
 	setTeclado(teclado);
 }
 
-Motor3d::~Motor3d() {}
+Motor3d::~Motor3d() {
+	delete instancia;
+}
 
 Motor3d *Motor3d::getInstancia()
 {

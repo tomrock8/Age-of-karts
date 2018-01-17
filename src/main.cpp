@@ -35,7 +35,6 @@ using namespace std;
 static void UpdatePhysics(u32 TDeltaTime);
 static void UpdateRender(btRigidBody *TObject);
 
-static btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass, int id);
 
 static core::list<btRigidBody *> objetosm;
 static ITimer *irrTimer;
@@ -64,24 +63,19 @@ int main()
 	//inicializar mundo bullet
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	btBulletWorldImporter *fileLoader = new btBulletWorldImporter(mundo);
 	mundo->setGravity(btVector3(0, -25, 0));
-
-	//Debug BUllet
+	//----------------------------//
+	//--------Debug Bullet--------//
+	//----------------------------//
 	DebugDraw debugDraw(device);
 	debugDraw.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	mundo->setDebugDrawer(&debugDraw);
-
 	//-----------------------------//
 	//-----ESCENARIO MAPA----------//
 	//-----------------------------//
-
 	Pista *pistaca = Pista::getInstancia();
-	//cout << " voy a criar el mapa" << endl;
 	pistaca->setMapa("assets/Mapa01/mapaIsla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/WPTrbBox2.obj");
-
 	pistaca->getArrayWaypoints();
-
 	//-----------------------------//
 	//-----GEOMETRIA COCHE---------//
 	//-----------------------------//
@@ -98,46 +92,20 @@ int main()
 	id++;
 	pj[1]->getNodo()->setID(id);
 
-	//CorredorIA *pj2 = new CorredorIA("assets/coche.obj", pos);
-	//pj2->InicializarFisicas();
-	//pj2->getNodo()->setID(id);
-	///////////////////////CAMARA///////////////////////////////////////////////
+
+	//-----------------------------//
+	//-------------CAMARA----------//
+	//-----------------------------//
 	Camara3persona *camara = new Camara3persona();
-
-	/*btVector3 cubopos1(0, 20, 40);
-	vector3df cuboescala1(5, 5, 5);
-	id++;*/
-	//CreateBox(cubopos1,cuboescala1,10);
-
-	//----------------------------//
-	//---------OBJETOS------------//
-	//----------------------------//
-	//---------------------------------------------------------------------------------------DESDE AQUI 
-	/*btVector3 posObj2(0, 10, 70);
-	vector3df tamObj2(5.f, 20.f, 20.f);
-	btRigidBody *obje2 = CreateBox(posObj2, tamObj2, 100000, id);
-	//ISceneNode *nodoObj2 = static_cast<ISceneNode *>(obje2->getUserPointer());
-	////El problema esta en que estas variables no cambian las variables de obje2
-	////nodoObj2->setID(id);
-	////nodoObj2->setName("Destruible");
-	id++;*/
-
-	//irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
-
-
-	//----------
-	// Cajas de municion
-	//----------
-	//Ha pasado a mejor vida
-
-	//---------------------------------------------------------------------------------------HASTA AQUI ( si se borra el turbo y las cajas no funcionan, cosa que no entiendo porque las cajas ya no las creo aqui)
-	//----------------------------//
-	//------GESTOR COLISIONES-----//
-	//----------------------------//
+	//-----------------------------//
+	//------GESTOR COLISIONES------//
+	//-----------------------------//
 
 	GestorColisiones *colisiones = new GestorColisiones();
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
-
+	//-----------------------------//
+	//------------TIME-------------//
+	//-----------------------------//
 	int lastFPS = -1;
 	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;
 	// -----------------------------//
@@ -176,16 +144,7 @@ int main()
 			textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 			textoDebug->agregar(pj[0]->toString());
 
-			//textoDebug->agregar("\n\n ---- CORREDOR 2 IA ----\n");
-			//textoDebug->agregar(pj2->toString());
 
-			//-------ENTRADA TECLADO ----------//
-			/*
-			if (teclado->isKeyDown(KEY_KEY_R))
-			{
-				pj2->movimiento();
-			}
-			*/
 
 			if (teclado->isKeyDown(KEY_ESCAPE))
 			{
@@ -232,8 +191,19 @@ int main()
 			m->getDevice()->yield();
 		}
 	}
-
-	m->getDevice()->drop();
+	//----------------------------------//
+	//-----------DESTRUCTORES-----------//
+	//----------------------------------//
+	
+	for (int i = 0; i < 2; i++) {
+		delete pj[i];
+	}
+	delete pj;
+	delete pistaca;
+	delete bullet;
+	//delete camara;
+	//delete colisiones;
+	m->getDevice()->drop();//irrlicht
 
 	return 0;
 }
@@ -280,54 +250,3 @@ void UpdateRender(btRigidBody *TObject)
 
 }
 
-btRigidBody *CreateBox(const btVector3 &TPosition, const vector3df &TScale, btScalar TMass, int id)
-{
-
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
-	Motor3d *m = Motor3d::getInstancia();
-	core::list<btRigidBody *> objetos = bullet->getObjetos();
-
-	ISceneNode *Node = m->getScene()->addCubeSceneNode(1.0f);
-	Node->setScale(TScale);
-	//----------------------------------
-	//Chapuza momentanea para solucionar el core dumped al colisionar con proyectil
-	Node->setName("Destruible");
-	Node->setID(2);
-	//----------------------------------
-	Node->setMaterialFlag(EMF_LIGHTING, 1);
-
-	Node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/rust.png"));
-	Node->setName("Destruible");
-	Node->setID(id);
-	Node->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
-	// Set the initial position of the object
-	btTransform Transform;
-	Transform.setIdentity();
-	Transform.setOrigin(TPosition);
-
-	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
-
-	// Create the shape
-	btVector3 HalfExtents(TScale.X * 0.5f, TScale.Y * 0.5f, TScale.Z * 0.5f);
-	btCollisionShape *Shape = new btBoxShape(HalfExtents);
-
-	// Add mass
-	btVector3 LocalInertia;
-	Shape->calculateLocalInertia(TMass, LocalInertia);
-
-	// Create the rigid body object
-	btRigidBody *RigidBody = new btRigidBody(TMass, MotionState, Shape, LocalInertia);
-
-	RigidBody->setActivationState(DISABLE_DEACTIVATION);
-	// Store a pointer to the irrlicht node so we can update it later
-	RigidBody->setUserPointer((void *)(Node));
-
-	// Add it to the world
-	mundo->addRigidBody(RigidBody);
-	objetos.push_back(RigidBody);
-	bullet->setObjetos(objetos);
-
-	return RigidBody;
-}

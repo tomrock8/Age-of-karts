@@ -19,9 +19,10 @@ public:
   bool Delete();
   ISceneNode *getNodo();
   btRigidBody *getRigidBody();
-    void setColision(bool b);
-    bool getColision();
-
+  void setColision(bool b);
+  bool getColision();
+//destructor
+	//~Item();
 protected:
   ISceneNode *nodo;
   btRigidBody *rigidBody;
@@ -32,6 +33,8 @@ protected:
   const char *nombre;
   int id;
   bool colision;
+  btDefaultMotionState *MotionState;
+  btCollisionShape *Shape;
 };
 
 #endif

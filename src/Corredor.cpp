@@ -108,7 +108,7 @@ void Corredor::InicializarFisicas()
 	CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
 
 	//RaycastDel Coche
-	btVehicleRaycaster *RayCastVehiculo = new btDefaultVehicleRaycaster(mundo);
+	RayCastVehiculo = new btDefaultVehicleRaycaster(mundo);
 	btRaycastVehicle::btVehicleTuning tuning;
 
 	vehiculo = new btRaycastVehicle(tuning, CuerpoColisionChasis, RayCastVehiculo);
@@ -986,4 +986,14 @@ std::string Corredor::getDireccion()
 	}
 
 	return "No Direccion";
+}
+//destructor
+Corredor::~Corredor() {
+	delete CuerpoColisionChasis->getMotionState();
+	delete CentroGravedad;
+	delete FormaColision;
+	delete RayCastVehiculo;
+	delete vehiculo;
+	delete CuerpoColisionChasis;
+
 }

@@ -1,6 +1,6 @@
 
 #include "Pista.hpp"
-#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
+
 
 //------------------------------\*
 //---CONSTRUCTOR pista----------\*
@@ -13,6 +13,23 @@ Pista::Pista() {
 
 Pista::~Pista()
 {
+	//destroy waypoint
+	for (int i = 0; i < tamWaypoints; i++) {
+		delete arrayWaypoints[i];
+	}
+	delete arrayWaypoints;
+	//destroy cajas
+	for (int i = 0; i < tamCajas; i++) {
+		delete arrayCajas[i];
+	}
+	delete arrayCajas;
+	//destroy turbo
+	for (int i = 0; i < tamTurbos; i++) {
+		delete arrayTurbos[i];
+	}
+	delete arrayTurbos;
+
+	delete instancia;
 }
 
 Pista *Pista::getInstancia()
@@ -23,7 +40,7 @@ Pista *Pista::getInstancia()
 	return instancia;
 }
 
-void Pista::InicializarFisicas()
+/*void Pista::InicializarFisicas()
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -58,7 +75,7 @@ void Pista::InicializarFisicas()
 	mundo->addRigidBody(CuerpoColisionMapa);
 	objetos.push_back(CuerpoColisionMapa);
 	bullet->setObjetos(objetos);
-}
+}*/
 
 void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 {
@@ -82,10 +99,11 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	std::string tamanyoArrayCajas;
 	std::string tamanyoArrayTurbo;
 	int tipoObj;
-	int wp = 0;
-	int turbos = 0;
-	float orientacion = 0.0f;
+	tamWaypoints = 0;
+	tamTurbos = 0;
 	tamCajas = 0;
+	float orientacion = 0.0f;
+	
 	ifstream myfile(waypoints);
 
 	if (myfile.is_open())
@@ -119,27 +137,27 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				getline(myfile, orientacionWp, ' ');//orientacion con respecto a la carretera	
 				orientacion = stoi(orientacionWp);
 				//cout <<"orientacion: "<<orientacion<<endl;
-				arrayWaypoints[wp] = new Waypoint();
+				arrayWaypoints[tamWaypoints] = new Waypoint();
 
 				//comento lo de la id de los waypoints porq da conflico con las cajas
 				//arrayWaypoints[wp]->getWaypoint()->setID(wp);
 				
-				if (wp > 0 && wp <= (stoi(tamanyoArrayWaypoints) - 2))
+				if (tamWaypoints > 0 && tamWaypoints <= (stoi(tamanyoArrayWaypoints) - 2))
 				{
-				arrayWaypoints[wp - 1]->setSiguiente(arrayWaypoints[wp]);
+				arrayWaypoints[tamWaypoints - 1]->setSiguiente(arrayWaypoints[tamWaypoints]);
 				
 				}
-				else if (wp == (stoi(tamanyoArrayWaypoints) - 1)) {
-				arrayWaypoints[wp - 1]->setSiguiente(arrayWaypoints[wp]);
+				else if (tamWaypoints == (stoi(tamanyoArrayWaypoints) - 1)) {
+				arrayWaypoints[tamWaypoints - 1]->setSiguiente(arrayWaypoints[tamWaypoints]);
 				
-				arrayWaypoints[wp]->setSiguiente(arrayWaypoints[0]);
+				arrayWaypoints[tamWaypoints]->setSiguiente(arrayWaypoints[0]);
 			
 				}
 				//cambiar a float y almacenar array de waypoints
-				arrayWaypoints[wp]->setPosicion(stof(pX), stof(pY), stof(pZ));
-				arrayWaypoints[wp]->setOrientacion(orientacion);//orientacion del waypoint
-				arrayWaypoints[wp]->inicializarFisicas();
-				wp++;
+				arrayWaypoints[tamWaypoints]->setPosicion(stof(pX), stof(pY), stof(pZ));
+				arrayWaypoints[tamWaypoints]->setOrientacion(orientacion);//orientacion del waypoint
+				arrayWaypoints[tamWaypoints]->inicializarFisicas();
+				tamWaypoints++;
 			}
 			if (tipoObj == 1) {//CAJA
 				arrayCajas[tamCajas] = new Caja(vector3df(stof(pX), stof(pY), stof(pZ)), tamCajas);
@@ -147,8 +165,8 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 			}
 			if (tipoObj == 2) {//TURBO
-				arrayTurbos[turbos] = new Turbo(turbos, btVector3(stof(pX), stof(pY), stof(pZ)), false);
-				turbos++;
+				arrayTurbos[tamTurbos] = new Turbo(tamTurbos, btVector3(stof(pX), stof(pY), stof(pZ)), false);
+				tamTurbos++;
 			}
 			//cout << line << endl;
 		}

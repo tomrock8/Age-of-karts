@@ -34,6 +34,10 @@ class MotorFisicas
 	btBulletWorldImporter *fileLoader;
 	core::list<btRigidBody *> objetos;
 	btDynamicsWorld *mundo;
+
+
+	
+	
 };
 
 #endif /* MOTORFISICAS_H */

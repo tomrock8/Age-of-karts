@@ -36,3 +36,6 @@ void TextoPantalla::agregar(std::string texto) {
 	this->texto += texto.c_str();
 	textoUI->setText(this->texto.c_str());
 }
+TextoPantalla::~TextoPantalla() {
+	delete instancia;
+}

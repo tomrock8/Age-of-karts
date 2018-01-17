@@ -60,7 +60,8 @@ class Corredor
 	int getTipoObj();
 	bool getTurbo();
 	Waypoint *getWaypointActual();
-
+	//destructor
+	~Corredor();
   protected:
 	//objetos
 	IMesh *coche;
@@ -111,6 +112,9 @@ class Corredor
 	btScalar FuerzaFrenoMano;
 	btScalar FuerzaGiro;
 	btScalar FuerzaFrenadoReposo;
+
+	//raycast
+	btVehicleRaycaster *RayCastVehiculo;
 
 	// Direccion - Orientacion
 	bool norte, sur, este, oeste;

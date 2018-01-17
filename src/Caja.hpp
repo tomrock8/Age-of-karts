@@ -24,6 +24,7 @@ public:
   void romper(Corredor *pj1Col);
   void comprobarRespawn();
   void Delete();
+   ~Caja();
 
 private:
   ISceneNode *nodo;

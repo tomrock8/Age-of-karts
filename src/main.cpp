@@ -155,6 +155,7 @@ int main()
 	while (m->getDevice()->run())
 	{
 		client->ReceivePackets(smgr);
+		client->SpawnPlayer(smgr);
 
 		textoDebug->limpiar();
 

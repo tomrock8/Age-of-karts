@@ -11,7 +11,8 @@ class TextoPantalla
 public:
 	void limpiar();
 	void agregar(std::string texto);
-
+	//destructor
+	~TextoPantalla();
 	static TextoPantalla *getInstancia();
 
 private:

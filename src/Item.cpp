@@ -37,11 +37,11 @@ btRigidBody *Item::inicializarFisicas()
 	btTransform Transform;
 	Transform.setIdentity();
 	Transform.setOrigin(btVector3(posicion.X, posicion.Y, posicion.Z));
-	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
+	MotionState = new btDefaultMotionState(Transform);
 
 	// Create the shape
 	btVector3 HalfExtents(escala.X * 0.5f, escala.Y * 0.5f, escala.Z * 0.5f);
-	btCollisionShape *Shape = new btBoxShape(HalfExtents);
+	Shape = new btBoxShape(HalfExtents);
 
 	// Add mass
 	btVector3 LocalInertia;

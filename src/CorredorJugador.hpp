@@ -20,6 +20,9 @@ class CorredorJugador : public Corredor
 	void update();
 
   private:
+	//objetos estaticos y dinamicos
+	Estatico * est;
+	Proyectil *pro;
 	bool checkItem;
 	bool comprobadorMovimiento;
 	//Item *actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos);

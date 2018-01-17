@@ -11,8 +11,10 @@ class Estatico : public Item
     Estatico(vector3df posicionItem, int idItem);
     void soltarItem();
     btRigidBody *inicializarFisicas();
-
+	//~Estatico();
   private:
+	  btDefaultMotionState * MotionState;
+	  btCollisionShape *Shape;
     bool colision;
 };
 

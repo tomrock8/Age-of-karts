@@ -119,3 +119,8 @@ IMeshSceneNode *Waypoint::getWaypoint(){
 	return waypoint;
 
 }
+Waypoint::~Waypoint() {
+	delete rigidBody->getMotionState();
+	delete rigidBody->getCollisionShape();
+	delete rigidBody;
+}

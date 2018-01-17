@@ -106,7 +106,7 @@ void CorredorJugador::actualizarItem()
 
 			if (tipoObj == 1)
 			{
-				Proyectil *pro = new Proyectil(posDisparo, idObjMapa);
+				pro = new Proyectil(posDisparo, idObjMapa);
 				lanzarItem(pro, direccionItem);
 				items.push_back(pro);
 			}
@@ -114,7 +114,7 @@ void CorredorJugador::actualizarItem()
 			{
 				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
 				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
-				Estatico *est = new Estatico(posDisparo, idObjMapa);
+				est = new Estatico(posDisparo, idObjMapa);
 				est->inicializarFisicas();
 				soltarItem(est);
 				items.push_back(est);

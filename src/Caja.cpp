@@ -136,3 +136,10 @@ void Caja::Delete()
 int Caja::getIDCaja() {
 	return id;
 }
+
+Caja::~Caja()
+{
+	delete rigidBody->getMotionState();
+	delete rigidBody->getCollisionShape();
+	delete rigidBody;
+}

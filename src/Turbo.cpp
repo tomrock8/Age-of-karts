@@ -86,3 +86,9 @@ int Turbo::getTiempoTurbo() {
 void Turbo::setTurboTocado(bool s) {
 	s = turboTocado;
 }
+//destructor
+Turbo::~Turbo() {
+	delete rigidBody->getMotionState();
+	delete rigidBody->getCollisionShape();
+	delete rigidBody;
+}

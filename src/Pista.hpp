@@ -20,7 +20,7 @@ class Pista
 
 public:
 	//Destructor
-	~Pista(void);
+	~Pista();
 	
 	static Pista *getInstancia();
 	void InicializarFisicas();

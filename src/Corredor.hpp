@@ -12,6 +12,7 @@
 #include "MotorFisicas.hpp"
 #include "Proyectil.hpp"
 #include "Estatico.hpp"
+#include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 using namespace std;
 

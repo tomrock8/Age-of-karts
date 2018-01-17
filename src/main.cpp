@@ -42,15 +42,19 @@ static core::list<btRigidBody *> objetosm;
 static ITimer *irrTimer;
 static ILogger *irrLog;
 
-int main()
+int main(int argc, char* argv[])
 {
+	cout << argc << endl;
 	CTeclado *teclado = CTeclado::getInstancia();
 
-	Client *client;
-	client = new Client(8);
-	client->CreateClientInterface();
-	client->SetIP();
-	client->ClientStartup();
+	Client *client = NULL;
+	if(argc == 2){
+		cout << "------------------------------------------------------------------------------------------------------------- \n";
+		client = new Client(8);
+		client->CreateClientInterface();
+		client->SetIP();
+		client->ClientStartup();
+	}
 
 	// -----------------------------
 	//  PREPARAR LA VENTANA
@@ -154,8 +158,10 @@ int main()
 
 	while (m->getDevice()->run())
 	{
-		client->ReceivePackets(smgr);
-		client->SpawnPlayer(smgr);
+		if(argc == 2){
+			client->ReceivePackets(smgr);
+			client->SpawnPlayer(smgr);
+		}
 
 		textoDebug->limpiar();
 
@@ -196,7 +202,8 @@ int main()
 
 		if (teclado->isKeyDown(KEY_ESCAPE))
 		{
-			client->ShutDownClient();
+			if(argc == 2)
+				client->ShutDownClient();
 			m->cerrar();
 			return 0;
 		}

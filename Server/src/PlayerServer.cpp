@@ -1,32 +1,28 @@
 #include "PlayerServer.hpp"
 
-PlayerServer::PlayerServer()
+PlayerServer::PlayerServer(int *pos)
 {
-    posicion[0] = 0;
-    posicion[1] = 0;
-    posicion[2] = 0;
+    posicion = new int[3];
+    posicion[0] = pos[0];
+    posicion[1] = pos[1];
+    posicion[2] = pos[2];
 }
 
-int* PlayerServer::getPosition()
-{
+int* PlayerServer::getPosition(){
     return posicion;
 }
 
-void PlayerServer::setPosition(int posicionSet[])
-{
-    posicion[0] = posicionSet[0];
-    posicion[1] = posicionSet[1];
-    posicion[2] = posicionSet[2];
+void PlayerServer::acelerar(){
+
 }
 
-void PlayerServer::setPositionX(int x)
-{
+void PlayerServer::frenar(){
 
-    posicion[0] = x;
-    std::cout<<"SetPos: " <<x<< std::endl;
+}
+void PlayerServer::girarA(){
+
 }
 
-void PlayerServer::playerUpdate()
-{
+void PlayerServer::girarB(){
 
 }

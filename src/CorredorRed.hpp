@@ -14,7 +14,7 @@ class CorredorRed : public RakNet::NetworkIDObject , public Corredor
 private:
 
 public:
-  CorredorRed();
+  CorredorRed(stringw rutaObj, vector3df pos);
   void acelerar();
   void frenar();
   void girarA();

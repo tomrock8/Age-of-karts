@@ -1,7 +1,8 @@
 #include "CorredorRed.hpp"
 
 
-CorredorRed::CorredorRed(){
+CorredorRed::CorredorRed(stringw rutaObj, vector3df pos) : Corredor(rutaObj, pos)
+{
 
 }
 
@@ -17,5 +18,5 @@ void CorredorRed::girarA(){
 }
 
 void CorredorRed::girarB(){
-    
+
 }

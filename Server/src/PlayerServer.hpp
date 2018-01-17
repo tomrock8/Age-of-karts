@@ -5,16 +5,17 @@ class PlayerServer : public RakNet::NetworkIDObject
 {
 private:
 
-int posicion[3];
+int *posicion;
 
 
 public:
-  PlayerServer();
+  PlayerServer(int *pos);
   int* getPosition();
-  void setPosition(int posicionSet[]);
-  void setPositionX(int x);
-  void playerUpdate();
+  void acelerar();
+  void frenar();
+  void girarA();
+  void girarB();
 
-  int move, turn, moveCheck, turnCheck;
+
 
 };

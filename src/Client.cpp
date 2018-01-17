@@ -40,7 +40,8 @@ void Client::SetIP()
 {
 	//se le pide al usuario que introduzca la IP del servidor al que quiera conectarse
 	std::cout << "Introduce IP del servidor: ";
-	std::cin >> serverIP;
+	//std::cin >> serverIP;
+	serverIP = "127.0.0.1";
 	//serverIP = "192.168.1.233";
 	//puerto de escucha del cliente
 	clientPort = "6003";
@@ -64,7 +65,7 @@ void Client::ClientStartup()
 	client->SetOccasionalPing(true);
 
 	//se conecta con el servidor detallando la IP, el puerto, la contrasenya y la longitud de esta ultima
-	RakNet::ConnectionAttemptResult car = client->Connect(serverIP.c_str(), atoi(serverPort.c_str()), "yoyo", (int)strlen("yoyo"));
+	RakNet::ConnectionAttemptResult car = client->Connect(serverIP.c_str(), atoi(serverPort.c_str()), "ageofkarts", (int)strlen("ageofkarts"));
 
 	//se comprueba que la conexion se ha realizado correctamente, en caso contrario se aborta la conexion y se muestra
 	//un mensaje de "connection attempt failed" por terminal
@@ -144,6 +145,8 @@ int Client::ReceivePackets(ISceneManager *escena)
 
 		//vector de posicion de Irrlicht
 		vector3df posicion;
+		vector3df pos2;
+		vector3df pos;
 
 		//switch para comprobar el tipo de paquete recibido
 		switch (packetIdentifier)
@@ -217,10 +220,12 @@ int Client::ReceivePackets(ISceneManager *escena)
 			bsIn.Read(posicion.Z);
 			std::cout << posicion.X << " + " << posicion.Z << std::endl;
 			bsIn.Read(playerNetworkID);
-			/*player[numPlayers] = new PlayerClient(escena);
-			player[numPlayers]->setPosition(posicion);
+			std::cout << "Creando jugador: " << numPlayers << std::endl; 
+			pos = posicion;
+			player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
+			//player[numPlayers]->setPosition(posicion);
 			player[numPlayers]->SetNetworkIDManager(&networkIDManager);
-			player[numPlayers]->SetNetworkID(playerNetworkID);*/
+			player[numPlayers]->SetNetworkID(playerNetworkID);
 			numPlayers++;
 
 			break;
@@ -228,17 +233,20 @@ int Client::ReceivePackets(ISceneManager *escena)
 		case ID_LOAD_CURRENT_PLAYERS:
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(numPlayers);
-			std::cout << numPlayers << std::endl;
+			std::cout << "Cargando numero de jugadores: " << numPlayers << std::endl;
 			for (int i = 0; i < numPlayers; i++)
 			{
 				bsIn.Read(posicion.X);
 				bsIn.Read(posicion.Y);
 				bsIn.Read(posicion.Z);
 				bsIn.Read(playerNetworkID);
-				/*player[i] = new PlayerClient(escena);
-				player[i]->setPosition(posicion);
+				pos2.X = 10;
+				pos2.Y = 20;
+				pos2.Z = 300;
+				player[i] = new CorredorRed("assets/coche.obj", pos2);
+				//player[i]->setPosition(posicion);
 				player[i]->SetNetworkIDManager(&networkIDManager);
-				player[i]->SetNetworkID(playerNetworkID);*/
+				player[i]->SetNetworkID(playerNetworkID);
 			}
 			netLoaded = true;
 			break;
@@ -279,7 +287,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			break;
 
 		case ID_PLAYER_DISCONNECT:
-			std::cout << "pollas \n";
+			std::cout << "Jugador desconectado \n";
 			int playerDisconnect;
 
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -348,12 +356,14 @@ void Client::SpawnPlayer(ISceneManager *escena)
 {
 	if (!spawned)
 	{
-		/*player[numPlayers] = new PlayerClient(escena);
-		vector3df posicion = player[numPlayers]->getPosition();
+		vector3df pos(10, 20, 300);
+		player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
+		vector3df posicion;
+		posicion = player[numPlayers]->getNodo()->getPosition();
 		typeID = ID_SPAWN_PLAYER;
 		player[numPlayers]->SetNetworkIDManager(&networkIDManager);
 		playerNetworkID = player[numPlayers]->GetNetworkID();
-		assert(networkIDManager.GET_OBJECT_FROM_ID<PlayerClient *>(playerNetworkID) == player[numPlayers]);
+		assert(networkIDManager.GET_OBJECT_FROM_ID<CorredorRed *>(playerNetworkID) == player[numPlayers]);
 
 		RakNet::BitStream bsOut;
 		bsOut.Write(typeID);
@@ -362,7 +372,7 @@ void Client::SpawnPlayer(ISceneManager *escena)
 		bsOut.Write(posicion.Z); //Posicion Z
 		bsOut.Write(player[numPlayers]->GetNetworkID());
 		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-*/
+
 		controlPlayer = numPlayers;
 		numPlayers++;
 		spawned = true;

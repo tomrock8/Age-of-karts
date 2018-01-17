@@ -26,7 +26,7 @@ void Server::CreateServerInterface()
 	server = RakNet::RakPeerInterface::GetInstance();
 
 	//establecer una contrasenya que deben introducir los clientes que quieran conectarse al servidor
-	server->SetIncomingPassword("yoyo", (int)strlen("yoyo"));
+	server->SetIncomingPassword("ageofkarts", (int)strlen("ageofkarts"));
 
 	//tiempo que se espera a desconectar el servidor si este no es capaz de realizar ninguna entrega de mensajes
 	server->SetTimeoutTime(30000, RakNet::UNASSIGNED_SYSTEM_ADDRESS);
@@ -148,7 +148,7 @@ void Server::ReceivePackets()
 			typeID = ID_LOAD_CURRENT_PLAYERS;
 			bsOut.Write(typeID);
 			bsOut.Write(numPlayers);
-			std::cout << numPlayers << std::endl;
+			std::cout << "Numero de jugadores actuales: " << numPlayers << std::endl;
 
 			for (int i = 0; i < numPlayers; i++)
 			{
@@ -160,8 +160,7 @@ void Server::ReceivePackets()
 				bsOut.Write(posicion[2]);
 				bsOut.Write(player[i]->GetNetworkID());
 			}
-			std::cout << "Salgo" << numPlayers << std::endl;
-
+			//														 Ip del emisor, false para enviar a todos menos a la ip
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 
 			break;
@@ -216,8 +215,8 @@ void Server::ReceivePackets()
 			bsIn.Read(posicion[2]);
 			bsIn.Read(playerNetworkID);
 			std::cout <<posicion[0] <<", "<<posicion[1] << ", " <<posicion[2] << std::endl;
-			player[numPlayers] = new PlayerServer();
-			player[numPlayers]->setPosition(posicion);
+			player[numPlayers] = new PlayerServer(posicion);
+			//player[numPlayers]->setPosition(posicion);
 			player[numPlayers]->SetNetworkIDManager(&networkIDManager);
 			player[numPlayers]->SetNetworkID(playerNetworkID);
 
@@ -230,7 +229,7 @@ void Server::ReceivePackets()
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 			numPlayers++;
 
-			std::cout << numPlayers << std::endl;
+			std::cout << "Jugador creado, en total: " << numPlayers << std::endl;
 
 			break;
 
@@ -246,7 +245,7 @@ void Server::ReceivePackets()
 			posicion[0] = x;
 			posicion[1] = y;
 			posicion[2] = z;
-			networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->setPosition(posicion);
+			//networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->setPosition(posicion);
 			typeID = ID_PLAYER_MOVE;
 			bsOut.Write(typeID);
 			bsOut.Write(x);

@@ -24,6 +24,8 @@ public:
   bool JugadorTurbo();
   bool objetoDestruible();
   bool JugadorEstatico();
+  bool JugadorWaypoint();
+
 
 private:
   CorredorJugador **pj1;

@@ -35,6 +35,7 @@ CorredorIA::CorredorIA(stringw rutaObj, vector3df pos, Waypoint **arrayWaypoints
 //-----------------------\*
 void CorredorIA::movimiento()
 {
+	/*
 	bool acelerando;
 	acelerando = true;
 	//Cara A (NORTE) - DELANTE
@@ -117,4 +118,5 @@ std::string CorredorIA::toString()
 	text += getNombreWaypoint().c_str();
 
 	return text;
+	*/
 }

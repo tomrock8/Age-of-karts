@@ -120,20 +120,25 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				orientacion = stoi(orientacionWp);
 				//cout <<"orientacion: "<<orientacion<<endl;
 				arrayWaypoints[wp] = new Waypoint();
-				arrayWaypoints[wp]->setNombre(std::to_string(wp));
-				if (wp == 0)
-				{ //si es el primero apuntara al ultimo
-					arrayWaypoints[wp]->setSiguiente(arrayWaypoints[stoi(tamanyoArrayWaypoints) + 1]);
-				}
-				else if (wp == stoi(tamanyoArrayWaypoints) - 2)
-				{ //si es el ultimo apuntara al primero
-					arrayWaypoints[wp]->setSiguiente(arrayWaypoints[0]);
-				}
-				else arrayWaypoints[wp]->setSiguiente(arrayWaypoints[wp + 1]);
 
+				//comento lo de la id de los waypoints porq da conflico con las cajas
+				//arrayWaypoints[wp]->getWaypoint()->setID(wp);
+				
+				if (wp > 0 && wp <= (stoi(tamanyoArrayWaypoints) - 2))
+				{
+				arrayWaypoints[wp - 1]->setSiguiente(arrayWaypoints[wp]);
+				
+				}
+				else if (wp == (stoi(tamanyoArrayWaypoints) - 1)) {
+				arrayWaypoints[wp - 1]->setSiguiente(arrayWaypoints[wp]);
+				
+				arrayWaypoints[wp]->setSiguiente(arrayWaypoints[0]);
+			
+				}
 				//cambiar a float y almacenar array de waypoints
 				arrayWaypoints[wp]->setPosicion(stof(pX), stof(pY), stof(pZ));
 				arrayWaypoints[wp]->setOrientacion(orientacion);//orientacion del waypoint
+				arrayWaypoints[wp]->inicializarFisicas();
 				wp++;
 			}
 			if (tipoObj == 1) {//CAJA
@@ -150,12 +155,19 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 
 		myfile.close();
+		
 	}
 
-	else
+	else{
 		cout << "Error abriendo archivo";
+}
 
+	for (int i=0;i<stoi(tamanyoArrayWaypoints);i++){
 
+			arrayWaypoints[i]->setDireccion();
+			
+		}
+	
 }
 
 

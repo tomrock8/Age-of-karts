@@ -23,6 +23,9 @@
 #include "GestorColisiones.hpp"
 #include "TextoPantalla.hpp"
 
+#include <CEGUI\CEGUI.h>
+#include <CEGUI\RendererModules\Irrlicht\Renderer.h>
+
 using namespace std;
 
 #ifdef _MSC_VER

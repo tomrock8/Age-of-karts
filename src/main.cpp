@@ -72,7 +72,7 @@ int main()
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	btBulletWorldImporter *fileLoader = new btBulletWorldImporter(mundo);
-	mundo->setGravity(btVector3(0, -15, 0));
+	mundo->setGravity(btVector3(0, -25, 0));
 
 	//Debug BUllet
 	DebugDraw debugDraw(device);
@@ -84,7 +84,7 @@ int main()
 	//-----------------------------//
 
 	Pista *pistaca = Pista::getInstancia();
-	cout << " voy a criar el mapa" << endl;
+	//cout << " voy a criar el mapa" << endl;
 	pistaca->setMapa("assets/Mapa01/mapaIsla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/WPTrbBox2.obj");
 
 	pistaca->getArrayWaypoints();
@@ -269,7 +269,7 @@ void UpdateRender(btRigidBody *TObject)
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
 	if (strcmp(Node->getName(), "Jugador") == 0) {
-		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 1, (f32)Point[2]));
+		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
 		
 	}
 	else

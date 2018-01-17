@@ -4,6 +4,9 @@
 #include <iostream>
 #include "IrrlichtLib.hpp"
 #include "Motor3d.hpp"
+#include "MotorFisicas.hpp"
+#include "btBulletDynamicsCommon.h"
+#include "btBulletCollisionCommon.h"
 
 using namespace std;
 
@@ -15,6 +18,8 @@ public:
   //Destructor
   ~Waypoint();
 
+
+void inicializarFisicas();
   //auxiliares
 
   //Update
@@ -24,16 +29,25 @@ public:
   void setSiguiente(Waypoint *siguiente);
   void setNombre(std::string nombre);
   void setOrientacion(float grados);
+  void setDireccion();
+
   //metodos GET
   IMeshSceneNode *getWaypoint();
-  vector3df getPosicion();
+  btVector3 getPosicion();
   Waypoint *getNextWaypoint();
   std::string getNombre();
+  btVector3 getDireccion();
 
 private:
   IMeshSceneNode *waypoint;
   std::string nombre;
   Waypoint *siguiente; // Siguiente punto
+  btVector3 direccion;
+
+  //fisicas
+  btDefaultMotionState *MotionState;
+  btCollisionShape *Shape;
+  btRigidBody * rigidBody;
 };
 
 #endif /* WAYPOINT_H */

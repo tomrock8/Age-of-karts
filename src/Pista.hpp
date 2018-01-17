@@ -12,6 +12,7 @@
 #include "Waypoint.hpp"
 #include "Turbo.hpp"
 #include "Caja.hpp"
+#include "BulletWorldImporter/btBulletWorldImporter.h"
 
 using namespace std;
 
@@ -65,6 +66,9 @@ private:
 	irr::core::list<Item *> Items;
 
 	int idObjCajas;
+
+	//fisicas del mapa
+	btBulletWorldImporter *fisicasMapa;
 };
 
 #endif /* PISTA_H */

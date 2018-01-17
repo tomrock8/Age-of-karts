@@ -89,8 +89,28 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	}
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	//bullet->setFisicas(fisicas);---------------------------------------------------------------Comentado por error, segmentation fault
-	//lectura de waypoints y creacion de los menesteres pertinentes
+	//---------------------------FISICAS-------------------------------//
+
+	
+	//cout << "cuantos rigidBodies tengo: " << num << endl;
+	//CuerpoColisionMapa = (btRigidBody*)bullet->getFisicas()->getRigidBodyByIndex(0);
+
+	//---------------------------FISICAS-------------------------------//
+
+	fisicasMapa = new btBulletWorldImporter(0);
+	fisicasMapa->loadFile(fisicas);
+	{
+		int num = fisicasMapa->getNumRigidBodies();
+		
+		for (int i = 0; i < num; i++){
+			CuerpoColisionMapa = (btRigidBody*)fisicasMapa->getRigidBodyByIndex(i);//recoger el rigidbody
+			//almacenar en puntero al nodo irrlich para poder actualizar( en caso de ser  necesario)
+			CuerpoColisionMapa->setUserPointer((void *)(Mapa));
+			mundo->addRigidBody(CuerpoColisionMapa);//almacenar rigidbody en el mundo
+			
+		}
+	}
+
 	//lectura de fichero
 	std::string line;
 	int j;
@@ -185,6 +205,8 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 			arrayWaypoints[i]->setDireccion();
 			
 		}
+
+
 	
 }
 

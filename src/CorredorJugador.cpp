@@ -74,7 +74,7 @@ void CorredorJugador::actualizarItem()
 	Pista *pista = Pista::getInstancia();
 	core::list<Item *> items = pista->getItems();
 	int direccionItem = 1;
-	vector3df posDisparo(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.Z * 5);
+	vector3df posDisparo(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y+10, cuboNodo->getPosition().Z + orientacion.Z * 5);
 	
 	if(teclado->isKeyDown(KEY_KEY_1)) setTipoObj(1);
 	if(teclado->isKeyDown(KEY_KEY_2)) setTipoObj(2);

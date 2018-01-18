@@ -22,6 +22,7 @@
 #include "Item.hpp"
 #include "GestorColisiones.hpp"
 #include "TextoPantalla.hpp"
+#include "Client.hpp"
 
 using namespace std;
 
@@ -40,9 +41,17 @@ static core::list<btRigidBody *> objetosm;
 static ITimer *irrTimer;
 static ILogger *irrLog;
 
-int main()
+int main(int argc, char* argv[])
 {
 	CTeclado *teclado = CTeclado::getInstancia();
+
+	Client *client = NULL;
+	if(argc == 2){
+		client = new Client(8);
+		client->CreateClientInterface();
+		client->SetIP();
+		client->ClientStartup();
+	}
 
 	// -----------------------------
 	//  PREPARAR LA VENTANA
@@ -82,9 +91,9 @@ int main()
 	//Posicion del nodo y el bloque de colisiones centralizado:
 
 	int id = 999;// estaba int id = 0; . Se cambia a 999 para evitar posibles conflictos con ids 0 creadas en mapa 
-	vector3df pos(0, 10, 300);
-	vector3df pos2(0, 10, 320);
-	CorredorJugador **pj= new CorredorJugador*[2];
+	vector3df pos(0, 0, 300);
+	vector3df pos2(0, 0, 320);
+	Corredor **pj= new Corredor*[2];
 	pj[0] = new CorredorJugador("assets/coche.obj", pos);
 	pj[1] = new CorredorJugador("assets/coche.obj", pos2);
 
@@ -115,81 +124,90 @@ int main()
 
 	while (m->getDevice()->run())
 	{
-		if (m->getDevice()->isWindowActive())
-		{
-
-			textoDebug->limpiar();
-
-			DeltaTime = irrTimer->getTime() - TimeStamp;
-			TimeStamp = irrTimer->getTime();
-			UpdatePhysics(DeltaTime);
-
-			for (int i = 0; i < pistaca->getTamCajas(); i++)
-			{
-				pistaca->getArrayCaja()[i]->comprobarRespawn();
-			}
-			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
-
-
-			pj[0]->actualizarItem();
-
-			camara->moveCameraControl(pj[0], device);
-			colisiones->ComprobarColisiones(pj);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
-			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
-
-			pj[0]->update();
-			//pj[1]->update();
-
-
-			textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-			textoDebug->agregar(pj[0]->toString());
-
-
-
-			if (teclado->isKeyDown(KEY_ESCAPE))
-			{
-				m->cerrar();
-				return 0;
-			}
-
-			if (teclado->isKeyDown(KEY_KEY_0))
-			{
-				debug = 0;
-			}
-			if (teclado->isKeyDown(KEY_KEY_9))
-			{
-				debug = 1;
-			}
-
-			//-------ENTRADA TECLADO FIN----------//
-			int fps = driver->getFPS();
-			if (lastFPS != fps)
-			{
-				core::stringw tmp(L"Age of karts [");
-				tmp += driver->getName();
-				tmp += L"] fps: ";
-				tmp += fps;
-
-				m->getDevice()->setWindowCaption(tmp.c_str());
-				lastFPS = fps;
-			}
-			//	RENDER
-			m->dibujar();
-
-			SMaterial debugMat;
-			debugMat.Lighting = true;
-			driver->setMaterial(debugMat);
-			driver->setTransform(ETS_WORLD, IdentityMatrix);
-			if (debug) {
-				mundo->debugDrawWorld();
-			}
-			guienv->drawAll();
-			driver->endScene();
+		if(argc == 2){
+			client->ReceivePackets(smgr);
+			client->SpawnPlayer(smgr);
 		}
-		else
+
+		textoDebug->limpiar();
+
+		DeltaTime = irrTimer->getTime() - TimeStamp;
+		TimeStamp = irrTimer->getTime();
+		UpdatePhysics(DeltaTime);
+
+		for (int i = 0; i < pistaca->getTamCajas(); i++)
 		{
-			m->getDevice()->yield();
+			pistaca->getArrayCaja()[i]->comprobarRespawn();
 		}
+		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
+
+
+		pj[0]->actualizarItem();
+
+		camara->moveCameraControl(pj[0], device);
+		colisiones->ComprobarColisiones(pj);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
+
+		pj[0]->update();
+		//pj[1]->update();
+
+
+		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
+		textoDebug->agregar(pj[0]->toString());
+
+		//textoDebug->agregar("\n\n ---- CORREDOR 2 IA ----\n");
+		//textoDebug->agregar(pj2->toString());
+
+		//-------ENTRADA TECLADO ----------//
+		/*
+		if (teclado->isKeyDown(KEY_KEY_R))
+		{
+			pj2->movimiento();
+		}
+		*/
+
+		if (teclado->isKeyDown(KEY_ESCAPE))
+		{
+			if(argc == 2)
+				client->ShutDownClient();
+			m->cerrar();
+			return 0;
+		}
+
+		if (teclado->isKeyDown(KEY_KEY_0))
+		{
+			debug = 0;
+		}
+		if (teclado->isKeyDown(KEY_KEY_9))
+		{
+			debug = 1;
+		}
+
+		//-------ENTRADA TECLADO FIN----------//
+		int fps = driver->getFPS();
+		if (lastFPS != fps)
+		{
+			core::stringw tmp(L"Age of karts [");
+			tmp += driver->getName();
+			tmp += L"] fps: ";
+			tmp += fps;
+
+			m->getDevice()->setWindowCaption(tmp.c_str());
+			lastFPS = fps;
+		}
+		//	RENDER
+		m->dibujar();
+
+		SMaterial debugMat;
+		debugMat.Lighting = true;
+		driver->setMaterial(debugMat);
+		driver->setTransform(ETS_WORLD, IdentityMatrix);
+		if (debug) {
+			mundo->debugDrawWorld();
+		}
+		guienv->drawAll();
+		driver->endScene();
+	
 	}
 	//----------------------------------//
 	//-----------DESTRUCTORES-----------//

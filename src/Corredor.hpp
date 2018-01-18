@@ -12,6 +12,7 @@
 #include "MotorFisicas.hpp"
 #include "Proyectil.hpp"
 #include "Estatico.hpp"
+#include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 using namespace std;
 
@@ -21,8 +22,9 @@ class Corredor
 	Corredor(stringw rutaObj, vector3df pos);
 	void InicializarFisicas();
 	void lanzarItem(Proyectil *item, int direcionItem);
-	void soltarItem();
 	void aplicarAceite();
+	void soltarItem();
+	virtual void actualizarItem(){}; // A implementar por derivadas
 	void incCargador();
 	void decCargador();
 	void SetFuerzaVelocidad(int turbo);

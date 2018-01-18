@@ -324,7 +324,9 @@ void Corredor::calculoDistanciaPunto(){
 	//calulamos la distancia hasta el waypoint 
 	//cout << "WAYPOINT ACTUAL:" <<actual->getWaypoint()->getID() << endl;
 	//cout << "WAYPOINT SIGUIENTE:" << siguiente->getWaypoint()->getID() << endl;
-	cout << "DISTANCIA:"<< distanciaWaypoint << endl;
+	TextoPantalla * texto = TextoPantalla::getInstancia();
+	texto->agregar("DISTANCIA: ");
+	texto->agregar(to_string(distanciaWaypoint)+"\n");
 
 }
 
@@ -335,7 +337,10 @@ void Corredor::calculoAnguloGiro(){
 	anguloGiro = OrientacionCoche.angle(OrientacionWaypoint) *360/PI;
 	//cout<< actual->getDireccion().getX() << actual->getDireccion().getY()  << actual->getDireccion().getZ()<< endl;
 	//calculamos el angulo para saber cuanto hay que girar
-	cout<< "ANGULO:" << anguloGiro  << endl;
+	TextoPantalla * texto = TextoPantalla::getInstancia();
+	texto->agregar("ANGULO: ");
+	texto->agregar(to_string(anguloGiro)+"\n");
+	//cout<< "ANGULO:" << anguloGiro  << endl;
 }
 
 void Corredor::setWaypointActual(ISceneNode *nodo)
@@ -401,20 +406,28 @@ void Corredor::logicaDifusa(){
 			noGiro=false;
 		}	
 
+		TextoPantalla * texto = TextoPantalla::getInstancia();
+		texto->agregar("ACCION 1: ");
+		std::string agrega;
 
 		if(distanciaLejos)
-		cout<< "ACELERA A TOPE" << endl;
+		agrega = "ACELERA A TOPE";
 		if(distanciaMedia)
-		cout<< "Reduce velocidad" << endl;
+		agrega = "Reduce velocidad";
 		if(distanciaCerca)
-		cout<< "Echa el freno fiera"<<endl;
+		agrega = "Echa el freno fiera";
+
+		texto->agregar(agrega+"\n");
 		
+		texto->agregar("ACCION 2: ");
 		if(noGiro)
-		cout<< "No GIRO" << endl;
+		agrega = "No GIRO";
 		if(giroFlojo)
-		cout<< "Giro POCO" << endl;
+		agrega = "Giro POCO";
 		if(giroFuerte)
-		cout<< "Giro a tope" << endl;
+		agrega = "Giro a tope";
+
+		texto->agregar(agrega+"\n");
 
 
 		//cout<< "CERCA" << perteneciaCerca << endl << "MEDIA" << pertenenciaMedia << endl << "LEJOS" << pertenenciaLejos << endl;

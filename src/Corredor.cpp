@@ -514,7 +514,7 @@ double Corredor::FuncionTriangular(double valor,double a,double b,double c){
 void Corredor::setTipoObj()
 {
 	srand(time(NULL));
-	tipoObj = rand() % 3 + 1;
+	tipoObj = rand() % 4 + 1;
 	//cout << "Random ------>" << tipoObj << endl;
 }
 
@@ -542,16 +542,16 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 	decCargador();
 }
 
-void Corredor::soltarItem(Estatico *item)
+void Corredor::soltarItem()
 {
 	tipoObj = 0;
 }
 
-void Corredor::setTurbo(bool activo, bool objeto) {
+void Corredor::setTurbo(bool activo, bool objeto,int valor) {
 	turboActivado = activo;
 	if (activo) {
 		Motor3d *m = Motor3d::getInstancia();
-		SetFuerzaVelocidad(30000);
+		SetFuerzaVelocidad(valor);
 		acelerar();
 
 		timerTurbo = m->getDevice()->getTimer()->getTime();
@@ -701,10 +701,13 @@ std::string Corredor::toString()
 		text += "Proyectil";
 	}
 	else if (getTipoObj() == 2) {
-		text += "Estatico";
+		text += "CajaFalsa";
 	}
 	else if (getTipoObj() == 3) {
 		text += "Turbo";
+	}
+	else if (getTipoObj() == 4) {
+		text += "Aceite";
 	}
 	text += "\nTurbo: ";
 	if (turboActivado) text += "Activado";
@@ -715,8 +718,23 @@ std::string Corredor::toString()
 
 void Corredor::setFriccion(btScalar valor) {
 	for (int i = 0; i < vehiculo->getNumWheels(); i++) {
-		vehiculo->getWheelInfo(i).m_frictionSlip = btScalar(10.0f);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover	
+		vehiculo->getWheelInfo(i).m_frictionSlip = btScalar(valor);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover	
 	}
+}
+void Corredor::aplicarAceite(){
+	frenodemano(true);
+	setFriccion(0.05f);
+
+	setTurbo(true,true,25000);
+	for (int i=0;i<500;i++){
+		girarIzquierda();
+
+	}
+
+
+
+	
+	
 }
 
 //	----------------------------------------------
@@ -759,7 +777,7 @@ void Corredor::update()
 		if (mundo->getTime() - timerTurbo >= 400) {
 			//cout << "Se acaba el turbo\n";
 			desacelerar();
-			setTurbo(false, false);
+			setTurbo(false, false,0);
 		}
 	}
 	else if (vehiculo->getCurrentSpeedKmHour() > 1)

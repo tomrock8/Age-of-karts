@@ -21,7 +21,8 @@ class Corredor
 	Corredor(stringw rutaObj, vector3df pos);
 	void InicializarFisicas();
 	void lanzarItem(Proyectil *item, int direcionItem);
-	void soltarItem(Estatico *item);
+	void soltarItem();
+	void aplicarAceite();
 	void incCargador();
 	void decCargador();
 	void SetFuerzaVelocidad(int turbo);
@@ -30,7 +31,7 @@ class Corredor
 	void setTipoObj(int i);
 	void acelerar();
 	void setFriccion(btScalar valor);
-	void setTurbo(bool activo, bool objeto);
+	void setTurbo(bool activo, bool objeto,int valor);
 	void setWaypointActual(ISceneNode *nodo);
 
 	//waypoints

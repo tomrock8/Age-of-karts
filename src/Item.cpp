@@ -18,8 +18,8 @@ Item::Item(vector3df posicionItem, int idItem)
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/gust.png"));
 
-	nombre = "Item";
-	nodo->setName(nombre);
+	
+	nodo->setName("Item");
 
 	id = idItem;
 	nodo->setID(id);
@@ -116,4 +116,7 @@ btRigidBody *Item::getRigidBody()
 ISceneNode *Item::getNodo()
 {
 	return nodo;
+}
+const char* Item::getNombre(){
+	return nombre;
 }

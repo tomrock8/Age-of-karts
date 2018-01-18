@@ -79,6 +79,7 @@ void CorredorJugador::actualizarItem()
 	if(teclado->isKeyDown(KEY_KEY_1)) setTipoObj(1);
 	if(teclado->isKeyDown(KEY_KEY_2)) setTipoObj(2);
 	if(teclado->isKeyDown(KEY_KEY_3)) setTipoObj(3);
+	if(teclado->isKeyDown(KEY_KEY_4)) setTipoObj(4);
 	
 	Pista *mapa = Pista::getInstancia();
 	int idObjMapa = pista->getIdsObjetosCaja();
@@ -110,18 +111,26 @@ void CorredorJugador::actualizarItem()
 				lanzarItem(pro, direccionItem);
 				items.push_back(pro);
 			}
-			else if (tipoObj == 2)
+				else if (tipoObj == 2)
 			{
 				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
 				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
-				est = new Estatico(posDisparo, idObjMapa);
+				CajaFalsa *est = new CajaFalsa(posDisparo, idObjMapa);
 				est->inicializarFisicas();
-				soltarItem(est);
+				soltarItem();
 				items.push_back(est);
 			}
 			else if (tipoObj == 3)
 			{
-				setTurbo(true, true);
+				setTurbo(true, true,30000);
+			}else if (tipoObj == 4)
+			{
+				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
+				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
+				Aceite *est2 = new Aceite(posDisparo, idObjMapa);
+				est2->inicializarFisicas();
+				soltarItem();
+				items.push_back(est2);
 			}
 			pista->setItems(items);
 			//Llama a la funcion de la clase padre

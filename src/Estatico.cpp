@@ -2,7 +2,7 @@
 
 Estatico::Estatico(vector3df posicionItem, int idItem) : Item(posicionItem, idItem)
 {
-	nombre = "Estatico";
+	//nombre = "Estatico";
 	nodo->setName("Estatico");
 
 	id = idItem;

@@ -21,6 +21,7 @@
 #include "Caja.hpp"
 #include "Item.hpp"
 #include "GestorColisiones.hpp"
+#include "GestorJugadores.hpp"
 #include "TextoPantalla.hpp"
 #include "Client.hpp"
 
@@ -93,9 +94,11 @@ int main(int argc, char* argv[])
 	int id = 999;// estaba int id = 0; . Se cambia a 999 para evitar posibles conflictos con ids 0 creadas en mapa 
 	vector3df pos(0, 1, 300);
 	vector3df pos2(0, 1, 320);
-	Corredor **pj= new Corredor*[2];
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	Corredor **pj = jugadores->getJugadores();
 	pj[0] = new CorredorJugador("assets/coche.obj", pos);
 	pj[1] = new CorredorJugador("assets/coche.obj", pos2);
+	jugadores->setJugadores(pj);
 
 	pj[0]->getNodo()->setID(id);
 	id++;
@@ -141,11 +144,11 @@ int main(int argc, char* argv[])
 		}
 		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 
-
+		pj = jugadores->getJugadores();
 		pj[0]->actualizarItem();
 
 		camara->moveCameraControl(pj[0], device);
-		colisiones->ComprobarColisiones(pj);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
 		pj[0]->update();
@@ -154,6 +157,8 @@ int main(int argc, char* argv[])
 
 		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 		textoDebug->agregar(pj[0]->toString());
+
+		jugadores->setJugadores(pj);
 
 		//textoDebug->agregar("\n\n ---- CORREDOR 2 IA ----\n");
 		//textoDebug->agregar(pj2->toString());

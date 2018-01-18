@@ -3,14 +3,15 @@
 #define TAMANYOCAJAS 10
 #define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 
-void GestorColisiones::ComprobarColisiones(Corredor **pj)
+void GestorColisiones::ComprobarColisiones()
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Pista *pista = Pista::getInstancia();
 	Caja** cajas = pista->getArrayCaja();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
-	pj1 = pj;
+	pj1 = jugadores->getJugadores();
 	int numManifolds = mundo->getDispatcher()->getNumManifolds();
 	for (int i = 0; i < numManifolds; i++)
 	{
@@ -40,6 +41,7 @@ void GestorColisiones::ComprobarColisiones(Corredor **pj)
 
 		}
 	}
+	jugadores->setJugadores(pj1);
 }
 
 
@@ -51,11 +53,12 @@ bool GestorColisiones::JugadorWaypoint(){
         if (strcmp("Waypoint", nodoB->getName()) == 0)
         {
 			for(int i = 0; i< 2; i++){
-			if(nodoA->getID() == pj1[i]->getNodo()->getID()){
-				pj1[i]->setWaypointActual(nodoB);
-				
-				return true;	
-				}
+				if(pj1[i]!=NULL)
+					if(nodoA->getID() == pj1[i]->getNodo()->getID()){
+						pj1[i]->setWaypointActual(nodoB);
+						
+						return true;	
+					}
 			}
 			
 		}

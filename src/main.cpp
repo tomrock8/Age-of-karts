@@ -58,10 +58,6 @@ int main()
 	irrTimer = device->getTimer();
 
 
-	// -----------------------------
-	//  CEGUI
-	// -----------------------------
-	Gui *interfaz = new Gui(*device);
 
 	int debug = 0;
 
@@ -116,6 +112,15 @@ int main()
 	//-----------------------------//
 	int lastFPS = -1;
 	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;
+	
+	
+
+	// -----------------------------
+	//  CEGUI
+	// -----------------------------
+	//Gui *interfaz = new Gui(m->getDevice());
+	
+	
 	// -----------------------------//
 	// ----------GAME LOOP----------//
 	// -----------------------------//
@@ -184,14 +189,18 @@ int main()
 			//	RENDER
 			m->dibujar();
 
-			SMaterial debugMat;
-			debugMat.Lighting = true;
-			driver->setMaterial(debugMat);
-			driver->setTransform(ETS_WORLD, IdentityMatrix);
+			
 			if (debug) {
+				SMaterial debugMat;
+				debugMat.Lighting = true;
+				driver->setMaterial(debugMat);
+				driver->setTransform(ETS_WORLD, IdentityMatrix);
 				mundo->debugDrawWorld();
 			}
 			guienv->drawAll();
+			// draw gui
+			//CEGUI::System::getSingleton().renderAllGUIContexts();
+			
 			driver->endScene();
 		}
 		else
@@ -211,9 +220,8 @@ int main()
 	delete bullet;
 	//delete camara;
 	//delete colisiones;
-	m->getDevice()->drop();//irrlicht
-
-	delete interfaz;
+	//m->getDevice()->drop();//irrlicht
+	delete m;
 
 	return 0;
 }

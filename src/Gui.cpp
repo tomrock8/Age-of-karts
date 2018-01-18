@@ -1,31 +1,92 @@
 #include "Gui.hpp"
 
-Gui::Gui(IrrlichtDevice &device) {
-	Motor3d *m = Motor3d::getInstancia();
-	IrrlichtDevice &dev = *m->getDevice();
+Gui::Gui(irr::IrrlichtDevice *device) {
+	//Motor3d *m = Motor3d::getInstancia();
 	// Bootstrap CEGUI::System with an IrrlichtRenderer object, an Irrlicht based
 	// ResourceProvider, and an Irrlicht based ImageCodec.
-	//CEGUI::OpenGLRenderer &ren = CEGUI::OpenGLRenderer::bootstrapSystem(OPEN_GL_DEVICE);
-	IrrlichtRenderer &ren = CEGUI::IrrlichtRenderer::bootstrapSystem(device); // Inicializa el renderer de irrlicht
-	renderer = &ren;
 
-	System::create(*renderer); // Inicializa el CEGUI::System y sus variables
+	// Guardamos la direccion del objeto que crea CEGUI (POR ESO EL &)
+	//render = &CEGUI::OpenGLRenderer::bootstrapSystem(OPEN_GL_DEVICE);
+	render = &CEGUI::IrrlichtRenderer::bootstrapSystem(*device); // Inicializa el renderer de irrlicht
+	contexto = &CEGUI::System::getSingleton().createGUIContext(render->getDefaultRenderTarget()); // Contenedor de todos los widgets
+	ventana = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindw", "root");
+	contexto->setRootWindow(ventana);
 
-
-	// Recoger el ResourceProvider para los elementos
-	ImageManager::getSingleton().loadImageset("./lib/cegui/assets/imagesets/WindowsLook.imageset");
+	CEGUI::DefaultResourceProvider *recursos = static_cast<CEGUI::DefaultResourceProvider*>(CEGUI::System::getSingleton().getResourceProvider());
 	
-	// Al inicializar, se configura el grupo de recursos
-	DefaultResourceProvider *rp = static_cast<DefaultResourceProvider*>(System::getSingleton().getResourceProvider());
-	rp->setResourceGroupDirectory("imagesets", "./lib/cegui/assets/imagesets/");
+	recursos->setResourceGroupDirectory("imagesets", "lib/cegui/assets/imagesets/");
+	recursos->setResourceGroupDirectory("schemes", "lib/cegui/assets/schemes/");
+	recursos->setResourceGroupDirectory("layouts", "lib/cegui/assets/layouts/");
+	recursos->setResourceGroupDirectory("fonts", "lib/cegui/assets/fonts/");
+	recursos->setResourceGroupDirectory("looknfeel", "lib/cegui/assets/looknfeel/");
+	recursos->setResourceGroupDirectory("lua_scripts", "lib/cegui/assets/lua_scripts/");
+	
+	CEGUI::ImageManager::setImagesetDefaultResourceGroup("imagesets");
+	CEGUI::Scheme::setDefaultResourceGroup("schemes");
+	CEGUI::WindowManager::setDefaultResourceGroup("layouts");
+	CEGUI::Font::setDefaultResourceGroup("fonts");
+	CEGUI::WidgetLookManager::setDefaultResourceGroup("looknfeel");
+	CEGUI::ScriptModule::setDefaultResourceGroup("lua_scripts");
 
-	// Para cargar un imageset:
-	ImageManager::getSingleton().loadImageset("WindowsLook.imageset", "imagesets");
+
+	std::cout << "\n FIN DE CONSTRUCTOR DE GUI\n\n";
 }
 
 Gui::~Gui() {
+	CEGUI::System::getSingleton().destroyGUIContext(*contexto); // Con * para referencia
 	CEGUI::System::destroy(); // Destruye el CEGUI::System y sus variables
 
 	//CEGUI::OpenGL3Renderer::destroy(static_cast<CEGUI::OpenGL3Renderer&>(*d_renderer));
-	CEGUI::IrrlichtRenderer::destroy(static_cast<CEGUI::IrrlichtRenderer&>(*renderer));
+	CEGUI::IrrlichtRenderer::destroy(static_cast<CEGUI::IrrlichtRenderer&>(*render));
+}
+
+CEGUI::Window *Gui::crearWidget(const std::string &tipo, btVector4 tam, btVector4 escala, const std::string &nombre) {
+	CEGUI::Window *vent = CEGUI::WindowManager::getSingleton().createWindow(tipo, nombre);
+	ventana->addChild(vent);
+	setWidgetTamEscala(vent, tam, escala);
+	return vent;
+}
+
+void Gui::cargarScheme(std::string archivoScheme){
+	// Esquema de elementos para el gui
+	CEGUI::SchemeManager::getSingleton().createFromFile(archivoScheme);
+}
+
+void Gui::dibujar() {
+	render->beginRendering();
+
+	contexto->draw();
+
+	render->endRendering();
+
+
+	// TODO: BUG
+}
+
+
+// -----------------------------
+//    METODOS GET
+// -----------------------------
+
+CEGUI::GUIContext *Gui::getContexto() {
+	return contexto;
+}
+
+CEGUI::IrrlichtRenderer *Gui::getRender() {
+	return render;
+}
+
+
+// -----------------------------
+//    METODOS SET
+// -----------------------------
+
+void Gui::setWidgetTamEscala(CEGUI::Window * vent, float tam[], float escala[]) {
+	ventana->setPosition(CEGUI::UVector2(CEGUI::UDim(escala[0], tam[0]), CEGUI::UDim(escala[1], tam[1])));
+	ventana->setSize(CEGUI::USize(CEGUI::UDim(escala[2], tam[2]), CEGUI::UDim(escala[3], tam[3])));
+}
+
+void Gui::setFuente(std::string archivoFuente) {
+	// Fuente a mostrar en el gui
+	contexto->setDefaultFont(archivoFuente);
 }

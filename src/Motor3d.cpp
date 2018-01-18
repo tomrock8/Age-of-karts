@@ -6,26 +6,27 @@
 
 Motor3d *Motor3d::instancia = NULL;
 
-Motor3d::Motor3d()
-{
-
+Motor3d::Motor3d() {
 	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(1280, 720), 16, false, false, true, 0);
-	if (!device)
-		//std::cout << "algo falla con device" << std::endl;
-
-	device->setWindowCaption(L"AGE OF KARTS");
-
+	//if (!device) std::cout << "algo falla con device" << std::endl;
 
 	driver = device->getVideoDriver();
+
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
 
 	CTeclado *teclado = CTeclado::getInstancia();
 	irrTimer = device->getTimer();
 	setTeclado(teclado);
+
+	device->setWindowCaption(L"AGE OF KARTS");
+
+	interfaz = new Gui(device);
 }
 
 Motor3d::~Motor3d() {
+	delete interfaz;
+	device->drop();
 	delete instancia;
 }
 
@@ -73,6 +74,7 @@ void Motor3d::cerrar()
 {
 	device->closeDevice();
 }
+
 int Motor3d::getTime() {
 	return irrTimer->getTime();
 }

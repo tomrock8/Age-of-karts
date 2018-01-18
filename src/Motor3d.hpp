@@ -4,6 +4,9 @@
 #include <iostream>
 #include "IrrlichtLib.hpp"
 #include "CTeclado.hpp"
+#include "Gui.hpp"
+
+
 using namespace std;
 
 class Motor3d
@@ -32,6 +35,9 @@ class Motor3d
 	ISceneManager *smgr;
 	IGUIEnvironment *guienv;
 	ITimer *irrTimer;
+
+	Gui *interfaz;
+
 };
 
 #endif /* MOTOR3D_H */

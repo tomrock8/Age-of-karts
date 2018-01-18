@@ -91,7 +91,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	btDynamicsWorld *mundo = bullet->getMundo();
 	//---------------------------FISICAS-------------------------------//
 
-	
+
 	//cout << "cuantos rigidBodies tengo: " << num << endl;
 	//CuerpoColisionMapa = (btRigidBody*)bullet->getFisicas()->getRigidBodyByIndex(0);
 
@@ -101,13 +101,13 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	fisicasMapa->loadFile(fisicas);
 	{
 		int num = fisicasMapa->getNumRigidBodies();
-		
-		for (int i = 0; i < num; i++){
+
+		for (int i = 0; i < num; i++) {
 			CuerpoColisionMapa = (btRigidBody*)fisicasMapa->getRigidBodyByIndex(i);//recoger el rigidbody
 			//almacenar en puntero al nodo irrlich para poder actualizar( en caso de ser  necesario)
 			CuerpoColisionMapa->setUserPointer((void *)(Mapa));
 			mundo->addRigidBody(CuerpoColisionMapa);//almacenar rigidbody en el mundo
-			
+
 		}
 	}
 
@@ -122,7 +122,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	tamTurbos = 0;
 	tamCajas = 0;
 	float orientacion = 0.0f;
-	
+
 	ifstream myfile(waypoints);
 
 	if (myfile.is_open())
@@ -160,17 +160,17 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 				//comento lo de la id de los waypoints porq da conflico con las cajas
 				//arrayWaypoints[wp]->getWaypoint()->setID(wp);
-				
+
 				if (tamWaypoints > 0 && tamWaypoints <= (stoi(tamanyoArrayWaypoints) - 2))
 				{
-				arrayWaypoints[tamWaypoints - 1]->setSiguiente(arrayWaypoints[tamWaypoints]);
-				
+					arrayWaypoints[tamWaypoints - 1]->setSiguiente(arrayWaypoints[tamWaypoints]);
+
 				}
 				else if (tamWaypoints == (stoi(tamanyoArrayWaypoints) - 1)) {
-				arrayWaypoints[tamWaypoints - 1]->setSiguiente(arrayWaypoints[tamWaypoints]);
-				
-				arrayWaypoints[tamWaypoints]->setSiguiente(arrayWaypoints[0]);
-			
+					arrayWaypoints[tamWaypoints - 1]->setSiguiente(arrayWaypoints[tamWaypoints]);
+
+					arrayWaypoints[tamWaypoints]->setSiguiente(arrayWaypoints[0]);
+
 				}
 				//cambiar a float y almacenar array de waypoints
 				arrayWaypoints[tamWaypoints]->setPosicion(stof(pX), stof(pY), stof(pZ));
@@ -190,23 +190,18 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 			//cout << line << endl;
 		}
 
-
-		myfile.close();
-		
-	}
-
-	else{
-		cout << "Error abriendo archivo";
-}
-
-	for (int i=0;i<stoi(tamanyoArrayWaypoints);i++){
+		for (int i = 0; i < stoi(tamanyoArrayWaypoints); i++) {
 
 			arrayWaypoints[i]->setDireccion();
-			
+
 		}
 
+		myfile.close();
 
-	
+	}
+	else {
+		cout << "Error abriendo archivo";
+	}
 }
 
 

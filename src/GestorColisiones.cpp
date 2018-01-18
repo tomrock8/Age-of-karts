@@ -3,7 +3,7 @@
 #define TAMANYOCAJAS 10
 #define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 
-void GestorColisiones::ComprobarColisiones(CorredorJugador **pj)
+void GestorColisiones::ComprobarColisiones(Corredor **pj)
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	Pista *pista = Pista::getInstancia();

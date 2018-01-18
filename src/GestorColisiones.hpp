@@ -19,7 +19,7 @@ class GestorColisiones
 {
 public:
   GestorColisiones(){};
-  void ComprobarColisiones(CorredorJugador **pj);
+  void ComprobarColisiones(Corredor **pj);
   bool JugadorCaja(Caja *cajas[]);
   bool JugadorTurbo();
   bool objetoDestruible();
@@ -28,7 +28,7 @@ public:
 
 
 private:
-  CorredorJugador **pj1;
+  Corredor **pj1;
   ISceneNode *nodoA;
   ISceneNode *nodoB;
 };

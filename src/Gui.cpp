@@ -9,7 +9,8 @@ Gui::Gui(irr::IrrlichtDevice *device) {
 	//render = &CEGUI::OpenGLRenderer::bootstrapSystem(OPEN_GL_DEVICE);
 	render = &CEGUI::IrrlichtRenderer::bootstrapSystem(*device); // Inicializa el renderer de irrlicht
 	contexto = &CEGUI::System::getSingleton().createGUIContext(render->getDefaultRenderTarget()); // Contenedor de todos los widgets
-
+	CEGUI::WindowManager *winMan = CEGUI::WindowManager::getSingletonPtr();
+	ventana = winMan->createWindow("DefaultWindow", "root");
 	CEGUI::DefaultResourceProvider *recursos = static_cast<CEGUI::DefaultResourceProvider*>(CEGUI::System::getSingleton().getResourceProvider());
 	
 	recursos->setResourceGroupDirectory("imagesets", "lib/cegui/assets/imagesets/");
@@ -27,10 +28,6 @@ Gui::Gui(irr::IrrlichtDevice *device) {
 	CEGUI::ScriptModule::setDefaultResourceGroup("lua_scripts");
 
 
-	CEGUI::WindowManager *winMan = CEGUI::WindowManager::getSingletonPtr();
-	ventana = winMan->createWindow("DefaultWindow", "root");
-
-
 	contexto->setRootWindow(ventana);
 
 	std::cout << "\n FIN DE CONSTRUCTOR DE GUI\n\n";
@@ -44,7 +41,7 @@ Gui::~Gui() {
 	CEGUI::IrrlichtRenderer::destroy(static_cast<CEGUI::IrrlichtRenderer&>(*render));
 }
 
-CEGUI::Window *Gui::crearWidget(const std::string &tipo, btVector4 tam, btVector4 escala, const std::string &nombre) {
+CEGUI::Window *Gui::crearWidget(const std::string &tipo, float tam[], float escala[], const std::string &nombre) {
 	CEGUI::Window *vent = CEGUI::WindowManager::getSingleton().createWindow(tipo, nombre);
 	ventana->addChild(vent);
 	setWidgetTamEscala(vent, tam, escala);
@@ -92,5 +89,6 @@ void Gui::setWidgetTamEscala(CEGUI::Window * vent, float tam[], float escala[]) 
 
 void Gui::setFuente(std::string archivoFuente) {
 	// Fuente a mostrar en el gui
+	CEGUI::FontManager::getSingleton().createFromFile(archivoFuente + ".font");
 	contexto->setDefaultFont(archivoFuente);
 }

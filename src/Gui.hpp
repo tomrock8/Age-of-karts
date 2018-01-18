@@ -16,7 +16,7 @@ class Gui {
 		void dibujar();
 		void cargarScheme(std::string archivoScheme);
 
-		CEGUI::Window *crearWidget(const std::string &tipo, btVector4 tam, btVector4 escala, const std::string &nombre = "");
+		CEGUI::Window *crearWidget(const std::string &tipo, float tam[], float escala[], const std::string &nombre = "");
 
 		// METODOS SET
 		void setFuente(std::string archivoFuente);

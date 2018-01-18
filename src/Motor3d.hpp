@@ -16,6 +16,7 @@ class Motor3d
 	~Motor3d(void);
 	//metodos GET
 	static Motor3d *getInstancia();
+	Gui *getInterfaz();
 
 	IVideoDriver *getDriver();
 	ISceneManager *getScene();

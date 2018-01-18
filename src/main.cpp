@@ -200,7 +200,7 @@ int main()
 			guienv->drawAll();
 			// draw gui
 			//CEGUI::System::getSingleton().renderAllGUIContexts();
-			
+			m->getInterfaz()->dibujar();
 			driver->endScene();
 		}
 		else

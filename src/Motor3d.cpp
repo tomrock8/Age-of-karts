@@ -22,6 +22,15 @@ Motor3d::Motor3d() {
 	device->setWindowCaption(L"AGE OF KARTS");
 
 	interfaz = new Gui(device);
+	interfaz->cargarScheme("VanillaSkin.scheme");
+	interfaz->setFuente("DejaVuSans-10");
+
+	float tam[4] = { 0.5f, 0.5f, 0.1f, 0.05f };
+	float escala[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+	interfaz->crearWidget("Vanilla/Button", tam, escala, "TestButton");
+	//(const std::string &tipo, float tam[], float escala[], const std::string &nombre) {
+
 }
 
 Motor3d::~Motor3d() {
@@ -30,51 +39,54 @@ Motor3d::~Motor3d() {
 	delete instancia;
 }
 
-Motor3d *Motor3d::getInstancia()
-{
+void Motor3d::dibujar() {
+	driver->beginScene(true, true, SColor(255, 200, 200, 200));
+	smgr->drawAll();
+}
+
+void Motor3d::cerrar() {
+	device->closeDevice();
+}
+
+
+// METODOS GET
+Motor3d *Motor3d::getInstancia() {
 	if (instancia == NULL)
 		instancia = new Motor3d();
 
 	return instancia;
 }
 
-void Motor3d::setTeclado(CTeclado *teclado)
-{
-
-	device->setEventReceiver(teclado);
-}
-
-IrrlichtDevice *Motor3d::getDevice()
-{
-	return device;
-}
-
-IVideoDriver *Motor3d::getDriver()
-{
-	return driver;
-}
-
-ISceneManager *Motor3d::getScene()
-{
-	return smgr;
-}
-
-IGUIEnvironment *Motor3d::getGUI()
-{
-	return guienv;
-}
-
-void Motor3d::dibujar()
-{
-	driver->beginScene(true, true, SColor(255, 200, 200, 200));
-	smgr->drawAll();
-}
-
-void Motor3d::cerrar()
-{
-	device->closeDevice();
+Gui *Motor3d::getInterfaz() {
+	return interfaz;
 }
 
 int Motor3d::getTime() {
 	return irrTimer->getTime();
+}
+
+IGUIEnvironment *Motor3d::getGUI() {
+	return guienv;
+}
+
+ISceneManager *Motor3d::getScene() {
+	return smgr;
+}
+
+IrrlichtDevice *Motor3d::getDevice() {
+	return device;
+}
+
+IVideoDriver *Motor3d::getDriver() {
+	return driver;
+}
+
+
+
+// METODOS SET
+
+void Motor3d::setTeclado(CTeclado *teclado)
+{
+
+	device->setEventReceiver(teclado);
 }

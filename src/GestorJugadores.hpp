@@ -19,14 +19,17 @@ class GestorJugadores
 
         static GestorJugadores *getInstancia();
         Corredor **getJugadores();
+        int getID();
         
 
         void setJugadores(Corredor **pj1);
+        void setID(int idp);
 
     private:
         GestorJugadores(void);
         static GestorJugadores *instancia;
         Corredor **pj;
+        int id;
 
 
 };

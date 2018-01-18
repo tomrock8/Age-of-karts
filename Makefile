@@ -26,6 +26,10 @@ exportAlt:
 altRun:
 	@./exec2
 	@echo "Ejecutando."
+	
+altRunRed:
+	@echo "Ejecutando."
+	@./exec2 2
 
 run:
 	@./exec

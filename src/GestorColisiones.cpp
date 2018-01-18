@@ -52,7 +52,7 @@ bool GestorColisiones::JugadorWaypoint(){
     {
         if (strcmp("Waypoint", nodoB->getName()) == 0)
         {
-			for(int i = 0; i< 2; i++){
+			for(int i = 0; i< 6; i++){
 				if(pj1[i]!=NULL)
 					if(nodoA->getID() == pj1[i]->getNodo()->getID()){
 						pj1[i]->setWaypointActual(nodoB);
@@ -82,10 +82,14 @@ bool GestorColisiones::JugadorTurbo()
 	{
 		if (strcmp("Turbo", nodoB->getName()) == 0)
 		{
-			for( int i = 0; i< 2; i++)
-				if(nodoA->getID() == pj1[i]->getNodo()->getID())
-					pj1[i]->setTurbo(true, false,30000);
-
+			for(int i = 0; i< 6; i++){
+				if(pj1[i]!=NULL){
+						cout<< pj1[i] << endl;
+					if(nodoA->getID() == pj1[i]->getNodo()->getID()){
+						pj1[i]->setTurbo(true, false,30000);
+					}
+				}
+			}
 			//cout << "Jugador - Turbo\n";
 			return true;
 		}
@@ -120,10 +124,11 @@ bool GestorColisiones::JugadorEstatico()
 				{
 					if (item->getColision()) {
 						if (strcmp("Aceite", item->getNombre()) == 0){	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
-							for(int j = 0; j<2; j++){
-								if (nodoA->getID()== pj1[j]->getNodo()->getID()){
-									pj1[j]->aplicarAceite();
-								}
+							for(int j = 0; j< 6; j++){
+								if(pj1[j]!=NULL)
+									if (nodoA->getID()== pj1[j]->getNodo()->getID()){
+										pj1[j]->aplicarAceite();
+									}
 							}
 						}
 						item->Delete();
@@ -170,10 +175,11 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 				{
 					if (cajas[i]->getIDCaja() == idB)
 					{
-						for(int j = 0; j<2; j++)
-							if(nodoA->getID()== pj1[j]->getNodo()->getID()){
-								cajas[i]->romper(pj1[j]);
-							}
+						for(int j = 0; j< 6; j++)
+							if(pj1[j]!=NULL)
+								if(nodoA->getID()== pj1[j]->getNodo()->getID()){
+									cajas[i]->romper(pj1[j]);
+								}
 					}
 				}
 				//cout << "Entro " << i << endl;

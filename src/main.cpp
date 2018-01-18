@@ -22,9 +22,8 @@
 #include "Item.hpp"
 #include "GestorColisiones.hpp"
 #include "TextoPantalla.hpp"
+#include "Gui.hpp"
 
-#include <CEGUI\CEGUI.h>
-#include <CEGUI\RendererModules\Irrlicht\Renderer.h>
 
 using namespace std;
 
@@ -57,6 +56,12 @@ int main()
 	IGUIEnvironment *guienv = m->getGUI();
 	IrrlichtDevice *device = m->getDevice();
 	irrTimer = device->getTimer();
+
+
+	// -----------------------------
+	//  CEGUI
+	// -----------------------------
+	Gui *interfaz = new Gui();
 
 	int debug = 0;
 
@@ -207,6 +212,8 @@ int main()
 	//delete camara;
 	//delete colisiones;
 	m->getDevice()->drop();//irrlicht
+
+	delete interfaz;
 
 	return 0;
 }

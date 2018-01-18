@@ -113,7 +113,6 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 	//lectura de fichero
 	std::string line;
-	int j;
 	std::string tipo, pX, pY, pZ, orientacionWp;
 	std::string tamanyoArrayWaypoints;
 	std::string tamanyoArrayCajas;

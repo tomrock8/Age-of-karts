@@ -17,7 +17,7 @@ Waypoint::Waypoint()
 void Waypoint::inicializarFisicas(){
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-    irr:core::list<btRigidBody *> objetos = bullet->getObjetos();
+    list<btRigidBody *> objetos = bullet->getObjetos();
     Motor3d *m = Motor3d::getInstancia();
     
 

@@ -32,10 +32,10 @@ void GestorColisiones::ComprobarColisiones(CorredorJugador **pj)
 				   cout<<"------------------------ID PROYECTIL ITEM CORRUPTO: ";
 			   }
 			}*/
-			
+
 			if (JugadorCaja(cajas))continue;
 			if (JugadorTurbo())continue;
-			if(JugadorWaypoint())continue;
+			if (JugadorWaypoint())continue;
 			if (objetoDestruible())continue;
 			if (JugadorEstatico())continue;
 
@@ -45,25 +45,25 @@ void GestorColisiones::ComprobarColisiones(CorredorJugador **pj)
 
 
 
-bool GestorColisiones::JugadorWaypoint(){
-	
-     if (strcmp("Jugador", nodoA->getName()) == 0)
-    {
-        if (strcmp("Waypoint", nodoB->getName()) == 0)
-        {
-			for(int i = 0; i< 2; i++){
-			if(nodoA->getID() == pj1[i]->getNodo()->getID()){
-				pj1[i]->setWaypointActual(nodoB);
-				
-				return true;	
+bool GestorColisiones::JugadorWaypoint() {
+
+	if (strcmp("Jugador", nodoA->getName()) == 0)
+	{
+		if (strcmp("Waypoint", nodoB->getName()) == 0)
+		{
+			for (int i = 0; i < 2; i++) {
+				if (nodoA->getID() == pj1[i]->getNodo()->getID()) {
+					pj1[i]->setWaypointActual(nodoB);
+
+					return true;
 				}
 			}
-			
+
 		}
-    }
-	
+	}
+
 	return false;
-	
+
 }
 
 
@@ -80,8 +80,8 @@ bool GestorColisiones::JugadorTurbo()
 	{
 		if (strcmp("Turbo", nodoB->getName()) == 0)
 		{
-			for( int i = 0; i< 2; i++)
-				if(nodoA->getID() == pj1[i]->getNodo()->getID())
+			for (int i = 0; i < 2; i++)
+				if (nodoA->getID() == pj1[i]->getNodo()->getID())
 					pj1[i]->setTurbo(true, false);
 
 			//cout << "Jugador - Turbo\n";
@@ -132,6 +132,7 @@ bool GestorColisiones::JugadorEstatico()
 			//cout << "Jugador - Turbo\n";
 		}
 	}
+	return false;
 }
 
 //
@@ -160,8 +161,8 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 				{
 					if (cajas[i]->getIDCaja() == idB)
 					{
-						for(int j = 0; j<2; j++)
-							if(nodoA->getID()== pj1[j]->getNodo()->getID()){
+						for (int j = 0; j < 2; j++)
+							if (nodoA->getID() == pj1[j]->getNodo()->getID()) {
 								cajas[i]->romper(pj1[j]);
 							}
 					}

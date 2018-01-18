@@ -4,7 +4,7 @@ Turbo::Turbo(int id, btVector3 pos, bool estado) {
 	turboActivo = estado;
 	turboTocado = estado;
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-irr:core::list<btRigidBody *> objetos = bullet->getObjetos();
+	list<btRigidBody *> objetos = bullet->getObjetos();
 	Motor3d *m = Motor3d::getInstancia();
 	turbo = m->getScene()->addCubeSceneNode(5.0f);
 	escala = vector3df(2.5f, 0.2f, 1.25f);

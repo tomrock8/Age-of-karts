@@ -13,11 +13,12 @@
 #include "Proyectil.hpp"
 #include "Estatico.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+#include "TextoPantalla.hpp"
+
 using namespace std;
 
-class Corredor
-{
-  public:
+class Corredor {
+public:
 	Corredor(stringw rutaObj, vector3df pos);
 	void InicializarFisicas();
 	void lanzarItem(Proyectil *item, int direcionItem);
@@ -41,15 +42,15 @@ class Corredor
 	void ActualizarRaytest();
 
 
-	//logica difusa
+	// Logica difusa
 	void logicaDifusa();
-	double FuncionTrapezoidal(double valor,double a,double b,double c, double d);
-	double FuncionTriangular(double valor,double a,double b,double c);
+	double FuncionTrapezoidal(double valor, double a, double b, double c, double d);
+	double FuncionTriangular(double valor, double a, double b, double c);
 
-	//Update
+	// Update
 	void update();
 
-	//metodos GET
+	// Metodos GET
 	IMeshSceneNode *getNodo();
 	btRaycastVehicle *getVehiculo();
 	btRigidBody *getRigidBody();
@@ -60,11 +61,12 @@ class Corredor
 	int getTipoObj();
 	bool getTurbo();
 	Waypoint *getWaypointActual();
-	//destructor
+
+	// Destructor
 	~Corredor();
-  protected:
+protected:
 	//objetos
-	IMesh *coche;
+	IMesh * coche;
 	IMeshSceneNode *cuboNodo;
 	ISceneNode *rueda1;
 	ISceneNode *rueda2;
@@ -78,10 +80,10 @@ class Corredor
 	// parametros IA
 	btScalar anguloGiro;
 	btScalar distanciaWaypoint;
-	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
-	double pertenenciaGiroFuerte,pertenenciaGiroFlojo,pertenenciaNoGiro;
-	bool distanciaCerca,distanciaMedia,distanciaLejos;
-	bool giroFuerte,giroFlojo,noGiro;
+	double pertenenciaCerca, pertenenciaMedia, pertenenciaLejos;
+	double pertenenciaGiroFuerte, pertenenciaGiroFlojo, pertenenciaNoGiro;
+	bool distanciaCerca, distanciaMedia, distanciaLejos;
+	bool giroFuerte, giroFlojo, noGiro;
 
 	//bullet
 	btRaycastVehicle *vehiculo;
@@ -131,7 +133,7 @@ class Corredor
 	void girarDerecha();
 	void girarIzquierda();
 	void frenodemano(bool activo);
-	virtual void movimiento(){}; // A implementar por derivadas
+	virtual void movimiento() {}; // A implementar por derivadas
 
 	// UPDATES
 	void actualizarRuedas();

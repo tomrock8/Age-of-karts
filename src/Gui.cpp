@@ -9,8 +9,6 @@ Gui::Gui(irr::IrrlichtDevice *device) {
 	//render = &CEGUI::OpenGLRenderer::bootstrapSystem(OPEN_GL_DEVICE);
 	render = &CEGUI::IrrlichtRenderer::bootstrapSystem(*device); // Inicializa el renderer de irrlicht
 	contexto = &CEGUI::System::getSingleton().createGUIContext(render->getDefaultRenderTarget()); // Contenedor de todos los widgets
-	ventana = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindw", "root");
-	contexto->setRootWindow(ventana);
 
 	CEGUI::DefaultResourceProvider *recursos = static_cast<CEGUI::DefaultResourceProvider*>(CEGUI::System::getSingleton().getResourceProvider());
 	
@@ -28,6 +26,12 @@ Gui::Gui(irr::IrrlichtDevice *device) {
 	CEGUI::WidgetLookManager::setDefaultResourceGroup("looknfeel");
 	CEGUI::ScriptModule::setDefaultResourceGroup("lua_scripts");
 
+
+	CEGUI::WindowManager *winMan = CEGUI::WindowManager::getSingletonPtr();
+	ventana = winMan->createWindow("DefaultWindow", "root");
+
+
+	contexto->setRootWindow(ventana);
 
 	std::cout << "\n FIN DE CONSTRUCTOR DE GUI\n\n";
 }

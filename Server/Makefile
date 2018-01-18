@@ -27,7 +27,7 @@ exec: $(OBJETOS)
 
 	
 	g++ -fPIC -g -o $@ $^  $(RUTAS) $(LIBRERIAS) $(CFLAGS)	
-	LD_LIBRARY_PATH=./lib
+	LD_LIBRARY_PATH=./../lib
 	export LD_LIBRARY_PATH
 	@echo "Generado ejecutable."
 

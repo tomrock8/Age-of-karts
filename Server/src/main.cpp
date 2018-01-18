@@ -1,14 +1,5 @@
-#include <irrlicht.h>
 #include "Server.hpp"
 
-using namespace irr;
-using namespace core;
-using namespace scene;
-using namespace video;
-using namespace io;
-using namespace gui;
-
-#pragma comment(lib, "Irrlicht.lib")
 
 const int W_WIDTH = 1024;
 const int H_WIDTH = 600;

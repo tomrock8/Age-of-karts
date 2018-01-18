@@ -82,13 +82,10 @@ bool GestorColisiones::JugadorTurbo()
 	{
 		if (strcmp("Turbo", nodoB->getName()) == 0)
 		{
-			for(int i = 0; i< 6; i++){
-				if(pj1[i]!=NULL){
-					if(nodoA->getID() == pj1[i]->getNodo()->getID()){
-						pj1[i]->setTurbo(true, false,30000);
-					}
-				}
-			}
+			for( int i = 0; i< 2; i++)
+				if(nodoA->getID() == pj1[i]->getNodo()->getID())
+					pj1[i]->setTurbo(true, false,25000);
+
 			//cout << "Jugador - Turbo\n";
 			return true;
 		}

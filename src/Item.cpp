@@ -120,3 +120,6 @@ ISceneNode *Item::getNodo()
 const char* Item::getNombre(){
 	return nombre;
 }
+void Item::setNombre(const char* name){
+	nombre=name;
+}

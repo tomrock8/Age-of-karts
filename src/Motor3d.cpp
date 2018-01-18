@@ -21,7 +21,6 @@ Motor3d::Motor3d()
 	guienv = device->getGUIEnvironment();
 
 	CTeclado *teclado = CTeclado::getInstancia();
-	irrTimer = device->getTimer();
 	setTeclado(teclado);
 }
 
@@ -72,7 +71,4 @@ void Motor3d::dibujar()
 void Motor3d::cerrar()
 {
 	device->closeDevice();
-}
-int Motor3d::getTime() {
-	return irrTimer->getTime();
 }

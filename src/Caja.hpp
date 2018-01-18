@@ -7,7 +7,7 @@
 #include "btBulletCollisionCommon.h"
 #include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
-#include <ctime>
+#include "Timer.hpp"
 #include <iostream>
 
 using namespace std;

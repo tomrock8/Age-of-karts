@@ -21,6 +21,7 @@ public:
   btRigidBody *getRigidBody();
     void setColision(bool b);
     bool getColision();
+    void setNombre(const char* name);
     const char* getNombre();
 
 protected:

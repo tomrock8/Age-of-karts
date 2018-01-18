@@ -65,9 +65,10 @@ btRigidBody *Caja::inicializarFisicas()
 
 void Caja::comprobarRespawn() {
 	Motor3d *mundo = Motor3d::getInstancia();
+		Timer *time = Timer::getInstancia();
 	if (nodo) {
 		if (!nodo->isVisible()) {
-			if (mundo->getTime() - timer >= 5000) {
+			if (time->getTimer() - timer >= 5) {
 				//cout << "Visible\n";
 				nodo->setVisible(true);
 			}
@@ -77,6 +78,7 @@ void Caja::comprobarRespawn() {
 
 void Caja::romper(Corredor *pj1Col) {
 	Motor3d *mundo = Motor3d::getInstancia();
+	Timer *time = Timer::getInstancia();
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 
@@ -90,7 +92,7 @@ void Caja::romper(Corredor *pj1Col) {
 			// Delete irrlicht node
 			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
 			Node->setVisible(false);
-			timer = mundo->getTime();
+			timer = time->getTimer();
 			if (pj1Col->getTipoObj() == 0) {
 				pj1Col->setTipoObj();
 			}

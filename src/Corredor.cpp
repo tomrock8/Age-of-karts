@@ -566,8 +566,8 @@ void Corredor::setTurbo(bool activo, bool objeto,int valor) {
 		Motor3d *m = Motor3d::getInstancia();
 		SetFuerzaVelocidad(valor);
 		acelerar();
-
-		timerTurbo = m->getDevice()->getTimer()->getTime();
+		Timer *time = Timer::getInstancia();
+		timerTurbo = time->getTimer();
 		if (objeto) tipoObj = 0;
 	}
 	else {
@@ -585,16 +585,22 @@ void Corredor::SetFuerzaVelocidad(int turbo)
 }
 void Corredor::acelerar()
 {
-	if (vehiculo->getCurrentSpeedKmHour()>360 && !turboActivado){
+	if (vehiculo->getCurrentSpeedKmHour()>300 && !turboActivado){
 		Fuerza =btScalar(200);		//limitador de velocidad
 	}
-	
+	if (vehiculo->getCurrentSpeedKmHour()<370){
 	vehiculo->applyEngineForce(Fuerza, 0);
 	vehiculo->applyEngineForce(Fuerza, 1);
 	vehiculo->applyEngineForce(Fuerza, 2);
 	vehiculo->applyEngineForce(Fuerza, 3);
 	vehiculo->setSteeringValue(btScalar(0), 0);
 	vehiculo->setSteeringValue(btScalar(0), 1);
+	}else{
+		vehiculo->applyEngineForce(600, 0);
+	vehiculo->applyEngineForce(200, 1);
+	vehiculo->applyEngineForce(200, 2);
+	vehiculo->applyEngineForce(200, 3);
+	}
 }
 
 void Corredor::frenar()
@@ -735,19 +741,14 @@ void Corredor::setFriccion(btScalar valor) {
 	}
 }
 void Corredor::aplicarAceite(){
+	//CuerpoColisionChasis->setAngularFactor(btScalar(120*PI/180));
+	//CuerpoColisionChasis->applyCentralForce(btVector3(100, 5.0f,100));
 	frenodemano(true);
-	setFriccion(0.05f);
-
-	setTurbo(true,true,25000);
-	for (int i=0;i<500;i++){
+	CuerpoColisionChasis->setAngularVelocity(btVector3(0, 40, 0));
+	Fuerza=0;
+		for (int i=0;i<800;i++){
 		girarIzquierda();
-
 	}
-
-
-
-	
-	
 }
 
 //	----------------------------------------------
@@ -785,10 +786,13 @@ vector3df Corredor::getVectorDireccion()
 
 void Corredor::update()
 {
+	
+	
 	if (turboActivado) {
 		Motor3d *mundo = Motor3d::getInstancia();
-		if (mundo->getTime() - timerTurbo >= 400) {
-			//cout << "Se acaba el turbo\n";
+		Timer *time = Timer::getInstancia();
+		if (time->getTimer() - timerTurbo >= 1) {
+			cout << "Se acaba el turbo\n";
 			desacelerar();
 			setTurbo(false, false,0);
 		}

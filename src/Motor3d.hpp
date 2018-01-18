@@ -20,7 +20,6 @@ class Motor3d
 	IrrlichtDevice *getDevice();
 	void setTeclado(CTeclado *teclado);
 	void dibujar();
-	int getTime();
 
 	void cerrar();
 
@@ -31,7 +30,6 @@ class Motor3d
 	IVideoDriver *driver;
 	ISceneManager *smgr;
 	IGUIEnvironment *guienv;
-	ITimer *irrTimer;
 };
 
 #endif /* MOTOR3D_H */

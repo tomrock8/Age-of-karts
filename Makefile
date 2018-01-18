@@ -11,12 +11,31 @@ CFLAGS := -ggdb -std=c++11
 
 all: objdir exec
 
-alt: objdir exec2
+run: objdir exec run
+
+alt: objdir exec2 
+
+runalt: objdir exec2 altRun
 
 exec2: $(OBJETOS)
-	@g++ -o $@ $^ $(RUTAS2) $(LIBRERIAS2) $(CFLAGS)
+	@g++ -o $@ $^ $(RUTAS2) $(LIBRERIAS2) $(CFLAGS) -Wl,-rpath=/usr/local/lib
 	@echo "Generado ejecutable. Ejecutar ./$@"
 
+exportAlt: 
+	export LD_LIBRARY_PATH="/usr/local/lib"
+
+
+altRun:
+	@./exec2
+	@echo "Ejecutando."
+
+run:
+	@./exec
+	@echo "Ejecutando."
+
+export: 
+	LD_LIBRARY_PATH=./lib
+	export LD_LIBRARY_PATH
 
 exec: $(OBJETOS)
 	#export RUTA_LIB=${HOME}:${RUTA_LIB}
@@ -27,14 +46,12 @@ exec: $(OBJETOS)
 	export RUTA_LIB=/usr/local/lib
 
 	
-	g++ -fPIC -g -o $@ $^  $(RUTAS) $(LIBRERIAS) $(CFLAGS)	
-	@LD_LIBRARY_PATH=./lib
-	@export LD_LIBRARY_PATH
+	g++ -fPIC -g -o $@ $^  $(RUTAS) $(LIBRERIAS) $(CFLAGS) -Wl,-rpath=./lib	
 	@echo "Generado ejecutable."
 
 obj/%.o : src/%.cpp
 	@g++ -fPIC -g -o $@ -c $^ $(RUTAS) $(CFLAGS)
-	@echo "Compilado."
+	@echo "Compilado $@."
 
 objdir:
 	@mkdir -p obj/
@@ -45,9 +62,19 @@ info:
 	$(info $(OBJETOS))
 
 clean:
-	rm -f -r obj/
-	rm -f exec
-#	echo "Limpiando resultado de compilacion."
+	@rm -f -r obj/
+	@rm -f exec
+	@rm -f exec2
+	@echo "Limpiando resultado de compilacion."
+
+help: 
+	@echo "Comandos utiles en Age Of Karts"
+	@echo "- make: para compilar con las librerias del proyecto"
+	@echo "- make run: para compilar con make y ejecutar"
+	@echo "- make alt: para compilar con las librerias instaladas en el sistema"
+	@echo "- make runalt: para compilar con make alt y ejecutar"
+	@echo "- make clean: para eliminar la carpeta de objetos y los ejecutables"
+	@echo "- make info: para ver la informacion de los archivos de src"
 
 #TODO:
 #  Comandos para compilar en release

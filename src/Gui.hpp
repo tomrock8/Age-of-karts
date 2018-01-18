@@ -5,15 +5,19 @@
 
 #include <CEGUI\CEGUI.h>
 #include <CEGUI\RendererModules\Irrlicht\Renderer.h>
+#include <CEGUI\ImageManager.h>
+
+using namespace CEGUI;
 
 class Gui {
 
 	public:
-		Gui();
+		Gui(IrrlichtDevice &device);
 		~Gui();
 
 	private:
 		CEGUI::IrrlichtRenderer *renderer;
+		//CEGUI::OpenGLRenderer *renderer;
 
 };
 

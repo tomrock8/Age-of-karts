@@ -61,7 +61,7 @@ int main()
 	// -----------------------------
 	//  CEGUI
 	// -----------------------------
-	Gui *interfaz = new Gui();
+	Gui *interfaz = new Gui(*device);
 
 	int debug = 0;
 

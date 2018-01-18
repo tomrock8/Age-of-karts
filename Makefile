@@ -1,11 +1,9 @@
 FUENTE := $(wildcard src/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
-LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader -lRakNetLibStatic 
-LIBRERIAS2 := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lGL -lSDL_image -lGLU -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader -lRakNetLibStatic -lpthread 
-RUTAS2 := -I. -I/usr/local/include/bullet/
-#ARCHIVOS_SO := libBulletDynamics.so libBulletCollision.so libBulletSoftBody.so libLinearMath.so libBulletWorldTransform.so libBulletFileLoader.so libIrrlicht.so.1.8.4 libBulletDynamics.so.2.88 libBulletCollision.so.2.88 libBulletSoftBody.so.2.88 libLinearMath.so.2.88 libBulletWorldTransform.so.2.88 libBulletFileLoader.so.2.88
-
-RUTAS := -I./include/irrlicht -I./include/raknet -I./include/irrlicht/include -I./include/bullet -L./lib 
+LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader -lRakNetLibStatic -lCEGUIBase-0_Static -lCEGUIIrrlichtRenderer-0_Static
+LIBRERIAS2 := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lGL -lSDL_image -lGLU -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader -lRakNetLibStatic -lpthread -lCEGUIBase-0_Static -lCEGUIIrrlichtRenderer-0_Static
+RUTAS2 := -I. -I/usr/local/include/bullet/  -I./include/CEGUI 
+RUTAS := -I./include/irrlicht -I./include/raknet  -I./include/CEGUI -I./include/irrlicht/include -I./include/bullet -L./lib 
 CFLAGS := -ggdb -std=c++11 
 .PHONY: objdir info all 
 

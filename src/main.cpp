@@ -24,7 +24,8 @@
 #include "GestorJugadores.hpp"
 #include "TextoPantalla.hpp"
 #include "Client.hpp"
-
+#include "CEGUI.h"
+#include "RendererModules/Irrlicht/Renderer.h"
 using namespace std;
 
 #ifdef _MSC_VER

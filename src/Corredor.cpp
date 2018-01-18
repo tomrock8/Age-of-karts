@@ -89,7 +89,7 @@ void Corredor::InicializarFisicas()
 	//establecemos su centro de gravedad
 	btTransform localTransform;
 	localTransform.setIdentity();
-	localTransform.setOrigin(btVector3(0, 2, 0));
+	localTransform.setOrigin(btVector3(0, 1.7, 0));
 	CentroGravedad = new btCompoundShape();
 
 	//Forma Colision

@@ -84,7 +84,6 @@ bool GestorColisiones::JugadorTurbo()
 		{
 			for(int i = 0; i< 6; i++){
 				if(pj1[i]!=NULL){
-						cout<< pj1[i] << endl;
 					if(nodoA->getID() == pj1[i]->getNodo()->getID()){
 						pj1[i]->setTurbo(true, false,30000);
 					}

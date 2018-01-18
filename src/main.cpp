@@ -152,6 +152,24 @@ int main(int argc, char* argv[])
 		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 		textoDebug->agregar(pj[0]->toString());
 		
+		if(teclado->isKeyDown(KEY_KEY_R)){
+			btVector3 btPos(pos.X, pos.Y, pos.Z);
+			/*btRigidBody *btRi = pj[0]->getRigidBody();
+			btTransform trans;
+			btRi->getMotionState()->getWorldTransform(trans);
+			trans.setOrigin(*btPos);
+			btRi->getMotionState()->setWorldTransform(trans);
+*/
+			
+			btTransform trans;
+			trans.setOrigin(btPos);
+			btQuaternion quaternion;
+		    quaternion.setEulerZYX(pj[0]->getNodo()->getRotation().Z* PI/180,pj[0]->getNodo()->getRotation().Y * PI/180,pj[0]->getNodo()->getRotation().X* PI/180);
+    		trans.setRotation(quaternion);
+			pj[0]->getRigidBody()->setCenterOfMassTransform(trans);
+			//pj[0]->getNodo()->setPosition(pos);
+		}
+
 		jugadores->setJugadores(pj);
 
 		//textoDebug->agregar("\n\n ---- CORREDOR 2 IA ----\n");

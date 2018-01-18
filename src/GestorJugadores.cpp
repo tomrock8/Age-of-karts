@@ -3,7 +3,7 @@
 GestorJugadores *GestorJugadores::instancia = NULL;
 
 GestorJugadores::GestorJugadores(){
-	//Corredor **pj= new Corredor*[6];
+	pj= new Corredor*[6];
     id = 999;// estaba int id = 0; . Se cambia a 999 para evitar posibles conflictos con ids 0 creadas en mapa 
 	vector3df pos(0, 1, 300);
     vector3df fuera(0,0,0);

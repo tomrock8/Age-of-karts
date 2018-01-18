@@ -14,8 +14,9 @@ MotorFisicas::MotorFisicas()
 	dispatcher = new btCollisionDispatcher(confColision);
 	solver = new btSequentialImpulseConstraintSolver();
 	mundo = new btDiscreteDynamicsWorld(dispatcher, broadPhase, solver, confColision); //creacion del mundo
-	fileLoader = new btBulletWorldImporter(mundo);
-	fileLoader->loadFile("assets/Mapa01/FisicasMapaIsla.bullet"); //no recoge bien el const char con la ruta del fichero si se le pasas por parametro
+//	fisicasMapa = new btBulletWorldImporter(mundo);
+//	fisicasMapa->loadFile("assets/Mapa01/FisicasMapaIsla.bullet"); //no recoge bien el const char con la ruta del fichero si se le pasas por parametro
+	
 }
 
 MotorFisicas::~MotorFisicas() {
@@ -23,7 +24,6 @@ MotorFisicas::~MotorFisicas() {
 	delete confColision;
 	delete dispatcher;
 	delete solver;
-	delete fileLoader;
 	delete mundo;
 }
 
@@ -50,13 +50,9 @@ void MotorFisicas::setObjetos(irr::core::list<btRigidBody *> obj)
 	objetos = obj;
 }
 
-void MotorFisicas::setFisicas(const char *f)
-{
-	//cout << f << endl;
-	fisicas = f;
-	//fileLoader->loadFile("fisicas/carretera.bullet");
-	fileLoader->loadFile(f);
-}
 //void MotorFisicas::setMapaFisicas(stringw mapa){
 //	fileLoader->loadFile("fisicas/carretera.bullet");
+//}
+//btBulletWorldImporter *MotorFisicas::getFisicas() {
+//	return fisicasMapa;
 //}

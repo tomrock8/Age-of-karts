@@ -19,10 +19,10 @@ public:
   bool Delete();
   ISceneNode *getNodo();
   btRigidBody *getRigidBody();
-  void setColision(bool b);
-  bool getColision();
-//destructor
-	//~Item();
+    void setColision(bool b);
+    bool getColision();
+    const char* getNombre();
+
 protected:
   ISceneNode *nodo;
   btRigidBody *rigidBody;

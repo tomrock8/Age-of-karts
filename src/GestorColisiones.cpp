@@ -23,7 +23,6 @@ void GestorColisiones::ComprobarColisiones(CorredorJugador **pj)
 
 		if (nodoA != 0 && nodoB != 0)
 		{
-
 			/* if (strcmp("Proyectil", nodoB->getName()) == 0){
 			   cout<<"------------------------ID PROYECTIL: "<<nodoB->getID()<<endl;
 			   if (item->getNodo() !=NULL){
@@ -82,7 +81,7 @@ bool GestorColisiones::JugadorTurbo()
 		{
 			for( int i = 0; i< 2; i++)
 				if(nodoA->getID() == pj1[i]->getNodo()->getID())
-					pj1[i]->setTurbo(true, false);
+					pj1[i]->setTurbo(true, false,30000);
 
 			//cout << "Jugador - Turbo\n";
 			return true;
@@ -117,9 +116,17 @@ bool GestorColisiones::JugadorEstatico()
 				if (item->getNodo()->getID() == idB)
 				{
 					if (item->getColision()) {
+						if (strcmp("Aceite", item->getNombre()) == 0){	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
+							for(int j = 0; j<2; j++){
+								if (nodoA->getID()== pj1[j]->getNodo()->getID()){
+									pj1[j]->aplicarAceite();
+								}
+							}
+						}
 						item->Delete();
 						Iterator = items.erase(Iterator);
 						pista->setItems(items);
+						
 					}
 					else {
 						item->setColision(true);

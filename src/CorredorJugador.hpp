@@ -7,6 +7,8 @@
 #include "Corredor.hpp"
 #include "Turbo.hpp"
 #include "Caja.hpp"
+#include "CajaFalsa.hpp"
+#include "Aceite.hpp"
 using namespace std;
 
 class CorredorJugador : public Corredor

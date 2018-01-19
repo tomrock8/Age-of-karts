@@ -91,7 +91,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	btDynamicsWorld *mundo = bullet->getMundo();
 	//---------------------------FISICAS-------------------------------//
 
-	
+
 	//cout << "cuantos rigidBodies tengo: " << num << endl;
 	//CuerpoColisionMapa = (btRigidBody*)bullet->getFisicas()->getRigidBodyByIndex(0);
 
@@ -101,15 +101,18 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	fisicasMapa->loadFile(fisicas);
 	{
 		int num = fisicasMapa->getNumRigidBodies();
-		
-		for (int i = 0; i < num; i++){
+
+		for (int i = 0; i < num; i++) {
 			CuerpoColisionMapa = (btRigidBody*)fisicasMapa->getRigidBodyByIndex(i);//recoger el rigidbody
 			//almacenar en puntero al nodo irrlich para poder actualizar( en caso de ser  necesario)
 			CuerpoColisionMapa->setUserPointer((void *)(Mapa));
 			mundo->addRigidBody(CuerpoColisionMapa);//almacenar rigidbody en el mundo
-			
+
 		}
 	}
+
+
+	// ------------------------------------------------------
 
 	//lectura de fichero
 	std::string line;
@@ -160,7 +163,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 				//comento lo de la id de los waypoints porq da conflico con las cajas
 				//arrayWaypoints[wp]->getWaypoint()->setID(wp);
-				
+
 				if (tamWaypoints > 0 && tamWaypoints <= (stoi(tamanyoArrayWaypoints) - 2))
 				{
 					arrayWaypoints[tamWaypoints - 1]->setSiguiente(arrayWaypoints[tamWaypoints]);
@@ -190,24 +193,12 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 			//cout << line << endl;
 		}
 
-		for (int i = 0; i < stoi(tamanyoArrayWaypoints); i++) {
-
 		myfile.close();
-		
+
 	}
-
-	else{
+	else {
 		cout << "Error abriendo archivo";
-}
-
-	for (int i=0;i<stoi(tamanyoArrayWaypoints);i++){
-
-			arrayWaypoints[i]->setDireccion();
-			
-		}
-
-
-	
+	}
 }
 
 
@@ -272,33 +263,4 @@ void Pista::setIdsObjetosCaja(int i) {
 int Pista::getIdsObjetosCaja() {
 	return idObjCajas;
 }
-	//---------------------------FISICAS-------------------------------//
 
-	
-	//cout << "cuantos rigidBodies tengo: " << num << endl;
-	//CuerpoColisionMapa = (btRigidBody*)bullet->getFisicas()->getRigidBodyByIndex(0);
-
-	//---------------------------FISICAS-------------------------------//
-
-	fisicasMapa->loadFile(fisicas);
-	{
-		int num = fisicasMapa->getNumRigidBodies();
-		
-		for (int i = 0; i < num; i++){
-			CuerpoColisionMapa = (btRigidBody*)fisicasMapa->getRigidBodyByIndex(i);//recoger el rigidbody
-			//almacenar en puntero al nodo irrlich para poder actualizar( en caso de ser  necesario)
-			CuerpoColisionMapa->setUserPointer((void *)(Mapa));
-			mundo->addRigidBody(CuerpoColisionMapa);//almacenar rigidbody en el mundo
-			
-		}
-				//arrayWaypoints[tamWaypoints]->getWaypoint()->setID(tamWaypoints);
-				
-		myfile.close();
-		
-	}
-
-	else{
-		cout << "Error abriendo archivo";
-}
-
-	

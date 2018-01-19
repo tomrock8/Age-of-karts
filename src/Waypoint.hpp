@@ -27,22 +27,16 @@ void inicializarFisicas();
   //metodos SET
   void setPosicion(float x, float y, float z);
   void setSiguiente(Waypoint *siguiente);
-  void setNombre(std::string nombre);
   void setOrientacion(float grados);
-  void setDireccion();
 
   //metodos GET
   IMeshSceneNode *getWaypoint();
   btVector3 getPosicion();
   Waypoint *getNextWaypoint();
-  std::string getNombre();
-  btVector3 getDireccion();
 
 private:
   IMeshSceneNode *waypoint;
-  std::string nombre;
   Waypoint *siguiente; // Siguiente punto
-  btVector3 direccion;
 
   //fisicas
   btDefaultMotionState *MotionState;

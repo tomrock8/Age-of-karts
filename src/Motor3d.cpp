@@ -17,7 +17,6 @@ Motor3d::Motor3d() {
 	guienv = device->getGUIEnvironment();
 
 	CTeclado *teclado = CTeclado::getInstancia();
-	irrTimer = device->getTimer();
 	setTeclado(teclado);
 
 	device->setWindowCaption(L"AGE OF KARTS");

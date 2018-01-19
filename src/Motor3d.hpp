@@ -35,7 +35,6 @@ class Motor3d
 	IVideoDriver *driver;
 	ISceneManager *smgr;
 	IGUIEnvironment *guienv;
-	ITimer *irrTimer;
 };
 
 #endif /* MOTOR3D_H */

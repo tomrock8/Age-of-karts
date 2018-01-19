@@ -21,10 +21,14 @@
 #include "Caja.hpp"
 #include "Item.hpp"
 #include "GestorColisiones.hpp"
+#include "GestorJugadores.hpp"
 #include "TextoPantalla.hpp"
 #include "Gui.hpp"
 
 
+#include "Client.hpp"
+#include "CEGUI.h"
+#include "RendererModules/Irrlicht/Renderer.h"
 using namespace std;
 
 #ifdef _MSC_VER
@@ -42,9 +46,17 @@ static core::list<btRigidBody *> objetosm;
 static ITimer *irrTimer;
 static ILogger *irrLog;
 
-int main()
+int main(int argc, char* argv[])
 {
 	CTeclado *teclado = CTeclado::getInstancia();
+
+	Client *client = NULL;
+	if(argc == 2){
+		client = new Client(8);
+		client->CreateClientInterface();
+		client->SetIP();
+		client->ClientStartup();
+	}
 
 	// -----------------------------
 	//  PREPARAR LA VENTANA
@@ -85,16 +97,11 @@ int main()
 	//-----------------------------//
 	//Posicion del nodo y el bloque de colisiones centralizado:
 
-	int id = 999;// estaba int id = 0; . Se cambia a 999 para evitar posibles conflictos con ids 0 creadas en mapa 
-	vector3df pos(0, 10, 300);
-	vector3df pos2(0, 10, 320);
-	CorredorJugador **pj= new CorredorJugador*[2];
-	pj[0] = new CorredorJugador("assets/coche.obj", pos);
-	pj[1] = new CorredorJugador("assets/coche.obj", pos2);
-
-	pj[0]->getNodo()->setID(id);
-	id++;
-	pj[1]->getNodo()->setID(id);
+	vector3df pos(0, 1, 300);
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	Corredor **pj = jugadores->getJugadores();
+	
+	//pj[1]->getNodo()->setID(id);
 
 
 	//-----------------------------//
@@ -140,66 +147,99 @@ int main()
 
 	while (m->getDevice()->run())
 	{
-		if (m->getDevice()->isWindowActive())
+		if(argc == 2){
+			client->ReceivePackets(smgr);
+			client->SpawnPlayer(smgr);
+		}
+
+		textoDebug->limpiar();
+
+		DeltaTime = irrTimer->getTime() - TimeStamp;
+		TimeStamp = irrTimer->getTime();
+		UpdatePhysics(DeltaTime);
+
+		for (int i = 0; i < pistaca->getTamCajas(); i++)
 		{
+			pistaca->getArrayCaja()[i]->comprobarRespawn();
+		}
+		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 
-			textoDebug->limpiar();
+		pj = jugadores->getJugadores();
+		pj[0]->actualizarItem();
 
-			DeltaTime = irrTimer->getTime() - TimeStamp;
-			TimeStamp = irrTimer->getTime();
-			UpdatePhysics(DeltaTime);
+		camara->moveCameraControl(pj[0], device);
+		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
-			for (int i = 0; i < pistaca->getTamCajas(); i++)
-			{
-				pistaca->getArrayCaja()[i]->comprobarRespawn();
-			}
-			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
-
-
-			pj[0]->actualizarItem();
-
-			camara->moveCameraControl(pj[0], device);
-			colisiones->ComprobarColisiones(pj);//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
-			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
-
-			pj[0]->update();
-			//pj[1]->update();
+		pj[0]->update();
+		//pj[1]->update();
 
 
-			textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-			textoDebug->agregar(pj[0]->toString());
+		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
+		textoDebug->agregar(pj[0]->toString());
+		
+		if(teclado->isKeyDown(KEY_KEY_R)){
+			btVector3 btPos(pos.X, pos.Y, pos.Z);
+			/*btRigidBody *btRi = pj[0]->getRigidBody();
+			btTransform trans;
+			btRi->getMotionState()->getWorldTransform(trans);
+			trans.setOrigin(*btPos);
+			btRi->getMotionState()->setWorldTransform(trans);
+*/
+			
+			btTransform trans;
+			trans.setOrigin(btPos);
+			btQuaternion quaternion;
+		    quaternion.setEulerZYX(pj[0]->getNodo()->getRotation().Z* PI/180,pj[0]->getNodo()->getRotation().Y * PI/180,pj[0]->getNodo()->getRotation().X* PI/180);
+    		trans.setRotation(quaternion);
+			pj[0]->getRigidBody()->setCenterOfMassTransform(trans);
+			//pj[0]->getNodo()->setPosition(pos);
+		}
 
+		jugadores->setJugadores(pj);
 
+		//textoDebug->agregar("\n\n ---- CORREDOR 2 IA ----\n");
+		//textoDebug->agregar(pj2->toString());
 
-			if (teclado->isKeyDown(KEY_ESCAPE))
-			{
-				m->cerrar();
-				return 0;
-			}
+		//-------ENTRADA TECLADO ----------//
+		/*
+		if (teclado->isKeyDown(KEY_KEY_R))
+		{
+			pj2->movimiento();
+		}
+		*/
 
-			if (teclado->isKeyDown(KEY_KEY_0))
-			{
-				debug = 0;
-			}
-			if (teclado->isKeyDown(KEY_KEY_9))
-			{
-				debug = 1;
-			}
+		if (teclado->isKeyDown(KEY_ESCAPE))
+		{
+			if(argc == 2)
+				client->ShutDownClient();
+			m->cerrar();
+			return 0;
+		}
 
-			//-------ENTRADA TECLADO FIN----------//
-			int fps = driver->getFPS();
-			if (lastFPS != fps)
-			{
-				core::stringw tmp(L"Age of karts [");
-				tmp += driver->getName();
-				tmp += L"] fps: ";
-				tmp += fps;
+		if (teclado->isKeyDown(KEY_KEY_0))
+		{
+			debug = 0;
+		}
+		if (teclado->isKeyDown(KEY_KEY_9))
+		{
+			debug = 1;
+		}
 
-				m->getDevice()->setWindowCaption(tmp.c_str());
-				lastFPS = fps;
-			}
-			//	RENDER
-			m->dibujar();
+		//-------ENTRADA TECLADO FIN----------//
+		int fps = driver->getFPS();
+		if (lastFPS != fps)
+		{
+			core::stringw tmp(L"Age of karts [");
+			tmp += driver->getName();
+			tmp += L"] fps: ";
+			tmp += fps;
+
+			m->getDevice()->setWindowCaption(tmp.c_str());
+			lastFPS = fps;
+		}
+		//	RENDER
+		m->dibujar();
 
 			
 			if (debug) {
@@ -215,16 +255,15 @@ int main()
 			//m->getInterfaz()->dibujar();
 			driver->endScene();
 		}
-		else
-		{
-			m->getDevice()->yield();
-		}
+		guienv->drawAll();
+		driver->endScene();
+	
 	}
 	//----------------------------------//
 	//-----------DESTRUCTORES-----------//
 	//----------------------------------//
 	
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 6; i++) {
 		delete pj[i];
 	}
 	delete pj;

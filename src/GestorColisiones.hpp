@@ -11,6 +11,7 @@
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "MotorFisicas.hpp"
+#include "GestorJugadores.hpp"
 #include <iostream>
 
 using namespace std;
@@ -19,7 +20,7 @@ class GestorColisiones
 {
 public:
   GestorColisiones(){};
-  void ComprobarColisiones(CorredorJugador **pj);
+  void ComprobarColisiones();
   bool JugadorCaja(Caja *cajas[]);
   bool JugadorTurbo();
   bool objetoDestruible();
@@ -28,7 +29,7 @@ public:
 
 
 private:
-  CorredorJugador **pj1;
+  Corredor **pj1;
   ISceneNode *nodoA;
   ISceneNode *nodoB;
 };

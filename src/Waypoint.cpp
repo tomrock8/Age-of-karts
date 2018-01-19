@@ -67,21 +67,6 @@ void Waypoint::setSiguiente(Waypoint *siguiente)
 	this->siguiente = siguiente;
 }
 
-void Waypoint::setNombre(std::string nombre)
-{
-
-	this->nombre = nombre;
-}
-
-void Waypoint::setDireccion(){
-
-	direccion = btVector3(this->getNextWaypoint()->getPosicion().getX()-waypoint->getPosition().X,
-	this->getNextWaypoint()->getPosicion().getY()-waypoint->getPosition().Y,
-	this->getNextWaypoint()->getPosicion().getZ()-waypoint->getPosition().Z);
-	direccion.normalize();
-	
-}	
-
 void Waypoint::setOrientacion(float grado)
 {
 
@@ -101,23 +86,15 @@ Waypoint *Waypoint::getNextWaypoint()
 	return siguiente;
 }
 
-std::string Waypoint::getNombre()
-{
-
-	return nombre;
-}
-
-
-btVector3 Waypoint::getDireccion(){
-
-	return direccion;
-
-}
-
 IMeshSceneNode *Waypoint::getWaypoint(){
 
 	return waypoint;
 
+}
+Waypoint::~Waypoint() {
+	delete rigidBody->getMotionState();
+	delete rigidBody->getCollisionShape();
+	delete rigidBody;
 }
 Waypoint::~Waypoint() {
 	try {
@@ -126,4 +103,3 @@ Waypoint::~Waypoint() {
 		delete rigidBody;
 	}
 	catch (...) { throw; }
-}

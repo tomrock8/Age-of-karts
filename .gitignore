@@ -1,5 +1,6 @@
 # EJECUTABLES
 exec
+exec2
 *.exe
 
 # COMPILADOS

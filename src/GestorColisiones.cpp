@@ -3,14 +3,15 @@
 #define TAMANYOCAJAS 10
 #define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 
-void GestorColisiones::ComprobarColisiones(CorredorJugador **pj)
+void GestorColisiones::ComprobarColisiones()
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Pista *pista = Pista::getInstancia();
 	Caja** cajas = pista->getArrayCaja();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
-	pj1 = pj;
+	pj1 = jugadores->getJugadores();
 	int numManifolds = mundo->getDispatcher()->getNumManifolds();
 	for (int i = 0; i < numManifolds; i++)
 	{
@@ -23,7 +24,6 @@ void GestorColisiones::ComprobarColisiones(CorredorJugador **pj)
 
 		if (nodoA != 0 && nodoB != 0)
 		{
-
 			/* if (strcmp("Proyectil", nodoB->getName()) == 0){
 			   cout<<"------------------------ID PROYECTIL: "<<nodoB->getID()<<endl;
 			   if (item->getNodo() !=NULL){
@@ -41,22 +41,24 @@ void GestorColisiones::ComprobarColisiones(CorredorJugador **pj)
 
 		}
 	}
+	jugadores->setJugadores(pj1);
 }
 
 
 
-bool GestorColisiones::JugadorWaypoint() {
-
-	if (strcmp("Jugador", nodoA->getName()) == 0)
-	{
-		if (strcmp("Waypoint", nodoB->getName()) == 0)
-		{
-			for (int i = 0; i < 2; i++) {
-				if (nodoA->getID() == pj1[i]->getNodo()->getID()) {
-					pj1[i]->setWaypointActual(nodoB);
-
-					return true;
-				}
+bool GestorColisiones::JugadorWaypoint(){
+	
+     if (strcmp("Jugador", nodoA->getName()) == 0)
+    {
+        if (strcmp("Waypoint", nodoB->getName()) == 0)
+        {
+			for(int i = 0; i< 6; i++){
+				if(pj1[i]!=NULL)
+					if(nodoA->getID() == pj1[i]->getNodo()->getID()){
+						pj1[i]->setWaypointActual(nodoB);
+						
+						return true;	
+					}
 			}
 
 		}
@@ -80,9 +82,9 @@ bool GestorColisiones::JugadorTurbo()
 	{
 		if (strcmp("Turbo", nodoB->getName()) == 0)
 		{
-			for (int i = 0; i < 2; i++)
-				if (nodoA->getID() == pj1[i]->getNodo()->getID())
-					pj1[i]->setTurbo(true, false);
+			for( int i = 0; i< 2; i++)
+				if(nodoA->getID() == pj1[i]->getNodo()->getID())
+					pj1[i]->setTurbo(true, false,25000);
 
 			//cout << "Jugador - Turbo\n";
 			return true;
@@ -117,9 +119,18 @@ bool GestorColisiones::JugadorEstatico()
 				if (item->getNodo()->getID() == idB)
 				{
 					if (item->getColision()) {
+						if (strcmp("Aceite", item->getNombre()) == 0){	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
+							for(int j = 0; j< 6; j++){
+								if(pj1[j]!=NULL)
+									if (nodoA->getID()== pj1[j]->getNodo()->getID()){
+										pj1[j]->aplicarAceite();
+									}
+							}
+						}
 						item->Delete();
 						Iterator = items.erase(Iterator);
 						pista->setItems(items);
+						
 					}
 					else {
 						item->setColision(true);
@@ -161,10 +172,11 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 				{
 					if (cajas[i]->getIDCaja() == idB)
 					{
-						for (int j = 0; j < 2; j++)
-							if (nodoA->getID() == pj1[j]->getNodo()->getID()) {
-								cajas[i]->romper(pj1[j]);
-							}
+						for(int j = 0; j< 6; j++)
+							if(pj1[j]!=NULL)
+								if(nodoA->getID()== pj1[j]->getNodo()->getID()){
+									cajas[i]->romper(pj1[j]);
+								}
 					}
 				}
 				//cout << "Entro " << i << endl;

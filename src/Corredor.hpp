@@ -12,6 +12,7 @@
 #include "MotorFisicas.hpp"
 #include "Proyectil.hpp"
 #include "Estatico.hpp"
+#include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 #include "TextoPantalla.hpp"
 
@@ -22,7 +23,9 @@ public:
 	Corredor(stringw rutaObj, vector3df pos);
 	void InicializarFisicas();
 	void lanzarItem(Proyectil *item, int direcionItem);
-	void soltarItem(Estatico *item);
+	void aplicarAceite();
+	void soltarItem();
+	virtual void actualizarItem(){}; // A implementar por derivadas
 	void incCargador();
 	void decCargador();
 	void SetFuerzaVelocidad(int turbo);
@@ -31,7 +34,7 @@ public:
 	void setTipoObj(int i);
 	void acelerar();
 	void setFriccion(btScalar valor);
-	void setTurbo(bool activo, bool objeto);
+	void setTurbo(bool activo, bool objeto,int valor);
 	void setWaypointActual(ISceneNode *nodo);
 
 	//waypoints
@@ -80,10 +83,10 @@ protected:
 	// parametros IA
 	btScalar anguloGiro;
 	btScalar distanciaWaypoint;
-	double pertenenciaCerca, pertenenciaMedia, pertenenciaLejos;
-	double pertenenciaGiroFuerte, pertenenciaGiroFlojo, pertenenciaNoGiro;
-	bool distanciaCerca, distanciaMedia, distanciaLejos;
-	bool giroFuerte, giroFlojo, noGiro;
+	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
+	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
+	bool distanciaCerca,distanciaMedia,distanciaLejos;
+	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
 
 	//bullet
 	btRaycastVehicle *vehiculo;

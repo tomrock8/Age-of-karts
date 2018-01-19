@@ -45,10 +45,6 @@ Motor3d *Motor3d::getInstancia() {
 	return instancia;
 }
 
-int Motor3d::getTime() {
-	return irrTimer->getTime();
-}
-
 IGUIEnvironment *Motor3d::getGUI() {
 	return guienv;
 }
@@ -68,8 +64,6 @@ IVideoDriver *Motor3d::getDriver() {
 
 // METODOS SET
 
-void Motor3d::setTeclado(CTeclado *teclado)
-{
-
+void Motor3d::setTeclado(CTeclado *teclado) {
 	device->setEventReceiver(teclado);
 }

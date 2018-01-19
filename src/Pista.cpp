@@ -134,8 +134,9 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 		//crear el array de waypoints para almacenar el path
 		getline(myfile, tamanyoArrayWaypoints, ' ');
-		getline(myfile, tamanyoArrayTurbo, ' ');
 		getline(myfile, tamanyoArrayCajas, ' ');
+		getline(myfile, tamanyoArrayTurbo, ' ');
+		
 
 		arrayWaypoints = new Waypoint *[stoi(tamanyoArrayWaypoints)];
 		arrayTurbos = new Turbo *[stoi(tamanyoArrayTurbo)];

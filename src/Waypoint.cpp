@@ -81,8 +81,8 @@ IMeshSceneNode *Waypoint::getWaypoint() {
 
 Waypoint::~Waypoint() {
 	try {
-		delete rigidBody->getMotionState();
 		delete rigidBody->getCollisionShape();
+		delete rigidBody->getMotionState();
 		delete rigidBody;
 	}
 	catch (...) { throw; }

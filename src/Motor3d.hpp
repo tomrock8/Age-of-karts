@@ -13,7 +13,6 @@ class Motor3d
 	~Motor3d();
 
 	void dibujar();
-	int getTime();
 	void cerrar();
 
 	// Metodos GET

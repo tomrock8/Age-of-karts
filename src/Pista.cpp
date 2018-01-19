@@ -160,7 +160,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				arrayWaypoints[tamWaypoints] = new Waypoint();
 
 				//comento lo de la id de los waypoints porq da conflico con las cajas
-				//arrayWaypoints[wp]->getWaypoint()->setID(wp);
+				//arrayWaypoints[tamWaypoints]->getWaypoint()->setID(tamWaypoints);
 				
 				if (tamWaypoints > 0 && tamWaypoints <= (stoi(tamanyoArrayWaypoints) - 2))
 				{
@@ -199,13 +199,6 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	else{
 		cout << "Error abriendo archivo";
 }
-
-	for (int i=0;i<stoi(tamanyoArrayWaypoints);i++){
-
-			arrayWaypoints[i]->setDireccion();
-			
-		}
-
 
 	
 }

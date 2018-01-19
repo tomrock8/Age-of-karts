@@ -332,14 +332,20 @@ void Corredor::calculoDistanciaPunto(){
 
 void Corredor::calculoAnguloGiro(){
 
-	btVector3 OrientacionCoche(orientacion.X,orientacion.Y,orientacion.Z);
-	btVector3 OrientacionWaypoint(actual->getDireccion().getX(),actual->getDireccion().getY(),actual->getDireccion().getZ());
-	anguloGiro = OrientacionCoche.angle(OrientacionWaypoint) *360/PI;
-	//cout<< actual->getDireccion().getX() << actual->getDireccion().getY()  << actual->getDireccion().getZ()<< endl;
-	//calculamos el angulo para saber cuanto hay que girar
-	TextoPantalla * texto = TextoPantalla::getInstancia();
-	texto->agregar("ANGULO: ");
-	texto->agregar(to_string(anguloGiro)+"\n");
+	btVector3 orientacionCoche(orientacion.X,orientacion.Y,orientacion.Z);
+	btVector3 direccion = btVector3(siguiente->getPosicion().getX()-cuboNodo->getPosition().X,
+	siguiente->getPosicion().getY()-cuboNodo->getPosition().Y,
+	siguiente->getPosicion().getZ()-cuboNodo->getPosition().Z);
+	direccion.normalize();
+	anguloGiro = orientacionCoche.angle(direccion) *180/PI;
+	
+	btVector3 orientacionCocheGirada = orientacionCoche.rotate(btVector3(0, 1, 0),2*PI/180);
+
+	btScalar angulo2 = orientacionCocheGirada.angle(direccion) *180/PI;
+		
+		if(angulo2>anguloGiro)
+			anguloGiro = -anguloGiro;
+
 	//cout<< "ANGULO:" << anguloGiro  << endl;
 }
 
@@ -365,10 +371,11 @@ void Corredor::logicaDifusa(){
 		pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint,1500,4000,6000,7000);
 		pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint,6000,7000,9000,100000);
 
-		pertenenciaNoGiro= FuncionTriangular(anguloGiro,0,0,10);
-		pertenenciaGiroFlojo=FuncionTriangular(anguloGiro,15,40,90);
-		pertenenciaGiroFuerte=FuncionTriangular(anguloGiro,91,140,180);
-
+		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-5,0,5);
+		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,6,40,90);
+		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,91,140,180);
+		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-91,-140,-180);
+		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-6,-40,-90);
 
 		if(pertenenciaCerca > pertenenciaMedia && pertenenciaCerca > pertenenciaLejos){
 			distanciaCerca=true;
@@ -390,106 +397,80 @@ void Corredor::logicaDifusa(){
 		}
 
 		if(pertenenciaNoGiro!=0){
-			giroFuerte=false;
-			giroFlojo=false;
+			giroFuerteDerecha=false;
+			giroFlojoDerecha=false;
 			noGiro=true;
+			giroFuerteIzquierda=false;
+			giroFlojoIzquierda=false;
 		}
 
-		if(pertenenciaGiroFlojo!=0){
-			giroFuerte=false;
-			giroFlojo=true;
+		if(pertenenciaGiroFlojoDerecha!=0){
+			giroFuerteDerecha=false;
+			giroFlojoDerecha=true;
 			noGiro=false;
+			giroFuerteIzquierda=false;
+			giroFlojoIzquierda=false;
 		}
-		if(pertenenciaGiroFuerte!=0){
-			giroFuerte=true;
-			giroFlojo=false;
+		if(pertenenciaGiroFuerteDerecha!=0){
+			giroFuerteDerecha=true;
+			giroFlojoDerecha=false;
 			noGiro=false;
+			giroFuerteIzquierda=false;
+			giroFlojoIzquierda=false;
 		}	
 
-		TextoPantalla * texto = TextoPantalla::getInstancia();
-		texto->agregar("ACCION 1: ");
-		std::string agrega;
+		if(pertenenciaGiroFlojoIzquierda!=0){
+			giroFuerteDerecha=false;
+			giroFlojoDerecha=false;
+			noGiro=false;
+			giroFuerteIzquierda=false;
+			giroFlojoIzquierda=true;
+		}
+		if(pertenenciaGiroFuerteIzquierda!=0){
+			giroFuerteDerecha=false;
+			giroFlojoDerecha=false;
+			noGiro=false;
+			giroFuerteIzquierda=true;
+			giroFlojoIzquierda=false;
+		}	
 
+		TextoPantalla * texto = TextoPantalla::getInstancia(); 
+		texto->agregar("ACCION 1: "); 
+		std::string agrega; 
 		if(distanciaLejos)
-		agrega = "ACELERA A TOPE";
-		if(distanciaMedia)
-		agrega = "Reduce velocidad";
+   			agrega = "ACELERA A TOPE"; 	
+		if(distanciaMedia)    
+			agrega = "Reduce velocidad"; 
 		if(distanciaCerca)
-		agrega = "Echa el freno fiera";
-
-		texto->agregar(agrega+"\n");
+    		agrega = "Echa el freno fiera"; 
 		
-		texto->agregar("ACCION 2: ");
+		texto->agregar(agrega+"\n"); 
+		
+		texto->agregar("ACCION 2: "); 
 		if(noGiro)
 		agrega = "No GIRO";
-		if(giroFlojo)
-		agrega = "Giro POCO";
-		if(giroFuerte)
-		agrega = "Giro a tope";
+		if(giroFlojoDerecha)
+		agrega = "Giro POCO D";
+		if(giroFuerteDerecha)
+		agrega = "Giro a tope D";
+		if(giroFlojoIzquierda)
+		agrega = "Giro POCO I";
+		if(giroFuerteIzquierda)
+		agrega = "Giro a tope I";
 
-		texto->agregar(agrega+"\n");
-
-
-		//cout<< "CERCA" << perteneciaCerca << endl << "MEDIA" << pertenenciaMedia << endl << "LEJOS" << pertenenciaLejos << endl;
-		//cout<< "NoGiro" << pertenenciaNoGiro << endl << "GiroMEDIO" << pertenenciaGiroFlojo << endl << "GiroFuerte" << pertenenciaGiroFuerte << endl;
-		//DISTANCIA AL WAYPOINT 
-
-		//VELOCIDAD
+		texto->agregar(agrega+"\n"); 
 
 }
-void Corredor::giroIA(){
 
-	/*
-	if(norte && (strcmp("Norte", actual->getDireccion().c_str()) == 0)){
-
-		if(cuboNodo->getPosition().X < actual->getWaypoint()->getPosition().X-10){
-			
-			cout << "Centrate girando a la derecha" << endl;
-			}else if(cuboNodo->getPosition().X > actual->getWaypoint()->getPosition().X+10){ 
-			
-				cout << "Centrate girando a la izquierda" << endl;
-				}
-
-		}else if(este && (strcmp("Este", actual->getDireccion().c_str()) == 0)){
-
-			if(cuboNodo->getPosition().Z < actual->getWaypoint()->getPosition().Z-10){
-			
-					cout << "Centrate girando a la izquierda" << endl;
-
-				}else if(cuboNodo->getPosition().Z > actual->getWaypoint()->getPosition().Z+10){ 
-			
-					cout << "Centrate girando a la derecha" << endl;
-					}
-
-
-			}else if (oeste && (strcmp("Oeste", actual->getDireccion().c_str()) == 0)){
-
-				if(cuboNodo->getPosition().Z < actual->getWaypoint()->getPosition().Z-10){
-			
-					cout << "Centrate girando a la derecha" << endl;
-
-				}else if(cuboNodo->getPosition().Z > actual->getWaypoint()->getPosition().Z+10){ 
-			
-					cout << "Centrate girando a la izquierda" << endl;
-					}
-
-				}else if (sur && (strcmp("Sur", actual->getDireccion().c_str()) == 0)){
-
-					if(cuboNodo->getPosition().X < actual->getWaypoint()->getPosition().X-10){
-			
-						cout << "Centrate girando a la izquierda" << endl;
-
-					}else if(cuboNodo->getPosition().X > actual->getWaypoint()->getPosition().X+10){ 
-			
-						cout << "Centrate girando a la derecha" << endl;
-						}
-
-							}
-		*/
-}
 
 void Corredor::movimientoIA(){
 
+	acelerar();
+
+	if(giroFlojoDerecha || giroFuerteDerecha)
+	girarDerecha();
+	else if(giroFlojoIzquierda || giroFuerteIzquierda)
+	girarIzquierda();
 
 
 }
@@ -513,6 +494,8 @@ double Corredor::FuncionTriangular(double valor,double a,double b,double c){
 
 	double resultado=0;
 
+	if (valor >=0)
+	{
 	if(a<=valor && valor < b)
 		resultado = (valor-a)/(b-a);
 	else if(valor == b)
@@ -520,7 +503,19 @@ double Corredor::FuncionTriangular(double valor,double a,double b,double c){
 	else if(b<valor && valor <=c)
 		resultado = (c-valor)/(c-b);
 
+	}else{
+	
+	if(a>=valor && valor > b)
+		resultado = (valor-a)/(b-a);
+	else if(valor == b)
+		resultado = 1;
+	else if(b>valor && valor >=c)
+		resultado = (c-valor)/(c-b);
+
+
+	}
 	return resultado;
+
 
 }
 
@@ -852,7 +847,7 @@ void Corredor::updateDireccion()
 	float orientacionX = round(orientacion.X);
 
 	// NORTE
-	if (direccionGrados <= 20 && direccionGrados >= 341)
+	if (orientacion.Z <= 0.98 && orientacionX == 0)
 	{
 		norte = true;
 		sur = false;

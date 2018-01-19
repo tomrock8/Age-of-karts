@@ -82,9 +82,9 @@ class Corredor
 	btScalar anguloGiro;
 	btScalar distanciaWaypoint;
 	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
-	double pertenenciaGiroFuerte,pertenenciaGiroFlojo,pertenenciaNoGiro;
+	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
 	bool distanciaCerca,distanciaMedia,distanciaLejos;
-	bool giroFuerte,giroFlojo,noGiro;
+	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
 
 	//bullet
 	btRaycastVehicle *vehiculo;

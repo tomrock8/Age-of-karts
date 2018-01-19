@@ -1,6 +1,9 @@
 
 #include <iostream>
-#include "CorredorRed.hpp"
+//#include "CorredorRed.hpp"
+//#include "CorredorJugador.hpp"
+#include "GestorJugadores.hpp"
+//#include "NetworkEnums.hpp"
 
 #define MAX_PLAYERS 10
 
@@ -37,7 +40,7 @@ class Client
     std::string clientPort;
     std::string serverIP;
 
-    CorredorRed *player[MAX_PLAYERS];
+    Corredor **player;
     int controlPlayer;
     int numPlayers;
     bool spawned;

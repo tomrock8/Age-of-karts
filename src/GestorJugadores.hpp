@@ -4,8 +4,8 @@
 
 #include <iostream>
 #include <string>
-#include "IrrlichtLib.hpp"
-#include "Corredor.hpp"
+//#include "IrrlichtLib.hpp"
+//#include "Corredor.hpp"
 //#include "CorredorRed.hpp"
 #include "CorredorJugador.hpp"
 
@@ -19,17 +19,18 @@ class GestorJugadores
 
         static GestorJugadores *getInstancia();
         Corredor **getJugadores();
-        int getID();
-        
+        int getNumJugadores();       
 
         void setJugadores(Corredor **pj1);
-        void setID(int idp);
+
+        void aumentarJugadores();
+
 
     private:
         GestorJugadores(void);
         static GestorJugadores *instancia;
         Corredor **pj;
-        int id;
+        int numJugadores;
 
 
 };

@@ -2,7 +2,7 @@
 #define CORREDORJUGADOR_H
 
 #include <iostream>
-#include "IrrlichtLib.hpp"
+//#include "IrrlichtLib.hpp"
 #include "Pista.hpp"
 #include "Corredor.hpp"
 #include "Turbo.hpp"

@@ -14,9 +14,10 @@
 #include "Estatico.hpp"
 #include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+#include "RaknetIncludes.hpp"
 using namespace std;
 
-class Corredor
+class Corredor: public RakNet::NetworkIDObject 
 {
   public:
 	Corredor(stringw rutaObj, vector3df pos);

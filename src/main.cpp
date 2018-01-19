@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 
 	Client *client = NULL;
 	if(argc == 2){
-		client = new Client(8);
+		client = new Client(4);
 		client->CreateClientInterface();
 		client->SetIP();
 		client->ClientStartup();
@@ -118,14 +118,13 @@ int main(int argc, char* argv[])
 	// ----------GAME LOOP----------//
 	// -----------------------------//
 	driver->beginScene(true, true, video::SColor(255, 32, 223, 255));
-
 	while (m->getDevice()->run())
 	{
 		if(argc == 2){
 			client->ReceivePackets(smgr);
-			client->SpawnPlayer(smgr);
+			//client->SpawnPlayer(smgr);
 		}
-
+		//cout << irrTimer->getTime() << endl;
 		textoDebug->limpiar();
 
 		DeltaTime = irrTimer->getTime() - TimeStamp;
@@ -137,19 +136,21 @@ int main(int argc, char* argv[])
 			pistaca->getArrayCaja()[i]->comprobarRespawn();
 		}
 		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
-
 		pj = jugadores->getJugadores();
+		if (jugadores->getNumJugadores() != 0)
 		pj[0]->actualizarItem();
 
+		if (jugadores->getNumJugadores() != 0)
 		camara->moveCameraControl(pj[0], device);
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
+		if (jugadores->getNumJugadores() != 0)
 		pj[0]->update();
 		//pj[1]->update();
 
-
 		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
+		if (jugadores->getNumJugadores() != 0)
 		textoDebug->agregar(pj[0]->toString());
 		
 		if(teclado->isKeyDown(KEY_KEY_R)){

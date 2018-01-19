@@ -82,7 +82,7 @@ CEGUI::IrrlichtRenderer *Gui::getRender() {
 //    METODOS SET
 // -----------------------------
 
-void Gui::setWidgetTamEscala(CEGUI::Window * vent, float tam[], float escala[]) {
+void Gui::setWidgetTamEscala(CEGUI::Window * vent, float escala[], float tam[]) {
 	ventana->setPosition(CEGUI::UVector2(CEGUI::UDim(escala[0], tam[0]), CEGUI::UDim(escala[1], tam[1])));
 	ventana->setSize(CEGUI::USize(CEGUI::UDim(escala[2], tam[2]), CEGUI::UDim(escala[3], tam[3])));
 }

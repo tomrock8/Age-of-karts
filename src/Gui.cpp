@@ -8,10 +8,10 @@ Gui::Gui(irr::IrrlichtDevice *device) {
 	// Guardamos la direccion del objeto que crea CEGUI (POR ESO EL &)
 	//render = &CEGUI::OpenGLRenderer::bootstrapSystem(OPEN_GL_DEVICE);
 	render = &CEGUI::IrrlichtRenderer::bootstrapSystem(*device); // Inicializa el renderer de irrlicht
-	contexto = &CEGUI::System::getSingleton().createGUIContext(render->getDefaultRenderTarget()); // Contenedor de todos los widgets
+	contexto = &CEGUI::System::getSingletonPtr()->createGUIContext(render->getDefaultRenderTarget()); // Contenedor de todos los widgets
 	CEGUI::WindowManager *winMan = CEGUI::WindowManager::getSingletonPtr();
 	ventana = winMan->createWindow("DefaultWindow", "root");
-	CEGUI::DefaultResourceProvider *recursos = static_cast<CEGUI::DefaultResourceProvider*>(CEGUI::System::getSingleton().getResourceProvider());
+	CEGUI::DefaultResourceProvider *recursos = static_cast<CEGUI::DefaultResourceProvider*>(CEGUI::System::getSingletonPtr()->getResourceProvider());
 	
 	recursos->setResourceGroupDirectory("imagesets", "lib/cegui/assets/imagesets/");
 	recursos->setResourceGroupDirectory("schemes", "lib/cegui/assets/schemes/");
@@ -34,7 +34,7 @@ Gui::Gui(irr::IrrlichtDevice *device) {
 }
 
 Gui::~Gui() {
-	CEGUI::System::getSingleton().destroyGUIContext(*contexto); // Con * para referencia
+	CEGUI::System::getSingletonPtr()->destroyGUIContext(*contexto); // Con * para referencia
 	CEGUI::System::destroy(); // Destruye el CEGUI::System y sus variables
 
 	//CEGUI::OpenGL3Renderer::destroy(static_cast<CEGUI::OpenGL3Renderer&>(*d_renderer));
@@ -42,7 +42,7 @@ Gui::~Gui() {
 }
 
 CEGUI::Window *Gui::crearWidget(const std::string &tipo, float tam[], float escala[], const std::string &nombre) {
-	CEGUI::Window *vent = CEGUI::WindowManager::getSingleton().createWindow(tipo, nombre);
+	CEGUI::Window *vent = CEGUI::WindowManager::getSingletonPtr()->createWindow(tipo, nombre);
 	ventana->addChild(vent);
 	setWidgetTamEscala(vent, tam, escala);
 	return vent;
@@ -50,7 +50,7 @@ CEGUI::Window *Gui::crearWidget(const std::string &tipo, float tam[], float esca
 
 void Gui::cargarScheme(std::string archivoScheme){
 	// Esquema de elementos para el gui
-	CEGUI::SchemeManager::getSingleton().createFromFile(archivoScheme);
+	CEGUI::SchemeManager::getSingletonPtr()->createFromFile(archivoScheme);
 }
 
 void Gui::dibujar() {
@@ -89,6 +89,6 @@ void Gui::setWidgetTamEscala(CEGUI::Window * vent, float escala[], float tam[]) 
 
 void Gui::setFuente(std::string archivoFuente) {
 	// Fuente a mostrar en el gui
-	CEGUI::FontManager::getSingleton().createFromFile(archivoFuente + ".font");
+	CEGUI::FontManager::getSingletonPtr()->createFromFile(archivoFuente + ".font");
 	contexto->setDefaultFont(archivoFuente);
 }

@@ -199,8 +199,8 @@ int main()
 			}
 			guienv->drawAll();
 			// draw gui
-			//CEGUI::System::getSingleton().renderAllGUIContexts();
-			m->getInterfaz()->dibujar();
+			CEGUI::System::getSingletonPtr()->renderAllGUIContexts();
+			//m->getInterfaz()->dibujar();
 			driver->endScene();
 		}
 		else

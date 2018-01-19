@@ -22,15 +22,13 @@ Motor3d::Motor3d() {
 	device->setWindowCaption(L"AGE OF KARTS");
 
 	interfaz = new Gui(device);
-	interfaz->cargarScheme("VanillaSkin.scheme");
+	interfaz->cargarScheme("AlfiskoSkin.scheme");
 	interfaz->setFuente("DejaVuSans-10");
 
-	float tam[4] = { 0.5f, 0.5f, 0.1f, 0.05f };
-	float escala[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	float tam[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	float escala[4] = { 0.5f, 0.5f, 0.1f, 0.05f }; 
 
-	interfaz->crearWidget("Vanilla/Button", tam, escala, "TestButton");
-	//(const std::string &tipo, float tam[], float escala[], const std::string &nombre) {
-
+	interfaz->crearWidget("AlfiskoSkin/Button", escala, tam, "TestButton");
 }
 
 Motor3d::~Motor3d() {

@@ -30,6 +30,7 @@ public:
 
 private:
   Corredor **pj1;
+  GestorJugadores *jugadores;
   ISceneNode *nodoA;
   ISceneNode *nodoB;
 };

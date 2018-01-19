@@ -95,8 +95,9 @@ int main(int argc, char* argv[])
 	vector3df pos(0, 1, 300);
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
-	if(argc !=2)
+	if(argc !=2){
 		pj[0] = new CorredorJugador("assets/coche.obj", pos);
+		jugadores->aumentarJugadores();}
 
 		jugadores->setJugadores(pj);
 	//pj[1]->getNodo()->setID(id);

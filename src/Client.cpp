@@ -40,9 +40,9 @@ void Client::SetIP()
 {
 	//se le pide al usuario que introduzca la IP del servidor al que quiera conectarse
 	std::cout << "Introduce IP del servidor: ";
-	std::cin >> serverIP;
+	//std::cin >> serverIP;
 	//serverIP = "127.0.0.1";
-	//serverIP = "192.168.1.233";
+	serverIP = "192.168.1.145";
 	//puerto de escucha del cliente
 	clientPort = "6003";
 }
@@ -250,6 +250,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 				pos2.Y = 20;
 				pos2.Z = 300;
 				player[i] = new Corredor("assets/coche.obj", pos2);
+				player[i]->getNodo()->setID(999+i);
 				//player[i]->setPosition(posicion);
 				player[i]->SetNetworkIDManager(&networkIDManager);
 				player[i]->SetNetworkID(playerNetworkID);

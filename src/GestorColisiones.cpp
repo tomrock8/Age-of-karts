@@ -6,7 +6,7 @@
 void GestorColisiones::ComprobarColisiones()
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	jugadores = GestorJugadores::getInstancia();
 	Pista *pista = Pista::getInstancia();
 	Caja** cajas = pista->getArrayCaja();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -52,7 +52,7 @@ bool GestorColisiones::JugadorWaypoint(){
     {
         if (strcmp("Waypoint", nodoB->getName()) == 0)
         {
-			for(int i = 0; i< 6; i++){
+			for(int i = 0; i< jugadores->getNumJugadores(); i++){
 				if(pj1[i]!=NULL)
 					if(nodoA->getID() == pj1[i]->getNodo()->getID()){
 						pj1[i]->setWaypointActual(nodoB);
@@ -82,7 +82,7 @@ bool GestorColisiones::JugadorTurbo()
 	{
 		if (strcmp("Turbo", nodoB->getName()) == 0)
 		{
-			for( int i = 0; i< 2; i++)
+			for( int i = 0; i< jugadores->getNumJugadores(); i++)
 				if(nodoA->getID() == pj1[i]->getNodo()->getID())
 					pj1[i]->setTurbo(true, false,25000);
 
@@ -120,7 +120,7 @@ bool GestorColisiones::JugadorEstatico()
 				{
 					if (item->getColision()) {
 						if (strcmp("Aceite", item->getNombre()) == 0){	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
-							for(int j = 0; j< 6; j++){
+							for(int j = 0; j< jugadores->getNumJugadores(); j++){
 								if(pj1[j]!=NULL)
 									if (nodoA->getID()== pj1[j]->getNodo()->getID()){
 										pj1[j]->aplicarAceite();
@@ -171,7 +171,7 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 				{
 					if (cajas[i]->getIDCaja() == idB)
 					{
-						for(int j = 0; j< 6; j++)
+						for(int j = 0; j< jugadores->getNumJugadores(); j++)
 							if(pj1[j]!=NULL)
 								if(nodoA->getID()== pj1[j]->getNodo()->getID()){
 									cajas[i]->romper(pj1[j]);

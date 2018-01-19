@@ -118,7 +118,19 @@ int main()
 	// -----------------------------
 	//  CEGUI
 	// -----------------------------
-	//Gui *interfaz = new Gui(m->getDevice());
+	Gui *interfaz = new Gui(device);
+	bool res = interfaz->cargarScheme("AlfiskoSkin.scheme");
+	if (res) {
+		interfaz->setFuente("DejaVuSans-10");
+
+		float tam[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		float escala[4] = { 0.5f, 0.5f, 0.1f, 0.05f };
+
+		CEGUI::Window *botonPrueba = interfaz->crearWidget("AlfiskoSkin/StaticText", escala, tam, "TestLabel");
+		if(botonPrueba)
+			botonPrueba->setText("TOWAPOTIO");
+	}
+	
 	
 	
 	// -----------------------------//
@@ -220,7 +232,7 @@ int main()
 	delete bullet;
 	//delete camara;
 	//delete colisiones;
-	//m->getDevice()->drop();//irrlicht
+	delete interfaz;
 	delete m;
 
 	return 0;

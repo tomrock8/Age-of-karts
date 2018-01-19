@@ -42,15 +42,31 @@ Gui::~Gui() {
 }
 
 CEGUI::Window *Gui::crearWidget(const std::string &tipo, float tam[], float escala[], const std::string &nombre) {
-	CEGUI::Window *vent = CEGUI::WindowManager::getSingletonPtr()->createWindow(tipo, nombre);
-	ventana->addChild(vent);
-	setWidgetTamEscala(vent, tam, escala);
-	return vent;
+	try {
+		CEGUI::Window *vent = CEGUI::WindowManager::getSingletonPtr()->createWindow(tipo, nombre);
+		ventana->addChild(vent);
+		setWidgetTamEscala(vent, tam, escala);
+		return vent;
+	}
+	catch (CEGUI::UnknownObjectException e) {
+		std::cout << "ERROR AL CREAR EL WIDGET " << tipo << " - " << e.what() << "\n";
+		//throw e;
+	}
+	return nullptr;
 }
 
-void Gui::cargarScheme(std::string archivoScheme){
-	// Esquema de elementos para el gui
-	CEGUI::SchemeManager::getSingletonPtr()->createFromFile(archivoScheme);
+bool Gui::cargarScheme(std::string archivoScheme){
+	try {
+		// Esquema de elementos para el gui
+		CEGUI::SchemeManager::getSingletonPtr()->createFromFile(archivoScheme);
+	}
+	catch (CEGUI::UnknownObjectException e) {
+		std::cout << "ERROR AL CARGAR EL SCHEME " << archivoScheme << " - " << e.what() << "\n";
+		//throw e;
+		return false;
+	}
+	
+	return true;
 }
 
 void Gui::dibujar() {

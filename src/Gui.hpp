@@ -7,6 +7,8 @@
 #include <CEGUI\ImageManager.h>
 #include "btBulletDynamicsCommon.h"
 
+using namespace std;
+
 class Gui {
 
 	public:
@@ -14,7 +16,7 @@ class Gui {
 		~Gui();
 		
 		void dibujar();
-		void cargarScheme(std::string archivoScheme);
+		bool cargarScheme(std::string archivoScheme);
 
 		CEGUI::Window *crearWidget(const std::string &tipo, float tam[], float escala[], const std::string &nombre = "");
 

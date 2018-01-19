@@ -6,7 +6,7 @@
 #include <string>
 //#include "IrrlichtLib.hpp"
 //#include "Corredor.hpp"
-//#include "CorredorRed.hpp"
+#include "CorredorRed.hpp"
 #include "CorredorJugador.hpp"
 
 using namespace std;

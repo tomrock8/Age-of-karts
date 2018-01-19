@@ -4,27 +4,30 @@
 #include <iostream>
 #include "IrrlichtLib.hpp"
 #include "CTeclado.hpp"
+
 using namespace std;
 
 class Motor3d
 {
   public:
-	//Destructor
-	~Motor3d(void);
-	//metodos GET
-	static Motor3d *getInstancia();
+	~Motor3d();
 
+	void dibujar();
+	void cerrar();
+
+	// Metodos GET
+	static Motor3d *getInstancia();
 	IVideoDriver *getDriver();
 	ISceneManager *getScene();
 	IGUIEnvironment *getGUI();
 	IrrlichtDevice *getDevice();
-	void setTeclado(CTeclado *teclado);
-	void dibujar();
 
-	void cerrar();
+	// Metodos SET
+	void setTeclado(CTeclado *teclado);
 
   private:
-	Motor3d(void);
+	Motor3d();
+
 	static Motor3d *instancia;
 	IrrlichtDevice *device;
 	IVideoDriver *driver;

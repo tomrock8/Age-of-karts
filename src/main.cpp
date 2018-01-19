@@ -23,9 +23,9 @@
 #include "GestorColisiones.hpp"
 #include "GestorJugadores.hpp"
 #include "TextoPantalla.hpp"
+#include "Gui.hpp"
 #include "Client.hpp"
-#include "CEGUI.h"
-#include "RendererModules/Irrlicht/Renderer.h"
+
 using namespace std;
 
 #ifdef _MSC_VER
@@ -48,7 +48,8 @@ int main(int argc, char* argv[])
 	CTeclado *teclado = CTeclado::getInstancia();
 
 	Client *client = NULL;
-	if(argc == 2){
+
+	if (argc == 2) {
 		client = new Client(8);
 		client->CreateClientInterface();
 		client->SetIP();
@@ -65,6 +66,8 @@ int main(int argc, char* argv[])
 	IGUIEnvironment *guienv = m->getGUI();
 	IrrlichtDevice *device = m->getDevice();
 	irrTimer = device->getTimer();
+
+
 
 	int debug = 0;
 
@@ -95,7 +98,7 @@ int main(int argc, char* argv[])
 	vector3df pos(0, 1, 300);
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
-	
+
 	//pj[1]->getNodo()->setID(id);
 
 
@@ -114,6 +117,27 @@ int main(int argc, char* argv[])
 	//-----------------------------//
 	int lastFPS = -1;
 	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;
+
+
+
+	// -----------------------------
+	//  CEGUI
+	// -----------------------------
+	Gui *interfaz = new Gui(device);
+	bool res = interfaz->cargarScheme("AlfiskoSkin.scheme");
+	if (res) {
+		interfaz->setFuente("DejaVuSans-10");
+
+		float tam[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		float escala[4] = { 0.5f, 0.5f, 0.1f, 0.05f };
+
+		CEGUI::Window *botonPrueba = interfaz->crearWidget("AlfiskoSkin/Button", escala, tam, "TestLabel");
+		if (botonPrueba)
+			botonPrueba->setText("TOWAPOTIO");
+	}
+
+
+
 	// -----------------------------//
 	// ----------GAME LOOP----------//
 	// -----------------------------//
@@ -121,7 +145,8 @@ int main(int argc, char* argv[])
 
 	while (m->getDevice()->run())
 	{
-		if(argc == 2){
+
+		if (argc == 2) {
 			client->ReceivePackets(smgr);
 			client->SpawnPlayer(smgr);
 		}
@@ -151,8 +176,8 @@ int main(int argc, char* argv[])
 
 		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 		textoDebug->agregar(pj[0]->toString());
-		
-		if(teclado->isKeyDown(KEY_KEY_R)){
+
+		if (teclado->isKeyDown(KEY_KEY_R)) {
 			btVector3 btPos(pos.X, pos.Y, pos.Z);
 			/*btRigidBody *btRi = pj[0]->getRigidBody();
 			btTransform trans;
@@ -160,12 +185,12 @@ int main(int argc, char* argv[])
 			trans.setOrigin(*btPos);
 			btRi->getMotionState()->setWorldTransform(trans);
 */
-			
 			btTransform trans;
 			trans.setOrigin(btPos);
 			btQuaternion quaternion;
-		    quaternion.setEulerZYX(pj[0]->getNodo()->getRotation().Z* PI/180,pj[0]->getNodo()->getRotation().Y * PI/180,pj[0]->getNodo()->getRotation().X* PI/180);
-    		trans.setRotation(quaternion);
+			quaternion.setEulerZYX(pj[0]->getNodo()->getRotation().Z* PI / 180, pj[0]->getNodo()->getRotation().Y * PI / 180, pj[0]->getNodo()->getRotation().X* PI / 180);
+			trans.setRotation(quaternion);
+
 			pj[0]->getRigidBody()->setCenterOfMassTransform(trans);
 			//pj[0]->getNodo()->setPosition(pos);
 		}
@@ -185,7 +210,7 @@ int main(int argc, char* argv[])
 
 		if (teclado->isKeyDown(KEY_ESCAPE))
 		{
-			if(argc == 2)
+			if (argc == 2)
 				client->ShutDownClient();
 			m->cerrar();
 			return 0;
@@ -215,21 +240,24 @@ int main(int argc, char* argv[])
 		//	RENDER
 		m->dibujar();
 
-		SMaterial debugMat;
-		debugMat.Lighting = true;
-		driver->setMaterial(debugMat);
-		driver->setTransform(ETS_WORLD, IdentityMatrix);
+
 		if (debug) {
+			SMaterial debugMat;
+			debugMat.Lighting = true;
+			driver->setMaterial(debugMat);
+			driver->setTransform(ETS_WORLD, IdentityMatrix);
 			mundo->debugDrawWorld();
 		}
 		guienv->drawAll();
+		// draw gui
+		CEGUI::System::getSingletonPtr()->renderAllGUIContexts();
+		//m->getInterfaz()->dibujar();
 		driver->endScene();
-	
+
 	}
 	//----------------------------------//
 	//-----------DESTRUCTORES-----------//
 	//----------------------------------//
-	
 	for (int i = 0; i < 6; i++) {
 		delete pj[i];
 	}
@@ -238,7 +266,8 @@ int main(int argc, char* argv[])
 	delete bullet;
 	//delete camara;
 	//delete colisiones;
-	m->getDevice()->drop();//irrlicht
+	delete interfaz;
+	delete m;
 
 	return 0;
 }
@@ -271,7 +300,7 @@ void UpdateRender(btRigidBody *TObject)
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
 	if (strcmp(Node->getName(), "Jugador") == 0) {
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
-		
+
 	}
 	else
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));

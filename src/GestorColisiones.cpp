@@ -32,10 +32,10 @@ void GestorColisiones::ComprobarColisiones()
 				   cout<<"------------------------ID PROYECTIL ITEM CORRUPTO: ";
 			   }
 			}*/
-			
+
 			if (JugadorCaja(cajas))continue;
 			if (JugadorTurbo())continue;
-			if(JugadorWaypoint())continue;
+			if (JugadorWaypoint())continue;
 			if (objetoDestruible())continue;
 			if (JugadorEstatico())continue;
 
@@ -60,12 +60,12 @@ bool GestorColisiones::JugadorWaypoint(){
 						return true;	
 					}
 			}
-			
+
 		}
-    }
-	
+	}
+
 	return false;
-	
+
 }
 
 
@@ -143,6 +143,7 @@ bool GestorColisiones::JugadorEstatico()
 			//cout << "Jugador - Turbo\n";
 		}
 	}
+	return false;
 }
 
 //

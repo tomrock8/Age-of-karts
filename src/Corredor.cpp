@@ -434,24 +434,31 @@ void Corredor::logicaDifusa(){
 			giroFlojoIzquierda=false;
 		}	
 
-
+		TextoPantalla * texto = TextoPantalla::getInstancia(); 
+		texto->agregar("ACCION 1: "); 
+		std::string agrega; 
 		if(distanciaLejos)
-		cout<< "ACELERA A TOPE" << endl;
-		if(distanciaMedia)
-		cout<< "Reduce velocidad" << endl;
+   			agrega = "ACELERA A TOPE"; 	
+		if(distanciaMedia)    
+			agrega = "Reduce velocidad"; 
 		if(distanciaCerca)
-		cout<< "Echa el freno fiera"<<endl;
+    		agrega = "Echa el freno fiera"; 
 		
+		texto->agregar(agrega+"\n"); 
+		
+		texto->agregar("ACCION 2: "); 
 		if(noGiro)
-		cout<< "No GIRO" << endl;
+		agrega = "No GIRO";
 		if(giroFlojoDerecha)
-		cout<< "Giro POCO D" << endl;
+		agrega = "Giro POCO D";
 		if(giroFuerteDerecha)
-		cout<< "Giro a tope D" << endl;
+		agrega = "Giro a tope D";
 		if(giroFlojoIzquierda)
-		cout<< "Giro POCO I" << endl;
+		agrega = "Giro POCO I";
 		if(giroFuerteIzquierda)
-		cout<< "Giro a tope I" << endl;
+		agrega = "Giro a tope I";
+
+		texto->agregar(agrega+"\n"); 
 
 }
 

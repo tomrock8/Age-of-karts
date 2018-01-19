@@ -17,7 +17,7 @@ public:
   btRigidBody *inicializarFisicas();
   void lanzarItem();
   bool Delete();
-  ISceneNode *getNodo();
+  IMeshSceneNode *getNodo();
   btRigidBody *getRigidBody();
     void setColision(bool b);
     bool getColision();
@@ -25,7 +25,7 @@ public:
     const char* getNombre();
 
 protected:
-  ISceneNode *nodo;
+	IMeshSceneNode *nodo;
   btRigidBody *rigidBody;
   btScalar masa;
   f32 tamanyo;

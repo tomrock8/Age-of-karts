@@ -17,7 +17,7 @@ class Caja
 public:
   Caja(vector3df posicionCaja, int idCaja);
   btRigidBody *inicializarFisicas();
-  ISceneNode *getNodo() { return nodo; };
+  IMeshSceneNode *getNodo() { return nodo; };
   btRigidBody *getRigidBody() { return rigidBody; };
   const char *getNombre() { return nombre; };
   int getIDCaja();
@@ -27,7 +27,7 @@ public:
    ~Caja();
 
 private:
-  ISceneNode *nodo;
+  IMeshSceneNode *nodo;
   btRigidBody *rigidBody;
   btScalar masa;
   f32 tamanyo;

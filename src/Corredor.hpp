@@ -15,6 +15,7 @@
 #include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 #include "TextoPantalla.hpp"
+#include "Escudo.hpp"
 
 using namespace std;
 
@@ -36,6 +37,8 @@ public:
 	void setFriccion(btScalar valor);
 	void setTurbo(bool activo, bool objeto,int valor);
 	void setWaypointActual(ISceneNode *nodo);
+	void setProteccion(bool s);
+	
 
 	//waypoints
 	void calculoDistanciaPunto();
@@ -64,12 +67,16 @@ public:
 	int getTipoObj();
 	bool getTurbo();
 	Waypoint *getWaypointActual();
+	bool getProteccion();
+
 
 	// Destructor
 	~Corredor();
+
 protected:
 	//objetos
 	IMesh * coche;
+	
 	IMeshSceneNode *cuboNodo;
 	ISceneNode *rueda1;
 	ISceneNode *rueda2;
@@ -102,6 +109,7 @@ protected:
 	int tipoObj;
 	bool turboActivado;
 	int timerTurbo;
+	Escudo *escudo;
 
 	btVector3 posicion;
 	btVector3 direccionRuedas;
@@ -117,7 +125,8 @@ protected:
 	btScalar FuerzaFrenoMano;
 	btScalar FuerzaGiro;
 	btScalar FuerzaFrenadoReposo;
-
+	//escudo
+	bool proteccion;
 	//raycast
 	btVehicleRaycaster *RayCastVehiculo;
 

@@ -290,7 +290,7 @@ void UpdatePhysics(u32 TDeltaTime)
 void UpdateRender(btRigidBody *TObject)
 {
 	Motor3d *m = Motor3d::getInstancia();
-	ISceneNode *Node = static_cast<ISceneNode *>(TObject->getUserPointer());
+	IMeshSceneNode *Node = static_cast<IMeshSceneNode *>(TObject->getUserPointer());
 	// Set position
 	btVector3 Point = TObject->getCenterOfMassPosition();
 

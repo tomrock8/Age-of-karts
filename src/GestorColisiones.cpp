@@ -1,7 +1,7 @@
 #include "GestorColisiones.hpp"
 
 #define TAMANYOCAJAS 10
-#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
+//#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
 
 void GestorColisiones::ComprobarColisiones()
 {
@@ -110,6 +110,16 @@ bool GestorColisiones::JugadorEstatico()
 	{
 		if (strcmp("Estatico", nodoB->getName()) == 0)
 		{
+			//probando escudo de jugador y que me devuelva si tiene proteccion o no
+			for (int j = 0; j < 6; j++) {
+				if (pj1[j] != NULL) {//tengo un personaje, y voy a ver si tiene escudo
+					if (pj1[j]->getProteccion()==true) {
+						cout << "estoy protegido" << endl;
+						pj1[j]->setProteccion(false);
+					}
+
+				}
+			}
 			//Turbo *t = mapa->getTurbo();
 			//t->setFrenadaActivo(pj1Col, true);
 			int idB = nodoB->getID();

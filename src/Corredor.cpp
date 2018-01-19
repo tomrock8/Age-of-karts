@@ -32,6 +32,9 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	posicion.setX(pos.X);
 	posicion.setY(pos.Y);
 	posicion.setZ(pos.Z);
+	//escudo
+	escudo = new Escudo(pos, getNodo(),500);
+	setProteccion(false);
 	//-------------bullet----------------
 	rueda1 = smgr->addCubeSceneNode(1.f);
 	rueda2 = smgr->addCubeSceneNode(1.f);
@@ -741,7 +744,7 @@ void Corredor::aplicarAceite(){
 	//CuerpoColisionChasis->applyCentralForce(btVector3(100, 5.0f,100));
 	frenodemano(true);
 	CuerpoColisionChasis->setAngularVelocity(btVector3(0, 40, 0));
-	Fuerza=0;
+	Fuerza=200;
 		for (int i=0;i<800;i++){
 		girarIzquierda();
 	}
@@ -1028,4 +1031,12 @@ Corredor::~Corredor() {
 	delete vehiculo;
 	delete CuerpoColisionChasis;
 
+}
+bool Corredor::getProteccion() {
+	return proteccion;
+}
+
+void Corredor::setProteccion(bool s) {
+	escudo->getNodo()->setVisible(s);
+	proteccion = s;
 }

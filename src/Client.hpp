@@ -21,6 +21,16 @@ class Client
     RakNet::NetworkID playerNetworkID;
     RakNet::MessageID typeID;
     RakNet::Packet *p;
+    RakNet::RakPeerInterface *client;
+
+    std::string serverPort;
+    std::string clientPort;
+    std::string serverIP;
+
+    Corredor **player;
+    int controlPlayer;
+    int numPlayers;
+    bool spawned;
 
     unsigned char GetPacketIdentifier(RakNet::Packet *p);
 
@@ -32,16 +42,8 @@ class Client
     void ShutDownClient();
     int ReceivePackets(ISceneManager *escena);
     void SpawnPlayer(ISceneManager *escena);
+
+    int getControlPlayer();
     //void UpdateNetworkKeyboard(CTeclado *teclado);
 
-    RakNet::RakPeerInterface *client;
-
-    std::string serverPort;
-    std::string clientPort;
-    std::string serverIP;
-
-    Corredor **player;
-    int controlPlayer;
-    int numPlayers;
-    bool spawned;
 };

@@ -95,7 +95,10 @@ int main(int argc, char* argv[])
 	vector3df pos(0, 1, 300);
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
-	
+	if(argc !=2)
+		pj[0] = new CorredorJugador("assets/coche.obj", pos);
+
+		jugadores->setJugadores(pj);
 	//pj[1]->getNodo()->setID(id);
 
 
@@ -137,22 +140,30 @@ int main(int argc, char* argv[])
 		}
 		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 		pj = jugadores->getJugadores();
-		if (jugadores->getNumJugadores() != 0)
-		pj[0]->actualizarItem();
+		if(argc!=2){
+			pj[0]->actualizarItem();
+			camara->moveCameraControl(pj[0], device);
+			colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+			pj[0]->update();
+			textoDebug->agregar(pj[0]->toString());
+		}else{
+			int controlPlayer = client->getControlPlayer();
+			if (jugadores->getNumJugadores() != 0)
+				pj[controlPlayer]->actualizarItem();
 
-		if (jugadores->getNumJugadores() != 0)
-		camara->moveCameraControl(pj[0], device);
-		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
-		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
+			if (jugadores->getNumJugadores() != 0)
+			camara->moveCameraControl(pj[controlPlayer], device);
+			colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
-		if (jugadores->getNumJugadores() != 0)
-		pj[0]->update();
-		//pj[1]->update();
+			if (jugadores->getNumJugadores() != 0)
+			pj[controlPlayer]->update();
+			//pj[1]->update();
 
-		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-		if (jugadores->getNumJugadores() != 0)
-		textoDebug->agregar(pj[0]->toString());
-		
+			textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
+			if (jugadores->getNumJugadores() != 0)
+			textoDebug->agregar(pj[controlPlayer]->toString());
+		}
 		if(teclado->isKeyDown(KEY_KEY_R)){
 			btVector3 btPos(pos.X, pos.Y, pos.Z);
 			/*btRigidBody *btRi = pj[0]->getRigidBody();

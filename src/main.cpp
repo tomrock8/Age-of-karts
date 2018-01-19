@@ -48,6 +48,7 @@ int main(int argc, char* argv[])
 	CTeclado *teclado = CTeclado::getInstancia();
 
 	Client *client = NULL;
+
 	if (argc == 2) {
 		client = new Client(8);
 		client->CreateClientInterface();
@@ -144,6 +145,7 @@ int main(int argc, char* argv[])
 
 	while (m->getDevice()->run())
 	{
+
 		if (argc == 2) {
 			client->ReceivePackets(smgr);
 			client->SpawnPlayer(smgr);
@@ -183,12 +185,12 @@ int main(int argc, char* argv[])
 			trans.setOrigin(*btPos);
 			btRi->getMotionState()->setWorldTransform(trans);
 */
-
 			btTransform trans;
 			trans.setOrigin(btPos);
 			btQuaternion quaternion;
 			quaternion.setEulerZYX(pj[0]->getNodo()->getRotation().Z* PI / 180, pj[0]->getNodo()->getRotation().Y * PI / 180, pj[0]->getNodo()->getRotation().X* PI / 180);
 			trans.setRotation(quaternion);
+
 			pj[0]->getRigidBody()->setCenterOfMassTransform(trans);
 			//pj[0]->getNodo()->setPosition(pos);
 		}
@@ -251,11 +253,11 @@ int main(int argc, char* argv[])
 		CEGUI::System::getSingletonPtr()->renderAllGUIContexts();
 		//m->getInterfaz()->dibujar();
 		driver->endScene();
+
 	}
 	//----------------------------------//
 	//-----------DESTRUCTORES-----------//
 	//----------------------------------//
-
 	for (int i = 0; i < 6; i++) {
 		delete pj[i];
 	}

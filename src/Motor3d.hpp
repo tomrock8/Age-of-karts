@@ -25,7 +25,6 @@ class Motor3d
 	// Metodos SET
 	void setTeclado(CTeclado *teclado);
 
-
   private:
 	Motor3d();
 

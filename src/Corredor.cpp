@@ -365,7 +365,6 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 }
 
 void Corredor::logicaDifusa() {
-
 	//GIRO DEL COCHE
 	pertenenciaCerca = FuncionTrapezoidal(distanciaWaypoint, 0, 0, 500, 1000);
 	pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint, 1500, 4000, 6000, 7000);
@@ -511,7 +510,6 @@ double Corredor::FuncionTriangular(double valor, double a, double b, double c) {
 		resultado = 1;
 	else if(b>valor && valor >=c)
 		resultado = (c-valor)/(c-b);
-
 
 	}
 	return resultado;

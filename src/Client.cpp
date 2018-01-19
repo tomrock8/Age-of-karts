@@ -40,8 +40,8 @@ void Client::SetIP()
 {
 	//se le pide al usuario que introduzca la IP del servidor al que quiera conectarse
 	std::cout << "Introduce IP del servidor: ";
-	//std::cin >> serverIP;
-	serverIP = "127.0.0.1";
+	std::cin >> serverIP;
+	//serverIP = "127.0.0.1";
 	//serverIP = "192.168.1.233";
 	//puerto de escucha del cliente
 	clientPort = "6003";

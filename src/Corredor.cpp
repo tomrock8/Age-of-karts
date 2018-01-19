@@ -272,7 +272,7 @@ void Corredor::ActualizarRaytest(){
 			{
 				ISceneNode *Node = static_cast<ISceneNode *>(RayCast1.m_collisionObject->getUserPointer());
 				if(Node){
-				//cout<<Node->getName()<<endl;
+				cout<<Node->getName()<<endl;
 				//cout<<RayCast1.m_closestHitFraction << endl;
 				}
 				
@@ -281,7 +281,7 @@ void Corredor::ActualizarRaytest(){
 
 				ISceneNode *Node = static_cast<ISceneNode *>(RayCast2.m_collisionObject->getUserPointer());
 				if(Node){
-				///cout<<Node->getName()<<endl;
+				cout<<Node->getName()<<endl;
 				//cout<<RayCast2.m_closestHitFraction << endl;
 				}
 
@@ -290,7 +290,7 @@ void Corredor::ActualizarRaytest(){
 
 				ISceneNode *Node = static_cast<ISceneNode *>(RayCast3.m_collisionObject->getUserPointer());
 				if(Node){
-				//cout<<Node->getName()<<endl;
+				cout<<Node->getName()<<endl;
 				//cout<<RayCast3.m_closestHitFraction << endl;
 				}			
 			}
@@ -298,7 +298,7 @@ void Corredor::ActualizarRaytest(){
 
 				ISceneNode *Node = static_cast<ISceneNode *>(RayCast4.m_collisionObject->getUserPointer());
 				if(Node){
-				//cout<<Node->getName()<<endl;
+				cout<<Node->getName()<<endl;
 				//cout<<RayCast4.m_closestHitFraction << endl;
 				}			
 			}
@@ -307,7 +307,7 @@ void Corredor::ActualizarRaytest(){
 
 				ISceneNode *Node = static_cast<ISceneNode *>(RayCast5.m_collisionObject->getUserPointer());
 				if(Node){
-				//cout<<Node->getName()<<endl;
+				cout<<Node->getName()<<endl;
 				//cout<<RayCast5.m_closestHitFraction << endl;
 				}			
 			}	
@@ -355,10 +355,10 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	//mas adelante se ve, Las IDS no funcionan bien tengo que preguntarle a santi a si que de momento lo comento para que
 	//se puedan coger las cajas.
 
-	//if(nodo->getID() > actual->getWaypoint()->getID()){
+	if(nodo->getID() > actual->getWaypoint()->getID()){
 		actual = actual->getNextWaypoint();
 		siguiente = actual->getNextWaypoint();
-	//}
+	}
 
 	//cout<< "NODO ACTUAL:"<< actual->getWaypoint()->getID() <<endl;
 	//cout<< "NODO SIGUIENTE:"<< siguiente->getWaypoint()->getID() <<endl;
@@ -808,6 +808,8 @@ void Corredor::update()
 	calculoDistanciaPunto();
 	calculoAnguloGiro();
 	logicaDifusa();
+	//ActualizarRaytest();
+	
 }
 
 

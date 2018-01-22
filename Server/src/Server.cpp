@@ -239,7 +239,7 @@ void Server::ReceivePackets()
 			break;
 
 		case ID_PLAYER_MOVE:
-			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			/*bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(posicion[0]);
 			bsIn.Read(posicion[1]);
 			bsIn.Read(posicion[2]);
@@ -261,7 +261,7 @@ void Server::ReceivePackets()
 			bsIn.Write(rotacion[2]);
 			bsOut.Write(id);
 
-			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);*/
 
 			break;
 

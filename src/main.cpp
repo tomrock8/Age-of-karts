@@ -230,13 +230,12 @@ int main(int argc, char* argv[])
 		}
 		//	RENDER
 		m->dibujar();
-
-		pj[0]->ActualizarRaytest();
 		//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
-   		driver->setTransform(video::ETS_WORLD, core::matrix4());
+   		SMaterial materialDriver;
+		materialDriver.Lighting = false;
+		driver->setTransform(video::ETS_WORLD, core::matrix4());
   		driver->setMaterial(materialDriver);
-   		materialDriver.Lighting = false;
-		SMaterial materialDriver; 
+		pj[0]->ActualizarRaytest(); 
 		//Para poder dibujar putas lineas de mierda
 		if (debug) {
 			SMaterial debugMat;

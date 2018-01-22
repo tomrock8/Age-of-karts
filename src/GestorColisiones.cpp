@@ -111,7 +111,7 @@ bool GestorColisiones::JugadorEstatico()
 		if (strcmp("Estatico", nodoB->getName()) == 0)
 		{
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
-			for (int j = 0; j < 6; j++) {
+			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
 				if (pj1[j] != NULL) {//tengo un personaje, y voy a ver si tiene escudo
 					if (pj1[j]->getProteccion()==true) {
 						cout << "estoy protegido" << endl;

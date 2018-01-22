@@ -1,10 +1,8 @@
 #include "CajaFalsa.hpp"
 
-CajaFalsa::CajaFalsa(vector3df posicionItem, int idItem) : Estatico(posicionItem, idItem)
+CajaFalsa::CajaFalsa(vector3df posicionItem) : Estatico(posicionItem)
 {
     nombre = "CajaFalsa";
 	//nodo->setName("CajaFalsa");
 
-	id = idItem;
-	nodo->setID(id);
 }

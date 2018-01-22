@@ -2,7 +2,7 @@
 
 
 
-Item::Item(vector3df posicionItem, int idItem)
+Item::Item(vector3df posicionItem)
 {
 	Motor3d *m = Motor3d::getInstancia();
 	colision = false;

@@ -1,9 +1,10 @@
 #include "Turbo.hpp"
 //el turbo se creara con una id y una posicion que se recojera por fichero 
-Turbo::Turbo(int id, btVector3 pos, bool estado) {
+Turbo::Turbo(btVector3 pos, bool estado) {
 	turboActivo = estado;
 	turboTocado = estado;
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	GestorIDs *ids = GestorIDs::getInstancia();
 	list<btRigidBody *> objetos = bullet->getObjetos();
 	Motor3d *m = Motor3d::getInstancia();
 	turbo = m->getScene()->addCubeSceneNode(5.0f);
@@ -11,8 +12,8 @@ Turbo::Turbo(int id, btVector3 pos, bool estado) {
 	turbo->setScale(escala);
 	turbo->setMaterialFlag(EMF_LIGHTING, false);
 	turbo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	turbo->setName("Turbo");
-	turbo->setID(id);
+	ids->setIdentifier(turbo,"Turbo");
+	id=turbo->getID();
 	m->getScene()->getMeshManipulator()->setVertexColors(turbo->getMesh(), SColor(255, 255, 0, 0));
 	//posicion origem 
 	transform;
@@ -45,7 +46,7 @@ Turbo::Turbo(int id, btVector3 pos, bool estado) {
 	objetos.push_back(rigidBody);
 	bullet->setObjetos(objetos);
 
-	this->id = id;
+	//this->id = id;
 
 }
 

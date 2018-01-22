@@ -35,7 +35,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	posicion.setY(pos.Y);
 	posicion.setZ(pos.Z);
 	//escudo
-	escudo = new Escudo(pos, getNodo(),500);
+	escudo = new Escudo(pos, getNodo());
 	setProteccion(false);
 	//-------------bullet----------------
 	rueda1 = smgr->addCubeSceneNode(1.f);
@@ -348,6 +348,23 @@ void Corredor::calculoDistanciaPunto() {
 
 }
 
+void Corredor::calculoDistanciaPuntoActual() {
+
+	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+	btVector3 posWaypoint(actual->getPosicion().getX(), actual->getPosicion().getY(), actual->getPosicion().getZ());
+
+	distanciaWaypointActual = posCoche.distance2(posWaypoint);
+
+	//calulamos la distancia hasta el waypoint 
+	//cout << "WAYPOINT ACTUAL:" <<actual->getWaypoint()->getID() << endl;
+	//cout << "WAYPOINT SIGUIENTE:" << siguiente->getWaypoint()->getID() << endl;
+	TextoPantalla * texto = TextoPantalla::getInstancia();
+	texto->agregar("DISTANCIA ACTUAL: ");
+	texto->agregar(to_string(distanciaWaypointActual)+"\n");
+
+}
+
+
 void Corredor::calculoAnguloGiro() {
 
 	btVector3 orientacionCoche(orientacion.X,orientacion.Y,orientacion.Z);
@@ -372,15 +389,30 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	//de momento lo pongo así, no da la segunda vuelta pero habria que mirar cuales se han visitado y cuales no
 	//mas adelante se ve, Las IDS no funcionan bien tengo que preguntarle a santi a si que de momento lo comento para que
 	//se puedan coger las cajas.
+	
+	if(nodo->getID() != actual->getWaypoint()->getID()){
+		if(nodo->getID() != siguiente->getWaypoint()->getID()){
+			cout<<"TE HAS SALTADO EL WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
+		}else{
+			if (siguiente->getWaypoint()->getID()==0){
+				cout<<"--------------PRIMERA VUELTA SUPERADA-------------: "<<endl;
+			}
+			actual = actual->getNextWaypoint();
+			siguiente = actual->getNextWaypoint();
+			
 
-	//if(nodo->getID() > actual->getWaypoint()->getID()){
-	actual = actual->getNextWaypoint();
-	siguiente = actual->getNextWaypoint();
-	//}
+			
+			cout<<"HAS PASADO POR EL WAYPOINT: "<<actual->getWaypoint()->getID()<<" SIGUIENTE WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
+		}
+		
+	}else{
+		cout<<"ESTAS EN EL WAYPOINTACTUAL: "<<actual->getWaypoint()->getID()<<endl;
+	}
 
 	//cout<< "NODO ACTUAL:"<< actual->getWaypoint()->getID() <<endl;
 	//cout<< "NODO SIGUIENTE:"<< siguiente->getWaypoint()->getID() <<endl;
 }
+
 
 void Corredor::logicaDifusa() {
 	//GIRO DEL COCHE
@@ -826,6 +858,7 @@ void Corredor::update()
 	actualizarRuedas();
 	updateDireccion();
 	calculoDistanciaPunto();
+	calculoDistanciaPuntoActual();
 	calculoAnguloGiro();
 	logicaDifusa();
 	//ActualizarRaytest();

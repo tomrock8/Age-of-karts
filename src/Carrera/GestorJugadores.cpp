@@ -28,6 +28,25 @@ GestorJugadores::GestorJugadores(){
 	pj[5]->getNodo()->setID(id);
 	id++;
 	*/
+
+
+
+	/*	pj= new Corredor*[6];
+   	GestorIDs *ids = GestorIDs::getInstancia();
+	vector3df pos(0, 1, 300);
+    vector3df fuera(0,0,0);
+	pj[0] = new CorredorJugador("assets/coche.obj", pos);
+	ids->setIdentifier(pj[0]->getNodo(),"Jugador");
+    pj[1] = new Corredor("assets/coche.obj", fuera);
+	ids->setIdentifier(pj[1]->getNodo(),"Jugador");
+    pj[2] = new Corredor("assets/coche.obj", fuera);
+	ids->setIdentifier(pj[2]->getNodo(),"Jugador");
+    pj[3] = new Corredor("assets/coche.obj", fuera);
+	ids->setIdentifier(pj[3]->getNodo(),"Jugador");
+    pj[4] = new Corredor("assets/coche.obj", fuera);
+	ids->setIdentifier(pj[4]->getNodo(),"Jugador");
+    pj[5] = new Corredor("assets/coche.obj", fuera);
+	ids->setIdentifier(pj[5]->getNodo(),"Jugador");*/
 }
 
 GestorJugadores::~GestorJugadores(){

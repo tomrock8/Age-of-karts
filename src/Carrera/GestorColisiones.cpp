@@ -84,8 +84,8 @@ bool GestorColisiones::JugadorTurbo()
 		{
 			for( int i = 0; i< jugadores->getNumJugadores(); i++)
 				if(nodoA->getID() == pj1[i]->getNodo()->getID())
-					pj1[i]->setTurbo(true, false,25000);
-
+					pj1[i]->setTurbo(true, false,26000);
+					
 			//cout << "Jugador - Turbo\n";
 			return true;
 		}
@@ -180,7 +180,7 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 			{
 				if (cajas[i] != NULL)
 				{
-					if (cajas[i]->getIDCaja() == idB)
+					if (cajas[i]->getNodo()->getID() == idB)
 					{
 						for(int j = 0; j< jugadores->getNumJugadores(); j++)
 							if(pj1[j]!=NULL)

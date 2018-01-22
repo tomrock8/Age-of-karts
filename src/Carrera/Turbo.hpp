@@ -8,11 +8,12 @@
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "Corredor.hpp"
+#include "GestorIDs.hpp"
 class Turbo
 {
 public:
 
-	Turbo(int id, btVector3 pos, bool estado);
+	Turbo(btVector3 pos, bool estado);
 	void quitarTurbo();
 
 	// METODOS SET

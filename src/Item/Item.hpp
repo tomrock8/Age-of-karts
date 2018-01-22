@@ -6,6 +6,7 @@
 #include "btBulletCollisionCommon.h"
 #include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
+#include "GestorIDs.hpp"
 #include <iostream>
 
 using namespace std;
@@ -13,7 +14,7 @@ using namespace std;
 class Item
 {
 public:
-  Item(vector3df posicionItem, int idItem);
+  Item(vector3df posicionItem);
   btRigidBody *inicializarFisicas();
   void lanzarItem();
   bool Delete();

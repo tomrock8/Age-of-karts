@@ -1,7 +1,7 @@
 #include "Escudo.hpp"
 #include "Motor3d.hpp"
 
-Escudo::Escudo(vector3df posicionItem, ISceneNode* parent ,int idItem) : Item(posicionItem, idItem)
+Escudo::Escudo(vector3df posicionItem, ISceneNode* parent) : Item(posicionItem)
 {
 	// -----------------------------
 	//  PREPARAR LA VENTANA
@@ -10,6 +10,7 @@ Escudo::Escudo(vector3df posicionItem, ISceneNode* parent ,int idItem) : Item(po
 	IVideoDriver *driver = m->getDriver();
 	ISceneManager *smgr = m->getScene();
 	nombre = "Escudo";
+
 //	EscudoNodo->setName("Escudo"+idItem);
 	nodo = smgr->addMeshSceneNode(m->getScene()->getMesh("assets/Objetos/escudo.obj"));
 	nodo->setScale(vector3df(5.0f, 5.0f, 5.0f));
@@ -19,7 +20,6 @@ Escudo::Escudo(vector3df posicionItem, ISceneNode* parent ,int idItem) : Item(po
 	nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL); //transparencia
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	id = idItem;
 	nodo->setName(nombre);
 
 

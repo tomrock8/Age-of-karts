@@ -46,6 +46,7 @@ class Corredor: public RakNet::NetworkIDObject
 
 	//waypoints
 	void calculoDistanciaPunto();
+	void calculoDistanciaPuntoActual();
 	void calculoAnguloGiro();
 	void giroIA();
 	void movimientoIA();
@@ -94,6 +95,7 @@ protected:
 	// parametros IA
 	btScalar anguloGiro;
 	btScalar distanciaWaypoint;
+	btScalar distanciaWaypointActual;
 	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
 	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
 	bool distanciaCerca,distanciaMedia,distanciaLejos;

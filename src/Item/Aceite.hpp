@@ -8,7 +8,7 @@ using namespace std;
 class Aceite : public Estatico
 {
   public:
-    Aceite(vector3df posicionItem, int idItem);
+    Aceite(vector3df posicionItem);
     //void soltarItem();
     //btRigidBody *inicializarFisicas();
 

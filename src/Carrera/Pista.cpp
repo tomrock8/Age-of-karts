@@ -79,8 +79,8 @@ Pista *Pista::getInstancia()
 
 void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 {
-	idObjCajas = 100;//variable inicializada al principio para poner los ids de los objetos que aparecen random en las cajas
 	Motor3d *m = Motor3d::getInstancia();
+	GestorIDs *ids = GestorIDs::getInstancia();
 	Mapa = m->getScene()->addMeshSceneNode(m->getScene()->getMesh(mapa));
 	if (Mapa)
 	{
@@ -177,15 +177,18 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				arrayWaypoints[tamWaypoints]->setPosicion(stof(pX), stof(pY), stof(pZ));
 				arrayWaypoints[tamWaypoints]->setOrientacion(orientacion);//orientacion del waypoint
 				arrayWaypoints[tamWaypoints]->inicializarFisicas();
+				IMeshSceneNode *im= arrayWaypoints[tamWaypoints]->getWaypoint();
+				ids->setIdentifier(im,im->getName());
+
 				tamWaypoints++;
 			}
 			if (tipoObj == 1) {//CAJA
-				arrayCajas[tamCajas] = new Caja(vector3df(stof(pX), stof(pY), stof(pZ)), tamCajas);
+				arrayCajas[tamCajas] = new Caja(vector3df(stof(pX), stof(pY), stof(pZ)));
 				tamCajas++;
 
 			}
 			if (tipoObj == 2) {//TURBO
-				arrayTurbos[tamTurbos] = new Turbo(tamTurbos, btVector3(stof(pX), stof(pY), stof(pZ)), false);
+				arrayTurbos[tamTurbos] = new Turbo(btVector3(stof(pX), stof(pY), stof(pZ)), false);
 				tamTurbos++;
 			}
 			//cout << line << endl;
@@ -253,12 +256,4 @@ Turbo *Pista::getTurbo(int id) {
 	return NULL;
 }
 
-
-//RECOGER Y ASIGNAR IDS A LOS OBJETOS RANDOM DE LAS CAJAS
-void Pista::setIdsObjetosCaja(int i) {
-	idObjCajas = i;
-}
-int Pista::getIdsObjetosCaja() {
-	return idObjCajas;
-}
 

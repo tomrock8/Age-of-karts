@@ -8,6 +8,7 @@
 #include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
 #include "Timer.hpp"
+#include "GestorIDs.hpp"
 #include <iostream>
 
 using namespace std;
@@ -15,12 +16,11 @@ using namespace std;
 class Caja
 {
 public:
-  Caja(vector3df posicionCaja, int idCaja);
+  Caja(vector3df posicionCaja);
   btRigidBody *inicializarFisicas();
   IMeshSceneNode *getNodo() { return nodo; };
   btRigidBody *getRigidBody() { return rigidBody; };
   const char *getNombre() { return nombre; };
-  int getIDCaja();
   void romper(Corredor *pj1Col);
   void comprobarRespawn();
   void Delete();

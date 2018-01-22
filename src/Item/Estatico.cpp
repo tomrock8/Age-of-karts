@@ -1,11 +1,13 @@
 #include "Estatico.hpp"
 
-Estatico::Estatico(vector3df posicionItem, int idItem) : Item(posicionItem, idItem)
+Estatico::Estatico(vector3df posicionItem) : Item(posicionItem)
 {
 	Motor3d *m = Motor3d::getInstancia();
+	GestorIDs *ids = GestorIDs::getInstancia();
 	tamanyo = 1.0f;
 	nodo = m->getScene()->addCubeSceneNode(tamanyo);
-	nodo->setName("Estatico");
+	ids->setIdentifier(nodo,"Estatico");
+	id=nodo->getID();
 
 	escala.X = 3.f;
 	escala.Y = 3.f;
@@ -17,8 +19,6 @@ Estatico::Estatico(vector3df posicionItem, int idItem) : Item(posicionItem, idIt
 
 	masa = 10000;
 
-	id = idItem;
-	nodo->setID(id);
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/gust.png"));

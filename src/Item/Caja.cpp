@@ -1,14 +1,18 @@
 #include "Caja.hpp"
 
-Caja::Caja(vector3df posicionCaja, int idCaja)
+Caja::Caja(vector3df posicionCaja)
 {
 	Motor3d *m = Motor3d::getInstancia();
+	GestorIDs *ids = GestorIDs::getInstancia();
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	tamanyo = 1.0f;
 	nodo = m->getScene()->addCubeSceneNode(tamanyo);
+	nombre = "Caja";
+	ids->setIdentifier(nodo,nombre);
+	id=ids->getIDLibre()-1;
 
 	escala.X = 5.f;
 	escala.Y = 5.f;
@@ -22,10 +26,7 @@ Caja::Caja(vector3df posicionCaja, int idCaja)
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 
 	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
-	nombre = "Caja";
-	nodo->setName(nombre);
-	id = idCaja;
-	nodo->setID(id);
+
 	rigidBody = inicializarFisicas();
 	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	mundo->addRigidBody(rigidBody);
@@ -134,9 +135,6 @@ void Caja::Delete()
 			break;
 		}
 	}
-}
-int Caja::getIDCaja() {
-	return id;
 }
 
 Caja::~Caja()

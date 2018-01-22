@@ -30,7 +30,6 @@ public:
 	// METODOS SET
 	void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
 	void setItems(irr::core::list<Item *> itemMetodo);
-	void setIdsObjetosCaja(int i); //almacenar las ids de los objetos que se crean/destruyen cuando se recoje una caja
 	// METODOS GET
 	core::list<Item *> getItems();
 	Turbo **getArrayTurbo();
@@ -40,7 +39,6 @@ public:
 	Waypoint **getArrayWaypoints();
 	Turbo* getTurbo();
 	Turbo* getTurbo(int id);
-	int  getIdsObjetosCaja();
 
 private:
 	Pista(void);
@@ -65,7 +63,6 @@ private:
 
 	irr::core::list<Item *> Items;
 
-	int idObjCajas;
 
 	//fisicas del mapa
 	btBulletWorldImporter *fisicasMapa;

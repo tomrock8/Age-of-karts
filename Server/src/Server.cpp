@@ -124,7 +124,8 @@ void Server::ReceivePackets()
 		RakNet::BitStream bsOut;						   //|mensaje de salida	
 
 		//vector de posicion de Irrlicht
-		int posicion[3];
+		float posicion[3];
+		float rotacion[3];
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -237,23 +238,26 @@ void Server::ReceivePackets()
 			break;
 
 		case ID_PLAYER_MOVE:
-			int x,y,z;
 
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-			bsIn.Read(x);
-			bsIn.Read(y);
-			bsIn.Read(z);
+			bsIn.Read(posicion[0]);
+			bsIn.Read(posicion[1]);
+			bsIn.Read(posicion[2]);
+			bsIn.Read(rotacion[0]);
+			bsIn.Read(rotacion[1]);
+			bsIn.Read(rotacion[2]);
 			bsIn.Read(playerNetworkID);
-			*posicion = *networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->getPosition();
-			posicion[0] = x;
-			posicion[1] = y;
-			posicion[2] = z;
+			player[playerNetworkID]->setPositionRotation(posicion, rotacion);
+			//*posicion = *networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->getPosition();
 			//networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->setPosition(posicion);
 			typeID = ID_PLAYER_MOVE;
 			bsOut.Write(typeID);
-			bsOut.Write(x);
-			bsOut.Write(y);
-			bsOut.Write(z);
+			bsIn.Write(posicion[0]);
+			bsIn.Write(posicion[1]);
+			bsIn.Write(posicion[2]);
+			bsIn.Write(rotacion[0]);
+			bsIn.Write(rotacion[1]);
+			bsIn.Write(rotacion[2]);
 			bsOut.Write(playerNetworkID);
 
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);

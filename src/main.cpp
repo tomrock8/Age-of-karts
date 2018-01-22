@@ -175,12 +175,7 @@ int main(int argc, char* argv[])
 		}
 		if(teclado->isKeyDown(KEY_KEY_R)){
 			btVector3 btPos(pos.X, pos.Y, pos.Z);
-			/*btRigidBody *btRi = pj[0]->getRigidBody();
-			btTransform trans;
-			btRi->getMotionState()->getWorldTransform(trans);
-			trans.setOrigin(*btPos);
-			btRi->getMotionState()->setWorldTransform(trans);
-*/
+
 			btTransform trans;
 			trans.setOrigin(btPos);
 			btQuaternion quaternion;
@@ -189,6 +184,18 @@ int main(int argc, char* argv[])
 
 			pj[0]->getRigidBody()->setCenterOfMassTransform(trans);
 			//pj[0]->getNodo()->setPosition(pos);
+		}
+		if (teclado->isKeyDown(KEY_KEY_T)) {
+			float *resetPos = new float[3];
+			resetPos[0] = pos.X;
+			resetPos[1] = pos.Y+40;
+			resetPos[2] = pos.Z;
+			float *resetOri = new float[3];
+			resetOri[0] = pj[0]->getNodo()->getRotation().Z;
+			resetOri[1] = pj[0]->getNodo()->getRotation().Y;
+			resetOri[2] = pj[0]->getNodo()->getRotation().X;
+
+			pj[0]->setPosicion(resetPos, resetOri);
 		}
 
 		jugadores->setJugadores(pj);

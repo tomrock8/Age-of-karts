@@ -31,3 +31,7 @@ void PlayerServer::girarA(){
 void PlayerServer::girarB(){
 
 }
+
+int PlayerServer::getID(){
+    return id;
+}

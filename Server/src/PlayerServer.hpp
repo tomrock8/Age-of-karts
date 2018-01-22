@@ -17,6 +17,7 @@ public:
   void frenar();
   void girarA();
   void girarB();
+  int getID();
 
 
 

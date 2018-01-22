@@ -41,6 +41,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void setTurbo(bool activo, bool objeto,int valor);
 	void setWaypointActual(ISceneNode *nodo);
 	void setProteccion(bool s);
+	void setPosicion(float *pos, float *ori);
 	
 
 	//waypoints

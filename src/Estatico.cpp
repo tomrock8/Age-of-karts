@@ -2,11 +2,26 @@
 
 Estatico::Estatico(vector3df posicionItem, int idItem) : Item(posicionItem, idItem)
 {
-	//nombre = "Estatico";
+	Motor3d *m = Motor3d::getInstancia();
+	tamanyo = 1.0f;
+	nodo = m->getScene()->addCubeSceneNode(tamanyo);
 	nodo->setName("Estatico");
+
+	escala.X = 3.f;
+	escala.Y = 3.f;
+	escala.Z = 3.f;
+	nodo->setScale(escala);
+
+	posicion = posicionItem;
+	nodo->setPosition(posicion);
+
+	masa = 10000;
 
 	id = idItem;
 	nodo->setID(id);
+	nodo->setMaterialFlag(EMF_LIGHTING, false);
+	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/gust.png"));
 }
 
 btRigidBody *Estatico::inicializarFisicas()
@@ -28,7 +43,7 @@ btRigidBody *Estatico::inicializarFisicas()
 	// Add mass
 	btVector3 LocalInertia;
 
-	masa = 10000;
+	
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
 	// Create the rigid body object

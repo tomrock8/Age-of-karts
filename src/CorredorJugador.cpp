@@ -80,6 +80,8 @@ void CorredorJugador::actualizarItem()
 	if(teclado->isKeyDown(KEY_KEY_2)) setTipoObj(2);
 	if(teclado->isKeyDown(KEY_KEY_3)) setTipoObj(3);
 	if(teclado->isKeyDown(KEY_KEY_4)) setTipoObj(4);
+	if(teclado->isKeyDown(KEY_KEY_5)) setTipoObj(5);
+	if(teclado->isKeyDown(KEY_KEY_6)) setTipoObj(6);
 	
 	Pista *mapa = Pista::getInstancia();
 	int idObjMapa = pista->getIdsObjetosCaja();
@@ -129,8 +131,28 @@ void CorredorJugador::actualizarItem()
 				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
 				Aceite *est2 = new Aceite(posDisparo, idObjMapa);
 				est2->inicializarFisicas();
+				//est2->getRigidBody()->setCollisionFlags(est2->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 				soltarItem();
 				items.push_back(est2);
+			}
+			else if (tipoObj == 5)
+			{
+				if(getProteccion()==false) setProteccion(true);
+				soltarItem();
+			}
+			else if (tipoObj == 6)
+			{
+				/* proyectil por 3
+				proX3 = new Proyectil *[3];
+				for (int i = 0; i < 1; i++) {
+				proX3[i] = new Proyectil(posDisparo, idObjMapa);
+				lanzarItem(proX3[i], direccionItem);
+				items.push_back(proX3[i]);
+
+				//direccionItem += 5;
+				idObjMapa++;
+				}
+				*/
 			}
 			pista->setItems(items);
 			//Llama a la funcion de la clase padre

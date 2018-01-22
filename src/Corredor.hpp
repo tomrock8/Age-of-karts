@@ -15,6 +15,10 @@
 #include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 #include "RaknetIncludes.hpp"
+#include "TextoPantalla.hpp"
+#include "Escudo.hpp"
+#include "EstadosJugador.hpp"
+
 using namespace std;
 
 class Corredor: public RakNet::NetworkIDObject 
@@ -36,6 +40,8 @@ class Corredor: public RakNet::NetworkIDObject
 	void setFriccion(btScalar valor);
 	void setTurbo(bool activo, bool objeto,int valor);
 	void setWaypointActual(ISceneNode *nodo);
+	void setProteccion(bool s);
+	
 
 	//waypoints
 	void calculoDistanciaPunto();
@@ -45,15 +51,15 @@ class Corredor: public RakNet::NetworkIDObject
 	void ActualizarRaytest();
 
 
-	//logica difusa
+	// Logica difusa
 	void logicaDifusa();
-	double FuncionTrapezoidal(double valor,double a,double b,double c, double d);
-	double FuncionTriangular(double valor,double a,double b,double c);
+	double FuncionTrapezoidal(double valor, double a, double b, double c, double d);
+	double FuncionTriangular(double valor, double a, double b, double c);
 
-	//Update
+	// Update
 	void update();
-
-	//metodos GET
+	void updateEstado();
+	// Metodos GET
 	IMeshSceneNode *getNodo();
 	btRaycastVehicle *getVehiculo();
 	btRigidBody *getRigidBody();
@@ -64,11 +70,16 @@ class Corredor: public RakNet::NetworkIDObject
 	int getTipoObj();
 	bool getTurbo();
 	Waypoint *getWaypointActual();
-	//destructor
+	bool getProteccion();
+
+
+	// Destructor
 	~Corredor();
-  protected:
+
+protected:
 	//objetos
-	IMesh *coche;
+	IMesh * coche;
+	
 	IMeshSceneNode *cuboNodo;
 	ISceneNode *rueda1;
 	ISceneNode *rueda2;
@@ -101,6 +112,8 @@ class Corredor: public RakNet::NetworkIDObject
 	int tipoObj;
 	bool turboActivado;
 	int timerTurbo;
+	Escudo *escudo;
+	EstadosJugador *estado;
 
 	btVector3 posicion;
 	btVector3 direccionRuedas;
@@ -116,7 +129,8 @@ class Corredor: public RakNet::NetworkIDObject
 	btScalar FuerzaFrenoMano;
 	btScalar FuerzaGiro;
 	btScalar FuerzaFrenadoReposo;
-
+	//escudo
+	bool proteccion;
 	//raycast
 	btVehicleRaycaster *RayCastVehiculo;
 
@@ -135,7 +149,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void girarDerecha();
 	void girarIzquierda();
 	void frenodemano(bool activo);
-	virtual void movimiento(){}; // A implementar por derivadas
+	virtual void movimiento() {}; // A implementar por derivadas
 
 	// UPDATES
 	void actualizarRuedas();

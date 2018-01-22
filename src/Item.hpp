@@ -17,15 +17,16 @@ public:
   btRigidBody *inicializarFisicas();
   void lanzarItem();
   bool Delete();
-  ISceneNode *getNodo();
+  IMeshSceneNode *getNodo();
   btRigidBody *getRigidBody();
     void setColision(bool b);
     bool getColision();
     void setNombre(const char* name);
     const char* getNombre();
+    void setMasa(btScalar mass);
 
 protected:
-  ISceneNode *nodo;
+	IMeshSceneNode *nodo;
   btRigidBody *rigidBody;
   btScalar masa;
   f32 tamanyo;

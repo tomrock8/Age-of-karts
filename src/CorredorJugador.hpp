@@ -25,6 +25,7 @@ class CorredorJugador : public Corredor
 	//objetos estaticos y dinamicos
 	Estatico * est;
 	Proyectil *pro;
+	Proyectil **proX3;
 	bool checkItem;
 	bool comprobadorMovimiento;
 	//Item *actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos);

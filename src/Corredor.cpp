@@ -29,9 +29,14 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 		cuboNodo->setRotation(vector3df(0.0f, 90.0f, 0.0f));
 	}
 
+	estado = new EstadosJugador();
+
 	posicion.setX(pos.X);
 	posicion.setY(pos.Y);
 	posicion.setZ(pos.Z);
+	//escudo
+	escudo = new Escudo(pos, getNodo(),500);
+	setProteccion(false);
 	//-------------bullet----------------
 	rueda1 = smgr->addCubeSceneNode(1.f);
 	rueda2 = smgr->addCubeSceneNode(1.f);
@@ -80,7 +85,7 @@ void Corredor::InicializarFisicas()
 	btVector3 posTransCoche = btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
 	transCoche.setOrigin(posTransCoche);
 	btQuaternion quaternion;
-	quaternion.setEulerZYX(cuboNodo->getRotation().Z* PI/180,cuboNodo->getRotation().Y * PI/180,cuboNodo->getRotation().X* PI/180);
+	quaternion.setEulerZYX(cuboNodo->getRotation().Z* PI / 180, cuboNodo->getRotation().Y * PI / 180, cuboNodo->getRotation().X* PI / 180);
 	transCoche.setRotation(quaternion);
 
 	//Motionstate
@@ -157,13 +162,13 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
 		wheel.m_suspensionStiffness = 40;    //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo 
-    	wheel.m_wheelsDampingCompression = 2.4f;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-    	wheel.m_wheelsDampingRelaxation = 2.3f;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
-    	wheel.m_frictionSlip = btScalar(10000.0f);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
-    	wheel.m_rollInfluence = 0.03;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
-    	//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
-    	wheel.m_maxSuspensionTravelCm = 800.f; //Nose muy bien que funcion tiene, pero si el valor es muy bajo el coche no avanza 
- 
+		wheel.m_wheelsDampingCompression = 2.4f;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
+		wheel.m_wheelsDampingRelaxation = 2.3f;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_frictionSlip = btScalar(10000.0f);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
+		wheel.m_rollInfluence = 0.03;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
+		//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
+		wheel.m_maxSuspensionTravelCm = 800.f; //Nose muy bien que funcion tiene, pero si el valor es muy bajo el coche no avanza 
+
 
 		/*
 	 * PARAMETROS EN RUEDAS DISPONIBLES
@@ -208,119 +213,119 @@ int Corredor::getTipoObj() { return tipoObj; };
 void Corredor::incCargador() { cargador++; };
 void Corredor::decCargador() { cargador--; };
 
-void Corredor::ActualizarRaytest(){
-		MotorFisicas *mun = MotorFisicas::getInstancia();
-		btDynamicsWorld *mundo = mun->getMundo();
-		mundo->updateAabbs();
-		mundo->computeOverlappingPairs();
-		
-			//cout<< orientacion.X << "   "<< orientacion.Z<<endl;
-			float distanciaRaycast=100; // longitud del rayo
-			float distanciaCoche=2; // distancia entre el rayo y el coche, donde empieza
-			float Raycast23=10; // distancia entre raycast 2 y 3
-			float Raycast45=20; // distancia entre raycast 4 y 5
+void Corredor::ActualizarRaytest() {
+	MotorFisicas *mun = MotorFisicas::getInstancia();
+	btDynamicsWorld *mundo = mun->getMundo();
+	mundo->updateAabbs();
+	mundo->computeOverlappingPairs();
 
-			// Raycast central1
-			btVector3 inicio(cuboNodo->getPosition().X,cuboNodo->getPosition().Y+1,cuboNodo->getPosition().Z);
-			btVector3 fin(cuboNodo->getPosition().X+orientacion.X*distanciaRaycast,cuboNodo->getPosition().Y+1,cuboNodo->getPosition().Z+ orientacion.Z *distanciaRaycast);
+	//cout<< orientacion.X << "   "<< orientacion.Z<<endl;
+	float distanciaRaycast = 100; // longitud del rayo
+	float distanciaCoche = 2; // distancia entre el rayo y el coche, donde empieza
+	float Raycast23 = 10; // distancia entre raycast 2 y 3
+	float Raycast45 = 20; // distancia entre raycast 4 y 5
 
-		
-			mundo->getDebugDrawer()->drawLine(inicio,fin,btVector4(0,0,1,1));
-			btCollisionWorld::ClosestRayResultCallback RayCast1(inicio,fin);
-			RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
-			mundo->rayTest(inicio,fin,RayCast1);
-			// Raycast central2 derecha
-			//inicio = btVector3(3*orientacion.Z+cuboNodo->getPosition().X,cuboNodo->getPosition().Y+1,orientacion.X*-3+cuboNodo->getPosition().Z);
-			fin = btVector3(Raycast23*orientacion.Z+cuboNodo->getPosition().X+orientacion.X*distanciaRaycast,cuboNodo->getPosition().Y+1,orientacion.X*-Raycast23+cuboNodo->getPosition().Z+orientacion.Z *distanciaRaycast);
+	// Raycast central1
+	btVector3 inicio(cuboNodo->getPosition().X, cuboNodo->getPosition().Y + 1, cuboNodo->getPosition().Z);
+	btVector3 fin(cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
 
-			mundo->getDebugDrawer()->drawLine(inicio,fin,btVector4(0,0,1,1));
-			btCollisionWorld::ClosestRayResultCallback RayCast2(inicio,fin);
-			RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
-			mundo->rayTest(inicio,fin,RayCast2);
 
-			
-			// Raycast central3 izquierda
-			//inicio = btVector3((cuboNodo->getPosition().X)+orientacion.X*distanciaCoche,cuboNodo->getPosition().Y+1,(-3+cuboNodo->getPosition().Z)+orientacion.Z*distanciaCoche);
-			fin = btVector3(-Raycast23*orientacion.Z+cuboNodo->getPosition().X+orientacion.X*distanciaRaycast,cuboNodo->getPosition().Y+1,orientacion.X*Raycast23+cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
+	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	btCollisionWorld::ClosestRayResultCallback RayCast1(inicio, fin);
+	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	mundo->rayTest(inicio, fin, RayCast1);
+	// Raycast central2 derecha
+	//inicio = btVector3(3*orientacion.Z+cuboNodo->getPosition().X,cuboNodo->getPosition().Y+1,orientacion.X*-3+cuboNodo->getPosition().Z);
+	fin = btVector3(Raycast23*orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*-Raycast23 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
 
-			mundo->getDebugDrawer()->drawLine(inicio,fin,btVector4(0,0,1,1));
-			btCollisionWorld::ClosestRayResultCallback RayCast3(inicio,fin);
-			RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
-			mundo->rayTest(inicio,fin,RayCast3);
+	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	btCollisionWorld::ClosestRayResultCallback RayCast2(inicio, fin);
+	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	mundo->rayTest(inicio, fin, RayCast2);
 
-			
-			// Raycast central4 derecha
-			//inicio = btVector3((-7+cuboNodo->getPosition().X)+orientacion.X*distanciaCoche,cuboNodo->getPosition().Y+1,(-7+cuboNodo->getPosition().Z)+orientacion.Z*distanciaCoche);
-			fin = btVector3(Raycast45*orientacion.Z+cuboNodo->getPosition().X+orientacion.X*distanciaRaycast,cuboNodo->getPosition().Y+1,orientacion.X*-Raycast45+cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
 
-			mundo->getDebugDrawer()->drawLine(inicio,fin,btVector4(0,0,1,1));
-			btCollisionWorld::ClosestRayResultCallback RayCast4(inicio,fin);
-			RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
-			mundo->rayTest(inicio,fin,RayCast4);
+	// Raycast central3 izquierda
+	//inicio = btVector3((cuboNodo->getPosition().X)+orientacion.X*distanciaCoche,cuboNodo->getPosition().Y+1,(-3+cuboNodo->getPosition().Z)+orientacion.Z*distanciaCoche);
+	fin = btVector3(-Raycast23 * orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*Raycast23 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
 
-			// Raycast central5 izquierda
-			//inicio = btVector3((cuboNodo->getPosition().X+7)+orientacion.X,cuboNodo->getPosition().Y+1,(cuboNodo->getPosition().Z+7)+orientacion.Z*distanciaCoche);
-			fin = btVector3(-Raycast45*orientacion.Z+cuboNodo->getPosition().X+orientacion.X*distanciaRaycast,cuboNodo->getPosition().Y+1,orientacion.X*Raycast45+cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
+	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	btCollisionWorld::ClosestRayResultCallback RayCast3(inicio, fin);
+	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	mundo->rayTest(inicio, fin, RayCast3);
 
-			mundo->getDebugDrawer()->drawLine(inicio,fin,btVector4(0,0,1,1));
-			btCollisionWorld::ClosestRayResultCallback RayCast5(inicio,fin);
-			RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
-			mundo->rayTest(inicio,fin,RayCast5);
-			
 
-			if (RayCast1.hasHit())
-			{
-				ISceneNode *Node = static_cast<ISceneNode *>(RayCast1.m_collisionObject->getUserPointer());
-				if(Node){
-				//cout<<Node->getName()<<endl;
-				//cout<<RayCast1.m_closestHitFraction << endl;
-				}
-				
-			}
-			if(RayCast2.hasHit()){
+	// Raycast central4 derecha
+	//inicio = btVector3((-7+cuboNodo->getPosition().X)+orientacion.X*distanciaCoche,cuboNodo->getPosition().Y+1,(-7+cuboNodo->getPosition().Z)+orientacion.Z*distanciaCoche);
+	fin = btVector3(Raycast45*orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*-Raycast45 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
 
-				ISceneNode *Node = static_cast<ISceneNode *>(RayCast2.m_collisionObject->getUserPointer());
-				if(Node){
-				///cout<<Node->getName()<<endl;
-				//cout<<RayCast2.m_closestHitFraction << endl;
-				}
+	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	btCollisionWorld::ClosestRayResultCallback RayCast4(inicio, fin);
+	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	mundo->rayTest(inicio, fin, RayCast4);
 
-			}
-			if(RayCast3.hasHit()){
+	// Raycast central5 izquierda
+	//inicio = btVector3((cuboNodo->getPosition().X+7)+orientacion.X,cuboNodo->getPosition().Y+1,(cuboNodo->getPosition().Z+7)+orientacion.Z*distanciaCoche);
+	fin = btVector3(-Raycast45 * orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*Raycast45 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
 
-				ISceneNode *Node = static_cast<ISceneNode *>(RayCast3.m_collisionObject->getUserPointer());
-				if(Node){
-				//cout<<Node->getName()<<endl;
-				//cout<<RayCast3.m_closestHitFraction << endl;
-				}			
-			}
-			if(RayCast4.hasHit()){
+	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	btCollisionWorld::ClosestRayResultCallback RayCast5(inicio, fin);
+	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	mundo->rayTest(inicio, fin, RayCast5);
 
-				ISceneNode *Node = static_cast<ISceneNode *>(RayCast4.m_collisionObject->getUserPointer());
-				if(Node){
-				//cout<<Node->getName()<<endl;
-				//cout<<RayCast4.m_closestHitFraction << endl;
-				}			
-			}
-			
-			if(RayCast5.hasHit()){
 
-				ISceneNode *Node = static_cast<ISceneNode *>(RayCast5.m_collisionObject->getUserPointer());
-				if(Node){
-				//cout<<Node->getName()<<endl;
-				//cout<<RayCast5.m_closestHitFraction << endl;
-				}			
-			}	
-					
+	if (RayCast1.hasHit())
+	{
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast1.m_collisionObject->getUserPointer());
+		if (Node) {
+			//cout<<Node->getName()<<endl;
+			//cout<<RayCast1.m_closestHitFraction << endl;
+		}
+
+	}
+	if (RayCast2.hasHit()) {
+
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast2.m_collisionObject->getUserPointer());
+		if (Node) {
+			//cout<<Node->getName()<<endl;
+			//cout<<RayCast2.m_closestHitFraction << endl;
+		}
+
+	}
+	if (RayCast3.hasHit()) {
+
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast3.m_collisionObject->getUserPointer());
+		if (Node) {
+			//cout<<Node->getName()<<endl;
+			//cout<<RayCast3.m_closestHitFraction << endl;
+		}
+	}
+	if (RayCast4.hasHit()) {
+
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast4.m_collisionObject->getUserPointer());
+		if (Node) {
+			//cout<<Node->getName()<<endl;
+			//cout<<RayCast4.m_closestHitFraction << endl;
+		}
+	}
+
+	if (RayCast5.hasHit()) {
+
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast5.m_collisionObject->getUserPointer());
+		if (Node) {
+			//cout<<Node->getName()<<endl;
+			//cout<<RayCast5.m_closestHitFraction << endl;
+		}
+	}
+
 }
 
-void Corredor::calculoDistanciaPunto(){
+void Corredor::calculoDistanciaPunto() {
 
-	btVector3 posCoche(cuboNodo->getPosition().X,cuboNodo->getPosition().Y,cuboNodo->getPosition().Z);
-	btVector3 posWaypoint (siguiente->getPosicion().getX(),siguiente->getPosicion().getY(),siguiente->getPosicion().getZ());
-	
-	distanciaWaypoint = posCoche.distance2(posWaypoint); 
-	
+	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+	btVector3 posWaypoint(siguiente->getPosicion().getX(), siguiente->getPosicion().getY(), siguiente->getPosicion().getZ());
+
+	distanciaWaypoint = posCoche.distance2(posWaypoint);
+
 	//calulamos la distancia hasta el waypoint 
 	//cout << "WAYPOINT ACTUAL:" <<actual->getWaypoint()->getID() << endl;
 	//cout << "WAYPOINT SIGUIENTE:" << siguiente->getWaypoint()->getID() << endl;
@@ -330,7 +335,7 @@ void Corredor::calculoDistanciaPunto(){
 
 }
 
-void Corredor::calculoAnguloGiro(){
+void Corredor::calculoAnguloGiro() {
 
 	btVector3 orientacionCoche(orientacion.X,orientacion.Y,orientacion.Z);
 	btVector3 direccion = btVector3(siguiente->getPosicion().getX()-cuboNodo->getPosition().X,
@@ -356,20 +361,19 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	//se puedan coger las cajas.
 
 	//if(nodo->getID() > actual->getWaypoint()->getID()){
-		actual = actual->getNextWaypoint();
-		siguiente = actual->getNextWaypoint();
+	actual = actual->getNextWaypoint();
+	siguiente = actual->getNextWaypoint();
 	//}
 
 	//cout<< "NODO ACTUAL:"<< actual->getWaypoint()->getID() <<endl;
 	//cout<< "NODO SIGUIENTE:"<< siguiente->getWaypoint()->getID() <<endl;
 }
 
-void Corredor::logicaDifusa(){
-
-		//GIRO DEL COCHE
-		pertenenciaCerca = FuncionTrapezoidal(distanciaWaypoint,0,0,500,1000);
-		pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint,1500,4000,6000,7000);
-		pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint,6000,7000,9000,100000);
+void Corredor::logicaDifusa() {
+	//GIRO DEL COCHE
+	pertenenciaCerca = FuncionTrapezoidal(distanciaWaypoint, 0, 0, 500, 1000);
+	pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint, 1500, 4000, 6000, 7000);
+	pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint, 6000, 7000, 9000, 100000);
 
 		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-5,0,5);
 		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,6,40,90);
@@ -383,18 +387,18 @@ void Corredor::logicaDifusa(){
 			distanciaMedia=false;
 		}
 
-		if(pertenenciaLejos>pertenenciaMedia && pertenenciaLejos> pertenenciaCerca){
-			distanciaCerca=false;
-			distanciaLejos=true;
-			distanciaMedia=false;
+	if (pertenenciaLejos > pertenenciaMedia && pertenenciaLejos > pertenenciaCerca) {
+		distanciaCerca = false;
+		distanciaLejos = true;
+		distanciaMedia = false;
 
-		}
-		if(pertenenciaMedia > pertenenciaCerca && pertenenciaMedia > pertenenciaLejos){
-			distanciaCerca=false;
-			distanciaLejos=false;
-			distanciaMedia=true;
+	}
+	if (pertenenciaMedia > pertenenciaCerca && pertenenciaMedia > pertenenciaLejos) {
+		distanciaCerca = false;
+		distanciaLejos = false;
+		distanciaMedia = true;
 
-		}
+	}
 
 		if(pertenenciaNoGiro!=0){
 			giroFuerteDerecha=false;
@@ -477,22 +481,22 @@ void Corredor::movimientoIA(){
 
 double Corredor::FuncionTrapezoidal(double valor,double a,double b,double c, double d){
 
-	double resultado=0;
+	double resultado = 0;
 
-	if(a<=valor && valor < b)
-		resultado = (valor-a)/(b-a);
-	else if(b <= valor && valor <= c)
+	if (a <= valor && valor < b)
+		resultado = (valor - a) / (b - a);
+	else if (b <= valor && valor <= c)
 		resultado = 1;
-	else if(c<valor && valor<=d)
-		resultado = (d-valor)/(d-c);
+	else if (c < valor && valor <= d)
+		resultado = (d - valor) / (d - c);
 
 	return resultado;
 
 }
 
-double Corredor::FuncionTriangular(double valor,double a,double b,double c){
+double Corredor::FuncionTriangular(double valor, double a, double b, double c) {
 
-	double resultado=0;
+	double resultado = 0;
 
 	if (valor >=0)
 	{
@@ -500,8 +504,8 @@ double Corredor::FuncionTriangular(double valor,double a,double b,double c){
 		resultado = (valor-a)/(b-a);
 	else if(valor == b)
 		resultado = 1;
-	else if(b<valor && valor <=c)
-		resultado = (c-valor)/(c-b);
+	else if (b < valor && valor <= c)
+		resultado = (c - valor) / (c - b);
 
 	}else{
 	
@@ -511,7 +515,6 @@ double Corredor::FuncionTriangular(double valor,double a,double b,double c){
 		resultado = 1;
 	else if(b>valor && valor >=c)
 		resultado = (c-valor)/(c-b);
-
 
 	}
 	return resultado;
@@ -581,32 +584,41 @@ void Corredor::SetFuerzaVelocidad(int turbo)
 void Corredor::acelerar()
 {
 	if (vehiculo->getCurrentSpeedKmHour()>300 && !turboActivado){
-		Fuerza =btScalar(200);		//limitador de velocidad
+		if (vehiculo->getCurrentSpeedKmHour()>350){
+			Fuerza =btScalar(0);
+		}else{
+			Fuerza =btScalar(200);		//limitador de velocidad
+		}	
+		
 	}
 	if (vehiculo->getCurrentSpeedKmHour()<370){
-	vehiculo->applyEngineForce(Fuerza, 0);
-	vehiculo->applyEngineForce(Fuerza, 1);
-	vehiculo->applyEngineForce(Fuerza, 2);
-	vehiculo->applyEngineForce(Fuerza, 3);
-	vehiculo->setSteeringValue(btScalar(0), 0);
-	vehiculo->setSteeringValue(btScalar(0), 1);
+		vehiculo->applyEngineForce(Fuerza, 0);
+		vehiculo->applyEngineForce(Fuerza, 1);
+		vehiculo->applyEngineForce(Fuerza, 2);
+		vehiculo->applyEngineForce(Fuerza, 3);
+		vehiculo->setSteeringValue(btScalar(0), 0);
+		vehiculo->setSteeringValue(btScalar(0), 1);
 	}else{
 		vehiculo->applyEngineForce(600, 0);
-	vehiculo->applyEngineForce(200, 1);
-	vehiculo->applyEngineForce(200, 2);
-	vehiculo->applyEngineForce(200, 3);
+		vehiculo->applyEngineForce(200, 1);
+		vehiculo->applyEngineForce(200, 2);
+		vehiculo->applyEngineForce(200, 3);
 	}
+	estado->setEstadoMovimiento(AVANZA);
+	estado->setDireccionMovimiento(RECTO);
 }
 
 void Corredor::frenar()
 {
-	if (vehiculo->getCurrentSpeedKmHour()>1){
+	if (vehiculo->getCurrentSpeedKmHour() > 1) {
 		FuerzaFrenado = btScalar(-9000);		//freno potente si esta en marcha el coche
-	}else{
-		if (vehiculo->getCurrentSpeedKmHour()>-200){
+	}
+	else {
+		if (vehiculo->getCurrentSpeedKmHour() > -200) {
 			FuerzaFrenado = btScalar(-2500);	//sino, marcha atras lenta
-		}else{
-			FuerzaFrenado=btScalar(0);	//limitador de velocidad al frenar
+		}
+		else {
+			FuerzaFrenado = btScalar(0);	//limitador de velocidad al frenar
 		}
 	}
 	vehiculo->applyEngineForce(FuerzaFrenado, 0);
@@ -615,30 +627,38 @@ void Corredor::frenar()
 	vehiculo->applyEngineForce(FuerzaFrenado, 3);
 	vehiculo->setSteeringValue(btScalar(0), 0);
 	vehiculo->setSteeringValue(btScalar(0), 1);
+	if (vehiculo->getCurrentSpeedKmHour()<0){
+		estado->setEstadoMovimiento(MARCHA_ATRAS);
+	}else{
+		estado->setEstadoMovimiento(FRENA);
+	}
 }
 
 void Corredor::girarDerecha()
 {
+	estado->setDireccionMovimiento(DERECHA);
 	vehiculo->setSteeringValue(FuerzaGiro, 0);
 	vehiculo->setSteeringValue(FuerzaGiro, 1);
 }
 
 void Corredor::girarIzquierda()
 {
+	estado->setDireccionMovimiento(IZQUIERDA);
 	vehiculo->setSteeringValue(-FuerzaGiro, 0);
 	vehiculo->setSteeringValue(-FuerzaGiro, 1);
 }
 void Corredor::frenodemano(bool activo)
-{	
-	int friccion = 2.0f; 
-	if (activo){
+{
+	int friccion = 2.0f;
+	if (activo) {
+		estado->setEstadoMovimiento(DERRAPA);
 		FuerzaGiro = btScalar(0.36);
 
-		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(friccion+0.5); 
-		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(friccion+0.5); 
+		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(friccion + 0.5);
+		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(friccion + 0.5);
 
-		vehiculo->getWheelInfo(2).m_frictionSlip = btScalar(friccion); 
-		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(friccion); 
+		vehiculo->getWheelInfo(2).m_frictionSlip = btScalar(friccion);
+		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(friccion);
 		/*for (int i=0;i<50;i++){
 			acelerar();
 		}*/
@@ -646,21 +666,22 @@ void Corredor::frenodemano(bool activo)
 		{
 			btWheelInfo &wheel = vehiculo->getWheelInfo(i);
 			wheel.m_suspensionStiffness = 20;    //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo 
-    		wheel.m_wheelsDampingCompression = btScalar(0.2) * 2 * btSqrt(wheel.m_suspensionStiffness);;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-    		wheel.m_wheelsDampingRelaxation = btScalar(0.5) * 2 * btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
-    		wheel.m_rollInfluence = 1;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
+			wheel.m_wheelsDampingCompression = btScalar(0.2) * 2 * btSqrt(wheel.m_suspensionStiffness);;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
+			wheel.m_wheelsDampingRelaxation = btScalar(0.5) * 2 * btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+			wheel.m_rollInfluence = 1;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 		}
 
-	}else{
+	}
+	else {
 		for (int i = 0; i < vehiculo->getNumWheels(); i++)
 		{
 			btWheelInfo &wheel = vehiculo->getWheelInfo(i);
 			wheel.m_suspensionStiffness = 40;    //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo 
-    		wheel.m_wheelsDampingCompression = 2.4f;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-    		wheel.m_wheelsDampingRelaxation = 2.3f;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
-    		wheel.m_frictionSlip = btScalar(10000.0f);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
-    		wheel.m_rollInfluence = 0.03;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
-    		//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
+			wheel.m_wheelsDampingCompression = 2.4f;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
+			wheel.m_wheelsDampingRelaxation = 2.3f;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+			wheel.m_frictionSlip = btScalar(10000.0f);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
+			wheel.m_rollInfluence = 0.03;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
+			//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
 		}
 		FuerzaGiro = btScalar(0.1);
 		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(10000.0f);
@@ -668,7 +689,7 @@ void Corredor::frenodemano(bool activo)
 
 		vehiculo->getWheelInfo(2).m_frictionSlip = btScalar(10000.0f);
 		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(10000.0f);
-	}	
+	}
 }
 void Corredor::desacelerar()
 {
@@ -706,23 +727,8 @@ std::string Corredor::toString()
 		" ] Y[ " + to_string(orientacion.Z) + "]";
 	text += "\n Velocidad (km/h): " + to_string(vehiculo->getCurrentSpeedKmHour());
 	text += "\n Fuerza Motor: " + to_string(vehiculo->getWheelInfo(0).m_engineForce);
-	text += "\n Tipo Objeto: ";
 
-	if (getTipoObj() == 0) {
-		text += "Nada";
-	}
-	else if (getTipoObj() == 1) {
-		text += "Proyectil";
-	}
-	else if (getTipoObj() == 2) {
-		text += "CajaFalsa";
-	}
-	else if (getTipoObj() == 3) {
-		text += "Turbo";
-	}
-	else if (getTipoObj() == 4) {
-		text += "Aceite";
-	}
+
 	text += "\nTurbo: ";
 	if (turboActivado) text += "Activado";
 	else text += "Desactivado";
@@ -740,10 +746,10 @@ void Corredor::aplicarAceite(){
 	//CuerpoColisionChasis->applyCentralForce(btVector3(100, 5.0f,100));
 	frenodemano(true);
 	CuerpoColisionChasis->setAngularVelocity(btVector3(0, 40, 0));
-	Fuerza=0;
-		for (int i=0;i<800;i++){
+	for (int i=0;i<100;i++){
 		girarIzquierda();
 	}
+	Fuerza=220;
 }
 
 //	----------------------------------------------
@@ -781,24 +787,25 @@ vector3df Corredor::getVectorDireccion()
 
 void Corredor::update()
 {
-	
-	
 	if (turboActivado) {
 		Motor3d *mundo = Motor3d::getInstancia();
 		Timer *time = Timer::getInstancia();
 		if (time->getTimer() - timerTurbo >= 1) {
-			cout << "Se acaba el turbo\n";
+			//cout << "Se acaba el turbo\n";
 			desacelerar();
 			setTurbo(false, false,0);
 		}
 	}
 	else if (vehiculo->getCurrentSpeedKmHour() > 1)
 		Fuerza = btScalar(FuerzaMaxima * (50 / vehiculo->getCurrentSpeedKmHour()));
-		if (Fuerza<1800){
-			FuerzaGiro = btScalar(0.001); 
-		}else{
-			FuerzaGiro = btScalar(0.1); 
-		}
+	if (Fuerza < 1800) {
+		FuerzaGiro = btScalar(0.001);
+	}
+	else {
+		FuerzaGiro = btScalar(0.1);
+	}
+
+	updateEstado();
 	movimiento();
 	posicion.setX(cuboNodo->getPosition().X);
 	posicion.setY(cuboNodo->getPosition().Y);
@@ -811,7 +818,43 @@ void Corredor::update()
 }
 
 
+void Corredor::updateEstado(){
+	if (vehiculo->getCurrentSpeedKmHour() < 0.5 && vehiculo->getCurrentSpeedKmHour() > -0.5){
+		estado->setEstadoMovimiento(QUIETO);
+	}
+	estado->setEstadoCoche(POR_DEFECTO);
+	if (proteccion==true){
+		estado->setEstadoCoche(CON_ESCUDO);
+	}
+	if (turboActivado==true){
+		estado->setEstadoCoche(CON_TURBO);
+	}
 
+
+	//Objetos:
+	switch (tipoObj){
+		// {NADA, FLECHA, FLECHA_TRIPLE, ESCUDO, ACEITE, CAJA_FALSA, TURBO} 
+		case 0:
+		estado->setEstadoObjeto(NADA);
+		break;
+		case 1:
+		estado->setEstadoObjeto(FLECHA);
+		break;
+		case 2:
+		estado->setEstadoObjeto(CAJA_FALSA);
+		break;
+		case 3:
+		estado->setEstadoObjeto(TURBO);
+		break;
+		case 4:
+		estado->setEstadoObjeto(ACEITE);
+		break;
+		case 5:
+		estado->setEstadoObjeto(ESCUDO);
+		break;
+	}
+	estado->update();
+}
 /**
  * Actualiza el vector direccion del corredor.
  */
@@ -1026,4 +1069,12 @@ Corredor::~Corredor() {
 	delete vehiculo;
 	delete CuerpoColisionChasis;
 
+}
+bool Corredor::getProteccion() {
+	return proteccion;
+}
+
+void Corredor::setProteccion(bool s) {
+	escudo->getNodo()->setVisible(s);
+	proteccion = s;
 }

@@ -14,14 +14,16 @@
 #include "Estatico.hpp"
 #include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+#include "RaknetIncludes.hpp"
 #include "TextoPantalla.hpp"
 #include "Escudo.hpp"
 #include "EstadosJugador.hpp"
 
 using namespace std;
 
-class Corredor {
-public:
+class Corredor: public RakNet::NetworkIDObject 
+{
+  public:
 	Corredor(stringw rutaObj, vector3df pos);
 	void InicializarFisicas();
 	void lanzarItem(Proyectil *item, int direcionItem);

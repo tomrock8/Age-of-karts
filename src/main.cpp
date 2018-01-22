@@ -47,9 +47,8 @@ int main(int argc, char* argv[])
 	CTeclado *teclado = CTeclado::getInstancia();
 
 	Client *client = NULL;
-
-	if (argc == 2) {
-		client = new Client(8);
+	if(argc == 2){
+		client = new Client(4);
 		client->CreateClientInterface();
 		client->SetIP();
 		client->ClientStartup();
@@ -97,7 +96,11 @@ int main(int argc, char* argv[])
 	vector3df pos(0, 1, 300);
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
+	if(argc !=2){
+		pj[0] = new CorredorJugador("assets/coche.obj", pos);
+		jugadores->aumentarJugadores();}
 
+		jugadores->setJugadores(pj);
 	//pj[1]->getNodo()->setID(id);
 
 
@@ -126,15 +129,14 @@ int main(int argc, char* argv[])
 	// ----------GAME LOOP----------//
 	// -----------------------------//
 	driver->beginScene(true, true, video::SColor(255, 32, 223, 255));
-
 	while (m->getDevice()->run())
 	{
 
 		if (argc == 2) {
 			client->ReceivePackets(smgr);
-			client->SpawnPlayer(smgr);
+			//client->SpawnPlayer(smgr);
 		}
-
+		//cout << irrTimer->getTime() << endl;
 		textoDebug->limpiar();
 
 		DeltaTime = irrTimer->getTime() - TimeStamp;
@@ -146,22 +148,35 @@ int main(int argc, char* argv[])
 			pistaca->getArrayCaja()[i]->comprobarRespawn();
 		}
 		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
-
 		pj = jugadores->getJugadores();
-		pj[0]->actualizarItem();
+		if(argc!=2){
+			pj[0]->actualizarItem();
+			camara->moveCameraControl(pj[0], device);
+			colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+			pj[0]->update();
+			textoDebug->agregar(pj[0]->toString());
+		}else{
+			int controlPlayer = client->getControlPlayer();
+			if (jugadores->getNumJugadores() != 0)
+				pj[controlPlayer]->actualizarItem();
 
-		camara->moveCameraControl(pj[0], device);
-		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
-		//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
+			if (jugadores->getNumJugadores() != 0)
+			camara->moveCameraControl(pj[controlPlayer], device);
+			colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
-		pj[0]->update();
-		//pj[1]->update();
+			if (jugadores->getNumJugadores() != 0)
+			pj[controlPlayer]->update();
+			//pj[1]->update();
 
+			textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
+			if (jugadores->getNumJugadores() != 0)
+			textoDebug->agregar(pj[controlPlayer]->toString());
 
-		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-		textoDebug->agregar(pj[0]->toString());
-
-		if (teclado->isKeyDown(KEY_KEY_R)) {
+			if (jugadores->getNumJugadores() != 0)
+				client->PlayerMovement();
+		}
+		if(teclado->isKeyDown(KEY_KEY_R)){
 			btVector3 btPos(pos.X, pos.Y, pos.Z);
 
 			btTransform trans;
@@ -235,7 +250,8 @@ int main(int argc, char* argv[])
 		materialDriver.Lighting = false;
 		driver->setTransform(video::ETS_WORLD, core::matrix4());
   		driver->setMaterial(materialDriver);
-		pj[0]->ActualizarRaytest(); 
+		if(argc !=2)
+			pj[0]->ActualizarRaytest(); 
 		//Para poder dibujar putas lineas de mierda
 		if (debug) {
 			SMaterial debugMat;

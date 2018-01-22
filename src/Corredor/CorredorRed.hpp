@@ -1,6 +1,4 @@
-#include "RaknetIncludes.hpp"
 #include "Corredor.hpp"
-#include "IrrlichtLib.hpp"
 
 using namespace irr;
 using namespace core;
@@ -9,7 +7,7 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
-class CorredorRed : public RakNet::NetworkIDObject , public Corredor
+class CorredorRed : public Corredor
 {
 private:
 

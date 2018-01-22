@@ -160,7 +160,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				arrayWaypoints[tamWaypoints] = new Waypoint();
 
 				//comento lo de la id de los waypoints porq da conflico con las cajas
-				arrayWaypoints[tamWaypoints]->getWaypoint()->setID(tamWaypoints);
+				//arrayWaypoints[tamWaypoints]->getWaypoint()->setID(tamWaypoints);
 				
 				if (tamWaypoints > 0 && tamWaypoints <= (stoi(tamanyoArrayWaypoints) - 2))
 				{

@@ -126,6 +126,7 @@ void Server::ReceivePackets()
 		//vector de posicion de Irrlicht
 		float posicion[3];
 		float rotacion[3];
+		int id;
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -238,7 +239,6 @@ void Server::ReceivePackets()
 			break;
 
 		case ID_PLAYER_MOVE:
-
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(posicion[0]);
 			bsIn.Read(posicion[1]);
@@ -246,8 +246,9 @@ void Server::ReceivePackets()
 			bsIn.Read(rotacion[0]);
 			bsIn.Read(rotacion[1]);
 			bsIn.Read(rotacion[2]);
-			bsIn.Read(playerNetworkID);
-			player[playerNetworkID]->setPositionRotation(posicion, rotacion);
+			bsIn.Read(id);
+    		std::cout <<"2 - " << posicion[0] << " - " << rotacion[0] << " . " << id << std::endl;
+			player[id]->setPositionRotation(posicion, rotacion);
 			//*posicion = *networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->getPosition();
 			//networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->setPosition(posicion);
 			typeID = ID_PLAYER_MOVE;
@@ -258,7 +259,7 @@ void Server::ReceivePackets()
 			bsIn.Write(rotacion[0]);
 			bsIn.Write(rotacion[1]);
 			bsIn.Write(rotacion[2]);
-			bsOut.Write(playerNetworkID);
+			bsOut.Write(id);
 
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 
@@ -326,7 +327,7 @@ void Server::refreshServer()
 	RakNet::BitStream bsOut;
 
 	//vector de posicion de Irrlicht
-	int* posicion;
+	float* posicion;
 
 	//ID del mensaje que notifica el refresco
 	typeID = ID_REFRESH_SERVER;

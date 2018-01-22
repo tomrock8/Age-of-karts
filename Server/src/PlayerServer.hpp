@@ -11,8 +11,8 @@ int id;
 
 
 public:
-  PlayerServer(int *pos, int i);
-  int* getPosition();
+  PlayerServer(float *pos, int i);
+  float* getPosition();
   void setPositionRotation(float *pos, float *rot);
   int getID();
   void acelerar();

@@ -172,6 +172,8 @@ int main(int argc, char* argv[])
 			textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 			if (jugadores->getNumJugadores() != 0)
 			textoDebug->agregar(pj[controlPlayer]->toString());
+
+			client->PlayerMovement();
 		}
 		if(teclado->isKeyDown(KEY_KEY_R)){
 			btVector3 btPos(pos.X, pos.Y, pos.Z);

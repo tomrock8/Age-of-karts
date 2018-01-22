@@ -1,9 +1,13 @@
-FUENTE := $(wildcard src/*.cpp)
+FUENTE := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
+
 LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lRakNetLibStatic  -lpthread 
 LIBRERIAS_BULLET := -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader 
+
 RUTAS2 := -I. -I/usr/local/include/bullet/ 
 RUTAS := -I./include/irrlicht -I./include/raknet -I./include/irrlicht/include -I./include/bullet -L./lib 
+RUTAS_INTERNAS := -I./src -I./src/Carrera -I./src/Corredor -I./src/Escena -I./src/Item -I./src/Motor
+
 CFLAGS := -ggdb -std=c++11 
 .PHONY: objdir info all 
 
@@ -16,7 +20,7 @@ alt: objdir exec2
 runalt: objdir exec2 altRun
 
 exec2: $(OBJETOS)
-	@g++ -o $@ $^ $(RUTAS2) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS) -Wl,-rpath=/usr/local/lib
+	@g++ -o $@ $^ $(RUTAS2) $(RUTAS_INTERNAS)  $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS) -Wl,-rpath=/usr/local/lib
 	@echo "Generado ejecutable. Ejecutar ./$@"
 
 exportAlt: 
@@ -48,15 +52,20 @@ exec: $(OBJETOS)
 	export RUTA_LIB=/usr/local/lib
 
 	
-	g++ -fPIC -g -o $@ $^  $(RUTAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS) -Wl,-rpath=./lib	
+	g++ -fPIC -g -o $@ $^  $(RUTAS) $(RUTAS_INTERNAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS) -Wl,-rpath=./lib	
 	@echo "Generado ejecutable."
 
 obj/%.o : src/%.cpp
-	@g++ -fPIC -g -o $@ -c $^ $(RUTAS) $(CFLAGS)
+	@g++ -fPIC -g -o $@ -c $^ $(RUTAS) $(RUTAS_INTERNAS)  $(CFLAGS)
 	@echo "Compilado $@."
 
 objdir:
 	@mkdir -p obj/
+	@mkdir -p obj/Carrera
+	@mkdir -p obj/Corredor
+	@mkdir -p obj/Escena
+	@mkdir -p obj/Item
+	@mkdir -p obj/Motor
 	@echo "Creando carpeta de compilados."
 
 info:

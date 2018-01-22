@@ -828,6 +828,8 @@ void Corredor::update()
 	calculoDistanciaPunto();
 	calculoAnguloGiro();
 	logicaDifusa();
+	//ActualizarRaytest();
+	
 }
 
 

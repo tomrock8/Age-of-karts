@@ -131,12 +131,14 @@ void CorredorJugador::actualizarItem()
 				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
 				Aceite *est2 = new Aceite(posDisparo, idObjMapa);
 				est2->inicializarFisicas();
+				//est2->getRigidBody()->setCollisionFlags(est2->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 				soltarItem();
 				items.push_back(est2);
 			}
 			else if (tipoObj == 5)
 			{
 				if(getProteccion()==false) setProteccion(true);
+				soltarItem();
 			}
 			else if (tipoObj == 6)
 			{

@@ -15,6 +15,8 @@ Estatico::Estatico(vector3df posicionItem, int idItem) : Item(posicionItem, idIt
 	posicion = posicionItem;
 	nodo->setPosition(posicion);
 
+	masa = 10000;
+
 	id = idItem;
 	nodo->setID(id);
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
@@ -41,7 +43,7 @@ btRigidBody *Estatico::inicializarFisicas()
 	// Add mass
 	btVector3 LocalInertia;
 
-	masa = 10000;
+	
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
 	// Create the rigid body object

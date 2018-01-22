@@ -23,7 +23,6 @@
 #include "GestorColisiones.hpp"
 #include "GestorJugadores.hpp"
 #include "TextoPantalla.hpp"
-#include "Gui.hpp"
 #include "Client.hpp"
 
 using namespace std;
@@ -120,21 +119,6 @@ int main(int argc, char* argv[])
 
 
 
-	// -----------------------------
-	//  CEGUI
-	// -----------------------------
-	Gui *interfaz = new Gui(device);
-	bool res = interfaz->cargarScheme("AlfiskoSkin.scheme");
-	if (res) {
-		interfaz->setFuente("DejaVuSans-10");
-
-		float tam[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		float escala[4] = { 0.5f, 0.5f, 0.1f, 0.05f };
-
-		CEGUI::Window *botonPrueba = interfaz->crearWidget("AlfiskoSkin/Button", escala, tam, "TestLabel");
-		if (botonPrueba)
-			botonPrueba->setText("TOWAPOTIO");
-	}
 
 
 
@@ -250,8 +234,6 @@ int main(int argc, char* argv[])
 		}
 		guienv->drawAll();
 		// draw gui
-		CEGUI::System::getSingletonPtr()->renderAllGUIContexts();
-		//m->getInterfaz()->dibujar();
 		driver->endScene();
 
 	}
@@ -266,7 +248,6 @@ int main(int argc, char* argv[])
 	delete bullet;
 	//delete camara;
 	//delete colisiones;
-	delete interfaz;
 	delete m;
 
 	return 0;

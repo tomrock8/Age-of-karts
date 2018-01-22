@@ -29,6 +29,8 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 		cuboNodo->setRotation(vector3df(0.0f, 90.0f, 0.0f));
 	}
 
+	estado = new EstadosJugador();
+
 	posicion.setX(pos.X);
 	posicion.setY(pos.Y);
 	posicion.setZ(pos.Z);
@@ -582,21 +584,28 @@ void Corredor::SetFuerzaVelocidad(int turbo)
 void Corredor::acelerar()
 {
 	if (vehiculo->getCurrentSpeedKmHour()>300 && !turboActivado){
-		Fuerza =btScalar(200);		//limitador de velocidad
+		if (vehiculo->getCurrentSpeedKmHour()>350){
+			Fuerza =btScalar(0);
+		}else{
+			Fuerza =btScalar(200);		//limitador de velocidad
+		}	
+		
 	}
 	if (vehiculo->getCurrentSpeedKmHour()<370){
-	vehiculo->applyEngineForce(Fuerza, 0);
-	vehiculo->applyEngineForce(Fuerza, 1);
-	vehiculo->applyEngineForce(Fuerza, 2);
-	vehiculo->applyEngineForce(Fuerza, 3);
-	vehiculo->setSteeringValue(btScalar(0), 0);
-	vehiculo->setSteeringValue(btScalar(0), 1);
+		vehiculo->applyEngineForce(Fuerza, 0);
+		vehiculo->applyEngineForce(Fuerza, 1);
+		vehiculo->applyEngineForce(Fuerza, 2);
+		vehiculo->applyEngineForce(Fuerza, 3);
+		vehiculo->setSteeringValue(btScalar(0), 0);
+		vehiculo->setSteeringValue(btScalar(0), 1);
 	}else{
 		vehiculo->applyEngineForce(600, 0);
-	vehiculo->applyEngineForce(200, 1);
-	vehiculo->applyEngineForce(200, 2);
-	vehiculo->applyEngineForce(200, 3);
+		vehiculo->applyEngineForce(200, 1);
+		vehiculo->applyEngineForce(200, 2);
+		vehiculo->applyEngineForce(200, 3);
 	}
+	estado->setEstadoMovimiento(AVANZA);
+	estado->setDireccionMovimiento(RECTO);
 }
 
 void Corredor::frenar()
@@ -618,16 +627,23 @@ void Corredor::frenar()
 	vehiculo->applyEngineForce(FuerzaFrenado, 3);
 	vehiculo->setSteeringValue(btScalar(0), 0);
 	vehiculo->setSteeringValue(btScalar(0), 1);
+	if (vehiculo->getCurrentSpeedKmHour()<0){
+		estado->setEstadoMovimiento(MARCHA_ATRAS);
+	}else{
+		estado->setEstadoMovimiento(FRENA);
+	}
 }
 
 void Corredor::girarDerecha()
 {
+	estado->setDireccionMovimiento(DERECHA);
 	vehiculo->setSteeringValue(FuerzaGiro, 0);
 	vehiculo->setSteeringValue(FuerzaGiro, 1);
 }
 
 void Corredor::girarIzquierda()
 {
+	estado->setDireccionMovimiento(IZQUIERDA);
 	vehiculo->setSteeringValue(-FuerzaGiro, 0);
 	vehiculo->setSteeringValue(-FuerzaGiro, 1);
 }
@@ -635,6 +651,7 @@ void Corredor::frenodemano(bool activo)
 {
 	int friccion = 2.0f;
 	if (activo) {
+		estado->setEstadoMovimiento(DERRAPA);
 		FuerzaGiro = btScalar(0.36);
 
 		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(friccion + 0.5);
@@ -710,23 +727,8 @@ std::string Corredor::toString()
 		" ] Y[ " + to_string(orientacion.Z) + "]";
 	text += "\n Velocidad (km/h): " + to_string(vehiculo->getCurrentSpeedKmHour());
 	text += "\n Fuerza Motor: " + to_string(vehiculo->getWheelInfo(0).m_engineForce);
-	text += "\n Tipo Objeto: ";
 
-	if (getTipoObj() == 0) {
-		text += "Nada";
-	}
-	else if (getTipoObj() == 1) {
-		text += "Proyectil";
-	}
-	else if (getTipoObj() == 2) {
-		text += "CajaFalsa";
-	}
-	else if (getTipoObj() == 3) {
-		text += "Turbo";
-	}
-	else if (getTipoObj() == 4) {
-		text += "Aceite";
-	}
+
 	text += "\nTurbo: ";
 	if (turboActivado) text += "Activado";
 	else text += "Desactivado";
@@ -744,10 +746,10 @@ void Corredor::aplicarAceite(){
 	//CuerpoColisionChasis->applyCentralForce(btVector3(100, 5.0f,100));
 	frenodemano(true);
 	CuerpoColisionChasis->setAngularVelocity(btVector3(0, 40, 0));
-	Fuerza=200;
-		for (int i=0;i<800;i++){
+	for (int i=0;i<100;i++){
 		girarIzquierda();
 	}
+	Fuerza=220;
 }
 
 //	----------------------------------------------
@@ -785,13 +787,11 @@ vector3df Corredor::getVectorDireccion()
 
 void Corredor::update()
 {
-	
-	
 	if (turboActivado) {
 		Motor3d *mundo = Motor3d::getInstancia();
 		Timer *time = Timer::getInstancia();
 		if (time->getTimer() - timerTurbo >= 1) {
-			cout << "Se acaba el turbo\n";
+			//cout << "Se acaba el turbo\n";
 			desacelerar();
 			setTurbo(false, false,0);
 		}
@@ -804,6 +804,8 @@ void Corredor::update()
 	else {
 		FuerzaGiro = btScalar(0.1);
 	}
+
+	updateEstado();
 	movimiento();
 	posicion.setX(cuboNodo->getPosition().X);
 	posicion.setY(cuboNodo->getPosition().Y);
@@ -816,7 +818,43 @@ void Corredor::update()
 }
 
 
+void Corredor::updateEstado(){
+	if (vehiculo->getCurrentSpeedKmHour() < 0.5 && vehiculo->getCurrentSpeedKmHour() > -0.5){
+		estado->setEstadoMovimiento(QUIETO);
+	}
+	estado->setEstadoCoche(POR_DEFECTO);
+	if (proteccion==true){
+		estado->setEstadoCoche(CON_ESCUDO);
+	}
+	if (turboActivado==true){
+		estado->setEstadoCoche(CON_TURBO);
+	}
 
+
+	//Objetos:
+	switch (tipoObj){
+		// {NADA, FLECHA, FLECHA_TRIPLE, ESCUDO, ACEITE, CAJA_FALSA, TURBO} 
+		case 0:
+		estado->setEstadoObjeto(NADA);
+		break;
+		case 1:
+		estado->setEstadoObjeto(FLECHA);
+		break;
+		case 2:
+		estado->setEstadoObjeto(CAJA_FALSA);
+		break;
+		case 3:
+		estado->setEstadoObjeto(TURBO);
+		break;
+		case 4:
+		estado->setEstadoObjeto(ACEITE);
+		break;
+		case 5:
+		estado->setEstadoObjeto(ESCUDO);
+		break;
+	}
+	estado->update();
+}
 /**
  * Actualiza el vector direccion del corredor.
  */

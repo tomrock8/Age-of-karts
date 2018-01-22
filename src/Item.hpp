@@ -23,6 +23,7 @@ public:
     bool getColision();
     void setNombre(const char* name);
     const char* getNombre();
+    void setMasa(btScalar mass);
 
 protected:
 	IMeshSceneNode *nodo;

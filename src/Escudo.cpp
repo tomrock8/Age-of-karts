@@ -21,8 +21,7 @@ Escudo::Escudo(vector3df posicionItem, ISceneNode* parent ,int idItem) : Item(po
 	nodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
 	id = idItem;
 	nodo->setName(nombre);
-	cout << "donde mierda estoy cojones ostia puta ya:" << parent->getPosition().X <<","<< parent->getPosition().Y << "," << parent->getPosition().Z << endl;
-	cout << "y que es esto :" << parent->getName() << endl;
+
 
 
 

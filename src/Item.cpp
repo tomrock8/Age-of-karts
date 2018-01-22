@@ -6,6 +6,9 @@ Item::Item(vector3df posicionItem, int idItem)
 {
 	Motor3d *m = Motor3d::getInstancia();
 	colision = false;
+
+	masa = 1;
+	
 }
 
 btRigidBody *Item::inicializarFisicas()
@@ -27,7 +30,7 @@ btRigidBody *Item::inicializarFisicas()
 	// Add mass
 	btVector3 LocalInertia;
 
-	masa = 1;
+	
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
 	// Create the rigid body object
@@ -103,4 +106,7 @@ const char* Item::getNombre(){
 }
 void Item::setNombre(const char* name){
 	nombre=name;
+}
+void Item::setMasa(btScalar mass){
+	masa=mass;
 }

@@ -16,6 +16,7 @@
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 #include "TextoPantalla.hpp"
 #include "Escudo.hpp"
+#include "EstadosJugador.hpp"
 
 using namespace std;
 
@@ -55,7 +56,7 @@ public:
 
 	// Update
 	void update();
-
+	void updateEstado();
 	// Metodos GET
 	IMeshSceneNode *getNodo();
 	btRaycastVehicle *getVehiculo();
@@ -110,6 +111,7 @@ protected:
 	bool turboActivado;
 	int timerTurbo;
 	Escudo *escudo;
+	EstadosJugador *estado;
 
 	btVector3 posicion;
 	btVector3 direccionRuedas;

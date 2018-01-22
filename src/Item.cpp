@@ -1,30 +1,14 @@
 #include "Item.hpp"
 
+
+
 Item::Item(vector3df posicionItem, int idItem)
 {
 	Motor3d *m = Motor3d::getInstancia();
-	tamanyo = 1.0f;
-	nodo = m->getScene()->addCubeSceneNode(tamanyo);
-
-	escala.X = 3.f;
-	escala.Y = 3.f;
-	escala.Z = 3.f;
-	nodo->setScale(escala);
-
-	posicion = posicionItem;
-	nodo->setPosition(posicion);
-
-	nodo->setMaterialFlag(EMF_LIGHTING, false);
-	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/gust.png"));
-
-	
-	nodo->setName("Item");
-
-	id = idItem;
-	nodo->setID(id);
-
 	colision = false;
+
+	masa = 1;
+	
 }
 
 btRigidBody *Item::inicializarFisicas()
@@ -46,7 +30,7 @@ btRigidBody *Item::inicializarFisicas()
 	// Add mass
 	btVector3 LocalInertia;
 
-	masa = 1;
+	
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
 	// Create the rigid body object
@@ -113,7 +97,7 @@ btRigidBody *Item::getRigidBody()
 {
 	return rigidBody;
 }
-ISceneNode *Item::getNodo()
+IMeshSceneNode *Item::getNodo()
 {
 	return nodo;
 }
@@ -122,4 +106,7 @@ const char* Item::getNombre(){
 }
 void Item::setNombre(const char* name){
 	nombre=name;
+}
+void Item::setMasa(btScalar mass){
+	masa=mass;
 }

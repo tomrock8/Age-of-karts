@@ -1,9 +1,9 @@
 FUENTE := $(wildcard src/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
-LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader -lRakNetLibStatic -lCEGUIBase-0_Static -lCEGUIIrrlichtRenderer-0_Static
-LIBRERIAS2 := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lGL -lSDL_image -lGLU -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader -lRakNetLibStatic -lpthread -lCEGUIBase-0_Static -lCEGUIIrrlichtRenderer-0_Static
-RUTAS2 := -I. -I/usr/local/include/bullet/  -I./include/CEGUI 
-RUTAS := -I./include/irrlicht -I./include/raknet  -I./include/CEGUI -I./include/irrlicht/include -I./include/bullet -L./lib 
+LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lRakNetLibStatic  -lpthread 
+LIBRERIAS_BULLET := -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader 
+RUTAS2 := -I. -I/usr/local/include/bullet/ 
+RUTAS := -I./include/irrlicht -I./include/raknet -I./include/irrlicht/include -I./include/bullet -L./lib 
 CFLAGS := -ggdb -std=c++11 
 .PHONY: objdir info all 
 
@@ -16,7 +16,7 @@ alt: objdir exec2
 runalt: objdir exec2 altRun
 
 exec2: $(OBJETOS)
-	@g++ -o $@ $^ $(RUTAS2) $(LIBRERIAS2) $(CFLAGS) -Wl,-rpath=/usr/local/lib
+	@g++ -o $@ $^ $(RUTAS2) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS) -Wl,-rpath=/usr/local/lib
 	@echo "Generado ejecutable. Ejecutar ./$@"
 
 exportAlt: 
@@ -48,7 +48,7 @@ exec: $(OBJETOS)
 	export RUTA_LIB=/usr/local/lib
 
 	
-	g++ -fPIC -g -o $@ $^  $(RUTAS) $(LIBRERIAS) $(CFLAGS) -Wl,-rpath=./lib	
+	g++ -fPIC -g -o $@ $^  $(RUTAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS) -Wl,-rpath=./lib	
 	@echo "Generado ejecutable."
 
 obj/%.o : src/%.cpp

@@ -2,8 +2,8 @@
 #include <iostream>
 #include "PlayerServer.hpp"
 
-#define MAX_CLIENTS 10
-#define MAX_PLAYERS 10
+#define MAX_CLIENTS 4
+#define MAX_PLAYERS 6
 
 class Server
 {

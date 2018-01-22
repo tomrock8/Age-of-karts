@@ -2,7 +2,7 @@
 #include <iostream>
 #include "NetworkEnums.hpp"
 
-#define MAX_PLAYERS 10 //numero maximo de jugadores conectados al servidor
+#define MAX_PLAYERS 6 //numero maximo de jugadores conectados al servidor
 
 
 //======================================================================
@@ -12,7 +12,7 @@ Server::Server(int maxPlay)
 {
 	numSockets = 1; //numero de sockets
 	numIPs = 1; //numero de ips
-	numPlayers=0; //numero de jugadores iniciales
+	numPlayers = 0; //numero de jugadores iniciales
 	spawned = false; //false == el servidor aun no ha spwaneado su jugador ; true == ya ha spwaneado su jugador, no puede spwanear mas
 	maxPlayers = maxPlay; //asignacion del numero max de jugadores
 	serverPort = "6001"; //puerto que va a usar el servidor
@@ -155,9 +155,11 @@ void Server::ReceivePackets()
 				posicion[0] = player[i]->getPosition()[0];
 				posicion[1] = player[i]->getPosition()[1];
 				posicion[2] = player[i]->getPosition()[2];
+				int id = player[i]->getID();
 				bsOut.Write(posicion[0]);
 				bsOut.Write(posicion[1]);
 				bsOut.Write(posicion[2]);
+				bsOut.Write(id);
 				bsOut.Write(player[i]->GetNetworkID());
 			}
 			//														 Ip del emisor, false para enviar a todos menos a la ip
@@ -215,7 +217,7 @@ void Server::ReceivePackets()
 			bsIn.Read(posicion[2]);
 			bsIn.Read(playerNetworkID);
 			std::cout <<posicion[0] <<", "<<posicion[1] << ", " <<posicion[2] << std::endl;
-			player[numPlayers] = new PlayerServer(posicion);
+			player[numPlayers] = new PlayerServer(posicion, numPlayers);
 			//player[numPlayers]->setPosition(posicion);
 			player[numPlayers]->SetNetworkIDManager(&networkIDManager);
 			player[numPlayers]->SetNetworkID(playerNetworkID);
@@ -225,6 +227,7 @@ void Server::ReceivePackets()
 			bsOut.Write(posicion[0]);
 			bsOut.Write(posicion[1]);
 			bsOut.Write(posicion[2]);
+			bsOut.Write(numPlayers);
 			bsOut.Write(playerNetworkID);
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 			numPlayers++;

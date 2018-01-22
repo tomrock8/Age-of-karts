@@ -4,24 +4,28 @@ OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
 LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lRakNetLibStatic  -lpthread 
 LIBRERIAS_BULLET := -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader 
 
-RUTAS := -I./include/irrlicht -I./include/raknet -I./include/irrlicht/include -I./include/bullet -L./lib
-RUTAS_INTERNAS := -I./src -I./src/Carrera -I./src/Corredor -I./src/Escena -I./src/Item -I./src/Motor
 RUTAS2 := -I. -I/usr/local/include/bullet/ 
+RUTAS := -I./include/irrlicht -I./include/raknet -I./include/irrlicht/include -I./include/bullet -L./lib 
+RUTAS_INTERNAS := -I./src -I./src/Carrera -I./src/Corredor -I./src/Escena -I./src/Item -I./src/Motor
 
-CFLAGS := -ggdb -std=c++11 -Wl,-rpath=/usr/local/lib
-
+CFLAGS := -ggdb -std=c++11 
 .PHONY: objdir info all 
+
 all: objdir exec
+
 run: objdir exec run
+
 alt: objdir exec2 
+
 runalt: objdir exec2 altRun
 
 exec2: $(OBJETOS)
-	@g++ -o $@ $^ $(RUTAS_INTERNAS) $(RUTAS2) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS) 
+	@g++ -o $@ $^ $(RUTAS2) $(RUTAS_INTERNAS)  $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS) -Wl,-rpath=/usr/local/lib
 	@echo "Generado ejecutable. Ejecutar ./$@"
 
 exportAlt: 
-	@export LD_LIBRARY_PATH="/usr/local/lib"
+	export LD_LIBRARY_PATH="/usr/local/lib"
+
 
 altRun:
 	@./exec2
@@ -36,15 +40,23 @@ run:
 	@echo "Ejecutando."
 
 export: 
-	@LD_LIBRARY_PATH=./lib
-	@export LD_LIBRARY_PATH
+	LD_LIBRARY_PATH=./lib
+	export LD_LIBRARY_PATH
 
 exec: $(OBJETOS)
-	g++ -fPIC -g -o $@ $^  $(RUTAS_INTERNAS) $(RUTAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS)
+	#export RUTA_LIB=${HOME}:${RUTA_LIB}
+	#export RUTA_LIB=$(HOME):$(RUTA_LIB)
+	#export PATH=$PATH:/usr/local/bin
+	#echo "$PATH"
+	#sudo cp lib/*.so.2.88 /usr/local/lib
+	export RUTA_LIB=/usr/local/lib
+
+	
+	g++ -fPIC -g -o $@ $^  $(RUTAS) $(RUTAS_INTERNAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS) -Wl,-rpath=./lib	
 	@echo "Generado ejecutable."
 
 obj/%.o : src/%.cpp
-	@g++ -fPIC -g -o $@ -c $^ $(RUTAS_INTERNAS) $(RUTAS) $(CFLAGS)
+	@g++ -fPIC -g -o $@ -c $^ $(RUTAS) $(RUTAS_INTERNAS)  $(CFLAGS)
 	@echo "Compilado $@."
 
 objdir:
@@ -64,7 +76,7 @@ clean:
 	@rm -f -r obj/
 	@rm -f exec
 	@rm -f exec2
-	@echo "Limpieza completada."
+	@echo "Limpiando resultado de compilacion."
 
 help: 
 	@echo "Comandos utiles en Age Of Karts"

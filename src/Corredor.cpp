@@ -136,6 +136,19 @@ void Corredor::InicializarFisicas()
 
 }
 
+void Corredor::setPosicion(float *pos, float *ori){
+	btVector3 btPos(pos[0], pos[1], pos[2]);
+
+	btTransform trans;
+	trans.setOrigin(btPos);
+	btQuaternion quaternion;
+	quaternion.setEulerZYX(ori[0]* PI / 180, ori[1] * PI / 180, ori[2] * PI / 180);
+	trans.setRotation(quaternion);
+
+	CuerpoColisionChasis->setCenterOfMassTransform(trans);
+
+}
+
 void Corredor::BorrarFisicas()
 {
 }

@@ -151,6 +151,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 		vector3df pos;
 		int x,y,z;
 
+
 		//switch para comprobar el tipo de paquete recibido
 		switch (packetIdentifier)
 		{
@@ -289,20 +290,21 @@ int Client::ReceivePackets(ISceneManager *escena)
 		case ID_PLAYER_MOVE:
 			if (netLoaded)
 			{
-				int x;
-				int y;
-				int z;
+				float *pos = new float[3];
+				float *ori = new float[3];
+				int id;
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-				bsIn.Read(x);
-				bsIn.Read(y);
-				bsIn.Read(z);
-				bsIn.Read(playerNetworkID);
+				bsIn.Read(pos[0]);
+				bsIn.Read(pos[1]);
+				bsIn.Read(pos[2]);
+				bsIn.Read(ori[0]);
+				bsIn.Read(ori[1]);
+				bsIn.Read(ori[2]);
+				bsIn.Read(id);
 
 				//posicion = networkIDManager.GET_OBJECT_FROM_ID<PlayerClient *>(playerNetworkID)->getPosition();
-
-				posicion.X = x;
-				posicion.Y = y;
-				posicion.Z = z;
+				
+				player[id]->setPosicion(pos, ori);
 
 				//networkIDManager.GET_OBJECT_FROM_ID<PlayerClient *>(playerNetworkID)->setPosition(posicion);
 			}
@@ -421,4 +423,34 @@ void Client::SpawnPlayer(ISceneManager *escena)
 
 int Client::getControlPlayer(){
 	return controlPlayer;
+}
+
+void Client::PlayerMovement(){
+	vector3df position = player[controlPlayer]->getNodo()->getPosition();
+	float *pos = new float[3];
+
+	pos[0] = position.X;
+	pos[1] = position.Y;
+	pos[2] = position.Z;
+
+	float *ori = new float[3];
+
+	ori[0] = player[controlPlayer]->getNodo()->getRotation().X;
+	ori[1] = player[controlPlayer]->getNodo()->getRotation().Y;
+	ori[2] = player[controlPlayer]->getNodo()->getRotation().Z;
+
+	typeID = ID_PLAYER_MOVE;
+	RakNet::BitStream bsOut;
+	bsOut.Write(typeID);
+	bsOut.Write(pos[0]);
+	bsOut.Write(pos[1]);
+	bsOut.Write(pos[2]);
+	bsOut.Write(ori[0]);
+	bsOut.Write(ori[1]);
+	bsOut.Write(ori[2]);
+	bsOut.Write(controlPlayer);
+
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
+
 }

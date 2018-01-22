@@ -40,6 +40,7 @@ class Client
     void SetIP();
     void ClientStartup();
     void ShutDownClient();
+    void PlayerMovement();
     int ReceivePackets(ISceneManager *escena);
     void SpawnPlayer(ISceneManager *escena);
 

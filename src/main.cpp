@@ -254,6 +254,7 @@ int main(int argc, char* argv[])
 		}
 		//	RENDER
 		m->dibujar();
+		
 		//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
    		SMaterial materialDriver;
 		materialDriver.Lighting = false;
@@ -262,6 +263,7 @@ int main(int argc, char* argv[])
 		if(argc !=2)
 			pj[0]->ActualizarRaytest(); 
 		//Para poder dibujar putas lineas de mierda
+
 		if (debug) {
 			SMaterial debugMat;
 			debugMat.Lighting = true;

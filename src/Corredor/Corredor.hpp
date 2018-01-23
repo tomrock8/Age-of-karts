@@ -48,7 +48,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void calculoDistanciaPunto();
 	void calculoDistanciaPuntoActual();
 	void calculoAnguloGiro();
-	void giroIA();
+	void calculoAnguloGiro(btVector3 posicion);
 	void movimientoIA();
 	void ActualizarRaytest();
 
@@ -101,6 +101,11 @@ protected:
 	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
 	bool distanciaCerca,distanciaMedia,distanciaLejos;
 	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
+	void vision(btScalar distancia,ISceneNode *nodo);
+	float distanciaCaja,distanciaTurbo,distanciaEnemigo;
+	ISceneNode *caja;
+	ISceneNode *turbo;
+	ISceneNode *enemigo;
 
 	//bullet
 	btRaycastVehicle *vehiculo;
@@ -113,8 +118,8 @@ protected:
 
 	//Objetos
 	int cargador;
-	int tipoObj;
-	bool turboActivado;
+	int tipoObj; // si es 0 no tengo nada
+	bool turboActivado; // para saber cuando esta activado turbo
 	int timerTurbo;
 	Escudo *escudo;
 	EstadosJugador *estado;

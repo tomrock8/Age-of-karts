@@ -48,7 +48,12 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	Pista *mapa = Pista::getInstancia();
 	actual = mapa->getArrayWaypoints()[0];
 	siguiente = actual->getNextWaypoint();
-
+	caja = NULL;
+	enemigo = NULL;
+	turbo= NULL;
+	distanciaCaja = 0;
+	distanciaEnemigo = 0;
+	distanciaTurbo = 0;
 
 	//smgr->getMeshManipulator()->setVertexColors(rueda1->getMesh(),SColor(255, 255, 0, 0));
 	rueda1->setMaterialFlag(EMF_LIGHTING, false);
@@ -178,7 +183,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 		wheel.m_suspensionStiffness = 40;    //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo 
 		wheel.m_wheelsDampingCompression = 2.4f;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
 		wheel.m_wheelsDampingRelaxation = 2.3f;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
-		wheel.m_frictionSlip = btScalar(10000.0f);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
+		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = 0.03;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 		//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
 		wheel.m_maxSuspensionTravelCm = 800.f; //Nose muy bien que funcion tiene, pero si el valor es muy bajo el coche no avanza 
@@ -245,16 +250,18 @@ void Corredor::ActualizarRaytest() {
 
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
-	btCollisionWorld::ClosestRayResultCallback RayCast1(inicio, fin);
+	btCollisionWorld::AllHitsRayResultCallback RayCast1(inicio, fin);
 	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	RayCast1.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast1);
 	// Raycast central2 derecha
 	//inicio = btVector3(3*orientacion.Z+cuboNodo->getPosition().X,cuboNodo->getPosition().Y+1,orientacion.X*-3+cuboNodo->getPosition().Z);
 	fin = btVector3(Raycast23*orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*-Raycast23 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
-	btCollisionWorld::ClosestRayResultCallback RayCast2(inicio, fin);
-	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	btCollisionWorld::AllHitsRayResultCallback RayCast2(inicio, fin);
+	RayCast2.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	RayCast2.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast2);
 
 
@@ -263,8 +270,9 @@ void Corredor::ActualizarRaytest() {
 	fin = btVector3(-Raycast23 * orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*Raycast23 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
-	btCollisionWorld::ClosestRayResultCallback RayCast3(inicio, fin);
-	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	btCollisionWorld::AllHitsRayResultCallback RayCast3(inicio, fin);
+	RayCast3.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	RayCast3.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast3);
 
 
@@ -273,8 +281,9 @@ void Corredor::ActualizarRaytest() {
 	fin = btVector3(Raycast45*orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*-Raycast45 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
-	btCollisionWorld::ClosestRayResultCallback RayCast4(inicio, fin);
-	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	btCollisionWorld::AllHitsRayResultCallback RayCast4(inicio, fin);
+	RayCast4.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	RayCast4.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast4);
 
 	// Raycast central5 izquierda
@@ -282,54 +291,117 @@ void Corredor::ActualizarRaytest() {
 	fin = btVector3(-Raycast45 * orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*Raycast45 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
-	btCollisionWorld::ClosestRayResultCallback RayCast5(inicio, fin);
-	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	btCollisionWorld::AllHitsRayResultCallback RayCast5(inicio, fin);
+	RayCast5.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	RayCast5.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast5);
+
+	turbo=NULL;
+	distanciaTurbo=0;
+
+	caja=NULL;
+	distanciaCaja=0;
 
 
 	if (RayCast1.hasHit())
 	{
-		ISceneNode *Node = static_cast<ISceneNode *>(RayCast1.m_collisionObject->getUserPointer());
+
+		for (int i=0;i<RayCast1.m_hitFractions.size();i++)
+			{
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast1.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
-			//cout<<Node->getName()<<endl;
-			//cout<<RayCast1.m_closestHitFraction << endl;
+			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 || strcmp(Node->getName(),"Turbo")==0){
+			vision(RayCast1.m_hitFractions[i],Node);
+			//cout<<"RaycastCentral::"<<Node->getName()<<endl;
+			//cout<<"Distancia::"<<RayCast1.m_hitFractions[i] << endl;
+			//if(distanciaCaja<RayCast1.m_hitFractions[i])
+			//distanciaCaja = RayCast1.m_hitFractions[i];
+			}
 		}
+			}
 
 	}
 	if (RayCast2.hasHit()) {
 
-		ISceneNode *Node = static_cast<ISceneNode *>(RayCast2.m_collisionObject->getUserPointer());
+		for (int i=0;i<RayCast2.m_hitFractions.size();i++)
+			{
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast2.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
-			//cout<<Node->getName()<<endl;
-			//cout<<RayCast2.m_closestHitFraction << endl;
+			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 || strcmp(Node->getName(),"Turbo")==0){
+			vision(RayCast2.m_hitFractions[i],Node);
+			//cout<<"RaycastDerecha1::"<<Node->getName()<<endl;
+			//cout<<"Distancia::"<<RayCast2.m_hitFractions[i] << endl;
+			
+			}
 		}
+			}
 
 	}
 	if (RayCast3.hasHit()) {
 
-		ISceneNode *Node = static_cast<ISceneNode *>(RayCast3.m_collisionObject->getUserPointer());
+		for (int i=0;i<RayCast3.m_hitFractions.size();i++)
+			{
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast3.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
-			//cout<<Node->getName()<<endl;
-			//cout<<RayCast3.m_closestHitFraction << endl;
+			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 || strcmp(Node->getName(),"Turbo")==0){
+			vision(RayCast3.m_hitFractions[i],Node);
+			//cout<<"RaycastIzquierda1::"<<Node->getName()<<endl;
+			//cout<<"Distancia::"<<RayCast3.m_hitFractions[i] << endl;
+			}
 		}
+			}
 	}
 	if (RayCast4.hasHit()) {
 
-		ISceneNode *Node = static_cast<ISceneNode *>(RayCast4.m_collisionObject->getUserPointer());
+		for (int i=0;i<RayCast4.m_hitFractions.size();i++)
+			{
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast4.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
-			//cout<<Node->getName()<<endl;
-			//cout<<RayCast4.m_closestHitFraction << endl;
+			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 || strcmp(Node->getName(),"Turbo")==0){
+			vision(RayCast4.m_hitFractions[i],Node);
+			//cout<<"RaycastDerecha2::"<<Node->getName()<<endl;
+			//cout<<"Distancia::"<<RayCast4.m_hitFractions[i] << endl;
+			}
 		}
+			}
 	}
 
 	if (RayCast5.hasHit()) {
-
-		ISceneNode *Node = static_cast<ISceneNode *>(RayCast5.m_collisionObject->getUserPointer());
+		for (int i=0;i<RayCast5.m_hitFractions.size();i++)
+			{
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast5.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
-			//cout<<Node->getName()<<endl;
-			//cout<<RayCast5.m_closestHitFraction << endl;
+			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 || strcmp(Node->getName(),"Turbo")==0){
+			
+			vision(RayCast5.m_hitFractions[i],Node);
+			//cout<<"RaycastIzquierda2::"<<Node->getName()<<endl;
+			//cout<<"Distancia::"<<RayCast5.m_hitFractions[i] << endl;
+			}
 		}
+			}
 	}
+
+
+
+}
+
+
+void Corredor::vision(btScalar distancia,ISceneNode *nodo){
+
+	if(strcmp(nodo->getName(),"Caja")==0){
+
+		if(!caja)
+		caja=nodo;
+
+	}
+
+	if(strcmp(nodo->getName(),"Turbo")==0){
+
+		if(!turbo)
+		turbo=nodo;
+		
+	}
+
 
 }
 
@@ -373,13 +445,13 @@ void Corredor::calculoDistanciaPuntoActual() {
 
 }
 
-
-void Corredor::calculoAnguloGiro() {
+void Corredor::calculoAnguloGiro(btVector3 posicion) {
 
 	btVector3 orientacionCoche(orientacion.X,orientacion.Y,orientacion.Z);
-	btVector3 direccion = btVector3(siguiente->getPosicion().getX()-cuboNodo->getPosition().X,
-	siguiente->getPosicion().getY()-cuboNodo->getPosition().Y,
-	siguiente->getPosicion().getZ()-cuboNodo->getPosition().Z);
+	btVector3 direccion = btVector3(posicion.getX()-cuboNodo->getPosition().X,
+	posicion.getY()-cuboNodo->getPosition().Y,
+	posicion.getZ()-cuboNodo->getPosition().Z);
+	
 	direccion.normalize();
 	anguloGiro = orientacionCoche.angle(direccion) *180/PI;
 	
@@ -431,17 +503,17 @@ void Corredor::logicaDifusa() {
 	pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint, 1500, 4000, 6000, 7000);
 	pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint, 6000, 7000, 9000, 100000);
 
-		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-5,0,5);
-		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,6,40,90);
+		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-10,0,10);
+		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,11,40,90);
 		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,91,140,180);
 		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-91,-140,-180);
-		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-6,-40,-90);
+		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-11,-40,-90);
 
-		if(pertenenciaCerca > pertenenciaMedia && pertenenciaCerca > pertenenciaLejos){
-			distanciaCerca=true;
-			distanciaLejos=false;
-			distanciaMedia=false;
-		}
+	if(pertenenciaCerca > pertenenciaMedia && pertenenciaCerca > pertenenciaLejos){
+		distanciaCerca=true;
+		distanciaLejos=false;
+		distanciaMedia=false;
+	}
 
 	if (pertenenciaLejos > pertenenciaMedia && pertenenciaLejos > pertenenciaCerca) {
 		distanciaCerca = false;
@@ -524,13 +596,42 @@ void Corredor::logicaDifusa() {
 
 
 void Corredor::movimientoIA(){
-
+	
+	calculoDistanciaPunto();
+	//calculoAnguloGiro();
+	logicaDifusa();
 	acelerar();
+
+	if(caja)
+	cout<<"VEO CAJA"<<endl;	
+
+	if(turbo)
+	cout<<"VEO TURBO"<<endl;	
+
+	if(!caja || !turbo){
+	calculoAnguloGiro(siguiente->getPosicion());
+	
+	}
+	
+	if(caja && turbo || caja && !turbo){
+
+	calculoAnguloGiro(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z));	
+	
+	}
+	
+	if(turbo && !caja){
+
+	calculoAnguloGiro(btVector3(turbo->getPosition().X,turbo->getPosition().Y,turbo->getPosition().Z));	
+	
+	}
+
 
 	if(giroFlojoDerecha || giroFuerteDerecha)
 	girarDerecha();
 	else if(giroFlojoIzquierda || giroFuerteIzquierda)
 	girarIzquierda();
+
+	//FuerzaMaxima
 
 
 }
@@ -868,10 +969,10 @@ void Corredor::update()
 	posicion.setZ(cuboNodo->getPosition().Z);
 	actualizarRuedas();
 	updateDireccion();
-	calculoDistanciaPunto();
-	calculoDistanciaPuntoActual();
-	calculoAnguloGiro();
-	logicaDifusa();
+
+	//borrar
+	
+	
 	//ActualizarRaytest();
 	
 }

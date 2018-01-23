@@ -239,7 +239,7 @@ void Server::ReceivePackets()
 			break;
 
 		case ID_PLAYER_MOVE:
-			/*bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(posicion[0]);
 			bsIn.Read(posicion[1]);
 			bsIn.Read(posicion[2]);
@@ -247,21 +247,20 @@ void Server::ReceivePackets()
 			bsIn.Read(rotacion[1]);
 			bsIn.Read(rotacion[2]);
 			bsIn.Read(id);
-    		std::cout <<"2 - " << posicion[0] << " - " << rotacion[0] << " . " << id << std::endl;
 			player[id]->setPositionRotation(posicion, rotacion);
 			//*posicion = *networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->getPosition();
 			//networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->setPosition(posicion);
 			typeID = ID_PLAYER_MOVE;
 			bsOut.Write(typeID);
-			bsIn.Write(posicion[0]);
-			bsIn.Write(posicion[1]);
-			bsIn.Write(posicion[2]);
-			bsIn.Write(rotacion[0]);
-			bsIn.Write(rotacion[1]);
-			bsIn.Write(rotacion[2]);
+			bsOut.Write(posicion[0]);
+			bsOut.Write(posicion[1]);
+			bsOut.Write(posicion[2]);
+			bsOut.Write(rotacion[0]);
+			bsOut.Write(rotacion[1]);
+			bsOut.Write(rotacion[2]);
 			bsOut.Write(id);
 
-			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);*/
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 
 			break;
 

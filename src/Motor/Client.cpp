@@ -232,6 +232,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			pos.Z = z;
 			player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
 			player[numPlayers]->getNodo()->setID(id);
+
 			//player[numPlayers]->setPosition(posicion);
 			player[numPlayers]->SetNetworkIDManager(&networkIDManager);
 			player[numPlayers]->SetNetworkID(playerNetworkID);
@@ -253,8 +254,9 @@ int Client::ReceivePackets(ISceneManager *escena)
 				pos2.X = 10;
 				pos2.Y = 20;
 				pos2.Z = 300;
-				player[i] = new Corredor("assets/coche.obj", pos2);
+				player[i] = new CorredorRed("assets/coche.obj", pos2);
 				player[i]->getNodo()->setID(i);
+				player[i]->update();
 				//player[i]->setPosition(posicion);
 				player[i]->SetNetworkIDManager(&networkIDManager);
 				player[i]->SetNetworkID(playerNetworkID);
@@ -262,7 +264,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			}
 			cout << "ahora vamos a crear el suyo: " << endl;
 			pos.X=0;
-			pos.Y = 1;
+			pos.Y = -5;
 			pos.Z = 300;
 			player[i] = new CorredorJugador("assets/coche.obj", pos);
 			player[i]->getNodo()->setID(i);
@@ -302,7 +304,12 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(ori[1]);
 				bsIn.Read(ori[2]);
 				bsIn.Read(id);
-
+				cout << "Jugador "<< id <<": "<< pos[0] <<" - "<< pos[1] <<" - "<< pos[2] <<" - "<< endl;
+				float prevY = player[id]->getNodo()->getPosition().Y;
+				float dif = pos[1]-prevY;
+				if (dif>-0.5 && dif<0.5){
+					pos[1]=prevY;
+				}
 				//posicion = networkIDManager.GET_OBJECT_FROM_ID<PlayerClient *>(playerNetworkID)->getPosition();
 				
 				player[id]->setPosicion(pos, ori);

@@ -169,6 +169,13 @@ int main(int argc, char* argv[])
 			pj[controlPlayer]->update();
 			//pj[1]->update();
 
+			if (jugadores->getNumJugadores() != 0)
+				for (int i=0;i<jugadores->getNumJugadores();i++){
+					if (i!=controlPlayer){
+						pj[i]->update();
+					}
+				}
+
 			textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 			if (jugadores->getNumJugadores() != 0)
 			textoDebug->agregar(pj[controlPlayer]->toString());
@@ -176,6 +183,8 @@ int main(int argc, char* argv[])
 			if (jugadores->getNumJugadores() != 0)
 				client->PlayerMovement();
 		}
+
+		
 		if(teclado->isKeyDown(KEY_KEY_R)){
 			btVector3 btPos(pos.X, pos.Y, pos.Z);
 

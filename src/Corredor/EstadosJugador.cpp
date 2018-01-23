@@ -80,11 +80,47 @@ void EstadosJugador::update(){
 void EstadosJugador::setEstadoMovimiento(estado_movimiento estado_mov){
     estado=estado_mov;
 }
+void EstadosJugador::setEstadoMovimiento(int estado_mov){
+    switch (estado_mov){
+
+        case 0:
+        estado = QUIETO;
+		break;
+		case 1:
+        estado = AVANZA;
+		break;
+		case 2:
+        estado = MARCHA_ATRAS;
+		break;
+		case 3:
+        estado = FRENA;
+		break;
+		case 4:
+        estado = DERRAPA;
+		break;
+
+	}
+}
 estado_movimiento EstadosJugador::getEstadoMovimiento(){
     return estado;
 }
 void EstadosJugador::setDireccionMovimiento(direccion_movimiento direccion_mov){
     direccion=direccion_mov;
+}
+void EstadosJugador::setDireccionMovimiento(int direccion_mov){
+    switch (direccion_mov){
+
+        case 0:
+        direccion = RECTO;
+		break;
+		case 1:
+        direccion = IZQUIERDA;
+		break;
+		case 2:
+        direccion = DERECHA;
+		break;
+
+	}
 }
 direccion_movimiento EstadosJugador::getDireccionMovimiento(){
     return direccion;
@@ -92,9 +128,54 @@ direccion_movimiento EstadosJugador::getDireccionMovimiento(){
 void EstadosJugador::setEstadoObjeto(estado_objeto estado_obj){
     objeto=estado_obj;
 }
+void EstadosJugador::setEstadoObjeto(int estado_obj){
+    switch (estado_obj){
+
+        case 0:
+        objeto = NADA;
+		break;
+		case 1:
+        objeto = FLECHA;
+		break;
+		case 2:
+        objeto = CAJA_FALSA;
+		break;
+		case 3:
+        objeto = TURBO;
+		break;
+		case 4:
+        objeto = ACEITE;
+		break;
+		case 5:
+        objeto = ESCUDO;
+		break;
+		case 6:
+        objeto = FLECHA_TRIPLE;
+		break;
+
+	}
+}
 estado_objeto EstadosJugador::getEstadoObjeto(){
     return objeto;
 }
  void EstadosJugador::setEstadoCoche(estado_coche coche){
     estadoCoche=coche;
+}
+ void EstadosJugador::setEstadoCoche(int coche){
+    switch (coche){
+
+        case 0:
+        estadoCoche = POR_DEFECTO;
+		break;
+		case 1:
+        estadoCoche = CON_TURBO;
+		break;
+		case 2:
+        estadoCoche = CON_ESCUDO;
+		break;
+
+	}
+}
+estado_coche EstadosJugador::getEstadoCoche(){
+    return estadoCoche;
 }

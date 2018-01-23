@@ -1,4 +1,5 @@
 #include "Corredor.hpp"
+#include "EstadosJugador.hpp"
 
 using namespace irr;
 using namespace core;
@@ -13,9 +14,10 @@ private:
 
 public:
   CorredorRed(stringw rutaObj, vector3df pos);
-  void acelerar();
-  void frenar();
-  void girarA();
-  void girarB();
+  void update();
+  void acelerarRed();
+  void frenarRed();
+  void girarDRed();
+  void girarIRed();
 
 };

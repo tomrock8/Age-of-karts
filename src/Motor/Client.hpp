@@ -41,6 +41,7 @@ class Client
     void ClientStartup();
     void ShutDownClient();
     void PlayerMovement();
+    void PlayerAction();
     int ReceivePackets(ISceneManager *escena);
     void SpawnPlayer(ISceneManager *escena);
 

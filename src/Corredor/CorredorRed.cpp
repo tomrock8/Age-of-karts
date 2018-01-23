@@ -6,17 +6,21 @@ CorredorRed::CorredorRed(stringw rutaObj, vector3df pos) : Corredor(rutaObj, pos
 
 }
 
-void CorredorRed::acelerar(){
-
+void CorredorRed::update(){
+    
 }
 
-void CorredorRed::frenar(){
-
-}
-void CorredorRed::girarA(){
-
+void CorredorRed::acelerarRed(){
+	acelerar();
 }
 
-void CorredorRed::girarB(){
+void CorredorRed::frenarRed(){
+    frenar();
+}
+void CorredorRed::girarDRed(){
+    girarDerecha();
+}
 
+void CorredorRed::girarIRed(){
+    girarIzquierda();
 }

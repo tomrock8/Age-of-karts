@@ -155,6 +155,10 @@ void Corredor::setPosicion(float *pos, float *ori){
 
 }
 
+EstadosJugador *Corredor::getEstados(){
+	return estado;
+}
+
 void Corredor::BorrarFisicas()
 {
 }

@@ -73,6 +73,7 @@ class Corredor: public RakNet::NetworkIDObject
 	bool getTurbo();
 	Waypoint *getWaypointActual();
 	bool getProteccion();
+	EstadosJugador *getEstados();
 
 
 	// Destructor

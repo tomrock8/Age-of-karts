@@ -27,12 +27,17 @@ class EstadosJugador
   EstadosJugador();
   void update();
   void setEstadoMovimiento(estado_movimiento estado_mov);
+  void setEstadoMovimiento(int estado_mov);
   estado_movimiento getEstadoMovimiento();
   void setDireccionMovimiento(direccion_movimiento direccion_mov);
+  void setDireccionMovimiento(int direccion_mov);
   direccion_movimiento getDireccionMovimiento();
   void setEstadoObjeto(estado_objeto estado_obj);
-  void setEstadoCoche(estado_coche coche);
+  void setEstadoObjeto(int estado_obj);
   estado_objeto getEstadoObjeto();
+  void setEstadoCoche(estado_coche coche);
+  void setEstadoCoche(int coche);
+  estado_coche getEstadoCoche();
 };
 
 #endif 

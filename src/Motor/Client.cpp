@@ -150,6 +150,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 		vector3df pos2;
 		vector3df pos;
 		float x,y,z;
+		int id;
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -295,7 +296,6 @@ int Client::ReceivePackets(ISceneManager *escena)
 			{
 				float *pos = new float[3];
 				float *ori = new float[3];
-				int id;
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(pos[0]);
 				bsIn.Read(pos[1]);
@@ -315,6 +315,27 @@ int Client::ReceivePackets(ISceneManager *escena)
 				player[id]->setPosicion(pos, ori);
 
 				//networkIDManager.GET_OBJECT_FROM_ID<PlayerClient *>(playerNetworkID)->setPosition(posicion);
+			}
+
+			break;
+
+		case ID_PLAYER_STATE:
+			if (netLoaded)
+			{
+				int estado1, estado2, estado3, estado4;
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(estado1);
+				bsIn.Read(estado2);
+				bsIn.Read(estado3);
+				bsIn.Read(estado4);
+				bsIn.Read(id);
+				
+				EstadosJugador *estados = player[id]->getEstados();
+
+				estados->setEstadoMovimiento(estado1);
+				estados->setDireccionMovimiento(estado2);
+				estados->setEstadoObjeto(estado3);
+				estados->setEstadoCoche(estado4);
 			}
 
 			break;
@@ -431,6 +452,25 @@ void Client::SpawnPlayer(ISceneManager *escena)
 
 int Client::getControlPlayer(){
 	return controlPlayer;
+}
+
+void Client::PlayerAction(){
+	int estado1 = player[controlPlayer]->getEstados()->getEstadoMovimiento();
+	int estado2 = player[controlPlayer]->getEstados()->getDireccionMovimiento();
+	int estado3 = player[controlPlayer]->getEstados()->getEstadoObjeto();
+	int estado4 = player[controlPlayer]->getEstados()->getEstadoCoche();
+	typeID = ID_PLAYER_STATE;
+	RakNet::BitStream bsOut;
+
+	bsOut.Write(typeID);
+	bsOut.Write(estado1);
+	bsOut.Write(estado2);
+	bsOut.Write(estado3);
+	bsOut.Write(estado4);
+	bsOut.Write(controlPlayer);
+	
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
 }
 
 void Client::PlayerMovement(){

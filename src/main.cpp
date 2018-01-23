@@ -1,6 +1,8 @@
 #include "Motor3d.hpp"
 #include "EscenaJuego.hpp"
 
+#include "Corredor.hpp"
+
 #ifdef _MSC_VER
 #pragma comment(lib, "Irrlicht.lib")
 #endif
@@ -13,6 +15,7 @@ int main(int argc, char* argv[]) {
 	//	GAME LOOP
 	// -----------------------------//
 	Motor3d *m = Motor3d::getInstancia();
+
 	while (m->getDevice()->run()) {
 		juego->update();
 	}

@@ -34,7 +34,6 @@ void EscenaJuego::init() {
 
 	CTeclado *teclado = CTeclado::getInstancia();
 
-	Client *client = NULL;
 	if (argc == 2) {
 		client = new Client(4);
 		client->CreateClientInterface();
@@ -136,6 +135,8 @@ void EscenaJuego::dibujar() {
 }
 
 void EscenaJuego::limpiar() {
+	Motor3d *m = Motor3d::getInstancia();
+	m->getScene()->clear();
 }
 
 void EscenaJuego::update() {

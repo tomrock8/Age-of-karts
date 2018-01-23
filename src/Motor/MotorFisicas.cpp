@@ -16,7 +16,7 @@ MotorFisicas::MotorFisicas()
 	mundo = new btDiscreteDynamicsWorld(dispatcher, broadPhase, solver, confColision); //creacion del mundo
 //	fisicasMapa = new btBulletWorldImporter(mundo);
 //	fisicasMapa->loadFile("assets/Mapa01/FisicasMapaIsla.bullet"); //no recoge bien el const char con la ruta del fichero si se le pasas por parametro
-	
+
 }
 
 MotorFisicas::~MotorFisicas() {

@@ -3,6 +3,19 @@
 
 #include "Escena.hpp"
 
+#include "Motor3d.hpp"
+#include "MotorFisicas.hpp"
+#include "DebugFisicas.hpp"
+#include "Camara3persona.hpp"
+#include "Client.hpp"
+
+#include "Pista.hpp"
+#include "GestorJugadores.hpp"
+#include "GestorColisiones.hpp"
+
+
+
+
 class EscenaJuego : public Escena {
 public:
 	EscenaJuego(tipo_escena tipo);
@@ -19,8 +32,22 @@ public:
 	// METODOS SET
 
 private:
+	void comprobarInputs();
+	void UpdatePhysics(u32 TDeltaTime);
+	void UpdateRender(btRigidBody *TObject);
 
+	int argc;
+	int debug;
 
+	Camara3persona *camara;
+	GestorColisiones *colisiones;
+
+	int lastFPS;
+	u32 TimeStamp;
+	u32 DeltaTime;
+
+	Client *client;
+	vector3df pos;
 };
 
 #endif /* ESCENAJUEGO_H */

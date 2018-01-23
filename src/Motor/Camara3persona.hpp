@@ -12,8 +12,8 @@ class Camara3persona
 public:
   Camara3persona();
   ~Camara3persona();
-  void moveCameraControl(Corredor *pj1, IrrlichtDevice *device);
-  void moveCameraControlPointer(Corredor *pj1, IrrlichtDevice *device);
+  void moveCameraControl(Corredor *pj1);
+  void moveCameraControlPointer(Corredor *pj1);
 
 private:
   float direction;

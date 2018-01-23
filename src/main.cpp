@@ -31,19 +31,15 @@ using namespace std;
 #pragma comment(lib, "Irrlicht.lib")
 #endif
 
-#define TAMANYOCAJAS 10
 
 //funciones
 static void UpdatePhysics(u32 TDeltaTime);
 static void UpdateRender(btRigidBody *TObject);
 
 
-static core::list<btRigidBody *> objetosm;
-static ITimer *irrTimer;
-static ILogger *irrLog;
+int main(int argc, char* argv[]) {
+	int debug = 0;
 
-int main(int argc, char* argv[])
-{
 	CTeclado *teclado = CTeclado::getInstancia();
 
 	Client *client = NULL;
@@ -58,74 +54,70 @@ int main(int argc, char* argv[])
 	//  PREPARAR LA VENTANA
 	// -----------------------------
 	Motor3d *m = Motor3d::getInstancia();
-
 	IVideoDriver *driver = m->getDriver();
 	ISceneManager *smgr = m->getScene();
-	IGUIEnvironment *guienv = m->getGUI();
 	IrrlichtDevice *device = m->getDevice();
-	irrTimer = device->getTimer();
 
-
-
-	int debug = 0;
-
-	//----------------------------//
-	//---------BULLET-------------//
-	//----------------------------//
-	//inicializar mundo bullet
+	//----------------------------
+	//	BULLET
+	//----------------------------
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	mundo->setGravity(btVector3(0, -25, 0));
-	//----------------------------//
-	//--------Debug Bullet--------//
-	//----------------------------//
+
+	//----------------------------
+	//	Debug Bullet
+	//----------------------------
 	DebugDraw debugDraw(device);
 	debugDraw.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	mundo->setDebugDrawer(&debugDraw);
-	//-----------------------------//
-	//-----ESCENARIO MAPA----------//
-	//-----------------------------//
+
+	//-----------------------------
+	//	ESCENARIO MAPA
+	//-----------------------------
 	Pista *pistaca = Pista::getInstancia();
 	pistaca->setMapa("assets/Mapa01/mapaIsla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/WPTrbBox2.obj");
 	pistaca->getArrayWaypoints();
-	//-----------------------------//
-	//-----GEOMETRIA COCHE---------//
-	//-----------------------------//
-	//Posicion del nodo y el bloque de colisiones centralizado:
 
+	//-----------------------------
+	//	JUGADORES
+	//-----------------------------
+	//Posicion del nodo y el bloque de colisiones centralizado:
 	vector3df pos(0, 1, 300);
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
+
 	if (argc != 2) {
 		pj[0] = new CorredorJugador("assets/coche.obj", pos);
 		jugadores->aumentarJugadores();
 	}
 
 	jugadores->setJugadores(pj);
-	//pj[1]->getNodo()->setID(id);
 
 
-	//-----------------------------//
-	//-------------CAMARA----------//
-	//-----------------------------//
+	//-----------------------------
+	//	CAMARA
+	//-----------------------------
 	Camara3persona *camara = new Camara3persona();
-	//-----------------------------//
-	//------GESTOR COLISIONES------//
-	//-----------------------------//
 
+	//-----------------------------
+	//	GESTOR COLISIONES
+	//-----------------------------
 	GestorColisiones *colisiones = new GestorColisiones();
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
-	//-----------------------------//
-	//------------TIME-------------//
-	//-----------------------------//
+
+	//-----------------------------
+	//	TIME
+	//-----------------------------
 	int lastFPS = -1;
-	u32 TimeStamp = irrTimer->getTime(), DeltaTime = 0;
+	u32 TimeStamp = m->getDevice()->getTimer()->getTime();
+	u32 DeltaTime = 0;
+
 
 	// -----------------------------//
-	// ----------GAME LOOP----------//
+	//	GAME LOOP
 	// -----------------------------//
-	while (m->getDevice()->run())
-	{
+	while (m->getDevice()->run()) {
 
 		if (argc == 2) {
 			client->ReceivePackets(smgr);
@@ -134,8 +126,8 @@ int main(int argc, char* argv[])
 		//cout << irrTimer->getTime() << endl;
 		textoDebug->limpiar();
 
-		DeltaTime = irrTimer->getTime() - TimeStamp;
-		TimeStamp = irrTimer->getTime();
+		DeltaTime = m->getDevice()->getTimer()->getTime() - TimeStamp;
+		TimeStamp = m->getDevice()->getTimer()->getTime();
 		UpdatePhysics(DeltaTime);
 
 		for (int i = 0; i < pistaca->getTamCajas(); i++)
@@ -146,7 +138,7 @@ int main(int argc, char* argv[])
 		pj = jugadores->getJugadores();
 		if (argc != 2) {
 			pj[0]->actualizarItem();
-			camara->moveCameraControl(pj[0], device);
+			camara->moveCameraControl(pj[0]);
 			colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 			pj[0]->update();
 			textoDebug->agregar(pj[0]->toString());
@@ -157,7 +149,7 @@ int main(int argc, char* argv[])
 				pj[controlPlayer]->actualizarItem();
 
 			if (jugadores->getNumJugadores() != 0)
-				camara->moveCameraControl(pj[controlPlayer], device);
+				camara->moveCameraControl(pj[controlPlayer]);
 			colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 			//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
@@ -172,6 +164,9 @@ int main(int argc, char* argv[])
 			if (jugadores->getNumJugadores() != 0)
 				client->PlayerMovement();
 		}
+
+
+		//------- ENTRADA TECLADO ----------
 		if (teclado->isKeyDown(KEY_KEY_R)) {
 			btVector3 btPos(pos.X, pos.Y, pos.Z);
 
@@ -197,40 +192,29 @@ int main(int argc, char* argv[])
 			pj[0]->setPosicion(resetPos, resetOri);
 		}
 
-		jugadores->setJugadores(pj);
-
-		//textoDebug->agregar("\n\n ---- CORREDOR 2 IA ----\n");
-		//textoDebug->agregar(pj2->toString());
-
-		//-------ENTRADA TECLADO ----------//
-		/*
-		if (teclado->isKeyDown(KEY_KEY_R))
-		{
-			pj2->movimiento();
-		}
-		*/
-
-		if (teclado->isKeyDown(KEY_ESCAPE))
-		{
+		if (teclado->isKeyDown(KEY_ESCAPE)) {
 			if (argc == 2)
 				client->ShutDownClient();
 			m->cerrar();
 			return 0;
 		}
 
-		if (teclado->isKeyDown(KEY_KEY_0))
-		{
+		if (teclado->isKeyDown(KEY_KEY_0)) {
 			debug = 0;
 		}
-		if (teclado->isKeyDown(KEY_KEY_9))
-		{
-			debug = 1;
+		else {
+			if (teclado->isKeyDown(KEY_KEY_9)) {
+				debug = 1;
+			}
 		}
 
 		//-------ENTRADA TECLADO FIN----------//
+
+
+		jugadores->setJugadores(pj);
+
 		int fps = driver->getFPS();
-		if (lastFPS != fps)
-		{
+		if (lastFPS != fps) {
 			core::stringw tmp(L"Age of karts [");
 			tmp += driver->getName();
 			tmp += L"] fps: ";
@@ -239,7 +223,9 @@ int main(int argc, char* argv[])
 			m->getDevice()->setWindowCaption(tmp.c_str());
 			lastFPS = fps;
 		}
-		//	RENDER
+
+
+		//------- RENDER ----------
 		m->dibujar();
 		//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
 		SMaterial materialDriver;
@@ -256,7 +242,7 @@ int main(int argc, char* argv[])
 			driver->setTransform(ETS_WORLD, IdentityMatrix);
 			mundo->debugDrawWorld();
 		}
-		guienv->drawAll();
+		m->getGUI()->drawAll();
 		// draw gui
 		driver->endScene();
 
@@ -278,8 +264,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void UpdatePhysics(u32 TDeltaTime)
-{
+void UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
@@ -293,8 +278,7 @@ void UpdatePhysics(u32 TDeltaTime)
 	}
 }
 // Passes bullet's orientation to irrlicht
-void UpdateRender(btRigidBody *TObject)
-{
+void UpdateRender(btRigidBody *TObject) {
 	Motor3d *m = Motor3d::getInstancia();
 	IMeshSceneNode *Node = static_cast<IMeshSceneNode *>(TObject->getUserPointer());
 	// Set position

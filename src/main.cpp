@@ -25,6 +25,9 @@
 #include "TextoPantalla.hpp"
 #include "Client.hpp"
 
+#include "Escena.hpp"
+#include "EscenaJuego.hpp"
+
 using namespace std;
 
 #ifdef _MSC_VER
@@ -38,6 +41,10 @@ static void UpdateRender(btRigidBody *TObject);
 
 
 int main(int argc, char* argv[]) {
+	EscenaJuego *juego = new EscenaJuego(Escena::tipo_escena::CARRERA);
+	juego->init();
+
+	/*
 	int debug = 0;
 
 	CTeclado *teclado = CTeclado::getInstancia();
@@ -112,13 +119,15 @@ int main(int argc, char* argv[]) {
 	int lastFPS = -1;
 	u32 TimeStamp = m->getDevice()->getTimer()->getTime();
 	u32 DeltaTime = 0;
-
+	*/
 
 	// -----------------------------//
 	//	GAME LOOP
 	// -----------------------------//
+	Motor3d *m = Motor3d::getInstancia();
 	while (m->getDevice()->run()) {
-
+		juego->update();
+		/*
 		if (argc == 2) {
 			client->ReceivePackets(smgr);
 			//client->SpawnPlayer(smgr);
@@ -223,8 +232,9 @@ int main(int argc, char* argv[]) {
 			m->getDevice()->setWindowCaption(tmp.c_str());
 			lastFPS = fps;
 		}
+		*/
 
-
+		/*
 		//------- RENDER ----------
 		m->dibujar();
 		//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
@@ -245,8 +255,10 @@ int main(int argc, char* argv[]) {
 		m->getGUI()->drawAll();
 		// draw gui
 		driver->endScene();
-
+		*/
 	}
+
+	/*
 	//----------------------------------//
 	//-----------DESTRUCTORES-----------//
 	//----------------------------------//
@@ -260,7 +272,8 @@ int main(int argc, char* argv[]) {
 	//delete camara;
 	//delete colisiones;
 	delete m;
-
+	*/
+	delete juego;
 	return 0;
 }
 

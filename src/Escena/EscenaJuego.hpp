@@ -39,6 +39,8 @@ private:
 	int argc;
 	int debug;
 
+	DebugDraw *debugDraw;
+
 	Camara3persona *camara;
 	GestorColisiones *colisiones;
 

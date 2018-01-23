@@ -1,3 +1,5 @@
+#ifndef CLIENT_H
+#define CLIENT_H
 
 #include <iostream>
 //#include "CorredorRed.hpp"
@@ -7,44 +9,47 @@
 
 #define MAX_PLAYERS 10
 
-class Client
-{
-  private:
-    int numSockets;
-    int numIPs;
-    int maxPlayers;
-    bool netLoaded;
-    unsigned char packetIdentifier;
+class Client {
 
-    RakNet::SocketDescriptor socketDescriptor;
-    RakNet::NetworkIDManager networkIDManager;
-    RakNet::NetworkID playerNetworkID;
-    RakNet::MessageID typeID;
-    RakNet::Packet *p;
-    RakNet::RakPeerInterface *client;
+public:
+	Client(int = 10);
+	void CreateClientInterface();
+	void SetIP();
+	void ClientStartup();
+	void ShutDownClient();
+	void PlayerMovement();
+	int ReceivePackets(ISceneManager *escena);
+	void SpawnPlayer(ISceneManager *escena);
 
-    std::string serverPort;
-    std::string clientPort;
-    std::string serverIP;
+	int getControlPlayer();
+	//void UpdateNetworkKeyboard(CTeclado *teclado);
 
-    Corredor **player;
-    int controlPlayer;
-    int numPlayers;
-    bool spawned;
 
-    unsigned char GetPacketIdentifier(RakNet::Packet *p);
+private:
+	int numSockets;
+	int numIPs;
+	int maxPlayers;
+	bool netLoaded;
+	unsigned char packetIdentifier;
 
-  public:
-    Client(int = 10);
-    void CreateClientInterface();
-    void SetIP();
-    void ClientStartup();
-    void ShutDownClient();
-    void PlayerMovement();
-    int ReceivePackets(ISceneManager *escena);
-    void SpawnPlayer(ISceneManager *escena);
+	RakNet::SocketDescriptor socketDescriptor;
+	RakNet::NetworkIDManager networkIDManager;
+	RakNet::NetworkID playerNetworkID;
+	RakNet::MessageID typeID;
+	RakNet::Packet *p;
+	RakNet::RakPeerInterface *client;
 
-    int getControlPlayer();
-    //void UpdateNetworkKeyboard(CTeclado *teclado);
+	std::string serverPort;
+	std::string clientPort;
+	std::string serverIP;
+
+	Corredor **player;
+	int controlPlayer;
+	int numPlayers;
+	bool spawned;
+
+	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 
 };
+
+#endif /* CLIENT_H */

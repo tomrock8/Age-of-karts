@@ -61,9 +61,9 @@ void EscenaJuego::init() {
 	//----------------------------
 	//	Debug Bullet
 	//----------------------------
-	DebugDraw debugDraw(device);
-	debugDraw.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-	mundo->setDebugDrawer(&debugDraw);
+	debugDraw = new DebugDraw(device);
+	debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+	mundo->setDebugDrawer(debugDraw);
 
 	//-----------------------------
 	//	ESCENARIO MAPA
@@ -95,7 +95,7 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	GESTOR COLISIONES
 	//-----------------------------
-	GestorColisiones *colisiones = new GestorColisiones();
+	colisiones = new GestorColisiones();
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 
 	//-----------------------------
@@ -271,10 +271,8 @@ void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	mundo->stepSimulation(TDeltaTime * 0.001f, 60);
 	int c = 0;
-	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator)
-	{
+	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
 		c++;
-
 		UpdateRender(*Iterator);
 	}
 }

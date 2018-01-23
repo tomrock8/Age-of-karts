@@ -4,7 +4,7 @@ GestorIDs *GestorIDs::instancia = new GestorIDs();
 
 GestorIDs::GestorIDs(){
     //nodoA= new ISceneNode();
-    id = 0;
+    id = 6;
 }
 
 void GestorIDs::setIdentifier(ISceneNode *nodo, const char *nombre){

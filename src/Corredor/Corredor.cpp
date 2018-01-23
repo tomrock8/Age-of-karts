@@ -30,6 +30,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	}
 
 	estado = new EstadosJugador();
+	vueltas = 1;
 
 	posicion.setX(pos.X);
 	posicion.setY(pos.Y);
@@ -346,6 +347,14 @@ void Corredor::calculoDistanciaPunto() {
 	texto->agregar("DISTANCIA: ");
 	texto->agregar(to_string(distanciaWaypoint)+"\n");
 
+	texto->agregar("WAYPOINT ACTUAL: ");
+	texto->agregar(to_string( actual->getWaypoint()->getID()-6)+"\n");
+	texto->agregar("WAYPOINT SIGUIENTE: ");
+	texto->agregar(to_string( siguiente->getWaypoint()->getID()-6)+"\n");
+	texto->agregar("VUELTAS: ");
+	texto->agregar(to_string(vueltas)+"\n");
+	
+
 }
 
 void Corredor::calculoDistanciaPuntoActual() {
@@ -392,21 +401,23 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	
 	if(nodo->getID() != actual->getWaypoint()->getID()){
 		if(nodo->getID() != siguiente->getWaypoint()->getID()){
-			cout<<"TE HAS SALTADO EL WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
+			//cout<<"TE HAS SALTADO EL WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
 		}else{
-			if (siguiente->getWaypoint()->getID()==0){
-				cout<<"--------------PRIMERA VUELTA SUPERADA-------------: "<<endl;
+			if (siguiente->getWaypoint()->getID()-6==0){
+				vueltas++;
+				//cout<<"--------------"<<vueltas<<" VUELTA SUPERADA-------------: "<<endl;
+
 			}
 			actual = actual->getNextWaypoint();
 			siguiente = actual->getNextWaypoint();
-			
+		
 
 			
-			cout<<"HAS PASADO POR EL WAYPOINT: "<<actual->getWaypoint()->getID()<<" SIGUIENTE WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
+			//cout<<"HAS PASADO POR EL WAYPOINT: "<<actual->getWaypoint()->getID()<<" SIGUIENTE WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
 		}
 		
 	}else{
-		cout<<"ESTAS EN EL WAYPOINTACTUAL: "<<actual->getWaypoint()->getID()<<endl;
+		//cout<<"ESTAS EN EL WAYPOINTACTUAL: "<<actual->getWaypoint()->getID()<<endl;
 	}
 
 	//cout<< "NODO ACTUAL:"<< actual->getWaypoint()->getID() <<endl;

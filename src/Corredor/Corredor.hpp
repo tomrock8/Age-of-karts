@@ -91,6 +91,7 @@ protected:
 	//WAYPOINTS
 	Waypoint *actual; // Punto Actual
 	Waypoint *siguiente; // Punto Siguiente
+	int vueltas;
 
 	// parametros IA
 	btScalar anguloGiro;
@@ -141,7 +142,7 @@ protected:
 	bool norte, sur, este, oeste;
 	float direccionGrados;
 	vector3df orientacion;
-
+	
 	void CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning);
 	void BorrarFisicas();
 

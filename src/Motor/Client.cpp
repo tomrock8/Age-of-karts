@@ -149,7 +149,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 		vector3df posicion;
 		vector3df pos2;
 		vector3df pos;
-		int x,y,z;
+		float x,y,z;
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -219,18 +219,19 @@ int Client::ReceivePackets(ISceneManager *escena)
 
 		case ID_SPAWN_PLAYER:
 			cout <<"ID_SPAWN_PLAYER\n";
+			int id;
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(x);
 			bsIn.Read(y);
 			bsIn.Read(z);
-			std::cout << x << " + " << z << std::endl;
+			bsIn.Read(id);
 			bsIn.Read(playerNetworkID);
-			std::cout << "Creando jugador: " << numPlayers << std::endl; 
+			std::cout << "Creando jugador en pos: " << x <<" - "<< y <<" - "<< z <<" - "<< std::endl; 
 			pos.X = x;
 			pos.Y = y;
 			pos.Z = z;
 			player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
-			player[numPlayers]->getNodo()->setID(999+numPlayers);
+			player[numPlayers]->getNodo()->setID(id);
 			//player[numPlayers]->setPosition(posicion);
 			player[numPlayers]->SetNetworkIDManager(&networkIDManager);
 			player[numPlayers]->SetNetworkID(playerNetworkID);
@@ -253,7 +254,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 				pos2.Y = 20;
 				pos2.Z = 300;
 				player[i] = new Corredor("assets/coche.obj", pos2);
-				player[i]->getNodo()->setID(999+i);
+				player[i]->getNodo()->setID(i);
 				//player[i]->setPosition(posicion);
 				player[i]->SetNetworkIDManager(&networkIDManager);
 				player[i]->SetNetworkID(playerNetworkID);
@@ -264,7 +265,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			pos.Y = 1;
 			pos.Z = 300;
 			player[i] = new CorredorJugador("assets/coche.obj", pos);
-			player[i]->getNodo()->setID(999+i);
+			player[i]->getNodo()->setID(i);
 			typeID = ID_SPAWN_PLAYER;
 			player[numPlayers]->SetNetworkIDManager(&networkIDManager);
 			playerNetworkID = player[numPlayers]->GetNetworkID();

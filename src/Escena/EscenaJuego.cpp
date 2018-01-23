@@ -303,4 +303,3 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	Node->setRotation(Euler);
 
 }
-

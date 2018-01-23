@@ -304,7 +304,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(ori[1]);
 				bsIn.Read(ori[2]);
 				bsIn.Read(id);
-				cout << "Jugador "<< id <<": "<< pos[0] <<" - "<< pos[1] <<" - "<< pos[2] <<" - "<< endl;
+				//cout << "Jugador "<< id <<": "<< pos[0] <<" - "<< pos[1] <<" - "<< pos[2] <<" - "<< endl;
 				float prevY = player[id]->getNodo()->getPosition().Y;
 				float dif = pos[1]-prevY;
 				if (dif>-0.5 && dif<0.5){
@@ -434,12 +434,12 @@ int Client::getControlPlayer(){
 }
 
 void Client::PlayerMovement(){
-	vector3df position = player[controlPlayer]->getNodo()->getPosition();
+	btVector3 position = player[controlPlayer]->getRigidBody()->getCenterOfMassPosition();
 	float *pos = new float[3];
 
-	pos[0] = position.X;
-	pos[1] = position.Y;
-	pos[2] = position.Z;
+	pos[0] = position.getX();
+	pos[1] = position.getY();
+	pos[2] = position.getZ();
 
 	float *ori = new float[3];
 

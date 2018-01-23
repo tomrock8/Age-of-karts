@@ -128,6 +128,11 @@ int main(int argc, char* argv[])
 	// -----------------------------//
 	// ----------GAME LOOP----------//
 	// -----------------------------//
+
+	//Tiempo
+		Timer *tiempo = Timer::getInstancia();
+		int tiempoRefresco = tiempo->getTimer();
+
 	driver->beginScene(true, true, video::SColor(255, 32, 223, 255));
 	while (m->getDevice()->run())
 	{

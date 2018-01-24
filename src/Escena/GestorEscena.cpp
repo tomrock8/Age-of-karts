@@ -3,13 +3,15 @@
 GestorEscena GestorEscena::_instancia;
 
 GestorEscena::GestorEscena() {
-	cambioEscena = true;
-}
+	cambioEscena = true; // Indicador que tiene que cambiar de escena
+	nEscenas = 6; // Numero total de escenas posibles (una de cada tipo)
+	escenas = new Escena*[nEscenas]; // Array que contendra todas las escenas posibles
 
-/*
-GestorEscena::~GestorEscena() {
+	// Inicializamos todas las posibles escenas a null
+	for (int i = 0; i < nEscenas; i++) {
+		escenas[i] = nullptr;
+	}
 }
-*/
 
 void GestorEscena::update() {
 	escenaActiva->update();
@@ -85,15 +87,63 @@ GestorEscena& GestorEscena::instancia() {
 	return _instancia;
 }
 
+Escena **GestorEscena::getEscenas() {
+	return escenas;
+}
 
 Escena *GestorEscena::getEscena(Escena::tipo_escena escena) {
+	if (escenas) {
+		for (int i = 0; i < nEscenas; i++) {
+			if (escenas[i]) {
+				if (escenas[i]->getTipoEscena() == escena) {
+					return escenas[i];
+				}
+			}
+		}
+	}
 	return nullptr;
 }
 
 bool GestorEscena::agregaEscena(Escena *escena) {
-	return false;
+	Escena::tipo_escena tipo = escena->getTipoEscena(); // Tipo de escena en la que trabajamos
+	// Escena para comprobar si existe ya una escena de ese tipo
+	if (getEscena(tipo)) { // Ya existe una escena del tipo
+		cout << "Ya hay una escena creada de ese tipo y va a ser borrada";
+		// Borramos escena ya existente
+		borraEscena(tipo);	// Se borra la escena ya existente
+	}
+	
+	// Buscar el indice donde se va a guardar la escena en el array
+	for (int i = 0; i < nEscenas; i++) {
+		if (!escenas[i]) { // La posicion del array esta vacia
+			escenas[i] = escena; // Asignamos al array de escenas el puntero de la nueva escena
+			return true; // La escena ha sido agregada al array y termina el proceso correctamente
+		}
+	}
+
+	return false; // No ha encontrado una posicion donde guardar la escena y termina el proceso
 }
 
-void GestorEscena::comprobarInputs() {
+bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
+	if (!getEscena(tipo)) // Comprobamos que exista la escena en el array
+		return false; // No existe la escena y terminamos
 
+	int indice = indiceEscena(tipo); // Recogemos el indice donde se encuentra el tipo de escena
+	delete escenas[indice]; // Eliminamos la escena que hemos recogido del array
+	escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
+	return true; // Terminamos el proceso correctamente y devolvemos true
+}
+
+int GestorEscena::indiceEscena(Escena::tipo_escena tipo) {
+	for (int i = 0; i < nEscenas; i++) {
+		if (escenas) { // Comprobamos que el array no es null
+			if (escenas[i]) { // Comprobamos que el elemento no es null
+				if (escenas[i]->getTipoEscena() == tipo) { // Comprobamos que es el mismo tipo de escena
+					return i; // Devolvemos el indice donde esta el tipo de escena que buscamos
+				}
+			}
+		}
+	}
+
+	return -1; // La escena no ha sido encontrada y devolvemos -1
 }

@@ -9,6 +9,7 @@
 #endif
 
 int main(int argc, char* argv[]) {
+	/*
 	EscenaJuego *juego = new EscenaJuego(Escena::tipo_escena::CARRERA);
 	juego->init();
 
@@ -22,9 +23,8 @@ int main(int argc, char* argv[]) {
 	}
 
 	delete juego;
-
-	GestorEscena::instancia().getEscena(Escena::tipo_escena::MENU);
-
+	*/
+	Escena *e = GestorEscena::instancia().getEscena(Escena::tipo_escena::CARRERA);
 
 	delete Motor3d::getInstancia();
 	return 0;

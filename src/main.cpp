@@ -185,9 +185,16 @@ int main(int argc, char* argv[])
 			if (jugadores->getNumJugadores() != 0)
 			textoDebug->agregar(pj[controlPlayer]->toString());
 
-			if (jugadores->getNumJugadores() != 0)
+			if (jugadores->getNumJugadores() != 0){
 				client->PlayerAction();
+				if (tiempo->getTimer() - tiempoRefresco >= 1) {
+					//cout << "Se acaba el turbo\n";
+					client->PlayerMovement();
+					tiempoRefresco = tiempo->getTimer();
+				}
+			}
 		}
+
 
 		
 		if(teclado->isKeyDown(KEY_KEY_R)){

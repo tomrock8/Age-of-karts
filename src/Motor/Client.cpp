@@ -42,7 +42,7 @@ void Client::SetIP()
 	std::cout << "Introduce IP del servidor: ";
 	//std::cin >> serverIP;
 	//serverIP = "127.0.0.1";
-	serverIP = "127.0.0.1";
+	serverIP = "192.168.1.10";
 	//puerto de escucha del cliente
 	clientPort = "6003";
 }
@@ -305,11 +305,11 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(ori[2]);
 				bsIn.Read(id);
 				//cout << "Jugador "<< id <<": "<< pos[0] <<" - "<< pos[1] <<" - "<< pos[2] <<" - "<< endl;
-				float prevY = player[id]->getNodo()->getPosition().Y;
+				/*float prevY = player[id]->getNodo()->getPosition().Y;
 				float dif = pos[1]-prevY;
 				if (dif>-0.5 && dif<0.5){
 					pos[1]=prevY;
-				}
+				}*/
 				//posicion = networkIDManager.GET_OBJECT_FROM_ID<PlayerClient *>(playerNetworkID)->getPosition();
 				
 				player[id]->setPosicion(pos, ori);

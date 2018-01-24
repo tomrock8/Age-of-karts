@@ -19,8 +19,8 @@ void CorredorRed::movimiento(){
     EstadosJugador *estados = this->getEstados();
 	int estadoMovimiento = estados->getEstadoMovimiento();
 	int direccionMovimiento = estados->getDireccionMovimiento();
-	cout <<"Estado del jugador: "<<estadoMovimiento<<endl;
-	cout <<"Direccion del jugador: "<<direccionMovimiento<<endl;
+	//cout <<"Estado del jugador: "<<estadoMovimiento<<endl;
+	//cout <<"Direccion del jugador: "<<direccionMovimiento<<endl;
     frenodemano(false);
     switch (estadoMovimiento){
 

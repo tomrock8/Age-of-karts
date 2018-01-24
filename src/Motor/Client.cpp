@@ -232,7 +232,6 @@ int Client::ReceivePackets(ISceneManager *escena)
 			pos.Y = y;
 			pos.Z = z;
 			player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
-			jugadores->aumentarJugadores();
 			player[numPlayers]->getNodo()->setID(id);
 
 			//player[numPlayers]->setPosition(posicion);

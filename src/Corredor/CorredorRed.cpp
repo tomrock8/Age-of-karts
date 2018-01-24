@@ -36,19 +36,21 @@ void CorredorRed::movimiento(){
 		break;
     }
 
-    switch (estados->getEstadoMovimiento()){
+    switch (estados->getDireccionMovimiento()){
 
 		case 0:
 		break;
 		case 1:
         girarIzquierda();
-		comprobadorMovimiento = true;
 		break;
 		case 2:
-        girarDerecha();
-		comprobadorMovimiento = true;      
+        girarDerecha();   
 		break;
     }
+
+    if(!comprobadorMovimiento)
+        desacelerar();
+    
 }
 
 void CorredorRed::acelerarRed(){

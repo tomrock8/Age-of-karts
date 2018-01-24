@@ -187,16 +187,14 @@ int main(int argc, char* argv[])
 			textoDebug->agregar(pj[controlPlayer]->toString());
 
 			if (jugadores->getNumJugadores() != 0){
-				client->PlayerAction();
 				clock_t tiempoActual = clock();
 				clock_t timediff = tiempoActual - tiempoRefresco;
 				float timediff_sec = ((float)timediff) / 100000;
-				//cout << timediff_sec << endl;
-				if (timediff_sec >= 0.02) {
-					//cout << "Se acaba el turbo\n";
-					//client->PlayerMovement();
+				if (timediff_sec >= 0.01) {
+					client->PlayerMovement();
 					tiempoRefresco = clock();
 				}
+				client->PlayerAction();
 			}
 		}
 

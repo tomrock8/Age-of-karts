@@ -42,7 +42,7 @@ void Client::SetIP()
 	std::cout << "Introduce IP del servidor: ";
 	//std::cin >> serverIP;
 	//serverIP = "127.0.0.1";
-	serverIP = "192.168.1.10";
+	serverIP = "192.168.1.8";
 	//puerto de escucha del cliente
 	clientPort = "6003";
 }
@@ -367,13 +367,14 @@ int Client::ReceivePackets(ISceneManager *escena)
 			//delete player[playerDisconnect];
 			for(int i=0; i<numPlayers; i++){	//Recorre todos los players
 				if(playerDisconnect<=i){		//Si se encuentra con playerDisconnect asigna la posicion siguiente a esta
-					//if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
-						//player[i]=player[i+1];
-					//else
-						//player[i]=NULL;
+					if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
+						player[i]=player[i+1];
+					else
+						player[i]=NULL;
 				}
 			}
 			numPlayers--;
+			jugadores->decrementarJugadores();
 			if(controlPlayer>playerDisconnect)	//Si el jugador controlado por este cliente esta por arriba del jugador eliminado se debe reducir
 				controlPlayer--;				//controlPlayer para no cambiar de jugador con la reordenacion del array
 

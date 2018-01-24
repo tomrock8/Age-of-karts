@@ -264,6 +264,27 @@ void Server::ReceivePackets()
 
 			break;
 
+		case ID_PLAYER_STATE:
+			int estado1, estado2, estado3, estado4;
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(estado1);
+			bsIn.Read(estado2);
+			bsIn.Read(estado3);
+			bsIn.Read(estado4);
+			bsIn.Read(id);
+			player[id]->setEstados(estado1, estado2, estado3, estado4);
+
+			typeID = ID_PLAYER_STATE;
+			bsOut.Write(typeID);
+			bsOut.Write(estado1);
+			bsOut.Write(estado2);
+			bsOut.Write(estado3);
+			bsOut.Write(estado4);
+			bsOut.Write(id);
+			
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+			break;
+
 		case ID_PLAYER_DISCONNECT:
 			std::cout << "Borrando player\n";
 			int playerDisconnect;

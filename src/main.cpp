@@ -186,7 +186,7 @@ int main(int argc, char* argv[])
 			textoDebug->agregar(pj[controlPlayer]->toString());
 
 			if (jugadores->getNumJugadores() != 0)
-				client->PlayerMovement();
+				client->PlayerAction();
 		}
 
 		

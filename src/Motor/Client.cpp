@@ -42,7 +42,7 @@ void Client::SetIP()
 	std::cout << "Introduce IP del servidor: ";
 	//std::cin >> serverIP;
 	//serverIP = "127.0.0.1";
-	serverIP = "192.168.1.145";
+	serverIP = "127.0.0.1";
 	//puerto de escucha del cliente
 	clientPort = "6003";
 }

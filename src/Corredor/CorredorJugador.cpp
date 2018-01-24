@@ -180,7 +180,6 @@ void CorredorJugador::actualizarItem()
 			}
 			else if (tipoObj == 7)
 			{
-				cout << "que nmerda" << endl;
 				h->getNodo()->setVisible(true);
 				h->setOrientacion(orientacion);
 				h->setPadre(this->getNodo());

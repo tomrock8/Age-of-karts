@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
 
 	//Tiempo
 		Timer *tiempo = Timer::getInstancia();
-		int tiempoRefresco = tiempo->getTimer();
+		clock_t tiempoRefresco = clock();
 
 	driver->beginScene(true, true, video::SColor(255, 32, 223, 255));
 	while (m->getDevice()->run())
@@ -188,10 +188,14 @@ int main(int argc, char* argv[])
 
 			if (jugadores->getNumJugadores() != 0){
 				client->PlayerAction();
-				if (tiempo->getTimer() - tiempoRefresco >= 1) {
+				clock_t tiempoActual = clock();
+				clock_t timediff = tiempoActual - tiempoRefresco;
+				float timediff_sec = ((float)timediff) / 100000;
+				//cout << timediff_sec << endl;
+				if (timediff_sec >= 0.02) {
 					//cout << "Se acaba el turbo\n";
 					//client->PlayerMovement();
-					tiempoRefresco = tiempo->getTimer();
+					tiempoRefresco = clock();
 				}
 			}
 		}

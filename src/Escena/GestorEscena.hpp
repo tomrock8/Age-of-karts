@@ -10,20 +10,20 @@
 class GestorEscena {
 public:
 
-	~GestorEscena(); // Destructor de la clase
+	//~GestorEscena(); // Destructor de la clase
 
 	void update(); // Actualizacion del gestor de escenas
 	void cambiaEscena(Escena::tipo_escena escena); // Modifica la escena actual
 
 	// METODOS GET
-	static GestorEscena *getInstancia(); // Devuelve la instancia del singleton
+	static GestorEscena& instancia(); // Devuelve la instancia del singleton
 	Escena *getEscena(Escena::tipo_escena escena); // Devuelve la escena con el tipo pedido
 
 	// METODOS SET
 	bool agregaEscena(Escena *escena); // Agrega una escena al gestor
 
 private:
-	static GestorEscena *instancia;  // Instancia de la escena para el singleton
+	static GestorEscena _instancia;  // Instancia de la escena para el singleton
 
 	int nEscenas;		// Numero de escenas maximo que tiene el juego
 	Escena **escenas;	// Array de escenas que tiene el juego

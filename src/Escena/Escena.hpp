@@ -8,7 +8,7 @@ public:
 	typedef enum { MENU, CARRERA, CARGA, LOBBY, OPCIONES, CREDITOS } tipo_escena;
 
 	Escena(tipo_escena tipo);
-	virtual ~Escena() = 0;
+	//virtual ~Escena() = 0;
 
 	// Metodos virtuales a implementar por los hijos
 	virtual void init() = 0;	// Inicializar la escena

@@ -13,35 +13,35 @@ using namespace std;
 class Waypoint
 {
 public:
-  //Constructor
-  Waypoint();
-  //Destructor
-  ~Waypoint();
+	//Constructor
+	Waypoint();
+	//Destructor
+	~Waypoint();
 
 
-void inicializarFisicas();
-  //auxiliares
+	void inicializarFisicas();
+	//auxiliares
 
-  //Update
+	//Update
 
-  //metodos SET
-  void setPosicion(float x, float y, float z);
-  void setSiguiente(Waypoint *siguiente);
-  void setOrientacion(float grados);
+	//metodos SET
+	void setPosicion(float x, float y, float z);
+	void setSiguiente(Waypoint *siguiente);
+	void setOrientacion(float grados);
 
-  //metodos GET
-  IMeshSceneNode *getWaypoint();
-  btVector3 getPosicion();
-  Waypoint *getNextWaypoint();
+	//metodos GET
+	IMeshSceneNode *getWaypoint();
+	btVector3 getPosicion();
+	Waypoint *getNextWaypoint();
 
 private:
-  IMeshSceneNode *waypoint;
-  Waypoint *siguiente; // Siguiente punto
+	IMeshSceneNode * waypoint;
+	Waypoint *siguiente; // Siguiente punto
 
-  //fisicas
-  btDefaultMotionState *MotionState;
-  btCollisionShape *Shape;
-  btRigidBody * rigidBody;
+	//fisicas
+	btDefaultMotionState *MotionState;
+	btCollisionShape *Shape;
+	btRigidBody * rigidBody;
 };
 
 #endif /* WAYPOINT_H */

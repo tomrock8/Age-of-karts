@@ -7,24 +7,23 @@ EscenaJuego::~EscenaJuego() {
 	//----------------------------------//
 	//-----------DESTRUCTORES-----------//
 	//----------------------------------//
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	Corredor **pj = jugadores->getJugadores();
-	for (int i = 0; i < 6; i++) {
-		if (pj[i])
-			delete pj[i];
-	}
-	delete pj;
+	cout << "\n-------------- A BORRAR LA ESCENA DE JUEGO! -------------- \n";
 
-	Pista *pistaca = Pista::getInstancia();
-	delete pistaca;
+	cout << "Voy a entrar en el destructor de bullet. Deseadme suerte...";
+	delete MotorFisicas::getInstancia();
+	cout << "\n";
 
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	delete bullet;
+	cout << "Voy a entrar en el destructor de jugadores. Deseadme suerte...";
+	delete GestorJugadores::getInstancia();
+	cout << "\n";
+
+	cout << "Voy a entrar en el destructor de pista. Deseadme suerte...";
+	delete Pista::getInstancia();
+	cout << "No ha ido mal.\n";
+
+	
 	//delete camara;
 	//delete colisiones;
-
-	Motor3d *m = Motor3d::getInstancia();
-	delete m;
 }
 
 void EscenaJuego::init() {

@@ -50,7 +50,16 @@ GestorJugadores::GestorJugadores(){
 }
 
 GestorJugadores::~GestorJugadores(){
-
+	cout << "\nENTRO DESTRUCTOR DE GESTOR JUGADORES";
+	cout << "\nPoco a poco, que son " << numJugadores << "\n";
+	for (int i = 0; i < numJugadores; i++) {
+		cout << "A por el " << i;
+		if (pj[i]) {
+			delete pj[i];
+		}
+		cout << "! ";
+	}
+	cout << "\nSALGO DESTRUCTOR DE GESTOR JUGADORES";
 }
 
 GestorJugadores *GestorJugadores::getInstancia(){

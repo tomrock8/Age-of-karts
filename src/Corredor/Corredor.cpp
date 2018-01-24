@@ -137,13 +137,13 @@ void Corredor::InicializarFisicas()
 
 }
 
-void Corredor::setPosicion(float *pos, float *ori){
+void Corredor::setPosicion(float *pos, float *ori) {
 	btVector3 btPos(pos[0], pos[1], pos[2]);
 
 	btTransform trans;
 	trans.setOrigin(btPos);
 	btQuaternion quaternion;
-	quaternion.setEulerZYX(ori[0]* PI / 180, ori[1] * PI / 180, ori[2] * PI / 180);
+	quaternion.setEulerZYX(ori[0] * PI / 180, ori[1] * PI / 180, ori[2] * PI / 180);
 	trans.setRotation(quaternion);
 
 	CuerpoColisionChasis->setCenterOfMassTransform(trans);
@@ -345,15 +345,15 @@ void Corredor::calculoDistanciaPunto() {
 	//cout << "WAYPOINT SIGUIENTE:" << siguiente->getWaypoint()->getID() << endl;
 	TextoPantalla * texto = TextoPantalla::getInstancia();
 	texto->agregar("DISTANCIA: ");
-	texto->agregar(to_string(distanciaWaypoint)+"\n");
+	texto->agregar(to_string(distanciaWaypoint) + "\n");
 
 	texto->agregar("WAYPOINT ACTUAL: ");
-	texto->agregar(to_string( actual->getWaypoint()->getID()-6)+"\n");
+	texto->agregar(to_string(actual->getWaypoint()->getID() - 6) + "\n");
 	texto->agregar("WAYPOINT SIGUIENTE: ");
-	texto->agregar(to_string( siguiente->getWaypoint()->getID()-6)+"\n");
+	texto->agregar(to_string(siguiente->getWaypoint()->getID() - 6) + "\n");
 	texto->agregar("VUELTAS: ");
-	texto->agregar(to_string(vueltas)+"\n");
-	
+	texto->agregar(to_string(vueltas) + "\n");
+
 
 }
 
@@ -369,26 +369,26 @@ void Corredor::calculoDistanciaPuntoActual() {
 	//cout << "WAYPOINT SIGUIENTE:" << siguiente->getWaypoint()->getID() << endl;
 	TextoPantalla * texto = TextoPantalla::getInstancia();
 	texto->agregar("DISTANCIA ACTUAL: ");
-	texto->agregar(to_string(distanciaWaypointActual)+"\n");
+	texto->agregar(to_string(distanciaWaypointActual) + "\n");
 
 }
 
 
 void Corredor::calculoAnguloGiro() {
 
-	btVector3 orientacionCoche(orientacion.X,orientacion.Y,orientacion.Z);
-	btVector3 direccion = btVector3(siguiente->getPosicion().getX()-cuboNodo->getPosition().X,
-	siguiente->getPosicion().getY()-cuboNodo->getPosition().Y,
-	siguiente->getPosicion().getZ()-cuboNodo->getPosition().Z);
+	btVector3 orientacionCoche(orientacion.X, orientacion.Y, orientacion.Z);
+	btVector3 direccion = btVector3(siguiente->getPosicion().getX() - cuboNodo->getPosition().X,
+		siguiente->getPosicion().getY() - cuboNodo->getPosition().Y,
+		siguiente->getPosicion().getZ() - cuboNodo->getPosition().Z);
 	direccion.normalize();
-	anguloGiro = orientacionCoche.angle(direccion) *180/PI;
-	
-	btVector3 orientacionCocheGirada = orientacionCoche.rotate(btVector3(0, 1, 0),2*PI/180);
+	anguloGiro = orientacionCoche.angle(direccion) * 180 / PI;
 
-	btScalar angulo2 = orientacionCocheGirada.angle(direccion) *180/PI;
-		
-		if(angulo2>anguloGiro)
-			anguloGiro = -anguloGiro;
+	btVector3 orientacionCocheGirada = orientacionCoche.rotate(btVector3(0, 1, 0), 2 * PI / 180);
+
+	btScalar angulo2 = orientacionCocheGirada.angle(direccion) * 180 / PI;
+
+	if (angulo2 > anguloGiro)
+		anguloGiro = -anguloGiro;
 
 	//cout<< "ANGULO:" << anguloGiro  << endl;
 }
@@ -398,25 +398,27 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	//de momento lo pongo así, no da la segunda vuelta pero habria que mirar cuales se han visitado y cuales no
 	//mas adelante se ve, Las IDS no funcionan bien tengo que preguntarle a santi a si que de momento lo comento para que
 	//se puedan coger las cajas.
-	
-	if(nodo->getID() != actual->getWaypoint()->getID()){
-		if(nodo->getID() != siguiente->getWaypoint()->getID()){
+
+	if (nodo->getID() != actual->getWaypoint()->getID()) {
+		if (nodo->getID() != siguiente->getWaypoint()->getID()) {
 			//cout<<"TE HAS SALTADO EL WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
-		}else{
-			if (siguiente->getWaypoint()->getID()-6==0){
+		}
+		else {
+			if (siguiente->getWaypoint()->getID() - 6 == 0) {
 				vueltas++;
 				//cout<<"--------------"<<vueltas<<" VUELTA SUPERADA-------------: "<<endl;
 
 			}
 			actual = actual->getNextWaypoint();
 			siguiente = actual->getNextWaypoint();
-		
 
-			
+
+
 			//cout<<"HAS PASADO POR EL WAYPOINT: "<<actual->getWaypoint()->getID()<<" SIGUIENTE WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
 		}
-		
-	}else{
+
+	}
+	else {
 		//cout<<"ESTAS EN EL WAYPOINTACTUAL: "<<actual->getWaypoint()->getID()<<endl;
 	}
 
@@ -431,17 +433,17 @@ void Corredor::logicaDifusa() {
 	pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint, 1500, 4000, 6000, 7000);
 	pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint, 6000, 7000, 9000, 100000);
 
-		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-5,0,5);
-		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,6,40,90);
-		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,91,140,180);
-		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-91,-140,-180);
-		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-6,-40,-90);
+	pertenenciaNoGiro = FuncionTriangular(anguloGiro, -5, 0, 5);
+	pertenenciaGiroFlojoDerecha = FuncionTriangular(anguloGiro, 6, 40, 90);
+	pertenenciaGiroFuerteDerecha = FuncionTriangular(anguloGiro, 91, 140, 180);
+	pertenenciaGiroFuerteIzquierda = FuncionTriangular(anguloGiro, -91, -140, -180);
+	pertenenciaGiroFlojoIzquierda = FuncionTriangular(anguloGiro, -6, -40, -90);
 
-		if(pertenenciaCerca > pertenenciaMedia && pertenenciaCerca > pertenenciaLejos){
-			distanciaCerca=true;
-			distanciaLejos=false;
-			distanciaMedia=false;
-		}
+	if (pertenenciaCerca > pertenenciaMedia && pertenenciaCerca > pertenenciaLejos) {
+		distanciaCerca = true;
+		distanciaLejos = false;
+		distanciaMedia = false;
+	}
 
 	if (pertenenciaLejos > pertenenciaMedia && pertenenciaLejos > pertenenciaCerca) {
 		distanciaCerca = false;
@@ -456,86 +458,86 @@ void Corredor::logicaDifusa() {
 
 	}
 
-		if(pertenenciaNoGiro!=0){
-			giroFuerteDerecha=false;
-			giroFlojoDerecha=false;
-			noGiro=true;
-			giroFuerteIzquierda=false;
-			giroFlojoIzquierda=false;
-		}
+	if (pertenenciaNoGiro != 0) {
+		giroFuerteDerecha = false;
+		giroFlojoDerecha = false;
+		noGiro = true;
+		giroFuerteIzquierda = false;
+		giroFlojoIzquierda = false;
+	}
 
-		if(pertenenciaGiroFlojoDerecha!=0){
-			giroFuerteDerecha=false;
-			giroFlojoDerecha=true;
-			noGiro=false;
-			giroFuerteIzquierda=false;
-			giroFlojoIzquierda=false;
-		}
-		if(pertenenciaGiroFuerteDerecha!=0){
-			giroFuerteDerecha=true;
-			giroFlojoDerecha=false;
-			noGiro=false;
-			giroFuerteIzquierda=false;
-			giroFlojoIzquierda=false;
-		}	
+	if (pertenenciaGiroFlojoDerecha != 0) {
+		giroFuerteDerecha = false;
+		giroFlojoDerecha = true;
+		noGiro = false;
+		giroFuerteIzquierda = false;
+		giroFlojoIzquierda = false;
+	}
+	if (pertenenciaGiroFuerteDerecha != 0) {
+		giroFuerteDerecha = true;
+		giroFlojoDerecha = false;
+		noGiro = false;
+		giroFuerteIzquierda = false;
+		giroFlojoIzquierda = false;
+	}
 
-		if(pertenenciaGiroFlojoIzquierda!=0){
-			giroFuerteDerecha=false;
-			giroFlojoDerecha=false;
-			noGiro=false;
-			giroFuerteIzquierda=false;
-			giroFlojoIzquierda=true;
-		}
-		if(pertenenciaGiroFuerteIzquierda!=0){
-			giroFuerteDerecha=false;
-			giroFlojoDerecha=false;
-			noGiro=false;
-			giroFuerteIzquierda=true;
-			giroFlojoIzquierda=false;
-		}	
+	if (pertenenciaGiroFlojoIzquierda != 0) {
+		giroFuerteDerecha = false;
+		giroFlojoDerecha = false;
+		noGiro = false;
+		giroFuerteIzquierda = false;
+		giroFlojoIzquierda = true;
+	}
+	if (pertenenciaGiroFuerteIzquierda != 0) {
+		giroFuerteDerecha = false;
+		giroFlojoDerecha = false;
+		noGiro = false;
+		giroFuerteIzquierda = true;
+		giroFlojoIzquierda = false;
+	}
 
-		TextoPantalla * texto = TextoPantalla::getInstancia(); 
-		texto->agregar("ACCION 1: "); 
-		std::string agrega; 
-		if(distanciaLejos)
-   			agrega = "ACELERA A TOPE"; 	
-		if(distanciaMedia)    
-			agrega = "Reduce velocidad"; 
-		if(distanciaCerca)
-    		agrega = "Echa el freno fiera"; 
-		
-		texto->agregar(agrega+"\n"); 
-		
-		texto->agregar("ACCION 2: "); 
-		if(noGiro)
+	TextoPantalla * texto = TextoPantalla::getInstancia();
+	texto->agregar("ACCION 1: ");
+	std::string agrega;
+	if (distanciaLejos)
+		agrega = "ACELERA A TOPE";
+	if (distanciaMedia)
+		agrega = "Reduce velocidad";
+	if (distanciaCerca)
+		agrega = "Echa el freno fiera";
+
+	texto->agregar(agrega + "\n");
+
+	texto->agregar("ACCION 2: ");
+	if (noGiro)
 		agrega = "No GIRO";
-		if(giroFlojoDerecha)
+	if (giroFlojoDerecha)
 		agrega = "Giro POCO D";
-		if(giroFuerteDerecha)
+	if (giroFuerteDerecha)
 		agrega = "Giro a tope D";
-		if(giroFlojoIzquierda)
+	if (giroFlojoIzquierda)
 		agrega = "Giro POCO I";
-		if(giroFuerteIzquierda)
+	if (giroFuerteIzquierda)
 		agrega = "Giro a tope I";
 
-		texto->agregar(agrega+"\n"); 
+	texto->agregar(agrega + "\n");
 
 }
 
 
-void Corredor::movimientoIA(){
+void Corredor::movimientoIA() {
 
 	acelerar();
 
-	if(giroFlojoDerecha || giroFuerteDerecha)
-	girarDerecha();
-	else if(giroFlojoIzquierda || giroFuerteIzquierda)
-	girarIzquierda();
+	if (giroFlojoDerecha || giroFuerteDerecha)
+		girarDerecha();
+	else if (giroFlojoIzquierda || giroFuerteIzquierda)
+		girarIzquierda();
 
 
 }
 
-double Corredor::FuncionTrapezoidal(double valor,double a,double b,double c, double d){
+double Corredor::FuncionTrapezoidal(double valor, double a, double b, double c, double d) {
 
 	double resultado = 0;
 
@@ -554,23 +556,24 @@ double Corredor::FuncionTriangular(double valor, double a, double b, double c) {
 
 	double resultado = 0;
 
-	if (valor >=0)
+	if (valor >= 0)
 	{
-	if(a<=valor && valor < b)
-		resultado = (valor-a)/(b-a);
-	else if(valor == b)
-		resultado = 1;
-	else if (b < valor && valor <= c)
-		resultado = (c - valor) / (c - b);
+		if (a <= valor && valor < b)
+			resultado = (valor - a) / (b - a);
+		else if (valor == b)
+			resultado = 1;
+		else if (b < valor && valor <= c)
+			resultado = (c - valor) / (c - b);
 
-	}else{
-	
-	if(a>=valor && valor > b)
-		resultado = (valor-a)/(b-a);
-	else if(valor == b)
-		resultado = 1;
-	else if(b>valor && valor >=c)
-		resultado = (c-valor)/(c-b);
+	}
+	else {
+
+		if (a >= valor && valor > b)
+			resultado = (valor - a) / (b - a);
+		else if (valor == b)
+			resultado = 1;
+		else if (b > valor && valor >= c)
+			resultado = (c - valor) / (c - b);
 
 	}
 	return resultado;
@@ -614,7 +617,7 @@ void Corredor::soltarItem()
 	tipoObj = 0;
 }
 
-void Corredor::setTurbo(bool activo, bool objeto,int valor) {
+void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 	turboActivado = activo;
 	if (activo) {
 		Motor3d *m = Motor3d::getInstancia();
@@ -639,22 +642,24 @@ void Corredor::SetFuerzaVelocidad(int turbo)
 }
 void Corredor::acelerar()
 {
-	if (vehiculo->getCurrentSpeedKmHour()>300 && !turboActivado){
-		if (vehiculo->getCurrentSpeedKmHour()>350){
-			Fuerza =btScalar(0);
-		}else{
-			Fuerza =btScalar(200);		//limitador de velocidad
-		}	
-		
+	if (vehiculo->getCurrentSpeedKmHour() > 300 && !turboActivado) {
+		if (vehiculo->getCurrentSpeedKmHour() > 350) {
+			Fuerza = btScalar(0);
+		}
+		else {
+			Fuerza = btScalar(200);		//limitador de velocidad
+		}
+
 	}
-	if (vehiculo->getCurrentSpeedKmHour()<370){
+	if (vehiculo->getCurrentSpeedKmHour() < 370) {
 		vehiculo->applyEngineForce(Fuerza, 0);
 		vehiculo->applyEngineForce(Fuerza, 1);
 		vehiculo->applyEngineForce(Fuerza, 2);
 		vehiculo->applyEngineForce(Fuerza, 3);
 		vehiculo->setSteeringValue(btScalar(0), 0);
 		vehiculo->setSteeringValue(btScalar(0), 1);
-	}else{
+	}
+	else {
 		vehiculo->applyEngineForce(600, 0);
 		vehiculo->applyEngineForce(200, 1);
 		vehiculo->applyEngineForce(200, 2);
@@ -683,9 +688,10 @@ void Corredor::frenar()
 	vehiculo->applyEngineForce(FuerzaFrenado, 3);
 	vehiculo->setSteeringValue(btScalar(0), 0);
 	vehiculo->setSteeringValue(btScalar(0), 1);
-	if (vehiculo->getCurrentSpeedKmHour()<0){
+	if (vehiculo->getCurrentSpeedKmHour() < 0) {
 		estado->setEstadoMovimiento(MARCHA_ATRAS);
-	}else{
+	}
+	else {
 		estado->setEstadoMovimiento(FRENA);
 	}
 }
@@ -797,15 +803,15 @@ void Corredor::setFriccion(btScalar valor) {
 		vehiculo->getWheelInfo(i).m_frictionSlip = btScalar(valor);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover	
 	}
 }
-void Corredor::aplicarAceite(){
+void Corredor::aplicarAceite() {
 	//CuerpoColisionChasis->setAngularFactor(btScalar(120*PI/180));
 	//CuerpoColisionChasis->applyCentralForce(btVector3(100, 5.0f,100));
 	frenodemano(true);
 	CuerpoColisionChasis->setAngularVelocity(btVector3(0, 40, 0));
-	for (int i=0;i<100;i++){
+	for (int i = 0; i < 100; i++) {
 		girarIzquierda();
 	}
-	Fuerza=220;
+	Fuerza = 220;
 }
 
 //	----------------------------------------------
@@ -849,7 +855,7 @@ void Corredor::update()
 		if (time->getTimer() - timerTurbo >= 1) {
 			//cout << "Se acaba el turbo\n";
 			desacelerar();
-			setTurbo(false, false,0);
+			setTurbo(false, false, 0);
 		}
 	}
 	else if (vehiculo->getCurrentSpeedKmHour() > 1)
@@ -873,42 +879,42 @@ void Corredor::update()
 	calculoAnguloGiro();
 	logicaDifusa();
 	//ActualizarRaytest();
-	
+
 }
 
 
-void Corredor::updateEstado(){
-	if (vehiculo->getCurrentSpeedKmHour() < 0.5 && vehiculo->getCurrentSpeedKmHour() > -0.5){
+void Corredor::updateEstado() {
+	if (vehiculo->getCurrentSpeedKmHour() < 0.5 && vehiculo->getCurrentSpeedKmHour() > -0.5) {
 		estado->setEstadoMovimiento(QUIETO);
 	}
 	estado->setEstadoCoche(POR_DEFECTO);
-	if (proteccion==true){
+	if (proteccion == true) {
 		estado->setEstadoCoche(CON_ESCUDO);
 	}
-	if (turboActivado==true){
+	if (turboActivado == true) {
 		estado->setEstadoCoche(CON_TURBO);
 	}
 
 
 	//Objetos:
-	switch (tipoObj){
+	switch (tipoObj) {
 		// {NADA, FLECHA, FLECHA_TRIPLE, ESCUDO, ACEITE, CAJA_FALSA, TURBO} 
-		case 0:
+	case 0:
 		estado->setEstadoObjeto(NADA);
 		break;
-		case 1:
+	case 1:
 		estado->setEstadoObjeto(FLECHA);
 		break;
-		case 2:
+	case 2:
 		estado->setEstadoObjeto(CAJA_FALSA);
 		break;
-		case 3:
+	case 3:
 		estado->setEstadoObjeto(TURBO);
 		break;
-		case 4:
+	case 4:
 		estado->setEstadoObjeto(ACEITE);
 		break;
-		case 5:
+	case 5:
 		estado->setEstadoObjeto(ESCUDO);
 		break;
 	}
@@ -1121,13 +1127,15 @@ std::string Corredor::getDireccion()
 }
 //destructor
 Corredor::~Corredor() {
-	delete CuerpoColisionChasis->getMotionState();
-	delete CentroGravedad;
-	delete FormaColision;
-	delete RayCastVehiculo;
-	delete vehiculo;
-	delete CuerpoColisionChasis;
+	cout << "\nENTRO DESTRUCTOR CORREDOR: " << cuboNodo->getID() << "\n";
+	
+	// Los rigid body se borran desde el motor de fisicas
+	// Los collision shape se borran desde el motor de fisicas
+	// delete CuerpoColisionChasis;
 
+
+
+	cout << "SALGO DESTRUCTOR CORREDOR: " << cuboNodo->getID();
 }
 bool Corredor::getProteccion() {
 	return proteccion;

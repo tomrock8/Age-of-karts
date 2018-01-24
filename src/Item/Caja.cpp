@@ -11,8 +11,8 @@ Caja::Caja(vector3df posicionCaja)
 	tamanyo = 1.0f;
 	nodo = m->getScene()->addCubeSceneNode(tamanyo);
 	nombre = "Caja";
-	ids->setIdentifier(nodo,nombre);
-	id=ids->getIDLibre()-1;
+	ids->setIdentifier(nodo, nombre);
+	id = ids->getIDLibre() - 1;
 
 	escala.X = 5.f;
 	escala.Y = 5.f;
@@ -66,7 +66,7 @@ btRigidBody *Caja::inicializarFisicas()
 
 void Caja::comprobarRespawn() {
 	Motor3d *mundo = Motor3d::getInstancia();
-		Timer *time = Timer::getInstancia();
+	Timer *time = Timer::getInstancia();
 	if (nodo) {
 		if (!nodo->isVisible()) {
 			if (time->getTimer() - timer >= 5) {
@@ -137,9 +137,11 @@ void Caja::Delete()
 	}
 }
 
-Caja::~Caja()
-{
-	delete rigidBody->getMotionState();
-	delete rigidBody->getCollisionShape();
-	delete rigidBody;
+Caja::~Caja() {
+	cout << "ENTRO DESTRUCTOR CAJA: " << nodo->getID();
+
+	// Los rigid body se borran desde el motor de fisicas
+	// delete rigidBody;
+	
+	cout << " SALGO DESTRUCTOR CAJA: " << nodo->getID();
 }

@@ -80,10 +80,11 @@ IMeshSceneNode *Waypoint::getWaypoint() {
 }
 
 Waypoint::~Waypoint() {
-	try {
-		delete rigidBody->getCollisionShape();
-		delete rigidBody->getMotionState();
-		delete rigidBody;
-	}
-	catch (...) { throw; }
+	cout << "ENTRO DELETE WAYPOINT: " << waypoint->getID();
+
+	siguiente = nullptr;
+	// Los rigid body se borran desde el motor de fisicas
+	//delete rigidBody;
+
+	cout << " SALGO DELETE WAYPOINT: " << waypoint->getID();
 }

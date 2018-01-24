@@ -12,21 +12,22 @@ using namespace std;
 
 class MotorFisicas
 {
-  public:
+public:
 	//Destructor
 	~MotorFisicas(void);
-	//metodos GET
+	
+	// METODOS GET
 	static MotorFisicas *getInstancia();
-	//void setMapaFisicas(stringw fichero);
 	btDynamicsWorld *getMundo();
 	irr::core::list<btRigidBody *> getObjetos();
+	
+	// METODOS SET
 	void setObjetos(irr::core::list<btRigidBody *> objetos);
-	//btBulletWorldImporter *getFisicas();
 
-  private:
+private:
 	MotorFisicas(void);
 	static MotorFisicas *instancia;
-	
+
 	btBroadphaseInterface *broadPhase;
 	btDefaultCollisionConfiguration *confColision;
 	btCollisionDispatcher *dispatcher;
@@ -35,8 +36,8 @@ class MotorFisicas
 	btDynamicsWorld *mundo;
 
 
-	
-	
+
+
 };
 
 #endif /* MOTORFISICAS_H */

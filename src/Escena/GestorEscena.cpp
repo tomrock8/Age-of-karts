@@ -1,14 +1,15 @@
 #include "GestorEscena.hpp"
 
-GestorEscena *GestorEscena::instancia = nullptr;
+GestorEscena GestorEscena::_instancia;
 
 GestorEscena::GestorEscena() {
 	cambioEscena = true;
 }
 
-
+/*
 GestorEscena::~GestorEscena() {
 }
+*/
 
 void GestorEscena::update() {
 	escenaActiva->update();
@@ -79,22 +80,18 @@ void GestorEscena::cambiaEscena(Escena::tipo_escena nueva) {
 	}
 }
 
-GestorEscena *GestorEscena::getInstancia() {
-	if (!instancia) {
-		instancia = new GestorEscena();
-		//EscenaMenu
-		instancia->cambiaEscena(Escena::tipo_escena::MENU);
-	}
 
-	return instancia;
+GestorEscena& GestorEscena::instancia() {
+	return _instancia;
 }
+
 
 Escena *GestorEscena::getEscena(Escena::tipo_escena escena) {
 	return nullptr;
 }
 
 bool GestorEscena::agregaEscena(Escena *escena) {
-
+	return false;
 }
 
 void GestorEscena::comprobarInputs() {

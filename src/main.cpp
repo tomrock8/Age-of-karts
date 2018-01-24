@@ -1,4 +1,5 @@
 #include "Motor3d.hpp"
+#include "GestorEscena.hpp"
 #include "EscenaJuego.hpp"
 
 #include "Corredor.hpp"
@@ -21,5 +22,10 @@ int main(int argc, char* argv[]) {
 	}
 
 	delete juego;
+
+	GestorEscena::instancia().getEscena(Escena::tipo_escena::MENU);
+
+
+	delete Motor3d::getInstancia();
 	return 0;
 }

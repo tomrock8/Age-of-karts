@@ -8,6 +8,7 @@ EstadosJugador::EstadosJugador(){
 }
 void EstadosJugador::update(){
     TextoPantalla *texto =TextoPantalla::getInstancia();
+	texto->agregar("----------------------");
     texto->agregar("ESTADO MOVIMIENTO: ");
     switch (estado){
 

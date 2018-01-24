@@ -161,6 +161,7 @@ int main(int argc, char* argv[])
 			pj[0]->update();
 			textoDebug->agregar(pj[0]->toString());
 		}else{
+			//cout << jugadores->getNumJugadores() << endl;
 			int controlPlayer = client->getControlPlayer();
 			if (jugadores->getNumJugadores() != 0)
 				pj[controlPlayer]->actualizarItem();

@@ -134,10 +134,10 @@ int Client::ReceivePackets(ISceneManager *escena)
 {
 	//cout <<"me gustar ver la vida pasar" << endl;
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	player = jugadores->getJugadores();
 	//bucle donde se reciben los distintos paquetes, se tratan y se deasignan
 	for (p = client->Receive(); p; client->DeallocatePacket(p), p = client->Receive())
 	{
+		player = jugadores->getJugadores();
 		//se coge el identificador del paquete recibido para los casos del switch
 		packetIdentifier = GetPacketIdentifier(p);
 
@@ -232,6 +232,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			pos.Y = y;
 			pos.Z = z;
 			player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
+			jugadores->aumentarJugadores();
 			player[numPlayers]->getNodo()->setID(id);
 
 			//player[numPlayers]->setPosition(posicion);
@@ -267,7 +268,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 				jugadores->aumentarJugadores();
 			}
 			cout << "ahora vamos a crear el suyo: " << endl;
-			pos.X=0;
+			pos.X = 0;
 			pos.Y = 0;
 			pos.Z = 300;
 			player[i] = new CorredorJugador("assets/coche.obj", pos);
@@ -332,9 +333,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(estado3);
 				bsIn.Read(estado4);
 				bsIn.Read(id);
-
-				//cout <<"Estado del movimiento del jugador "<< id<<": "<<estado1<<endl;
-				//cout <<"--------------------------"<<endl;				
+				//std::cout << estado1 << std::endl;
 				EstadosJugador *estados = player[id]->getEstados();
 
 				estados->setEstadoMovimiento(estado1);

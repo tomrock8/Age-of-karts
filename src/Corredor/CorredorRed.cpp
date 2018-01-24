@@ -15,6 +15,7 @@ void CorredorRed::updateRed(){
 }
 
 void CorredorRed::movimiento(){
+    //std::cout << "Entro\n";
     EstadosJugador *estados = this->getEstados();
 	int estadoMovimiento = estados->getEstadoMovimiento();
 	int direccionMovimiento = estados->getDireccionMovimiento();
@@ -24,6 +25,7 @@ void CorredorRed::movimiento(){
     switch (estadoMovimiento){
 
         case 0:
+        //std::cout << "Esta quieto\n";
 		break;
 		case 1:
         acelerar();

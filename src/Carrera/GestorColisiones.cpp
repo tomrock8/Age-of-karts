@@ -48,13 +48,14 @@ void GestorColisiones::ComprobarColisiones()
 
 bool GestorColisiones::JugadorWaypoint(){
 	
-     if (strcmp("Jugador", nodoA->getName()) == 0)
+     if (strcmp("Jugador", nodoA->getName()) == 0 || strcmp("JugadorIA", nodoA->getName()) == 0)
     {
         if (strcmp("Waypoint", nodoB->getName()) == 0)
         {
 			for(int i = 0; i< jugadores->getNumJugadores(); i++){
 				if(pj1[i]!=NULL)
 					if(nodoA->getID() == pj1[i]->getNodo()->getID()){
+						
 						pj1[i]->setWaypointActual(nodoB);
 						
 						return true;	
@@ -78,7 +79,7 @@ bool GestorColisiones::JugadorTurbo()
 	Pista *mapa = Pista::getInstancia();
 	//cout << TimeStamp << endl;
 
-	if (strcmp("Jugador", nodoA->getName()) == 0)
+	if (strcmp("Jugador", nodoA->getName()) == 0 || strcmp("JugadorIA", nodoA->getName()) == 0)
 	{
 		if (strcmp("Turbo", nodoB->getName()) == 0)
 		{

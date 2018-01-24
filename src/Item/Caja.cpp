@@ -9,14 +9,14 @@ Caja::Caja(vector3df posicionCaja)
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	tamanyo = 1.0f;
-	nodo = m->getScene()->addCubeSceneNode(tamanyo);
+	nodo = m->getScene()->addMeshSceneNode(m->getScene()->getMesh("assets/Objetos/caja.obj"));
 	nombre = "Caja";
 	ids->setIdentifier(nodo,nombre);
 	id=ids->getIDLibre()-1;
 
-	escala.X = 5.f;
-	escala.Y = 5.f;
-	escala.Z = 5.f;
+	escala.X = 2.f;
+	escala.Y = 2.f;
+	escala.Z = 2.f;
 	nodo->setScale(escala);
 
 	posicion = posicionCaja;
@@ -25,7 +25,6 @@ Caja::Caja(vector3df posicionCaja)
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 
-	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/rust.png"));
 
 	rigidBody = inicializarFisicas();
 	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);

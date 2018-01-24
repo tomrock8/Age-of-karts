@@ -75,8 +75,13 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	FuerzaFrenoMano = btScalar(800);
 	FuerzaFrenadoReposo = btScalar(60);
 
-	if (cuboNodo)
-		InicializarFisicas();
+	if (cuboNodo) InicializarFisicas();
+
+	//HABILIDADES
+	h = new Habilidad(2, this->getNodo());
+	h->getNodo()->setVisible(false);
+	h->setPosicion(pos);
+	h->setPadre(this->getNodo());
 }
 
 void Corredor::InicializarFisicas()
@@ -967,6 +972,7 @@ void Corredor::update()
 	}
 
 	updateEstado();
+	if (h->getHabilidadActiva())updateHabilidad();
 	movimiento();
 	posicion.setX(cuboNodo->getPosition().X);
 	posicion.setY(cuboNodo->getPosition().Y);
@@ -980,7 +986,19 @@ void Corredor::update()
 	//ActualizarRaytest();
 	
 }
+void Corredor::updateHabilidad() {
+	Timer *tiempo = Timer::getInstancia();
+	int inicioHabilidad = h->getInicioHabilidad();
 
+
+	if (tiempo->getTimer() - inicioHabilidad >= 3) {
+	cout << "Se acaba el tiro\n";
+	h->setHabilidadActiva(false);
+	h->getNodo()->setVisible(false);
+	h->eliminarFisicas();
+
+	}
+}
 
 void Corredor::updateEstado(){
 	if (vehiculo->getCurrentSpeedKmHour() < 0.5 && vehiculo->getCurrentSpeedKmHour() > -0.5){

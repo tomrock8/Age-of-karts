@@ -1,6 +1,9 @@
 #include "Item.hpp"
 
 
+Item::Item(int tipo) {
+
+}
 
 Item::Item(vector3df posicionItem)
 {
@@ -45,7 +48,7 @@ btRigidBody *Item::inicializarFisicas()
 	mundo->addRigidBody(rigidBody);
 	objetos.push_back(rigidBody);
 	bullet->setObjetos(objetos);
-
+	rigidBody->setGravity(btVector3(0, -6, 0));
 	return rigidBody;
 }
 

@@ -87,3 +87,15 @@ Waypoint::~Waypoint() {
 	}
 	catch (...) { throw; }
 }
+void Waypoint::setVector1(btVector3 p) {
+	vector1 = p;
+}
+void Waypoint::setVector2(btVector3 p2) {
+	vector2 = p2;
+}
+btVector3 Waypoint::getVector1() {
+	return vector1;
+}
+btVector3 Waypoint::getVector2() {
+	return vector2;
+}

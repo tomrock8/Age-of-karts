@@ -18,6 +18,7 @@
 #include "TextoPantalla.hpp"
 #include "Escudo.hpp"
 #include "EstadosJugador.hpp"
+#include "Habilidad.hpp"
 
 using namespace std;
 
@@ -125,6 +126,9 @@ protected:
 	Escudo *escudo;
 	EstadosJugador *estado;
 
+	//habilidad 
+	Habilidad * h;
+
 	btVector3 posicion;
 	btVector3 direccionRuedas;
 	btVector3 rotacionRuedas;
@@ -165,6 +169,7 @@ protected:
 	void actualizarRuedas();
 	void updateDireccion();
 	void updateVectorDireccion();
+	void updateHabilidad();
 };
 
 #endif /* CORREDOR_H */

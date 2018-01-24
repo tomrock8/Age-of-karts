@@ -80,8 +80,9 @@ void CorredorJugador::actualizarItem()
 	if(teclado->isKeyDown(KEY_KEY_2)) setTipoObj(2);
 	if(teclado->isKeyDown(KEY_KEY_3)) setTipoObj(3);
 	if(teclado->isKeyDown(KEY_KEY_4)) setTipoObj(4);
-	if(teclado->isKeyDown(KEY_KEY_5)) setTipoObj(5);
-	if(teclado->isKeyDown(KEY_KEY_6)) setTipoObj(6);
+	if(teclado->isKeyDown(KEY_KEY_5)) setTipoObj(5);//escudo
+	if(teclado->isKeyDown(KEY_KEY_6)) setTipoObj(6);//proytectil x3
+	if(teclado->isKeyDown(KEY_KEY_7)) setTipoObj(7);//Habilidad
 	
 
 	if (teclado->isKeyup(KEY_KEY_P))
@@ -140,17 +141,53 @@ void CorredorJugador::actualizarItem()
 			}
 			else if (tipoObj == 6)
 			{
-				/* proyectil por 3
 				proX3 = new Proyectil *[3];
-				for (int i = 0; i < 1; i++) {
-				proX3[i] = new Proyectil(posDisparo, idObjMapa);
-				lanzarItem(proX3[i], direccionItem);
-				items.push_back(proX3[i]);
+				btVector3 orientacioncentral(orientacion.X, orientacion.Y, orientacion.Z);
+				btVector3 centro(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.Z * 5);
+				btVector3 orientacionderecha = orientacioncentral.rotate(btVector3(0, 1, 0), 10 * PI / 180);
+				btVector3 orientacionizquierda = orientacioncentral.rotate(btVector3(0, 1, 0), -10 * PI / 180);
+				vector3df c(centro.getX(), centro.getY(), centro.getZ());
+				vector3df iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 5);
+				vector3df d(cuboNodo->getPosition().X + orientacionderecha.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 5);
+				for (int i = 0; i < 3; i++) {
 
-				//direccionItem += 5;
-				idObjMapa++;
+
+					if (i == 0) {
+						proX3[i] = new Proyectil(iz);
+						proX3[i]->inicializarFisicas();
+						proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionizquierda.getX() * 100, 5.0f, orientacionizquierda.getZ() * 100));
+					}
+					if (i == 1) {
+
+						proX3[i] = new Proyectil(c);
+						proX3[i]->inicializarFisicas();
+						proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacioncentral.getX() * 100, 5.0f, orientacioncentral.getZ() * 100));
+					}
+					if (i == 2) {
+
+						proX3[i] = new Proyectil(d);
+						proX3[i]->inicializarFisicas();
+						proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionderecha.getX() * 100, 5.0f, orientacionderecha.getZ() * 100));
+					}
+
+
+					items.push_back(proX3[i]);
+
+
+
 				}
-				*/
+				soltarItem();
+			}
+			else if (tipoObj == 7)
+			{
+				cout << "que nmerda" << endl;
+				h->getNodo()->setVisible(true);
+				h->setOrientacion(orientacion);
+				h->setPadre(this->getNodo());
+				h->setPosicion(posDisparo);
+				h->lanzarHabilidad();
+				items.push_back(h);
+				soltarItem();
 			}
 			pista->setItems(items);
 			//Llama a la funcion de la clase padre

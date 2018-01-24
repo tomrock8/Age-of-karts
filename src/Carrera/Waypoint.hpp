@@ -28,11 +28,15 @@ void inicializarFisicas();
   void setPosicion(float x, float y, float z);
   void setSiguiente(Waypoint *siguiente);
   void setOrientacion(float grados);
+  void setVector1(btVector3 p1);
+  void setVector2(btVector3 p2);
 
   //metodos GET
   IMeshSceneNode *getWaypoint();
   btVector3 getPosicion();
   Waypoint *getNextWaypoint();
+  btVector3 getVector1();
+  btVector3 getVector2();
 
 private:
   IMeshSceneNode *waypoint;
@@ -42,6 +46,11 @@ private:
   btDefaultMotionState *MotionState;
   btCollisionShape *Shape;
   btRigidBody * rigidBody;
+
+  //vectores
+  btVector3 vector1;
+  btVector3 vector2;
+
 };
 
 #endif /* WAYPOINT_H */

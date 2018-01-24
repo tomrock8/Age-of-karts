@@ -14,20 +14,21 @@ using namespace std;
 class Item
 {
 public:
+  Item(int tipo);
   Item(vector3df posicionItem);
   btRigidBody *inicializarFisicas();
   void lanzarItem();
   bool Delete();
   IMeshSceneNode *getNodo();
   btRigidBody *getRigidBody();
-    void setColision(bool b);
-    bool getColision();
-    void setNombre(const char* name);
-    const char* getNombre();
-    void setMasa(btScalar mass);
+  void setColision(bool b);
+  bool getColision();
+  void setNombre(const char* name);
+  const char* getNombre();
+  void setMasa(btScalar mass);
 
 protected:
-	IMeshSceneNode *nodo;
+  IMeshSceneNode *nodo;
   btRigidBody *rigidBody;
   btScalar masa;
   f32 tamanyo;

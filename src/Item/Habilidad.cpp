@@ -49,7 +49,7 @@ void Habilidad::HabilidadPirata () {
 	escala.Z = 3.0f;
 	nodo->setScale(escala);
 	nodo->setPosition(posicion);
-	id = 1234;//esto habra que tocarlo posible null
+	id = 1235;//esto habra que tocarlo posible null
 	nodo->setID(id);
 }
 void Habilidad::HabilidadVikingo() {//Se queda en stand by, no se puede asignar con irrlicht la fisica necesaria, todo se hace con openGL
@@ -124,17 +124,16 @@ void Habilidad::HabilidadChino() {
 	nodo->setScale(escala);
 	nodo->setParent(NodoVehiculo);
 	posicion = NodoVehiculo->getPosition();
-	id = 1238;//esto habra que tocarlo posible null
+	id = 1237;//esto habra que tocarlo posible null
 	nodo->setID(id);
 }
 void Habilidad::lanzarHabilidad() {
 	tiempo = Timer::getInstancia();
 	tiempo->getInstancia();
 	inicioHabilidad = tiempo->getTimer();
-	cout << " que tiene esto a ver me cago en el copon bendito  : " << inicioHabilidad << endl;
 	habilidadActiva = true;
 	btRigidBody *rigidBody = inicializarFisicas(tipoHabilidad);
-	if (tipoHabilidad == 2) {
+	if (tipoHabilidad == 2) {//pirata
 		this->getRigidBody()->setGravity(btVector3(0, 0, 0));
 		this->getRigidBody()->setLinearVelocity(btVector3(orientacion.X * 100, 5.0f, orientacion.Z * 100));
 	}
@@ -225,7 +224,7 @@ btRigidBody *Habilidad::inicializarFisicas(int tipo)
 	btTransform t;
 	rigidBody->getMotionState()->getWorldTransform(t);
 	// Store a pointer to the irrlicht node so we can update it later
-	rigidBody->setUserPointer((void *)(nodo));
+	rigidBody->setUserPointer((void *)(this->getNodo()));
 	if (masa != 0)
 		rigidBody->setActivationState(DISABLE_DEACTIVATION);
 	// Add it to the world

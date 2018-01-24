@@ -78,7 +78,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	if (cuboNodo) InicializarFisicas();
 
 	//HABILIDADES
-	h = new Habilidad(2, this->getNodo());
+	h = new Habilidad(1, this->getNodo());
 	h->getNodo()->setVisible(false);
 	h->setPosicion(pos);
 	h->setPadre(this->getNodo());

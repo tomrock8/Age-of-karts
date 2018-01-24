@@ -15,15 +15,17 @@ void CorredorRed::updateRed(){
 }
 
 void CorredorRed::movimiento(){
+    //std::cout << "Entro\n";
     EstadosJugador *estados = this->getEstados();
 	int estadoMovimiento = estados->getEstadoMovimiento();
 	int direccionMovimiento = estados->getDireccionMovimiento();
-	cout <<"Estado del jugador: "<<estadoMovimiento<<endl;
-	cout <<"Direccion del jugador: "<<direccionMovimiento<<endl;
+	//cout <<"Estado del jugador: "<<estadoMovimiento<<endl;
+	//cout <<"Direccion del jugador: "<<direccionMovimiento<<endl;
     frenodemano(false);
     switch (estadoMovimiento){
 
         case 0:
+        //std::cout << "Esta quieto\n";
 		break;
 		case 1:
         acelerar();

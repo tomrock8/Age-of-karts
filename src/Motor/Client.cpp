@@ -42,7 +42,7 @@ void Client::SetIP()
 	std::cout << "Introduce IP del servidor: ";
 	//std::cin >> serverIP;
 	//serverIP = "127.0.0.1";
-	serverIP = "192.168.1.8";
+	serverIP = "192.168.1.4";
 	//puerto de escucha del cliente
 	clientPort = "6003";
 }
@@ -134,10 +134,10 @@ int Client::ReceivePackets(ISceneManager *escena)
 {
 	//cout <<"me gustar ver la vida pasar" << endl;
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	player = jugadores->getJugadores();
 	//bucle donde se reciben los distintos paquetes, se tratan y se deasignan
 	for (p = client->Receive(); p; client->DeallocatePacket(p), p = client->Receive())
 	{
+		player = jugadores->getJugadores();
 		//se coge el identificador del paquete recibido para los casos del switch
 		packetIdentifier = GetPacketIdentifier(p);
 
@@ -147,7 +147,25 @@ int Client::ReceivePackets(ISceneManager *escena)
 
 		//vector de posicion de Irrlicht
 		vector3df posicion;
-		vector3df pos2;
+		vector3df pos2[6];
+		pos2[0].X = -10;
+		pos2[0].Y = 0;
+		pos2[0].Z = 310;
+		pos2[1].X = -10;
+		pos2[1].Y = 0;
+		pos2[1].Z = 290;
+		pos2[2].X = -20;
+		pos2[2].Y = 0;
+		pos2[2].Z = 310;
+		pos2[3].X = -20;
+		pos2[3].Y = 0;
+		pos2[3].Z = 290;
+		pos2[4].X = -30;
+		pos2[4].Y = 0;
+		pos2[4].Z = 310;
+		pos2[5].X = -30;
+		pos2[5].Y = 0;
+		pos2[5].Z = 290;
 		vector3df pos;
 		float x,y,z;
 		int id;
@@ -253,11 +271,6 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(posicion.Y);
 				bsIn.Read(posicion.Z);
 				bsIn.Read(playerNetworkID);
-				/*
-				pos2.X = 10;
-				pos2.Y = 20;
-				pos2.Z = 300;
-				*/
 				player[i] = new CorredorRed("assets/coche.obj", posicion);
 				player[i]->getNodo()->setID(i);
 				player[i]->update();
@@ -267,9 +280,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 				jugadores->aumentarJugadores();
 			}
 			cout << "ahora vamos a crear el suyo: " << endl;
-			pos.X=0;
-			pos.Y = 0;
-			pos.Z = 300;
+			pos = pos2[i];
 			player[i] = new CorredorJugador("assets/coche.obj", pos);
 			player[i]->getNodo()->setID(i);
 			typeID = ID_SPAWN_PLAYER;
@@ -280,7 +291,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			y = pos.Y;
 			z = pos.Z;
 			bsOut.Write(typeID);
-			cout << x <<" - "<< y <<" - "<< z <<" - "<<endl;
+			cout << x <<" - "<< y <<" - "<< z <<endl;
 			bsOut.Write(x); //Posicion X
 			bsOut.Write(y); //Posicion Y
 			bsOut.Write(z); //Posicion Z
@@ -332,9 +343,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(estado3);
 				bsIn.Read(estado4);
 				bsIn.Read(id);
-
-				//cout <<"Estado del movimiento del jugador "<< id<<": "<<estado1<<endl;
-				//cout <<"--------------------------"<<endl;				
+				//std::cout << estado1 << std::endl;
 				EstadosJugador *estados = player[id]->getEstados();
 
 				estados->setEstadoMovimiento(estado1);
@@ -369,13 +378,14 @@ int Client::ReceivePackets(ISceneManager *escena)
 			//delete player[playerDisconnect];
 			for(int i=0; i<numPlayers; i++){	//Recorre todos los players
 				if(playerDisconnect<=i){		//Si se encuentra con playerDisconnect asigna la posicion siguiente a esta
-					//if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
-						//player[i]=player[i+1];
-					//else
-						//player[i]=NULL;
+					if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
+						player[i]=player[i+1];
+					else
+						player[i]=NULL;
 				}
 			}
 			numPlayers--;
+			jugadores->decrementarJugadores();
 			if(controlPlayer>playerDisconnect)	//Si el jugador controlado por este cliente esta por arriba del jugador eliminado se debe reducir
 				controlPlayer--;				//controlPlayer para no cambiar de jugador con la reordenacion del array
 

@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
 			if (jugadores->getNumJugadores() != 0)
 				for (int i=0;i<jugadores->getNumJugadores();i++){
 					if (i!=controlPlayer){
-						pj[i]->update();
+						pj[i]->updateRed();
 					}
 				}
 
@@ -189,7 +189,7 @@ int main(int argc, char* argv[])
 				client->PlayerAction();
 				if (tiempo->getTimer() - tiempoRefresco >= 1) {
 					//cout << "Se acaba el turbo\n";
-					client->PlayerMovement();
+					//client->PlayerMovement();
 					tiempoRefresco = tiempo->getTimer();
 				}
 			}

@@ -76,6 +76,8 @@ class Corredor: public RakNet::NetworkIDObject
 	bool getProteccion();
 	EstadosJugador *getEstados();
 
+	virtual void updateRed() {}; 
+
 
 	// Destructor
 	~Corredor();

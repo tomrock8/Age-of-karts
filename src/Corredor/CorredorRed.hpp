@@ -14,7 +14,7 @@ private:
 
 public:
   CorredorRed(stringw rutaObj, vector3df pos);
-  void update();
+  void updateRed();
   void movimiento();
   void acelerarRed();
   void frenarRed();

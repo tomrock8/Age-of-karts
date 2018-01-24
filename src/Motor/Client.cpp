@@ -237,6 +237,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			//player[numPlayers]->setPosition(posicion);
 			player[numPlayers]->SetNetworkIDManager(&networkIDManager);
 			player[numPlayers]->SetNetworkID(playerNetworkID);
+			jugadores->aumentarJugadores();
 			numPlayers++;
 
 			break;
@@ -252,10 +253,12 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(posicion.Y);
 				bsIn.Read(posicion.Z);
 				bsIn.Read(playerNetworkID);
+				/*
 				pos2.X = 10;
 				pos2.Y = 20;
 				pos2.Z = 300;
-				player[i] = new CorredorRed("assets/coche.obj", pos2);
+				*/
+				player[i] = new CorredorRed("assets/coche.obj", posicion);
 				player[i]->getNodo()->setID(i);
 				player[i]->update();
 				//player[i]->setPosition(posicion);
@@ -265,7 +268,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			}
 			cout << "ahora vamos a crear el suyo: " << endl;
 			pos.X=0;
-			pos.Y = -5;
+			pos.Y = 0;
 			pos.Z = 300;
 			player[i] = new CorredorJugador("assets/coche.obj", pos);
 			player[i]->getNodo()->setID(i);
@@ -329,7 +332,9 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(estado3);
 				bsIn.Read(estado4);
 				bsIn.Read(id);
-				
+
+				//cout <<"Estado del movimiento del jugador "<< id<<": "<<estado1<<endl;
+				//cout <<"--------------------------"<<endl;				
 				EstadosJugador *estados = player[id]->getEstados();
 
 				estados->setEstadoMovimiento(estado1);

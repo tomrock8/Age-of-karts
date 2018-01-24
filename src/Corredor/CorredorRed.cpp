@@ -6,14 +6,22 @@ CorredorRed::CorredorRed(stringw rutaObj, vector3df pos) : Corredor(rutaObj, pos
 
 }
 
-void CorredorRed::update(){
-    
+void CorredorRed::updateRed(){
+    movimiento();
+	actualizarRuedas();
+	EstadosJugador *estados = this->getEstados();
+	estados->update();
+
 }
 
 void CorredorRed::movimiento(){
     EstadosJugador *estados = this->getEstados();
+	int estadoMovimiento = estados->getEstadoMovimiento();
+	int direccionMovimiento = estados->getDireccionMovimiento();
+	cout <<"Estado del jugador: "<<estadoMovimiento<<endl;
+	cout <<"Direccion del jugador: "<<direccionMovimiento<<endl;
     frenodemano(false);
-    switch (estados->getEstadoMovimiento()){
+    switch (estadoMovimiento){
 
         case 0:
 		break;
@@ -34,7 +42,8 @@ void CorredorRed::movimiento(){
 		break;
     }
 
-    switch (estados->getDireccionMovimiento()){
+	
+    switch (direccionMovimiento){
 
 		case 0:
 		break;
@@ -45,6 +54,7 @@ void CorredorRed::movimiento(){
         girarDerecha();   
 		break;
     }
+	
     
 }
 

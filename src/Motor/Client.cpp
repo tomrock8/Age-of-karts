@@ -42,7 +42,7 @@ void Client::SetIP()
 	std::cout << "Introduce IP del servidor: ";
 	//std::cin >> serverIP;
 	//serverIP = "127.0.0.1";
-	serverIP = "192.168.1.8";
+	serverIP = "192.168.1.4";
 	//puerto de escucha del cliente
 	clientPort = "6003";
 }
@@ -147,7 +147,25 @@ int Client::ReceivePackets(ISceneManager *escena)
 
 		//vector de posicion de Irrlicht
 		vector3df posicion;
-		vector3df pos2;
+		vector3df pos2[6];
+		pos2[0].X = -10;
+		pos2[0].Y = 0;
+		pos2[0].Z = 310;
+		pos2[1].X = -10;
+		pos2[1].Y = 0;
+		pos2[1].Z = 290;
+		pos2[2].X = -20;
+		pos2[2].Y = 0;
+		pos2[2].Z = 310;
+		pos2[3].X = -20;
+		pos2[3].Y = 0;
+		pos2[3].Z = 290;
+		pos2[4].X = -30;
+		pos2[4].Y = 0;
+		pos2[4].Z = 310;
+		pos2[5].X = -30;
+		pos2[5].Y = 0;
+		pos2[5].Z = 290;
 		vector3df pos;
 		float x,y,z;
 		int id;
@@ -253,11 +271,6 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(posicion.Y);
 				bsIn.Read(posicion.Z);
 				bsIn.Read(playerNetworkID);
-				/*
-				pos2.X = 10;
-				pos2.Y = 20;
-				pos2.Z = 300;
-				*/
 				player[i] = new CorredorRed("assets/coche.obj", posicion);
 				player[i]->getNodo()->setID(i);
 				player[i]->update();
@@ -267,9 +280,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 				jugadores->aumentarJugadores();
 			}
 			cout << "ahora vamos a crear el suyo: " << endl;
-			pos.X = 0;
-			pos.Y = 0;
-			pos.Z = 300;
+			pos = pos2[i];
 			player[i] = new CorredorJugador("assets/coche.obj", pos);
 			player[i]->getNodo()->setID(i);
 			typeID = ID_SPAWN_PLAYER;
@@ -280,7 +291,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			y = pos.Y;
 			z = pos.Z;
 			bsOut.Write(typeID);
-			cout << x <<" - "<< y <<" - "<< z <<" - "<<endl;
+			cout << x <<" - "<< y <<" - "<< z <<endl;
 			bsOut.Write(x); //Posicion X
 			bsOut.Write(y); //Posicion Y
 			bsOut.Write(z); //Posicion Z

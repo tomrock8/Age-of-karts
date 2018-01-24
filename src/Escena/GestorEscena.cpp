@@ -19,7 +19,7 @@ void GestorEscena::update() {
 
 bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 	Escena *anterior = escenaActiva; // Guardar escena anterior para tratar con ella si es necesario
-	
+
 	if (anterior) { // Hay una escena activa actualmente
 		escenaActiva = nullptr; // Desasignamos la escena activa
 
@@ -49,7 +49,7 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 			}
 		}
 	}
-	
+
 	// No hay una escena activa, de manera que se crea una nueva
 	return nuevaEscena(tipo);
 }
@@ -79,23 +79,22 @@ Escena *GestorEscena::getEscena(Escena::tipo_escena tipo) {
 
 bool GestorEscena::agregaEscena(Escena *escena) {
 	Escena::tipo_escena tipo = escena->getTipoEscena(); // Tipo de escena en la que trabajamos
-	// Escena para comprobar si existe ya una escena de ese tipo
-	if (getEscena(tipo)) { // Ya existe una escena del tipo
+	
+	int indice = indiceEscena(tipo); // Escena para comprobar si existe ya una escena de ese tipo
+	
+	if (indice != -1) { // Ya existe una escena del tipo
 		cout << "Ya hay una escena creada de ese tipo y va a ser borrada";
 		borraEscena(tipo);	// Se borra la escena ya existente
+		escenas[indice] = escena; // Se almacena en el array de escena la nueva escena
+		return true; // La escena ha sido agregada al array y termina el proceso correctamente
 	}
-
-	// Buscar el indice donde se va a guardar la escena en el array
-	for (int i = 0; i < nEscenas; i++) {
-		if (!escenas[i]) { // La posicion del array esta vacia
-			escenas[i] = escena; // Asignamos al array de escenas el puntero de la nueva escena
-			if (!escenaActiva) // Comprubea que haya una escena activa
-				cambiaEscena(tipo); // No hay una escena activa. Se cambia a la nueva
-			return true; // La escena ha sido agregada al array y termina el proceso correctamente
-		}
+	else {
+		indice = indiceVacio(); // Cogemos la primera posicion vacia
+		escenas[indice] = escena; // Se almacena en el array de escena la nueva escena
+		return true; // La escena ha sido agregada al array y termina el proceso correctamente
 	}
-
-	return false; // No ha encontrado una posicion donde guardar la escena y termina el proceso
+	
+	return false;
 }
 
 bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo) {
@@ -116,6 +115,7 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo) {
 	case Escena::tipo_escena::CARRERA:
 		escenaActiva = new EscenaJuego(Escena::tipo_escena::CARRERA); // Se crea la nueva escena
 		escenaActiva->init(); // Inicializamos la escena
+		agregaEscena(escenaActiva); // Se agrega la escena nueva al array de escenas
 		cambioEscena = true; // Activamos el indicador para cambiar de escena
 		return true; // Devolvemos true y terminamos
 
@@ -157,6 +157,17 @@ int GestorEscena::indiceEscena(Escena::tipo_escena tipo) {
 					return i; // Devolvemos el indice donde esta el tipo de escena que buscamos
 				}
 			}
+		}
+	}
+
+	return -1; // La escena no ha sido encontrada y devolvemos -1
+}
+
+int GestorEscena::indiceVacio() {
+	if (escenas) { // Comprobamos que el array no es null
+		for (int i = 0; i < nEscenas; i++) {
+			if (!escenas[i]) // Comprobamos que el elemento del array es null
+				return i; // Devolvemos el indice donde esta el hueco
 		}
 	}
 

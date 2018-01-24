@@ -24,7 +24,21 @@ int main(int argc, char* argv[]) {
 
 	delete juego;
 	*/
-	Escena *e = GestorEscena::instancia().getEscena(Escena::tipo_escena::CARRERA);
+	//Escena *e = GestorEscena::instancia().getEscena(Escena::tipo_escena::CARRERA);
+	
+
+	// -----------------------------//
+	//	GAME LOOP
+	// -----------------------------//
+	Motor3d *m = Motor3d::getInstancia();
+
+	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
+	
+	while (m->getDevice()->run()) {
+		GestorEscena::instancia().update();
+	}
+
+	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
 
 	delete Motor3d::getInstancia();
 	return 0;

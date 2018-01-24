@@ -3,11 +3,15 @@
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 }
 
-EscenaJuego::~EscenaJuego() {
+EscenaJuego::~EscenaJuego(){
 	//----------------------------------//
 	//-----------DESTRUCTORES-----------//
 	//----------------------------------//
 	cout << "\n-------------- A BORRAR LA ESCENA DE JUEGO! -------------- \n";
+	cout << "Vamos a limpiar primero la escena!...";
+	limpiar();
+	cout << "Bien!\n";
+
 
 	cout << "Voy a entrar en el destructor de bullet. Deseadme suerte...";
 	delete MotorFisicas::getInstancia();

@@ -98,10 +98,17 @@ int main(int argc, char* argv[])
 	Corredor **pj = jugadores->getJugadores();
 	if(argc !=2){
 		pj[0] = new CorredorJugador("assets/coche.obj", pos);
-		jugadores->aumentarJugadores();}
+		jugadores->aumentarJugadores();
+
+		pj[1] = new CorredorIA("assets/coche.obj", vector3df(-5,10,300));
+		jugadores->aumentarJugadores();
+		
+		pj[0]->getNodo()->setID(0);
+		pj[1]->getNodo()->setID(1);
+		}
 
 		jugadores->setJugadores(pj);
-	//pj[1]->getNodo()->setID(id);
+		
 
 
 	//-----------------------------//
@@ -156,9 +163,11 @@ int main(int argc, char* argv[])
 		pj = jugadores->getJugadores();
 		if(argc!=2){
 			pj[0]->actualizarItem();
-			camara->moveCameraControl(pj[0], device);
+			//pj[1]->actualizarItem();
+			camara->moveCameraControl(pj[1], device);
 			colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 			pj[0]->update();
+			pj[1]->update();
 			textoDebug->agregar(pj[0]->toString());
 		}else{
 			int controlPlayer = client->getControlPlayer();
@@ -272,10 +281,13 @@ int main(int argc, char* argv[])
 		materialDriver.Lighting = false;
 		driver->setTransform(video::ETS_WORLD, core::matrix4());
   		driver->setMaterial(materialDriver);
-		if(argc !=2)
-			pj[0]->ActualizarRaytest(); 
+		if(argc !=2){
+			CorredorIA *COMENARDOSAUXILIAR = static_cast<CorredorIA *>(pj[1]);
+			//COMENARDOSAUXILIAR->update();
+			COMENARDOSAUXILIAR->ActualizarRaytest(); 
+			
 		//Para poder dibujar putas lineas de mierda
-
+		}
 		if (debug) {
 			SMaterial debugMat;
 			debugMat.Lighting = true;
@@ -330,7 +342,7 @@ void UpdateRender(btRigidBody *TObject)
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if (strcmp(Node->getName(), "Jugador") == 0) {
+	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 ) {
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
 
 	}

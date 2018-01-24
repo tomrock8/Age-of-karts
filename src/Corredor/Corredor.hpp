@@ -48,16 +48,8 @@ class Corredor: public RakNet::NetworkIDObject
 	//waypoints
 	void calculoDistanciaPunto();
 	void calculoDistanciaPuntoActual();
-	void calculoAnguloGiro();
-	void calculoAnguloGiro(btVector3 posicion);
-	void movimientoIA();
-	void ActualizarRaytest();
 
-
-	// Logica difusa
-	void logicaDifusa();
-	double FuncionTrapezoidal(double valor, double a, double b, double c, double d);
-	double FuncionTriangular(double valor, double a, double b, double c);
+	
 
 	// Update
 	void update();
@@ -98,18 +90,9 @@ protected:
 	int vueltas;
 
 	// parametros IA
-	btScalar anguloGiro;
 	btScalar distanciaWaypoint;
 	btScalar distanciaWaypointActual;
-	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
-	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
-	bool distanciaCerca,distanciaMedia,distanciaLejos;
-	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
-	void vision(btScalar distancia,ISceneNode *nodo);
-	float distanciaCaja,distanciaTurbo,distanciaEnemigo;
-	ISceneNode *caja;
-	ISceneNode *turbo;
-	ISceneNode *enemigo;
+	
 
 	//bullet
 	btRaycastVehicle *vehiculo;

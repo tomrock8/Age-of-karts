@@ -55,10 +55,6 @@ void CorredorJugador::movimiento()
 		if (!turboActivado)
 		desacelerar();
 
-	if	(teclado->isKeyDown(KEY_KEY_V)){
-		movimientoIA();
-
-	}
 }
 
 void CorredorJugador::update()

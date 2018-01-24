@@ -12,7 +12,6 @@ void CorredorRed::update(){
 
 void CorredorRed::movimiento(){
     EstadosJugador *estados = this->getEstados();
-    bool comprobadorMovimiento = false;
     frenodemano(false);
     switch (estados->getEstadoMovimiento()){
 
@@ -20,19 +19,18 @@ void CorredorRed::movimiento(){
 		break;
 		case 1:
         acelerar();
-        comprobadorMovimiento = true;
 		break;
 		case 2:
         frenar();
-        comprobadorMovimiento = true;
 		break;
 		case 3:
         frenar();
-        comprobadorMovimiento = true;
 		break;
 		case 4:
 		frenodemano(true);
-		comprobadorMovimiento = true;
+		break;
+		case 5:
+		desacelerar();
 		break;
     }
 
@@ -47,9 +45,6 @@ void CorredorRed::movimiento(){
         girarDerecha();   
 		break;
     }
-
-    if(!comprobadorMovimiento)
-        desacelerar();
     
 }
 

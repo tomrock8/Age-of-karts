@@ -26,6 +26,9 @@ void EstadosJugador::update(){
 		case 4:
         texto->agregar("DERRAPA\n");
 		break;
+		case 5:
+        texto->agregar("DESACELERA\n");
+		break;
 
 	}
     texto->agregar("DIRECCION MOVIMIENTO: ");
@@ -97,6 +100,9 @@ void EstadosJugador::setEstadoMovimiento(int estado_mov){
 		break;
 		case 4:
         estado = DERRAPA;
+		break;
+		case 5:
+        estado = DESACELERA;
 		break;
 
 	}

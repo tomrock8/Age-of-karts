@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
 	//-----ESCENARIO MAPA----------//
 	//-----------------------------//
 	Pista *pistaca = Pista::getInstancia();
-	pistaca->setMapa("assets/Mapa01/mapaIsla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+	pistaca->setMapa("assets/Mapa01/mapaIsla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/WPTrbBox2.obj");
 	pistaca->getArrayWaypoints();
 	//-----------------------------//
 	//-----GEOMETRIA COCHE---------//

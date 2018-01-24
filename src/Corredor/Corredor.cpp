@@ -859,6 +859,7 @@ void Corredor::frenodemano(bool activo)
 }
 void Corredor::desacelerar()
 {
+	estado->setEstadoMovimiento(DESACELERA);
 	vehiculo->applyEngineForce(0, 0);
 	vehiculo->applyEngineForce(0, 1);
 	vehiculo->applyEngineForce(0, 2);

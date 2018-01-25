@@ -32,12 +32,16 @@ private:
 	bool netLoaded;
 	unsigned char packetIdentifier;
 
-	RakNet::SocketDescriptor socketDescriptor;
-	RakNet::NetworkIDManager networkIDManager;
-	RakNet::NetworkID playerNetworkID;
-	RakNet::MessageID typeID;
-	RakNet::Packet *p;
-	RakNet::RakPeerInterface *client;
+  public:
+    Client(int = 10);
+    void CreateClientInterface();
+    void SetIP();
+    void ClientStartup();
+    void ShutDownClient();
+    void PlayerMovement();
+    void PlayerAction();
+    int ReceivePackets(ISceneManager *escena);
+    void SpawnPlayer(ISceneManager *escena);
 
 	std::string serverPort;
 	std::string clientPort;

@@ -55,42 +55,6 @@ Pista *Pista::getInstancia() {
 	return instancia;
 }
 
-/*void Pista::InicializarFisicas()
-{
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
-	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
-
-	Masa = 0;
-	//posicion inicial del objeto
-	btVector3 posicionMapa(0, 0, 0);
-	btTransform mapaTransformacion;
-	mapaTransformacion.setIdentity();
-	mapaTransformacion.setOrigin(posicionMapa);
-
-	//motionState por defecto
-	MotionState = new btDefaultMotionState(mapaTransformacion);
-
-	//crear la forma del mapa, el escalado ya se ha aplicado previamente en la funcion de triangleshape
-	//btVector3 mapaExtension(escala.X, escala.Y, escala.Z);
-
-	// Add mass
-	btVector3 localInertia;
-	FormaColision->calculateLocalInertia(Masa, localInertia);
-
-	//creacion del objeto
-	CuerpoColisionMapa = new btRigidBody(Masa, MotionState, FormaColision, localInertia);
-	//almacenar en puntero al nodo irrlich para poder actualizar( en caso de ser  necesario)
-	CuerpoColisionMapa->setUserPointer((void *)(Mapa));
-
-	//add al mundo
-	//mundo->addRigidBody(cuerpoMapa);
-	//objetos.push_back(cuerpoMapa);
-
-	mundo->addRigidBody(CuerpoColisionMapa);
-	objetos.push_back(CuerpoColisionMapa);
-	bullet->setObjetos(objetos);
-}*/
 
 void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 {
@@ -128,7 +92,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 	//lectura de fichero
 	std::string line;
-	std::string tipo, pX, pY, pZ, orientacionWp;
+	std::string tipo, pX, pY, pZ, orientacionWp, v1X, v1Y, v1Z, v2X, v2Y, v2Z;
 	std::string tamanyoArrayWaypoints;
 	std::string tamanyoArrayCajas;
 	std::string tamanyoArrayTurbo;
@@ -137,6 +101,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	tamTurbos = 0;
 	tamCajas = 0;
 	float orientacion = 0.0f;
+	
 
 	ifstream myfile(waypoints);
 
@@ -168,14 +133,32 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 
 			tipoObj = stoi(tipo);
 			if (tipoObj == 0) {//WAYPOINT
-				//seteamos los Waypoins
-				getline(myfile, orientacionWp, ' ');//orientacion con respecto a la carretera	
+				arrayWaypoints[tamWaypoints] = new Waypoint();
+				//=========================================//
+				//orientacion con respecto a la carretera  //
+				//=========================================//
+				getline(myfile, orientacionWp, ' ');
 				orientacion = stoi(orientacionWp);
 				//cout <<"orientacion: "<<orientacion<<endl;
-				arrayWaypoints[tamWaypoints] = new Waypoint();
-
+				//=========================================//
+				//Vectores que complementan los waypoint   // 
+				//=========================================//
+				//la distribucion sera vector1, wp, vector 2
+				//vector1
+				getline(myfile, v1X, ' ');
+				getline(myfile, v1Y, ' ');
+				getline(myfile, v1Z, ' ');
+				arrayWaypoints[tamWaypoints]->setVector1(btVector3(stof(v1X), stof(v1Y), stof(v1Z)));
+				//vector2
+				getline(myfile, v2X, ' ');
+				getline(myfile, v2Y, ' ');
+				getline(myfile, v2Z, ' ');
+				arrayWaypoints[tamWaypoints]->setVector2(btVector3(stof(v2X), stof(v2Y), stof(v2Z)));
+				//=========================================//
+				//			rellenar los waypoints		   //
+				//=========================================//
 				//comento lo de la id de los waypoints porq da conflico con las cajas
-				//arrayWaypoints[tamWaypoints]->getWaypoint()->setID(tamWaypoints);
+				arrayWaypoints[tamWaypoints]->getWaypoint()->setID(tamWaypoints);
 				
 				if (tamWaypoints > 0 && tamWaypoints <= (stoi(tamanyoArrayWaypoints) - 2))
 				{
@@ -242,7 +225,9 @@ Caja **Pista::getArrayCaja() {
 int Pista::getTamCajas() {
 	return tamCajas;
 }
-
+int Pista::getTamArrayWaypoints(){
+	return tamWaypoints;
+}
 void Pista::setArrayCaja(Caja **cajas) {
 	arrayCajas = cajas;
 }

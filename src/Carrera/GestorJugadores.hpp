@@ -24,6 +24,7 @@ class GestorJugadores
         void setJugadores(Corredor **pj1);
 
         void aumentarJugadores();
+        void decrementarJugadores();
 
 
     private:

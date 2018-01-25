@@ -24,6 +24,13 @@ void PlayerServer::setPositionRotation(float pos[3], float rot[3]){
     rotacion[2] = rot[2];
 }
 
+void PlayerServer::setEstados(int e1, int e2, int e3, int e4){
+    estado1 = e1;
+    estado2 = e2;
+    estado3 = e3;
+    estado4 = e4;
+}
+
 int PlayerServer::getID(){
     return id;
 }

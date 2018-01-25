@@ -42,7 +42,7 @@ void Client::SetIP()
 	std::cout << "Introduce IP del servidor: ";
 	//std::cin >> serverIP;
 	//serverIP = "127.0.0.1";
-	serverIP = "192.168.1.145";
+	serverIP = "192.168.1.8";
 	//puerto de escucha del cliente
 	clientPort = "6003";
 }
@@ -134,10 +134,10 @@ int Client::ReceivePackets(ISceneManager *escena)
 {
 	//cout <<"me gustar ver la vida pasar" << endl;
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	player = jugadores->getJugadores();
 	//bucle donde se reciben los distintos paquetes, se tratan y se deasignan
 	for (p = client->Receive(); p; client->DeallocatePacket(p), p = client->Receive())
 	{
+		player = jugadores->getJugadores();
 		//se coge el identificador del paquete recibido para los casos del switch
 		packetIdentifier = GetPacketIdentifier(p);
 
@@ -147,9 +147,28 @@ int Client::ReceivePackets(ISceneManager *escena)
 
 		//vector de posicion de Irrlicht
 		vector3df posicion;
-		vector3df pos2;
+		vector3df pos2[6];
+		pos2[0].X = -10;
+		pos2[0].Y = 0;
+		pos2[0].Z = 310;
+		pos2[1].X = -10;
+		pos2[1].Y = 0;
+		pos2[1].Z = 290;
+		pos2[2].X = -20;
+		pos2[2].Y = 0;
+		pos2[2].Z = 310;
+		pos2[3].X = -20;
+		pos2[3].Y = 0;
+		pos2[3].Z = 290;
+		pos2[4].X = -30;
+		pos2[4].Y = 0;
+		pos2[4].Z = 310;
+		pos2[5].X = -30;
+		pos2[5].Y = 0;
+		pos2[5].Z = 290;
 		vector3df pos;
 		float x,y,z;
+		int id;
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -232,9 +251,11 @@ int Client::ReceivePackets(ISceneManager *escena)
 			pos.Z = z;
 			player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
 			player[numPlayers]->getNodo()->setID(id);
+
 			//player[numPlayers]->setPosition(posicion);
 			player[numPlayers]->SetNetworkIDManager(&networkIDManager);
 			player[numPlayers]->SetNetworkID(playerNetworkID);
+			jugadores->aumentarJugadores();
 			numPlayers++;
 
 			break;
@@ -250,20 +271,16 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(posicion.Y);
 				bsIn.Read(posicion.Z);
 				bsIn.Read(playerNetworkID);
-				pos2.X = 10;
-				pos2.Y = 20;
-				pos2.Z = 300;
-				player[i] = new Corredor("assets/coche.obj", pos2);
+				player[i] = new CorredorRed("assets/coche.obj", posicion);
 				player[i]->getNodo()->setID(i);
+				player[i]->update();
 				//player[i]->setPosition(posicion);
 				player[i]->SetNetworkIDManager(&networkIDManager);
 				player[i]->SetNetworkID(playerNetworkID);
 				jugadores->aumentarJugadores();
 			}
 			cout << "ahora vamos a crear el suyo: " << endl;
-			pos.X=0;
-			pos.Y = 1;
-			pos.Z = 300;
+			pos = pos2[i];
 			player[i] = new CorredorJugador("assets/coche.obj", pos);
 			player[i]->getNodo()->setID(i);
 			typeID = ID_SPAWN_PLAYER;
@@ -274,7 +291,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			y = pos.Y;
 			z = pos.Z;
 			bsOut.Write(typeID);
-			cout << x <<" - "<< y <<" - "<< z <<" - "<<endl;
+			cout << x <<" - "<< y <<" - "<< z <<endl;
 			bsOut.Write(x); //Posicion X
 			bsOut.Write(y); //Posicion Y
 			bsOut.Write(z); //Posicion Z
@@ -293,7 +310,6 @@ int Client::ReceivePackets(ISceneManager *escena)
 			{
 				float *pos = new float[3];
 				float *ori = new float[3];
-				int id;
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(pos[0]);
 				bsIn.Read(pos[1]);
@@ -302,12 +318,38 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(ori[1]);
 				bsIn.Read(ori[2]);
 				bsIn.Read(id);
-
+				//cout << "Jugador "<< id <<": "<< pos[0] <<" - "<< pos[1] <<" - "<< pos[2] <<" - "<< endl;
+				/*float prevY = player[id]->getNodo()->getPosition().Y;
+				float dif = pos[1]-prevY;
+				if (dif>-0.5 && dif<0.5){
+					pos[1]=prevY;
+				}*/
 				//posicion = networkIDManager.GET_OBJECT_FROM_ID<PlayerClient *>(playerNetworkID)->getPosition();
 				
 				player[id]->setPosicion(pos, ori);
 
 				//networkIDManager.GET_OBJECT_FROM_ID<PlayerClient *>(playerNetworkID)->setPosition(posicion);
+			}
+
+			break;
+
+		case ID_PLAYER_STATE:
+			if (netLoaded)
+			{
+				int estado1, estado2, estado3, estado4;
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(estado1);
+				bsIn.Read(estado2);
+				bsIn.Read(estado3);
+				bsIn.Read(estado4);
+				bsIn.Read(id);
+				//std::cout << estado1 << std::endl;
+				EstadosJugador *estados = player[id]->getEstados();
+
+				estados->setEstadoMovimiento(estado1);
+				estados->setDireccionMovimiento(estado2);
+				estados->setEstadoObjeto(estado3);
+				estados->setEstadoCoche(estado4);
 			}
 
 			break;
@@ -336,13 +378,14 @@ int Client::ReceivePackets(ISceneManager *escena)
 			//delete player[playerDisconnect];
 			for(int i=0; i<numPlayers; i++){	//Recorre todos los players
 				if(playerDisconnect<=i){		//Si se encuentra con playerDisconnect asigna la posicion siguiente a esta
-					//if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
-						//player[i]=player[i+1];
-					//else
-						//player[i]=NULL;
+					if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
+						player[i]=player[i+1];
+					else
+						player[i]=NULL;
 				}
 			}
 			numPlayers--;
+			jugadores->decrementarJugadores();
 			if(controlPlayer>playerDisconnect)	//Si el jugador controlado por este cliente esta por arriba del jugador eliminado se debe reducir
 				controlPlayer--;				//controlPlayer para no cambiar de jugador con la reordenacion del array
 
@@ -426,13 +469,32 @@ int Client::getControlPlayer(){
 	return controlPlayer;
 }
 
+void Client::PlayerAction(){
+	int estado1 = player[controlPlayer]->getEstados()->getEstadoMovimiento();
+	int estado2 = player[controlPlayer]->getEstados()->getDireccionMovimiento();
+	int estado3 = player[controlPlayer]->getEstados()->getEstadoObjeto();
+	int estado4 = player[controlPlayer]->getEstados()->getEstadoCoche();
+	typeID = ID_PLAYER_STATE;
+	RakNet::BitStream bsOut;
+
+	bsOut.Write(typeID);
+	bsOut.Write(estado1);
+	bsOut.Write(estado2);
+	bsOut.Write(estado3);
+	bsOut.Write(estado4);
+	bsOut.Write(controlPlayer);
+	
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
+}
+
 void Client::PlayerMovement(){
-	vector3df position = player[controlPlayer]->getNodo()->getPosition();
+	btVector3 position = player[controlPlayer]->getRigidBody()->getCenterOfMassPosition();
 	float *pos = new float[3];
 
-	pos[0] = position.X;
-	pos[1] = position.Y;
-	pos[2] = position.Z;
+	pos[0] = position.getX();
+	pos[1] = position.getY();
+	pos[2] = position.getZ();
 
 	float *ori = new float[3];
 

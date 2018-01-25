@@ -102,3 +102,6 @@ int GestorJugadores::getNumJugadores(){
 void GestorJugadores::aumentarJugadores(){
 	numJugadores++;
 }
+void GestorJugadores::decrementarJugadores(){
+	numJugadores--;
+}

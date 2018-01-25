@@ -427,6 +427,29 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 	}
 }
 
+void Corredor::lanzarFlecha(vector3df posDisparo){
+	int direccionItem = 1;
+	Pista *pista = Pista::getInstancia();
+	core::list<Item *> items = pista->getItems();
+	Proyectil *pro = new Proyectil(posDisparo);
+	lanzarItem(pro, direccionItem);
+	items.push_back(pro);
+	soltarItem();
+	pista->setItems(items);
+}
+
+void Corredor::lanzarCajaFalsa(vector3df posDisparo){
+	Pista *pista = Pista::getInstancia();
+	core::list<Item *> items = pista->getItems();
+	posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
+	posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
+	CajaFalsa *est = new CajaFalsa(posDisparo);
+	est->inicializarFisicas();
+	soltarItem();
+	items.push_back(est);
+	pista->setItems(items);
+}
+
 bool Corredor::getTurbo() {
 	return turboActivado;
 }

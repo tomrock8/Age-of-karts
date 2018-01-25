@@ -94,19 +94,11 @@ void CorredorJugador::actualizarItem()
 
 			if (tipoObj == 1)
 			{
-				pro = new Proyectil(posDisparo);
-				lanzarItem(pro, direccionItem);
-				items.push_back(pro);
-				soltarItem();
+				lanzarFlecha(posDisparo);
 			}
-				else if (tipoObj == 2)
+			else if (tipoObj == 2)
 			{
-				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
-				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
-				CajaFalsa *est = new CajaFalsa(posDisparo);
-				est->inicializarFisicas();
-				soltarItem();
-				items.push_back(est);
+				lanzarCajaFalsa(posDisparo);
 			}
 			else if (tipoObj == 3)
 			{

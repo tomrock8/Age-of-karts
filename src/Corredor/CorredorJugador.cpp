@@ -91,12 +91,6 @@ void CorredorJugador::actualizarItem()
 		if (tipoObj != 0 && !checkItem)
 		{
 			checkItem = true;
-			if (teclado->isKeyDown(KEY_DOWN))
-			{
-				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
-				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
-				direccionItem = -1;
-			}
 
 			if (tipoObj == 1)
 			{

@@ -226,6 +226,8 @@ int main(int argc, char* argv[])
 			}
 		}
 
+		if(jugadores->getNumJugadores() != 0)		
+			gc->update();
 
 		
 		if(teclado->isKeyDown(KEY_KEY_R)){
@@ -283,7 +285,6 @@ int main(int argc, char* argv[])
 			debug = 1;
 		}
 
-		gc->update();
 		//-------ENTRADA TECLADO FIN----------//
 		int fps = driver->getFPS();
 		if (lastFPS != fps)

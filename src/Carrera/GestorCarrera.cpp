@@ -6,19 +6,15 @@ GestorCarrera::GestorCarrera(){
     pj1 = jugadores->getJugadores();
     jugadores->setJugadores(pj1);
     pj2= new Corredor*[6];
-    for (int j = 0; j < jugadores->getNumJugadores(); j++) {
-        if (pj1[j] != NULL) {
-            pj1[0]->setPosicionCarrera(3);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
-            pj1[1]->setPosicionCarrera(2);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
-            pj1[2]->setPosicionCarrera(1);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
-
-            //pj1[j]->setPosicionCarrera(pj1[j]->getNodo()->getID()+1);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
-        }
-        pj2[j]=pj1[j];
-    }
     
 }
 void GestorCarrera::update(){
+    for (int j = 0; j < jugadores->getNumJugadores(); j++) {
+        if (pj1[j] != NULL) {
+            pj1[j]->setPosicionCarrera(pj1[j]->getNodo()->getID()+1);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
+        }
+        pj2[j]=pj1[j];
+    }
     int cont=0;
     pj_aux=NULL;
     //ordenamos el array de jugadores en pj2, en funcion de sus waypoints de mayor a menor

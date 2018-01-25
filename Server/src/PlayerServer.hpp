@@ -12,6 +12,7 @@ int estado1;
 int estado2;
 int estado3;
 int estado4;
+int obj;
 
 
 public:
@@ -24,6 +25,7 @@ public:
   void frenar();
   void girarA();
   void girarB();
+  void setObj(int t);
 
 
 

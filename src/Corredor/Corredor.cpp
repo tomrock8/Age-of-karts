@@ -3,6 +3,8 @@
 #include <string>
 #include <time.h>
 #include "Pista.hpp"
+#include "Client.hpp"
+
 
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
@@ -372,12 +374,15 @@ void Corredor::setTipoObj()
 {
 	srand(time(NULL));
 	tipoObj = rand() % 4 + 1;
+	Client *c = Client::getInstancia();
+	c->PlayerSetObject(tipoObj);
 	//cout << "Random ------>" << tipoObj << endl;
 }
 
 void Corredor::setTipoObj(int i)
 {
 	tipoObj = i;
+	cout << "el objeto --- "<< i <<" ---"<<endl;
 	//cout << "Random ------>" << tipoObj << endl;
 }
 

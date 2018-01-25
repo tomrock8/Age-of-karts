@@ -23,6 +23,7 @@ public:
 	void ShutDownClient();
 	void PlayerMovement();
 	void PlayerAction();
+	void PlayerSetObject(int tipo);
 	int ReceivePackets(ISceneManager *escena);
 	void SpawnPlayer(ISceneManager *escena);
 

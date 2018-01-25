@@ -3,7 +3,7 @@
 
 CorredorRed::CorredorRed(stringw rutaObj, vector3df pos) : Corredor(rutaObj, pos)
 {
-
+	cuboNodo->SetName("JugadorRed");
 }
 
 void CorredorRed::updateRed(){

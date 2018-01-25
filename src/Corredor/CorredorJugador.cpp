@@ -103,6 +103,7 @@ void CorredorJugador::actualizarItem()
 				pro = new Proyectil(posDisparo);
 				lanzarItem(pro, direccionItem);
 				items.push_back(pro);
+				soltarItem();
 			}
 				else if (tipoObj == 2)
 			{
@@ -172,13 +173,19 @@ void CorredorJugador::actualizarItem()
 			}
 			else if (tipoObj == 7)
 			{
-				h->getNodo()->setVisible(true);
-				h->setOrientacion(orientacion);
-				h->setPadre(this->getNodo());
-				h->setPosicion(posDisparo);
-				h->lanzarHabilidad();
-				items.push_back(h);
-				soltarItem();
+				if (getLimite() >= 10) {//puedo lanzar la habilidad
+					h->getNodo()->setVisible(true);
+					h->setOrientacion(orientacion);
+					h->setPadre(this->getNodo());
+					h->setPosicion(posDisparo);
+					h->lanzarHabilidad();
+					items.push_back(h);
+					soltarItem();
+				}
+				else {
+					cout << "que mierda estas haciendo , no puedes usar la habilidad si tu limite no es 10 o mas" << endl;
+				}
+				
 			}
 			pista->setItems(items);
 			//Llama a la funcion de la clase padre

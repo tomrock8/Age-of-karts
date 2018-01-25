@@ -45,6 +45,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void setWaypointAnteriorID(int i);
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
+	void setLimite(int s);
 	
 
 	//waypoints
@@ -75,7 +76,7 @@ class Corredor: public RakNet::NetworkIDObject
 	Waypoint *getWaypointAnterior();
 	bool getProteccion();
 	EstadosJugador *getEstados();
-
+	int getLimite();
 	virtual void updateRed() {}; 
 
 
@@ -122,6 +123,7 @@ protected:
 
 	//habilidad 
 	Habilidad * h;
+	int limite;
 
 	btVector3 posicion;
 	btVector3 direccionRuedas;

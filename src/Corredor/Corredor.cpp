@@ -13,6 +13,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	tipoObj = 0;
 	turboActivado = false;
 	timerTurbo = 0;
+	limite = 0;
 	Motor3d *m = Motor3d::getInstancia();
 	ISceneManager *smgr = m->getScene();
 	coche = smgr->getMesh(rutaObj);
@@ -74,7 +75,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	if (cuboNodo) InicializarFisicas();
 
 	//HABILIDADES
-	h = new Habilidad(1, this->getNodo());
+	h = new Habilidad(4, this->getNodo());
 	h->getNodo()->setVisible(false);
 	h->setPosicion(pos);
 	h->setPadre(this->getNodo());
@@ -266,6 +267,8 @@ void Corredor::calculoDistanciaPunto() {
 	texto->agregar(to_string( siguiente->getWaypoint()->getID()-6)+"\n");
 	texto->agregar("VUELTA: ");
 	texto->agregar(to_string(vueltas)+"\n");
+	texto->agregar("Limite:" + to_string(getLimite()) + "\n");
+
 	
 
 
@@ -402,6 +405,11 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 void Corredor::soltarItem()
 {
 	tipoObj = 0;
+	setLimite(getLimite() + 2);
+	cout << "El limite se ha incrementado, ahora es : " << getLimite() << endl;
+	if (h->getHabilidadActiva() == true) {
+		setLimite(0);
+	}
 }
 
 void Corredor::setTurbo(bool activo, bool objeto, int valor) {
@@ -678,7 +686,7 @@ void Corredor::updateHabilidad() {
 
 
 	if (tiempo->getTimer() - inicioHabilidad >= 3) {
-	cout << "Se acaba el tiro\n";
+	//cout << "Se acaba el tiro\n";
 	h->setHabilidadActiva(false);
 	h->getNodo()->setVisible(false);
 	h->eliminarFisicas();
@@ -719,6 +727,12 @@ void Corredor::updateEstado(){
 		break;
 	case 5:
 		estado->setEstadoObjeto(ESCUDO);
+		break;
+		case 6:
+		estado->setEstadoObjeto(FLECHA_TRIPLE);
+		break;
+		case 7:
+		estado->setEstadoObjeto(HABILIDAD);
 		break;
 	}
 	estado->update();
@@ -969,4 +983,10 @@ btScalar Corredor::getdistanciaWaypointAnterior(){
 }
 int Corredor::getVueltas(){
 	return vueltas;
+}
+void Corredor::setLimite(int s) {
+	limite = s;
+}
+int Corredor::getLimite() {
+	return limite;
 }

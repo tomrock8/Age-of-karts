@@ -29,7 +29,7 @@ public:
   void setOrientacion(vector3df o);
   void setPosicion(vector3df po);
   void setPadre(ISceneNode* n);
-  btRigidBody* inicializarFisicas(int tipo);
+  void inicializarFisicas(int tipo);
   void eliminarFisicas();
 
 private:

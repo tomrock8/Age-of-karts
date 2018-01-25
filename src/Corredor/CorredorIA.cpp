@@ -31,19 +31,19 @@ void CorredorIA::movimiento()
 	
 
 	if(!caja || !turbo){
-	cout<< "sigoWAyPOINT"<< endl;
+	//cout<< "sigoWAyPOINT"<< endl;
 	calculoAnguloGiro(siguiente->getPosicion());
 	
 	}
 	
 	if(caja && turbo || caja && !turbo){
-		cout<< "sigoCAJA"<< endl;
+	//	cout<< "sigoCAJA"<< endl;
 	calculoAnguloGiro(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z));	
 	
 	}
 	
 	if(turbo && !caja){
-		cout<< "sigoTUrbo"<< endl;
+	//	cout<< "sigoTUrbo"<< endl;
 	calculoAnguloGiro(btVector3(turbo->getPosition().X,turbo->getPosition().Y,turbo->getPosition().Z));	
 	
 	}
@@ -94,7 +94,7 @@ void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 		if(angulo2>anguloGiro)
 			anguloGiro = -anguloGiro;
 
-	cout<< "ANGULO:" << anguloGiro  << endl;
+	//cout<< "ANGULO:" << anguloGiro  << endl;
 }
 
 

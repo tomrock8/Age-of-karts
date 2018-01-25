@@ -132,7 +132,8 @@ void Habilidad::lanzarHabilidad() {
 	tiempo->getInstancia();
 	inicioHabilidad = tiempo->getTimer();
 	habilidadActiva = true;
-	btRigidBody *rigidBody = inicializarFisicas(tipoHabilidad);
+	//btRigidBody *rigidBody = inicializarFisicas(tipoHabilidad);
+	inicializarFisicas(tipoHabilidad);
 	if (tipoHabilidad == 2) {//pirata
 		this->getRigidBody()->setGravity(btVector3(0, 0, 0));
 		this->getRigidBody()->setLinearVelocity(btVector3(orientacion.X * 100, 5.0f, orientacion.Z * 100));
@@ -186,31 +187,40 @@ int Habilidad::getTipo() {
 	return tipoHabilidad;
 }
 
-btRigidBody *Habilidad::inicializarFisicas(int tipo)
+void Habilidad::inicializarFisicas(int tipo)
 {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
+
 	// Set the initial position of the object
 
 	btTransform Transform;
 	Transform.setIdentity();
-	Transform.setOrigin(btVector3(posicion.X, posicion.Y, posicion.Z));
+	if (tipoHabilidad == 1 || tipoHabilidad == 4) {//solo la del chino y gladiador seguira al coche
+		Transform.setOrigin(btVector3(Habilidad::getNodo()->getPosition().X, Habilidad::getNodo()->getPosition().Y, Habilidad::getNodo()->getPosition().Z));
+	}
+	else {
+		Transform.setOrigin(btVector3(posicion.X, posicion.Y, posicion.Z));
+	}
+
+	
+
 	MotionState = new btDefaultMotionState(Transform);
 
 
 	// Create the shape
-	if (tipo == 1 || tipo == 2) {
+	/*if ( tipo == 2) {
 
 		btScalar esfera(16);
 		Shape = new btSphereShape(esfera);
 				
 	}
-	else {
+	else {*/
 		btVector3 HalfExtents(escala.X * 0.5f, escala.Y * 0.5f, escala.Z * 0.5f);
 		Shape = new btBoxShape(HalfExtents);
-	}
+	//}
 	
 	// Add mass
 	btVector3 LocalInertia;
@@ -232,5 +242,5 @@ btRigidBody *Habilidad::inicializarFisicas(int tipo)
 	objetos.push_back(rigidBody);
 	bullet->setObjetos(objetos);
 
-	return rigidBody;
+
 }

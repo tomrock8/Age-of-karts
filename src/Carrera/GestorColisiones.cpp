@@ -98,54 +98,63 @@ bool GestorColisiones::JugadorEstatico() {
 	core::list<Item *> items = pista->getItems();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	Pista *mapa = Pista::getInstancia();
+	bool b1 = false;
 	//cout << TimeStamp << endl;
 
 	if (strcmp("Jugador", nodoA->getName()) == 0) {
-		if (strcmp("Estatico", nodoB->getName()) == 0) {
+		if (strcmp("Estatico", nodoB->getName()) == 0 || strcmp("Proyectil", nodoB->getName()) == 0) {
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
-				if (pj1[j] != NULL) {//tengo un personaje, y voy a ver si tiene escudo
+				if (pj1[j]->getNodo()->getID() == nodoA->getID()) {//tengo un personaje, y voy a ver si tiene escudo
 					if (pj1[j]->getProteccion() == true) {
 						cout << "estoy protegido" << endl;
 						pj1[j]->setProteccion(false);
+						b1 = true;
+						break;
 					}
 
 				}
 			}
-			//Turbo *t = mapa->getTurbo();
-			//t->setFrenadaActivo(pj1Col, true);
+
+
 			int idB = nodoB->getID();
 			for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
 			{
 				Item *item = *Iterator;
 				if (item->getNodo()->getID() == idB) {
-					if (item->getColision()) {
-						if (strcmp("Aceite", item->getNombre()) == 0) {	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
-							for (int j = 0; j < jugadores->getNumJugadores(); j++) {
-								if (pj1[j] != NULL) {
-									if (nodoA->getID() == pj1[j]->getNodo()->getID()) {
-										pj1[j]->aplicarAceite();
+					//if (item->getColision()) {
+						if (!b1) {
+							cout << "dentro" << endl;
+							if (strcmp("Aceite", item->getNombre()) == 0) {	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
+								for (int j = 0; j < jugadores->getNumJugadores(); j++) {
+									if (pj1[j] != NULL) {
+										if (nodoA->getID() == pj1[j]->getNodo()->getID()) {
+											pj1[j]->aplicarAceite();
+										}
 									}
 								}
 							}
 						}
+						cout << "borramos" << endl;
 						item->Delete();
 						Iterator = items.erase(Iterator);
 						pista->setItems(items);
-					}
-					else {
-						item->setColision(true);
-					}
+					//}
+					//else {
+					//	item->setColision(true);
+					//}
 
 					return true;
 				}
 			}
+
 
 			//cout << "Jugador - Turbo\n";
 		}
 	}
 	return false;
 }
+
 
 //
 // Comprobar colisiones entre Jugador y Caja

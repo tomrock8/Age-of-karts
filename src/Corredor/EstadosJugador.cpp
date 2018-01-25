@@ -46,6 +46,7 @@ void EstadosJugador::update(){
 		break;
     }
     texto->agregar("OBJETO ACTUAL: ");
+	
     switch (objeto){
 
 		case 0:
@@ -66,7 +67,14 @@ void EstadosJugador::update(){
         case 5:
         texto->agregar("ESCUDO\n");
 		break;
+		case 6:
+		texto->agregar("FLECHA TRIPLE\n");
+		break;
+		case 7:
+		texto->agregar("HABILIDAD\n");
+		break;
     }
+
     texto->agregar("ESTADO COCHE: ");
     switch (estadoCoche){
 		case 0:
@@ -158,6 +166,9 @@ void EstadosJugador::setEstadoObjeto(int estado_obj){
 		break;
 		case 6:
         objeto = FLECHA_TRIPLE;
+		break;
+		case 7:
+		objeto = HABILIDAD;
 		break;
 
 	}

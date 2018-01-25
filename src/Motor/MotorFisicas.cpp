@@ -53,6 +53,7 @@ MotorFisicas::~MotorFisicas() {
 	delete broadPhase;
 	cout << "\n";
 	
+	instancia = nullptr;
 	cout << "SALGO DESTRUCTOR MOTOR DE FISICAS\n";
 }
 

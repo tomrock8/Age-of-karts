@@ -3,7 +3,7 @@
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 }
 
-EscenaJuego::~EscenaJuego(){
+EscenaJuego::~EscenaJuego() {
 	//----------------------------------//
 	//-----------DESTRUCTORES-----------//
 	//----------------------------------//
@@ -25,9 +25,7 @@ EscenaJuego::~EscenaJuego(){
 	delete Pista::getInstancia();
 	cout << "No ha ido mal.\n";
 
-	
-	//delete camara;
-	//delete colisiones;
+	delete camara;
 }
 
 void EscenaJuego::init() {
@@ -149,6 +147,8 @@ void EscenaJuego::update() {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 
+
+	comprobarInputs();
 	if (argc == 2) {
 		client->ReceivePackets(m->getScene());
 		//client->SpawnPlayer(smgr);
@@ -160,8 +160,7 @@ void EscenaJuego::update() {
 	TimeStamp = m->getDevice()->getTimer()->getTime();
 	UpdatePhysics(DeltaTime);
 
-	for (int i = 0; i < pistaca->getTamCajas(); i++)
-	{
+	for (int i = 0; i < pistaca->getTamCajas(); i++) {
 		pistaca->getArrayCaja()[i]->comprobarRespawn();
 	}
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
@@ -194,12 +193,6 @@ void EscenaJuego::update() {
 		if (jugadores->getNumJugadores() != 0)
 			client->PlayerMovement();
 	}
-
-
-	comprobarInputs();
-
-	//-------ENTRADA TECLADO FIN----------//
-
 
 	jugadores->setJugadores(pj);
 
@@ -265,6 +258,11 @@ void EscenaJuego::comprobarInputs() {
 			debug = 1;
 		}
 	}
+
+	if (teclado->isKeyDown(KEY_F5)) {
+		GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
+	}
+
 
 	//-------ENTRADA TECLADO FIN----------//
 }

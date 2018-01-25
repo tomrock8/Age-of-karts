@@ -828,8 +828,7 @@ btRigidBody *Corredor::getRigidBody()
 	return CuerpoColisionChasis;
 }
 
-IMeshSceneNode *Corredor::getNodo()
-{
+IMeshSceneNode *Corredor::getNodo(){
 	return cuboNodo;
 }
 
@@ -1127,15 +1126,15 @@ std::string Corredor::getDireccion()
 }
 //destructor
 Corredor::~Corredor() {
-	cout << "\nENTRO DESTRUCTOR CORREDOR: " << cuboNodo->getID() << "\n";
+	cout << "\nENTRO DESTRUCTOR CORREDOR: \n";
 	
 	// Los rigid body se borran desde el motor de fisicas
 	// Los collision shape se borran desde el motor de fisicas
 	// delete CuerpoColisionChasis;
+	delete vehiculo;
+	//delete cuboNodo;
 
-
-
-	cout << "SALGO DESTRUCTOR CORREDOR: " << cuboNodo->getID();
+	cout << "SALGO DESTRUCTOR CORREDOR: ";
 }
 bool Corredor::getProteccion() {
 	return proteccion;

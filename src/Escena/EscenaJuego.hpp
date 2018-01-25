@@ -1,6 +1,7 @@
 #ifndef ESCENAJUEGO_H
 #define ESCENAJUEGO_H
 
+#include "GestorEscena.hpp"
 #include "Escena.hpp"
 
 #include "Motor3d.hpp"

@@ -5,7 +5,10 @@
 
 class Escena {
 public:
-	typedef enum { MENU, CARRERA, CARGA, LOBBY, OPCIONES, CREDITOS } tipo_escena;
+	typedef enum { MENU, CARRERA, CARGA, LOBBY, OPCIONES, CREDITOS } tipo_escena; // Definicion de los diferentes tipos de escenas
+	static const int nTipos = 6; // Numero de tipos de escenas que pueden haber
+
+	typedef enum { CAMBIO, CORRIENDO, CARGANDO } estado_escena; // Definicion del estado actual de la escena
 
 	Escena(tipo_escena tipo);
 	~Escena();
@@ -23,7 +26,7 @@ public:
 	
 protected:
 
-	tipo_escena tipoEscena;
+	tipo_escena tipoEscena; // Tipo de escena a la que pertenece
 
 	virtual void comprobarInputs() = 0; // Comprobar los inputs en la escena
 

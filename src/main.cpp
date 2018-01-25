@@ -9,37 +9,21 @@
 #endif
 
 int main(int argc, char* argv[]) {
-	/*
-	EscenaJuego *juego = new EscenaJuego(Escena::tipo_escena::CARRERA);
-	juego->init();
-
-	// -----------------------------//
-	//	GAME LOOP
-	// -----------------------------//
 	Motor3d *m = Motor3d::getInstancia();
-
-	while (m->getDevice()->run()) {
-		juego->update();
-	}
-
-	delete juego;
-	*/
-	//Escena *e = GestorEscena::instancia().getEscena(Escena::tipo_escena::CARRERA);
-	
-
-	// -----------------------------//
-	//	GAME LOOP
-	// -----------------------------//
-	Motor3d *m = Motor3d::getInstancia();
-
 	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
-	
+
+	// -----------------------------//
+	//	GAME LOOP
+	// -----------------------------//
 	while (m->getDevice()->run()) {
 		GestorEscena::instancia().update();
 	}
 
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
-
 	delete Motor3d::getInstancia();
+
+
+	cout << "\n\ncaca";
+
 	return 0;
 }

@@ -4,10 +4,10 @@
 
 #include <iostream>
 #include <string>
-//#include "IrrlichtLib.hpp"
-//#include "Corredor.hpp"
+#include "Corredor.hpp"
 #include "CorredorRed.hpp"
 #include "CorredorJugador.hpp"
+#include "CorredorIA.hpp"
 
 using namespace std;
 

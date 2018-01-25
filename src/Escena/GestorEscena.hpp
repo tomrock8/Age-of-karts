@@ -26,7 +26,7 @@ public:
 private:
 	static GestorEscena _instancia;  // Instancia de la escena para el singleton
 
-	const int nEscenas = 6;	// Numero de escenas maximo que tiene el juego
+	//const int nEscenas = 6;	// Numero de escenas maximo que tiene el juego
 	Escena **escenas;	// Array de escenas que tiene el juego
 
 	Escena *escenaActiva; // Escena que esta activa actualmente

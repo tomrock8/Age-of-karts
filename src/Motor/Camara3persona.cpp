@@ -8,6 +8,10 @@ Camara3persona::Camara3persona()
 	zdirection = 0;
 }
 
+Camara3persona::~Camara3persona() {
+	delete camera;
+}
+
 void Camara3persona::moveCameraControl(Corredor *pj1)
 {
 	CTeclado *teclado = CTeclado::getInstancia();

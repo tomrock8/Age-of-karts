@@ -10,6 +10,7 @@ void GestorColisiones::ComprobarColisiones()
 	Pista *pista = Pista::getInstancia();
 	Caja** cajas = pista->getArrayCaja();
 	btDynamicsWorld *mundo = bullet->getMundo();
+
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	pj1 = jugadores->getJugadores();
 	int numManifolds = mundo->getDispatcher()->getNumManifolds();
@@ -46,21 +47,17 @@ void GestorColisiones::ComprobarColisiones()
 
 
 
-bool GestorColisiones::JugadorWaypoint(){
-	
-     if (strcmp("Jugador", nodoA->getName()) == 0)
-    {
-        if (strcmp("Waypoint", nodoB->getName()) == 0)
-        {
-			for(int i = 0; i< jugadores->getNumJugadores(); i++){
-				if(pj1[i]!=NULL)
-					if(nodoA->getID() == pj1[i]->getNodo()->getID()){
+bool GestorColisiones::JugadorWaypoint() {
+	if (strcmp("Jugador", nodoA->getName()) == 0) {
+		if (strcmp("Waypoint", nodoB->getName()) == 0) {
+			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+				if (pj1[i] != NULL) {
+					if (nodoA->getID() == pj1[i]->getNodo()->getID()) {
 						pj1[i]->setWaypointActual(nodoB);
-						
-						return true;	
+						return true;
 					}
+				}
 			}
-
 		}
 	}
 
@@ -73,31 +70,27 @@ bool GestorColisiones::JugadorWaypoint(){
 //
 // Comprobar colisiones entre Jugador y turbo
 //
-bool GestorColisiones::JugadorTurbo()
-{
+bool GestorColisiones::JugadorTurbo() {
 	Pista *mapa = Pista::getInstancia();
 	//cout << TimeStamp << endl;
 
-	if (strcmp("Jugador", nodoA->getName()) == 0)
-	{
-		if (strcmp("Turbo", nodoB->getName()) == 0)
-		{
-			for( int i = 0; i< jugadores->getNumJugadores(); i++)
-				if(nodoA->getID() == pj1[i]->getNodo()->getID())
-					pj1[i]->setTurbo(true, false,26000);
-					
-			//cout << "Jugador - Turbo\n";
-			return true;
+	if (strcmp("Jugador", nodoA->getName()) == 0) {
+		if (strcmp("Turbo", nodoB->getName()) == 0) {
+			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+				if (nodoA->getID() == pj1[i]->getNodo()->getID())
+					pj1[i]->setTurbo(true, false, 26000);
+				return true;
+			}
 		}
 	}
+
 	return false;
 }
 
 //
 // Comprobar colisiones entre Jugador y turbo
 //
-bool GestorColisiones::JugadorEstatico()
-{
+bool GestorColisiones::JugadorEstatico() {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	Pista *pista = Pista::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -106,14 +99,12 @@ bool GestorColisiones::JugadorEstatico()
 	Pista *mapa = Pista::getInstancia();
 	//cout << TimeStamp << endl;
 
-	if (strcmp("Jugador", nodoA->getName()) == 0)
-	{
-		if (strcmp("Estatico", nodoB->getName()) == 0)
-		{
+	if (strcmp("Jugador", nodoA->getName()) == 0) {
+		if (strcmp("Estatico", nodoB->getName()) == 0) {
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
 				if (pj1[j] != NULL) {//tengo un personaje, y voy a ver si tiene escudo
-					if (pj1[j]->getProteccion()==true) {
+					if (pj1[j]->getProteccion() == true) {
 						cout << "estoy protegido" << endl;
 						pj1[j]->setProteccion(false);
 					}
@@ -126,21 +117,20 @@ bool GestorColisiones::JugadorEstatico()
 			for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
 			{
 				Item *item = *Iterator;
-				if (item->getNodo()->getID() == idB)
-				{
+				if (item->getNodo()->getID() == idB) {
 					if (item->getColision()) {
-						if (strcmp("Aceite", item->getNombre()) == 0){	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
-							for(int j = 0; j< jugadores->getNumJugadores(); j++){
-								if(pj1[j]!=NULL)
-									if (nodoA->getID()== pj1[j]->getNodo()->getID()){
+						if (strcmp("Aceite", item->getNombre()) == 0) {	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
+							for (int j = 0; j < jugadores->getNumJugadores(); j++) {
+								if (pj1[j] != NULL) {
+									if (nodoA->getID() == pj1[j]->getNodo()->getID()) {
 										pj1[j]->aplicarAceite();
 									}
+								}
 							}
 						}
 						item->Delete();
 						Iterator = items.erase(Iterator);
 						pista->setItems(items);
-						
 					}
 					else {
 						item->setColision(true);
@@ -159,8 +149,7 @@ bool GestorColisiones::JugadorEstatico()
 //
 // Comprobar colisiones entre Jugador y Caja
 //
-bool GestorColisiones::JugadorCaja(Caja **cajas)
-{
+bool GestorColisiones::JugadorCaja(Caja **cajas) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	Pista *pista = Pista::getInstancia();
@@ -168,25 +157,22 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	bool colision = false;
 
-	if (strcmp("Jugador", nodoA->getName()) == 0)
-	{
-		if (strcmp("Caja", nodoB->getName()) == 0 && nodoB->isVisible())
-		{
+	if (strcmp("Jugador", nodoA->getName()) == 0) {
+		if (strcmp("Caja", nodoB->getName()) == 0 && nodoB->isVisible()) {
 			colision = true;
 			//cout << "Jug - Caja\n";
 			int idB = nodoB->getID();
 			//cout << "Tam Cajas: " << tamCajas << "- " << idB << endl;
-			for (int i = 0; i < tamCajas; i++)
-			{
-				if (cajas[i] != NULL)
-				{
-					if (cajas[i]->getNodo()->getID() == idB)
-					{
-						for(int j = 0; j< jugadores->getNumJugadores(); j++)
-							if(pj1[j]!=NULL)
-								if(nodoA->getID()== pj1[j]->getNodo()->getID()){
+			for (int i = 0; i < tamCajas; i++) {
+				if (cajas[i] != NULL) {
+					if (cajas[i]->getNodo()->getID() == idB) {
+						for (int j = 0; j < jugadores->getNumJugadores(); j++) {
+							if (pj1[j] != NULL) {
+								if (nodoA->getID() == pj1[j]->getNodo()->getID()) {
 									cajas[i]->romper(pj1[j]);
 								}
+							}
+						}
 					}
 				}
 				//cout << "Entro " << i << endl;
@@ -201,8 +187,7 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 //
 // Comprobar colisiones entre proyectil y objeto destruible
 //
-bool GestorColisiones::objetoDestruible()
-{
+bool GestorColisiones::objetoDestruible() {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	Pista *pista = Pista::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -210,19 +195,15 @@ bool GestorColisiones::objetoDestruible()
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	bool colision = false;
 
-	if (strcmp("Destruible", nodoA->getName()) == 0)
-	{
-		if (strcmp("Proyectil", nodoB->getName()) == 0)
-		{
+	if (strcmp("Destruible", nodoA->getName()) == 0) {
+		if (strcmp("Proyectil", nodoB->getName()) == 0) {
 			colision = true;
 			//cout << "Destruible - Item\n";
 			int idB = nodoB->getID();
-			for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
-			{
+			for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator) {
 				Item *item = *Iterator;
 				//cout << "NodoB: " << idB << " == NodoItem: " << item->getNodo()->getID() << endl;
-				if (item->getNodo()->getID() == idB)
-				{
+				if (item->getNodo()->getID() == idB) {
 					//cout << "Entro\n";
 					item->Delete();
 					Iterator = items.erase(Iterator);

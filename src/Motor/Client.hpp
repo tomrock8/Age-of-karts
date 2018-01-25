@@ -24,6 +24,7 @@ public:
 	void PlayerMovement();
 	void PlayerAction();
 	void PlayerSetObject(int tipo);
+	void PlayerThrowObject();
 	int ReceivePackets(ISceneManager *escena);
 	void SpawnPlayer(ISceneManager *escena);
 

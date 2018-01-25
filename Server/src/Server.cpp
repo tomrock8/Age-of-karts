@@ -304,6 +304,20 @@ void Server::ReceivePackets()
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 			break;	
 
+		case ID_PLAYER_THROW_OBJECT:
+
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+
+			player[id]->setObj(0);
+
+			typeID = ID_PLAYER_THROW_OBJECT;
+			bsOut.Write(typeID);
+			bsOut.Write(id);
+
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+			break;
+
 		case ID_PLAYER_DISCONNECT:
 			std::cout << "Borrando player\n";
 			int playerDisconnect;

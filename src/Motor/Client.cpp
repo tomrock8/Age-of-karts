@@ -386,6 +386,17 @@ int Client::ReceivePackets(ISceneManager *escena)
 
 			break;
 
+		case ID_PLAYER_THROW_OBJECT:
+			if (netLoaded)
+			{
+				int id;
+
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(id);
+				cout <<" el jugador "<< id<<" lanza el objeto" << endl;
+				player[id]->lanzarItemRed();
+			}
+
 		case ID_REFRESH_SERVER:
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			for (int i = 0; i < numPlayers; i++)
@@ -556,6 +567,15 @@ void Client::PlayerSetObject(int tipo){
 	cout <<"He cogido el objeto ---"<< tipo <<" --- y lo comparto con los demas"<< endl;
 	bsOut.Write(typeID);
 	bsOut.Write(tipo);
+	bsOut.Write(controlPlayer);
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+
+void Client::PlayerThrowObject(){
+	typeID = ID_PLAYER_THROW_OBJECT;
+	RakNet::BitStream bsOut;
+	cout <<"He lanzado el objeto!" << endl;
+	bsOut.Write(typeID);
 	bsOut.Write(controlPlayer);
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }

@@ -1,4 +1,5 @@
 #include "CorredorJugador.hpp"
+#include "Client.hpp"
 
 CorredorJugador::CorredorJugador(stringw rutaObj, vector3df pos) : Corredor(rutaObj, pos)
 {
@@ -97,6 +98,9 @@ void CorredorJugador::actualizarItem()
 				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
 				direccionItem = -1;
 			}
+
+			Client *client = Client::getInstancia();
+			client->PlayerThrowObject();
 
 			if (tipoObj == 1)
 			{

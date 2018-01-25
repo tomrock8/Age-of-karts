@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
 		
 		pj[2] = new Corredor("assets/coche.obj", pos3);
 		pj[2]->getNodo()->setID(2);
-		pj[2]->setWaypointActualID(2);
+		pj[2]->setWaypointActualID(5);
 		jugadores->aumentarJugadores();
 		
 		}

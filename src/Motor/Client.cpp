@@ -4,6 +4,8 @@
 
 #define DEBUG_BUILD
 
+Client *Client::instancia = NULL;
+
 //==================================================================================
 // constructor que inicializa los valores de las variables requeridad por el cliente
 //==================================================================================
@@ -21,10 +23,14 @@ Client::Client(int maxPlay)
 //==================================================================================
 
 Client *Client::getInstancia() {
-	if (pollas == NULL)
-		pollas = new Client(4);
+	if (instancia == NULL)
+		instancia = new Client(4);
 
-	return pollas;
+	return instancia;
+}
+
+Client::~Client(){
+
 }
 
 //==================================================================================

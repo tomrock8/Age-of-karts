@@ -13,8 +13,10 @@ class Client
 {
 
 public:
+
+	~Client(void);
+
 	static Client *getInstancia();
-	Client(int = 10);
 	void CreateClientInterface();
 	void SetIP();
 	void ClientStartup();
@@ -28,8 +30,9 @@ public:
 	//void UpdateNetworkKeyboard(CTeclado *teclado);
 	
 private:
+	Client(int maxPlay);
 
-	static Client *pollas;
+	static Client *instancia;
 
 	int numSockets;
 	int numIPs;

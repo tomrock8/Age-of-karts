@@ -6,7 +6,7 @@ Waypoint::Waypoint() {
 	waypoint->setMaterialFlag(EMF_LIGHTING, false); //Desactivar iluminacion
 	m->getScene()->getMeshManipulator()->setVertexColors(waypoint->getMesh(), SColor(255, 200, 100, 100));
 	waypoint->setVisible(false);
-	waypoint->setScale(vector3df(950, 150, 05));
+	waypoint->setScale(vector3df(1500, 150, 05));
 	waypoint->setName("Waypoint");
 	siguiente = NULL; // Referenciar despues con la funcion
 }

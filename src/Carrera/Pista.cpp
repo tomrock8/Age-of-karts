@@ -11,29 +11,44 @@ Pista *Pista::instancia = NULL;
 Pista::Pista() {
 }
 
-Pista::~Pista()
-{
+Pista::~Pista() {
+	cout << "\n------------- ENTRO DESTRUCTOR PISTA -------------\n";
 	//destroy waypoint
+	cout << "Borrando waypoints. Son " << tamWaypoints << "\n";
 	for (int i = 0; i < tamWaypoints; i++) {
+		cout << "El namber " << i << ": ";
 		delete arrayWaypoints[i];
+		cout << "\n";
 	}
+	cout << "Borro array waypoints \n";
 	delete arrayWaypoints;
+	
 	//destroy cajas
+	cout << "Borrando cajas. Son " << tamCajas << "\n";
 	for (int i = 0; i < tamCajas; i++) {
+		cout << "La namber " << i << ": ";
 		delete arrayCajas[i];
+		cout << "\n";
 	}
+	cout << "Borro array cajas \n";
 	delete arrayCajas;
+	
 	//destroy turbo
+	cout << "Borrando turbos. Son " << tamTurbos << "\n";
 	for (int i = 0; i < tamTurbos; i++) {
+		cout << "El namber " << i << ": ";
 		delete arrayTurbos[i];
+		cout << "\n";
 	}
+	cout << "Borro array turbos \n";
 	delete arrayTurbos;
 
-	delete instancia;
+	cout << "Borro instancia \n";
+	instancia = nullptr;
+	cout << "\n------------- SALGO DESTRUCTOR PISTA -------------\n";
 }
 
-Pista *Pista::getInstancia()
-{
+Pista *Pista::getInstancia() {
 	if (instancia == NULL)
 		instancia = new Pista();
 

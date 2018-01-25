@@ -8,18 +8,25 @@
 class Timer
 {
 public:
+	~Timer();
 
-    void setTimer(int valor);
-    void restartTimer();
-    int getTimer();
-    static Timer *getInstancia();
-    ~Timer();
+	void restartTimer();
+
+	// METODOS SET
+	void setTimer(int valor);
+
+	// METODOS GET
+	int getTimer();
+	static Timer *getInstancia();
+
+
 private:
-    Timer(void);
+	Timer();
+
 	std::clock_t tiempo_inicial;
-    int tiempo_transcurrido;
-    static Timer *instancia;
+	int tiempo_transcurrido;
+	static Timer *instancia;
 
 };
 
-#endif /* Tiempo */
+#endif /* TIMER_H */

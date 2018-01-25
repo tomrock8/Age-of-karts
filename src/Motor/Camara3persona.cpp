@@ -8,10 +8,15 @@ Camara3persona::Camara3persona()
 	zdirection = 0;
 }
 
-void Camara3persona::moveCameraControl(Corredor *pj1, IrrlichtDevice *device)
+Camara3persona::~Camara3persona() {
+	delete camera;
+}
+
+void Camara3persona::moveCameraControl(Corredor *pj1)
 {
 	CTeclado *teclado = CTeclado::getInstancia();
-	camera = device->getSceneManager()->getActiveCamera();
+	Motor3d *m = Motor3d::getInstancia();
+	camera = m->getDevice()->getSceneManager()->getActiveCamera();
 	core::vector3df cameraPos = camera->getAbsolutePosition();
 
 	float change_x = 0.0f;
@@ -55,10 +60,10 @@ void Camara3persona::moveCameraControl(Corredor *pj1, IrrlichtDevice *device)
 	//pj1->getNodo()->setRotation( core::vector3df( 0, direction, 0 ) );
 }
 
-void Camara3persona::moveCameraControlPointer(Corredor *pj1, IrrlichtDevice *device)
-{
-	core::position2d<f32> cursorPos = device->getCursorControl()->getRelativePosition();
-	camera = device->getSceneManager()->getActiveCamera();
+void Camara3persona::moveCameraControlPointer(Corredor *pj1) {
+	Motor3d *m = Motor3d::getInstancia();
+	core::position2d<f32> cursorPos = m->getDevice()->getCursorControl()->getRelativePosition();
+	camera = m->getDevice()->getSceneManager()->getActiveCamera();
 	core::vector3df cameraPos = camera->getAbsolutePosition();
 
 	float change_x = (cursorPos.X - 0.5) * 256.0f;
@@ -71,7 +76,7 @@ void Camara3persona::moveCameraControlPointer(Corredor *pj1, IrrlichtDevice *dev
 		zdirection = -90;
 	else if (zdirection > 90)
 		zdirection = 90;
-	device->getCursorControl()->setPosition(0.5f, 0.5f);
+	m->getDevice()->getCursorControl()->setPosition(0.5f, 0.5f);
 
 	core::vector3df playerPos = pj1->getNodo()->getPosition();
 

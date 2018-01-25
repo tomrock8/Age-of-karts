@@ -17,10 +17,6 @@ void CorredorJugador::movimiento()
 	bool comprobadorMovimiento = false;
 
 	//-------ENTRADA TECLADO ----------//
-	if (teclado->isKeyDown(KEY_ESCAPE))
-	{
-		m->getDevice()->closeDevice();
-	}
 	if (teclado->isKeyDown(KEY_KEY_S))
 	{
 		frenar();

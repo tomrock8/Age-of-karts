@@ -13,16 +13,16 @@ using namespace std;
 class Waypoint
 {
 public:
-  //Constructor
-  Waypoint();
-  //Destructor
-  ~Waypoint();
+	//Constructor
+	Waypoint();
+	//Destructor
+	~Waypoint();
 
 
-void inicializarFisicas();
-  //auxiliares
+	void inicializarFisicas();
+	//auxiliares
 
-  //Update
+	//Update
 
   //metodos SET
   void setPosicion(float x, float y, float z);
@@ -39,8 +39,8 @@ void inicializarFisicas();
   btVector3 getVector2();
 
 private:
-  IMeshSceneNode *waypoint;
-  Waypoint *siguiente; // Siguiente punto
+	IMeshSceneNode * waypoint;
+	Waypoint *siguiente; // Siguiente punto
 
   //fisicas
   btDefaultMotionState *MotionState;

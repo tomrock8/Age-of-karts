@@ -143,13 +143,13 @@ void Corredor::InicializarFisicas()
 
 }
 
-void Corredor::setPosicion(float *pos, float *ori){
+void Corredor::setPosicion(float *pos, float *ori) {
 	btVector3 btPos(pos[0], pos[1], pos[2]);
 
 	btTransform trans;
 	trans.setOrigin(btPos);
 	btQuaternion quaternion;
-	quaternion.setEulerZYX(ori[0]* PI / 180, ori[1] * PI / 180, ori[2] * PI / 180);
+	quaternion.setEulerZYX(ori[0] * PI / 180, ori[1] * PI / 180, ori[2] * PI / 180);
 	trans.setRotation(quaternion);
 
 	CuerpoColisionChasis->setCenterOfMassTransform(trans);
@@ -261,12 +261,13 @@ void Corredor::calculoDistanciaPunto() {
 	texto->agregar(to_string(distanciaWaypoint)+"\n");
 
 	texto->agregar("WAYPOINT ACTUAL: ");
-	texto->agregar(to_string( actual->getWaypoint()->getID()-6)+"\n");
+	texto->agregar(to_string(actual->getWaypoint()->getID() - 6) + "\n");
 	texto->agregar("WAYPOINT SIGUIENTE: ");
 	texto->agregar(to_string( siguiente->getWaypoint()->getID()-6)+"\n");
 	texto->agregar("VUELTA: ");
 	texto->agregar(to_string(vueltas)+"\n");
 	
+
 
 }
 
@@ -279,7 +280,7 @@ void Corredor::calculoDistanciaPuntoActual() {
 
 	TextoPantalla * texto = TextoPantalla::getInstancia();
 	texto->agregar("DISTANCIA ACTUAL: ");
-	texto->agregar(to_string(distanciaWaypointActual)+"\n");
+	texto->agregar(to_string(distanciaWaypointActual) + "\n");
 
 }
 void Corredor::calculoDistanciaPuntoAnterior() {
@@ -311,17 +312,18 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 				}
 			
 			//cout<<"TE HAS SALTADO EL WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
-		}else{
-			if (siguiente->getWaypoint()->getID()-6==0){
+		}
+		else {
+			if (siguiente->getWaypoint()->getID() - 6 == 0) {
 				vueltas++;
 				//cout<<"--------------"<<vueltas<<" VUELTA SUPERADA-------------: "<<endl;
 
 			}
 			actual = actual->getNextWaypoint();
 			siguiente = actual->getNextWaypoint();
-		
 
-			
+
+
 			//cout<<"HAS PASADO POR EL WAYPOINT: "<<actual->getWaypoint()->getID()<<" SIGUIENTE WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
 		}
 		
@@ -402,7 +404,7 @@ void Corredor::soltarItem()
 	tipoObj = 0;
 }
 
-void Corredor::setTurbo(bool activo, bool objeto,int valor) {
+void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 	turboActivado = activo;
 	if (activo) {
 		Motor3d *m = Motor3d::getInstancia();
@@ -427,22 +429,24 @@ void Corredor::SetFuerzaVelocidad(int turbo)
 }
 void Corredor::acelerar()
 {
-	if (vehiculo->getCurrentSpeedKmHour()>300 && !turboActivado){
-		if (vehiculo->getCurrentSpeedKmHour()>350){
-			Fuerza =btScalar(0);
-		}else{
-			Fuerza =btScalar(200);		//limitador de velocidad
-		}	
-		
+	if (vehiculo->getCurrentSpeedKmHour() > 300 && !turboActivado) {
+		if (vehiculo->getCurrentSpeedKmHour() > 350) {
+			Fuerza = btScalar(0);
+		}
+		else {
+			Fuerza = btScalar(200);		//limitador de velocidad
+		}
+
 	}
-	if (vehiculo->getCurrentSpeedKmHour()<370){
+	if (vehiculo->getCurrentSpeedKmHour() < 370) {
 		vehiculo->applyEngineForce(Fuerza, 0);
 		vehiculo->applyEngineForce(Fuerza, 1);
 		vehiculo->applyEngineForce(Fuerza, 2);
 		vehiculo->applyEngineForce(Fuerza, 3);
 		vehiculo->setSteeringValue(btScalar(0), 0);
 		vehiculo->setSteeringValue(btScalar(0), 1);
-	}else{
+	}
+	else {
 		vehiculo->applyEngineForce(600, 0);
 		vehiculo->applyEngineForce(200, 1);
 		vehiculo->applyEngineForce(200, 2);
@@ -471,9 +475,10 @@ void Corredor::frenar()
 	vehiculo->applyEngineForce(FuerzaFrenado, 3);
 	vehiculo->setSteeringValue(btScalar(0), 0);
 	vehiculo->setSteeringValue(btScalar(0), 1);
-	if (vehiculo->getCurrentSpeedKmHour()<0){
+	if (vehiculo->getCurrentSpeedKmHour() < 0) {
 		estado->setEstadoMovimiento(MARCHA_ATRAS);
-	}else{
+	}
+	else {
 		estado->setEstadoMovimiento(FRENA);
 	}
 }
@@ -586,15 +591,15 @@ void Corredor::setFriccion(btScalar valor) {
 		vehiculo->getWheelInfo(i).m_frictionSlip = btScalar(valor);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover	
 	}
 }
-void Corredor::aplicarAceite(){
+void Corredor::aplicarAceite() {
 	//CuerpoColisionChasis->setAngularFactor(btScalar(120*PI/180));
 	//CuerpoColisionChasis->applyCentralForce(btVector3(100, 5.0f,100));
 	frenodemano(true);
 	CuerpoColisionChasis->setAngularVelocity(btVector3(0, 40, 0));
-	for (int i=0;i<100;i++){
+	for (int i = 0; i < 100; i++) {
 		girarIzquierda();
 	}
-	Fuerza=220;
+	Fuerza = 220;
 }
 
 //	----------------------------------------------
@@ -611,8 +616,7 @@ btRigidBody *Corredor::getRigidBody()
 	return CuerpoColisionChasis;
 }
 
-IMeshSceneNode *Corredor::getNodo()
-{
+IMeshSceneNode *Corredor::getNodo(){
 	return cuboNodo;
 }
 
@@ -638,7 +642,7 @@ void Corredor::update()
 		if (time->getTimer() - timerTurbo >= 1) {
 			//cout << "Se acaba el turbo\n";
 			desacelerar();
-			setTurbo(false, false,0);
+			setTurbo(false, false, 0);
 		}
 	}
 	else if (vehiculo->getCurrentSpeedKmHour() > 1)
@@ -687,33 +691,33 @@ void Corredor::updateEstado(){
 		estado->setEstadoMovimiento(QUIETO);
 	}
 	estado->setEstadoCoche(POR_DEFECTO);
-	if (proteccion==true){
+	if (proteccion == true) {
 		estado->setEstadoCoche(CON_ESCUDO);
 	}
-	if (turboActivado==true){
+	if (turboActivado == true) {
 		estado->setEstadoCoche(CON_TURBO);
 	}
 
 
 	//Objetos:
-	switch (tipoObj){
+	switch (tipoObj) {
 		// {NADA, FLECHA, FLECHA_TRIPLE, ESCUDO, ACEITE, CAJA_FALSA, TURBO} 
-		case 0:
+	case 0:
 		estado->setEstadoObjeto(NADA);
 		break;
-		case 1:
+	case 1:
 		estado->setEstadoObjeto(FLECHA);
 		break;
-		case 2:
+	case 2:
 		estado->setEstadoObjeto(CAJA_FALSA);
 		break;
-		case 3:
+	case 3:
 		estado->setEstadoObjeto(TURBO);
 		break;
-		case 4:
+	case 4:
 		estado->setEstadoObjeto(ACEITE);
 		break;
-		case 5:
+	case 5:
 		estado->setEstadoObjeto(ESCUDO);
 		break;
 	}
@@ -926,13 +930,15 @@ std::string Corredor::getDireccion()
 }
 //destructor
 Corredor::~Corredor() {
-	delete CuerpoColisionChasis->getMotionState();
-	delete CentroGravedad;
-	delete FormaColision;
-	delete RayCastVehiculo;
+	cout << "\nENTRO DESTRUCTOR CORREDOR: \n";
+	
+	// Los rigid body se borran desde el motor de fisicas
+	// Los collision shape se borran desde el motor de fisicas
+	// delete CuerpoColisionChasis;
 	delete vehiculo;
-	delete CuerpoColisionChasis;
+	//delete cuboNodo;
 
+	cout << "SALGO DESTRUCTOR CORREDOR: ";
 }
 bool Corredor::getProteccion() {
 	return proteccion;

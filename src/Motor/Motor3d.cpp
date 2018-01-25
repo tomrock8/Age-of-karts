@@ -24,7 +24,7 @@ Motor3d::Motor3d() {
 
 Motor3d::~Motor3d() {
 	device->drop();
-	delete instancia;
+	instancia = nullptr;
 }
 
 void Motor3d::dibujar() {

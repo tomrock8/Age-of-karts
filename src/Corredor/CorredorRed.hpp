@@ -1,13 +1,6 @@
 #include "Corredor.hpp"
 #include "EstadosJugador.hpp"
 
-using namespace irr;
-using namespace core;
-using namespace scene;
-using namespace video;
-using namespace io;
-using namespace gui;
-
 class CorredorRed : public Corredor
 {
 private:

@@ -94,7 +94,8 @@ void CorredorJugador::actualizarItem()
 			checkItem = true;
 
 			Client *client = Client::getInstancia();
-			client->PlayerThrowObject();
+			if(client->getConnected())
+				client->PlayerThrowObject();
 
 			if (tipoObj == 1)
 			{

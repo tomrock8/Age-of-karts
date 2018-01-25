@@ -101,7 +101,7 @@ bool GestorColisiones::JugadorEstatico() {
 	bool b1 = false;
 	//cout << TimeStamp << endl;
 
-	if (strcmp("Jugador", nodoA->getName()) == 0) {
+	if (strcmp("Jugador", nodoA->getName()) == 0 || strcmp("JugadorRed", nodoA->getName()) == 0) {
 		if (strcmp("CajaFalsa", nodoB->getName()) == 0 || strcmp("Proyectil", nodoB->getName()) == 0) {
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {

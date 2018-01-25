@@ -378,7 +378,8 @@ void Corredor::setTipoObj()
 	srand(time(NULL));
 	tipoObj = rand() % 4 + 1;
 	Client *c = Client::getInstancia();
-	c->PlayerSetObject(tipoObj);
+	if(c->getConnected())
+		c->PlayerSetObject(tipoObj);
 	//cout << "Random ------>" << tipoObj << endl;
 }
 

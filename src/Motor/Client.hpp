@@ -29,6 +29,7 @@ public:
 	void SpawnPlayer(ISceneManager *escena);
 
 	int getControlPlayer();
+	bool getConnected();
 	//void UpdateNetworkKeyboard(CTeclado *teclado);
 	
 private:
@@ -40,6 +41,7 @@ private:
 	int numIPs;
 	int maxPlayers;
 	bool netLoaded;
+	bool connected;
 	unsigned char packetIdentifier;
 
 	RakNet::SocketDescriptor socketDescriptor;

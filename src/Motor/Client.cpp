@@ -16,6 +16,7 @@ Client::Client(int maxPlay)
 	numPlayers = 0;
 	spawned = false;   // true == el jugador del cliente ya ha spwaneado
 	netLoaded = false; // true == si todos los clientes de la partida han spwaneado
+	connected = false;
 }
 
 //==================================================================================
@@ -59,7 +60,7 @@ void Client::SetIP()
 	std::cout << "Introduce IP del servidor: ";
 	//std::cin >> serverIP;
 	//serverIP = "127.0.0.1";
-	serverIP = "192.168.1.3";
+	serverIP = "192.168.1.5";
 	//puerto de escucha del cliente
 	clientPort = "6003";
 }
@@ -250,6 +251,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 		//se ha aceptado la conexion con un cliente
 		case ID_CONNECTION_REQUEST_ACCEPTED:
 			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
+			connected = true;
 			return 3;
 			break;
 
@@ -510,6 +512,10 @@ void Client::SpawnPlayer(ISceneManager *escena)
 
 int Client::getControlPlayer(){
 	return controlPlayer;
+}
+
+bool Client::getConnected(){
+	return connected;
 }
 
 void Client::PlayerAction(){

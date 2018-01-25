@@ -294,6 +294,10 @@ void EscenaJuego::comprobarInputs() {
 	CTeclado *teclado = CTeclado::getInstancia();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
+	vector3df pos(-10,0,310);
+	int i = 0;
+	if(argc == 2)
+		i=client->getControlPlayer();
 
 	//------- ENTRADA TECLADO ----------
 	if (teclado->isKeyDown(KEY_KEY_R)) {
@@ -302,10 +306,10 @@ void EscenaJuego::comprobarInputs() {
 		btTransform trans;
 		trans.setOrigin(btPos);
 		btQuaternion quaternion;
-		quaternion.setEulerZYX(pj[0]->getNodo()->getRotation().Z* PI / 180, pj[0]->getNodo()->getRotation().Y * PI / 180, pj[0]->getNodo()->getRotation().X* PI / 180);
+		quaternion.setEulerZYX(pj[i]->getNodo()->getRotation().Z* PI / 180, pj[i]->getNodo()->getRotation().Y * PI / 180, pj[i]->getNodo()->getRotation().X* PI / 180);
 		trans.setRotation(quaternion);
 
-		pj[0]->getRigidBody()->setCenterOfMassTransform(trans);
+		pj[i]->getRigidBody()->setCenterOfMassTransform(trans);
 		//pj[0]->getNodo()->setPosition(pos);
 	}
 	if (teclado->isKeyDown(KEY_KEY_T)) {

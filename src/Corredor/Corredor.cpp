@@ -15,6 +15,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	tipoObj = 0;
 	turboActivado = false;
 	timerTurbo = 0;
+	limite = 0;
 	Motor3d *m = Motor3d::getInstancia();
 	ISceneManager *smgr = m->getScene();
 	coche = smgr->getMesh(rutaObj);
@@ -76,7 +77,7 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 	if (cuboNodo) InicializarFisicas();
 
 	//HABILIDADES
-	h = new Habilidad(1, this->getNodo());
+	h = new Habilidad(4, this->getNodo());
 	h->getNodo()->setVisible(false);
 	h->setPosicion(pos);
 	h->setPadre(this->getNodo());
@@ -268,6 +269,8 @@ void Corredor::calculoDistanciaPunto() {
 	texto->agregar(to_string( siguiente->getWaypoint()->getID()-6)+"\n");
 	texto->agregar("VUELTA: ");
 	texto->agregar(to_string(vueltas)+"\n");
+	texto->agregar("Limite:" + to_string(getLimite()) + "\n");
+
 	
 
 
@@ -407,6 +410,11 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 void Corredor::soltarItem()
 {
 	tipoObj = 0;
+	setLimite(getLimite() + 2);
+	cout << "El limite se ha incrementado, ahora es : " << getLimite() << endl;
+	if (h->getHabilidadActiva() == true) {
+		setLimite(0);
+	}
 }
 
 void Corredor::setTurbo(bool activo, bool objeto, int valor) {
@@ -417,13 +425,102 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 		acelerar();
 		Timer *time = Timer::getInstancia();
 		timerTurbo = time->getTimer();
-		if (objeto) tipoObj = 0;
+		if (objeto) soltarItem();
 	}
 	else {
 		SetFuerzaVelocidad(1000);
 	}
 }
 
+void Corredor::lanzarFlecha(vector3df posDisparo){
+	int direccionItem = 1;
+	Pista *pista = Pista::getInstancia();
+	core::list<Item *> items = pista->getItems();
+	Proyectil *pro = new Proyectil(posDisparo);
+	lanzarItem(pro, direccionItem);
+	items.push_back(pro);
+	soltarItem();
+	pista->setItems(items);
+}
+
+void Corredor::lanzarCajaFalsa(vector3df posDisparo){
+	Pista *pista = Pista::getInstancia();
+	core::list<Item *> items = pista->getItems();
+	posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
+	posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
+	CajaFalsa *est = new CajaFalsa(posDisparo);
+	est->inicializarFisicas();
+	soltarItem();
+	items.push_back(est);
+	pista->setItems(items);
+}
+
+void Corredor::lanzarTurbo(){
+
+	setTurbo(true, true,26000);
+}
+
+void Corredor::lanzarAceite(vector3df posDisparo){
+
+	Pista *pista = Pista::getInstancia();
+	core::list<Item *> items = pista->getItems();
+	posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
+	posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
+	Aceite *est2 = new Aceite(posDisparo);
+	est2->inicializarFisicas();
+	//est2->getRigidBody()->setCollisionFlags(est2->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	soltarItem();
+	items.push_back(est2);
+	pista->setItems(items);
+}
+
+void Corredor::lanzarEscudo(){
+
+	if(getProteccion()==false) setProteccion(true);
+	soltarItem();
+}
+
+void Corredor::lanzarFlechaTriple(vector3df posDisparo){
+	Pista *pista = Pista::getInstancia();
+	core::list<Item *> items = pista->getItems();
+	Proyectil **proX3 = new Proyectil *[3];
+	btVector3 orientacioncentral(orientacion.X, orientacion.Y, orientacion.Z);
+	btVector3 centro(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.Z * 5);
+	btVector3 orientacionderecha = orientacioncentral.rotate(btVector3(0, 1, 0), 10 * PI / 180);
+	btVector3 orientacionizquierda = orientacioncentral.rotate(btVector3(0, 1, 0), -10 * PI / 180);
+	vector3df c(centro.getX(), centro.getY(), centro.getZ());
+	vector3df iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 5);
+	vector3df d(cuboNodo->getPosition().X + orientacionderecha.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 5);
+	for (int i = 0; i < 3; i++) {
+
+
+		if (i == 0) {
+			proX3[i] = new Proyectil(iz);
+			proX3[i]->inicializarFisicas();
+			proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionizquierda.getX() * 100, 5.0f, orientacionizquierda.getZ() * 100));
+		}
+		if (i == 1) {
+
+			proX3[i] = new Proyectil(c);
+			proX3[i]->inicializarFisicas();
+			proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacioncentral.getX() * 100, 5.0f, orientacioncentral.getZ() * 100));
+		}
+		if (i == 2) {
+
+			proX3[i] = new Proyectil(d);
+			proX3[i]->inicializarFisicas();
+			proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionderecha.getX() * 100, 5.0f, orientacionderecha.getZ() * 100));
+		}
+
+
+		items.push_back(proX3[i]);
+
+
+
+	}
+	soltarItem();
+	pista->setItems(items);
+}
 bool Corredor::getTurbo() {
 	return turboActivado;
 }
@@ -683,7 +780,7 @@ void Corredor::updateHabilidad() {
 
 
 	if (tiempo->getTimer() - inicioHabilidad >= 3) {
-	cout << "Se acaba el tiro\n";
+	//cout << "Se acaba el tiro\n";
 	h->setHabilidadActiva(false);
 	h->getNodo()->setVisible(false);
 	h->eliminarFisicas();
@@ -724,6 +821,12 @@ void Corredor::updateEstado(){
 		break;
 	case 5:
 		estado->setEstadoObjeto(ESCUDO);
+		break;
+		case 6:
+		estado->setEstadoObjeto(FLECHA_TRIPLE);
+		break;
+		case 7:
+		estado->setEstadoObjeto(HABILIDAD);
 		break;
 	}
 	estado->update();
@@ -974,4 +1077,10 @@ btScalar Corredor::getdistanciaWaypointAnterior(){
 }
 int Corredor::getVueltas(){
 	return vueltas;
+}
+void Corredor::setLimite(int s) {
+	limite = s;
+}
+int Corredor::getLimite() {
+	return limite;
 }

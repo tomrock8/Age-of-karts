@@ -46,9 +46,10 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 
 	//establecemos el primer waypoint del mapa
 	Pista *mapa = Pista::getInstancia();
+	anterior = mapa->getArrayWaypoints()[mapa->getTamArrayWaypoints()-1];
 	actual = mapa->getArrayWaypoints()[0];
 	siguiente = actual->getNextWaypoint();
-	
+	siguiente_aux=siguiente;
 
 	//smgr->getMeshManipulator()->setVertexColors(rueda1->getMesh(),SColor(255, 255, 0, 0));
 	rueda1->setMaterialFlag(EMF_LIGHTING, false);
@@ -235,13 +236,16 @@ int Corredor::getTipoObj() { return tipoObj; };
 void Corredor::incCargador() { cargador++; };
 void Corredor::decCargador() { cargador--; };
 
-
-
+void Corredor::setPosicionCarrera(int i){
+	posicionCarrera=i;
+}
 
 
 
 void Corredor::calculoDistanciaPunto() {
+	
 
+	
 	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
 	btVector3 posWaypoint(siguiente->getPosicion().getX(), siguiente->getPosicion().getY(), siguiente->getPosicion().getZ());
 
@@ -250,15 +254,17 @@ void Corredor::calculoDistanciaPunto() {
 	//calulamos la distancia hasta el waypoint 
 	//cout << "WAYPOINT ACTUAL:" <<actual->getWaypoint()->getID() << endl;
 	//cout << "WAYPOINT SIGUIENTE:" << siguiente->getWaypoint()->getID() << endl;
+	
 	TextoPantalla * texto = TextoPantalla::getInstancia();
 	texto->agregar("DISTANCIA: ");
+	//cout <<"distanciaWaypoint: "<<distanciaWaypoint<<endl; 
 	texto->agregar(to_string(distanciaWaypoint)+"\n");
 
 	texto->agregar("WAYPOINT ACTUAL: ");
 	texto->agregar(to_string( actual->getWaypoint()->getID()-6)+"\n");
 	texto->agregar("WAYPOINT SIGUIENTE: ");
 	texto->agregar(to_string( siguiente->getWaypoint()->getID()-6)+"\n");
-	texto->agregar("VUELTAS: ");
+	texto->agregar("VUELTA: ");
 	texto->agregar(to_string(vueltas)+"\n");
 	
 
@@ -271,13 +277,22 @@ void Corredor::calculoDistanciaPuntoActual() {
 
 	distanciaWaypointActual = posCoche.distance2(posWaypoint);
 
-	//calulamos la distancia hasta el waypoint 
-	//cout << "WAYPOINT ACTUAL:" <<actual->getWaypoint()->getID() << endl;
-	//cout << "WAYPOINT SIGUIENTE:" << siguiente->getWaypoint()->getID() << endl;
 	TextoPantalla * texto = TextoPantalla::getInstancia();
 	texto->agregar("DISTANCIA ACTUAL: ");
 	texto->agregar(to_string(distanciaWaypointActual)+"\n");
 
+}
+void Corredor::calculoDistanciaPuntoAnterior() {
+
+	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+	btVector3 posWaypoint(anterior->getPosicion().getX(), anterior->getPosicion().getY(), anterior->getPosicion().getZ());
+
+	distanciaWaypointAnterior = posCoche.distance2(posWaypoint);
+
+	TextoPantalla * texto = TextoPantalla::getInstancia();
+	texto->agregar("ANTERIOR: ");
+	//cout <<"DISTANCIA ANTERIOR: "<<distanciaWaypointAnterior<<" ID: "<<cuboNodo->getID()<<" WAYPOINT ANT: "<<anterior->getWaypoint()->getID()-6<<endl; 
+	texto->agregar(to_string(anterior->getWaypoint()->getID()-6)+"\n");
 }
 
 
@@ -289,7 +304,12 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	//se puedan coger las cajas.
 	
 	if(nodo->getID() != actual->getWaypoint()->getID()){
-		if(nodo->getID() != siguiente->getWaypoint()->getID()){
+	/*	if(nodo->getID() != siguiente->getWaypoint()->getID()){
+			if (actual->getWaypoint()->getID()-6!=0)
+				if(nodo->getID() < actual->getWaypoint()->getID()){
+					//cout<<"VAS AL REVES"<<endl;
+				}
+			
 			//cout<<"TE HAS SALTADO EL WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
 		}else{
 			if (siguiente->getWaypoint()->getID()-6==0){
@@ -306,16 +326,45 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 		}
 		
 	}else{
-		//cout<<"ESTAS EN EL WAYPOINTACTUAL: "<<actual->getWaypoint()->getID()<<endl;
+		//cout<<"ESTAS EN EL WAYPOINTACTUAL: "<<actual->getWaypoint()->getID()<<endl;*/
+		if (siguiente_aux->getWaypoint()->getID()-6==0){
+				vueltas++;
+				//cout<<"--------------"<<vueltas<<" VUELTA SUPERADA-------------: "<<endl;
+
+			}
+		setWaypointActualID(nodo->getID()-6);
+		if(nodo->getID() == anterior->getWaypoint()->getID()){
+			//AL REVES
+		}
+
 	}
 
 	//cout<< "NODO ACTUAL:"<< actual->getWaypoint()->getID() <<endl;
 	//cout<< "NODO SIGUIENTE:"<< siguiente->getWaypoint()->getID() <<endl;
 }
-
-
-
-
+void Corredor::setWaypointActualID(int i){
+	
+	while (i!=actual->getWaypoint()->getID()-6){
+		anterior =actual;
+		actual = actual->getNextWaypoint();	
+	}
+	if (anterior==NULL){
+		if (actual->getWaypoint()->getID()-6!=0){
+			setWaypointAnteriorID(actual->getWaypoint()->getID()-1-6);
+		}else{
+			Pista *mapa = Pista::getInstancia();
+			setWaypointAnteriorID(mapa->getTamArrayWaypoints());
+		}
+	}
+		siguiente = actual->getNextWaypoint();
+		if (actual->getWaypoint()->getID()==siguiente_aux->getWaypoint()->getID())
+		siguiente_aux=siguiente;
+}
+void Corredor::setWaypointAnteriorID(int i){
+	while (i!=anterior->getWaypoint()->getID()-6){
+		anterior=anterior->getNextWaypoint();
+	}
+}
 
 void Corredor::setTipoObj()
 {
@@ -610,7 +659,13 @@ void Corredor::update()
 	actualizarRuedas();
 	updateDireccion();
 	calculoDistanciaPunto();
+	calculoDistanciaPuntoActual();
+	calculoDistanciaPuntoAnterior();
+	//cout<<"Posicion carrera: "<<posicionCarrera<<" ID: "<<cuboNodo->getID()<<endl;
 	//ActualizarRaytest();
+	TextoPantalla * texto = TextoPantalla::getInstancia();
+	texto->agregar("POSICION CARRERA: ");
+	texto->agregar(to_string(posicionCarrera)+"\n");
 	
 }
 void Corredor::updateHabilidad() {
@@ -886,4 +941,26 @@ bool Corredor::getProteccion() {
 void Corredor::setProteccion(bool s) {
 	escudo->getNodo()->setVisible(s);
 	proteccion = s;
+}
+
+Waypoint *Corredor::getWaypointActual(){
+	return actual;
+}
+Waypoint *Corredor::getWaypointSiguiente(){
+	return siguiente;
+}
+Waypoint *Corredor::getWaypointAnterior(){
+	return anterior;
+}
+btScalar Corredor::getdistanciaWaypoint(){
+	return distanciaWaypoint;
+}
+btScalar Corredor::getdistanciaWaypointActual(){
+	return distanciaWaypointActual;
+}
+btScalar Corredor::getdistanciaWaypointAnterior(){
+	return distanciaWaypointAnterior;
+}
+int Corredor::getVueltas(){
+	return vueltas;
 }

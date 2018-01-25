@@ -41,6 +41,8 @@ class Corredor: public RakNet::NetworkIDObject
 	void setFriccion(btScalar valor);
 	void setTurbo(bool activo, bool objeto,int valor);
 	void setWaypointActual(ISceneNode *nodo);
+	void setWaypointActualID(int i);
+	void setWaypointAnteriorID(int i);
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
 	
@@ -48,8 +50,21 @@ class Corredor: public RakNet::NetworkIDObject
 	//waypoints
 	void calculoDistanciaPunto();
 	void calculoDistanciaPuntoActual();
-
+	void calculoDistanciaPuntoAnterior();
+	void calculoAnguloGiro();
+	void giroIA();
+	void movimientoIA();
+	void ActualizarRaytest();
+	void setPosicionCarrera(int i);
+	btScalar getdistanciaWaypoint();
+	btScalar getdistanciaWaypointAnterior();
+	btScalar getdistanciaWaypointActual();
+	int getVueltas();
 	
+	// Logica difusa
+	void logicaDifusa();
+	double FuncionTrapezoidal(double valor, double a, double b, double c, double d);
+	double FuncionTriangular(double valor, double a, double b, double c);
 
 	// Update
 	void update();
@@ -65,6 +80,8 @@ class Corredor: public RakNet::NetworkIDObject
 	int getTipoObj();
 	bool getTurbo();
 	Waypoint *getWaypointActual();
+	Waypoint *getWaypointSiguiente();
+	Waypoint *getWaypointAnterior();
 	bool getProteccion();
 	EstadosJugador *getEstados();
 
@@ -85,14 +102,21 @@ protected:
 	ISceneNode *rueda4;
 
 	//WAYPOINTS
+	Waypoint *anterior; // Punto Actual
 	Waypoint *actual; // Punto Actual
 	Waypoint *siguiente; // Punto Siguiente
+	Waypoint *siguiente_aux; // Punto Siguiente
 	int vueltas;
+	int posicionCarrera;
 
 	// parametros IA
 	btScalar distanciaWaypoint;
 	btScalar distanciaWaypointActual;
-	
+	btScalar distanciaWaypointAnterior;
+	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
+	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
+	bool distanciaCerca,distanciaMedia,distanciaLejos;
+	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
 
 	//bullet
 	btRaycastVehicle *vehiculo;

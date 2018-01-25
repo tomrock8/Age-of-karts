@@ -24,6 +24,7 @@
 #include "GestorJugadores.hpp"
 #include "TextoPantalla.hpp"
 #include "Client.hpp"
+#include "GestorCarrera.hpp"
 
 using namespace std;
 
@@ -94,21 +95,38 @@ int main(int argc, char* argv[])
 	//Posicion del nodo y el bloque de colisiones centralizado:
 
 	vector3df pos(0, 1, 300);
+	vector3df pos2(220, 1, 300);
+	vector3df pos3(300, 1, 200);
+	GestorIDs *ids = GestorIDs::getInstancia();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 	if(argc !=2){
 		pj[0] = new CorredorJugador("assets/coche.obj", pos);
-		jugadores->aumentarJugadores();
-
-		pj[1] = new CorredorIA("assets/coche.obj", vector3df(-5,10,300));
+		pj[0]->getNodo()->setID(0);
+		pj[0]->setWaypointActualID(0);
 		jugadores->aumentarJugadores();
 		
-		pj[0]->getNodo()->setID(0);
+
+		pj[1] = new CorredorIA("assets/coche.obj", vector3df(-5,10,303));
 		pj[1]->getNodo()->setID(1);
+		pj[1]->setWaypointActualID(0);
+		jugadores->aumentarJugadores();
+		
+		pj[2] = new Corredor("assets/coche.obj", pos3);
+		pj[2]->getNodo()->setID(2);
+		pj[2]->setWaypointActualID(2);
+		jugadores->aumentarJugadores();
+		
 		}
 
-		jugadores->setJugadores(pj);
 		
+		
+
+
+		jugadores->setJugadores(pj);
+
+		GestorCarrera *gc=new GestorCarrera();
+	//pj[1]->getNodo()->setID(id);
 
 
 	//-----------------------------//
@@ -164,10 +182,11 @@ int main(int argc, char* argv[])
 		if(argc!=2){
 			pj[0]->actualizarItem();
 			//pj[1]->actualizarItem();
-			camara->moveCameraControl(pj[1], device);
+			camara->moveCameraControl(pj[0], device);
 			colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 			pj[0]->update();
-			pj[1]->update();
+				pj[1]->update();
+					pj[2]->update();
 			textoDebug->agregar(pj[0]->toString());
 		}else{
 			//cout << jugadores->getNumJugadores() << endl;
@@ -264,6 +283,7 @@ int main(int argc, char* argv[])
 			debug = 1;
 		}
 
+		gc->update();
 		//-------ENTRADA TECLADO FIN----------//
 		int fps = driver->getFPS();
 		if (lastFPS != fps)

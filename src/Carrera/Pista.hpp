@@ -39,6 +39,7 @@ public:
 	Waypoint **getArrayWaypoints();
 	Turbo* getTurbo();
 	Turbo* getTurbo(int id);
+	int getTamArrayWaypoints();
 
 private:
 	Pista(void);

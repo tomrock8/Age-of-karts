@@ -210,7 +210,9 @@ Caja **Pista::getArrayCaja() {
 int Pista::getTamCajas() {
 	return tamCajas;
 }
-
+int Pista::getTamArrayWaypoints(){
+	return tamWaypoints;
+}
 void Pista::setArrayCaja(Caja **cajas) {
 	arrayCajas = cajas;
 }

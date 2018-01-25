@@ -17,6 +17,17 @@ Client::Client(int maxPlay)
 }
 
 //==================================================================================
+// coger instancia del singleton
+//==================================================================================
+
+Client *Client::getInstancia() {
+	if (pollas == NULL)
+		pollas = new Client(4);
+
+	return pollas;
+}
+
+//==================================================================================
 // se crea el cliente obteniendo la instancia de la clase RakPeerInterface
 //==================================================================================
 void Client::CreateClientInterface()
@@ -42,7 +53,7 @@ void Client::SetIP()
 	std::cout << "Introduce IP del servidor: ";
 	//std::cin >> serverIP;
 	//serverIP = "127.0.0.1";
-	serverIP = "192.168.1.6";
+	serverIP = "192.168.1.4";
 	//puerto de escucha del cliente
 	clientPort = "6003";
 }

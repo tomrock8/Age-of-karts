@@ -30,13 +30,13 @@ EscenaJuego::~EscenaJuego() {
 
 void EscenaJuego::init() {
 	//ARGUMENTOS MAIN
-	argc = 0;
+	argc = 2;
 	debug = 0;
 
 	CTeclado *teclado = CTeclado::getInstancia();
 
 	if (argc == 2) {
-		client = new Client(4);
+		client = Client::getInstancia();
 		client->CreateClientInterface();
 		client->SetIP();
 		client->ClientStartup();

@@ -91,94 +91,45 @@ void CorredorJugador::actualizarItem()
 		if (tipoObj != 0 && !checkItem)
 		{
 			checkItem = true;
-			if (teclado->isKeyDown(KEY_DOWN))
-			{
-				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
-				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
-				direccionItem = -1;
-			}
 
 			if (tipoObj == 1)
 			{
-				pro = new Proyectil(posDisparo);
-				lanzarItem(pro, direccionItem);
-				items.push_back(pro);
+				lanzarFlecha(posDisparo);
 			}
-				else if (tipoObj == 2)
+			else if (tipoObj == 2)
 			{
-				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
-				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
-				CajaFalsa *est = new CajaFalsa(posDisparo);
-				est->inicializarFisicas();
-				soltarItem();
-				items.push_back(est);
+				lanzarCajaFalsa(posDisparo);
 			}
 			else if (tipoObj == 3)
 			{
-				setTurbo(true, true,26000);
+				lanzarTurbo();
 			}else if (tipoObj == 4)
 			{
-				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
-				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
-				Aceite *est2 = new Aceite(posDisparo);
-				est2->inicializarFisicas();
-				//est2->getRigidBody()->setCollisionFlags(est2->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-				soltarItem();
-				items.push_back(est2);
+				lanzarAceite(posDisparo);
 			}
 			else if (tipoObj == 5)
 			{
-				if(getProteccion()==false) setProteccion(true);
-				soltarItem();
+				lanzarEscudo();
 			}
 			else if (tipoObj == 6)
 			{
-				proX3 = new Proyectil *[3];
-				btVector3 orientacioncentral(orientacion.X, orientacion.Y, orientacion.Z);
-				btVector3 centro(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.Z * 5);
-				btVector3 orientacionderecha = orientacioncentral.rotate(btVector3(0, 1, 0), 10 * PI / 180);
-				btVector3 orientacionizquierda = orientacioncentral.rotate(btVector3(0, 1, 0), -10 * PI / 180);
-				vector3df c(centro.getX(), centro.getY(), centro.getZ());
-				vector3df iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 5);
-				vector3df d(cuboNodo->getPosition().X + orientacionderecha.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 5);
-				for (int i = 0; i < 3; i++) {
-
-
-					if (i == 0) {
-						proX3[i] = new Proyectil(iz);
-						proX3[i]->inicializarFisicas();
-						proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionizquierda.getX() * 100, 5.0f, orientacionizquierda.getZ() * 100));
-					}
-					if (i == 1) {
-
-						proX3[i] = new Proyectil(c);
-						proX3[i]->inicializarFisicas();
-						proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacioncentral.getX() * 100, 5.0f, orientacioncentral.getZ() * 100));
-					}
-					if (i == 2) {
-
-						proX3[i] = new Proyectil(d);
-						proX3[i]->inicializarFisicas();
-						proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionderecha.getX() * 100, 5.0f, orientacionderecha.getZ() * 100));
-					}
-
-
-					items.push_back(proX3[i]);
-
-
-
-				}
-				soltarItem();
+				lanzarFlechaTriple(posDisparo);
 			}
 			else if (tipoObj == 7)
 			{
-				h->getNodo()->setVisible(true);
-				h->setOrientacion(orientacion);
-				h->setPadre(this->getNodo());
-				h->setPosicion(posDisparo);
-				h->lanzarHabilidad();
-				items.push_back(h);
-				soltarItem();
+				if (getLimite() >= 10) {//puedo lanzar la habilidad
+					h->getNodo()->setVisible(true);
+					h->setOrientacion(orientacion);
+					h->setPadre(this->getNodo());
+					h->setPosicion(posDisparo);
+					h->lanzarHabilidad();
+					items.push_back(h);
+					soltarItem();
+				}
+				else {
+					cout << "No puedes usar la habilidad si tu limite no es 10 o mas" << endl;
+				}
+				
 			}
 			pista->setItems(items);
 			//Llama a la funcion de la clase padre

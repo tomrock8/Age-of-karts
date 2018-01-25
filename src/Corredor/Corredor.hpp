@@ -13,6 +13,7 @@
 #include "Proyectil.hpp"
 #include "Estatico.hpp"
 #include "CajaFalsa.hpp"
+#include "Aceite.hpp"
 #include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 #include "RaknetIncludes.hpp"
@@ -51,6 +52,10 @@ class Corredor: public RakNet::NetworkIDObject
 	//Items
 	void lanzarFlecha(vector3df posDisparo);
 	void lanzarCajaFalsa(vector3df posDisparo);
+	void lanzarTurbo();
+	void lanzarAceite(vector3df posDisparo);
+	void lanzarEscudo();
+	void lanzarFlechaTriple(vector3df posDisparo);
 
 	//waypoints
 	void calculoDistanciaPunto();

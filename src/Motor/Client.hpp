@@ -1,6 +1,3 @@
-#ifndef CLIENT_H
-#define CLIENT_H
-
 #include <iostream>
 //#include "CorredorRed.hpp"
 //#include "CorredorJugador.hpp"
@@ -9,22 +6,8 @@
 
 #define MAX_PLAYERS 10
 
-class Client {
-
-public:
-	Client(int = 10);
-	void CreateClientInterface();
-	void SetIP();
-	void ClientStartup();
-	void ShutDownClient();
-	void PlayerMovement();
-	int ReceivePackets(ISceneManager *escena);
-	void SpawnPlayer(ISceneManager *escena);
-
-	int getControlPlayer();
-	//void UpdateNetworkKeyboard(CTeclado *teclado);
-
-
+class Client
+{
 private:
 	int numSockets;
 	int numIPs;
@@ -32,16 +15,12 @@ private:
 	bool netLoaded;
 	unsigned char packetIdentifier;
 
-  public:
-    Client(int = 10);
-    void CreateClientInterface();
-    void SetIP();
-    void ClientStartup();
-    void ShutDownClient();
-    void PlayerMovement();
-    void PlayerAction();
-    int ReceivePackets(ISceneManager *escena);
-    void SpawnPlayer(ISceneManager *escena);
+	RakNet::SocketDescriptor socketDescriptor;
+	RakNet::NetworkIDManager networkIDManager;
+	RakNet::NetworkID playerNetworkID;
+	RakNet::MessageID typeID;
+	RakNet::Packet *p;
+	RakNet::RakPeerInterface *client;
 
 	std::string serverPort;
 	std::string clientPort;
@@ -54,6 +33,18 @@ private:
 
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 
-};
+public:
+	Client(int = 10);
+	void CreateClientInterface();
+	void SetIP();
+	void ClientStartup();
+	void ShutDownClient();
+	void PlayerMovement();
+	void PlayerAction();
+	int ReceivePackets(ISceneManager *escena);
+	void SpawnPlayer(ISceneManager *escena);
 
-#endif /* CLIENT_H */
+	int getControlPlayer();
+	//void UpdateNetworkKeyboard(CTeclado *teclado);
+
+};

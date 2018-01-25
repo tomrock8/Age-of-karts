@@ -1,6 +1,8 @@
 #ifndef ESCENAJUEGO_H
 #define ESCENAJUEGO_H
 
+#include <ctime>
+
 #include "GestorEscena.hpp"
 #include "Escena.hpp"
 
@@ -12,10 +14,8 @@
 
 #include "Pista.hpp"
 #include "GestorJugadores.hpp"
+#include "GestorCarrera.hpp"
 #include "GestorColisiones.hpp"
-
-
-
 
 class EscenaJuego : public Escena {
 public:
@@ -51,6 +51,9 @@ private:
 
 	Client *client;
 	vector3df pos;
+
+	clock_t tiempoRefresco;
+	GestorCarrera *gc;
 };
 
 #endif /* ESCENAJUEGO_H */

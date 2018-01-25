@@ -51,21 +51,12 @@ class Corredor: public RakNet::NetworkIDObject
 	void calculoDistanciaPunto();
 	void calculoDistanciaPuntoActual();
 	void calculoDistanciaPuntoAnterior();
-	void calculoAnguloGiro();
-	void giroIA();
-	void movimientoIA();
-	void ActualizarRaytest();
 	void setPosicionCarrera(int i);
 	btScalar getdistanciaWaypoint();
 	btScalar getdistanciaWaypointAnterior();
 	btScalar getdistanciaWaypointActual();
 	int getVueltas();
 	
-	// Logica difusa
-	void logicaDifusa();
-	double FuncionTrapezoidal(double valor, double a, double b, double c, double d);
-	double FuncionTriangular(double valor, double a, double b, double c);
-
 	// Update
 	void update();
 	void updateEstado();
@@ -113,18 +104,12 @@ protected:
 	btScalar distanciaWaypoint;
 	btScalar distanciaWaypointActual;
 	btScalar distanciaWaypointAnterior;
-	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
-	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
-	bool distanciaCerca,distanciaMedia,distanciaLejos;
-	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
 
 	//bullet
 	btRaycastVehicle *vehiculo;
 	btDefaultMotionState *motionStateCoche; //interpolacion
 	btCollisionShape *FormaColision;		//contornoB
 	btRigidBody *CuerpoColisionChasis;
-
-
 	btCompoundShape *CentroGravedad;
 
 	//Objetos
@@ -154,6 +139,7 @@ protected:
 	btScalar FuerzaFrenadoReposo;
 	//escudo
 	bool proteccion;
+
 	//raycast
 	btVehicleRaycaster *RayCastVehiculo;
 

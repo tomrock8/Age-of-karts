@@ -9,7 +9,9 @@ Camara3persona::Camara3persona()
 }
 
 Camara3persona::~Camara3persona() {
-	delete camera;
+	cout << "\nENTRO AL DESTRUCTOR DE CAMARA\n";
+	//delete camera;
+	cout << "\nSALGO DEL DESTRUCTOR DE CAMARA\n";
 }
 
 void Camara3persona::moveCameraControl(Corredor *pj1)

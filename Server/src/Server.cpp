@@ -292,10 +292,11 @@ void Server::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(t);
 			bsIn.Read(id);
+			std::cout << "He cogido un objeto: " << id << std::endl;
 
 			player[id]->setObj(t);
 
-			typeID = ID_PLAYER_STATE;
+			typeID = ID_PLAYER_SET_OBJECT;
 			bsOut.Write(typeID);
 			bsOut.Write(t);
 			bsOut.Write(id);

@@ -36,7 +36,7 @@ void EscenaJuego::init() {
 	CTeclado *teclado = CTeclado::getInstancia();
 
 	if (argc == 2) {
-		client = new Client(4);
+		client = Client::getInstancia();
 		client->CreateClientInterface();
 		client->SetIP();
 		client->ClientStartup();

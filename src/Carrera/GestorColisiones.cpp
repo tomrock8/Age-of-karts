@@ -37,7 +37,7 @@ void GestorColisiones::ComprobarColisiones()
 			if (JugadorTurbo())continue;
 			if (JugadorWaypoint())continue;
 			if (objetoDestruible())continue;
-			if (JugadorEstatico())continue;
+			if (JugadorEstatico())break;
 
 		}
 	}

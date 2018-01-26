@@ -7,6 +7,8 @@
 #include "Corredor.hpp"
 #include "Turbo.hpp"
 #include "Caja.hpp"
+#include "CajaFalsa.hpp"
+#include "Aceite.hpp"
 using namespace std;
 
 class CorredorJugador : public Corredor
@@ -21,6 +23,9 @@ class CorredorJugador : public Corredor
 
   private:
 	//objetos estaticos y dinamicos
+	Estatico * est;
+	Proyectil *pro;
+	Proyectil **proX3;
 	bool checkItem;
 	bool comprobadorMovimiento;
 	//Item *actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos);

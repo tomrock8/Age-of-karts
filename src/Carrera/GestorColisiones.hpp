@@ -26,7 +26,7 @@ public:
   bool objetoDestruible();
   bool JugadorEstatico();
   bool JugadorWaypoint();
-
+  bool JugadorItemTeledirigido();
 
 private:
   Corredor **pj1;

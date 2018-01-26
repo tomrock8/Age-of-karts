@@ -67,7 +67,8 @@ void CorredorJugador::actualizarItem()
 	Pista *pista = Pista::getInstancia();
 	core::list<Item *> items = pista->getItems();
 	int direccionItem = 1;
-	vector3df posDisparo(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y+10, cuboNodo->getPosition().Z + orientacion.Z * 5);
+	vector3df posDisparo(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y+5, cuboNodo->getPosition().Z + orientacion.Z * 5);
+	vector3df posDisparo2(cuboNodo->getPosition().X, cuboNodo->getPosition().Y-1, cuboNodo->getPosition().Z);
 	
 	if(teclado->isKeyDown(KEY_KEY_1)) setTipoObj(1);
 	if(teclado->isKeyDown(KEY_KEY_2)) setTipoObj(2);
@@ -76,7 +77,7 @@ void CorredorJugador::actualizarItem()
 	if(teclado->isKeyDown(KEY_KEY_5)) setTipoObj(5);//escudo
 	if(teclado->isKeyDown(KEY_KEY_6)) setTipoObj(6);//proytectil x3
 	if(teclado->isKeyDown(KEY_KEY_7)) setTipoObj(7);//Habilidad
-	
+	if(teclado->isKeyDown(KEY_KEY_8)) setTipoObj(8);
 
 	if (teclado->isKeyup(KEY_KEY_P))
 	{
@@ -185,6 +186,12 @@ void CorredorJugador::actualizarItem()
 					cout << "que mierda estas haciendo , no puedes usar la habilidad si tu limite no es 10 o mas" << endl;
 				}
 				
+			}else if (tipoObj == 8){
+				ItemTeledirigido *pt= new ItemTeledirigido(posDisparo2);
+				pt->inicializarFisicas();
+				pt->getRigidBody()->setCollisionFlags(pt->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+				pt->getNodo()->setParent(cuboNodo);
+				tipoObj=0;
 			}
 			pista->setItems(items);
 			//Llama a la funcion de la clase padre

@@ -9,6 +9,7 @@
 #include "Caja.hpp"
 #include "CajaFalsa.hpp"
 #include "Aceite.hpp"
+#include "ItemTeledirigido.hpp"
 using namespace std;
 
 class CorredorJugador : public Corredor

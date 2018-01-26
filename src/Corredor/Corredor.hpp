@@ -10,7 +10,7 @@
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "MotorFisicas.hpp"
-#include "Proyectil.hpp"
+#include "ItemTeledirigido.hpp"
 #include "Estatico.hpp"
 #include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
@@ -28,6 +28,7 @@ class Corredor: public RakNet::NetworkIDObject
 	Corredor(stringw rutaObj, vector3df pos);
 	void InicializarFisicas();
 	void lanzarItem(Proyectil *item, int direcionItem);
+	void lanzarItemTeledirigido();
 	void virtual lanzarItemRed(){};
 	void aplicarAceite();
 	void soltarItem();
@@ -54,6 +55,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void calculoDistanciaPuntoActual();
 	void calculoDistanciaPuntoAnterior();
 	void setPosicionCarrera(int i);
+	int getPosicionCarrera();
 	btScalar getdistanciaWaypoint();
 	btScalar getdistanciaWaypointAnterior();
 	btScalar getdistanciaWaypointActual();

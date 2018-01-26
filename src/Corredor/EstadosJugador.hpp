@@ -11,7 +11,7 @@
 using namespace std;
 typedef enum {QUIETO, AVANZA, MARCHA_ATRAS, FRENA, DERRAPA, DESACELERA} estado_movimiento;
 typedef enum {RECTO,IZQUIERDA, DERECHA} direccion_movimiento;
-typedef enum {NADA, FLECHA, CAJA_FALSA, TURBO, ACEITE, ESCUDO, FLECHA_TRIPLE,HABILIDAD} estado_objeto;
+typedef enum {NADA, FLECHA, CAJA_FALSA, TURBO, ACEITE, ESCUDO, FLECHA_TRIPLE,HABILIDAD,ITEM_TELEDIRIGIDO} estado_objeto;
 typedef enum {POR_DEFECTO, CON_TURBO, CON_ESCUDO} estado_coche;
 
 

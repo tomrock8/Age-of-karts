@@ -38,6 +38,7 @@ void GestorColisiones::ComprobarColisiones()
 			if (JugadorWaypoint())continue;
 			if (objetoDestruible())continue;
 			if (JugadorEstatico())break;
+			if (JugadorItemTeledirigido())continue;
 
 		}
 	}
@@ -155,6 +156,33 @@ bool GestorColisiones::JugadorEstatico()
 		}
 	}
 	return false;
+}
+
+bool GestorColisiones::JugadorItemTeledirigido() {
+	int x=-1;
+	if (strcmp("Jugador", nodoA->getName()) == 0) {
+		if (strcmp("ItemTeledirigido", nodoB->getName()) == 0) {
+			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
+				if (pj1[j]->getNodo()->getID()==nodoA->getID()){
+					x=j;
+					break;
+				}
+			}
+			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+				if (pj1[x]->getPosicionCarrera()!=1){
+					if (pj1[x]->getPosicionCarrera()-1==pj1[i]->getPosicionCarrera()){
+						//vector3df l1(pj1[i]->getNodo()->getPosition().X,pj1[i]->getNodo()->getPosition().Y+5,pj1[i]->getNodo()->getPosition().Z);
+						//nodoB->setPosition(l1);
+						pj1[i]->lanzarItemTeledirigido();
+						return true;
+					}
+				}
+			}
+
+		}
+	}
+	return false;
+
 }
 
 //

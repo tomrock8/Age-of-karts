@@ -73,6 +73,10 @@ void EstadosJugador::update(){
 		case 7:
 		texto->agregar("HABILIDAD\n");
 		break;
+		case 8:
+		texto->agregar("ITEM_TELEDIRIGIDO\n");
+		break;
+		
     }
 
     texto->agregar("ESTADO COCHE: ");

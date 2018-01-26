@@ -242,7 +242,9 @@ void Corredor::decCargador() { cargador--; };
 void Corredor::setPosicionCarrera(int i){
 	posicionCarrera=i;
 }
-
+int Corredor::getPosicionCarrera(){
+	return posicionCarrera;
+}
 
 
 void Corredor::calculoDistanciaPunto() {
@@ -397,6 +399,20 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 	//std::cout << "Disparo " << std::endl;
 	tipoObj = 0;
 	decCargador();
+}
+
+void Corredor::lanzarItemTeledirigido()
+{	
+		vehiculo->applyEngineForce(0,0);
+		vehiculo->applyEngineForce(0,1);
+		vehiculo->applyEngineForce(0,2);
+		vehiculo->applyEngineForce(0,3);
+		vehiculo->setBrake(100,0);
+		vehiculo->setBrake(100,1);
+		vehiculo->setBrake(100,2);
+		vehiculo->setBrake(100,3);
+		aplicarAceite();
+		//tipoObj = 0;
 }
 
 void Corredor::soltarItem()
@@ -605,6 +621,7 @@ void Corredor::aplicarAceite() {
 		girarIzquierda();
 	}
 	Fuerza = 220;
+	frenodemano(false);
 }
 
 //	----------------------------------------------
@@ -730,6 +747,9 @@ void Corredor::updateEstado(){
 		break;
 		case 7:
 		estado->setEstadoObjeto(HABILIDAD);
+		break;
+		case 8:
+		estado->setEstadoObjeto(ITEM_TELEDIRIGIDO);
 		break;
 	}
 	estado->update();

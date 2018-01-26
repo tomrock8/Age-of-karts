@@ -189,10 +189,10 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 		wheel.m_suspensionStiffness = 40;    //tambaleo de las ruedas (se mueve como si fuera por terreno con baches). A mayor valor mayor tambaleo 
 		wheel.m_wheelsDampingCompression = 2.4f;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
 		wheel.m_wheelsDampingRelaxation = 2.3f;  //btScalar(0.5)*2*btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_frictionSlip = btScalar(100000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = 0.03;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 		//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
 		wheel.m_maxSuspensionTravelCm = 800.f; //Nose muy bien que funcion tiene, pero si el valor es muy bajo el coche no avanza 
-
 
 		/*
 	 * PARAMETROS EN RUEDAS DISPONIBLES
@@ -265,6 +265,8 @@ void Corredor::calculoDistanciaPunto() {
 	texto->agregar(to_string(actual->getWaypoint()->getID() - 6) + "\n");
 	texto->agregar("WAYPOINT SIGUIENTE: ");
 	texto->agregar(to_string( siguiente->getWaypoint()->getID()-6)+"\n");
+	texto->agregar("WAYPOINT SIGUIENTE_AUX: ");
+	texto->agregar(to_string( siguiente_aux->getWaypoint()->getID()-6)+"\n");
 	texto->agregar("VUELTA: ");
 	texto->agregar(to_string(vueltas)+"\n");
 	texto->agregar("Limite:" + to_string(getLimite()) + "\n");
@@ -307,64 +309,53 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	//mas adelante se ve, Las IDS no funcionan bien tengo que preguntarle a santi a si que de momento lo comento para que
 	//se puedan coger las cajas.
 	
-	if(nodo->getID() != actual->getWaypoint()->getID()){
-	/*	if(nodo->getID() != siguiente->getWaypoint()->getID()){
-			if (actual->getWaypoint()->getID()-6!=0)
-				if(nodo->getID() < actual->getWaypoint()->getID()){
-					//cout<<"VAS AL REVES"<<endl;
-				}
-			
-			//cout<<"TE HAS SALTADO EL WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
-		}
-		else {
-			if (siguiente->getWaypoint()->getID() - 6 == 0) {
-				vueltas++;
-				//cout<<"--------------"<<vueltas<<" VUELTA SUPERADA-------------: "<<endl;
 
-			}
-			actual = actual->getNextWaypoint();
-			siguiente = actual->getNextWaypoint();
-
-
-
-			//cout<<"HAS PASADO POR EL WAYPOINT: "<<actual->getWaypoint()->getID()<<" SIGUIENTE WAYPOINT: "<<siguiente->getWaypoint()->getID()<<endl;
-		}
+	if(nodo->getID() > actual->getWaypoint()->getID() && nodo->getID() == siguiente_aux->getWaypoint()->getID()){
 		
-	}else{
-		//cout<<"ESTAS EN EL WAYPOINTACTUAL: "<<actual->getWaypoint()->getID()<<endl;*/
+		//setWaypointActualID(nodo->getID()-6);
+		actual = actual->getNextWaypoint();	
+		siguiente = actual->getNextWaypoint();
+		if (actual->getWaypoint()->getID()==siguiente_aux->getWaypoint()->getID())
+		siguiente_aux=siguiente;
+	
+	}
+	
+	if(nodo->getID()-6 == 0){ //caso de vuelta completa
+			
 		if (siguiente_aux->getWaypoint()->getID()-6==0){
+				//cout<<"HAS DADO UNA VUELTA"<<endl;
 				vueltas++;
+				actual = siguiente_aux;
+				siguiente = actual->getNextWaypoint();
+				siguiente_aux = actual->getNextWaypoint();
 				//cout<<"--------------"<<vueltas<<" VUELTA SUPERADA-------------: "<<endl;
-
 			}
-		setWaypointActualID(nodo->getID()-6);
-		if(nodo->getID() == anterior->getWaypoint()->getID()){
-			//AL REVES
-		}
 
+	}
+	
+	if(nodo->getID()<actual->getWaypoint()->getID() && nodo->getID()-6 != 0){
+		
+		if(cuboNodo->getID() == 0){
+		cout<< "VOY MARCHA ATRAS"<<endl;
+		cout<<endl;
+		}
 	}
 
 	//cout<< "NODO ACTUAL:"<< actual->getWaypoint()->getID() <<endl;
 	//cout<< "NODO SIGUIENTE:"<< siguiente->getWaypoint()->getID() <<endl;
 }
+
 void Corredor::setWaypointActualID(int i){
-	
-	while (i!=actual->getWaypoint()->getID()-6){
-		anterior =actual;
+
+		/*
 		actual = actual->getNextWaypoint();	
-	}
-	if (anterior==NULL){
-		if (actual->getWaypoint()->getID()-6!=0){
-			setWaypointAnteriorID(actual->getWaypoint()->getID()-1-6);
-		}else{
-			Pista *mapa = Pista::getInstancia();
-			setWaypointAnteriorID(mapa->getTamArrayWaypoints());
-		}
-	}
 		siguiente = actual->getNextWaypoint();
+
 		if (actual->getWaypoint()->getID()==siguiente_aux->getWaypoint()->getID())
 		siguiente_aux=siguiente;
+		*/
 }
+
 void Corredor::setWaypointAnteriorID(int i){
 	while (i!=anterior->getWaypoint()->getID()-6){
 		anterior=anterior->getNextWaypoint();

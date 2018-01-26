@@ -83,20 +83,20 @@ void EscenaJuego::init() {
 		pj[0] = new CorredorJugador("assets/coche.obj", vector3df(-10, 0, 310));
 		jugadores->aumentarJugadores();
 
-		pj[1] = new CorredorIA("assets/coche.obj", vector3df(-10, 0, 290));
+		pj[1] = new CorredorIA("assets/coche.obj", vector3df(-10,0,290));
+		jugadores->aumentarJugadores();
+		
+		
+		pj[2] = new CorredorIA("assets/coche.obj", vector3df(-20,0,320));
 		jugadores->aumentarJugadores();
 
-
-		pj[2] = new CorredorIA("assets/coche.obj", vector3df(-20, 0, 310));
+		pj[3] = new CorredorIA("assets/coche.obj", vector3df(-20,0,290));
 		jugadores->aumentarJugadores();
 
-		pj[3] = new CorredorIA("assets/coche.obj", vector3df(-20, 0, 290));
+		pj[4] = new CorredorIA("assets/coche.obj", vector3df(-30,0,320));
 		jugadores->aumentarJugadores();
 
-		pj[4] = new CorredorIA("assets/coche.obj", vector3df(-30, 0, 310));
-		jugadores->aumentarJugadores();
-
-		pj[5] = new CorredorIA("assets/coche.obj", vector3df(-30, 0, 290));
+		pj[5] = new CorredorIA("assets/coche.obj", vector3df(-30,0,290));
 		jugadores->aumentarJugadores();
 
 
@@ -372,7 +372,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if (strcmp(Node->getName(), "Jugador") == 0) {
+	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA")==0) {
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
 
 	}

@@ -18,36 +18,47 @@ CorredorIA::CorredorIA(stringw rutaObj, vector3df pos) : Corredor(rutaObj, pos)
 //-----------------------\*
 void CorredorIA::movimiento()
 {
-	
+//	cout<<"velocidad::"<<vehiculo->getCurrentSpeedKmHour()<< endl;
 	logicaDifusa();
 	acelerar();
 	
-	//if(caja)
-	//cout<<"VEO CAJA"<<endl;	
-
-	//if(turbo)
-	//cout<<"VEO TURBO"<<endl;	
 
 	
-
 	if(!caja || !turbo){
 	//cout<< "sigoWAyPOINT"<< endl;
-	calculoAnguloGiro(siguiente->getPosicion());
+	distanciaVector();
 	
 	}
 	
+
 	if(caja && turbo || caja && !turbo){
-	//	cout<< "sigoCAJA"<< endl;
-	calculoAnguloGiro(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z));	
-	
-	}
-	
+    //    cout<< "sigoCAJA"<< endl;
+    calculoAnguloGiro(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z));
+
+    }
+
 	if(turbo && !caja){
-	//	cout<< "sigoTUrbo"<< endl;
+	//cout<< "sigoTUrbo"<< endl;
 	calculoAnguloGiro(btVector3(turbo->getPosition().X,turbo->getPosition().Y,turbo->getPosition().Z));	
 	
 	}
 
+
+	if(distanciaCerca || distanciaMedia){
+	
+		//cout<<"FRENO" << endl;
+	/*
+	vehiculo->applyEngineForce(50,0);
+	vehiculo->applyEngineForce(50,1);
+	vehiculo->applyEngineForce(50,2);
+	vehiculo->applyEngineForce(50,3);
+
+	vehiculo->setBrake(10,0);
+	vehiculo->setBrake(10,1);
+	vehiculo->setBrake(10,2);
+	vehiculo->setBrake(10,3);
+	*/	
+	}
 
 	if(noGiro){
 	
@@ -56,26 +67,78 @@ void CorredorIA::movimiento()
 
 	}
 
-	if(giroFlojoDerecha || giroFuerteDerecha){
+	if(giroFlojoDerecha){
 	//girarDerecha();
 	
-	vehiculo->setSteeringValue(0.1, 0);
-	vehiculo->setSteeringValue(0.1, 1);
-	
+	vehiculo->setSteeringValue(0.06, 0);
+	vehiculo->setSteeringValue(0.06, 1);
 	}
 
-	if(giroFlojoIzquierda || giroFuerteIzquierda){
+	if(giroFuerteDerecha){
+	vehiculo->setSteeringValue(0.15, 0);
+	vehiculo->setSteeringValue(0.15, 1);
+	//vehiculo->setBrake(100,0);
+	//vehiculo->setBrake(100,1);
+	//vehiculo->setBrake(100,2);
+	//vehiculo->setBrake(100,3);
+	}
+
+	if(giroFlojoIzquierda){
 	//girarIzquierda();
 	
-	vehiculo->setSteeringValue(-0.1, 0);
-	vehiculo->setSteeringValue(-0.1, 1);
+	vehiculo->setSteeringValue(-0.06, 0);
+	vehiculo->setSteeringValue(-0.06, 1);
 
+	}
+
+	if(giroFuerteIzquierda){
+
+	vehiculo->setSteeringValue(-0.15, 0);
+	vehiculo->setSteeringValue(-0.15, 1);
+	//vehiculo->setBrake(100,0);
+	//vehiculo->setBrake(100,1);
+	//vehiculo->setBrake(100,2);
+	//vehiculo->setBrake(100,3);
 	}
 
 
 }
 
+void CorredorIA::distanciaVector(){
 
+	btScalar distanciaCentro=0;
+	btScalar distanciaLado1=0;
+	btScalar distanciaLado2=0;
+
+	
+	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+	btVector3 posWaypoint(actual->getPosicion().getX(), actual->getPosicion().getY(), actual->getPosicion().getZ());
+	distanciaCentro = posCoche.distance2(posWaypoint);
+	distanciaLado1 = posCoche.distance2(siguiente->getVector1());
+	distanciaLado2 = posCoche.distance2(siguiente->getVector2());
+	
+	if(distanciaCentro<distanciaLado1 && distanciaCentro<distanciaLado2){
+	
+	
+	calculoAnguloGiro(siguiente->getPosicion());
+	
+	}
+	else{
+
+ 	if(distanciaLado1<distanciaCentro && distanciaLado1<distanciaLado2){
+
+	
+	calculoAnguloGiro(siguiente->getVector1());
+	}
+	if(distanciaLado2<distanciaCentro && distanciaLado2<distanciaLado1){
+	
+	calculoAnguloGiro(siguiente->getVector2());
+	
+	}
+	
+	}
+
+}
 
 void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 
@@ -100,15 +163,16 @@ void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 
 void CorredorIA::logicaDifusa() {
 	//GIRO DEL COCHE
-	pertenenciaCerca = FuncionTrapezoidal(distanciaWaypoint, 0, 0, 500, 1000);
+	pertenenciaCerca = FuncionTrapezoidal(distanciaWaypoint, 0, 0, 500, 2000);
 	pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint, 1500, 4000, 6000, 7000);
 	pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint, 6000, 7000, 9000, 100000);
 
-		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-8,0,8);
-		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,9,40,90);
-		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,91,140,180);
-		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-91,-140,-180);
-		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-9,-40,-90);
+		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-6,0,6);
+		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,7,15,45);
+		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-7,-15,-45);
+		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,46,80,180);
+		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-46,-80,-180);
+		
 
 	if(pertenenciaCerca > pertenenciaMedia && pertenenciaCerca > pertenenciaLejos){
 		distanciaCerca=true;
@@ -246,13 +310,13 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->computeOverlappingPairs();
 
 	//cout<< orientacion.X << "   "<< orientacion.Z<<endl;
-	float distanciaRaycast = 100; // longitud del rayo
-	float distanciaCoche = 10; // distancia entre el rayo y el coche, donde empieza
-	float Raycast23 = 20; // distancia entre raycast 2 y 3
-	float Raycast45 = 40; // distancia entre raycast 4 y 5
+	float distanciaRaycast = 50; // longitud del rayo
+	float distanciaCoche = 2; // distancia entre el rayo y el coche, donde empieza
+	float Raycast23 = 10; // distancia entre raycast 2 y 3
+	float Raycast45 = 20; // distancia entre raycast 4 y 5
 
 	// Raycast central1
-	btVector3 inicio(cuboNodo->getPosition().X, cuboNodo->getPosition().Y + 1, cuboNodo->getPosition().Z);
+	btVector3 inicio(cuboNodo->getPosition().X + orientacion.X*distanciaCoche, cuboNodo->getPosition().Y , cuboNodo->getPosition().Z+ orientacion.Z*distanciaCoche);
 	btVector3 fin(cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
 
 
@@ -303,12 +367,16 @@ void CorredorIA::ActualizarRaytest() {
 	RayCast5.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast5);
 
-	turbo=NULL;
+	caja=NULL;	
+	distanciaCaja=0;
+	turbo=NULL;	
 	distanciaTurbo=0;
 
-	caja=NULL;
-	distanciaCaja=0;
+	//de momento lo dejo asi
+	if(tipoObj!=0){
 
+	tipoObj=0;
+	}
 
 	if (RayCast1.hasHit())
 	{
@@ -398,16 +466,30 @@ void CorredorIA::vision(btScalar distancia,ISceneNode *nodo){
 
 	if(strcmp(nodo->getName(),"Caja")==0){
 
-		if(!caja)
-		caja=nodo;
 
+		if(distanciaCaja==0){
+		distanciaCaja=distancia;
+		caja=nodo;
+		}
+
+		if(distancia<distanciaCaja){
+		distanciaCaja=distancia;
+		caja=nodo;	
+		}
+		
 	}
 
 	if(strcmp(nodo->getName(),"Turbo")==0){
 
-		if(!turbo)
+		if(distanciaTurbo==0){
+		distanciaTurbo=distancia;
 		turbo=nodo;
-		
+		}
+
+		if(distancia<distanciaTurbo){
+		distanciaTurbo=distancia;
+		turbo=nodo;	
+		}
 	}
 
 

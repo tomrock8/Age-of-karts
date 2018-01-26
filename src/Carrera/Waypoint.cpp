@@ -80,13 +80,13 @@ IMeshSceneNode *Waypoint::getWaypoint() {
 }
 
 Waypoint::~Waypoint() {
-	cout << "ENTRO DELETE WAYPOINT: " << waypoint->getID();
+	cout << "ENTRO DELETE WAYPOINT: " <<endl;
 
 	siguiente = nullptr;
 	// Los rigid body se borran desde el motor de fisicas
 	//delete rigidBody;
 
-	cout << " SALGO DELETE WAYPOINT: " << waypoint->getID();
+	cout << " SALGO DELETE WAYPOINT: " << endl;
 }
 void Waypoint::setVector1(btVector3 p) {
 	vector1 = p;

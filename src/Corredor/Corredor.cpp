@@ -420,102 +420,13 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 		acelerar();
 		Timer *time = Timer::getInstancia();
 		timerTurbo = time->getTimer();
-		if (objeto) soltarItem();
+		if (objeto) tipoObj = 0;
 	}
 	else {
 		SetFuerzaVelocidad(1000);
 	}
 }
 
-void Corredor::lanzarFlecha(vector3df posDisparo){
-	int direccionItem = 1;
-	Pista *pista = Pista::getInstancia();
-	core::list<Item *> items = pista->getItems();
-	Proyectil *pro = new Proyectil(posDisparo);
-	lanzarItem(pro, direccionItem);
-	items.push_back(pro);
-	soltarItem();
-	pista->setItems(items);
-}
-
-void Corredor::lanzarCajaFalsa(vector3df posDisparo){
-	Pista *pista = Pista::getInstancia();
-	core::list<Item *> items = pista->getItems();
-	posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
-	posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
-	CajaFalsa *est = new CajaFalsa(posDisparo);
-	est->inicializarFisicas();
-	soltarItem();
-	items.push_back(est);
-	pista->setItems(items);
-}
-
-void Corredor::lanzarTurbo(){
-
-	setTurbo(true, true,26000);
-}
-
-void Corredor::lanzarAceite(vector3df posDisparo){
-
-	Pista *pista = Pista::getInstancia();
-	core::list<Item *> items = pista->getItems();
-	posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
-	posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
-	Aceite *est2 = new Aceite(posDisparo);
-	est2->inicializarFisicas();
-	//est2->getRigidBody()->setCollisionFlags(est2->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	soltarItem();
-	items.push_back(est2);
-	pista->setItems(items);
-}
-
-void Corredor::lanzarEscudo(){
-
-	if(getProteccion()==false) setProteccion(true);
-	soltarItem();
-}
-
-void Corredor::lanzarFlechaTriple(vector3df posDisparo){
-	Pista *pista = Pista::getInstancia();
-	core::list<Item *> items = pista->getItems();
-	Proyectil **proX3 = new Proyectil *[3];
-	btVector3 orientacioncentral(orientacion.X, orientacion.Y, orientacion.Z);
-	btVector3 centro(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.Z * 5);
-	btVector3 orientacionderecha = orientacioncentral.rotate(btVector3(0, 1, 0), 10 * PI / 180);
-	btVector3 orientacionizquierda = orientacioncentral.rotate(btVector3(0, 1, 0), -10 * PI / 180);
-	vector3df c(centro.getX(), centro.getY(), centro.getZ());
-	vector3df iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 5);
-	vector3df d(cuboNodo->getPosition().X + orientacionderecha.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 5);
-	for (int i = 0; i < 3; i++) {
-
-
-		if (i == 0) {
-			proX3[i] = new Proyectil(iz);
-			proX3[i]->inicializarFisicas();
-			proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionizquierda.getX() * 100, 5.0f, orientacionizquierda.getZ() * 100));
-		}
-		if (i == 1) {
-
-			proX3[i] = new Proyectil(c);
-			proX3[i]->inicializarFisicas();
-			proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacioncentral.getX() * 100, 5.0f, orientacioncentral.getZ() * 100));
-		}
-		if (i == 2) {
-
-			proX3[i] = new Proyectil(d);
-			proX3[i]->inicializarFisicas();
-			proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionderecha.getX() * 100, 5.0f, orientacionderecha.getZ() * 100));
-		}
-
-
-		items.push_back(proX3[i]);
-
-
-
-	}
-	soltarItem();
-	pista->setItems(items);
-}
 bool Corredor::getTurbo() {
 	return turboActivado;
 }

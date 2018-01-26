@@ -136,6 +136,7 @@ void Server::ReceivePackets()
 		//uno de los clientes se ha desconectado del servidor
 		case ID_DISCONNECTION_NOTIFICATION:
 			std::cout << "ID_DISCONNECTION_NOTIFICATION de " << p->systemAddress.ToString(true) << std::endl;
+			std::cout<< "NumPlayers: " << numPlayers << std::endl;
 			
 			break;
 
@@ -247,6 +248,7 @@ void Server::ReceivePackets()
 			bsIn.Read(rotacion[1]);
 			bsIn.Read(rotacion[2]);
 			bsIn.Read(id);
+			if(id == numPlayers) id--;  //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
 			player[id]->setPositionRotation(posicion, rotacion);
 			//*posicion = *networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->getPosition();
 			//networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->setPosition(posicion);
@@ -272,6 +274,7 @@ void Server::ReceivePackets()
 			bsIn.Read(estado3);
 			bsIn.Read(estado4);
 			bsIn.Read(id);
+			if(id == numPlayers) id--;  //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
 			player[id]->setEstados(estado1, estado2, estado3, estado4);
 
 			typeID = ID_PLAYER_STATE;
@@ -292,6 +295,7 @@ void Server::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(t);
 			bsIn.Read(id);
+			if(id == numPlayers) id--;  //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
 			std::cout << "He cogido un objeto: " << id << std::endl;
 
 			player[id]->setObj(t);
@@ -308,6 +312,7 @@ void Server::ReceivePackets()
 
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
+			if(id == numPlayers) id--; //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
 
 			player[id]->setObj(0);
 
@@ -326,6 +331,8 @@ void Server::ReceivePackets()
 			std::cout << "Jugador eliminado: " << playerDisconnect << " / " <<numPlayers << std::endl;
 
 			playerDisconnection(playerDisconnect);
+
+			std::cout << "Jugador Borrado\n";
 
 			break;
 		
@@ -454,12 +461,18 @@ void Server::GetConnectionList(){
 void Server::playerDisconnection(int playerDisconnect){
 	RakNet::BitStream bsOut;						   //|mensaje de salida	
 	delete player[playerDisconnect];
+	std::cout<< "NumPlayers: " << numPlayers << std::endl;
 	for(int i=0; i<numPlayers; i++){	//Recorre todos los players
+		std::cout << "Player " << i << std::endl;
 		if(playerDisconnect<=i){		//Si se encuentra con playerDisconnect asigna la posicion siguiente a esta
-			if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
+			std::cout << "Reorganizo Array\n";
+			if(i<numPlayers-1){			//Si la posicion es la final asigna null al ultimo player para evitar basura
+				std::cout << "Asigno i + 1 a i\n";
 				player[i]=player[i+1];
-			else
+			}else{
+				std::cout << "Asigno i a NULL\n";
 				player[i]=NULL;
+			}
 		}
 	}
 

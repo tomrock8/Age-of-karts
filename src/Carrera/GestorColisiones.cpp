@@ -235,4 +235,4 @@ bool GestorColisiones::objetoDestruible()
 		}
 	}
 	return colision;
-}s
+}

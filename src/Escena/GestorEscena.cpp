@@ -15,13 +15,7 @@ GestorEscena::GestorEscena() {
 }
 
 void GestorEscena::update() {
-	try {
-		escenaActiva->update();
-	}
-	catch (...) {
-		cout << "\nCAMBIO DE ESCENA\n";
-	}
-
+	escenaActiva->update();
 }
 
 

@@ -11,7 +11,7 @@ TextoPantalla::TextoPantalla() {
 	fuente = m->getGUI()->getFont("assets/fuente.bmp");
 	textoUI = m->getGUI()->addStaticText(
 		texto.c_str(),				 // Texto
-		rect<s32>(10, 10, 400, 300), // Rectangulo de los bordes
+		rect<s32>(10, 10, 350, 700), // Rectangulo de los bordes
 		false,						 // Mostrar bordes
 		true,						 // Cortar en varias lineas
 		0,							 // Nodo padre

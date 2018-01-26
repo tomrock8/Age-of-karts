@@ -38,7 +38,7 @@ void GestorColisiones::ComprobarColisiones()
 			if (JugadorTurbo())continue;
 			if (JugadorWaypoint())continue;
 			if (objetoDestruible())continue;
-			if (JugadorEstatico())continue;
+			if (JugadorEstatico())break;
 
 		}
 	}
@@ -101,8 +101,8 @@ bool GestorColisiones::JugadorEstatico() {
 	bool b1 = false;
 	//cout << TimeStamp << endl;
 
-	if (strcmp("Jugador", nodoA->getName()) == 0 || strcmp("JugadorRed", nodoA->getName()) == 0) {
-		if (strcmp("CajaFalsa", nodoB->getName()) == 0 || strcmp("Proyectil", nodoB->getName()) == 0) {
+	if (strcmp("Jugador", nodoA->getName()) == 0) {
+		if (strcmp("Estatico", nodoB->getName()) == 0 || strcmp("Proyectil", nodoB->getName()) == 0) {
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
 				if (pj1[j]->getNodo()->getID() == nodoA->getID()) {//tengo un personaje, y voy a ver si tiene escudo
@@ -139,12 +139,13 @@ bool GestorColisiones::JugadorEstatico() {
 						item->Delete();
 						Iterator = items.erase(Iterator);
 						pista->setItems(items);
-					}
-					else {
-						item->setColision(true);
-					}
+					//}
+					//else {
+					//	item->setColision(true);
+					//}
 
 					return true;
+				}
 			}
 
 

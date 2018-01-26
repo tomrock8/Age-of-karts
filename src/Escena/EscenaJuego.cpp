@@ -229,7 +229,7 @@ void EscenaJuego::update() {
 		pj[4]->update();
 		pj[5]->update();
 
-		textoDebug->agregar(pj[0]->toString());
+		//textoDebug->agregar(pj[0]->toString());
 	}
 	else {
 		//cout << jugadores->getNumJugadores() << endl;

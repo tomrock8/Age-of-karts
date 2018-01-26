@@ -30,7 +30,7 @@ EscenaJuego::~EscenaJuego() {
 
 void EscenaJuego::init() {
 	//ARGUMENTOS MAIN
-	argc = 2;
+	argc = 0;
 	debug = 0;
 
 	CTeclado *teclado = CTeclado::getInstancia();

@@ -338,8 +338,8 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	if(nodo->getID()<actual->getWaypoint()->getID() && nodo->getID()-6 != 0){
 		
 		if(cuboNodo->getID() == 0){
-		cout<< "VOY MARCHA ATRAS"<<endl;
-		cout<<endl;
+		//cout<< "VOY MARCHA ATRAS"<<endl;
+		//cout<<endl;
 		}
 	}
 

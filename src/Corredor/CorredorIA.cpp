@@ -310,7 +310,7 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->computeOverlappingPairs();
 
 	//cout<< orientacion.X << "   "<< orientacion.Z<<endl;
-	float distanciaRaycast = 50; // longitud del rayo
+	float distanciaRaycast = 60; // longitud del rayo
 	float distanciaCoche = 2; // distancia entre el rayo y el coche, donde empieza
 	float Raycast23 = 10; // distancia entre raycast 2 y 3
 	float Raycast45 = 20; // distancia entre raycast 4 y 5

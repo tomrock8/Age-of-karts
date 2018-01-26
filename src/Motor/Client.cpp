@@ -4,6 +4,8 @@
 
 #define DEBUG_BUILD
 
+Client *Client::instancia = NULL;
+
 //==================================================================================
 // constructor que inicializa los valores de las variables requeridad por el cliente
 //==================================================================================
@@ -14,6 +16,22 @@ Client::Client(int maxPlay)
 	numPlayers = 0;
 	spawned = false;   // true == el jugador del cliente ya ha spwaneado
 	netLoaded = false; // true == si todos los clientes de la partida han spwaneado
+	connected = false;
+}
+
+//==================================================================================
+// coger instancia del singleton
+//==================================================================================
+
+Client *Client::getInstancia() {
+	if (instancia == NULL)
+		instancia = new Client(4);
+
+	return instancia;
+}
+
+Client::~Client(){
+
 }
 
 //==================================================================================
@@ -42,7 +60,7 @@ void Client::SetIP()
 	std::cout << "Introduce IP del servidor: ";
 	//std::cin >> serverIP;
 	//serverIP = "127.0.0.1";
-	serverIP = "192.168.1.6";
+	serverIP = "192.168.1.5";
 	//puerto de escucha del cliente
 	clientPort = "6003";
 }
@@ -233,6 +251,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 		//se ha aceptado la conexion con un cliente
 		case ID_CONNECTION_REQUEST_ACCEPTED:
 			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
+			connected = true;
 			return 3;
 			break;
 
@@ -354,6 +373,32 @@ int Client::ReceivePackets(ISceneManager *escena)
 
 			break;
 
+		case ID_PLAYER_SET_OBJECT:
+			if (netLoaded)
+			{
+				int t, id;
+
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(t);
+				bsIn.Read(id);
+				cout <<" asignando al jugador *** "<< id <<" *** ";
+				player[id]->setTipoObj(t);
+
+			}
+
+			break;
+
+		case ID_PLAYER_THROW_OBJECT:
+			if (netLoaded)
+			{
+				int id;
+
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(id);
+				cout <<" el jugador "<< id<<" lanza el objeto" << endl;
+				player[id]->lanzarItemRed();
+			}
+
 		case ID_REFRESH_SERVER:
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			for (int i = 0; i < numPlayers; i++)
@@ -469,6 +514,10 @@ int Client::getControlPlayer(){
 	return controlPlayer;
 }
 
+bool Client::getConnected(){
+	return connected;
+}
+
 void Client::PlayerAction(){
 	int estado1 = player[controlPlayer]->getEstados()->getEstadoMovimiento();
 	int estado2 = player[controlPlayer]->getEstados()->getDireccionMovimiento();
@@ -516,4 +565,23 @@ void Client::PlayerMovement(){
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
 
+}
+
+void Client::PlayerSetObject(int tipo){
+	typeID = ID_PLAYER_SET_OBJECT;
+	RakNet::BitStream bsOut;
+	cout <<"He cogido el objeto ---"<< tipo <<" --- y lo comparto con los demas"<< endl;
+	bsOut.Write(typeID);
+	bsOut.Write(tipo);
+	bsOut.Write(controlPlayer);
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+
+void Client::PlayerThrowObject(){
+	typeID = ID_PLAYER_THROW_OBJECT;
+	RakNet::BitStream bsOut;
+	cout <<"He lanzado el objeto!" << endl;
+	bsOut.Write(typeID);
+	bsOut.Write(controlPlayer);
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }

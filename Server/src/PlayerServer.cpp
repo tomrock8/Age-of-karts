@@ -9,6 +9,7 @@ PlayerServer::PlayerServer(float *pos, int i)
     rotacion[1] = 0;
     rotacion[2] = 0;
     id = i;
+    obj = 0;
 }
 
 float* PlayerServer::getPosition(){
@@ -33,6 +34,10 @@ void PlayerServer::setEstados(int e1, int e2, int e3, int e4){
 
 int PlayerServer::getID(){
     return id;
+}
+
+void PlayerServer::setObj(int t){
+    obj = t;
 }
 
 void PlayerServer::acelerar(){

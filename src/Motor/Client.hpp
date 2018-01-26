@@ -1,3 +1,6 @@
+#ifndef CLIENT_H
+#define CLIENT_H
+
 #include <iostream>
 //#include "CorredorRed.hpp"
 //#include "CorredorJugador.hpp"
@@ -8,11 +11,37 @@
 
 class Client
 {
+
+public:
+
+	~Client(void);
+
+	static Client *getInstancia();
+	void CreateClientInterface();
+	void SetIP();
+	void ClientStartup();
+	void ShutDownClient();
+	void PlayerMovement();
+	void PlayerAction();
+	void PlayerSetObject(int tipo);
+	void PlayerThrowObject();
+	int ReceivePackets(ISceneManager *escena);
+	void SpawnPlayer(ISceneManager *escena);
+
+	int getControlPlayer();
+	bool getConnected();
+	//void UpdateNetworkKeyboard(CTeclado *teclado);
+	
 private:
+	Client(int maxPlay);
+
+	static Client *instancia;
+
 	int numSockets;
 	int numIPs;
 	int maxPlayers;
 	bool netLoaded;
+	bool connected;
 	unsigned char packetIdentifier;
 
 	RakNet::SocketDescriptor socketDescriptor;
@@ -33,18 +62,6 @@ private:
 
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 
-public:
-	Client(int = 10);
-	void CreateClientInterface();
-	void SetIP();
-	void ClientStartup();
-	void ShutDownClient();
-	void PlayerMovement();
-	void PlayerAction();
-	int ReceivePackets(ISceneManager *escena);
-	void SpawnPlayer(ISceneManager *escena);
-
-	int getControlPlayer();
-	//void UpdateNetworkKeyboard(CTeclado *teclado);
-
 };
+
+#endif

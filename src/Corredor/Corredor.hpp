@@ -28,6 +28,7 @@ class Corredor: public RakNet::NetworkIDObject
 	Corredor(stringw rutaObj, vector3df pos);
 	void InicializarFisicas();
 	void lanzarItem(Proyectil *item, int direcionItem);
+	void virtual lanzarItemRed(){};
 	void aplicarAceite();
 	void soltarItem();
 	virtual void actualizarItem(){}; // A implementar por derivadas

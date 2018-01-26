@@ -1,4 +1,5 @@
 #include "CorredorJugador.hpp"
+#include "Client.hpp"
 
 CorredorJugador::CorredorJugador(stringw rutaObj, vector3df pos) : Corredor(rutaObj, pos)
 {
@@ -91,6 +92,10 @@ void CorredorJugador::actualizarItem()
 		if (tipoObj != 0 && !checkItem)
 		{
 			checkItem = true;
+
+			Client *client = Client::getInstancia();
+			if(client->getConnected())
+				client->PlayerThrowObject();
 
 			if (tipoObj == 1)
 			{

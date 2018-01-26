@@ -167,7 +167,7 @@ bool GestorColisiones::JugadorCaja(Caja **cajas) {
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	bool colision = false;
 
-	if (strcmp("Jugador", nodoA->getName()) == 0) {
+	if (strcmp("Jugador", nodoA->getName()) == 0 || strcmp("JugadorRed", nodoA->getName()) == 0) {
 		if (strcmp("Caja", nodoB->getName()) == 0 && nodoB->isVisible()) {
 			colision = true;
 			//cout << "Jug - Caja\n";

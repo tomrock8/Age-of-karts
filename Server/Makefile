@@ -26,7 +26,7 @@ exec: $(OBJETOS)
 	export RUTA_LIB=/usr/local/lib
 
 	
-	g++ -fPIC -g -o $@ $^  $(RUTAS) $(LIBRERIAS) $(CFLAGS) -Wl,-rpath=./lib	
+	g++ -fPIC -g -o $@ $^  $(RUTAS) $(LIBRERIAS) $(CFLAGS) -Wl,-rpath=./../lib	
 	@echo "Generado ejecutable."
 
 obj/%.o : src/%.cpp

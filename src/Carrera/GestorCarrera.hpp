@@ -15,6 +15,7 @@ public:
 	int getCorredorIndexOriginal(int n);
 	void setVueltas(int i);
 	int getVueltas();
+	Corredor* comprobarItemTeledirigido(int num);
 private:
 	Corredor * *pj1;
 	Corredor **pj2;

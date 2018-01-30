@@ -14,6 +14,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	cargador = 0;
 	tipoObj = 0;
 	turboActivado = false;
+	objetivoFijado=false;
 	timerTurbo = 0;
 	limite = 0;
 	Motor3d *m = Motor3d::getInstancia();
@@ -383,18 +384,25 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 	decCargador();
 }
 void Corredor::lanzarItemTeledirigido()
-{
-	vehiculo->applyEngineForce(0, 0);
-	vehiculo->applyEngineForce(0, 1);
-	vehiculo->applyEngineForce(0, 2);
-	vehiculo->applyEngineForce(0, 3);
-	vehiculo->setBrake(100, 0);
-	vehiculo->setBrake(100, 1);
-	vehiculo->setBrake(100, 2);
-	vehiculo->setBrake(100, 3);
-	aplicarAceite();
-	//tipoObj = 0;
+{	
+		
+		vehiculo->applyEngineForce(0,0);
+		vehiculo->applyEngineForce(0,1);
+		vehiculo->applyEngineForce(0,2);
+		vehiculo->applyEngineForce(0,3);
+		vehiculo->setBrake(100,0);
+		vehiculo->setBrake(100,1);
+		vehiculo->setBrake(100,2);
+		vehiculo->setBrake(100,3);
+		aplicarAceite();
+		//tipoObj = 0;
 }
+void Corredor::setObjetivoTelederigido(){
+	objetivoFijado=true;
+			Timer *time = Timer::getInstancia();
+		timerTeledirigido=time->getTimer();
+}
+
 void Corredor::soltarItem()
 {
 	setTipoObj(0);
@@ -497,14 +505,11 @@ void Corredor::usarObjetos() {
 		}
 
 	}
-	else if (getTipoObj() == 8) {
-		ItemTeledirigido *pt = new ItemTeledirigido(posDisparo);
-		pt->inicializarFisicas();
-		pt->getRigidBody()->setCollisionFlags(pt->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-		pt->getNodo()->setParent(cuboNodo);
+	else if (tipoObj == 8){
+		pt = new ItemTeledirigido(posDisparo);
+		pt->lanzarItemTeledirigido(posicionCarrera);
 		items.push_back(pt);
 		soltarItem();
-
 	}
 	pista->setItems(items);
 
@@ -517,7 +522,7 @@ void Corredor::aplicarAceite() {
 	for (int i = 0; i < 100; i++) {
 		girarIzquierda();
 	}
-	Fuerza = 220;
+	Fuerza = 500;
 	frenodemano(false);
 }
 void Corredor::incCargador() { cargador++; };
@@ -742,9 +747,10 @@ std::string Corredor::toString()
 //---------------------------------------//
 void Corredor::update()
 {
+	Timer *time = Timer::getInstancia();
 	if (turboActivado) {
 		Motor3d *mundo = Motor3d::getInstancia();
-		Timer *time = Timer::getInstancia();
+
 		if (time->getTimer() - timerTurbo >= 1) {
 			//cout << "Se acaba el turbo\n";
 			desacelerar();
@@ -760,6 +766,7 @@ void Corredor::update()
 		FuerzaGiro = btScalar(0.1);
 	}
 
+	updateTeledirigido();
 	updateEstado();
 	if (h->getHabilidadActiva())updateHabilidad();
 	movimiento();
@@ -778,6 +785,23 @@ void Corredor::update()
 	texto->agregar(to_string(posicionCarrera)+"\n");
 	
 }
+
+void Corredor::updateTeledirigido(){
+	if (pt!=NULL){
+		Timer *t = Timer::getInstancia();
+		if (objetivoFijado){
+			if (t->getTimer()-timerTeledirigido>2){
+				
+				lanzarItemTeledirigido();
+			}
+			if (t->getTimer()-timerTeledirigido>3){
+				objetivoFijado=false;
+
+			}
+		}
+	}
+}
+
 void Corredor::actualizarRuedas()
 {
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);

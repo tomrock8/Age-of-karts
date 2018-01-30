@@ -32,6 +32,8 @@ class Corredor: public RakNet::NetworkIDObject
 	void lanzarItemTeledirigido();
 	void virtual lanzarItemRed(){};
 	void aplicarAceite();
+	void updateTeledirigido();
+	void setObjetivoTelederigido();
 	void soltarItem();
 	virtual void actualizarItem(){}; // A implementar por derivadas
 	void incCargador();
@@ -123,7 +125,11 @@ protected:
 	int cargador;
 	int tipoObj; // si es 0 no tengo nada
 	bool turboActivado; // para saber cuando esta activado turbo
+	bool objetivoFijado; //para el item teledirigido
 	int timerTurbo;
+	int timerTeledirigido;
+	
+	ItemTeledirigido *pt;
 
 	//objetos estaticos y dinamicos
 	Estatico * est;

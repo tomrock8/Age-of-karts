@@ -93,3 +93,13 @@ void GestorCarrera::setVueltas(int i){
 int GestorCarrera::getVueltas(){
     return vueltas;
 }
+Corredor* GestorCarrera::comprobarItemTeledirigido(int num){
+    for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+        if (num!=1){
+             if (pj1[i]->getPosicionCarrera()==num-1){
+				return pj1[i];
+            }
+        }
+    } 
+    return NULL;
+}

@@ -60,6 +60,7 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 
 
 GestorEscena& GestorEscena::instancia() {
+	static GestorEscena _instancia;  // Instancia de la escena para el singleton
 	return _instancia;
 }
 

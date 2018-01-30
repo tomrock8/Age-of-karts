@@ -12,7 +12,7 @@ using namespace std;
 class CorredorIA : public Corredor
 {
   public:
-	CorredorIA(stringw rutaObj, vector3df pos);
+	CorredorIA(stringw rutaObj, btVector3 pos);
 
 	void movimiento();
 	void calculoAnguloGiro(btVector3 posicion);

@@ -1,6 +1,6 @@
 #include "CorredorIA.hpp"
 
-CorredorIA::CorredorIA(stringw rutaObj, vector3df pos) : Corredor(rutaObj, pos)
+CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos) : Corredor(rutaObj, pos)
 {
 
 	cuboNodo->setName("JugadorIA");
@@ -142,7 +142,7 @@ void CorredorIA::distanciaVector(){
 
 void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 
-	btVector3 orientacionCoche(orientacion.X,orientacion.Y,orientacion.Z);
+	btVector3 orientacionCoche(orientacion.getX(),orientacion.getY(),orientacion.getZ());
 	btVector3 direccion = btVector3(posicion.getX()-cuboNodo->getPosition().X,
 	posicion.getY()-cuboNodo->getPosition().Y,
 	posicion.getZ()-cuboNodo->getPosition().Z);
@@ -316,8 +316,8 @@ void CorredorIA::ActualizarRaytest() {
 	float Raycast45 = 20; // distancia entre raycast 4 y 5
 
 	// Raycast central1
-	btVector3 inicio(cuboNodo->getPosition().X + orientacion.X*distanciaCoche, cuboNodo->getPosition().Y , cuboNodo->getPosition().Z+ orientacion.Z*distanciaCoche);
-	btVector3 fin(cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
+	btVector3 inicio(cuboNodo->getPosition().X + orientacion.getX()*distanciaCoche, cuboNodo->getPosition().Y , cuboNodo->getPosition().Z+ orientacion.getZ()*distanciaCoche);
+	btVector3 fin(cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y + 1, cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -327,7 +327,7 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->rayTest(inicio, fin, RayCast1);
 	// Raycast central2 derecha
 	//inicio = btVector3(3*orientacion.Z+cuboNodo->getPosition().X,cuboNodo->getPosition().Y+1,orientacion.X*-3+cuboNodo->getPosition().Z);
-	fin = btVector3(Raycast23*orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*-Raycast23 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
+	fin = btVector3(Raycast23*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.getX()*-Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast2(inicio, fin);
@@ -338,7 +338,7 @@ void CorredorIA::ActualizarRaytest() {
 
 	// Raycast central3 izquierda
 	//inicio = btVector3((cuboNodo->getPosition().X)+orientacion.X*distanciaCoche,cuboNodo->getPosition().Y+1,(-3+cuboNodo->getPosition().Z)+orientacion.Z*distanciaCoche);
-	fin = btVector3(-Raycast23 * orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*Raycast23 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
+	fin = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.getX()*Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast3(inicio, fin);
@@ -349,7 +349,7 @@ void CorredorIA::ActualizarRaytest() {
 
 	// Raycast central4 derecha
 	//inicio = btVector3((-7+cuboNodo->getPosition().X)+orientacion.X*distanciaCoche,cuboNodo->getPosition().Y+1,(-7+cuboNodo->getPosition().Z)+orientacion.Z*distanciaCoche);
-	fin = btVector3(Raycast45*orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*-Raycast45 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
+	fin = btVector3(Raycast45*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.getX()*-Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast4(inicio, fin);
@@ -359,7 +359,7 @@ void CorredorIA::ActualizarRaytest() {
 
 	// Raycast central5 izquierda
 	//inicio = btVector3((cuboNodo->getPosition().X+7)+orientacion.X,cuboNodo->getPosition().Y+1,(cuboNodo->getPosition().Z+7)+orientacion.Z*distanciaCoche);
-	fin = btVector3(-Raycast45 * orientacion.Z + cuboNodo->getPosition().X + orientacion.X*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.X*Raycast45 + cuboNodo->getPosition().Z + orientacion.Z *distanciaRaycast);
+	fin = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y + 1, orientacion.getX()*Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast5(inicio, fin);

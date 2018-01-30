@@ -1,6 +1,6 @@
 #include "Estatico.hpp"
 
-Estatico::Estatico(vector3df posicionItem) : Item(posicionItem)
+Estatico::Estatico(btVector3 posicionItem) : Item(posicionItem)
 {
 	Motor3d *m = Motor3d::getInstancia();
 	GestorIDs *ids = GestorIDs::getInstancia();
@@ -9,13 +9,13 @@ Estatico::Estatico(vector3df posicionItem) : Item(posicionItem)
 	ids->setIdentifier(nodo,"Estatico");
 	id=nodo->getID();
 
-	escala.X = 3.f;
-	escala.Y = 3.f;
-	escala.Z = 3.f;
-	nodo->setScale(escala);
+	escala.setX(3);
+	escala.setY(3);
+	escala.setZ(3);
+	nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
 
 	posicion = posicionItem;
-	nodo->setPosition(posicion);
+	nodo->setPosition(vector3df(posicion.getX(),posicion.getY(),posicion.getZ()));
 
 	masa = 10000;
 
@@ -33,11 +33,11 @@ btRigidBody *Estatico::inicializarFisicas()
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
-	Transform.setOrigin(btVector3(posicion.X, posicion.Y, posicion.Z));
+	Transform.setOrigin(posicion);
 	MotionState = new btDefaultMotionState(Transform);
 
 	// Create the shape
-	btVector3 HalfExtents(escala.X * 0.5f, escala.Y * 0.5f, escala.Z * 0.5f);
+	btVector3 HalfExtents(escala.getX() * 0.5f, escala.getY() * 0.5f, escala.getZ() * 0.5f);
 	Shape = new btBoxShape(HalfExtents);
 
 	// Add mass

@@ -1,6 +1,6 @@
 #include "ItemTeledirigido.hpp"
 
-ItemTeledirigido::ItemTeledirigido(vector3df posicionItem) : Item(posicionItem)
+ItemTeledirigido::ItemTeledirigido(btVector3 posicionItem) : Item(posicionItem)
 {
 	Motor3d *m = Motor3d::getInstancia();
 	GestorIDs *ids = GestorIDs::getInstancia();
@@ -9,13 +9,13 @@ ItemTeledirigido::ItemTeledirigido(vector3df posicionItem) : Item(posicionItem)
 	ids->setIdentifier(nodo,"ItemTeledirigido");
 	id=nodo->getID();
 
-	escala.X = 3.f;
-	escala.Y = 3.f;
-	escala.Z = 3.f;
-	nodo->setScale(escala);
+	escala.setX(3);
+	escala.setY(3);
+	escala.setZ(3);
+	nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
 
 	posicion = posicionItem;
-	nodo->setPosition(posicion);
+	nodo->setPosition(vector3df(posicion.getX(),posicion.getY(),posicion.getZ()));
 
 	masa = 10000;
 

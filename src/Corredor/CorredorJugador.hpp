@@ -15,7 +15,7 @@ using namespace std;
 class CorredorJugador : public Corredor
 {
   public:
-	CorredorJugador(stringw rutaObj, vector3df pos);
+	CorredorJugador(stringw rutaObj, btVector3 pos);
 	void actualizarItem();
 	void movimiento();
 	std::string toString();

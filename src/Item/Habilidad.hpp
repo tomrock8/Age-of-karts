@@ -24,10 +24,8 @@ public:
   int getTipo();
   //SET
   void setHabilidadActiva(bool s);
- // void setOrientacion(btVector3 o);
- // void setPosicion(btVector3 po);
-  void setOrientacion(vector3df o);
-  void setPosicion(vector3df po);
+  void setOrientacion(btVector3 o);
+  void setPosicion(btVector3 po);
   void setPadre(ISceneNode* n);
   void inicializarFisicas(int tipo);
   void eliminarFisicas();
@@ -49,8 +47,8 @@ private:
 
 	//variables
 	//btVector3 posicion;
-	//btVector3 orientacion;
-	vector3df orientacion;
+	btVector3 orientacion;
+	
 };
 
 #endif

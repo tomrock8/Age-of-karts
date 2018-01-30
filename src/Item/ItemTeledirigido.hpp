@@ -6,7 +6,7 @@
 class ItemTeledirigido : public Item
 {
     public:
-    ItemTeledirigido(vector3df posicionItem);
+    ItemTeledirigido(btVector3 posicionItem);
     void lanzarItemTeledirigido(int num);
 
     private:

@@ -1,7 +1,7 @@
 #include "CorredorRed.hpp"
 
 
-CorredorRed::CorredorRed(stringw rutaObj, vector3df pos) : Corredor(rutaObj, pos)
+CorredorRed::CorredorRed(stringw rutaObj, btVector3 pos) : Corredor(rutaObj, pos)
 {
 	cuboNodo->setName("JugadorRed");
 }
@@ -65,7 +65,7 @@ void CorredorRed::lanzarItemRed(){
 	Pista *pista = Pista::getInstancia();
 	core::list<Item *> items = pista->getItems();
 	int direccionItem = 1;
-	vector3df posDisparo(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y+10, cuboNodo->getPosition().Z + orientacion.Z * 5);
+	btVector3 posDisparo(cuboNodo->getPosition().X + orientacion.getX() * 5, cuboNodo->getPosition().Y+10, cuboNodo->getPosition().Z + orientacion.getZ() * 5);
 
 	if (tipoObj == 1)
 			{
@@ -75,8 +75,8 @@ void CorredorRed::lanzarItemRed(){
 			}
 				else if (tipoObj == 2)
 			{
-				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
-				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
+				posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 5);
+				posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 5);
 				CajaFalsa *est = new CajaFalsa(posDisparo);
 				est->inicializarFisicas();
 				soltarItem();
@@ -87,8 +87,8 @@ void CorredorRed::lanzarItemRed(){
 				setTurbo(true, true,26000);
 			}else if (tipoObj == 4)
 			{
-				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
-				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
+				posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 5);
+				posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 5);
 				Aceite *est2 = new Aceite(posDisparo);
 				est2->inicializarFisicas();
 				//est2->getRigidBody()->setCollisionFlags(est2->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -103,13 +103,12 @@ void CorredorRed::lanzarItemRed(){
 			else if (tipoObj == 6)
 			{
 				proX3 = new Proyectil *[3];
-				btVector3 orientacioncentral(orientacion.X, orientacion.Y, orientacion.Z);
-				btVector3 centro(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.Z * 5);
+				btVector3 orientacioncentral(orientacion.getX(), orientacion.getY(), orientacion.getZ());
+				btVector3 centro(cuboNodo->getPosition().X + orientacion.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 5);
 				btVector3 orientacionderecha = orientacioncentral.rotate(btVector3(0, 1, 0), 10 * PI / 180);
 				btVector3 orientacionizquierda = orientacioncentral.rotate(btVector3(0, 1, 0), -10 * PI / 180);
-				vector3df c(centro.getX(), centro.getY(), centro.getZ());
-				vector3df iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 5);
-				vector3df d(cuboNodo->getPosition().X + orientacionderecha.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 5);
+				btVector3 iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 5);
+				btVector3 d(cuboNodo->getPosition().X + orientacionderecha.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 5);
 				for (int i = 0; i < 3; i++) {
 
 
@@ -120,7 +119,7 @@ void CorredorRed::lanzarItemRed(){
 					}
 					if (i == 1) {
 
-						proX3[i] = new Proyectil(c);
+						proX3[i] = new Proyectil(centro);
 						proX3[i]->inicializarFisicas();
 						proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacioncentral.getX() * 100, 5.0f, orientacioncentral.getZ() * 100));
 					}

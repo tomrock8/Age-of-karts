@@ -8,7 +8,7 @@ using namespace std;
 class Proyectil : public Item
 {
 public:
-  Proyectil(vector3df posicionItem);
+  Proyectil(btVector3 posicionItem);
   void lanzarItem();
 
 private:

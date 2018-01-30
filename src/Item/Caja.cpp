@@ -1,6 +1,6 @@
 #include "Caja.hpp"
 
-Caja::Caja(vector3df posicionCaja)
+Caja::Caja(btVector3 posicionCaja)
 {
 	Motor3d *m = Motor3d::getInstancia();
 	GestorIDs *ids = GestorIDs::getInstancia();
@@ -14,13 +14,13 @@ Caja::Caja(vector3df posicionCaja)
 	ids->setIdentifier(nodo, nombre);
 	id = ids->getIDLibre() - 1;
 
-	escala.X = 2.f;
-	escala.Y = 2.f;
-	escala.Z = 2.f;
-	nodo->setScale(escala);
+	escala.setX(2);
+	escala.setY(2);
+	escala.setZ(2);
+	nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
 
 	posicion = posicionCaja;
-	nodo->setPosition(posicion);
+	nodo->setPosition(vector3df(posicion.getX(),posicion.getY(),posicion.getZ()));
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
@@ -38,11 +38,11 @@ btRigidBody *Caja::inicializarFisicas()
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
-	Transform.setOrigin(btVector3(posicion.X, posicion.Y, posicion.Z));
+	Transform.setOrigin(posicion);
 	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
 
 	// Create the shape
-	btVector3 HalfExtents(escala.X * 0.5f, escala.Y * 0.5f, escala.Z * 0.5f);
+	btVector3 HalfExtents(escala.getX() * 0.5f, escala.getY()* 0.5f, escala.getZ() * 0.5f);
 	btCollisionShape *Shape = new btBoxShape(HalfExtents);
 
 	// Add mass
@@ -144,3 +144,14 @@ Caja::~Caja() {
 	
 	cout << " SALGO DESTRUCTOR CAJA: ";
 }
+
+
+IMeshSceneNode *Caja::getNodo() { 
+	return nodo; 
+	}
+  btRigidBody *Caja::getRigidBody() { 
+	  return rigidBody; 
+	  }
+  const char *Caja::getNombre() { 
+	  return nombre; 
+  }

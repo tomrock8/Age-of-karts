@@ -164,27 +164,27 @@ int Client::ReceivePackets(ISceneManager *escena)
 		RakNet::BitStream bsOut;						   //|mensaje de salida
 
 		//vector de posicion de Irrlicht
-		vector3df posicion;
-		vector3df pos2[6];
-		pos2[0].X = -10;
-		pos2[0].Y = 0;
-		pos2[0].Z = 310;
-		pos2[1].X = -10;
-		pos2[1].Y = 0;
-		pos2[1].Z = 290;
-		pos2[2].X = -20;
-		pos2[2].Y = 0;
-		pos2[2].Z = 310;
-		pos2[3].X = -20;
-		pos2[3].Y = 0;
-		pos2[3].Z = 290;
-		pos2[4].X = -30;
-		pos2[4].Y = 0;
-		pos2[4].Z = 310;
-		pos2[5].X = -30;
-		pos2[5].Y = 0;
-		pos2[5].Z = 290;
-		vector3df pos;
+		btVector3 posicion;
+		btVector3 pos2[6];
+		pos2[0].setX(-10);
+		pos2[0].setY(0);
+		pos2[0].setZ(310);
+		pos2[1].setX(-10);
+		pos2[1].setY(0);
+		pos2[1].setZ(290);
+		pos2[2].setX(-20);
+		pos2[2].setY(0);
+		pos2[2].setZ(310);
+		pos2[3].setX(-20);
+		pos2[3].setY(0);
+		pos2[3].setZ(290);
+		pos2[4].setX(-30);
+		pos2[4].setY(0);
+		pos2[4].setZ(310);
+		pos2[5].setX(-30);
+		pos2[5].setY(0);
+		pos2[5].setZ(290);
+		btVector3 pos;
 		float x,y,z;
 		int id;
 
@@ -265,9 +265,9 @@ int Client::ReceivePackets(ISceneManager *escena)
 			bsIn.Read(id);
 			bsIn.Read(playerNetworkID);
 			std::cout << "Creando jugador en pos: " << x <<" - "<< y <<" - "<< z <<" - "<< std::endl; 
-			pos.X = x;
-			pos.Y = y;
-			pos.Z = z;
+			pos.setX(x);
+			pos.setY(y);
+			pos.setZ(z);
 			player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
 			player[numPlayers]->getNodo()->setID(id);
 
@@ -286,9 +286,9 @@ int Client::ReceivePackets(ISceneManager *escena)
 			std::cout << "Cargando numero de jugadores: " << numPlayers << std::endl;
 			for (i = 0; i < numPlayers; i++)
 			{
-				bsIn.Read(posicion.X);
-				bsIn.Read(posicion.Y);
-				bsIn.Read(posicion.Z);
+				bsIn.Read(posicion.getX());
+				bsIn.Read(posicion.getY());
+				bsIn.Read(posicion.getZ());
 				bsIn.Read(playerNetworkID);
 				player[i] = new CorredorRed("assets/coche.obj", posicion);
 				player[i]->getNodo()->setID(i);
@@ -306,9 +306,9 @@ int Client::ReceivePackets(ISceneManager *escena)
 			player[numPlayers]->SetNetworkIDManager(&networkIDManager);
 			playerNetworkID = player[numPlayers]->GetNetworkID();
 			assert(networkIDManager.GET_OBJECT_FROM_ID<CorredorJugador *>(playerNetworkID) == player[numPlayers]);
-			x = pos.X;
-			y = pos.Y;
-			z = pos.Z;
+			x = pos.getX();
+			y = pos.getY();
+			z = pos.getZ();
 			bsOut.Write(typeID);
 			cout << x <<" - "<< y <<" - "<< z <<endl;
 			bsOut.Write(x); //Posicion X
@@ -403,9 +403,9 @@ int Client::ReceivePackets(ISceneManager *escena)
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			for (int i = 0; i < numPlayers; i++)
 			{
-				bsIn.Read(posicion.X);
-				bsIn.Read(posicion.Y);
-				bsIn.Read(posicion.Z);
+				bsIn.Read(posicion.getX());
+				bsIn.Read(posicion.getY());
+				bsIn.Read(posicion.getZ());
 				//player[i]->setPosition(posicion);
 			}
 			netLoaded = true;

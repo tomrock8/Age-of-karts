@@ -8,7 +8,7 @@ using namespace std;
 class Estatico : public Item
 {
   public:
-    Estatico(vector3df posicionItem);
+    Estatico(btVector3 posicionItem);
     void soltarItem();
     btRigidBody *inicializarFisicas();
 	//~Estatico();

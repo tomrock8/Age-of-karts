@@ -44,11 +44,11 @@ void Habilidad::HabilidadPirata () {
 	nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL); //transparencia
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	escala.X = 3.0f;
-	escala.Y = 3.0f;
-	escala.Z = 3.0f;
-	nodo->setScale(escala);
-	nodo->setPosition(posicion);
+	escala.setX(3);
+	escala.setY(3);
+	escala.setZ(3);
+	nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
+	nodo->setPosition(vector3df(posicion.getX(),posicion.getY(),posicion.getZ()));
 	id = 1235;//esto habra que tocarlo posible null
 	nodo->setID(id);
 }
@@ -65,12 +65,12 @@ void Habilidad::HabilidadVikingo() {//Se queda en stand by, no se puede asignar 
 	nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL); //transparencia
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	escala.X = 1.0f;
-	escala.Y = 1.0f;
-	escala.Z = 1.0f;
-	nodo->setScale(escala);
+	escala.setX(1);
+	escala.setY(1);
+	escala.setZ(1);
+	nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
 	nodo->setParent(NodoVehiculo);
-	posicion = NodoVehiculo->getPosition();
+	posicion = btVector3 (NodoVehiculo->getPosition().X,NodoVehiculo->getPosition().Y,NodoVehiculo->getPosition().Z);
 	id = 1236;//esto habra que tocarlo posible null
 	nodo->setID(id);
 
@@ -94,12 +94,12 @@ void Habilidad::HabilidadGladiador() {//Se queda en stand by, no se puede asigna
 	nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL); //transparencia
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	escala.X = 10.0f;
-	escala.Y = 10.0f;
-	escala.Z = 10.0f;
-	nodo->setScale(escala);
+	escala.setX(10);
+	escala.setY(10);
+	escala.setZ(10);
+	nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
 	nodo->setParent(NodoVehiculo);
-	posicion = NodoVehiculo->getPosition();
+	posicion = btVector3 (NodoVehiculo->getPosition().X,NodoVehiculo->getPosition().Y,NodoVehiculo->getPosition().Z);
 	id = 1234;//esto habra que tocarlo posible null
 	nodo->setID(id);
 
@@ -118,12 +118,12 @@ void Habilidad::HabilidadChino() {
 	nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL); //transparencia
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	escala.X = 1.0f;
-	escala.Y = 1.0f;
-	escala.Z = 1.0f;
-	nodo->setScale(escala);
+	escala.setX(1);
+	escala.setY(1);
+	escala.setZ(1);
+	nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
 	nodo->setParent(NodoVehiculo);
-	posicion = NodoVehiculo->getPosition();
+	posicion = btVector3 (NodoVehiculo->getPosition().X,NodoVehiculo->getPosition().Y,NodoVehiculo->getPosition().Z);
 	id = 1237;//esto habra que tocarlo posible null
 	nodo->setID(id);
 }
@@ -136,7 +136,7 @@ void Habilidad::lanzarHabilidad() {
 	inicializarFisicas(tipoHabilidad);
 	if (tipoHabilidad == 2) {//pirata
 		this->getRigidBody()->setGravity(btVector3(0, 0, 0));
-		this->getRigidBody()->setLinearVelocity(btVector3(orientacion.X * 100, 5.0f, orientacion.Z * 100));
+		this->getRigidBody()->setLinearVelocity(btVector3(orientacion.getX() * 100, 5.0f, orientacion.getZ() * 100));
 	}
 	if (tipoHabilidad == 4) {
 		this->getRigidBody()->setGravity(btVector3(0, 0, 0));
@@ -164,22 +164,15 @@ bool Habilidad::getHabilidadActiva() {
 void Habilidad::setHabilidadActiva(bool s) {
 	habilidadActiva = s;
 }
-//void Habilidad::setOrientacion(btVector3 o) {
-//	orientacion = o;
-//
-//}
-//void Habilidad::setPosicion(btVector3 p) {
-//	posicion = p;
-//
-//}
-void Habilidad::setOrientacion(vector3df o) {
+void Habilidad::setOrientacion(btVector3 o) {
 	orientacion = o;
 
 }
-void Habilidad::setPosicion(vector3df p) {
+void Habilidad::setPosicion(btVector3 p) {
 	posicion = p;
 
 }
+
 void Habilidad::setPadre(ISceneNode* n){
 	NodoVehiculo = n;
 	}
@@ -202,7 +195,7 @@ void Habilidad::inicializarFisicas(int tipo)
 		Transform.setOrigin(btVector3(Habilidad::getNodo()->getPosition().X, Habilidad::getNodo()->getPosition().Y, Habilidad::getNodo()->getPosition().Z));
 	}
 	else {
-		Transform.setOrigin(btVector3(posicion.X, posicion.Y, posicion.Z));
+		Transform.setOrigin(posicion);
 	}
 
 	
@@ -218,7 +211,7 @@ void Habilidad::inicializarFisicas(int tipo)
 				
 	}
 	else {*/
-		btVector3 HalfExtents(escala.X * 0.5f, escala.Y * 0.5f, escala.Z * 0.5f);
+		btVector3 HalfExtents(escala.getX() * 0.5f, escala.getY() * 0.5f, escala.getZ() * 0.5f);
 		Shape = new btBoxShape(HalfExtents);
 	//}
 	

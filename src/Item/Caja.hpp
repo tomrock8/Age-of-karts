@@ -16,11 +16,11 @@ using namespace std;
 class Caja
 {
 public:
-  Caja(vector3df posicionCaja);
+  Caja(btVector3 posicionCaja);
   btRigidBody *inicializarFisicas();
-  IMeshSceneNode *getNodo() { return nodo; };
-  btRigidBody *getRigidBody() { return rigidBody; };
-  const char *getNombre() { return nombre; };
+  IMeshSceneNode *getNodo();
+  btRigidBody *getRigidBody();
+  const char *getNombre();
   void romper(Corredor *pj1Col);
   void comprobarRespawn();
   void Delete();
@@ -31,8 +31,8 @@ private:
   btRigidBody *rigidBody;
   btScalar masa;
   f32 tamanyo;
-  vector3df escala;
-  vector3df posicion;
+  btVector3 escala;
+  btVector3 posicion;
   const char *nombre;
   int id;
   int timer;

@@ -166,7 +166,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				tamWaypoints++;
 			}
 			if (tipoObj == 1) {//CAJA
-				arrayCajas[tamCajas] = new Caja(vector3df(stof(pX), stof(pY), stof(pZ)));
+				arrayCajas[tamCajas] = new Caja(btVector3(stof(pX), stof(pY), stof(pZ)));
 				tamCajas++;
 
 			}

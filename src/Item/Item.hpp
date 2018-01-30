@@ -15,7 +15,7 @@ class Item
 {
 public:
   Item(int tipo);
-  Item(vector3df posicionItem);
+  Item(btVector3 pos);
   btRigidBody *inicializarFisicas();
   void lanzarItem();
   bool Delete();
@@ -32,8 +32,8 @@ protected:
   btRigidBody *rigidBody;
   btScalar masa;
   f32 tamanyo;
-  vector3df escala;
-  vector3df posicion;
+  btVector3 escala;
+  btVector3 posicion;
   const char *nombre;
   int id;
   bool colision;

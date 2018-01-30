@@ -1,7 +1,7 @@
 #include "Escudo.hpp"
 #include "Motor3d.hpp"
 
-Escudo::Escudo(vector3df posicionItem, ISceneNode* parent) : Item(posicionItem)
+Escudo::Escudo(btVector3 posicionItem, ISceneNode* parent) : Item(posicionItem)
 {
 	// -----------------------------
 	//  PREPARAR LA VENTANA
@@ -13,7 +13,10 @@ Escudo::Escudo(vector3df posicionItem, ISceneNode* parent) : Item(posicionItem)
 
 //	EscudoNodo->setName("Escudo"+idItem);
 	nodo = smgr->addMeshSceneNode(m->getScene()->getMesh("assets/Objetos/escudo.obj"));
-	nodo->setScale(vector3df(5.0f, 5.0f, 5.0f));
+	escala.setX(5);
+	escala.setY(5);
+	escala.setZ(5);
+	nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
 	//nodo = smgr->addSphereSceneNode(5.0f);
 	nodo->setParent(parent);
 	//4smgr->getMeshManipulator()->setVertexColors(nodo->getMesh(), SColor(50));

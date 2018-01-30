@@ -8,7 +8,7 @@ using namespace std;
 class CajaFalsa : public Estatico
 {
   public:
-    CajaFalsa(vector3df posicionItem);
+    CajaFalsa(btVector3 posicionItem);
     //void soltarItem();
     //btRigidBody *inicializarFisicas();
 

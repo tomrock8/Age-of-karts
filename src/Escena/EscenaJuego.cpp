@@ -80,23 +80,23 @@ void EscenaJuego::init() {
 	Corredor **pj = jugadores->getJugadores();
 
 	if (argc != 2) {
-		pj[0] = new CorredorJugador("assets/coche.obj", vector3df(-10, 0, 310));
+		pj[0] = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310));
 		jugadores->aumentarJugadores();
 
-		pj[1] = new CorredorIA("assets/coche.obj", vector3df(-10,0,290));
+		pj[1] = new CorredorIA("assets/coche.obj", btVector3(-10,0,290));
 		jugadores->aumentarJugadores();
 		
 		
-		pj[2] = new CorredorIA("assets/coche.obj", vector3df(-20,0,320));
+		pj[2] = new CorredorIA("assets/coche.obj", btVector3(-20,0,320));
 		jugadores->aumentarJugadores();
 
-		pj[3] = new CorredorIA("assets/coche.obj", vector3df(-20,0,290));
+		pj[3] = new CorredorIA("assets/coche.obj", btVector3(-20,0,290));
 		jugadores->aumentarJugadores();
 
-		pj[4] = new CorredorIA("assets/coche.obj", vector3df(-30,0,320));
+		pj[4] = new CorredorIA("assets/coche.obj", btVector3(-30,0,320));
 		jugadores->aumentarJugadores();
 
-		pj[5] = new CorredorIA("assets/coche.obj", vector3df(-30,0,290));
+		pj[5] = new CorredorIA("assets/coche.obj", btVector3(-30,0,290));
 		jugadores->aumentarJugadores();
 
 

@@ -25,7 +25,7 @@ using namespace std;
 class Corredor: public RakNet::NetworkIDObject 
 {
   public:
-	Corredor(stringw rutaObj, vector3df pos);
+	Corredor(stringw rutaObj, btVector3 pos);
 	void InicializarFisicas();
 	void lanzarItem(Proyectil *item, int direcionItem);
 	void lanzarItemTeledirigido();
@@ -43,8 +43,6 @@ class Corredor: public RakNet::NetworkIDObject
 	void setFriccion(btScalar valor);
 	void setTurbo(bool activo, bool objeto,int valor);
 	void setWaypointActual(ISceneNode *nodo);
-	void setWaypointActualID(int i);
-	void setWaypointAnteriorID(int i);
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
 	void setLimite(int s);
@@ -68,9 +66,7 @@ class Corredor: public RakNet::NetworkIDObject
 	IMeshSceneNode *getNodo();
 	btRaycastVehicle *getVehiculo();
 	btRigidBody *getRigidBody();
-	std::string getDireccion();
-	int getDireccionGrados();
-	vector3df getVectorDireccion();
+	btVector3 getVectorDireccion();
 	int getCargador();
 	int getTipoObj();
 	bool getTurbo();
@@ -148,10 +144,8 @@ protected:
 	//raycast
 	btVehicleRaycaster *RayCastVehiculo;
 
-	// Direccion - Orientacion
-	bool norte, sur, este, oeste;
-	float direccionGrados;
-	vector3df orientacion;
+	
+	btVector3 orientacion;
 	
 	void CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning);
 	void BorrarFisicas();
@@ -167,7 +161,6 @@ protected:
 
 	// UPDATES
 	void actualizarRuedas();
-	void updateDireccion();
 	void updateVectorDireccion();
 	void updateHabilidad();
 };

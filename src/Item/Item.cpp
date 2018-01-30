@@ -5,12 +5,12 @@ Item::Item(int tipo) {
 
 }
 
-Item::Item(vector3df posicionItem)
+Item::Item(btVector3 pos)
 {
-	Motor3d *m = Motor3d::getInstancia();
+	
 	colision = false;
 
-	masa = 1;
+	masa = 50;
 	
 }
 
@@ -23,11 +23,11 @@ btRigidBody *Item::inicializarFisicas()
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
-	Transform.setOrigin(btVector3(posicion.X, posicion.Y, posicion.Z));
+	Transform.setOrigin(posicion);
 	MotionState = new btDefaultMotionState(Transform);
 
 	// Create the shape
-	btVector3 HalfExtents(escala.X * 0.5f, escala.Y * 0.5f, escala.Z * 0.5f);
+	btVector3 HalfExtents(escala.getX() * 0.5f, escala.getY() * 0.5f, escala.getZ() * 0.5f);
 	Shape = new btBoxShape(HalfExtents);
 
 	// Add mass

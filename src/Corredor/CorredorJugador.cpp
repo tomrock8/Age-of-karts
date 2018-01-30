@@ -1,7 +1,7 @@
 #include "CorredorJugador.hpp"
 #include "Client.hpp"
 
-CorredorJugador::CorredorJugador(stringw rutaObj, vector3df pos) : Corredor(rutaObj, pos)
+CorredorJugador::CorredorJugador(stringw rutaObj, btVector3 pos) : Corredor(rutaObj, pos)
 {
 	checkItem = false;
 }
@@ -67,8 +67,8 @@ void CorredorJugador::actualizarItem()
 	Pista *pista = Pista::getInstancia();
 	core::list<Item *> items = pista->getItems();
 	int direccionItem = 1;
-	vector3df posDisparo(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y+5, cuboNodo->getPosition().Z + orientacion.Z * 5);
-	vector3df posDisparo2(cuboNodo->getPosition().X, cuboNodo->getPosition().Y-1, cuboNodo->getPosition().Z);
+	btVector3 posDisparo(cuboNodo->getPosition().X + orientacion.getX() * 5, cuboNodo->getPosition().Y+5, cuboNodo->getPosition().Z + orientacion.getZ() * 5);
+	btVector3 posDisparo2(cuboNodo->getPosition().X, cuboNodo->getPosition().Y-1, cuboNodo->getPosition().Z);
 	
 	if(teclado->isKeyDown(KEY_KEY_1)) setTipoObj(1);
 	if(teclado->isKeyDown(KEY_KEY_2)) setTipoObj(2);
@@ -107,8 +107,8 @@ void CorredorJugador::actualizarItem()
 			}
 				else if (tipoObj == 2)
 			{
-				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
-				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
+				posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 5);
+				posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 5);
 				CajaFalsa *est = new CajaFalsa(posDisparo);
 				est->inicializarFisicas();
 				soltarItem();
@@ -119,8 +119,8 @@ void CorredorJugador::actualizarItem()
 				setTurbo(true, true,26000);
 			}else if (tipoObj == 4)
 			{
-				posDisparo.X = cuboNodo->getPosition().X - orientacion.X * 5;
-				posDisparo.Z = cuboNodo->getPosition().Z - orientacion.Z * 5;
+				posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 5);
+				posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 5);
 				Aceite *est2 = new Aceite(posDisparo);
 				est2->inicializarFisicas();
 				//est2->getRigidBody()->setCollisionFlags(est2->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -135,13 +135,12 @@ void CorredorJugador::actualizarItem()
 			else if (tipoObj == 6)
 			{
 				proX3 = new Proyectil *[3];
-				btVector3 orientacioncentral(orientacion.X, orientacion.Y, orientacion.Z);
-				btVector3 centro(cuboNodo->getPosition().X + orientacion.X * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.Z * 5);
+				btVector3 orientacioncentral(orientacion.getX(), orientacion.getY(), orientacion.getZ());
+				btVector3 centro(cuboNodo->getPosition().X + orientacion.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 5);
 				btVector3 orientacionderecha = orientacioncentral.rotate(btVector3(0, 1, 0), 10 * PI / 180);
 				btVector3 orientacionizquierda = orientacioncentral.rotate(btVector3(0, 1, 0), -10 * PI / 180);
-				vector3df c(centro.getX(), centro.getY(), centro.getZ());
-				vector3df iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 5);
-				vector3df d(cuboNodo->getPosition().X + orientacionderecha.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 5);
+				btVector3 iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 5);
+				btVector3 d(cuboNodo->getPosition().X + orientacionderecha.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 5);
 				for (int i = 0; i < 3; i++) {
 
 
@@ -152,7 +151,7 @@ void CorredorJugador::actualizarItem()
 					}
 					if (i == 1) {
 
-						proX3[i] = new Proyectil(c);
+						proX3[i] = new Proyectil(centro);
 						proX3[i]->inicializarFisicas();
 						proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacioncentral.getX() * 100, 5.0f, orientacioncentral.getZ() * 100));
 					}

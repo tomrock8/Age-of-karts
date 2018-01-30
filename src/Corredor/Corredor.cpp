@@ -9,7 +9,7 @@
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
 //-------------------------\*
-Corredor::Corredor(stringw rutaObj, vector3df pos)
+Corredor::Corredor(stringw rutaObj, btVector3 pos)
 {
 	cargador = 0;
 	tipoObj = 0;
@@ -28,16 +28,16 @@ Corredor::Corredor(stringw rutaObj, vector3df pos)
 		cuboNodo->setScale(vector3df(1, 1, 1.5));
 		// Desactivar la iluminacion del cubo
 		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-		cuboNodo->setPosition(pos);
+		cuboNodo->setPosition(vector3df(pos.getX(),pos.getY(),pos.getZ()));
 		cuboNodo->setRotation(vector3df(0.0f, 90.0f, 0.0f));
 	}
 
 	estado = new EstadosJugador();
 	vueltas = 1;
 
-	posicion.setX(pos.X);
-	posicion.setY(pos.Y);
-	posicion.setZ(pos.Z);
+	posicion.setX(pos.getX());
+	posicion.setY(pos.getY());
+	posicion.setZ(pos.getZ());
 	//escudo
 	escudo = new Escudo(pos, getNodo());
 	setProteccion(false);
@@ -316,7 +316,6 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 
 	if(nodo->getID() > actual->getWaypoint()->getID() && nodo->getID() == siguiente_aux->getWaypoint()->getID()){
 		
-		//setWaypointActualID(nodo->getID()-6);
 		actual = actual->getNextWaypoint();	
 		siguiente = actual->getNextWaypoint();
 		if (actual->getWaypoint()->getID()==siguiente_aux->getWaypoint()->getID())
@@ -349,22 +348,6 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	//cout<< "NODO SIGUIENTE:"<< siguiente->getWaypoint()->getID() <<endl;
 }
 
-void Corredor::setWaypointActualID(int i){
-
-		/*
-		actual = actual->getNextWaypoint();	
-		siguiente = actual->getNextWaypoint();
-
-		if (actual->getWaypoint()->getID()==siguiente_aux->getWaypoint()->getID())
-		siguiente_aux=siguiente;
-		*/
-}
-
-void Corredor::setWaypointAnteriorID(int i){
-	while (i!=anterior->getWaypoint()->getID()-6){
-		anterior=anterior->getNextWaypoint();
-	}
-}
 
 void Corredor::setTipoObj()
 {
@@ -393,9 +376,9 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 
 	btRigidBody *rigidItem = item->inicializarFisicas();
 	if (direccionItem == 1)
-		item->getRigidBody()->setLinearVelocity(btVector3(orientacion.X * 100, 5.0f, orientacion.Z * 100));
+		item->getRigidBody()->setLinearVelocity(btVector3(orientacion.getX() * 100, 5.0f, orientacion.getZ() * 100));
 	else if (direccionItem == -1)
-		item->getRigidBody()->setLinearVelocity(btVector3(-orientacion.X * 100, 5.0f, -orientacion.Z * 100));
+		item->getRigidBody()->setLinearVelocity(btVector3(-orientacion.getX() * 100, 5.0f, -orientacion.getZ() * 100));
 	//std::cout << "Disparo " << std::endl;
 	tipoObj = 0;
 	decCargador();
@@ -589,13 +572,9 @@ std::string Corredor::toString()
 	text += ", ";
 	text += to_string(getNodo()->getPosition().Z);
 	text += "]\n";
-	text += " Direccion: ";
-	text += getDireccion();
-	text += " [ ";
-	text += to_string(getDireccionGrados());
-	text += " ]";
-	text += "\n Vector direccion(Orientacion) X[ " + to_string(orientacion.X) +
-		" ] Y[ " + to_string(orientacion.Z) + "]";
+	
+	text += "\n Vector direccion(Orientacion) X[ " + to_string(orientacion.getX()) +
+		" ] Y[ " + to_string(orientacion.getZ()) + "]";
 	text += "\n Velocidad (km/h): " + to_string(vehiculo->getCurrentSpeedKmHour());
 	text += "\n Fuerza Motor: " + to_string(vehiculo->getWheelInfo(0).m_engineForce);
 
@@ -642,12 +621,9 @@ IMeshSceneNode *Corredor::getNodo(){
 	return cuboNodo;
 }
 
-int Corredor::getDireccionGrados()
-{
-	return direccionGrados;
-}
 
-vector3df Corredor::getVectorDireccion()
+
+btVector3 Corredor::getVectorDireccion()
 {
 	return orientacion;
 }
@@ -683,7 +659,7 @@ void Corredor::update()
 	posicion.setY(cuboNodo->getPosition().Y);
 	posicion.setZ(cuboNodo->getPosition().Z);
 	actualizarRuedas();
-	updateDireccion();
+	updateVectorDireccion();
 	calculoDistanciaPunto();
 	calculoDistanciaPuntoActual();
 	calculoDistanciaPuntoAnterior();
@@ -764,201 +740,14 @@ void Corredor::updateVectorDireccion()
 	float anguloX = cuboNodo->getRotation().Y * PI / 180;
 
 	//cout<< "Rotacion en Y=="<< anguloZ  * 180/PI << endl;
-	orientacion = vector3df(sin(anguloX), 0, cos(anguloZ));
+	orientacion = btVector3(sin(anguloX), 0, cos(anguloZ));
 
 	orientacion.normalize();
 	//cout<< "ORIENTACION XNORMAL=="<< orientacion.X << " ORIENTACION ZNORMAL=="<< orientacion.Z  << endl;
 }
 
-/**
- * Actualiza la posicion hacia la que mira el corredor
- * Tabla de grados -
- * Norte    - 000 [341-20]
- * Noreste  - 045 [21-70]
- * Este	 - 090 [71-110]
- * SurEste  - 135 [111-160]
- * Sur		 - 180 [161-200]
- * SurOeste - 225 [201-250]
- * Oeste    - 270 [251-290]
- * NorOeste - 315 [291-340]
-*/
-void Corredor::updateDireccion()
-{
-	updateVectorDireccion();
-	float orientacionZ = round(orientacion.Z);
-	float orientacionX = round(orientacion.X);
 
-	// NORTE
-	if (orientacion.Z <= 0.98 && orientacionX == 0)
-	{
-		norte = true;
-		sur = false;
-		este = false;
-		oeste = false;
-	}
-	else
-	{
-		// NORESTE
-		if (orientacion.X >= 0.1 && orientacion.Z >= 0.1)
-		{
-			norte = true;
-			sur = false;
-			este = true;
-			oeste = false;
-		}
-		else
-		{
-			// ESTE
-			if (orientacion.X >= 0.98 && orientacionZ == 0)
-			{
-				norte = false;
-				sur = false;
-				oeste = false;
-				este = true;
-			}
-			else
-			{
-				// SURESTE
-				if (orientacion.X >= 0.1 && orientacion.Z <= -0.1)
-				{
-					norte = false;
-					sur = true;
-					este = true;
-					oeste = false;
-				}
-				else
-				{
-					// SUR
-					if (orientacionX == 0 && orientacion.Z <= -0.98)
-					{
-						norte = false;
-						sur = true;
-						este = false;
-						oeste = false;
-					}
-					else
-					{
-						// SUROESTE
-						if (orientacion.X <= -0.1 && orientacion.Z <= -0.1)
-						{
-							norte = false;
-							sur = true;
-							este = false;
-							oeste = true;
-						}
-						else
-						{
-							// OESTE
-							if (orientacion.X <= -0.95 && orientacionZ == 0)
-							{
-								norte = false;
-								sur = false;
-								este = false;
-								oeste = true;
-							}
-							else
-							{
-								// NOROESTE
-								if (orientacion.X <= -0.1 && orientacion.Z >= 0.1)
-								{
-									norte = true;
-									sur = false;
-									este = false;
-									oeste = true;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
 
-/**
- * Mediante los boleanos de la clase, se obtiene la direccion
- * 	respecto de los ejes
-*/
-std::string Corredor::getDireccion()
-{
-	if (norte)
-	{
-		if (este)
-		{
-			return "noreste";
-		}
-		else
-		{
-			if (oeste)
-			{
-				return "noroeste";
-			}
-			else
-			{
-				return "norte";
-			}
-		}
-	}
-
-	if (sur)
-	{
-		if (este)
-		{
-			return "sureste";
-		}
-		else
-		{
-			if (oeste)
-			{
-				return "suroeste";
-			}
-			else
-			{
-				return "sur";
-			}
-		}
-	}
-
-	if (este)
-	{
-		if (norte)
-		{
-			return "noreste";
-		}
-		else
-		{
-			if (sur)
-			{
-				return "sureste";
-			}
-			else
-			{
-				return "este";
-			}
-		}
-	}
-
-	if (oeste)
-	{
-		if (norte)
-		{
-			return "noroeste";
-		}
-		else
-		{
-			if (sur)
-			{
-				return "suroeste";
-			}
-			else
-			{
-				return "oeste";
-			}
-		}
-	}
-
-	return "No Direccion";
-}
 //destructor
 Corredor::~Corredor() {
 	cout << "\nENTRO DESTRUCTOR CORREDOR: \n";

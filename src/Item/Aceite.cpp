@@ -1,6 +1,6 @@
 #include "Aceite.hpp"
 
-Aceite::Aceite(vector3df posicionItem) : Estatico(posicionItem)
+Aceite::Aceite(btVector3 posicionItem) : Estatico(posicionItem)
 {
     nombre = "Aceite";
 	//nodo->setName("Aceite");

@@ -9,7 +9,7 @@ using namespace std;
 class Escudo : public Item
 {
 public:
-  Escudo(vector3df posicionItem, ISceneNode* parent);
+  Escudo(btVector3 posicionItem, ISceneNode* parent);
   ~Escudo();
 
 private:

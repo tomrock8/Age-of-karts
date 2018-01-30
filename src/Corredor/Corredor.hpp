@@ -19,6 +19,7 @@
 #include "Escudo.hpp"
 #include "EstadosJugador.hpp"
 #include "Habilidad.hpp"
+#include "ItemTeledirigido.hpp"
 
 using namespace std;
 
@@ -78,6 +79,12 @@ class Corredor: public RakNet::NetworkIDObject
 	int getLimite();
 	virtual void updateRed() {}; 
 
+	//estado de los objetos a usar
+	void setCheckItem(bool s);
+	bool getCheckItem();
+	void setPosDisparo(btVector3 posDisparo);
+	void usarObjetos();
+
 
 	// Destructor
 	~Corredor();
@@ -112,18 +119,27 @@ protected:
 	btRigidBody *CuerpoColisionChasis;
 	btCompoundShape *CentroGravedad;
 
-	//Objetos
+	
 	int cargador;
 	int tipoObj; // si es 0 no tengo nada
 	bool turboActivado; // para saber cuando esta activado turbo
 	int timerTurbo;
+
+	//objetos estaticos y dinamicos
+	Estatico * est;
+	Proyectil *pro;
+	Proyectil **proX3;
 	Escudo *escudo;
 	EstadosJugador *estado;
-
+	btVector3 posDisparo;
 	//habilidad 
 	Habilidad * h;
 	int limite;
+	//estados de lanzamiento de objeto
+	bool checkItem;
 
+
+	
 	btVector3 posicion;
 	btVector3 direccionRuedas;
 	btVector3 rotacionRuedas;

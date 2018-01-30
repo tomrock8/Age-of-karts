@@ -284,9 +284,6 @@ void EscenaJuego::update() {
 		m->getDevice()->setWindowCaption(tmp.c_str());
 		lastFPS = fps;
 	}
-
-
-	dibujar();
 }
 
 void EscenaJuego::comprobarInputs() {
@@ -353,7 +350,7 @@ void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
-	mundo->stepSimulation(TDeltaTime * 0.001f, 60);
+	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
 	int c = 0;
 	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
 		c++;

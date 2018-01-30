@@ -137,12 +137,12 @@ void Caja::Delete()
 }
 
 Caja::~Caja() {
-	cout << "ENTRO DESTRUCTOR CAJA: ";
+	cout << "DESTRUCTOR CAJA: ENTRO ";
 
 	// Los rigid body se borran desde el motor de fisicas
 	// delete rigidBody;
 	
-	cout << " SALGO DESTRUCTOR CAJA: ";
+	cout << " SALGO.\n";
 }
 
 

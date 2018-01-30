@@ -94,5 +94,5 @@ Turbo::~Turbo() {
 	// Los rigid body se borran desde el motor de fisicas
 	// delete rigidBody;
 	
-	cout << " SALGO DELETE TURBO: " << turbo->getID();
+	cout << " SALGO DELETE TURBO\n";
 }

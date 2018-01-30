@@ -903,7 +903,7 @@ Corredor::~Corredor() {
 	// Los collision shape se borran desde el motor de fisicas
 	// delete CuerpoColisionChasis;
 	delete vehiculo;
-	//delete cuboNodo;
+	cuboNodo->remove();
 
 	cout << "SALGO DESTRUCTOR CORREDOR: ";
 }

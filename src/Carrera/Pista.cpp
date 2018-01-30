@@ -29,7 +29,7 @@ Pista::~Pista()
 	}
 	delete arrayTurbos;
 
-	delete instancia;
+	instancia = nullptr;
 }
 
 Pista *Pista::getInstancia()

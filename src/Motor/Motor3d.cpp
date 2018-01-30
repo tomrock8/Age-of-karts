@@ -23,6 +23,7 @@ Motor3d::Motor3d() {
 }
 
 Motor3d::~Motor3d() {
+	smgr->getRootSceneNode()->removeAll();
 	device->drop();
 	instancia = nullptr;
 }

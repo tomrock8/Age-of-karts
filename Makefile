@@ -20,7 +20,7 @@ alt: objdir exec2
 runalt: objdir exec2 altRun
 
 exec2: $(OBJETOS)
-	@g++ -o $@ $^ $(RUTAS2) $(RUTAS_INTERNAS)  $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS) -Wl,-rpath=/usr/local/lib
+	@g++ -o $@ $^ $(RUTAS2) $(RUTAS_INTERNAS)  $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS)
 	@echo "Generado ejecutable. Ejecutar ./$@"
 
 exportAlt: 
@@ -52,11 +52,13 @@ exec: $(OBJETOS)
 	export RUTA_LIB=/usr/local/lib
 
 	
-	g++ -fPIC -g -o $@ $^  $(RUTAS) $(RUTAS_INTERNAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS) -Wl,-rpath=./lib	
+	g++ -g -o $@ $^  $(RUTAS) $(RUTAS_INTERNAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS)	
+
+	LD_LIBRARY_PATH=./lib ./exec
 	@echo "Generado ejecutable."
 
 obj/%.o : src/%.cpp
-	@g++ -fPIC -g -o $@ -c $^ $(RUTAS) $(RUTAS_INTERNAS)  $(CFLAGS)
+	@g++ -g -o $@ -c $^ $(RUTAS) $(RUTAS_INTERNAS)  $(CFLAGS)
 	@echo "Compilado $@."
 
 objdir:

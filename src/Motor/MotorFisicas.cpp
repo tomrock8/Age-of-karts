@@ -17,7 +17,7 @@ MotorFisicas::MotorFisicas() {
 }
 
 MotorFisicas::~MotorFisicas() {
-	cout << "\nENTRO DESTRUCTOR MOTOR DE FISICAS\n";
+	cout << "ENTRO DESTRUCTOR MOTOR DE FISICAS\n";
 
 	cout << "Destruyendo Objetos del mundo. Son " << mundo->getNumCollisionObjects() << "\n";
 	for (int i = mundo->getNumCollisionObjects() - 1; i >= 0; i--) {

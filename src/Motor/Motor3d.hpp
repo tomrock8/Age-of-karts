@@ -11,7 +11,10 @@ class Motor3d
 {
 public:
 
+	void iniciarDibujado();
 	void dibujar();
+	void terminarDibujado();
+
 	void cerrar();
 
 	// Metodos GET
@@ -21,11 +24,17 @@ public:
 	IGUIEnvironment *getGUI();
 	IrrlichtDevice *getDevice();
 
+	u16 getAnchoPantalla();
+	u16 getAltoPantalla();
+
 	// Metodos SET
 	void setTeclado(CTeclado *teclado);
 
 private:
 	Motor3d();
+
+	u16 anchoPantalla;
+	u16 altoPantalla;
 
 	IrrlichtDevice *device;
 	IVideoDriver *driver;

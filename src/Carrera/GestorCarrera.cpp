@@ -95,14 +95,13 @@ void GestorCarrera::setVueltas(int i) {
 int GestorCarrera::getVueltas() {
 	return vueltas;
 }
-bool GestorCarrera::comprobarItemTeledirigido(int num){ //aplicar el teledirigido al siguiente corredor
+void GestorCarrera::comprobarItemTeledirigido(int num){ //aplicar el teledirigido al siguiente corredor
     for (int i = 0; i < jugadores->getNumJugadores(); i++) {
         if (num!=1){
              if (pj1[i]->getPosicionCarrera()==num-1){
 				pj1[i]->setObjetivoTelederigido();
-                return true;
+                //return true;
             }
         }
     } 
-    return false;
 }

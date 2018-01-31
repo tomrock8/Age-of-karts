@@ -1,14 +1,14 @@
-#ifndef ESCENAMENU_H
-#define ESCENAMENU_H
+#ifndef ESCENACREDITOS_H
+#define ESCENACREDITOS_H
 
 #include "Escena.hpp"
 
 #include "Motor3d.hpp"
 
-class EscenaMenu : public Escena {
+class EscenaCreditos : public Escena {
 public:
-	EscenaMenu();
-	~EscenaMenu();
+	EscenaCreditos();
+	~EscenaCreditos();
 
 	void init();
 	void dibujar();
@@ -30,4 +30,4 @@ private:
 
 };
 
-#endif /* ESCENAMENU_H */
+#endif /* ESCENACREDITOS_H */

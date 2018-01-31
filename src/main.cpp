@@ -10,14 +10,15 @@
 
 int main(int argc, char* argv[]) {
 	Motor3d m = Motor3d::instancia();
-	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
+	//GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
+	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
 
 	// -----------------------------//
 	//	GAME LOOP
 	// -----------------------------//
-	bool finJuego = false;
-	while (m.getDevice()->run() && !finJuego) {
-		finJuego = GestorEscena::instancia().update();
+	Escena::tipo_escena tipoActual = GestorEscena::instancia().getEscenaActiva().getTipoEscena();
+	while (m.getDevice()->run() && tipoActual != Escena::tipo_escena::SALIR) {
+		tipoActual = GestorEscena::instancia().update();
 
 	}
 	

@@ -14,7 +14,7 @@ public:
 	int getCorredorIndexOriginal(int n);
 	void setVueltas(int i);
 	int getVueltas();
-	bool comprobarItemTeledirigido(int num);
+	void comprobarItemTeledirigido(int num);
 private:
 	Corredor **pj1;
 	Corredor **pj2;

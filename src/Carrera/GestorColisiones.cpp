@@ -141,7 +141,7 @@ bool GestorColisiones::JugadorEstatico()
 							for(int j = 0; j< jugadores->getNumJugadores(); j++){
 								if(pj1[j]!=NULL)
 									if (nodoA->getID()== pj1[j]->getNodo()->getID()){
-										pj1[j]->aplicarAceite();
+										pj1[j]->setAceite();
 									}
 							}
 						}

@@ -5,7 +5,9 @@
 //-------------------------\*
 
 Motor3d::Motor3d() {
-	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(1280, 720), 16, false, false, true, 0);
+	anchoPantalla = 1280;
+	altoPantalla = 720;
+	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(anchoPantalla, altoPantalla), 16, false, false, true, 0);
 	if (!device) 
 		std::cout << "ERROR AL CREAR EL DEVICE" << std::endl;
 
@@ -20,9 +22,17 @@ Motor3d::Motor3d() {
 	device->setWindowCaption(L"AGE OF KARTS");
 }
 
-void Motor3d::dibujar() {
+void Motor3d::iniciarDibujado() {
 	driver->beginScene(true, true, SColor(255, 200, 200, 200));
+}
+
+void Motor3d::dibujar() {
 	smgr->drawAll();
+	guienv->drawAll();
+}
+
+void Motor3d::terminarDibujado() {
+	driver->endScene();
 }
 
 void Motor3d::cerrar() {
@@ -47,6 +57,14 @@ ISceneManager *Motor3d::getScene() {
 
 IrrlichtDevice *Motor3d::getDevice() {
 	return device;
+}
+
+u16 Motor3d::getAnchoPantalla() {
+	return anchoPantalla;
+}
+
+u16 Motor3d::getAltoPantalla() {
+	return altoPantalla;
 }
 
 IVideoDriver *Motor3d::getDriver() {

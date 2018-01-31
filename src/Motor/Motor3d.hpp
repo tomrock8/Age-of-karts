@@ -27,7 +27,6 @@ public:
 private:
 	Motor3d();
 
-	//static Motor3d *instancia;
 	IrrlichtDevice *device;
 	IVideoDriver *driver;
 	ISceneManager *smgr;

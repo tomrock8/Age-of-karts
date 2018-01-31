@@ -16,33 +16,33 @@ public:
 	// Metodos virtuales a implementar por los hijos
 
 	// Inicializar la escena
-	virtual void init() = 0;	
-	
+	virtual void init() = 0;
+
 	// Dibujar los elementos de la escena
-	virtual void dibujar() = 0;	
-	
+	virtual void dibujar() = 0;
+
 	// Borrar los elementos de la escena
-	virtual void limpiar() = 0;	
-	
+	virtual void limpiar() = 0;
+
 	// Actualizar la escena y sus elementos
-	virtual void update() = 0;	
+	virtual void update() = 0;
 
 	// Comprobar los inputs en la escena
 	//	devuelve true si tiene que cambiar de escena
-	virtual bool comprobarInputs() = 0; 
-	
+	virtual bool comprobarInputs() = 0;
+
 	// METODOS GET
 
 	// Devuelve el tipo de escena
-	tipo_escena getTipoEscena(); 
+	tipo_escena getTipoEscena();
 
 	// METODOS SET
-	
+
 protected:
 
 	tipo_escena tipoEscena; // Tipo de escena a la que pertenece
 
-	
+
 
 };
 

@@ -20,9 +20,17 @@ Motor3d::Motor3d() {
 	device->setWindowCaption(L"AGE OF KARTS");
 }
 
-void Motor3d::dibujar() {
+void Motor3d::iniciarDibujado() {
 	driver->beginScene(true, true, SColor(255, 200, 200, 200));
+}
+
+void Motor3d::dibujar() {
 	smgr->drawAll();
+	guienv->drawAll();
+}
+
+void Motor3d::terminarDibujado() {
+	driver->endScene();
 }
 
 void Motor3d::cerrar() {

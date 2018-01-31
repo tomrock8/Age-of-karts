@@ -11,7 +11,10 @@ class Motor3d
 {
 public:
 
+	void iniciarDibujado();
 	void dibujar();
+	void terminarDibujado();
+
 	void cerrar();
 
 	// Metodos GET

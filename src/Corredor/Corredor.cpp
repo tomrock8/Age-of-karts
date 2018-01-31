@@ -72,7 +72,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	Fuerza = FuerzaMaxima;
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
-	alturaConexionChasis = btScalar(2); //influye mucho en la acceleracion de salida
+	alturaConexionChasis = btScalar(1.9); //influye mucho en la acceleracion de salida
 	Masa = btScalar(700);
 	FuerzaFrenado = btScalar(-10000);
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
@@ -108,9 +108,9 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = 32;    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
-		wheel.m_wheelsDampingCompression = 8.4 ;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-		wheel.m_wheelsDampingRelaxation =  8.2 ;//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_suspensionStiffness = 22;    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
+		wheel.m_wheelsDampingCompression = 2.4 ;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
+		wheel.m_wheelsDampingRelaxation =  2.2 ;//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(1000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = 0.01;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 											//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 

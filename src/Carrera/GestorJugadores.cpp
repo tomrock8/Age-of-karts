@@ -5,13 +5,14 @@ GestorJugadores *GestorJugadores::instancia = NULL;
 GestorJugadores::GestorJugadores() {
 	pj = new Corredor*[6];
 	numJugadores = 0;
+
 }
 
 GestorJugadores::~GestorJugadores() {
 	cout << "ENTRO DESTRUCTOR DE GESTOR JUGADORES\n";
 	cout << "Poco a poco, que son " << numJugadores << "\n";
 	for (int i = 0; i < numJugadores; i++) {
-		cout << "A por el " << i;
+		cout << i <<endl;
 		if (pj[i]) {
 			if (strcmp(pj[i]->getNodo()->getName(), "Jugador") == 0) {
 				CorredorJugador *cj = static_cast<CorredorJugador *>(pj[i]);

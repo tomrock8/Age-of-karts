@@ -26,7 +26,7 @@ private:
 
 	stringw texto; // Texto a mostrar en pantalla
 	IGUIStaticText *textoUI; // Nodo de irrlicht
-	
+	ITexture* logoAOK; // Textura del logo del juego
 
 };
 

@@ -275,7 +275,13 @@ void Corredor::setPosicionCarrera(int i) {
 void Corredor::setTipoObj()
 {
 	srand(time(NULL));
-	tipoObj = rand() % 7 + 1;
+	tipoObj = rand() % 8 + 1;
+
+	if(tipoObj == 8)
+		cargador = 3;
+	else if(tipoObj == 3)
+		cargador = 1;
+	
 	Client *c = Client::getInstancia();
 	if (c->getConnected())
 		c->PlayerSetObject(tipoObj);
@@ -284,6 +290,10 @@ void Corredor::setTipoObj()
 void Corredor::setTipoObj(int i)
 {
 	tipoObj = i;
+	if(tipoObj == 8)
+		cargador = 3;
+	else if(tipoObj == 3)
+		cargador = 1;
 	cout << "el objeto --- " << i << " ---" << endl;
 	//cout << "Random ------>" << tipoObj << endl;
 }
@@ -334,7 +344,12 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 		acelerar();
 		Timer *time = Timer::getInstancia();
 		timerTurbo = time->getTimer();
-		if (objeto) tipoObj = 0;
+		if (objeto) {
+			if(cargador==1) 
+				tipoObj = 0;
+			cargador--;
+			cout << "Turbos restantes: " << cargador << endl;
+		}
 	}
 	else {
 		SetFuerzaVelocidad(1000);
@@ -409,17 +424,30 @@ void Corredor::soltarItem()
 		setLimite(0);
 	}
 }
+
+/*
+Tipos de objeto: 
+	1. Proyectil/Flecha
+	2. Estatico/Caja Falsa
+	3. Turbo
+	4. Aceite
+	5. Escudo
+	6. Flecha Triple
+	7. Flecha Teledirigida
+	8. Turbo Triple
+	9. HABILIDAD (No entra en el pool de objetos)
+*/
 void Corredor::usarObjetos() {
 	Pista *pista = Pista::getInstancia();
 	core::list<Item *> items = pista->getItems();
-	if (getTipoObj() == 1)
+	if (getTipoObj() == 1)		// PROYECTIL
 	{
 		pro = new Proyectil(posDisparo);
 		lanzarItem(pro, 1);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		items.push_back(pro);
 		soltarItem();
 	}
-	else if (getTipoObj() == 2)
+	else if (getTipoObj() == 2)	//CAJA FALSA
 	{
 		posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 5);
 		posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 5);
@@ -428,11 +456,11 @@ void Corredor::usarObjetos() {
 		soltarItem();
 		items.push_back(est);
 	}
-	else if (getTipoObj() == 3)
+	else if (getTipoObj() == 3)	//TURBO
 	{
 		setTurbo(true, true, 26000);
 	}
-	else if (getTipoObj() == 4)
+	else if (getTipoObj() == 4)	//ACEITE
 	{
 		posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 5);
 		posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 5);
@@ -442,12 +470,12 @@ void Corredor::usarObjetos() {
 		soltarItem();
 		items.push_back(est2);
 	}
-	else if (getTipoObj() == 5)
+	else if (getTipoObj() == 5)	//ESCUDO
 	{
 		if (getProteccion() == false) setProteccion(true);
 		soltarItem();
 	}
-	else if (getTipoObj() == 6)
+	else if (getTipoObj() == 6)	//FLECHA TRIPLE
 	{
 		proX3 = new Proyectil *[3];
 		btVector3 orientacioncentral(orientacion.getX(), orientacion.getY(), orientacion.getZ());
@@ -486,7 +514,18 @@ void Corredor::usarObjetos() {
 		}
 		soltarItem();
 	}
-	else if (getTipoObj() == 8)
+	else if (tipoObj == 7)	//FLECHA TELEDIRIGIDA
+	{
+		pt = new ItemTeledirigido(posDisparo);
+		pt->lanzarItemTeledirigido(posicionCarrera);
+		items.push_back(pt);
+		soltarItem();
+	}
+	else if(tipoObj == 8)	//TURBO TRIPLE
+	{
+		setTurbo(true, true, 26000);
+	}
+	else if (getTipoObj() == 9) //HABILIDAD
 	{
 		if (getLimite() >= 10) {//puedo lanzar la habilidad
 			h->getNodo()->setVisible(true);
@@ -498,15 +537,9 @@ void Corredor::usarObjetos() {
 			soltarItem();
 		}
 		else {
-			cout << "que mierda estas haciendo , no puedes usar la habilidad si tu limite no es 10 o mas" << endl;
+			cout << "No puedes usar la habilidad si tu limite no es 10 o mas" << endl;
 		}
 
-	}
-	else if (tipoObj == 7){
-		pt = new ItemTeledirigido(posDisparo);
-		pt->lanzarItemTeledirigido(posicionCarrera);
-		items.push_back(pt);
-		soltarItem();
 	}
 	pista->setItems(items);
 

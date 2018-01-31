@@ -68,8 +68,8 @@ void CorredorJugador::actualizarItem() {
 	if (teclado->isKeyDown(KEY_KEY_4)) setTipoObj(4);
 	if (teclado->isKeyDown(KEY_KEY_5)) setTipoObj(5);//escudo
 	if (teclado->isKeyDown(KEY_KEY_6)) setTipoObj(6);//proytectil x3
-	if (teclado->isKeyDown(KEY_KEY_7)) setTipoObj(7);//Habilidad
-	if (teclado->isKeyDown(KEY_KEY_8)) setTipoObj(8);
+	if (teclado->isKeyDown(KEY_KEY_7)) setTipoObj(7);//FlechaTeledirigida
+	if (teclado->isKeyDown(KEY_KEY_8)) setTipoObj(8);//TurboTriple
 
 	if (teclado->isKeyup(KEY_KEY_P))
 	{

@@ -11,8 +11,8 @@ Pista *Pista::instancia = NULL;
 Pista::Pista() {
 }
 
-Pista::~Pista()
-{
+Pista::~Pista() {
+	cout << "Destructor de PISTA. Entro.\n";
 	//destroy waypoint
 	for (int i = 0; i < tamWaypoints; i++) {
 		delete arrayWaypoints[i];
@@ -30,6 +30,7 @@ Pista::~Pista()
 	delete arrayTurbos;
 
 	instancia = nullptr;
+	cout << "Destructor de PISTA. Salgo.\n";
 }
 
 Pista *Pista::getInstancia()

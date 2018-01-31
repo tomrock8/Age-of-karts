@@ -18,8 +18,12 @@ Escena::tipo_escena GestorEscena::update() {
 		escenaActiva->update();
 		escenaActiva->dibujar();
 	}
+	else {
+		if(cambioEscena != Escena::tipo_escena::SALIR)
+			cambiaEscena(cambioEscena);
+	}
 
-	return cambioEscena;
+	return cambioEscena; // Por si hay que salir, devolver la escena salir. En cualquier otro caso obviar.
 }
 
 
@@ -27,8 +31,8 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 	Escena *anterior = escenaActiva; // Guardar escena anterior para tratar con ella si es necesario
 
 	if (anterior) { // Hay una escena activa actualmente
+		escenaActiva->limpiar();
 		escenaActiva = nullptr; // Desasignamos la escena activa
-
 		// Proceso de borrado la escena antigua en caso que sea necesario
 		if (tipo == Escena::tipo_escena::MENU) {
 			// MENU		DESDE LOBBY		-> BORRAR LOBBY
@@ -126,18 +130,20 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo) {
 		return true; // Devolvemos true y terminamos
 
 	case Escena::tipo_escena::CREDITOS:
-		//escenaActiva = new EscenaCreditos(Escena::tipo_escena::CREDITOS);
-		return false;
+		escenaActiva = new EscenaCreditos();
+		agregaEscena(escenaActiva);
+		cambioEscena = Escena::tipo_escena::CREDITOS;
+		return true;
 
 	case Escena::tipo_escena::LOBBY:
 		//escenaActiva = new EscenaLobby(Escena::tipo_escena::LOBBY);
 		return false;
 
 	case Escena::tipo_escena::MENU:
-		escenaActiva = new EscenaMenu(Escena::tipo_escena::MENU);
+		escenaActiva = new EscenaMenu();
 		agregaEscena(escenaActiva);
 		cambioEscena = Escena::tipo_escena::MENU;
-		return false;
+		return true;
 
 	case Escena::tipo_escena::OPCIONES:
 		//escenaActiva = new EscenaOpciones(Escena::tipo_escena::OPCIONES);
@@ -156,6 +162,12 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 	if (tipo == Escena::tipo_escena::CARRERA) {
 		EscenaJuego *e = static_cast<EscenaJuego *>(escenas[indice]); // Convertimos la escena en su tipo
 		delete e; // Eliminamos la escena que hemos recogido del array
+	}
+	else {
+		if (tipo == Escena::tipo_escena::MENU) {
+			EscenaMenu *e = static_cast<EscenaMenu *>(escenas[indice]);
+			delete e;
+		}
 	}
 
 	escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null

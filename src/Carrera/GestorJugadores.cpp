@@ -8,8 +8,8 @@ GestorJugadores::GestorJugadores() {
 }
 
 GestorJugadores::~GestorJugadores() {
-	cout << "\nENTRO DESTRUCTOR DE GESTOR JUGADORES";
-	cout << "\nPoco a poco, que son " << numJugadores << "\n";
+	cout << "ENTRO DESTRUCTOR DE GESTOR JUGADORES\n";
+	cout << "Poco a poco, que son " << numJugadores << "\n";
 	for (int i = 0; i < numJugadores; i++) {
 		cout << "A por el " << i;
 		if (pj[i]) {
@@ -31,11 +31,11 @@ GestorJugadores::~GestorJugadores() {
 			}
 
 		}
-		cout << "! ";
+		cout << "! \n";
 	}
 
 	instancia = nullptr;
-	cout << "\nSALGO DESTRUCTOR DE GESTOR JUGADORES";
+	cout << "SALGO DESTRUCTOR DE GESTOR JUGADORES\n";
 }
 
 GestorJugadores *GestorJugadores::getInstancia() {

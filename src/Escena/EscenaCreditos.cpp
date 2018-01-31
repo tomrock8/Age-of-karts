@@ -1,13 +1,16 @@
-#include "EscenaMenu.hpp"
+#include "EscenaCreditos.hpp"
 
-EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
-	texto = L"1 - INCIAR JUEGO SINGLEPLAYER\n\n";
-	texto += "2 - INCIAR JUEGO MULTIPLAYER\n\n";
-	texto += "3  - OPCIONES (IN DEVELOPMENT)\n\n";
-	texto += "4 - CREDITOS\n\n";
-	texto += "ESC - SALIR\n\n\n";
-	texto += "        SocketWar 2017";
-
+EscenaCreditos::EscenaCreditos() : Escena(Escena::tipo_escena::CREDITOS) {
+	texto = L"Autores:\n\n";
+	texto += "  -  Angel Gonzalez Cobo\n\n";
+	texto += "  -  Carlos Jimenez Quinto\n\n";
+	texto += "  -  Jordi Serna Valero\n\n";
+	texto += "  -  Javier Martinez Arias\n\n";
+	texto += "  -  Salvador Mateo Tomas\n\n";
+	texto += "  -  Santiago Martinez Gutierrez\n\n";
+	texto += "SocketWar 2017\n\n";
+	texto += "Grado en ingenieria multimedia. Universidad de Alicante.\n\n";
+	texto += "INTRO - SALIR";
 
 	u16 xPos = Motor3d::instancia().getAnchoPantalla() / 3;
 	u16 yPos = Motor3d::instancia().getAltoPantalla() / 4;
@@ -27,20 +30,21 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));
 }
 
-EscenaMenu::~EscenaMenu() {
-	cout << "Destructor ESCENA MENU. Entro.";
+EscenaCreditos::~EscenaCreditos() {
+	cout << "Destructor ESCENA CREDITOS. Entro.";
 	limpiar();
 	cout << "Salgo.\n";
 }
 
-void EscenaMenu::init() {
+void EscenaCreditos::init() {
 
 
 }
 
-void EscenaMenu::dibujar() {
+void EscenaCreditos::dibujar() {
 	Motor3d::instancia().iniciarDibujado();
 
+	//Motor3d::instancia().getDriver()->draw2DImage(logoAOK, rect<s32>(0, 0, 100, 100), 0, SColor(255, 255, 255, 255), true);
 	Motor3d::instancia().getDriver()->draw2DImage(logoAOK, position2d<s32>(Motor3d::instancia().getAnchoPantalla() / 4, 0),
 		core::rect<s32>(0, 0, logoAOK->getSize().Width, logoAOK->getSize().Height), 0,
 		video::SColor(255, 255, 255, 255), true);
@@ -49,19 +53,19 @@ void EscenaMenu::dibujar() {
 	Motor3d::instancia().terminarDibujado();
 }
 
-void EscenaMenu::limpiar() {
+void EscenaCreditos::limpiar() {
 	Motor3d::instancia().getScene()->clear();
 	Motor3d::instancia().getGUI()->clear();
 }
 
-void EscenaMenu::update() {
+void EscenaCreditos::update() {
 }
 
-Escena::tipo_escena EscenaMenu::comprobarInputs() {
+Escena::tipo_escena EscenaCreditos::comprobarInputs() {
 	CTeclado *teclado = CTeclado::getInstancia();
 
-	if (teclado->isKeyDown(KEY_ESCAPE)) {
-		return Escena::tipo_escena::SALIR; // Devuelve el estado de las escenas para que salga
+	if (teclado->isKeyDown(KEY_RETURN)) {
+		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
 	else {
 		if (teclado->isKeyDown(KEY_KEY_1)) {
@@ -71,18 +75,8 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			if (teclado->isKeyDown(KEY_KEY_2)) {
 				cout << "MULTI PLAYER\n";
 			}
-			else {
-				if (teclado->isKeyDown(KEY_KEY_3)) {
-					cout << "OPCIONES\n";
-				}
-				else {
-					if (teclado->isKeyDown(KEY_KEY_4)) {
-						cout << "CREDITOS\n";
-					}
-				}
-			}
 		}
 	}
 
-	return Escena::tipo_escena::MENU;
+	return Escena::tipo_escena::CREDITOS;
 }

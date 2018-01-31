@@ -14,15 +14,15 @@ EscenaJuego::~EscenaJuego() {
 	cout << "Bien!\n";
 
 
-	cout << "Voy a entrar en el destructor de bullet. Deseadme suerte...";
+	cout << "Voy a entrar en el destructor de bullet. Deseadme suerte...\n";
 	delete MotorFisicas::getInstancia();
-	cout << "\n";
+	cout << "Bien!\n";
 
-	cout << "Voy a entrar en el destructor de jugadores. Deseadme suerte...";
+	cout << "Voy a entrar en el destructor de jugadores. Deseadme suerte...\n";
 	delete GestorJugadores::getInstancia();
-	cout << "\n";
+	cout << "Bien!\n";
 
-	cout << "Voy a entrar en el destructor de pista. Deseadme suerte...";
+	cout << "Voy a entrar en el destructor de pista. Deseadme suerte...\n";
 	delete Pista::getInstancia();
 	cout << "No ha ido mal.\n";
 

@@ -6,6 +6,8 @@
 #include "EscenaMenu.hpp"
 #include "EscenaCarga.hpp"
 #include "EscenaLobby.hpp"
+#include "EscenaCreditos.hpp"
+#include "EscenaOpciones.hpp"
 
 class GestorEscena {
 public:

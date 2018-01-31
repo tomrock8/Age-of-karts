@@ -171,6 +171,7 @@ void EscenaJuego::dibujar() {
 
 void EscenaJuego::limpiar() {
 	Motor3d::instancia().getScene()->clear();
+	Motor3d::instancia().getGUI()->clear();
 }
 
 void EscenaJuego::update() {

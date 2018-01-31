@@ -16,9 +16,9 @@ int main(int argc, char* argv[]) {
 	// -----------------------------//
 	//	GAME LOOP
 	// -----------------------------//
-	bool finJuego = false;
-	while (m.getDevice()->run() && !finJuego) {
-		finJuego = GestorEscena::instancia().update();
+	Escena::tipo_escena tipoActual = GestorEscena::instancia().getEscenaActiva().getTipoEscena();
+	while (m.getDevice()->run() && tipoActual != Escena::tipo_escena::SALIR) {
+		tipoActual = GestorEscena::instancia().update();
 
 	}
 	

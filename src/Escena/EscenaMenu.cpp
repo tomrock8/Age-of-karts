@@ -52,11 +52,11 @@ void EscenaMenu::limpiar() {
 void EscenaMenu::update() {
 }
 
-bool EscenaMenu::comprobarInputs() {
+Escena::tipo_escena EscenaMenu::comprobarInputs() {
 	CTeclado *teclado = CTeclado::getInstancia();
 
 	if (teclado->isKeyDown(KEY_ESCAPE)) {
-		return true; // Devuelve true para cambiar de escena
+		return Escena::tipo_escena::SALIR; // Devuelve el estado de las escenas para que salga
 	}
 	else {
 		if (teclado->isKeyDown(KEY_KEY_1)) {
@@ -69,5 +69,5 @@ bool EscenaMenu::comprobarInputs() {
 		}
 	}
 
-	return false;
+	return Escena::tipo_escena::MENU;
 }

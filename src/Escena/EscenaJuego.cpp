@@ -265,7 +265,7 @@ void EscenaJuego::update() {
 	}
 }
 
-bool EscenaJuego::comprobarInputs() {
+Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	CTeclado *teclado = CTeclado::getInstancia();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
@@ -305,7 +305,7 @@ bool EscenaJuego::comprobarInputs() {
 		if (argc == 2)
 			client->ShutDownClient();
 
-		return true;
+		return Escena::tipo_escena::SALIR; // Esto deberia cargar la escena de carga - menu
 	}
 
 	if (teclado->isKeyDown(KEY_KEY_0)) {
@@ -317,7 +317,7 @@ bool EscenaJuego::comprobarInputs() {
 		}
 	}
 
-	return false;
+	return Escena::tipo_escena::CARRERA; // Significa que debe seguir ejecutando
 }
 
 void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {

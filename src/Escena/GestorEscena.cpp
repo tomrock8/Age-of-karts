@@ -2,7 +2,7 @@
 #include <iostream>
 
 GestorEscena::GestorEscena() {
-	cambioEscena = true; // Indicador que tiene que cambiar de escena
+	cambioEscena = Escena::tipo_escena::MENU; // Indicador que tiene que cambiar de escena
 	escenas = new Escena*[Escena::nTipos]; // Array que contendra todas las escenas posibles
 
 	// Inicializamos todas las posibles escenas a null
@@ -11,15 +11,14 @@ GestorEscena::GestorEscena() {
 	}
 }
 
-bool GestorEscena::update() {
+Escena::tipo_escena GestorEscena::update() {
 	//LIMITAR UPDATE 30
-	bool cambioEscena = false;
-	if(escenaActiva)
-		cambioEscena = escenaActiva->comprobarInputs();
-	if (!cambioEscena) {
+	cambioEscena = escenaActiva->comprobarInputs();
+	if (cambioEscena == escenaActiva->getTipoEscena()) {
 		escenaActiva->update();
 		escenaActiva->dibujar();
 	}
+
 	return cambioEscena;
 }
 
@@ -123,7 +122,7 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo) {
 	case Escena::tipo_escena::CARRERA:
 		escenaActiva = new EscenaJuego(Escena::tipo_escena::CARRERA); // Se crea la nueva escena
 		agregaEscena(escenaActiva); // Se agrega la escena nueva al array de escenas
-		cambioEscena = true; // Activamos el indicador para cambiar de escena
+		cambioEscena = Escena::tipo_escena::CARRERA; // Activamos el indicador para cambiar de escena
 		return true; // Devolvemos true y terminamos
 
 	case Escena::tipo_escena::CREDITOS:
@@ -137,7 +136,7 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo) {
 	case Escena::tipo_escena::MENU:
 		escenaActiva = new EscenaMenu(Escena::tipo_escena::MENU);
 		agregaEscena(escenaActiva);
-		cambioEscena = true;
+		cambioEscena = Escena::tipo_escena::MENU;
 		return false;
 
 	case Escena::tipo_escena::OPCIONES:

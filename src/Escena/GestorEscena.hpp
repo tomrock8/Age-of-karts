@@ -10,7 +10,7 @@
 class GestorEscena {
 public:
 
-	bool update(); // Actualizacion del gestor de escenas
+	Escena::tipo_escena update(); // Actualizacion del gestor de escenas
 	bool cambiaEscena(Escena::tipo_escena escena); // Modifica la escena actual
 	bool borraEscena(Escena::tipo_escena tipo); // Limpia y borra la escena del tipo seleccionado
 
@@ -33,7 +33,7 @@ private:
 	Escena **escenas;	// Array de escenas que tiene el juego
 
 	Escena *escenaActiva; // Escena que esta activa actualmente
-	bool cambioEscena;	// Indicador para saber si hay que cambiar de escena
+	Escena::tipo_escena cambioEscena;	// Indicador para saber si hay que cambiar de escena
 
 	// METODOS
 	GestorEscena(); // Constructor privado para el constructor

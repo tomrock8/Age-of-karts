@@ -14,7 +14,7 @@ public:
 	void dibujar();
 	void limpiar();
 	void update();
-	bool comprobarInputs();
+	Escena::tipo_escena comprobarInputs();
 
 	// METODOS GET
 

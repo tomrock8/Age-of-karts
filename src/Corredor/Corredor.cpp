@@ -68,7 +68,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
 	suspension = btScalar(2); // cuanto mas valor el chasis mas alto respecto a las ruedas
-	FuerzaMaxima = btScalar(3000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
+	FuerzaMaxima = btScalar(3500); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
@@ -111,7 +111,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 		wheel.m_suspensionStiffness = 22;    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
 		wheel.m_wheelsDampingCompression = 2.4 ;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
 		wheel.m_wheelsDampingRelaxation =  2.2 ;//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
-		wheel.m_frictionSlip = btScalar(1000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
+		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = 0.01;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 											//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
 		wheel.m_maxSuspensionTravelCm = 10000; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 
@@ -851,7 +851,7 @@ void Corredor::frenodemano(bool activo)
 	int friccion = 1.f;
 	if (activo) {
 		estado->setEstadoMovimiento(DERRAPA);
-		FuerzaGiro = btScalar(0.15);
+		FuerzaGiro = btScalar(0.2);
 
 		vehiculo->applyEngineForce(Fuerza, 0);
 		vehiculo->applyEngineForce(Fuerza, 1);
@@ -868,11 +868,11 @@ void Corredor::frenodemano(bool activo)
 	}
 	else {
 		
-		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(1000);
-		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(1000);
+		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(10000);
+		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(10000);
 
-		vehiculo->getWheelInfo(2).m_frictionSlip = btScalar(1000);
-		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(1000);
+		vehiculo->getWheelInfo(2).m_frictionSlip = btScalar(10000);
+		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(10000);
 
 		FuerzaGiro = btScalar(0.1);
 		
@@ -897,7 +897,7 @@ void Corredor::desacelerar()
 
 void Corredor::comprobarSueloRuedas()
 {
-/*
+
 	for(int i = 0; i < vehiculo->getNumWheels(); i++){
 	if(!vehiculo->getWheelInfo(i).m_raycastInfo.m_isInContact){
 		
@@ -912,7 +912,7 @@ void Corredor::comprobarSueloRuedas()
 	
 	}	
 
-*/
+
 }
 
 

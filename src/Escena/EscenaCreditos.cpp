@@ -37,8 +37,6 @@ EscenaCreditos::~EscenaCreditos() {
 }
 
 void EscenaCreditos::init() {
-
-
 }
 
 void EscenaCreditos::dibujar() {

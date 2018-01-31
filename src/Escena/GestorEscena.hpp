@@ -1,5 +1,5 @@
-#ifndef ESCENALOBBY_H
-#define ESCENALOBBY_H
+#ifndef GESTORESCENA_H
+#define GESTORESCENA_H
 
 #include "Escena.hpp"
 #include "EscenaJuego.hpp"

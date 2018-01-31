@@ -78,6 +78,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 				else {
 					if (teclado->isKeyDown(KEY_KEY_4)) {
 						cout << "CREDITOS\n";
+						return Escena::tipo_escena::CREDITOS;
 					}
 				}
 			}

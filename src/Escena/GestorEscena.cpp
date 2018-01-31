@@ -19,7 +19,7 @@ Escena::tipo_escena GestorEscena::update() {
 		escenaActiva->dibujar();
 	}
 	else {
-		if(cambioEscena != Escena::tipo_escena::SALIR)
+		if (cambioEscena != Escena::tipo_escena::SALIR)
 			cambiaEscena(cambioEscena);
 	}
 
@@ -33,6 +33,8 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 	if (anterior) { // Hay una escena activa actualmente
 		escenaActiva->limpiar();
 		escenaActiva = nullptr; // Desasignamos la escena activa
+		borraEscena(anterior->getTipoEscena());
+		/*
 		// Proceso de borrado la escena antigua en caso que sea necesario
 		if (tipo == Escena::tipo_escena::MENU) {
 			// MENU		DESDE LOBBY		-> BORRAR LOBBY
@@ -58,6 +60,7 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 				}
 			}
 		}
+		*/
 	}
 
 	// No hay una escena activa, de manera que se crea una nueva
@@ -162,17 +165,43 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 	if (tipo == Escena::tipo_escena::CARRERA) {
 		EscenaJuego *e = static_cast<EscenaJuego *>(escenas[indice]); // Convertimos la escena en su tipo
 		delete e; // Eliminamos la escena que hemos recogido del array
-	}
-	else {
-		if (tipo == Escena::tipo_escena::MENU) {
-			EscenaMenu *e = static_cast<EscenaMenu *>(escenas[indice]);
-			delete e;
-		}
+		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
+		return true;
 	}
 
-	escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
-	return true; // Terminamos el proceso correctamente y devolvemos true
+	if (tipo == Escena::tipo_escena::MENU) {
+		EscenaMenu *e = static_cast<EscenaMenu *>(escenas[indice]);// Convertimos la escena en su tipo
+		delete e; // Eliminamos la escena que hemos recogido del array
+		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
+		return true;
+	}
+
+	if (tipo == Escena::tipo_escena::CREDITOS) {
+		EscenaCreditos *e = static_cast<EscenaCreditos *>(escenas[indice]);// Convertimos la escena en su tipo
+		delete e; // Eliminamos la escena que hemos recogido del array
+		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
+		return true;
+	}
+
+	if (tipo == Escena::tipo_escena::OPCIONES) {
+		EscenaOpciones *e = static_cast<EscenaOpciones *>(escenas[indice]);// Convertimos la escena en su tipo
+		delete e; // Eliminamos la escena que hemos recogido del array
+		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
+		return true;
+	}
+
+	if (tipo == Escena::tipo_escena::LOBBY) {
+		EscenaLobby *e = static_cast<EscenaLobby *>(escenas[indice]);// Convertimos la escena en su tipo
+		delete e; // Eliminamos la escena que hemos recogido del array
+		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
+		return true;
+	}
+
+
+
+	return false;
 }
+
 
 int GestorEscena::indiceEscena(Escena::tipo_escena tipo) {
 	if (escenas) { // Comprobamos que el array no es null

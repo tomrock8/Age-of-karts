@@ -6,7 +6,7 @@
 class EscenaOpciones : public Escena {
 public:
 
-	~EscenaOpciones();
+	//~EscenaOpciones();
 
 	void init();
 	void dibujar();

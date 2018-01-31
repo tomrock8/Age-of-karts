@@ -26,7 +26,7 @@ public:
 	void dibujar();
 	void limpiar();
 	void update();
-	void comprobarInputs();
+	bool comprobarInputs();
 
 	// METODOS GET
 

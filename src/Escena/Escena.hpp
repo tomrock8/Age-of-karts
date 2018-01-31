@@ -28,7 +28,8 @@ public:
 	virtual void update() = 0;	
 
 	// Comprobar los inputs en la escena
-	virtual void comprobarInputs() = 0; 
+	//	devuelve true si tiene que cambiar de escena
+	virtual bool comprobarInputs() = 0; 
 	
 	// METODOS GET
 

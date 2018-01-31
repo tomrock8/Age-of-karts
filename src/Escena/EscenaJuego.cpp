@@ -279,7 +279,7 @@ void EscenaJuego::update() {
 	}
 }
 
-void EscenaJuego::comprobarInputs() {
+bool EscenaJuego::comprobarInputs() {
 	CTeclado *teclado = CTeclado::getInstancia();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
@@ -306,6 +306,7 @@ void EscenaJuego::comprobarInputs() {
 		resetPos[0] = pos.X;
 		resetPos[1] = pos.Y + 40;
 		resetPos[2] = pos.Z;
+
 		float *resetOri = new float[3];
 		resetOri[0] = pj[0]->getNodo()->getRotation().Z;
 		resetOri[1] = pj[0]->getNodo()->getRotation().Y;
@@ -317,8 +318,8 @@ void EscenaJuego::comprobarInputs() {
 	if (teclado->isKeyDown(KEY_ESCAPE)) {
 		if (argc == 2)
 			client->ShutDownClient();
-		Motor3d::instancia().cerrar();
-		//return 0;
+
+		return true;
 	}
 
 	if (teclado->isKeyDown(KEY_KEY_0)) {
@@ -329,13 +330,6 @@ void EscenaJuego::comprobarInputs() {
 			debug = 1;
 		}
 	}
-
-	if (teclado->isKeyDown(KEY_F5)) {
-		GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
-	}
-
-
-	//-------ENTRADA TECLADO FIN----------//
 }
 
 void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {

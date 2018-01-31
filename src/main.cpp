@@ -15,11 +15,14 @@ int main(int argc, char* argv[]) {
 	// -----------------------------//
 	//	GAME LOOP
 	// -----------------------------//
-	while (m.getDevice()->run()) {
-		GestorEscena::instancia().update();
-	}
+	bool finJuego = false;
+	while (m.getDevice()->run() && !finJuego) {
+		finJuego = GestorEscena::instancia().update();
 
+	}
+	
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
+	Motor3d::instancia().cerrar();
 
 	cout << "\n\ncaca";
 

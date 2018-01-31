@@ -10,7 +10,7 @@
 class GestorEscena {
 public:
 
-	void update(); // Actualizacion del gestor de escenas
+	bool update(); // Actualizacion del gestor de escenas
 	bool cambiaEscena(Escena::tipo_escena escena); // Modifica la escena actual
 	bool borraEscena(Escena::tipo_escena tipo); // Limpia y borra la escena del tipo seleccionado
 
@@ -37,7 +37,7 @@ private:
 
 	// METODOS
 	GestorEscena(); // Constructor privado para el constructor
-	void comprobarInputs(); // Comprueba los inputs
+	bool comprobarInputs(); // Comprueba los inputs
 	bool agregaEscena(Escena *escena); // Agrega una escena al gestor
 	int indiceEscena(Escena::tipo_escena tipo); // Devuelve el indice de la escena en el array (-1 si no existe)
 	int indiceVacio(); // Devuelve la primera posicion donde se pueda guardar una escena nueva

@@ -279,7 +279,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 
 	//------- ENTRADA TECLADO ----------
 	if (teclado->isKeyDown(KEY_KEY_R)) {
-		btVector3 btPos(pos.X, pos.Y, pos.Z);
+		btVector3 btPos = pj[i]->getWaypointActual()->getPosicion();
 
 		btTransform trans;
 		trans.setOrigin(btPos);

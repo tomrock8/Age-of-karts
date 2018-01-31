@@ -124,10 +124,7 @@ void EscenaJuego::init() {
 }
 
 void EscenaJuego::dibujar() {
-	DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
-	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
-	UpdatePhysics(DeltaTime);
-
+	
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 
@@ -189,9 +186,9 @@ void EscenaJuego::update() {
 	//cout << irrTimer->getTime() << endl;
 	textoDebug->limpiar();
 
-	//DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
-	//TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
-	//UpdatePhysics(DeltaTime);
+	DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
+	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
+	UpdatePhysics(DeltaTime);
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
 		pistaca->getArrayCaja()[i]->comprobarRespawn(); // TODO: MOVER AL UPDATE DE PISTACA

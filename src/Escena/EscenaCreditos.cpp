@@ -18,7 +18,7 @@ EscenaCreditos::EscenaCreditos() : Escena(Escena::tipo_escena::CREDITOS) {
 	fuente = Motor3d::instancia().getGUI()->getFont("assets/fuente.bmp");
 	textoUI = Motor3d::instancia().getGUI()->addStaticText(
 		texto.c_str(),				 // Texto
-		rect<s32>(xPos, 2 * yPos, 2 * xPos, 3* yPos), // Rectangulo de los bordes
+		rect<s32>(xPos, 2 * yPos, 2 * xPos, 4* yPos), // Rectangulo de los bordes
 		false,						 // Mostrar bordes
 		true,						 // Cortar en varias lineas
 		0,							 // Nodo padre

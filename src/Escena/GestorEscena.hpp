@@ -37,6 +37,8 @@ private:
 	Escena *escenaActiva; // Escena que esta activa actualmente
 	Escena::tipo_escena cambioEscena;	// Indicador para saber si hay que cambiar de escena
 
+	clock_t tiempoRefresco; // Reloj para limitar el refresco
+
 	// METODOS
 	GestorEscena(); // Constructor privado para el constructor
 	bool comprobarInputs(); // Comprueba los inputs

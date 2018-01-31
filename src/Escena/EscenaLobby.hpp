@@ -4,6 +4,7 @@
 #include "Escena.hpp"
 
 #include "Motor3d.hpp"
+#include "Timer.hpp"
 
 class EscenaLobby : public Escena {
 public:
@@ -30,7 +31,6 @@ private:
 	stringw texto; // Texto a mostrar en pantalla
 	IGUIStaticText *textoUI; // Nodo de irrlicht
 	ITexture* logoAOK; // Textura del logo del juego
-
 };
 
 #endif /* ESCENALOBBY_H */

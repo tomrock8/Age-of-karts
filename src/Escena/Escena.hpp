@@ -42,8 +42,6 @@ protected:
 
 	tipo_escena tipoEscena; // Tipo de escena a la que pertenece
 
-
-
 };
 
 #endif /* ESCENA_H */

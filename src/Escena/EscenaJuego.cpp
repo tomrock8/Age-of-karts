@@ -124,6 +124,10 @@ void EscenaJuego::init() {
 }
 
 void EscenaJuego::dibujar() {
+	DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
+	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
+	UpdatePhysics(DeltaTime);
+
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 
@@ -185,9 +189,9 @@ void EscenaJuego::update() {
 	//cout << irrTimer->getTime() << endl;
 	textoDebug->limpiar();
 
-	DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
-	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
-	UpdatePhysics(DeltaTime);
+	//DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
+	//TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
+	//UpdatePhysics(DeltaTime);
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
 		pistaca->getArrayCaja()[i]->comprobarRespawn(); // TODO: MOVER AL UPDATE DE PISTACA
@@ -305,7 +309,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		if (argc == 2)
 			client->ShutDownClient();
 
-		return Escena::tipo_escena::SALIR; // Esto deberia cargar la escena de carga - menu
+		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
 	}
 
 	if (teclado->isKeyDown(KEY_KEY_0)) {

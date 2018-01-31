@@ -12,8 +12,16 @@ GestorEscena::GestorEscena() {
 }
 
 Escena::tipo_escena GestorEscena::update() {
-	//LIMITAR UPDATE 30
-	cambioEscena = escenaActiva->comprobarInputs();
+	clock_t tiempoActual = clock();
+	clock_t timediff = tiempoActual - tiempoRefresco;
+	float timediff_sec = ((float)timediff) / 1000;
+
+
+	if (timediff_sec >= 0.04f) {
+		tiempoRefresco = clock();
+		cambioEscena = escenaActiva->comprobarInputs();
+	}
+
 	if (cambioEscena == escenaActiva->getTipoEscena()) {
 		escenaActiva->update();
 		escenaActiva->dibujar();

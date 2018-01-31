@@ -274,8 +274,92 @@ void Corredor::setPosicionCarrera(int i) {
 }
 void Corredor::setTipoObj()
 {
+	int random;
 	srand(time(NULL));
-	tipoObj = rand() % 8 + 1;
+	random = rand() % 100 + 1;
+	
+	/*
+					1º	2º-3º	4º-5º	6º
+1.	Flecha			15	15		15		10
+2.	Caja falsa		27	15		10		3
+3.	Turbo			10	15		15		15
+4.	Aceite			26	15		10		2
+5.	Escudo			17	15		10		15
+6.	Flecha Triple	5	10		15		15
+7.	Flecha Tele		0	5		10		25
+8.	Turbo Triple	0	10		15		15
+	*/
+	if(posicionCarrera == 1){
+		if(random < 16)
+			tipoObj = 1;
+		else if(random < 43)
+			tipoObj = 2;
+		else if(random < 53)
+			tipoObj = 3;
+		else if(random < 79)
+			tipoObj = 4;
+		else if(random < 96)
+			tipoObj = 5;
+		else if(random < 101)
+			tipoObj = 6;
+		else if(random < 101)
+			tipoObj = 7;
+		else if(random < 101)
+			tipoObj = 8;
+	}else if(posicionCarrera == 2 || posicionCarrera == 3){
+		if(random < 16)
+			tipoObj = 1;
+		else if(random < 31)
+			tipoObj = 2;
+		else if(random < 46)
+			tipoObj = 3;
+		else if(random < 61)
+			tipoObj = 4;
+		else if(random < 76)
+			tipoObj = 5;
+		else if(random < 86)
+			tipoObj = 6;
+		else if(random < 91)
+			tipoObj = 7;
+		else if(random < 101)
+			tipoObj = 8;
+	}else if(posicionCarrera == 4 || posicionCarrera == 5){
+		if(random < 16)
+			tipoObj = 1;
+		else if(random < 26)
+			tipoObj = 2;
+		else if(random < 41)
+			tipoObj = 3;
+		else if(random < 51)
+			tipoObj = 4;
+		else if(random < 61)
+			tipoObj = 5;
+		else if(random < 76)
+			tipoObj = 6;
+		else if(random < 86)
+			tipoObj = 7;
+		else if(random < 101)
+			tipoObj = 8;
+	}else if(posicionCarrera == 6){
+		if(random < 11)
+			tipoObj = 1;
+		else if(random < 14)
+			tipoObj = 2;
+		else if(random < 29)
+			tipoObj = 3;
+		else if(random < 31)
+			tipoObj = 4;
+		else if(random < 46)
+			tipoObj = 5;
+		else if(random < 61)
+			tipoObj = 6;
+		else if(random < 76)
+			tipoObj = 7;
+		else if(random < 101)
+			tipoObj = 8;
+	}
+
+	cout << "Posicion: " << posicionCarrera << " - NumRandom: " << random << " - Objeto: " << tipoObj << endl;
 
 	if(tipoObj == 8)
 		cargador = 3;

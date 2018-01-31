@@ -24,11 +24,17 @@ public:
 	IGUIEnvironment *getGUI();
 	IrrlichtDevice *getDevice();
 
+	u16 getAnchoPantalla();
+	u16 getAltoPantalla();
+
 	// Metodos SET
 	void setTeclado(CTeclado *teclado);
 
 private:
 	Motor3d();
+
+	u16 anchoPantalla;
+	u16 altoPantalla;
 
 	IrrlichtDevice *device;
 	IVideoDriver *driver;

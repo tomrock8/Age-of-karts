@@ -5,7 +5,9 @@
 //-------------------------\*
 
 Motor3d::Motor3d() {
-	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(1280, 720), 16, false, false, true, 0);
+	anchoPantalla = 1280;
+	altoPantalla = 720;
+	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(anchoPantalla, altoPantalla), 16, false, false, true, 0);
 	if (!device) 
 		std::cout << "ERROR AL CREAR EL DEVICE" << std::endl;
 
@@ -55,6 +57,14 @@ ISceneManager *Motor3d::getScene() {
 
 IrrlichtDevice *Motor3d::getDevice() {
 	return device;
+}
+
+u16 Motor3d::getAnchoPantalla() {
+	return anchoPantalla;
+}
+
+u16 Motor3d::getAltoPantalla() {
+	return altoPantalla;
 }
 
 IVideoDriver *Motor3d::getDriver() {

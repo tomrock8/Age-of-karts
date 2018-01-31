@@ -22,6 +22,11 @@ public:
 
 private:
 
+	IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
+
+	stringw texto; // Texto a mostrar en pantalla
+	IGUIStaticText *textoUI; // Nodo de irrlicht
+	
 
 };
 

@@ -14,7 +14,7 @@ Estatico::Estatico(btVector3 posicionItem) : Item(posicionItem) {
 	posicion = posicionItem;
 	nodo->setPosition(vector3df(posicion.getX(),posicion.getY(),posicion.getZ()));
 
-	masa = 10000;
+	masa = 0;
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
@@ -50,6 +50,7 @@ btRigidBody *Estatico::inicializarFisicas() {
 	rigidBody->setUserPointer((void *)(nodo));
 	if (masa != 0)
 		rigidBody->setActivationState(DISABLE_DEACTIVATION);
+	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	// Add it to the world
 	mundo->addRigidBody(rigidBody);
 	objetos.push_back(rigidBody);

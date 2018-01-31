@@ -106,6 +106,7 @@ bool GestorColisiones::JugadorEstatico()
 	core::list<Item *> items = pista->getItems();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	Pista *mapa = Pista::getInstancia();
+	bool protegido;
 	//cout << TimeStamp << endl;
 
 	if (strcmp("Jugador", nodoA->getName()) == 0 || strcmp("JugadorIA", nodoA->getName()) == 0 || strcmp("JugadorRed", nodoA->getName()) == 0)
@@ -118,6 +119,7 @@ bool GestorColisiones::JugadorEstatico()
 					if (pj1[j]->getProteccion()==true) {
 						cout << "estoy protegido" << endl;
 						pj1[j]->setProteccion(false);
+						protegido = true;
 					}
 
 				}
@@ -130,7 +132,11 @@ bool GestorColisiones::JugadorEstatico()
 				Item *item = *Iterator;
 				if (item->getNodo()->getID() == idB)
 				{
-					if (item->getColision()) {
+					cout << "Colisiono\n";
+					if(!protegido)
+					{
+						cout << "Te reviento\n";
+					//if (item->getColision()) {
 						if (strcmp("Aceite", item->getNombre()) == 0){	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
 							for(int j = 0; j< jugadores->getNumJugadores(); j++){
 								if(pj1[j]!=NULL)
@@ -139,14 +145,16 @@ bool GestorColisiones::JugadorEstatico()
 									}
 							}
 						}
+					}
+						protegido = false;
 						item->Delete();
 						Iterator = items.erase(Iterator);
 						pista->setItems(items);
 						
-					}
-					else { 
-						item->setColision(true);
-					}
+					//}
+					//else { 
+					//	item->setColision(true);
+					//}
 
 					return true;
 				}

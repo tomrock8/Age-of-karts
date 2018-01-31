@@ -1,8 +1,8 @@
 #include "EscenaMenu.hpp"
 
 EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
-	texto = L"1 - INCIAR JUEGO SINGLEPLAYER\n\n";
-	texto += "2 - INCIAR JUEGO MULTIPLAYER\n\n";
+	texto = L"INTRO - INCIAR JUEGO SINGLEPLAYER\n\n";
+	texto += "ESPACIO - INCIAR JUEGO MULTIPLAYER\n\n";
 	texto += "3  - OPCIONES (IN DEVELOPMENT)\n\n";
 	texto += "4 - CREDITOS\n\n";
 	texto += "ESC - SALIR\n\n\n";
@@ -64,12 +64,15 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 		return Escena::tipo_escena::SALIR; // Devuelve el estado de las escenas para que salga
 	}
 	else {
-		if (teclado->isKeyDown(KEY_KEY_1)) {
-			cout << "SINGLE PLAYER\n";
+		if (teclado->isKeyDown(KEY_RETURN)) {
+			cout << "SINGLE PLAYER\n"; 
+			return Escena::tipo_escena::CARRERA;
 		}
 		else {
-			if (teclado->isKeyDown(KEY_KEY_2)) {
+			if (teclado->isKeyDown(KEY_SPACE)) {
+
 				cout << "MULTI PLAYER\n";
+				return Escena::tipo_escena::LOBBY;
 			}
 			else {
 				if (teclado->isKeyDown(KEY_KEY_3)) {

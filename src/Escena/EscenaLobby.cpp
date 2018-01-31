@@ -64,58 +64,49 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if (teclado->isKeyDown(KEY_KEY_1)) {
 			texto += "1";
 			nElementos++;
-			return Escena::tipo_escena::CREDITOS;
 		}
 		if (teclado->isKeyDown(KEY_KEY_2)) {
 			texto += "2";
 			nElementos++;
-			return Escena::tipo_escena::CREDITOS;
 		}
 		if (teclado->isKeyDown(KEY_KEY_3)) {
 			texto += "3";
 			nElementos++;
-			return Escena::tipo_escena::CREDITOS;
 		}
 		if (teclado->isKeyDown(KEY_KEY_4)) {
 			texto += "4";
 			nElementos++;
-			return Escena::tipo_escena::CREDITOS;
 		}
 		if (teclado->isKeyDown(KEY_KEY_4)) {
 			texto += "4";
 			nElementos++;
-			return Escena::tipo_escena::CREDITOS;
 		}
 		if (teclado->isKeyDown(KEY_KEY_5)) {
 			texto += "5";
 			nElementos++;
-			return Escena::tipo_escena::CREDITOS;
 		}
 		if (teclado->isKeyDown(KEY_KEY_6)) {
 			texto += "6";
 			nElementos++;
-			return Escena::tipo_escena::CREDITOS;
 		}
 		if (teclado->isKeyDown(KEY_KEY_7)) {
 			texto += "7";
 			nElementos++;
-			return Escena::tipo_escena::CREDITOS;
 		}
 		if (teclado->isKeyDown(KEY_KEY_8)) {
 			texto += "8";
 			nElementos++;
-			return Escena::tipo_escena::CREDITOS;
 		}
 		if (teclado->isKeyDown(KEY_KEY_9)) {
 			texto += "9";
 			nElementos++;
-			return Escena::tipo_escena::CREDITOS;
 		}
 		if (teclado->isKeyDown(KEY_KEY_0)) {
 			texto += "0";
 			nElementos++;
-			return Escena::tipo_escena::CREDITOS;
 		}
+		textoUI->setText(this->texto.c_str());
+		return Escena::tipo_escena::LOBBY;
 	}
 
 

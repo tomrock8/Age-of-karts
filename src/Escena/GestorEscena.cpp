@@ -139,8 +139,10 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo) {
 		return true;
 
 	case Escena::tipo_escena::LOBBY:
-		//escenaActiva = new EscenaLobby(Escena::tipo_escena::LOBBY);
-		return false;
+		escenaActiva = new EscenaLobby();
+		agregaEscena(escenaActiva);
+		cambioEscena = Escena::tipo_escena::LOBBY;
+		return true;
 
 	case Escena::tipo_escena::MENU:
 		escenaActiva = new EscenaMenu();

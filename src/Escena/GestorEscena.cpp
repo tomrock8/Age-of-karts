@@ -1,8 +1,5 @@
 #include "GestorEscena.hpp"
-
 #include <iostream>
-
-GestorEscena GestorEscena::_instancia;
 
 GestorEscena::GestorEscena() {
 	cambioEscena = true; // Indicador que tiene que cambiar de escena

@@ -21,11 +21,11 @@ ItemTeledirigido::ItemTeledirigido(btVector3 posicionItem) : Item(posicionItem) 
 void ItemTeledirigido::lanzarItemTeledirigido(int num)
 {
 	GestorCarrera *gc=new GestorCarrera();
-	bool b=gc->comprobarItemTeledirigido(num);
+	gc->comprobarItemTeledirigido(num);
 
 	
 
-	if (b){
+	/*if (b){
 		tiempo = Timer::getInstancia();
 		t = tiempo->getTimer();
 		
@@ -33,8 +33,8 @@ void ItemTeledirigido::lanzarItemTeledirigido(int num)
 		nodo->setPosition(posicion);
 		nodo->setParent(pj->getNodo());
 		inicializarFisicas();
-		rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);*/
-	}
+		rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	}*/
 }
 
 int ItemTeledirigido::getTimer() {

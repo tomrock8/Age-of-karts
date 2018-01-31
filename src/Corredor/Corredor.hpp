@@ -32,7 +32,8 @@ class Corredor: public RakNet::NetworkIDObject
 	void lanzarItemTeledirigido();
 	void virtual lanzarItemRed(){};
 	void aplicarAceite();
-	void updateTeledirigido();
+	void setAceite();
+	void updateTimerObstaculos();
 	void setObjetivoTelederigido();
 	void soltarItem();
 	virtual void actualizarItem(){}; // A implementar por derivadas
@@ -128,8 +129,10 @@ protected:
 	int tipoObj; // si es 0 no tengo nada
 	bool turboActivado; // para saber cuando esta activado turbo
 	bool objetivoFijado; //para el item teledirigido
+	bool aceiteActivado; //para el item teledirigido
 	int timerTurbo;
 	int timerTeledirigido;
+	int timerAceite;
 	
 	ItemTeledirigido *pt;
 
@@ -147,7 +150,9 @@ protected:
 	bool checkItem;
 
 
-	
+	int velocidadMaxima;
+	int velocidadMaximaTurbo;
+	int velocidadMaximaAtras;
 	btVector3 posicion;
 	btVector3 direccionRuedas;
 	btVector3 rotacionRuedas;

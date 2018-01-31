@@ -14,9 +14,14 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 {
 	cargador = 0;
 	tipoObj = 0;
+	velocidadMaxima=320;
+	velocidadMaximaTurbo=380;
+	velocidadMaximaAtras=-100;
 	turboActivado = false;
 	objetivoFijado = false;
+	aceiteActivado = false;
 	timerTurbo = 0;
+	timerAceite = 0;
 	limite = 0;
 	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
 	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
@@ -62,8 +67,8 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.7); // cuanto mas valor el chasis mas alto respecto a las ruedas
-	FuerzaMaxima = btScalar(3000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
+	suspension = btScalar(1.6); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	FuerzaMaxima = btScalar(3500); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
@@ -71,7 +76,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	Masa = btScalar(700);
 	FuerzaFrenado = btScalar(-10000);
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
-	FuerzaFrenoMano = btScalar(800);
+	FuerzaFrenoMano = btScalar(700);
 	FuerzaFrenadoReposo = btScalar(60);
 
 	if (cuboNodo) InicializarFisicas();
@@ -104,12 +109,12 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
 		wheel.m_suspensionStiffness = 20;    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
-		wheel.m_wheelsDampingCompression = 2.4 ;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-		wheel.m_wheelsDampingRelaxation =  2.2 ;//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_wheelsDampingCompression = 2.4f ;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
+		wheel.m_wheelsDampingRelaxation =  2.3f ;//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(1000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = 0.01;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 											//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
-		wheel.m_maxSuspensionTravelCm = 1000; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 
+		wheel.m_maxSuspensionTravelCm = 10000; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 
 
 											   /*
 											   * PARAMETROS EN RUEDAS DISPONIBLES
@@ -493,7 +498,7 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 		}
 	}
 	else {
-		SetFuerzaVelocidad(1000);
+		SetFuerzaVelocidad(FuerzaMaxima);
 	}
 }
 void Corredor::SetFuerzaVelocidad(int turbo)
@@ -554,6 +559,11 @@ void Corredor::setObjetivoTelederigido() {
 	objetivoFijado = true;
 	Timer *time = Timer::getInstancia();
 	timerTeledirigido = time->getTimer();
+}
+void Corredor::setAceite(){
+	aceiteActivado = true;
+	Timer *time = Timer::getInstancia();
+	timerAceite = time->getTimer();
 }
 
 void Corredor::soltarItem()
@@ -693,7 +703,7 @@ void Corredor::aplicarAceite() {
 	for (int i = 0; i < 100; i++) {
 		girarIzquierda();
 	}
-	Fuerza = 500;
+	
 	frenodemano(false);
 }
 void Corredor::incCargador() { cargador++; };
@@ -764,7 +774,7 @@ void Corredor::calculoDistanciaPuntoAnterior() {
 //----------------------------------------//
 void Corredor::acelerar()
 {
-	if(vehiculo->getCurrentSpeedKmHour()>320){
+	if((vehiculo->getCurrentSpeedKmHour()>velocidadMaxima && !turboActivado) || (turboActivado && vehiculo->getCurrentSpeedKmHour()>velocidadMaximaTurbo)){
 
 		vehiculo->applyEngineForce(0, 0);
 		vehiculo->applyEngineForce(0, 1);
@@ -787,7 +797,7 @@ void Corredor::frenar()
 {
 	
 
-	if(vehiculo->getCurrentSpeedKmHour() < -50){
+	if(vehiculo->getCurrentSpeedKmHour() < velocidadMaximaAtras){
 
 	vehiculo->applyEngineForce(0, 0);
 	vehiculo->applyEngineForce(0, 1);
@@ -964,7 +974,7 @@ void Corredor::update()
 	}
 
 
-	updateTeledirigido();
+	updateTimerObstaculos();
 	updateEstado();
 	if (h->getHabilidadActiva())updateHabilidad();
 	movimiento();
@@ -985,10 +995,10 @@ void Corredor::update()
 
 }
 
-void Corredor::updateTeledirigido() {
-	if (pt != NULL) {
-		Timer *t = Timer::getInstancia();
+void Corredor::updateTimerObstaculos() {
+	if (pt != NULL) {	
 		if (objetivoFijado){
+			Timer *t = Timer::getInstancia();
 			if (t->getTimer()-timerTeledirigido>=2){
 				
 				lanzarItemTeledirigido();
@@ -999,6 +1009,16 @@ void Corredor::updateTeledirigido() {
 			}
 		}
 	}
+	if (aceiteActivado){
+		Timer *t2 = Timer::getInstancia();
+			if (t2->getTimer()-timerAceite>=0){
+				lanzarItemTeledirigido();
+			}
+			if (t2->getTimer()-timerAceite>=1){
+				aceiteActivado=false;
+			}
+		}
+
 }
 
 void Corredor::actualizarRuedas()

@@ -13,6 +13,7 @@ GestorEscena::GestorEscena() {
 
 void GestorEscena::update() {
 	//LIMITAR UPDATE 30
+	escenaActiva->comprobarInputs();
 	escenaActiva->update();
 	escenaActiva->dibujar();
 }

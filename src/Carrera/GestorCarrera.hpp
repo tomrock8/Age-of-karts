@@ -6,8 +6,7 @@
 #include "Waypoint.hpp"
 using namespace std;
 
-class GestorCarrera
-{
+class GestorCarrera {
 public:
 	GestorCarrera();
 	void update();
@@ -17,7 +16,7 @@ public:
 	int getVueltas();
 	bool comprobarItemTeledirigido(int num);
 private:
-	Corredor * *pj1;
+	Corredor **pj1;
 	Corredor **pj2;
 	Corredor **pj3;
 	Corredor *pj_aux;

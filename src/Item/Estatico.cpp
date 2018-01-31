@@ -1,12 +1,9 @@
 #include "Estatico.hpp"
 
-Estatico::Estatico(btVector3 posicionItem) : Item(posicionItem)
-{
-	Motor3d *m = Motor3d::getInstancia();
-	GestorIDs *ids = GestorIDs::getInstancia();
+Estatico::Estatico(btVector3 posicionItem) : Item(posicionItem) {
 	tamanyo = 1.0f;
-	nodo = m->getScene()->addCubeSceneNode(tamanyo);
-	ids->setIdentifier(nodo,"Estatico");
+	nodo = Motor3d::instancia().getScene()->addCubeSceneNode(tamanyo);
+	GestorIDs::instancia().setIdentifier(nodo,"Estatico");
 	id=nodo->getID();
 
 	escala.setX(3);
@@ -21,11 +18,10 @@ Estatico::Estatico(btVector3 posicionItem) : Item(posicionItem)
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	nodo->setMaterialTexture(0, m->getDriver()->getTexture("assets/textures/gust.png"));
+	nodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/gust.png"));
 }
 
-btRigidBody *Estatico::inicializarFisicas()
-{
+btRigidBody *Estatico::inicializarFisicas() {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -62,12 +58,6 @@ btRigidBody *Estatico::inicializarFisicas()
 	return rigidBody;
 }
 
-void Estatico::soltarItem()
-{
+void Estatico::soltarItem() {
 	//otro que se fue al corredor bitches :(
 }
-/*Estatico::~Estatico() {
-	delete rigidBody->getMotionState();
-	delete rigidBody->getCollisionShape();
-	delete rigidBody;
-}*/

@@ -3,18 +3,19 @@
 Turbo::Turbo(btVector3 pos, bool estado) {
 	turboActivo = estado;
 	turboTocado = estado;
+	
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	GestorIDs *ids = GestorIDs::getInstancia();
 	list<btRigidBody *> objetos = bullet->getObjetos();
-	Motor3d *m = Motor3d::getInstancia();
-	turbo = m->getScene()->addCubeSceneNode(5.0f);
+	turbo = Motor3d::instancia().getScene()->addCubeSceneNode(5.0f);
 	escala = vector3df(2.5f, 0.2f, 1.25f);
 	turbo->setScale(escala);
 	turbo->setMaterialFlag(EMF_LIGHTING, false);
 	turbo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	ids->setIdentifier(turbo,"Turbo");
-	id=turbo->getID();
-	m->getScene()->getMeshManipulator()->setVertexColors(turbo->getMesh(), SColor(255, 255, 0, 0));
+	
+	GestorIDs::instancia().setIdentifier(turbo, "Turbo");
+	id = turbo->getID();
+	Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(turbo->getMesh(), SColor(255, 255, 0, 0));
+
 	//posicion origem 
 	transform;
 	transform.setIdentity();
@@ -45,9 +46,6 @@ Turbo::Turbo(btVector3 pos, bool estado) {
 	bullet->getMundo()->addRigidBody(rigidBody);
 	objetos.push_back(rigidBody);
 	bullet->setObjetos(objetos);
-
-	//this->id = id;
-
 }
 
 int Turbo::getId() {
@@ -61,17 +59,17 @@ bool Turbo::getTurboActivo() {
 void Turbo::setTurboActivo(Corredor *c, bool s) {
 	//cout << "TURBO ACTIVADO" << endl;
 	corredor = c;
-	Motor3d *m = Motor3d::getInstancia();
+
 	turboActivo = s;
 	turboTocado = s;
 	if (turboActivo && turboTocado) {//si esta activo almacenamos tiempo y aumentamos fuerza
 		corredor->SetFuerzaVelocidad(150000);
 		corredor->acelerar();
 
-		tiempo = m->getDevice()->getTimer()->getTime();
+		tiempo = Motor3d::instancia().getDevice()->getTimer()->getTime();
 	}
 	else corredor->SetFuerzaVelocidad(100000);
-	
+
 	turboTocado = false;
 }
 
@@ -93,6 +91,6 @@ Turbo::~Turbo() {
 
 	// Los rigid body se borran desde el motor de fisicas
 	// delete rigidBody;
-	
+
 	cout << " SALGO DELETE TURBO\n";
 }

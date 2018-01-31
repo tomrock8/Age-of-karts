@@ -9,8 +9,8 @@
 #include "btBulletCollisionCommon.h"
 #include "Corredor.hpp"
 #include "GestorIDs.hpp"
-class Turbo
-{
+
+class Turbo {
 public:
 
 	Turbo(btVector3 pos, bool estado);

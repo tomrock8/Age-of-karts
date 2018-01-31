@@ -1,9 +1,7 @@
 #include "Camara3persona.hpp"
 
-Camara3persona::Camara3persona()
-{
-	Motor3d *m = Motor3d::getInstancia();
-	camera = m->getScene()->addCameraSceneNode(0, core::vector3df(0.0f, 0.0f, 0.0f), core::vector3df(0.0f, 0.0f, 0.0f), -1);
+Camara3persona::Camara3persona() {
+	camera = Motor3d::instancia().getScene()->addCameraSceneNode(0, core::vector3df(0.0f, 0.0f, 0.0f), core::vector3df(0.0f, 0.0f, 0.0f), -1);
 	direction = 0;
 	zdirection = 0;
 }
@@ -14,11 +12,9 @@ Camara3persona::~Camara3persona() {
 	cout << "\nSALGO DEL DESTRUCTOR DE CAMARA\n";
 }
 
-void Camara3persona::moveCameraControl(Corredor *pj1)
-{
+void Camara3persona::moveCameraControl(Corredor *pj1) {
 	CTeclado *teclado = CTeclado::getInstancia();
-	Motor3d *m = Motor3d::getInstancia();
-	camera = m->getDevice()->getSceneManager()->getActiveCamera();
+	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
 	core::vector3df cameraPos = camera->getAbsolutePosition();
 
 	float change_x = 0.0f;
@@ -63,9 +59,8 @@ void Camara3persona::moveCameraControl(Corredor *pj1)
 }
 
 void Camara3persona::moveCameraControlPointer(Corredor *pj1) {
-	Motor3d *m = Motor3d::getInstancia();
-	core::position2d<f32> cursorPos = m->getDevice()->getCursorControl()->getRelativePosition();
-	camera = m->getDevice()->getSceneManager()->getActiveCamera();
+	core::position2d<f32> cursorPos = Motor3d::instancia().getDevice()->getCursorControl()->getRelativePosition();
+	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
 	core::vector3df cameraPos = camera->getAbsolutePosition();
 
 	float change_x = (cursorPos.X - 0.5) * 256.0f;
@@ -78,7 +73,7 @@ void Camara3persona::moveCameraControlPointer(Corredor *pj1) {
 		zdirection = -90;
 	else if (zdirection > 90)
 		zdirection = 90;
-	m->getDevice()->getCursorControl()->setPosition(0.5f, 0.5f);
+	Motor3d::instancia().getDevice()->getCursorControl()->setPosition(0.5f, 0.5f);
 
 	core::vector3df playerPos = pj1->getNodo()->getPosition();
 

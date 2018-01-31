@@ -15,10 +15,15 @@ public:
 	bool borraEscena(Escena::tipo_escena tipo); // Limpia y borra la escena del tipo seleccionado
 
 	// METODOS GET
-	static GestorEscena& instancia(); // Devuelve la instancia del singleton
-	Escena& getEscenaActiva(); // Devuelve la escena que esta activa actualmente
-	Escena **getEscenas(); // Devuelve el array de escenas posibles
-	Escena *getEscena(Escena::tipo_escena escena); // Devuelve la escena con el tipo pedido
+
+	// Devuelve la instancia del singleton
+	static GestorEscena& instancia(); 
+	// Devuelve la escena que esta activa actualmente
+	Escena& getEscenaActiva(); 
+	// Devuelve el array de escenas posibles
+	Escena **getEscenas(); 
+	// Devuelve la escena con el tipo pedido
+	Escena *getEscena(Escena::tipo_escena escena);
 	
 	// METODOS SET
 	

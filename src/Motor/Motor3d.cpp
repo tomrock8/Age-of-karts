@@ -4,8 +4,6 @@
 //---CONSTRUCTOR Motor3d---\*
 //-------------------------\*
 
-Motor3d *Motor3d::instancia = NULL;
-
 Motor3d::Motor3d() {
 	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(1280, 720), 16, false, false, true, 0);
 	if (!device) 
@@ -22,12 +20,6 @@ Motor3d::Motor3d() {
 	device->setWindowCaption(L"AGE OF KARTS");
 }
 
-Motor3d::~Motor3d() {
-	smgr->getRootSceneNode()->removeAll();
-	device->drop();
-	instancia = nullptr;
-}
-
 void Motor3d::dibujar() {
 	driver->beginScene(true, true, SColor(255, 200, 200, 200));
 	smgr->drawAll();
@@ -35,15 +27,14 @@ void Motor3d::dibujar() {
 
 void Motor3d::cerrar() {
 	device->closeDevice();
+	device->drop();
 }
 
 
 // METODOS GET
-Motor3d *Motor3d::getInstancia() {
-	if (instancia == NULL)
-		instancia = new Motor3d();
-
-	return instancia;
+Motor3d &Motor3d::instancia() {
+	static Motor3d _instancia;
+	return _instancia;
 }
 
 IGUIEnvironment *Motor3d::getGUI() {
@@ -64,7 +55,6 @@ IVideoDriver *Motor3d::getDriver() {
 
 
 // METODOS SET
-
 void Motor3d::setTeclado(CTeclado *teclado) {
 	device->setEventReceiver(teclado);
 }

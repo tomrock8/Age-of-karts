@@ -277,7 +277,7 @@ void Corredor::setPosicionCarrera(int i) {
 void Corredor::setTipoObj()
 {
 	srand(time(NULL));
-	tipoObj = rand() % 4 + 1;
+	tipoObj = rand() % 7 + 1;
 	Client *c = Client::getInstancia();
 	if (c->getConnected())
 		c->PlayerSetObject(tipoObj);
@@ -489,7 +489,7 @@ void Corredor::usarObjetos() {
 		}
 		soltarItem();
 	}
-	else if (getTipoObj() == 7)
+	else if (getTipoObj() == 8)
 	{
 		if (getLimite() >= 10) {//puedo lanzar la habilidad
 			h->getNodo()->setVisible(true);
@@ -505,7 +505,7 @@ void Corredor::usarObjetos() {
 		}
 
 	}
-	else if (tipoObj == 8){
+	else if (tipoObj == 7){
 		pt = new ItemTeledirigido(posDisparo);
 		pt->lanzarItemTeledirigido(posicionCarrera);
 		items.push_back(pt);
@@ -790,11 +790,11 @@ void Corredor::updateTeledirigido(){
 	if (pt!=NULL){
 		Timer *t = Timer::getInstancia();
 		if (objetivoFijado){
-			if (t->getTimer()-timerTeledirigido>2){
+			if (t->getTimer()-timerTeledirigido>=2){
 				
 				lanzarItemTeledirigido();
 			}
-			if (t->getTimer()-timerTeledirigido>3){
+			if (t->getTimer()-timerTeledirigido>=3){
 				objetivoFijado=false;
 
 			}
@@ -872,10 +872,10 @@ void Corredor::updateEstado(){
 		estado->setEstadoObjeto(FLECHA_TRIPLE);
 		break;
 		case 7:
-		estado->setEstadoObjeto(HABILIDAD);
+		estado->setEstadoObjeto(ITEM_TELEDIRIGIDO);
 		break;
 		case 8:
-		estado->setEstadoObjeto(ITEM_TELEDIRIGIDO);
+		estado->setEstadoObjeto(HABILIDAD);
 		break;
 	}
 	estado->update();

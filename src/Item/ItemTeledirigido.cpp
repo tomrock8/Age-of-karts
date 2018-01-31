@@ -24,14 +24,14 @@ ItemTeledirigido::ItemTeledirigido(btVector3 posicionItem) : Item(posicionItem)
 void ItemTeledirigido::lanzarItemTeledirigido(int num)
 {
 	GestorCarrera *gc=new GestorCarrera();
-	Corredor *pj=gc->comprobarItemTeledirigido(num);
+	bool b=gc->comprobarItemTeledirigido(num);
 
 	
 
-	if (pj!=NULL){
+	if (b){
 		tiempo = Timer::getInstancia();
 		t = tiempo->getTimer();
-		pj->setObjetivoTelederigido();
+		
 		/*posicion=pj->getNodo()->getPosition();
 		nodo->setPosition(posicion);
 		nodo->setParent(pj->getNodo());

@@ -84,7 +84,7 @@ void EscenaJuego::init() {
 		pj[1] = new CorredorIA("assets/coche.obj", btVector3(-10, 0, 290));
 		jugadores->aumentarJugadores();
 
-
+		/*
 		pj[2] = new CorredorIA("assets/coche.obj", btVector3(-20, 0, 320));
 		jugadores->aumentarJugadores();
 
@@ -96,18 +96,18 @@ void EscenaJuego::init() {
 
 		pj[5] = new CorredorIA("assets/coche.obj", btVector3(-30, 0, 290));
 		jugadores->aumentarJugadores();
-
+*/
 
 
 		pj[0]->getNodo()->setID(0);
 		pj[1]->getNodo()->setID(1);
 
-
+/*
 		pj[2]->getNodo()->setID(2);
 		pj[3]->getNodo()->setID(3);
 		pj[4]->getNodo()->setID(4);
 		pj[5]->getNodo()->setID(5);
-
+*/
 
 	}
 
@@ -151,21 +151,21 @@ void EscenaJuego::dibujar() {
 	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
 	if (argc != 2) {
 		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
-
+/*
 		CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj[2]);
 		CorredorIA *COMENARDOSAUXILIAR3 = static_cast<CorredorIA *>(pj[3]);
 		CorredorIA *COMENARDOSAUXILIAR4 = static_cast<CorredorIA *>(pj[4]);
 		CorredorIA *COMENARDOSAUXILIAR5 = static_cast<CorredorIA *>(pj[5]);
-
+*/
 
 		//COMENARDOSAUXILIAR->update();
 		COMENARDOSAUXILIAR1->ActualizarRaytest();
-
+/*
 		COMENARDOSAUXILIAR2->ActualizarRaytest();
 		COMENARDOSAUXILIAR3->ActualizarRaytest();
 		COMENARDOSAUXILIAR4->ActualizarRaytest();
 		COMENARDOSAUXILIAR5->ActualizarRaytest();
-
+*/
 
 		//Para poder dibujar putas lineas de mierda
 	}
@@ -216,12 +216,12 @@ void EscenaJuego::update() {
 		pj[0]->update();
 		pj[1]->update();
 
-
+/*
 		pj[2]->update();
 		pj[3]->update();
 		pj[4]->update();
 		pj[5]->update();
-
+*/
 		//textoDebug->agregar(pj[0]->toString());
 	}
 	else {

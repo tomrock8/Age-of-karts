@@ -7,6 +7,7 @@ EstadosJugador::EstadosJugador(){
     estadoCoche=POR_DEFECTO;
 }
 void EstadosJugador::update(){
+   /*
     TextoPantalla *texto =TextoPantalla::getInstancia();
 	texto->agregar("----------------------");
     texto->agregar("ESTADO MOVIMIENTO: ");
@@ -91,7 +92,7 @@ void EstadosJugador::update(){
         texto->agregar("CON_ESCUDO\n");
 		break;
     }
-   
+   */
 }
 void EstadosJugador::setEstadoMovimiento(estado_movimiento estado_mov){
     estado=estado_mov;

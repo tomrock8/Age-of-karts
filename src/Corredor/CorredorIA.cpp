@@ -72,9 +72,11 @@ void CorredorIA::movimiento()
 	
 	vehiculo->setSteeringValue(0.06, 0);
 	vehiculo->setSteeringValue(0.06, 1);
+
 	}
 
 	if(giroFuerteDerecha){
+		
 	vehiculo->setSteeringValue(0.15, 0);
 	vehiculo->setSteeringValue(0.15, 1);
 	//vehiculo->setBrake(100,0);
@@ -167,9 +169,9 @@ void CorredorIA::logicaDifusa() {
 	pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint, 1500, 4000, 6000, 7000);
 	pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint, 6000, 7000, 9000, 100000);
 
-		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-6,0,6);
-		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,7,15,45);
-		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-7,-15,-45);
+		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-5,0,5);
+		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,6,15,45);
+		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-6,-15,-45);
 		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,46,80,180);
 		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-46,-80,-180);
 		

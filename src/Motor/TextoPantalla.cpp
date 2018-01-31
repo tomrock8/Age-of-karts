@@ -3,7 +3,7 @@
 TextoPantalla *TextoPantalla::instancia = NULL;
 
 TextoPantalla::TextoPantalla() {
-	/*
+	
 	Motor3d *m = Motor3d::getInstancia();
 	// -----------------------------//
 	// -----------INTERFAZ----------//
@@ -19,7 +19,7 @@ TextoPantalla::TextoPantalla() {
 		0,							 // Id del elemento
 		true);						 // Rellenado (o transparente)
 	textoUI->setOverrideFont(fuente);
-	*/
+	
 }
 
 TextoPantalla *TextoPantalla::getInstancia() {
@@ -30,17 +30,17 @@ TextoPantalla *TextoPantalla::getInstancia() {
 }
 
 void TextoPantalla::limpiar() {
-	/*
+	
 	texto = "";
 	textoUI->setText(texto.c_str());
-*/
+
 }
 
 void TextoPantalla::agregar(std::string texto) {
-	/*
+	
 	this->texto += texto.c_str();
 	textoUI->setText(this->texto.c_str());
-*/
+
 }
 TextoPantalla::~TextoPantalla() {
 	delete instancia;

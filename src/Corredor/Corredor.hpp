@@ -65,6 +65,8 @@ class Corredor: public RakNet::NetworkIDObject
 	// Update
 	void update();
 	void updateEstado();
+	void comprobarSueloRuedas();
+
 	// Metodos GET
 	IMeshSceneNode *getNodo();
 	btRaycastVehicle *getVehiculo();

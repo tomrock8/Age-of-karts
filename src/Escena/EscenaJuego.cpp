@@ -130,7 +130,7 @@ void EscenaJuego::dibujar() {
 
 	//------- RENDER ----------
 	Motor3d::instancia().iniciarDibujado();
-	
+	Motor3d::instancia().getScene()->drawAll();
 
 	//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
 	SMaterial materialDriver;
@@ -165,7 +165,8 @@ void EscenaJuego::dibujar() {
 		Motor3d::instancia().getDriver()->setTransform(ETS_WORLD, IdentityMatrix);
 		MotorFisicas::getInstancia()->getMundo()->debugDrawWorld();
 	}
-	Motor3d::instancia().dibujar();
+	
+	Motor3d::instancia().getGUI()->drawAll();
 	Motor3d::instancia().terminarDibujado();
 }
 

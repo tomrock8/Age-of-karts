@@ -6,13 +6,10 @@ Escudo::Escudo(btVector3 posicionItem, ISceneNode* parent) : Item(posicionItem)
 	// -----------------------------
 	//  PREPARAR LA VENTANA
 	// -----------------------------
-	Motor3d *m = Motor3d::getInstancia();
-	IVideoDriver *driver = m->getDriver();
-	ISceneManager *smgr = m->getScene();
 	nombre = "Escudo";
 
 //	EscudoNodo->setName("Escudo"+idItem);
-	nodo = smgr->addMeshSceneNode(m->getScene()->getMesh("assets/Objetos/escudo.obj"));
+	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/escudo.obj"));
 	escala.setX(5);
 	escala.setY(5);
 	escala.setZ(5);

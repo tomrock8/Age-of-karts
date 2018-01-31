@@ -15,22 +15,20 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	cargador = 0;
 	tipoObj = 0;
 	turboActivado = false;
-	objetivoFijado=false;
+	objetivoFijado = false;
 	timerTurbo = 0;
 	limite = 0;
-	Motor3d *m = Motor3d::getInstancia();
-	ISceneManager *smgr = m->getScene();
-	coche = smgr->getMesh(rutaObj);
-	cuboNodo = smgr->addMeshSceneNode(coche, 0);
+	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
+	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
 	//cuboNodo = smgr->addCubeSceneNode(1.5f);
 	if (cuboNodo) {
 		cuboNodo->setName("Jugador");
 		//cambiar a color rojo del coche
-		smgr->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
+		Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
 		cuboNodo->setScale(vector3df(1, 1, 1.5));
 		// Desactivar la iluminacion del cubo
 		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-		cuboNodo->setPosition(vector3df(pos.getX(),pos.getY(),pos.getZ()));
+		cuboNodo->setPosition(vector3df(pos.getX(), pos.getY(), pos.getZ()));
 		cuboNodo->setRotation(vector3df(0.0f, 90.0f, 0.0f));
 	}
 
@@ -44,17 +42,17 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	escudo = new Escudo(pos, getNodo());
 	setProteccion(false);
 	//-------------bullet----------------
-	rueda1 = smgr->addCubeSceneNode(1.f);
-	rueda2 = smgr->addCubeSceneNode(1.f);
-	rueda3 = smgr->addCubeSceneNode(1.f);
-	rueda4 = smgr->addCubeSceneNode(1.f);
+	rueda1 = Motor3d::instancia().getScene()->addCubeSceneNode(1.f);
+	rueda2 = Motor3d::instancia().getScene()->addCubeSceneNode(1.f);
+	rueda3 = Motor3d::instancia().getScene()->addCubeSceneNode(1.f);
+	rueda4 = Motor3d::instancia().getScene()->addCubeSceneNode(1.f);
 
 	//establecemos el primer waypoint del mapa
 	Pista *mapa = Pista::getInstancia();
-	anterior = mapa->getArrayWaypoints()[mapa->getTamArrayWaypoints()-1];
+	anterior = mapa->getArrayWaypoints()[mapa->getTamArrayWaypoints() - 1];
 	actual = mapa->getArrayWaypoints()[0];
 	siguiente = actual->getNextWaypoint();
-	siguiente_aux=siguiente;
+	siguiente_aux = siguiente;
 
 	//smgr->getMeshManipulator()->setVertexColors(rueda1->getMesh(),SColor(255, 255, 0, 0));
 	rueda1->setMaterialFlag(EMF_LIGHTING, false);
@@ -277,8 +275,98 @@ void Corredor::setPosicionCarrera(int i) {
 }
 void Corredor::setTipoObj()
 {
+	int random;
 	srand(time(NULL));
-	tipoObj = rand() % 4 + 1;
+	random = rand() % 100 + 1;
+	
+	/*
+					1º	2º-3º	4º-5º	6º
+1.	Flecha			15	15		15		10
+2.	Caja falsa		27	15		10		3
+3.	Turbo			10	15		15		15
+4.	Aceite			26	15		10		2
+5.	Escudo			17	15		10		15
+6.	Flecha Triple	5	10		15		15
+7.	Flecha Tele		0	5		10		25
+8.	Turbo Triple	0	10		15		15
+	*/
+	if(posicionCarrera == 1){
+		if(random < 16)
+			tipoObj = 1;
+		else if(random < 43)
+			tipoObj = 2;
+		else if(random < 53)
+			tipoObj = 3;
+		else if(random < 79)
+			tipoObj = 4;
+		else if(random < 96)
+			tipoObj = 5;
+		else if(random < 101)
+			tipoObj = 6;
+		else if(random < 101)
+			tipoObj = 7;
+		else if(random < 101)
+			tipoObj = 8;
+	}else if(posicionCarrera == 2 || posicionCarrera == 3){
+		if(random < 16)
+			tipoObj = 1;
+		else if(random < 31)
+			tipoObj = 2;
+		else if(random < 46)
+			tipoObj = 3;
+		else if(random < 61)
+			tipoObj = 4;
+		else if(random < 76)
+			tipoObj = 5;
+		else if(random < 86)
+			tipoObj = 6;
+		else if(random < 91)
+			tipoObj = 7;
+		else if(random < 101)
+			tipoObj = 8;
+	}else if(posicionCarrera == 4 || posicionCarrera == 5){
+		if(random < 16)
+			tipoObj = 1;
+		else if(random < 26)
+			tipoObj = 2;
+		else if(random < 41)
+			tipoObj = 3;
+		else if(random < 51)
+			tipoObj = 4;
+		else if(random < 61)
+			tipoObj = 5;
+		else if(random < 76)
+			tipoObj = 6;
+		else if(random < 86)
+			tipoObj = 7;
+		else if(random < 101)
+			tipoObj = 8;
+	}else if(posicionCarrera == 6){
+		if(random < 11)
+			tipoObj = 1;
+		else if(random < 14)
+			tipoObj = 2;
+		else if(random < 29)
+			tipoObj = 3;
+		else if(random < 31)
+			tipoObj = 4;
+		else if(random < 46)
+			tipoObj = 5;
+		else if(random < 61)
+			tipoObj = 6;
+		else if(random < 76)
+			tipoObj = 7;
+		else if(random < 101)
+			tipoObj = 8;
+	}
+
+	cout << "Posicion: " << posicionCarrera << " - NumRandom: " << random << " - Objeto: " << tipoObj << endl;
+
+	if(tipoObj == 8)
+		cargador = 3;
+	else if(tipoObj == 3)
+		cargador = 1;
+	
 	Client *c = Client::getInstancia();
 	if (c->getConnected())
 		c->PlayerSetObject(tipoObj);
@@ -287,6 +375,10 @@ void Corredor::setTipoObj()
 void Corredor::setTipoObj(int i)
 {
 	tipoObj = i;
+	if(tipoObj == 8)
+		cargador = 3;
+	else if(tipoObj == 3)
+		cargador = 1;
 	cout << "el objeto --- " << i << " ---" << endl;
 	//cout << "Random ------>" << tipoObj << endl;
 }
@@ -319,7 +411,7 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 
 	}
 
-	if (nodo->getID()<actual->getWaypoint()->getID() && nodo->getID() - 6 != 0) {
+	if (nodo->getID() < actual->getWaypoint()->getID() && nodo->getID() - 6 != 0) {
 
 		if (cuboNodo->getID() == 0) {
 			//cout<< "VOY MARCHA ATRAS"<<endl;
@@ -333,12 +425,16 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 	turboActivado = activo;
 	if (activo) {
-		Motor3d *m = Motor3d::getInstancia();
 		SetFuerzaVelocidad(valor);
 		acelerar();
 		Timer *time = Timer::getInstancia();
 		timerTurbo = time->getTimer();
-		if (objeto) tipoObj = 0;
+		if (objeto) {
+			if(cargador==1) 
+				tipoObj = 0;
+			cargador--;
+			cout << "Turbos restantes: " << cargador << endl;
+		}
 	}
 	else {
 		SetFuerzaVelocidad(1000);
@@ -385,23 +481,23 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 	decCargador();
 }
 void Corredor::lanzarItemTeledirigido()
-{	
-		
-		vehiculo->applyEngineForce(0,0);
-		vehiculo->applyEngineForce(0,1);
-		vehiculo->applyEngineForce(0,2);
-		vehiculo->applyEngineForce(0,3);
-		vehiculo->setBrake(100,0);
-		vehiculo->setBrake(100,1);
-		vehiculo->setBrake(100,2);
-		vehiculo->setBrake(100,3);
-		aplicarAceite();
-		//tipoObj = 0;
+{
+
+	vehiculo->applyEngineForce(0, 0);
+	vehiculo->applyEngineForce(0, 1);
+	vehiculo->applyEngineForce(0, 2);
+	vehiculo->applyEngineForce(0, 3);
+	vehiculo->setBrake(100, 0);
+	vehiculo->setBrake(100, 1);
+	vehiculo->setBrake(100, 2);
+	vehiculo->setBrake(100, 3);
+	aplicarAceite();
+	//tipoObj = 0;
 }
-void Corredor::setObjetivoTelederigido(){
-	objetivoFijado=true;
-			Timer *time = Timer::getInstancia();
-		timerTeledirigido=time->getTimer();
+void Corredor::setObjetivoTelederigido() {
+	objetivoFijado = true;
+	Timer *time = Timer::getInstancia();
+	timerTeledirigido = time->getTimer();
 }
 
 void Corredor::soltarItem()
@@ -413,17 +509,30 @@ void Corredor::soltarItem()
 		setLimite(0);
 	}
 }
+
+/*
+Tipos de objeto: 
+	1. Proyectil/Flecha
+	2. Estatico/Caja Falsa
+	3. Turbo
+	4. Aceite
+	5. Escudo
+	6. Flecha Triple
+	7. Flecha Teledirigida
+	8. Turbo Triple
+	9. HABILIDAD (No entra en el pool de objetos)
+*/
 void Corredor::usarObjetos() {
 	Pista *pista = Pista::getInstancia();
 	core::list<Item *> items = pista->getItems();
-	if (getTipoObj() == 1)
+	if (getTipoObj() == 1)		// PROYECTIL
 	{
 		pro = new Proyectil(posDisparo);
 		lanzarItem(pro, 1);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		items.push_back(pro);
 		soltarItem();
 	}
-	else if (getTipoObj() == 2)
+	else if (getTipoObj() == 2)	//CAJA FALSA
 	{
 		posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 5);
 		posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 5);
@@ -432,11 +541,11 @@ void Corredor::usarObjetos() {
 		soltarItem();
 		items.push_back(est);
 	}
-	else if (getTipoObj() == 3)
+	else if (getTipoObj() == 3)	//TURBO
 	{
 		setTurbo(true, true, 26000);
 	}
-	else if (getTipoObj() == 4)
+	else if (getTipoObj() == 4)	//ACEITE
 	{
 		posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 5);
 		posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 5);
@@ -446,12 +555,12 @@ void Corredor::usarObjetos() {
 		soltarItem();
 		items.push_back(est2);
 	}
-	else if (getTipoObj() == 5)
+	else if (getTipoObj() == 5)	//ESCUDO
 	{
 		if (getProteccion() == false) setProteccion(true);
 		soltarItem();
 	}
-	else if (getTipoObj() == 6)
+	else if (getTipoObj() == 6)	//FLECHA TRIPLE
 	{
 		proX3 = new Proyectil *[3];
 		btVector3 orientacioncentral(orientacion.getX(), orientacion.getY(), orientacion.getZ());
@@ -490,7 +599,18 @@ void Corredor::usarObjetos() {
 		}
 		soltarItem();
 	}
-	else if (getTipoObj() == 7)
+	else if (tipoObj == 7)	//FLECHA TELEDIRIGIDA
+	{
+		pt = new ItemTeledirigido(posDisparo);
+		pt->lanzarItemTeledirigido(posicionCarrera);
+		items.push_back(pt);
+		soltarItem();
+	}
+	else if(tipoObj == 8)	//TURBO TRIPLE
+	{
+		setTurbo(true, true, 26000);
+	}
+	else if (getTipoObj() == 9) //HABILIDAD
 	{
 		if (getLimite() >= 10) {//puedo lanzar la habilidad
 			h->getNodo()->setVisible(true);
@@ -502,15 +622,9 @@ void Corredor::usarObjetos() {
 			soltarItem();
 		}
 		else {
-			cout << "que mierda estas haciendo , no puedes usar la habilidad si tu limite no es 10 o mas" << endl;
+			cout << "No puedes usar la habilidad si tu limite no es 10 o mas" << endl;
 		}
 
-	}
-	else if (tipoObj == 8){
-		pt = new ItemTeledirigido(posDisparo);
-		pt->lanzarItemTeledirigido(posicionCarrera);
-		items.push_back(pt);
-		soltarItem();
 	}
 	pista->setItems(items);
 
@@ -532,9 +646,9 @@ void Corredor::decCargador() { cargador--; };
 //-------CALCULO DE DISTANCIA-------------//
 //----------------------------------------//
 void Corredor::calculoDistanciaPunto() {
-	
 
-	
+
+
 	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
 	btVector3 posWaypoint(siguiente->getPosicion().getX(), siguiente->getPosicion().getY(), siguiente->getPosicion().getZ());
 
@@ -547,19 +661,20 @@ void Corredor::calculoDistanciaPunto() {
 	TextoPantalla * texto = TextoPantalla::getInstancia();
 	texto->agregar("DISTANCIA: ");
 	//cout <<"distanciaWaypoint: "<<distanciaWaypoint<<endl; 
-	texto->agregar(to_string(distanciaWaypoint)+"\n");
+	texto->agregar(to_string(distanciaWaypoint) + "\n");
 
 	texto->agregar("WAYPOINT ACTUAL: ");
 	texto->agregar(to_string(actual->getWaypoint()->getID() - 6) + "\n");
 	texto->agregar("WAYPOINT SIGUIENTE: ");
-	texto->agregar(to_string( siguiente->getWaypoint()->getID()-6)+"\n");
+	texto->agregar(to_string(siguiente->getWaypoint()->getID() - 6) + "\n");
 	texto->agregar("WAYPOINT SIGUIENTE_AUX: ");
-	texto->agregar(to_string( siguiente_aux->getWaypoint()->getID()-6)+"\n");
+	texto->agregar(to_string(siguiente_aux->getWaypoint()->getID() - 6) + "\n");
 	texto->agregar("VUELTA: ");
-	texto->agregar(to_string(vueltas)+"\n");
+	texto->agregar(to_string(vueltas) + "\n");
 	texto->agregar("Limite:" + to_string(getLimite()) + "\n");
 */
 	
+
 
 
 }
@@ -749,7 +864,7 @@ std::string Corredor::toString()
 	text += ", ";
 	text += to_string(getNodo()->getPosition().Z);
 	text += "]\n";
-	
+
 	text += "\n Vector direccion(Orientacion) X[ " + to_string(orientacion.getX()) +
 		" ] Y[ " + to_string(orientacion.getZ()) + "]";
 	text += "\n Velocidad (km/h): " + to_string(vehiculo->getCurrentSpeedKmHour());
@@ -785,8 +900,6 @@ void Corredor::update()
 	Timer *time = Timer::getInstancia();
 
 	if (turboActivado) {
-		Motor3d *mundo = Motor3d::getInstancia();
-
 		if (time->getTimer() - timerTurbo >= 1) {
 			//cout << "Se acaba el turbo\n";
 			desacelerar();
@@ -812,19 +925,19 @@ void Corredor::update()
 	//ActualizarRaytest();
 	
 	texto->agregar("POSICION CARRERA: ");
-	texto->agregar(to_string(posicionCarrera)+"\n");
-	
+	texto->agregar(to_string(posicionCarrera) + "\n");
+
 }
 
-void Corredor::updateTeledirigido(){
-	if (pt!=NULL){
+void Corredor::updateTeledirigido() {
+	if (pt != NULL) {
 		Timer *t = Timer::getInstancia();
 		if (objetivoFijado){
-			if (t->getTimer()-timerTeledirigido>2){
+			if (t->getTimer()-timerTeledirigido>=2){
 				
 				lanzarItemTeledirigido();
 			}
-			if (t->getTimer()-timerTeledirigido>3){
+			if (t->getTimer()-timerTeledirigido>=3){
 				objetivoFijado=false;
 
 			}
@@ -857,15 +970,15 @@ void Corredor::updateHabilidad() {
 
 
 	if (tiempo->getTimer() - inicioHabilidad >= 3) {
-	//cout << "Se acaba el tiro\n";
-	h->setHabilidadActiva(false);
-	h->getNodo()->setVisible(false);
-	h->eliminarFisicas();
+		//cout << "Se acaba el tiro\n";
+		h->setHabilidadActiva(false);
+		h->getNodo()->setVisible(false);
+		h->eliminarFisicas();
 
 	}
 }
-void Corredor::updateEstado(){
-	if (vehiculo->getCurrentSpeedKmHour() < 0.5 && vehiculo->getCurrentSpeedKmHour() > -0.5){
+void Corredor::updateEstado() {
+	if (vehiculo->getCurrentSpeedKmHour() < 0.5 && vehiculo->getCurrentSpeedKmHour() > -0.5) {
 		estado->setEstadoMovimiento(QUIETO);
 	}
 	estado->setEstadoCoche(POR_DEFECTO);
@@ -898,14 +1011,14 @@ void Corredor::updateEstado(){
 	case 5:
 		estado->setEstadoObjeto(ESCUDO);
 		break;
-		case 6:
+	case 6:
 		estado->setEstadoObjeto(FLECHA_TRIPLE);
 		break;
 		case 7:
-		estado->setEstadoObjeto(HABILIDAD);
+		estado->setEstadoObjeto(ITEM_TELEDIRIGIDO);
 		break;
 		case 8:
-		estado->setEstadoObjeto(ITEM_TELEDIRIGIDO);
+		estado->setEstadoObjeto(HABILIDAD);
 		break;
 	}
 	estado->update();
@@ -928,7 +1041,7 @@ void Corredor::updateVectorDireccion()
 //---------------------------------------//
 Corredor::~Corredor() {
 	cout << "\nENTRO DESTRUCTOR CORREDOR: \n";
-	
+
 	// Los rigid body se borran desde el motor de fisicas
 	// Los collision shape se borran desde el motor de fisicas
 	// delete CuerpoColisionChasis;

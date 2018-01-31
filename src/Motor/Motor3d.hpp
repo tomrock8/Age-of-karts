@@ -9,14 +9,13 @@ using namespace std;
 
 class Motor3d
 {
-  public:
-	~Motor3d();
+public:
 
 	void dibujar();
 	void cerrar();
 
 	// Metodos GET
-	static Motor3d *getInstancia();
+	static Motor3d &instancia();
 	IVideoDriver *getDriver();
 	ISceneManager *getScene();
 	IGUIEnvironment *getGUI();
@@ -25,10 +24,9 @@ class Motor3d
 	// Metodos SET
 	void setTeclado(CTeclado *teclado);
 
-  private:
+private:
 	Motor3d();
 
-	static Motor3d *instancia;
 	IrrlichtDevice *device;
 	IVideoDriver *driver;
 	ISceneManager *smgr;

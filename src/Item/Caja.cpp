@@ -1,18 +1,15 @@
 #include "Caja.hpp"
 
-Caja::Caja(btVector3 posicionCaja)
-{
-	Motor3d *m = Motor3d::getInstancia();
-	GestorIDs *ids = GestorIDs::getInstancia();
+Caja::Caja(btVector3 posicionCaja) {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 	tamanyo = 1.0f;
-	nodo = m->getScene()->addMeshSceneNode(m->getScene()->getMesh("assets/Objetos/caja.obj"));
+	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/caja.obj"));
 	nombre = "Caja";
-	ids->setIdentifier(nodo, nombre);
-	id = ids->getIDLibre() - 1;
+	GestorIDs::instancia().setIdentifier(nodo, nombre);
+	id = GestorIDs::instancia().getIDLibre() - 1;
 
 	escala.setX(2);
 	escala.setY(2);
@@ -64,7 +61,6 @@ btRigidBody *Caja::inicializarFisicas()
 }
 
 void Caja::comprobarRespawn() {
-	Motor3d *mundo = Motor3d::getInstancia();
 	Timer *time = Timer::getInstancia();
 	if (nodo) {
 		if (!nodo->isVisible()) {
@@ -77,7 +73,6 @@ void Caja::comprobarRespawn() {
 }
 
 void Caja::romper(Corredor *pj1Col) {
-	Motor3d *mundo = Motor3d::getInstancia();
 	Timer *time = Timer::getInstancia();
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();

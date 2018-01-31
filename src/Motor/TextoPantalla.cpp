@@ -4,13 +4,13 @@ TextoPantalla *TextoPantalla::instancia = NULL;
 
 TextoPantalla::TextoPantalla() {
 	
-	Motor3d *m = Motor3d::getInstancia();
+	Motor3d m = Motor3d::instancia();
 	// -----------------------------//
 	// -----------INTERFAZ----------//
 	// -----------------------------//
 	texto = L"Datos del jugador:\n"; // PARA MODIFICACIONES FUTURAS
-	fuente = m->getGUI()->getFont("assets/fuente.bmp");
-	textoUI = m->getGUI()->addStaticText(
+	fuente = m.getGUI()->getFont("assets/fuente.bmp");
+	textoUI = m.getGUI()->addStaticText(
 		texto.c_str(),				 // Texto
 		rect<s32>(10, 10, 350, 700), // Rectangulo de los bordes
 		false,						 // Mostrar bordes

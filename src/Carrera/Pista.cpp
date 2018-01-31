@@ -41,21 +41,15 @@ Pista *Pista::getInstancia()
 }
 
 
-void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
-{
-	Motor3d *m = Motor3d::getInstancia();
-	GestorIDs *ids = GestorIDs::getInstancia();
-	Mapa = m->getScene()->addMeshSceneNode(m->getScene()->getMesh(mapa));
-	if (Mapa)
-	{
+void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
+	Mapa = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh(mapa));
+	if (Mapa) {
 		Mapa->setName("MAPA1");
 		Mapa->setMaterialFlag(EMF_LIGHTING, false);
 	}
+
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	//---------------------------FISICAS-------------------------------//
-	//cout << "cuantos rigidBodies tengo: " << num << endl;
-	//CuerpoColisionMapa = (btRigidBody*)bullet->getFisicas()->getRigidBodyByIndex(0);
 
 	//---------------------------FISICAS-------------------------------//
 
@@ -86,27 +80,20 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 	tamTurbos = 0;
 	tamCajas = 0;
 	float orientacion = 0.0f;
-	
+
 
 	ifstream myfile(waypoints);
 
-	if (myfile.is_open())
-	{
-
-
+	if (myfile.is_open()) {
 		//crear el array de waypoints para almacenar el path
 		getline(myfile, tamanyoArrayWaypoints, ' ');
 		getline(myfile, tamanyoArrayCajas, ' ');
 		getline(myfile, tamanyoArrayTurbo, ' ');
-		
+
 
 		arrayWaypoints = new Waypoint *[stoi(tamanyoArrayWaypoints)];
 		arrayTurbos = new Turbo *[stoi(tamanyoArrayTurbo)];
 		arrayCajas = new Caja *[stoi(tamanyoArrayCajas)];
-
-		//cout<<"waypoints:"<<wp<<"turbo: "<<turbos<<"caja: "<<cajas<<endl;
-
-
 
 		while (!myfile.eof()) {
 
@@ -144,7 +131,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				//=========================================//
 				//comento lo de la id de los waypoints porq da conflico con las cajas
 				arrayWaypoints[tamWaypoints]->getWaypoint()->setID(tamWaypoints);
-				
+
 				if (tamWaypoints > 0 && tamWaypoints <= (stoi(tamanyoArrayWaypoints) - 2))
 				{
 					arrayWaypoints[tamWaypoints - 1]->setSiguiente(arrayWaypoints[tamWaypoints]);
@@ -160,8 +147,8 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 				arrayWaypoints[tamWaypoints]->setPosicion(stof(pX), stof(pY), stof(pZ));
 				arrayWaypoints[tamWaypoints]->setOrientacion(orientacion);//orientacion del waypoint
 				arrayWaypoints[tamWaypoints]->inicializarFisicas();
-				IMeshSceneNode *im= arrayWaypoints[tamWaypoints]->getWaypoint();
-				ids->setIdentifier(im,im->getName());
+				IMeshSceneNode *im = arrayWaypoints[tamWaypoints]->getWaypoint();
+				GestorIDs::instancia().setIdentifier(im, im->getName());
 
 				tamWaypoints++;
 			}
@@ -186,19 +173,15 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints)
 }
 
 
-void Pista::BorrarFisicas()
-{
-
+void Pista::BorrarFisicas() {
 	// a implementar
 }
 
-irr::core::list<Item *> Pista::getItems()
-{
+irr::core::list<Item *> Pista::getItems() {
 	return Items;
 }
 
-void Pista::setItems(irr::core::list<Item *> itemMetodo)
-{
+void Pista::setItems(irr::core::list<Item *> itemMetodo) {
 	Items = itemMetodo;
 }
 Waypoint **Pista::getArrayWaypoints() {
@@ -239,9 +222,6 @@ Turbo *Pista::getTurbo(int id) {
 	return NULL;
 }
 
-
-
-
-int Pista::getTamArrayWaypoints(){
+int Pista::getTamArrayWaypoints() {
 	return tamWaypoints;
 }

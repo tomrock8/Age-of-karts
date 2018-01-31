@@ -26,6 +26,7 @@ public:
 	void dibujar();
 	void limpiar();
 	void update();
+	bool comprobarInputs();
 
 	// METODOS GET
 
@@ -33,7 +34,7 @@ public:
 	// METODOS SET
 
 private:
-	void comprobarInputs();
+	
 	void UpdatePhysics(u32 TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
 

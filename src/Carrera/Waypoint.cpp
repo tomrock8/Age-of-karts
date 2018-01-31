@@ -1,10 +1,9 @@
 #include "Waypoint.hpp"
 
 Waypoint::Waypoint() {
-	Motor3d *m = Motor3d::getInstancia();
-	waypoint = m->getScene()->addCubeSceneNode(0.1f);
+	waypoint = Motor3d::instancia().getScene()->addCubeSceneNode(0.1f);
 	waypoint->setMaterialFlag(EMF_LIGHTING, false); //Desactivar iluminacion
-	m->getScene()->getMeshManipulator()->setVertexColors(waypoint->getMesh(), SColor(255, 200, 100, 100));
+	Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(waypoint->getMesh(), SColor(255, 200, 100, 100));
 	waypoint->setVisible(false);
 	waypoint->setScale(vector3df(1500, 150, 05));
 	waypoint->setName("Waypoint");
@@ -15,8 +14,6 @@ void Waypoint::inicializarFisicas() {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	list<btRigidBody *> objetos = bullet->getObjetos();
-	Motor3d *m = Motor3d::getInstancia();
-
 
 	//posicion origem 
 	btTransform transform;

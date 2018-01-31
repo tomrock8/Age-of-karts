@@ -14,7 +14,6 @@ class Turbo
 public:
 
 	Turbo(btVector3 pos, bool estado);
-	void quitarTurbo();
 
 	// METODOS SET
 	void setTurboActivo(Corredor *corredor, bool s);
@@ -29,9 +28,8 @@ public:
 	//destructor
 	~Turbo();
 private:
-	Corredor * corredor;
-	IMeshSceneNode *turbo;
-	vector3df escala;
+	IMeshSceneNode * turbo;
+	btVector3 escala;
 	btTransform transform;
 	btDefaultMotionState *MotionState;
 	btVector3 halfExtents;

@@ -11,10 +11,14 @@ GestorEscena::GestorEscena() {
 	}
 }
 
-void GestorEscena::update() {
+bool GestorEscena::update() {
 	//LIMITAR UPDATE 30
-	escenaActiva->update();
-	escenaActiva->dibujar();
+	bool cambioEscena = escenaActiva->comprobarInputs();
+	if (!cambioEscena) {
+		escenaActiva->update();
+		escenaActiva->dibujar();
+	}
+	return cambioEscena;
 }
 
 

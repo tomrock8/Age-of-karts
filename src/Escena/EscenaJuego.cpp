@@ -45,10 +45,8 @@ void EscenaJuego::init() {
 	// -----------------------------
 	//  PREPARAR LA VENTANA
 	// -----------------------------
-	Motor3d *m = Motor3d::getInstancia();
-	IVideoDriver *driver = m->getDriver();
-	ISceneManager *smgr = m->getScene();
-	IrrlichtDevice *device = m->getDevice();
+	IVideoDriver *driver = Motor3d::instancia().getDriver();
+	ISceneManager *smgr = Motor3d::instancia().getScene();
 
 
 	//----------------------------
@@ -61,7 +59,7 @@ void EscenaJuego::init() {
 	//----------------------------
 	//	Debug Bullet
 	//----------------------------
-	debugDraw = new DebugDraw(device);
+	debugDraw = new DebugDraw(Motor3d::instancia().getDevice());
 	debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	mundo->setDebugDrawer(debugDraw);
 
@@ -83,20 +81,20 @@ void EscenaJuego::init() {
 		pj[0] = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310));
 		jugadores->aumentarJugadores();
 
-		pj[1] = new CorredorIA("assets/coche.obj", btVector3(-10,0,290));
-		jugadores->aumentarJugadores();
-		
-		
-		pj[2] = new CorredorIA("assets/coche.obj", btVector3(-20,0,320));
+		pj[1] = new CorredorIA("assets/coche.obj", btVector3(-10, 0, 290));
 		jugadores->aumentarJugadores();
 
-		pj[3] = new CorredorIA("assets/coche.obj", btVector3(-20,0,290));
+
+		pj[2] = new CorredorIA("assets/coche.obj", btVector3(-20, 0, 320));
 		jugadores->aumentarJugadores();
 
-		pj[4] = new CorredorIA("assets/coche.obj", btVector3(-30,0,320));
+		pj[3] = new CorredorIA("assets/coche.obj", btVector3(-20, 0, 290));
 		jugadores->aumentarJugadores();
 
-		pj[5] = new CorredorIA("assets/coche.obj", btVector3(-30,0,290));
+		pj[4] = new CorredorIA("assets/coche.obj", btVector3(-30, 0, 320));
+		jugadores->aumentarJugadores();
+
+		pj[5] = new CorredorIA("assets/coche.obj", btVector3(-30, 0, 290));
 		jugadores->aumentarJugadores();
 
 
@@ -132,26 +130,25 @@ void EscenaJuego::init() {
 	//	TIME
 	//-----------------------------
 	lastFPS = -1;
-	TimeStamp = m->getDevice()->getTimer()->getTime();
+	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
 	DeltaTime = 0;
 	tiempoRefresco = clock();
 }
 
 void EscenaJuego::dibujar() {
-	Motor3d *m = Motor3d::getInstancia();
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 
 	//------- RENDER ----------
-	m->dibujar();
+	Motor3d::instancia().dibujar();
 
 	//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
 	SMaterial materialDriver;
 	materialDriver.Lighting = false;
-	m->getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
-	m->getDriver()->setMaterial(materialDriver);
+	Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
+	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
 	if (argc != 2) {
 		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
 
@@ -176,38 +173,34 @@ void EscenaJuego::dibujar() {
 	if (debug) {
 		SMaterial debugMat;
 		debugMat.Lighting = true;
-		m->getDriver()->setMaterial(debugMat);
-		m->getDriver()->setTransform(ETS_WORLD, IdentityMatrix);
+		Motor3d::instancia().getDriver()->setMaterial(debugMat);
+		Motor3d::instancia().getDriver()->setTransform(ETS_WORLD, IdentityMatrix);
 		mundo->debugDrawWorld();
 	}
-	m->getGUI()->drawAll();
+	Motor3d::instancia().getGUI()->drawAll();
 	// draw gui
-	m->getDriver()->endScene();
+	Motor3d::instancia().getDriver()->endScene();
 }
 
 void EscenaJuego::limpiar() {
-	Motor3d *m = Motor3d::getInstancia();
-	m->getScene()->clear();
+	Motor3d::instancia().getScene()->clear();
 }
 
 void EscenaJuego::update() {
-	Motor3d *m = Motor3d::getInstancia();
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 
-
-	comprobarInputs();
 	if (argc == 2) {
-		client->ReceivePackets(m->getScene());
+		client->ReceivePackets(Motor3d::instancia().getScene());
 		//client->SpawnPlayer(smgr);
 	}
 	//cout << irrTimer->getTime() << endl;
 	textoDebug->limpiar();
 
-	DeltaTime = m->getDevice()->getTimer()->getTime() - TimeStamp;
-	TimeStamp = m->getDevice()->getTimer()->getTime();
+	DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
+	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
 	UpdatePhysics(DeltaTime);
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
@@ -247,7 +240,7 @@ void EscenaJuego::update() {
 		//pj[1]->update();
 
 		if (jugadores->getNumJugadores() != 0)
-			for (int i = 0; i<jugadores->getNumJugadores(); i++) {
+			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 				if (i != controlPlayer) {
 					pj[i]->updateRed();
 				}
@@ -274,27 +267,26 @@ void EscenaJuego::update() {
 
 	jugadores->setJugadores(pj);
 
-	int fps = m->getDriver()->getFPS();
+	int fps = Motor3d::instancia().getDriver()->getFPS();
 	if (lastFPS != fps) {
 		core::stringw tmp(L"Age of karts [");
-		tmp += m->getDriver()->getName();
+		tmp += Motor3d::instancia().getDriver()->getName();
 		tmp += L"] fps: ";
 		tmp += fps;
 
-		m->getDevice()->setWindowCaption(tmp.c_str());
+		Motor3d::instancia().getDevice()->setWindowCaption(tmp.c_str());
 		lastFPS = fps;
 	}
 }
 
-void EscenaJuego::comprobarInputs() {
-	Motor3d *m = Motor3d::getInstancia();
+bool EscenaJuego::comprobarInputs() {
 	CTeclado *teclado = CTeclado::getInstancia();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
-	vector3df pos(-10,0,310);
+	vector3df pos(-10, 0, 310);
 	int i = 0;
-	if(argc == 2)
-		i=client->getControlPlayer();
+	if (argc == 2)
+		i = client->getControlPlayer();
 
 	//------- ENTRADA TECLADO ----------
 	if (teclado->isKeyDown(KEY_KEY_R)) {
@@ -314,6 +306,7 @@ void EscenaJuego::comprobarInputs() {
 		resetPos[0] = pos.X;
 		resetPos[1] = pos.Y + 40;
 		resetPos[2] = pos.Z;
+
 		float *resetOri = new float[3];
 		resetOri[0] = pj[0]->getNodo()->getRotation().Z;
 		resetOri[1] = pj[0]->getNodo()->getRotation().Y;
@@ -325,8 +318,8 @@ void EscenaJuego::comprobarInputs() {
 	if (teclado->isKeyDown(KEY_ESCAPE)) {
 		if (argc == 2)
 			client->ShutDownClient();
-		m->cerrar();
-		//return 0;
+
+		return true;
 	}
 
 	if (teclado->isKeyDown(KEY_KEY_0)) {
@@ -337,13 +330,6 @@ void EscenaJuego::comprobarInputs() {
 			debug = 1;
 		}
 	}
-
-	if (teclado->isKeyDown(KEY_F5)) {
-		GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
-	}
-
-
-	//-------ENTRADA TECLADO FIN----------//
 }
 
 void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
@@ -360,7 +346,6 @@ void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
 
 // Passes bullet's orientation to irrlicht
 void EscenaJuego::UpdateRender(btRigidBody *TObject) {
-	Motor3d *m = Motor3d::getInstancia();
 	IMeshSceneNode *Node = static_cast<IMeshSceneNode *>(TObject->getUserPointer());
 	// Set position
 	btVector3 Point = TObject->getCenterOfMassPosition();
@@ -369,7 +354,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA")==0) {
+	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0) {
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
 
 	}

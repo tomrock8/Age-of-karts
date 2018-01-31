@@ -11,27 +11,25 @@
 
 using namespace std;
 
-class GestorJugadores
-{
-    public:
+class GestorJugadores {
+public:
 
-        ~GestorJugadores(void);
+	~GestorJugadores(void);
 
-        static GestorJugadores *getInstancia();
-        Corredor **getJugadores();
-        int getNumJugadores();       
+	static GestorJugadores *getInstancia();
+	Corredor **getJugadores();
+	int getNumJugadores();
 
-        void setJugadores(Corredor **pj1);
+	void setJugadores(Corredor **pj1);
 
-        void aumentarJugadores();
-        void decrementarJugadores();
+	void aumentarJugadores();
+	void decrementarJugadores();
 
-
-    private:
-        GestorJugadores(void);
-        static GestorJugadores *instancia;
-        Corredor **pj;
-        int numJugadores;
+private:
+	GestorJugadores(void);
+	static GestorJugadores *instancia;
+	Corredor **pj;
+	int numJugadores;
 
 
 };

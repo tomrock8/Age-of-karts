@@ -71,10 +71,10 @@ void EstadosJugador::update(){
 		case 6:
 		texto->agregar("FLECHA TRIPLE\n");
 		break;
-		case 7:
+		case 8:
 		texto->agregar("HABILIDAD\n");
 		break;
-		case 8:
+		case 7:
 		texto->agregar("ITEM_TELEDIRIGIDO\n");
 		break;
 		
@@ -172,8 +172,11 @@ void EstadosJugador::setEstadoObjeto(int estado_obj){
 		case 6:
         objeto = FLECHA_TRIPLE;
 		break;
-		case 7:
+		case 8:
 		objeto = HABILIDAD;
+		break;
+		case 7:
+		objeto = ITEM_TELEDIRIGIDO;
 		break;
 
 	}

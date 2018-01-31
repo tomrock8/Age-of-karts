@@ -1,7 +1,5 @@
 #include "GestorIDs.hpp"
 
-GestorIDs *GestorIDs::instancia = new GestorIDs();
-
 GestorIDs::GestorIDs(){
     //nodoA= new ISceneNode();
     id = 6;
@@ -15,12 +13,7 @@ void GestorIDs::setIdentifier(ISceneNode *nodo, const char *nombre){
 int GestorIDs::getIDLibre(){
     return id;
 }
-GestorIDs *GestorIDs::getInstancia(){
-    if (instancia == NULL)
-    instancia = new GestorIDs();
-
-	return instancia;
-}
-GestorIDs::~GestorIDs(){
-    delete instancia;
+GestorIDs &GestorIDs::instancia(){
+	static GestorIDs _instancia;
+    return _instancia;
 }

@@ -1,16 +1,18 @@
-#ifndef ESCENALOBBY_H
-#define ESCENALOBBY_H
+#ifndef GESTORESCENA_H
+#define GESTORESCENA_H
 
 #include "Escena.hpp"
 #include "EscenaJuego.hpp"
 #include "EscenaMenu.hpp"
 #include "EscenaCarga.hpp"
 #include "EscenaLobby.hpp"
+#include "EscenaCreditos.hpp"
+#include "EscenaOpciones.hpp"
 
 class GestorEscena {
 public:
 
-	bool update(); // Actualizacion del gestor de escenas
+	Escena::tipo_escena update(); // Actualizacion del gestor de escenas
 	bool cambiaEscena(Escena::tipo_escena escena); // Modifica la escena actual
 	bool borraEscena(Escena::tipo_escena tipo); // Limpia y borra la escena del tipo seleccionado
 
@@ -33,7 +35,9 @@ private:
 	Escena **escenas;	// Array de escenas que tiene el juego
 
 	Escena *escenaActiva; // Escena que esta activa actualmente
-	bool cambioEscena;	// Indicador para saber si hay que cambiar de escena
+	Escena::tipo_escena cambioEscena;	// Indicador para saber si hay que cambiar de escena
+
+	clock_t tiempoRefresco; // Reloj para limitar el refresco
 
 	// METODOS
 	GestorEscena(); // Constructor privado para el constructor

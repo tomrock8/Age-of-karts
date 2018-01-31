@@ -1,6 +1,7 @@
 #include "EscenaJuego.hpp"
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
+	init();
 }
 
 EscenaJuego::~EscenaJuego() {
@@ -13,15 +14,15 @@ EscenaJuego::~EscenaJuego() {
 	cout << "Bien!\n";
 
 
-	cout << "Voy a entrar en el destructor de bullet. Deseadme suerte...";
+	cout << "Voy a entrar en el destructor de bullet. Deseadme suerte...\n";
 	delete MotorFisicas::getInstancia();
-	cout << "\n";
+	cout << "Bien!\n";
 
-	cout << "Voy a entrar en el destructor de jugadores. Deseadme suerte...";
+	cout << "Voy a entrar en el destructor de jugadores. Deseadme suerte...\n";
 	delete GestorJugadores::getInstancia();
-	cout << "\n";
+	cout << "Bien!\n";
 
-	cout << "Voy a entrar en el destructor de pista. Deseadme suerte...";
+	cout << "Voy a entrar en el destructor de pista. Deseadme suerte...\n";
 	delete Pista::getInstancia();
 	cout << "No ha ido mal.\n";
 
@@ -33,8 +34,6 @@ void EscenaJuego::init() {
 	argc = 0;
 	debug = 0;
 
-	CTeclado *teclado = CTeclado::getInstancia();
-
 	if (argc == 2) {
 		client = Client::getInstancia();
 		client->CreateClientInterface();
@@ -42,26 +41,15 @@ void EscenaJuego::init() {
 		client->ClientStartup();
 	}
 
-	// -----------------------------
-	//  PREPARAR LA VENTANA
-	// -----------------------------
-	IVideoDriver *driver = Motor3d::instancia().getDriver();
-	ISceneManager *smgr = Motor3d::instancia().getScene();
-
-
-	//----------------------------
-	//	BULLET
-	//----------------------------
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
-	mundo->setGravity(btVector3(0, -25, 0));
+	// Gravedad
+	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0, -25, 0));
 
 	//----------------------------
 	//	Debug Bullet
 	//----------------------------
 	debugDraw = new DebugDraw(Motor3d::instancia().getDevice());
 	debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-	mundo->setDebugDrawer(debugDraw);
+	MotorFisicas::getInstancia()->getMundo()->setDebugDrawer(debugDraw);
 
 	//-----------------------------
 	//	ESCENARIO MAPA
@@ -136,13 +124,16 @@ void EscenaJuego::init() {
 }
 
 void EscenaJuego::dibujar() {
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
+	DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
+	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
+	UpdatePhysics(DeltaTime);
+
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 
 	//------- RENDER ----------
-	Motor3d::instancia().dibujar();
+	Motor3d::instancia().iniciarDibujado();
+	
 
 	//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
 	SMaterial materialDriver;
@@ -175,11 +166,10 @@ void EscenaJuego::dibujar() {
 		debugMat.Lighting = true;
 		Motor3d::instancia().getDriver()->setMaterial(debugMat);
 		Motor3d::instancia().getDriver()->setTransform(ETS_WORLD, IdentityMatrix);
-		mundo->debugDrawWorld();
+		MotorFisicas::getInstancia()->getMundo()->debugDrawWorld();
 	}
-	Motor3d::instancia().getGUI()->drawAll();
-	// draw gui
-	Motor3d::instancia().getDriver()->endScene();
+	Motor3d::instancia().dibujar();
+	Motor3d::instancia().terminarDibujado();
 }
 
 void EscenaJuego::limpiar() {
@@ -199,9 +189,9 @@ void EscenaJuego::update() {
 	//cout << irrTimer->getTime() << endl;
 	textoDebug->limpiar();
 
-	DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
-	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
-	UpdatePhysics(DeltaTime);
+	//DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
+	//TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
+	//UpdatePhysics(DeltaTime);
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
 		pistaca->getArrayCaja()[i]->comprobarRespawn(); // TODO: MOVER AL UPDATE DE PISTACA
@@ -279,7 +269,7 @@ void EscenaJuego::update() {
 	}
 }
 
-bool EscenaJuego::comprobarInputs() {
+Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	CTeclado *teclado = CTeclado::getInstancia();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
@@ -319,7 +309,7 @@ bool EscenaJuego::comprobarInputs() {
 		if (argc == 2)
 			client->ShutDownClient();
 
-		return true;
+		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
 	}
 
 	if (teclado->isKeyDown(KEY_KEY_0)) {
@@ -330,6 +320,8 @@ bool EscenaJuego::comprobarInputs() {
 			debug = 1;
 		}
 	}
+
+	return Escena::tipo_escena::CARRERA; // Significa que debe seguir ejecutando
 }
 
 void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
@@ -356,7 +348,6 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
 	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0) {
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
-
 	}
 	else
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));

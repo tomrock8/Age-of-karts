@@ -1116,13 +1116,7 @@ void Corredor::updateVectorDireccion()
 //--------------DESTRUCTOR---------------//
 //---------------------------------------//
 Corredor::~Corredor() {
-	cout << "\nENTRO DESTRUCTOR CORREDOR: \n";
-
-	// Los rigid body se borran desde el motor de fisicas
-	// Los collision shape se borran desde el motor de fisicas
-	// delete CuerpoColisionChasis;
+	cout << "\nENTRO DESTRUCTOR CORREDOR. ";
 	delete vehiculo;
-	cuboNodo->remove();
-
-	cout << "SALGO DESTRUCTOR CORREDOR: ";
+	cout << "SALGO DESTRUCTOR CORREDOR\n";
 }

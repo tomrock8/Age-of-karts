@@ -278,6 +278,62 @@ void Corredor::setTipoObj()
 	int random;
 	srand(time(NULL));
 	random = rand() % 100 + 1;
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	int totalJugadores = jugadores->getNumJugadores();
+	int SimPosCarrera;
+
+	/*
+		En caso de no ser el total de jugadores, adaptamos la posicion
+		a otra para que cambien las probabilidades de los objetos
+	*/
+	if(totalJugadores == 2)
+	{
+		if(posicionCarrera == 1)
+		{
+			SimPosCarrera = 3;
+		}
+		else if(posicionCarrera == 2){
+			SimPosCarrera = 4;
+		}
+	}
+	else if(totalJugadores == 3)
+	{
+		if(posicionCarrera == 1)
+		{
+			SimPosCarrera = 2;
+		}
+		else if(posicionCarrera == 2)
+		{
+			SimPosCarrera = 3;
+		}
+		else if(posicionCarrera == 3)
+		{
+			SimPosCarrera = 4;
+		}
+	}
+	else if(totalJugadores == 4)
+	{
+		if(posicionCarrera == 1)
+		{
+			SimPosCarrera == 2;
+		}
+		else if(posicionCarrera == 2)
+		{
+			SimPosCarrera == 3;
+		}
+		else if(posicionCarrera == 3)
+		{
+			SimPosCarrera == 4;
+		}
+		else if(posicionCarrera == 4)
+		{
+			SimPosCarrera == 5;
+		}
+	}
+	else 
+	{
+		SimPosCarrera = posicionCarrera;
+	}
 	
 	/*
 					1º	2º-3º	4º-5º	6º
@@ -290,7 +346,7 @@ void Corredor::setTipoObj()
 7.	Flecha Tele		0	5		10		25
 8.	Turbo Triple	0	10		15		15
 	*/
-	if(posicionCarrera == 1){
+	if(SimPosCarrera == 1){
 		if(random < 16)
 			tipoObj = 1;
 		else if(random < 43)
@@ -307,7 +363,7 @@ void Corredor::setTipoObj()
 			tipoObj = 7;
 		else if(random < 101)
 			tipoObj = 8;
-	}else if(posicionCarrera == 2 || posicionCarrera == 3){
+	}else if(SimPosCarrera == 2 || SimPosCarrera == 3){
 		if(random < 16)
 			tipoObj = 1;
 		else if(random < 31)
@@ -324,7 +380,7 @@ void Corredor::setTipoObj()
 			tipoObj = 7;
 		else if(random < 101)
 			tipoObj = 8;
-	}else if(posicionCarrera == 4 || posicionCarrera == 5){
+	}else if(SimPosCarrera == 4 || SimPosCarrera == 5){
 		if(random < 16)
 			tipoObj = 1;
 		else if(random < 26)
@@ -341,7 +397,7 @@ void Corredor::setTipoObj()
 			tipoObj = 7;
 		else if(random < 101)
 			tipoObj = 8;
-	}else if(posicionCarrera == 6){
+	}else if(SimPosCarrera == 6){
 		if(random < 11)
 			tipoObj = 1;
 		else if(random < 14)

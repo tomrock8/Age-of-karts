@@ -2,11 +2,12 @@
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	ipConexion = "";
-	init();	
+	init();
 }
 
 EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo) {
 	this->ipConexion = ipConexion;
+	init();
 }
 
 EscenaJuego::~EscenaJuego() {
@@ -72,7 +73,7 @@ void EscenaJuego::init() {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 
-	if (tipoEscena == Escena::tipo_escena::ONLINE) {
+	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		pj[0] = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310));
 		jugadores->aumentarJugadores();
 
@@ -144,7 +145,7 @@ void EscenaJuego::dibujar() {
 	materialDriver.Lighting = false;
 	Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
 	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
-	if (tipoEscena == Escena::tipo_escena::ONLINE) {
+	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
 		/*
 				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj[2]);
@@ -204,7 +205,7 @@ void EscenaJuego::update() {
 	}
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 	pj = jugadores->getJugadores();
-	if (tipoEscena == Escena::tipo_escena::ONLINE) {
+	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		pj[0]->actualizarItem();
 		//pj[1]->actualizarItem();
 		camara->moveCameraControl(pj[0]);

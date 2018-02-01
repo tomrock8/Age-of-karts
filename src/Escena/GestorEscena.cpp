@@ -37,13 +37,14 @@ Escena::tipo_escena GestorEscena::update() {
 
 bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 	Escena *anterior = escenaActiva; // Guardar escena anterior para tratar con ella si es necesario
+	std::string ipConexion = "";
 
 	if (anterior) { // Hay una escena activa actualmente
 		if (anterior->getTipoEscena() == Escena::tipo_escena::LOBBY && tipo == Escena::tipo_escena::ONLINE) {
-			std::string ipConexion = static_cast<EscenaLobby*>(anterior)->getIpConexion();
+			ipConexion = static_cast<EscenaLobby*>(anterior)->getIpConexion();
 			cout << ipConexion << "\n";
 		}
-			
+
 
 		escenaActiva->limpiar();
 		escenaActiva = nullptr; // Desasignamos la escena activa
@@ -78,7 +79,7 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 	}
 
 	// No hay una escena activa, de manera que se crea una nueva
-	return nuevaEscena(tipo);
+	return nuevaEscena(tipo, ipConexion);
 }
 
 
@@ -125,16 +126,16 @@ bool GestorEscena::agregaEscena(Escena *escena) {
 	return false;
 }
 
-bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo) {
+bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion) {
 	// Crea una escena del tipo especificado
 	// Agregar la escena al array
 
 	// Buscar si la nueva escena ya esta creada
 	// Crear si hace falta la nueva escena (porque no existe)
 	// Asignar la nueva escena a activa
-
-	if (getEscena(tipo))  // Comprobar que no existe ya la escena
+	if (getEscena(tipo)) {// Comprobar que no existe ya la escena
 		borraEscena(tipo); // Ya hay una escena de ese tipo y es borrada
+	}
 
 	switch (tipo) { // Crear la escena dependiendo del tipo
 	case Escena::tipo_escena::CARGA:
@@ -142,7 +143,7 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo) {
 		return false;
 
 	case Escena::tipo_escena::ONLINE:
-		escenaActiva = new EscenaJuego(Escena::tipo_escena::ONLINE); // Se crea la nueva escena
+		escenaActiva = new EscenaJuego(Escena::tipo_escena::ONLINE, ipConexion); // Se crea la nueva escena
 		agregaEscena(escenaActiva); // Se agrega la escena nueva al array de escenas
 		cambioEscena = Escena::tipo_escena::ONLINE; // Activamos el indicador para cambiar de escena
 		return true; // Devolvemos true y terminamos

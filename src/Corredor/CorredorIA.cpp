@@ -20,7 +20,7 @@ void CorredorIA::movimiento()
 {
 //	cout<<"velocidad::"<<vehiculo->getCurrentSpeedKmHour()<< endl;
 	logicaDifusa();
-	acelerar();
+	
 	
 
 	
@@ -31,6 +31,27 @@ void CorredorIA::movimiento()
 	}
 	
 
+	if(caja && turbo || caja && !turbo){
+    //    cout<< "sigoCAJA"<< endl;
+    calculoAnguloGiro(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z));
+
+    }
+
+	if(turbo && !caja){
+	//cout<< "sigoTUrbo"<< endl;
+	calculoAnguloGiro(btVector3(turbo->getPosition().X,turbo->getPosition().Y,turbo->getPosition().Z));	
+	
+	}
+
+
+	if(distanciaCerca){
+		//vehiculo->setBrake(3000,0);
+		//vehiculo->setBrake(3000,1);
+//		vehiculo->setBrake(1000,2);
+//		vehiculo->setBrake(1000,3);
+	}
+		acelerar();
+	
 	
 
 
@@ -61,15 +82,18 @@ void CorredorIA::movimiento()
 	if(giroFlojoDerecha){
 	girarDerecha();
 	
-	vehiculo->setSteeringValue(0.09, 0);
-	vehiculo->setSteeringValue(0.09, 1);
+	//vehiculo->setSteeringValue(0.09, 0);
+	//vehiculo->setSteeringValue(0.09, 1);
 
 	}
 
 	if(giroFuerteDerecha){
-		girarDerecha();
-	//vehiculo->setSteeringValue(0.15, 0);
-	//vehiculo->setSteeringValue(0.15, 1);
+		//girarDerecha();
+	//frenodemano(true);
+	//frenar();
+	vehiculo->setSteeringValue(0.2, 0);
+	vehiculo->setSteeringValue(0.2, 1);
+	//frenodemano(false);
 	//vehiculo->setBrake(100,0);
 	//vehiculo->setBrake(100,1);
 	//vehiculo->setBrake(100,2);
@@ -85,9 +109,12 @@ void CorredorIA::movimiento()
 	}
 
 	if(giroFuerteIzquierda){
-girarIzquierda();
-	//vehiculo->setSteeringValue(-0.15, 0);
-	//vehiculo->setSteeringValue(-0.15, 1);
+	//girarIzquierda();
+	//frenodemano(true);
+	//frenar();
+	vehiculo->setSteeringValue(-0.2, 0);
+	vehiculo->setSteeringValue(-0.2, 1);
+	//frenodemano(false);
 	//vehiculo->setBrake(100,0);
 	//vehiculo->setBrake(100,1);
 	//vehiculo->setBrake(100,2);
@@ -160,9 +187,9 @@ void CorredorIA::logicaDifusa() {
 	pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint, 1500, 4000, 6000, 7000);
 	pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint, 6000, 7000, 9000, 100000);
 
-		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-6,0,6);
-		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,7,15,45);
-		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-7,-15,-45);
+		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-8,0,8);
+		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,9,15,45);
+		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-9,-15,-45);
 		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,46,80,180);
 		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-46,-80,-180);
 		

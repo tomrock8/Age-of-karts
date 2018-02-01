@@ -2,7 +2,7 @@
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	ipConexion = "";
-	init();
+	init();	
 }
 
 EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo) {
@@ -80,6 +80,9 @@ void EscenaJuego::init() {
 		pj[1] = new CorredorIA("assets/coche.obj", btVector3(-10, 0, 290));
 		jugadores->aumentarJugadores();
 
+		pj[2] = new CorredorIA("assets/coche.obj", btVector3(-30, 0, 300));
+		jugadores->aumentarJugadores();
+
 		/*
 		pj[2] = new CorredorIA("assets/coche.obj", btVector3(-20, 0, 320));
 		jugadores->aumentarJugadores();
@@ -97,6 +100,7 @@ void EscenaJuego::init() {
 
 		pj[0]->getNodo()->setID(0);
 		pj[1]->getNodo()->setID(1);
+		pj[2]->getNodo()->setID(2);
 
 		/*
 				pj[2]->getNodo()->setID(2);

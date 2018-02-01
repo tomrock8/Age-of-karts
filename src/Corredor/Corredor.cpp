@@ -534,24 +534,17 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 	-1=Atras	//
 	*/
 	btRigidBody *rigidItem = item->inicializarFisicas();
+	rigidItem->setCollisionFlags(rigidItem->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	if (direccionItem == 1)
-		item->getRigidBody()->setLinearVelocity(btVector3(orientacion.getX() * 100, 5.0f, orientacion.getZ() * 100));
+		item->getRigidBody()->setLinearVelocity(btVector3(orientacion.getX() * 400, 5.0f, orientacion.getZ() * 400));
 	else if (direccionItem == -1)
-		item->getRigidBody()->setLinearVelocity(btVector3(-orientacion.getX() * 100, 5.0f, -orientacion.getZ() * 100));
+		item->getRigidBody()->setLinearVelocity(btVector3(-orientacion.getX() * 1000, 20.0f, -orientacion.getZ() * 1000));
 	tipoObj = 0;
 	decCargador();
 }
 void Corredor::lanzarItemTeledirigido()
 {
-
-	vehiculo->applyEngineForce(0, 0);
-	vehiculo->applyEngineForce(0, 1);
-	vehiculo->applyEngineForce(0, 2);
-	vehiculo->applyEngineForce(0, 3);
-	vehiculo->setBrake(100, 0);
-	vehiculo->setBrake(100, 1);
-	vehiculo->setBrake(100, 2);
-	vehiculo->setBrake(100, 3);
+	resetFuerzas();
 	aplicarAceite();
 	//tipoObj = 0;
 }
@@ -564,6 +557,17 @@ void Corredor::setAceite(){
 	aceiteActivado = true;
 	Timer *time = Timer::getInstancia();
 	timerAceite = time->getTimer();
+}
+
+void Corredor::resetFuerzas(){
+	vehiculo->applyEngineForce(0, 0);
+	vehiculo->applyEngineForce(0, 1);
+	vehiculo->applyEngineForce(0, 2);
+	vehiculo->applyEngineForce(0, 3);
+	vehiculo->setBrake(10000, 0);
+	vehiculo->setBrake(10000, 1);
+	vehiculo->setBrake(10000, 2);
+	vehiculo->setBrake(10000, 3);
 }
 
 void Corredor::soltarItem()
@@ -907,7 +911,7 @@ void Corredor::comprobarSueloRuedas()
 		vehiculo->applyEngineForce(0, 3);
 		vehiculo->setSteeringValue(0, 0);
 		vehiculo->setSteeringValue(0, 1);
-		cout<<"LA RUEDA :: "<< i << "NO ESTA EN CONTACTO"<<endl;
+		//cout<<"LA RUEDA :: "<< i << "NO ESTA EN CONTACTO"<<endl;
 	}	
 	
 	}	

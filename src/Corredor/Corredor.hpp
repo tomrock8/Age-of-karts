@@ -33,6 +33,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void virtual lanzarItemRed(){};
 	void aplicarAceite();
 	void setAceite();
+	void resetFuerzas();
 	void updateTimerObstaculos();
 	void setObjetivoTelederigido();
 	void soltarItem();

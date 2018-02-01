@@ -26,6 +26,7 @@ public:
   bool objetoDestruible();
   bool JugadorEstatico();
   bool JugadorWaypoint();
+  bool JugadorProyectil();
   //bool JugadorItemTeledirigido();
 
 private:

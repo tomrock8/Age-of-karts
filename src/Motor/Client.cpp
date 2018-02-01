@@ -54,13 +54,12 @@ void Client::CreateClientInterface()
 //==================================================================================
 // se establece la IP del servidor y el puerto de escucha del cliente
 //==================================================================================
-void Client::SetIP()
-{
+void Client::SetIP(std::string ipConexion) {
 	//se le pide al usuario que introduzca la IP del servidor al que quiera conectarse
-	std::cout << "Introduce IP del servidor: ";
-	std::cin >> serverIP;
+	//std::cout << "Introduce IP del servidor: ";
+	//std::cin >> serverIP;
 	//serverIP = "127.0.0.1";
-	//serverIP = "192.168.1.58";
+	serverIP = ipConexion;
 	//puerto de escucha del cliente
 	clientPort = "6003";
 }

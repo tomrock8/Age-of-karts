@@ -19,12 +19,14 @@ public:
 
 
 	// METODOS GET
+	std::string getIpConexion();
 
 	// METODOS SET
 
 private:
 	int nElementos; // Numeros para la IP (los ultimos 3)
-
+	std::string ipConexion;
+	int count;
 
 	IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
 

@@ -18,7 +18,7 @@ public:
 
 	static Client *getInstancia();
 	void CreateClientInterface();
-	void SetIP();
+	void SetIP(std::string ipConexion);
 	void ClientStartup();
 	void ShutDownClient();
 	void PlayerMovement();

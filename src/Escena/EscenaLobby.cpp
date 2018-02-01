@@ -2,6 +2,9 @@
 
 EscenaLobby::EscenaLobby() : Escena(Escena::tipo_escena::LOBBY) {
 	nElementos = 0;
+	count = 50;
+	ipConexion = "192.168.1.";
+
 	texto = L"ESC - SALIR\n\n";
 	texto = "Introduce IP para iniciar partida online: 192.168.1.";
 
@@ -61,54 +64,79 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	}
 
 	if (nElementos < 3) {
-		if (teclado->isKeyDown(KEY_KEY_1)) {
-			texto += "1";
-			nElementos++;
+		if (count <= 0) {
+			if (teclado->isKeyDown(KEY_KEY_1)) {
+				texto += "1";
+				ipConexion += "1";
+				nElementos++;
+				count = 50;
+			}
+			if (teclado->isKeyDown(KEY_KEY_2)) {
+				texto += "2";
+				ipConexion += "2";
+				nElementos++;
+				count = 50;
+			}
+			if (teclado->isKeyDown(KEY_KEY_3)) {
+				texto += "3";
+				ipConexion += "3";
+				nElementos++;
+				count = 50;
+			}
+			if (teclado->isKeyDown(KEY_KEY_4)) {
+				texto += "4";
+				ipConexion += "4";
+				nElementos++;
+				count = 50;
+			}
+			if (teclado->isKeyDown(KEY_KEY_5)) {
+				texto += "5";
+				ipConexion += "5";
+				nElementos++;
+				count = 50;
+			}
+			if (teclado->isKeyDown(KEY_KEY_6)) {
+				texto += "6";
+				ipConexion += "6";
+				nElementos++;
+				count = 50;
+			}
+			if (teclado->isKeyDown(KEY_KEY_7)) {
+				texto += "7";
+				ipConexion += "7";
+				nElementos++;
+				count = 50;
+			}
+			if (teclado->isKeyDown(KEY_KEY_8)) {
+				texto += "8";
+				ipConexion += "8";
+				nElementos++;
+				count = 50;
+			}
+			if (teclado->isKeyDown(KEY_KEY_9)) {
+				texto += "9";
+				ipConexion += "9";
+				nElementos++;
+				count = 50;
+			}
+			if (teclado->isKeyDown(KEY_KEY_0)) {
+				texto += "0";
+				ipConexion += "0";
+				nElementos++;
+				count = 50;
+			}
+			textoUI->setText(this->texto.c_str());
 		}
-		if (teclado->isKeyDown(KEY_KEY_2)) {
-			texto += "2";
-			nElementos++;
-		}
-		if (teclado->isKeyDown(KEY_KEY_3)) {
-			texto += "3";
-			nElementos++;
-		}
-		if (teclado->isKeyDown(KEY_KEY_4)) {
-			texto += "4";
-			nElementos++;
-		}
-		if (teclado->isKeyDown(KEY_KEY_4)) {
-			texto += "4";
-			nElementos++;
-		}
-		if (teclado->isKeyDown(KEY_KEY_5)) {
-			texto += "5";
-			nElementos++;
-		}
-		if (teclado->isKeyDown(KEY_KEY_6)) {
-			texto += "6";
-			nElementos++;
-		}
-		if (teclado->isKeyDown(KEY_KEY_7)) {
-			texto += "7";
-			nElementos++;
-		}
-		if (teclado->isKeyDown(KEY_KEY_8)) {
-			texto += "8";
-			nElementos++;
-		}
-		if (teclado->isKeyDown(KEY_KEY_9)) {
-			texto += "9";
-			nElementos++;
-		}
-		if (teclado->isKeyDown(KEY_KEY_0)) {
-			texto += "0";
-			nElementos++;
-		}
-		textoUI->setText(this->texto.c_str());
+		else
+			count--;
+
 		return Escena::tipo_escena::LOBBY;
 	}
 
 
-	return Escena::tipo_escena::CARRERA;
+	return Escena::tipo_escena::ONLINE;
+}
+
+std::string EscenaLobby::getIpConexion() {
+	return ipConexion;
 }

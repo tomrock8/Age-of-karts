@@ -1,7 +1,12 @@
 #include "EscenaJuego.hpp"
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
-	init();
+	ipConexion = "";
+	init();	
+}
+
+EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo) {
+	this->ipConexion = ipConexion;
 }
 
 EscenaJuego::~EscenaJuego() {
@@ -26,18 +31,20 @@ EscenaJuego::~EscenaJuego() {
 	delete Pista::getInstancia();
 	cout << "No ha ido mal.\n";
 
+	delete TextoPantalla::getInstancia();
+
 	delete camara;
 }
 
 void EscenaJuego::init() {
 	//ARGUMENTOS MAIN
-	argc = 0;
 	debug = 0;
+	
 
-	if (argc == 2) {
+	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
 		client->CreateClientInterface();
-		client->SetIP();
+		client->SetIP(ipConexion);
 		client->ClientStartup();
 	}
 
@@ -65,7 +72,7 @@ void EscenaJuego::init() {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 
-	if (argc != 2) {
+	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		pj[0] = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310));
 		jugadores->aumentarJugadores();
 
@@ -90,12 +97,12 @@ void EscenaJuego::init() {
 		pj[0]->getNodo()->setID(0);
 		pj[1]->getNodo()->setID(1);
 
-/*
-		pj[2]->getNodo()->setID(2);
-		pj[3]->getNodo()->setID(3);
-		pj[4]->getNodo()->setID(4);
-		pj[5]->getNodo()->setID(5);
-*/
+		/*
+				pj[2]->getNodo()->setID(2);
+				pj[3]->getNodo()->setID(3);
+				pj[4]->getNodo()->setID(4);
+				pj[5]->getNodo()->setID(5);
+		*/
 
 	}
 
@@ -124,7 +131,7 @@ void EscenaJuego::init() {
 }
 
 void EscenaJuego::dibujar() {
-	
+
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 
@@ -137,23 +144,23 @@ void EscenaJuego::dibujar() {
 	materialDriver.Lighting = false;
 	Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
 	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
-	if (argc != 2) {
+	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
-/*
-		CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj[2]);
-		CorredorIA *COMENARDOSAUXILIAR3 = static_cast<CorredorIA *>(pj[3]);
-		CorredorIA *COMENARDOSAUXILIAR4 = static_cast<CorredorIA *>(pj[4]);
-		CorredorIA *COMENARDOSAUXILIAR5 = static_cast<CorredorIA *>(pj[5]);
-*/
+		/*
+				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj[2]);
+				CorredorIA *COMENARDOSAUXILIAR3 = static_cast<CorredorIA *>(pj[3]);
+				CorredorIA *COMENARDOSAUXILIAR4 = static_cast<CorredorIA *>(pj[4]);
+				CorredorIA *COMENARDOSAUXILIAR5 = static_cast<CorredorIA *>(pj[5]);
+		*/
 
 		//COMENARDOSAUXILIAR->update();
 		COMENARDOSAUXILIAR1->ActualizarRaytest();
-/*
-		COMENARDOSAUXILIAR2->ActualizarRaytest();
-		COMENARDOSAUXILIAR3->ActualizarRaytest();
-		COMENARDOSAUXILIAR4->ActualizarRaytest();
-		COMENARDOSAUXILIAR5->ActualizarRaytest();
-*/
+		/*
+				COMENARDOSAUXILIAR2->ActualizarRaytest();
+				COMENARDOSAUXILIAR3->ActualizarRaytest();
+				COMENARDOSAUXILIAR4->ActualizarRaytest();
+				COMENARDOSAUXILIAR5->ActualizarRaytest();
+		*/
 
 		//Para poder dibujar putas lineas de mierda
 	}
@@ -165,7 +172,7 @@ void EscenaJuego::dibujar() {
 		Motor3d::instancia().getDriver()->setTransform(ETS_WORLD, IdentityMatrix);
 		MotorFisicas::getInstancia()->getMundo()->debugDrawWorld();
 	}
-	
+
 	Motor3d::instancia().getGUI()->drawAll();
 	Motor3d::instancia().terminarDibujado();
 }
@@ -181,7 +188,7 @@ void EscenaJuego::update() {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 
-	if (argc == 2) {
+	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client->ReceivePackets(Motor3d::instancia().getScene());
 		//client->SpawnPlayer(smgr);
 	}
@@ -197,7 +204,7 @@ void EscenaJuego::update() {
 	}
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 	pj = jugadores->getJugadores();
-	if (argc != 2) {
+	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		pj[0]->actualizarItem();
 		//pj[1]->actualizarItem();
 		camara->moveCameraControl(pj[0]);
@@ -205,12 +212,12 @@ void EscenaJuego::update() {
 		pj[0]->update();
 		pj[1]->update();
 
-/*
-		pj[2]->update();
-		pj[3]->update();
-		pj[4]->update();
-		pj[5]->update();
-*/
+		/*
+				pj[2]->update();
+				pj[3]->update();
+				pj[4]->update();
+				pj[5]->update();
+		*/
 		//textoDebug->agregar(pj[0]->toString());
 	}
 	else {
@@ -274,7 +281,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	Corredor **pj = jugadores->getJugadores();
 	vector3df pos(-10, 0, 310);
 	int i = 0;
-	if (argc == 2)
+	if (tipoEscena == Escena::tipo_escena::ONLINE)
 		i = client->getControlPlayer();
 
 	//------- ENTRADA TECLADO ----------
@@ -305,7 +312,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	}
 
 	if (teclado->isKeyDown(KEY_ESCAPE)) {
-		if (argc == 2)
+		if (tipoEscena == Escena::tipo_escena::ONLINE)
 			client->ShutDownClient();
 
 		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu

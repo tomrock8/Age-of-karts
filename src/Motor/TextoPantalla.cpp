@@ -43,5 +43,5 @@ void TextoPantalla::agregar(std::string texto) {
 
 }
 TextoPantalla::~TextoPantalla() {
-	delete instancia;
+	instancia = nullptr;
 }

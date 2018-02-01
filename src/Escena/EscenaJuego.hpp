@@ -20,6 +20,7 @@
 class EscenaJuego : public Escena {
 public:
 	EscenaJuego(tipo_escena tipo);
+	EscenaJuego(tipo_escena tipo, std::string);
 	~EscenaJuego();
 
 	void init();
@@ -35,10 +36,10 @@ public:
 
 private:
 	
+	std::string ipConexion;
+
 	void UpdatePhysics(u32 TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
-
-	int argc;
 	int debug;
 
 	DebugDraw *debugDraw;

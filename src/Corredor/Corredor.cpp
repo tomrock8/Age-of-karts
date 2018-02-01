@@ -14,8 +14,8 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 {
 	cargador = 0;
 	tipoObj = 0;
-	velocidadMaxima=320;
-	velocidadMaximaTurbo=380;
+	velocidadMaxima=380;
+	velocidadMaximaTurbo=480;
 	velocidadMaximaAtras=-100;
 	turboActivado = false;
 	objetivoFijado = false;
@@ -46,11 +46,19 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	//escudo
 	escudo = new Escudo(pos, getNodo());
 	setProteccion(false);
+
+	
 	//-------------bullet----------------
-	rueda1 = Motor3d::instancia().getScene()->addCubeSceneNode(1.f);
-	rueda2 = Motor3d::instancia().getScene()->addCubeSceneNode(1.f);
-	rueda3 = Motor3d::instancia().getScene()->addCubeSceneNode(1.f);
-	rueda4 = Motor3d::instancia().getScene()->addCubeSceneNode(1.f);
+	rueda1 = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/rueda.obj"));
+    rueda2 = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/rueda.obj"));
+    rueda3 = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/rueda.obj"));
+    rueda4 = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/rueda.obj"));
+
+	rueda1->setScale(vector3df(2,1,1));//alante derecha
+	rueda2->setScale(vector3df(2,1,1));//delante izquierda
+	rueda3->setScale(vector3df(2,1,1));//atras derecha
+	rueda4->setScale(vector3df(2,1,1));//atras izquierda
+
 
 	//establecemos el primer waypoint del mapa
 	Pista *mapa = Pista::getInstancia();
@@ -65,10 +73,11 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	rueda3->setMaterialFlag(EMF_LIGHTING, false);
 	rueda4->setMaterialFlag(EMF_LIGHTING, false);
 
+
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
 	suspension = btScalar(2); // cuanto mas valor el chasis mas alto respecto a las ruedas
-	FuerzaMaxima = btScalar(3500); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
+	FuerzaMaxima = btScalar(10000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
@@ -108,7 +117,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = 22;    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
+		wheel.m_suspensionStiffness = 20;    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
 		wheel.m_wheelsDampingCompression = 2.4 ;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
 		wheel.m_wheelsDampingRelaxation =  2.2 ;//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
@@ -907,7 +916,7 @@ void Corredor::comprobarSueloRuedas()
 		vehiculo->applyEngineForce(0, 3);
 		vehiculo->setSteeringValue(0, 0);
 		vehiculo->setSteeringValue(0, 1);
-		cout<<"LA RUEDA :: "<< i << "NO ESTA EN CONTACTO"<<endl;
+		//cout<<"LA RUEDA :: "<< i << "NO ESTA EN CONTACTO"<<endl;
 	}	
 	
 	}	
@@ -1024,22 +1033,56 @@ void Corredor::updateTimerObstaculos() {
 void Corredor::actualizarRuedas()
 {
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
+	vector3df Euler;
+	btQuaternion TQuat = ruedas.getRotation();
+	quaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	q.toEuler(Euler);
+	Euler *= RADTODEG;
+	
+	float distanciAancho=1.5;
+	float ditanciaLargo=1;
 
-	rueda1->setPosition(vector3df(ruedas.getOrigin().getX(), ruedas.getOrigin().getY(), ruedas.getOrigin().getZ()));
-	rueda1->setRotation(vector3df(ruedas.getRotation().getX(), ruedas.getRotation().getY(), ruedas.getRotation().getZ()));
+	
+
+	//rueda1
+	rueda1->setPosition(vector3df(distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
+	orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
+	rueda1->setRotation(vector3df(Euler.X, Euler.Y , Euler.Z));
+	
+	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
-
-	rueda2->setPosition(vector3df(ruedas.getOrigin().getX(), ruedas.getOrigin().getY(), ruedas.getOrigin().getZ()));
-	rueda2->setRotation(vector3df(ruedas.getRotation().getX(), ruedas.getRotation().getY(), ruedas.getRotation().getZ()));
+	TQuat = ruedas.getRotation();
+	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	q.toEuler(Euler);
+	Euler *= RADTODEG;
+	rueda2->setPosition(vector3df(-distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
+	orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
+	rueda2->setRotation(vector3df(Euler.X, Euler.Y +180 , Euler.Z));
+	
+	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
-
-	rueda3->setPosition(vector3df(ruedas.getOrigin().getX(), ruedas.getOrigin().getY(), ruedas.getOrigin().getZ()));
-	rueda3->setRotation(vector3df(ruedas.getRotation().getX(), ruedas.getRotation().getY(), ruedas.getRotation().getZ()));
+	TQuat = ruedas.getRotation();
+	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	q.toEuler(Euler);
+	Euler *= RADTODEG;
+	rueda3->setPosition(vector3df(distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
+	orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
+	rueda3->setRotation(vector3df(Euler.X, Euler.Y , Euler.Z));
+	
+	
+	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
+	TQuat = ruedas.getRotation();
+	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	q.toEuler(Euler);
+	Euler *= RADTODEG;
+	rueda4->setPosition(vector3df(-distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
+	orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
+	rueda4->setRotation(vector3df(Euler.X, Euler.Y +180, Euler.Z));
 
-	rueda4->setPosition(vector3df(ruedas.getOrigin().getX(), ruedas.getOrigin().getY(), ruedas.getOrigin().getZ()));
-	rueda4->setRotation(vector3df(ruedas.getRotation().getX(), ruedas.getRotation().getY(), ruedas.getRotation().getZ()));
+
 }
+
 void Corredor::updateHabilidad() {
 	Timer *tiempo = Timer::getInstancia();
 	int inicioHabilidad = h->getInicioHabilidad();

@@ -98,11 +98,12 @@ protected:
 	//objetos
 	IMesh * coche;
 	
+
 	IMeshSceneNode *cuboNodo;
-	ISceneNode *rueda1;
-	ISceneNode *rueda2;
-	ISceneNode *rueda3;
-	ISceneNode *rueda4;
+	IMeshSceneNode *rueda1;
+	IMeshSceneNode *rueda2;
+	IMeshSceneNode *rueda3;
+	IMeshSceneNode *rueda4;
 
 	//WAYPOINTS
 	Waypoint *anterior; // Punto Actual

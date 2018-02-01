@@ -160,9 +160,9 @@ void CorredorIA::logicaDifusa() {
 	pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint, 1500, 4000, 6000, 7000);
 	pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint, 6000, 7000, 9000, 100000);
 
-		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-10,0,10);
-		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,11,15,45);
-		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-11,-15,-45);
+		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-6,0,6);
+		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,7,15,45);
+		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-7,-15,-45);
 		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,46,80,180);
 		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-46,-80,-180);
 		

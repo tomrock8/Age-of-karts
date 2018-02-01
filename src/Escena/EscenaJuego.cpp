@@ -328,7 +328,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		}
 	}
 
-	return Escena::tipo_escena::CARRERA; // Significa que debe seguir ejecutando
+	return tipoEscena; // Significa que debe seguir ejecutando
 }
 
 void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {

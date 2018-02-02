@@ -313,6 +313,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		trans.setRotation(quaternion);
 
 		pj[i]->getRigidBody()->setCenterOfMassTransform(trans);
+		pj[i]->resetFuerzas();
 		//pj[0]->getNodo()->setPosition(pos);
 	}
 	if (teclado->isKeyDown(KEY_KEY_T)) {

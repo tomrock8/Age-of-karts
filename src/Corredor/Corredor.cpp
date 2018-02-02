@@ -78,7 +78,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(2.3); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(1.9); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	anchoRueda = btScalar(0.4);			  //0.4

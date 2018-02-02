@@ -166,8 +166,8 @@ void CorredorIA::reposicionar(){
 		posicion_aux=posicion;
 		
 	}
-	if (time->getTimer()-timerRecolocar>5){
-		if (abs((posicion_aux.getX())-(posicion.getX()))<10 || abs((posicion_aux.getZ())-(posicion.getZ()))<10){
+	if (time->getTimer()-timerRecolocar>6){
+		if (abs(abs(posicion_aux.getX())-abs(posicion.getX()))<2 || abs(abs(posicion_aux.getZ())-abs(posicion.getZ()))<2){
 			btVector3 btPos = actual->getPosicion();
 
 			btTransform trans;
@@ -183,7 +183,7 @@ void CorredorIA::reposicionar(){
 			//cout<<"sigue"<<endl;
 		}
 	}
-	if (time->getTimer()-timerRecolocar>7){
+	if (time->getTimer()-timerRecolocar>8){
 		timerRecolocar=time->getTimer();
 	}
 }

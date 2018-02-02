@@ -64,7 +64,7 @@ void Caja::comprobarRespawn() {
 	Timer *time = Timer::getInstancia();
 	if (nodo) {
 		if (!nodo->isVisible()) {
-			if (time->getTimer() - timer >= 5) {
+			if (time->getTimer() - timer >= 4) {
 				//cout << "Visible\n";
 				nodo->setVisible(true);
 			}

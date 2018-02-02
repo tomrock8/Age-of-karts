@@ -581,16 +581,8 @@ void Corredor::setAceite(){
 void Corredor::resetFuerzas(){
 	CuerpoColisionChasis->clearForces();
 	btVector3 zeroVector(0,0,0);
-	//CuerpoColisionChasis->setLinearVelocity(zeroVector);
-	//CuerpoColisionChasis->setAngularVeclocity(zeroVector);
-	vehiculo->applyEngineForce(0, 0);
-	vehiculo->applyEngineForce(0, 1);
-	vehiculo->applyEngineForce(0, 2);
-	vehiculo->applyEngineForce(0, 3);
-	vehiculo->setBrake(10000, 0);
-	vehiculo->setBrake(10000, 1);
-	vehiculo->setBrake(10000, 2);
-	vehiculo->setBrake(10000, 3);
+	CuerpoColisionChasis->setLinearVelocity(zeroVector);
+	CuerpoColisionChasis->setAngularVelocity(zeroVector);
 }
 
 void Corredor::soltarItem()

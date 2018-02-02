@@ -84,7 +84,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
-	Masa = btScalar(700);
+	Masa = btScalar(600);
 	FuerzaFrenado = btScalar(-8000);
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
 	FuerzaFrenoMano = btScalar(700);
@@ -168,7 +168,7 @@ void Corredor::InicializarFisicas()
 	//establecemos su centro de gravedad
 	btTransform localTransform;
 	localTransform.setIdentity();
-	localTransform.setOrigin(btVector3(0, 2, 0));
+	localTransform.setOrigin(btVector3(0, 1.7, 0));
 	CentroGravedad = new btCompoundShape();
 
 	//Forma Colision

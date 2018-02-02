@@ -15,7 +15,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	cargador = 0;
 	tipoObj = 0;
 	velocidadMaxima=380;
-	velocidadMaximaTurbo=480;
+	velocidadMaximaTurbo=420;
 	direccionContraria=0;
 	velocidadMaximaAtras=-100;
 	velocidadLimiteGiro=120;

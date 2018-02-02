@@ -52,7 +52,7 @@ void CorredorIA::movimiento()
 	}
 		acelerar();
 	
-	
+	reposicionar();
 
 
 
@@ -159,7 +159,34 @@ void CorredorIA::distanciaVector(){
 	}
 
 }
+void CorredorIA::reposicionar(){
+	Timer *time = Timer::getInstancia();
+	cout<<"TIEMPO: "<<time->getTimer()<<endl;
+	if (time->getTimer()==1){
+		posicion_aux=posicion;
+		
+	}
+	if (time->getTimer()>5){
+		if (abs((posicion_aux.getX())-(posicion.getX()))<15 || abs((posicion_aux.getZ())-(posicion.getZ()))<15){
+			btVector3 btPos = actual->getPosicion();
 
+			btTransform trans;
+			trans.setOrigin(btPos);
+			btQuaternion quaternion;
+			quaternion.setEulerZYX(cuboNodo->getRotation().Z* PI / 180, cuboNodo->getRotation().Y * PI / 180, cuboNodo->getRotation().X* PI / 180);
+			trans.setRotation(quaternion);
+
+			CuerpoColisionChasis->setCenterOfMassTransform(trans);
+			time->restartTimer();
+			cout<<"recolocado"<<endl;
+		}else{
+			cout<<"sigue"<<endl;
+		}
+	}
+	if (time->getTimer()>7){
+		time->restartTimer();
+	}
+}
 void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 
 	btVector3 orientacionCoche(orientacion.getX(),orientacion.getY(),orientacion.getZ());

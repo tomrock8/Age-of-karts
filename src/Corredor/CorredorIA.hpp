@@ -15,6 +15,7 @@ class CorredorIA : public Corredor
 	CorredorIA(stringw rutaObj, btVector3 pos);
 
 	void movimiento();
+	void reposicionar();
 	void calculoAnguloGiro(btVector3 posicion);
 	void ActualizarRaytest();
 
@@ -39,7 +40,8 @@ class CorredorIA : public Corredor
 	ISceneNode *caja;
 	ISceneNode *turbo;
 	ISceneNode *enemigo;
-
+	btVector3 posicion_aux;
+	int timerRecolocar;
 };
 
 #endif /* CORREDORIA_H */

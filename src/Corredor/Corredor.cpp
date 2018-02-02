@@ -557,7 +557,7 @@ void Corredor::lanzarItem(Proyectil *item, int direccionItem)
 	if (direccionItem == 1)
 		item->getRigidBody()->setLinearVelocity(btVector3(orientacion.getX() * 400, 5.0f, orientacion.getZ() * 400));
 	else if (direccionItem == -1)
-		item->getRigidBody()->setLinearVelocity(btVector3(-orientacion.getX() * 1000, 20.0f, -orientacion.getZ() * 1000));
+		item->getRigidBody()->setLinearVelocity(btVector3(-orientacion.getX() * 400, 20.0f, -orientacion.getZ() * 400));
 	tipoObj = 0;
 	decCargador();
 }
@@ -619,8 +619,8 @@ void Corredor::usarObjetos() {
 	}
 	else if (getTipoObj() == 2)	//CAJA FALSA
 	{
-		posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 5);
-		posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 5);
+		posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
+		posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
 		CajaFalsa *est = new CajaFalsa(posDisparo);
 		est->inicializarFisicas();
 		soltarItem();
@@ -632,8 +632,8 @@ void Corredor::usarObjetos() {
 	}
 	else if (getTipoObj() == 4)	//ACEITE
 	{
-		posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 5);
-		posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 5);
+		posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
+		posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
 		Aceite *est2 = new Aceite(posDisparo);
 		est2->inicializarFisicas();
 		//est2->getRigidBody()->setCollisionFlags(est2->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -649,30 +649,33 @@ void Corredor::usarObjetos() {
 	{
 		proX3 = new Proyectil *[3];
 		btVector3 orientacioncentral(orientacion.getX(), orientacion.getY(), orientacion.getZ());
-		btVector3 centro(cuboNodo->getPosition().X + orientacion.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 5);
+		btVector3 centro(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10);
 		btVector3 orientacionderecha = orientacioncentral.rotate(btVector3(0, 1, 0), 10 * PI / 180);
 		btVector3 orientacionizquierda = orientacioncentral.rotate(btVector3(0, 1, 0), -10 * PI / 180);
-		btVector3 iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 5);
-		btVector3 d(cuboNodo->getPosition().X + orientacionderecha.getX() * 5, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 5);
+		btVector3 iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 10);
+		btVector3 d(cuboNodo->getPosition().X + orientacionderecha.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 10);
 		for (int i = 0; i < 3; i++) {
 
 
 			if (i == 0) {
 				proX3[i] = new Proyectil(iz);
 				proX3[i]->inicializarFisicas();
-				proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionizquierda.getX() * 100, 5.0f, orientacionizquierda.getZ() * 100));
+				proX3[i]->getRigidBody()->setCollisionFlags(proX3[i]->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+				proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionizquierda.getX() * 400, 5.0f, orientacionizquierda.getZ() * 400));
 			}
 			if (i == 1) {
 
 				proX3[i] = new Proyectil(centro);
 				proX3[i]->inicializarFisicas();
-				proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacioncentral.getX() * 100, 5.0f, orientacioncentral.getZ() * 100));
+				proX3[i]->getRigidBody()->setCollisionFlags(proX3[i]->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+				proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacioncentral.getX() * 400, 5.0f, orientacioncentral.getZ() * 400));
 			}
 			if (i == 2) {
 
 				proX3[i] = new Proyectil(d);
 				proX3[i]->inicializarFisicas();
-				proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionderecha.getX() * 100, 5.0f, orientacionderecha.getZ() * 100));
+				proX3[i]->getRigidBody()->setCollisionFlags(proX3[i]->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+				proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionderecha.getX() * 400, 5.0f, orientacionderecha.getZ() * 400));
 			}
 
 

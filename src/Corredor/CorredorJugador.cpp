@@ -59,7 +59,7 @@ void CorredorJugador::actualizarItem() {
 	CTeclado *teclado = CTeclado::getInstancia();
 
 	int direccionItem = 1;
-	setPosDisparo(btVector3(cuboNodo->getPosition().X + orientacion.getX() * 5, cuboNodo->getPosition().Y + 1, cuboNodo->getPosition().Z + orientacion.getZ() * 5));
+	setPosDisparo(btVector3(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10));
 	btVector3 posDisparo2(cuboNodo->getPosition().X, cuboNodo->getPosition().Y - 1, cuboNodo->getPosition().Z);
 
 	if (teclado->isKeyDown(KEY_KEY_1)) setTipoObj(1);

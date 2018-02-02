@@ -161,13 +161,13 @@ void CorredorIA::distanciaVector(){
 }
 void CorredorIA::reposicionar(){
 	Timer *time = Timer::getInstancia();
-	cout<<"TIEMPO: "<<time->getTimer()-timerRecolocar<<endl;
+	//cout<<"TIEMPO: "<<time->getTimer()-timerRecolocar<<endl;
 	if (time->getTimer()-timerRecolocar==1){
 		posicion_aux=posicion;
 		
 	}
 	if (time->getTimer()-timerRecolocar>6){
-		if (abs(abs(posicion_aux.getX())-abs(posicion.getX()))<2 || abs(abs(posicion_aux.getZ())-abs(posicion.getZ()))<2){
+		if (abs(abs(posicion_aux.getX())-abs(posicion.getX()))<1 && abs(abs(posicion_aux.getZ())-abs(posicion.getZ()))<1){
 			btVector3 btPos = actual->getPosicion();
 
 			btTransform trans;

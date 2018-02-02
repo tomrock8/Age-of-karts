@@ -10,7 +10,7 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos) : Corredor(rutaObj, pos)
 	distanciaCaja = 0;
 	distanciaEnemigo = 0;
 	distanciaTurbo = 0;
-	
+	timerRecolocar=0;
 }
 
 //-----------------------\*
@@ -161,13 +161,13 @@ void CorredorIA::distanciaVector(){
 }
 void CorredorIA::reposicionar(){
 	Timer *time = Timer::getInstancia();
-	cout<<"TIEMPO: "<<time->getTimer()<<endl;
-	if (time->getTimer()==1){
+	cout<<"TIEMPO: "<<time->getTimer()-timerRecolocar<<endl;
+	if (time->getTimer()-timerRecolocar==1){
 		posicion_aux=posicion;
 		
 	}
-	if (time->getTimer()>5){
-		if (abs((posicion_aux.getX())-(posicion.getX()))<15 || abs((posicion_aux.getZ())-(posicion.getZ()))<15){
+	if (time->getTimer()-timerRecolocar>5){
+		if (abs((posicion_aux.getX())-(posicion.getX()))<25 || abs((posicion_aux.getZ())-(posicion.getZ()))<25){
 			btVector3 btPos = actual->getPosicion();
 
 			btTransform trans;
@@ -177,14 +177,14 @@ void CorredorIA::reposicionar(){
 			trans.setRotation(quaternion);
 
 			CuerpoColisionChasis->setCenterOfMassTransform(trans);
-			time->restartTimer();
-			cout<<"recolocado"<<endl;
+			timerRecolocar=time->getTimer();
+			//cout<<"recolocado"<<endl;
 		}else{
-			cout<<"sigue"<<endl;
+			//cout<<"sigue"<<endl;
 		}
 	}
-	if (time->getTimer()>7){
-		time->restartTimer();
+	if (time->getTimer()-timerRecolocar>7){
+		timerRecolocar=time->getTimer();
 	}
 }
 void CorredorIA::calculoAnguloGiro(btVector3 posicion) {

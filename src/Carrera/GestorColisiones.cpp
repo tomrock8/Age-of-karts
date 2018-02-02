@@ -107,7 +107,7 @@ bool GestorColisiones::JugadorEstatico()
 	core::list<Item *> items = pista->getItems();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	Pista *mapa = Pista::getInstancia();
-	bool protegido;
+	bool protegido=false;
 	bool aceite = false;
 	//cout << TimeStamp << endl;
 
@@ -188,7 +188,7 @@ bool GestorColisiones::JugadorProyectil()
 	core::list<Item *> items = pista->getItems();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	Pista *mapa = Pista::getInstancia();
-	bool protegido;
+	bool protegido=false;
 
 	if (strcmp("Jugador", nodoA->getName()) == 0 || strcmp("JugadorIA", nodoA->getName()) == 0 || strcmp("JugadorRed", nodoA->getName()) == 0)
 	{

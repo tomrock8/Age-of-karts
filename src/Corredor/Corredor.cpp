@@ -614,6 +614,7 @@ void Corredor::usarObjetos() {
 	{
 		pro = new Proyectil(posDisparo);
 		lanzarItem(pro, 1);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		pro->setLanzado(true);
 		items.push_back(pro);
 		soltarItem();
 	}
@@ -677,7 +678,8 @@ void Corredor::usarObjetos() {
 				proX3[i]->getRigidBody()->setCollisionFlags(proX3[i]->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 				proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionderecha.getX() * 400, 5.0f, orientacionderecha.getZ() * 400));
 			}
-
+			proX3[i]->setLanzado(true);
+			
 
 			items.push_back(proX3[i]);
 

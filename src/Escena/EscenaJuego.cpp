@@ -187,6 +187,7 @@ void EscenaJuego::limpiar() {
 void EscenaJuego::update() {
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
+	core::list<Item *> items = pistaca->getItems();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	Corredor **pj = jugadores->getJugadores();
 
@@ -204,6 +205,21 @@ void EscenaJuego::update() {
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
 		pistaca->getArrayCaja()[i]->comprobarRespawn(); // TODO: MOVER AL UPDATE DE PISTACA
 	}
+
+	for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
+	{
+		Item *item = *Iterator;
+		if(item->getLanzado()){
+			if(item->comprobarDestructor()){
+				item->Delete();
+				Iterator = items.erase(Iterator);
+				break;
+			}
+		}
+	}
+	pistaca->setItems(items);
+
+
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 	pj = jugadores->getJugadores();
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {

@@ -21,11 +21,12 @@ public:
   bool Delete();
   IMeshSceneNode *getNodo();
   btRigidBody *getRigidBody();
-  void setColision(bool b);
-  bool getColision();
+  void setLanzado(bool b);
+  bool getLanzado();
   void setNombre(const char* name);
   const char* getNombre();
   void setMasa(btScalar mass);
+  bool comprobarDestructor();
 
 protected:
   IMeshSceneNode *nodo;
@@ -36,7 +37,8 @@ protected:
   btVector3 posicion;
   const char *nombre;
   int id;
-  bool colision;
+  bool lanzado;
+  clock_t tiempoLanzado;
   btDefaultMotionState *MotionState;
   btCollisionShape *Shape;
 };

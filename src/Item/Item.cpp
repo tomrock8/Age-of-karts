@@ -2,13 +2,12 @@
 
 
 Item::Item(int tipo) {
-
 }
 
 Item::Item(btVector3 pos)
 {
-	
-	colision = false;
+
+	lanzado = false;
 
 	masa = 50;
 	
@@ -52,13 +51,23 @@ btRigidBody *Item::inicializarFisicas()
 	return rigidBody;
 }
 
-void Item::setColision(bool b) {
-	colision = b;
+void Item::setLanzado(bool b) {
+	lanzado = b;
+	tiempoLanzado = clock();
 }
 
-bool Item::getColision()
+bool Item::getLanzado()
 {
-	return colision;
+	return lanzado;
+}
+
+bool Item::comprobarDestructor(){
+	clock_t timediff = clock() - tiempoLanzado;
+	float timediff_sec = ((float)timediff) / 100000;
+	if (timediff_sec >= 15) {
+		return true;
+	}
+	return false;
 }
 
 bool Item::Delete()

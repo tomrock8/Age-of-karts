@@ -155,6 +155,8 @@ protected:
 	int velocidadMaxima;
 	int velocidadMaximaTurbo;
 	int velocidadMaximaAtras;
+	int velocidadLimiteGiro;
+	int direccionContraria;
 	btVector3 posicion;
 	btVector3 direccionRuedas;
 	btVector3 rotacionRuedas;

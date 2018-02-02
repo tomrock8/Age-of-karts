@@ -16,7 +16,9 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	tipoObj = 0;
 	velocidadMaxima=380;
 	velocidadMaximaTurbo=480;
+	direccionContraria=0;
 	velocidadMaximaAtras=-100;
+	velocidadLimiteGiro=120;
 	turboActivado = false;
 	objetivoFijado = false;
 	aceiteActivado = false;
@@ -458,14 +460,16 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	//mas adelante se ve, Las IDS no funcionan bien tengo que preguntarle a santi a si que de momento lo comento para que
 	//se puedan coger las cajas.
 
-
+	bool b=false;	//booleano para comprobar si esta siguiendo bien los waypoints
 	if (nodo->getID() > actual->getWaypoint()->getID() && nodo->getID() == siguiente_aux->getWaypoint()->getID()) {
 
 		actual = actual->getNextWaypoint();
 		siguiente = actual->getNextWaypoint();
-		if (actual->getWaypoint()->getID() == siguiente_aux->getWaypoint()->getID())
+		if (actual->getWaypoint()->getID() == siguiente_aux->getWaypoint()->getID()){
 			siguiente_aux = siguiente;
-
+			b=true;
+			direccionContraria=0;
+		}
 	}
 
 	if (nodo->getID() - 6 == 0) { //caso de vuelta completa
@@ -476,19 +480,25 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 			actual = siguiente_aux;
 			siguiente = actual->getNextWaypoint();
 			siguiente_aux = actual->getNextWaypoint();
-			//cout<<"--------------"<<vueltas<<" VUELTA SUPERADA-------------: "<<endl;
+			b=true;
+			direccionContraria=0;
 		}
 
 	}
 
-	if (nodo->getID() < actual->getWaypoint()->getID() && nodo->getID() - 6 != 0) {
-
-		if (cuboNodo->getID() == 0) {
-			//cout<< "VOY MARCHA ATRAS"<<endl;
-			//cout<<endl;
+	if (b==false && nodo->getID() - 6 != 0 && nodo->getID()>=siguiente_aux->getWaypoint()->getID()-2 && direccionContraria!=2) { //comprobador de recuperacion de direccion correcta en caso de no estar en la meta
+		direccionContraria=0;
+	}
+	Pista *mapa = Pista::getInstancia();
+	//comprobadores direccion opuesta
+	if ((b==false && nodo->getID()<siguiente_aux->getWaypoint()->getID()-4 && nodo->getID() - 6 != 0) || (mapa->getTamArrayWaypoints()-1 == nodo->getID() - 6 && (actual->getWaypoint()->getID()-6!=mapa->getTamArrayWaypoints()-1))) {
+		direccionContraria=1;
+		if ((mapa->getTamArrayWaypoints()-1 == nodo->getID() - 6 && (actual->getWaypoint()->getID()-6!=mapa->getTamArrayWaypoints()-1))){
+			direccionContraria=2;	//va marcha atras en la meta id=0 la comprobacion es distinta (por ser mayor el id siempre, tanto para alante como para atras)
 		}
 	}
 
+	
 	//cout<< "NODO ACTUAL:"<< actual->getWaypoint()->getID() <<endl;
 	//cout<< "NODO SIGUIENTE:"<< siguiente->getWaypoint()->getID() <<endl;
 }
@@ -839,7 +849,7 @@ void Corredor::frenar()
 void Corredor::girarDerecha()
 {
 	estado->setDireccionMovimiento(DERECHA);
-	if(vehiculo->getCurrentSpeedKmHour()<120){
+	if(vehiculo->getCurrentSpeedKmHour()<velocidadLimiteGiro){
 	FuerzaGiro = 0.4;
 	}else{
 	FuerzaGiro = 0.1;
@@ -851,7 +861,7 @@ void Corredor::girarDerecha()
 void Corredor::girarIzquierda()
 {
 	estado->setDireccionMovimiento(IZQUIERDA);
-	if(vehiculo->getCurrentSpeedKmHour()<120){
+	if(vehiculo->getCurrentSpeedKmHour()<velocidadLimiteGiro){
 	FuerzaGiro = 0.4;
 	}else{
 	FuerzaGiro = 0.1;
@@ -975,6 +985,10 @@ void Corredor::update()
 	texto->agregar(to_string(vehiculo->getWheelInfo(3).m_engineForce));
 	texto->agregar("\n VELOCIDAD: ");
 	texto->agregar(to_string(vehiculo->getCurrentSpeedKmHour()));
+	if (direccionContraria!=0){
+		texto->agregar("\nVAS EN DIRECCION CONTRARIA, JUGADOR: ");
+		texto->agregar(to_string(cuboNodo->getID())+"\n");
+	}
 
 	Timer *time = Timer::getInstancia();
 
@@ -1003,7 +1017,7 @@ void Corredor::update()
 	//cout<<"Posicion carrera: "<<posicionCarrera<<" ID: "<<cuboNodo->getID()<<endl;
 	//ActualizarRaytest();
 	
-	texto->agregar("POSICION CARRERA: ");
+	texto->agregar("\nPOSICION CARRERA: ");
 	texto->agregar(to_string(posicionCarrera) + "\n");
 
 }

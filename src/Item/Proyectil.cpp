@@ -7,9 +7,9 @@ Proyectil::Proyectil(btVector3 posicionItem) : Item(posicionItem) {
 	GestorIDs::instancia().setIdentifier(nodo, nombre);
 	id = nodo->getID();
 
-	escala.setX(3);
-	escala.setY(3);
-	escala.setZ(3);
+	escala.setX(5);
+	escala.setY(5);
+	escala.setZ(5);
 	nodo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
 
 	posicion = posicionItem;

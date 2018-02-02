@@ -18,7 +18,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	velocidadMaximaTurbo=420;
 	direccionContraria=0;
 	velocidadMaximaAtras=-100;
-	velocidadLimiteGiro=120;
+	velocidadLimiteGiro=150;
 	turboActivado = false;
 	objetivoFijado = false;
 	aceiteActivado = false;

@@ -267,7 +267,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			pos.setX(x);
 			pos.setY(y);
 			pos.setZ(z);
-			player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
+			player[numPlayers] = new CorredorRed("assets/coche.obj", pos, Corredor::tipo_jugador::GLADIADOR);
 			player[numPlayers]->getNodo()->setID(id);
 
 			//player[numPlayers]->setPosition(posicion);
@@ -289,7 +289,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 				bsIn.Read(posicion.getY());
 				bsIn.Read(posicion.getZ());
 				bsIn.Read(playerNetworkID);
-				player[i] = new CorredorRed("assets/coche.obj", posicion);
+				player[i] = new CorredorRed("assets/coche.obj", posicion,Corredor::tipo_jugador::GLADIADOR);
 				player[i]->getNodo()->setID(i);
 				player[i]->update();
 				//player[i]->setPosition(posicion);
@@ -299,7 +299,7 @@ int Client::ReceivePackets(ISceneManager *escena)
 			}
 			cout << "ahora vamos a crear el suyo: " << endl;
 			pos = pos2[i];
-			player[i] = new CorredorJugador("assets/coche.obj", pos);
+			player[i] = new CorredorJugador("assets/coche.obj", pos,Corredor::tipo_jugador::GLADIADOR);
 			player[i]->getNodo()->setID(i);
 			typeID = ID_SPAWN_PLAYER;
 			player[numPlayers]->SetNetworkIDManager(&networkIDManager);

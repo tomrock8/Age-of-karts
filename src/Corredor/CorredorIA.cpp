@@ -1,6 +1,6 @@
 #include "CorredorIA.hpp"
 
-CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos) : Corredor(rutaObj, pos)
+CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos, tipo)
 {
 
 	cuboNodo->setName("JugadorIA");
@@ -166,8 +166,8 @@ void CorredorIA::reposicionar(){
 		posicion_aux=posicion;
 		
 	}
-	if (time->getTimer()-timerRecolocar>6){
-		if (abs(abs(posicion_aux.getX())-abs(posicion.getX()))<1 && abs(abs(posicion_aux.getZ())-abs(posicion.getZ()))<1){
+	if (time->getTimer()-timerRecolocar>4){
+		if (abs(abs(posicion_aux.getX())-abs(posicion.getX()))<2 && abs(abs(posicion_aux.getZ())-abs(posicion.getZ()))<2){
 			btVector3 btPos = actual->getPosicion();
 
 			btTransform trans;
@@ -183,7 +183,7 @@ void CorredorIA::reposicionar(){
 			//cout<<"sigue"<<endl;
 		}
 	}
-	if (time->getTimer()-timerRecolocar>8){
+	if (time->getTimer()-timerRecolocar>5){
 		timerRecolocar=time->getTimer();
 	}
 }

@@ -74,23 +74,23 @@ void EscenaJuego::init() {
 	Corredor **pj = jugadores->getJugadores();
 
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		pj[0] = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310));
+		pj[0] = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::CHINO);
 		jugadores->aumentarJugadores();
 
-		pj[1] = new CorredorIA("assets/coche.obj", btVector3(-10, 0, 280));
+		pj[1] = new CorredorIA("assets/coche.obj", btVector3(-10, 0, 280),Corredor::tipo_jugador::GLADIADOR);
 		jugadores->aumentarJugadores();
 
 	
-		pj[2] = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 300));
+		pj[2] = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 300),Corredor::tipo_jugador::PIRATA);
 		jugadores->aumentarJugadores();
 
-		pj[3] = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 280));
+		pj[3] = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 280),Corredor::tipo_jugador::VIKINGO);
 		jugadores->aumentarJugadores();
 
-		pj[4] = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 300));
+		pj[4] = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 300),Corredor::tipo_jugador::GLADIADOR);
 		jugadores->aumentarJugadores();
 
-		pj[5] = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 290));
+		pj[5] = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 290),Corredor::tipo_jugador::CHINO);
 		jugadores->aumentarJugadores();
 
 

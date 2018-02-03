@@ -14,7 +14,7 @@ private:
 	Proyectil **proX3;*/
 
 public:
-  CorredorRed(stringw rutaObj, btVector3 pos);
+  CorredorRed(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo);
   void updateRed();
   void movimiento();
   void acelerarRed();

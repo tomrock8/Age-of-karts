@@ -12,7 +12,7 @@ using namespace std;
 class CorredorIA : public Corredor
 {
   public:
-	CorredorIA(stringw rutaObj, btVector3 pos);
+	CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo);
 
 	void movimiento();
 	void reposicionar();

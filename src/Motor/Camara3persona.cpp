@@ -12,6 +12,14 @@ Camara3persona::~Camara3persona() {
 	cout << "\nSALGO DEL DESTRUCTOR DE CAMARA\n";
 }
 
+void Camara3persona::moveCamera(Corredor * pj1){
+	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
+	vector3df RelativeToCar(0,30,-40);
+	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCar);
+	camera->setPosition(RelativeToCar);
+	camera->setTarget(pj1->getNodo()->getAbsolutePosition());
+}
+
 void Camara3persona::moveCameraControl(Corredor *pj1) {
 	CTeclado *teclado = CTeclado::getInstancia();
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();

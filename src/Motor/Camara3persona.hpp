@@ -12,6 +12,7 @@ class Camara3persona
 public:
   Camara3persona();
   ~Camara3persona();
+  void moveCamera(Corredor *pj1);
   void moveCameraControl(Corredor *pj1);
   void moveCameraControlPointer(Corredor *pj1);
 

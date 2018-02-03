@@ -225,7 +225,7 @@ void EscenaJuego::update() {
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		pj[0]->actualizarItem();
 		//pj[1]->actualizarItem();
-		camara->moveCameraControl(pj[0]);
+		camara->moveCamera(pj[0]);
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		pj[0]->update();
 		pj[1]->update();

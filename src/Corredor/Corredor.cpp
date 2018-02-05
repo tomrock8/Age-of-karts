@@ -150,7 +150,7 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaximaTurbo=410;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.2;
+			indiceGiroBajo=0.15;
 			velocidadLimiteGiro=180;
 			//------PESO------
 			Masa = btScalar(500);
@@ -882,11 +882,7 @@ void Corredor::calculoDistanciaPuntoAnterior() {
 void Corredor::acelerar()
 {
 	if((vehiculo->getCurrentSpeedKmHour()>velocidadMaxima && !turboActivado) || (turboActivado && vehiculo->getCurrentSpeedKmHour()>velocidadMaximaTurbo)){
-
-		vehiculo->applyEngineForce(0, 0);
-		vehiculo->applyEngineForce(0, 1);
-		vehiculo->applyEngineForce(0, 2);
-		vehiculo->applyEngineForce(0, 3);
+		limitadorVelocidad();
 
 	}else{
 		vehiculo->applyEngineForce(Fuerza, 0);
@@ -988,10 +984,7 @@ void Corredor::frenodemano(bool activo)
 void Corredor::desacelerar()
 {
 	estado->setEstadoMovimiento(DESACELERA);
-	vehiculo->applyEngineForce(0, 0);
-	vehiculo->applyEngineForce(0, 1);
-	vehiculo->applyEngineForce(0, 2);
-	vehiculo->applyEngineForce(0, 3);
+	limitadorVelocidad();
 
 	vehiculo->setSteeringValue(0, 0);
 	vehiculo->setSteeringValue(0, 1);
@@ -1001,7 +994,12 @@ void Corredor::desacelerar()
 	vehiculo->setBrake(60, 2);
 	vehiculo->setBrake(60, 3);
 }
-
+void Corredor::limitadorVelocidad(){
+	vehiculo->applyEngineForce(0, 0);
+	vehiculo->applyEngineForce(0, 1);
+	vehiculo->applyEngineForce(0, 2);
+	vehiculo->applyEngineForce(0, 3);
+}
 void Corredor::comprobarSueloRuedas()
 {
 /*
@@ -1055,27 +1053,10 @@ std::string Corredor::toString()
 //---------------------------------------//
 void Corredor::update()
 {
-
-
-	TextoPantalla *texto =TextoPantalla::getInstancia();
-	texto->agregar("---------------------- \n");
-    texto->agregar("\n Rueda alante izquierda: ");
-	texto->agregar(to_string(vehiculo->getWheelInfo(0).m_engineForce));
-	texto->agregar("\n Rueda alante derecha: ");
-	texto->agregar(to_string(vehiculo->getWheelInfo(1).m_engineForce));
-	texto->agregar("\n Rueda atras izquierda:");
-	texto->agregar(to_string(vehiculo->getWheelInfo(2).m_engineForce));
-	texto->agregar("\n Rueda atras derecha: ");
-	texto->agregar(to_string(vehiculo->getWheelInfo(3).m_engineForce));
-	texto->agregar("\n VELOCIDAD: ");
-	texto->agregar(to_string(vehiculo->getCurrentSpeedKmHour()));
-	if (direccionContraria!=0){
-		texto->agregar("\nVAS EN DIRECCION CONTRARIA, JUGADOR: ");
-		texto->agregar(to_string(cuboNodo->getID())+"\n");
+	if((vehiculo->getCurrentSpeedKmHour()>velocidadMaxima && !turboActivado) || (turboActivado && vehiculo->getCurrentSpeedKmHour()>velocidadMaximaTurbo)){
+		limitadorVelocidad();
 	}
-
 	Timer *time = Timer::getInstancia();
-
 	if (turboActivado) {
 		if (time->getTimer() - timerTurbo >= 1) {
 			//cout << "Se acaba el turbo\n";
@@ -1098,12 +1079,31 @@ void Corredor::update()
 	calculoDistanciaPunto();
 	calculoDistanciaPuntoActual();
 	calculoDistanciaPuntoAnterior();
+	updateText();
 	//cout<<"Posicion carrera: "<<posicionCarrera<<" ID: "<<cuboNodo->getID()<<endl;
 	//ActualizarRaytest();
-	
+
+}
+
+void Corredor::updateText(){
+	TextoPantalla *texto =TextoPantalla::getInstancia();
+	texto->agregar("---------------------- \n");
+    texto->agregar("\n Rueda alante izquierda: ");
+	texto->agregar(to_string(vehiculo->getWheelInfo(0).m_engineForce));
+	texto->agregar("\n Rueda alante derecha: ");
+	texto->agregar(to_string(vehiculo->getWheelInfo(1).m_engineForce));
+	texto->agregar("\n Rueda atras izquierda:");
+	texto->agregar(to_string(vehiculo->getWheelInfo(2).m_engineForce));
+	texto->agregar("\n Rueda atras derecha: ");
+	texto->agregar(to_string(vehiculo->getWheelInfo(3).m_engineForce));
+	texto->agregar("\n VELOCIDAD: ");
+	texto->agregar(to_string(vehiculo->getCurrentSpeedKmHour()));
+	if (direccionContraria!=0){
+		texto->agregar("\nVAS EN DIRECCION CONTRARIA, JUGADOR: ");
+		texto->agregar(to_string(cuboNodo->getID())+"\n");
+	}
 	texto->agregar("\nPOSICION CARRERA: ");
 	texto->agregar(to_string(posicionCarrera) + "\n");
-
 }
 
 void Corredor::updateTimerObstaculos() {

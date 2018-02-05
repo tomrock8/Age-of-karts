@@ -16,6 +16,7 @@ void Camara3persona::moveCamera(Corredor * pj1){
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
 	vector3df RelativeToCar(0,30,-40);
 	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCar);
+	RelativeToCar.Y = 30;
 	camera->setPosition(RelativeToCar);
 	camera->setTarget(pj1->getNodo()->getAbsolutePosition());
 }

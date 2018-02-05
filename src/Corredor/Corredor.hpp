@@ -54,6 +54,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
 	void setLimite(int s);
+	void limitadorVelocidad();
 	
 
 	//waypoints
@@ -70,6 +71,7 @@ class Corredor: public RakNet::NetworkIDObject
 	// Update
 	void update();
 	void updateEstado();
+	void updateText();
 	void comprobarSueloRuedas();
 
 	// Metodos GET

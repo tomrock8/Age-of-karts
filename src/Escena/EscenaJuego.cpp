@@ -231,7 +231,6 @@ void EscenaJuego::update() {
 		pj[0]->update();
 		pj[1]->update();
 
-		
 				pj[2]->update();
 				pj[3]->update();
 				pj[4]->update();
@@ -246,6 +245,7 @@ void EscenaJuego::update() {
 			pj[controlPlayer]->actualizarItem();
 
 		if (jugadores->getNumJugadores() != 0)
+		//	camara->moveCamera(pj[controlPlayer]);
 			camara->moveCameraControl(pj[controlPlayer]);
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED

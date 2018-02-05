@@ -114,8 +114,8 @@ void CorredorIA::movimiento()
 	if(giroFuerteDerecha){
 	//girarDerecha();
 	//frenar();
-	vehiculo->setSteeringValue(0.12, 0);
-	vehiculo->setSteeringValue(0.12, 1);
+	vehiculo->setSteeringValue(0.15, 0);
+	vehiculo->setSteeringValue(0.15, 1);
 	//frenodemano(true);
 
 	}
@@ -131,8 +131,8 @@ void CorredorIA::movimiento()
 	if(giroFuerteIzquierda){
 	//girarIzquierda();
 	//frenar();
-	vehiculo->setSteeringValue(-0.12, 0);
-	vehiculo->setSteeringValue(-0.12, 1);
+	vehiculo->setSteeringValue(-0.15, 0);
+	vehiculo->setSteeringValue(-0.15, 1);
 	//frenodemano(true);
 	
 	}
@@ -223,10 +223,10 @@ void CorredorIA::logicaDifusa() {
 
 
 		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-40,0,40);
-		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,5,15,30);
-		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-5,-15,-30);
-		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,25,80,180);
-		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-25,-80,-180);
+		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,5,20,35);
+		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-5,-20,-35);
+		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,30,80,180);
+		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-30,-80,-180);
 		
 
 	if(pertenenciaCerca > pertenenciaMedia && pertenenciaCerca > pertenenciaLejos){

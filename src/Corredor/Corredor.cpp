@@ -150,7 +150,7 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaximaTurbo=410;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.15;
+			indiceGiroBajo=0.1;
 			velocidadLimiteGiro=180;
 			//------PESO------
 			//Masa = btScalar(500);

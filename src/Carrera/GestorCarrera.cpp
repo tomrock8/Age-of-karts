@@ -53,15 +53,7 @@ void GestorCarrera::update() {
 							}
 							else {          //no estan en el mismo waypoint
 								if (i < j) {   //si el waypoint de i es mayor (i mas pequenya) entra
-									if (pj1[y]->getWaypointAnterior()->getWaypoint()->getID() == pj1[x]->getWaypointActual()->getWaypoint()->getID()) {    //si un corredor esta un waypoint por detras que otro entra
-										if (pj1[y]->getdistanciaWaypointAnterior() > pj1[x]->getdistanciaWaypointActual()) {       //si ademas el corredor1 esta mas lejos del waypoint anterior que el corredor2 de su waypoint actual aumentamos su posicion en carrera (en caso contrario no)
-											cont--;
-										}
-									}
-									else {      //sino al i tener waypoint mayor aumentamos posicion de carrera
 										cont--;
-									}
-
 								}
 							}
 						}

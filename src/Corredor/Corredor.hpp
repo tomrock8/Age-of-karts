@@ -58,13 +58,10 @@ class Corredor: public RakNet::NetworkIDObject
 	
 
 	//waypoints
-	void calculoDistanciaPunto();
-	void calculoDistanciaPuntoActual();
-	void calculoDistanciaPuntoAnterior();
 	void setPosicionCarrera(int i);
 	int getPosicionCarrera();
+	btScalar getDistanciaPunto(btVector3 vector);
 	btScalar getdistanciaWaypoint();
-	btScalar getdistanciaWaypointAnterior();
 	btScalar getdistanciaWaypointActual();
 	int getVueltas();
 	

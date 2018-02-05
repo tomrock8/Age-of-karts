@@ -18,107 +18,123 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 //-----------------------\*
 void CorredorIA::movimiento()
 {
-//	cout<<"velocidad::"<<vehiculo->getCurrentSpeedKmHour()<< endl;
+	//LLmamos a la logica difusa para que nos de los valores de entrada
 	logicaDifusa();
 	
-	
+	//	if(distanciaCerca && vehiculo->getCurrentSpeedKmHour()>300){
+	//desacelerar();
+	//}else{
+	acelerar();
+	//}
 
 	
-	if(!caja || !turbo){
+	//si no veo nada con el raycast sigo los waypoints	
+	if(!caja || !turbo || !enemigo){
 	//cout<< "sigoWAyPOINT"<< endl;
 	distanciaVector();
 	
 	}
 	
-
+	//COJO LA caja mas cercana porq la veo
 	if(caja && turbo || caja && !turbo){
-    //    cout<< "sigoCAJA"<< endl;
+    //cout<< "sigoCAJA"<< endl;
+	if(getDistanciaPunto(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z))<4000)
     calculoAnguloGiro(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z));
+
+	if(getDistanciaPunto(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z))<20){
+		if(tipoObj==2 || tipoObj==4) // si son cajas falsas lo mejor es ponerlas junto a las de verdad
+		usarObjetos();	
+	}
 
     }
 
+	//cojo turbo
 	if(turbo && !caja){
 	//cout<< "sigoTUrbo"<< endl;
+	if(getDistanciaPunto(btVector3(turbo->getPosition().X,turbo->getPosition().Y,turbo->getPosition().Z))<2500)
 	calculoAnguloGiro(btVector3(turbo->getPosition().X,turbo->getPosition().Y,turbo->getPosition().Z));	
 	
 	}
 
 
-	if(distanciaCerca){
-		//vehiculo->setBrake(3000,0);
-		//vehiculo->setBrake(3000,1);
-//		vehiculo->setBrake(1000,2);
-//		vehiculo->setBrake(1000,3);
+	//lanzamiento de objetos sin necesidad de ver al jugador
+	if(tipoObj!=0){
+		
+		if(tipoObj==3)// falta condicion para usarlo en rectas 
+		tipoObj=0;
+		if(tipoObj==5)//el escudo se usa al instante
+		usarObjetos();
+		if(tipoObj==8)// poner condicion para que lo lance en rectas y a parte no los tire todos seguidos
+		tipoObj=0;
+		if(tipoObj==9)
+		tipoObj==0;
+	
 	}
-		acelerar();
+
+	//veo al enemigo necesito orientamer a el para lanzarle proyectiles no dirigidos
+	if(enemigo){
+	//cout<<"veo enemigo"<< endl;	
+		if(tipoObj==1 || tipoObj == 6){
+			//hay que orientarse al jugador, tener en cuenta su distancia se puede usar logica difusa para esot pero de momento no
+			if(getDistanciaPunto(btVector3(enemigo->getPosition().X,enemigo->getPosition().Y,enemigo->getPosition().Z))<3000){	
+			calculoAnguloGiro(btVector3(enemigo->getPosition().X,enemigo->getPosition().Y,enemigo->getPosition().Z));
+			
+			if(noGiro)	
+			usarObjetos();
+
+			}
+			//cout<<"disparo"<<endl;		
+		}else{
+		// no tengo objeto pero alomejor me interesa esquivarlo	
+
+		}
+	}
+
+
+	
 	
 	reposicionar();
 
-
-
-	if(distanciaCerca || distanciaMedia){
-	
-		//cout<<"FRENO" << endl;
-	/*
-	vehiculo->applyEngineForce(50,0);
-	vehiculo->applyEngineForce(50,1);
-	vehiculo->applyEngineForce(50,2);
-	vehiculo->applyEngineForce(50,3);
-
-	vehiculo->setBrake(10,0);
-	vehiculo->setBrake(10,1);
-	vehiculo->setBrake(10,2);
-	vehiculo->setBrake(10,3);
-	*/	
-	}
 
 	if(noGiro){
 	
 	vehiculo->setSteeringValue(0, 0);
 	vehiculo->setSteeringValue(0, 1);
-
+	//frenodemano(false);
 	}
 
 	if(giroFlojoDerecha){
 	girarDerecha();
-	
+	//frenodemano(false);
 	//vehiculo->setSteeringValue(0.09, 0);
 	//vehiculo->setSteeringValue(0.09, 1);
 
 	}
 
 	if(giroFuerteDerecha){
-		//girarDerecha();
-	//frenodemano(true);
+	//girarDerecha();
 	//frenar();
-	vehiculo->setSteeringValue(0.2, 0);
-	vehiculo->setSteeringValue(0.2, 1);
-	//frenodemano(false);
-	//vehiculo->setBrake(100,0);
-	//vehiculo->setBrake(100,1);
-	//vehiculo->setBrake(100,2);
-	//vehiculo->setBrake(100,3);
+	vehiculo->setSteeringValue(0.1, 0);
+	vehiculo->setSteeringValue(0.1, 1);
+	//frenodemano(true);
+
 	}
 
 	if(giroFlojoIzquierda){
 	girarIzquierda();
-	
+	//frenodemano(true);
 	//vehiculo->setSteeringValue(-0.09, 0);
 	//vehiculo->setSteeringValue(-0.09, 1);
-
+	//frenodemano(false);
 	}
 
 	if(giroFuerteIzquierda){
 	//girarIzquierda();
-	//frenodemano(true);
 	//frenar();
-	vehiculo->setSteeringValue(-0.2, 0);
-	vehiculo->setSteeringValue(-0.2, 1);
-	//frenodemano(false);
-	//vehiculo->setBrake(100,0);
-	//vehiculo->setBrake(100,1);
-	//vehiculo->setBrake(100,2);
-	//vehiculo->setBrake(100,3);
+	vehiculo->setSteeringValue(-0.1, 0);
+	vehiculo->setSteeringValue(-0.1, 1);
+	//frenodemano(true);
+	
 	}
 
 
@@ -130,32 +146,21 @@ void CorredorIA::distanciaVector(){
 	btScalar distanciaLado1=0;
 	btScalar distanciaLado2=0;
 
-	
 	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
-	btVector3 posWaypoint(actual->getPosicion().getX(), actual->getPosicion().getY(), actual->getPosicion().getZ());
-	distanciaCentro = posCoche.distance2(posWaypoint);
-	distanciaLado1 = posCoche.distance2(siguiente->getVector1());
-	distanciaLado2 = posCoche.distance2(siguiente->getVector2());
+	distanciaCentro = getDistanciaPunto(siguiente->getPosicion());
+	distanciaLado1 = getDistanciaPunto(siguiente->getVector1());
+	distanciaLado2 = getDistanciaPunto(siguiente->getVector2());
 	
 	if(distanciaCentro<distanciaLado1 && distanciaCentro<distanciaLado2){
-	
-	
 	calculoAnguloGiro(siguiente->getPosicion());
-	
 	}
 	else{
-
  	if(distanciaLado1<distanciaCentro && distanciaLado1<distanciaLado2){
-
-	
 	calculoAnguloGiro(siguiente->getVector1());
 	}
 	if(distanciaLado2<distanciaCentro && distanciaLado2<distanciaLado1){
-	
 	calculoAnguloGiro(siguiente->getVector2());
-	
 	}
-	
 	}
 
 }
@@ -214,11 +219,14 @@ void CorredorIA::logicaDifusa() {
 	pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint, 1500, 4000, 6000, 7000);
 	pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint, 6000, 7000, 9000, 100000);
 
-		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-8,0,8);
-		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,9,15,45);
-		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-9,-15,-45);
-		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,46,80,180);
-		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-46,-80,-180);
+
+
+
+		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-40,0,40);
+		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,5,15,30);
+		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-5,-15,-30);
+		pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,25,80,180);
+		pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-25,-80,-180);
 		
 
 	if(pertenenciaCerca > pertenenciaMedia && pertenenciaCerca > pertenenciaLejos){
@@ -240,7 +248,8 @@ void CorredorIA::logicaDifusa() {
 
 	}
 
-		if(pertenenciaNoGiro!=0){
+		if(pertenenciaNoGiro>pertenenciaGiroFlojoDerecha && pertenenciaNoGiro>pertenenciaGiroFlojoIzquierda
+		&&pertenenciaNoGiro>pertenenciaGiroFuerteDerecha && pertenenciaNoGiro>pertenenciaGiroFuerteIzquierda){
 			giroFuerteDerecha=false;
 			giroFlojoDerecha=false;
 			noGiro=true;
@@ -248,14 +257,16 @@ void CorredorIA::logicaDifusa() {
 			giroFlojoIzquierda=false;
 		}
 
-		if(pertenenciaGiroFlojoDerecha!=0){
+		if(pertenenciaGiroFlojoDerecha>pertenenciaNoGiro && pertenenciaGiroFlojoDerecha>pertenenciaGiroFuerteDerecha
+			&& pertenenciaGiroFlojoDerecha>pertenenciaGiroFlojoIzquierda && pertenenciaGiroFlojoDerecha>pertenenciaGiroFuerteIzquierda){
 			giroFuerteDerecha=false;
 			giroFlojoDerecha=true;
 			noGiro=false;
 			giroFuerteIzquierda=false;
 			giroFlojoIzquierda=false;
 		}
-		if(pertenenciaGiroFuerteDerecha!=0){
+		if(pertenenciaGiroFuerteDerecha>pertenenciaNoGiro && pertenenciaGiroFuerteDerecha>pertenenciaGiroFlojoDerecha
+		&& pertenenciaGiroFuerteDerecha>pertenenciaGiroFlojoIzquierda && pertenenciaGiroFuerteDerecha>pertenenciaGiroFuerteIzquierda){
 			giroFuerteDerecha=true;
 			giroFlojoDerecha=false;
 			noGiro=false;
@@ -263,14 +274,16 @@ void CorredorIA::logicaDifusa() {
 			giroFlojoIzquierda=false;
 		}	
 
-		if(pertenenciaGiroFlojoIzquierda!=0){
+		if(pertenenciaGiroFlojoIzquierda>pertenenciaNoGiro &&  pertenenciaGiroFlojoIzquierda>pertenenciaGiroFuerteIzquierda
+		&& pertenenciaGiroFlojoIzquierda > pertenenciaGiroFlojoDerecha && pertenenciaGiroFlojoIzquierda > pertenenciaGiroFuerteDerecha){
 			giroFuerteDerecha=false;
 			giroFlojoDerecha=false;
 			noGiro=false;
 			giroFuerteIzquierda=false;
 			giroFlojoIzquierda=true;
 		}
-		if(pertenenciaGiroFuerteIzquierda!=0){
+		if(pertenenciaGiroFuerteIzquierda>pertenenciaNoGiro && pertenenciaGiroFuerteIzquierda>pertenenciaGiroFlojoIzquierda
+		&& pertenenciaGiroFuerteIzquierda>pertenenciaGiroFlojoDerecha && pertenenciaGiroFuerteIzquierda>pertenenciaGiroFuerteDerecha){
 			giroFuerteDerecha=false;
 			giroFlojoDerecha=false;
 			noGiro=false;
@@ -357,10 +370,10 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->computeOverlappingPairs();
 
 	//cout<< orientacion.X << "   "<< orientacion.Z<<endl;
-	float distanciaRaycast = 60; // longitud del rayo
+	float distanciaRaycast = 150; // longitud del rayo
 	float distanciaCoche = 2; // distancia entre el rayo y el coche, donde empieza
-	float Raycast23 = 10; // distancia entre raycast 2 y 3
-	float Raycast45 = 20; // distancia entre raycast 4 y 5
+	float Raycast23 = 25; // distancia entre raycast 2 y 3
+	float Raycast45 = 35; // distancia entre raycast 4 y 5
 
 	// Raycast central1
 	btVector3 inicio(cuboNodo->getPosition().X + orientacion.getX()*distanciaCoche, cuboNodo->getPosition().Y , cuboNodo->getPosition().Z+ orientacion.getZ()*distanciaCoche);
@@ -418,12 +431,10 @@ void CorredorIA::ActualizarRaytest() {
 	distanciaCaja=0;
 	turbo=NULL;	
 	distanciaTurbo=0;
+	enemigo=NULL;
+	distanciaEnemigo=0;
 
-	//de momento lo dejo asi
-	if(tipoObj!=0){
-
-	tipoObj=0;
-	}
+	
 
 	if (RayCast1.hasHit())
 	{
@@ -432,7 +443,9 @@ void CorredorIA::ActualizarRaytest() {
 			{
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast1.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
-			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0){
+			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
+			|| strcmp(Node->getName(),"Jugador") ==0
+			|| strcmp(Node->getName(),"JugadorIA")==0){
 			vision(RayCast1.m_hitFractions[i],Node);
 			//cout<<"RaycastCentral::"<<Node->getName()<<endl;
 			//cout<<"Distancia::"<<RayCast1.m_hitFractions[i] << endl;
@@ -449,7 +462,9 @@ void CorredorIA::ActualizarRaytest() {
 			{
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast2.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
-			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0){
+			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
+			|| strcmp(Node->getName(),"Jugador")==0
+			|| strcmp(Node->getName(),"JugadorIA")==0){
 			vision(RayCast2.m_hitFractions[i],Node);
 			//cout<<"RaycastDerecha1::"<<Node->getName()<<endl;
 			//cout<<"Distancia::"<<RayCast2.m_hitFractions[i] << endl;
@@ -465,7 +480,9 @@ void CorredorIA::ActualizarRaytest() {
 			{
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast3.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
-			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0){
+			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
+			|| strcmp(Node->getName(),"Jugador")==0
+			|| strcmp(Node->getName(),"JugadorIA")==0){
 			vision(RayCast3.m_hitFractions[i],Node);
 			//cout<<"RaycastIzquierda1::"<<Node->getName()<<endl;
 			//cout<<"Distancia::"<<RayCast3.m_hitFractions[i] << endl;
@@ -479,7 +496,9 @@ void CorredorIA::ActualizarRaytest() {
 			{
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast4.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
-			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0){
+			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
+			|| strcmp(Node->getName(),"Jugador")==0 
+			|| strcmp(Node->getName(),"JugadorIA")==0){
 			vision(RayCast4.m_hitFractions[i],Node);
 			//cout<<"RaycastDerecha2::"<<Node->getName()<<endl;
 			//cout<<"Distancia::"<<RayCast4.m_hitFractions[i] << endl;
@@ -493,7 +512,9 @@ void CorredorIA::ActualizarRaytest() {
 			{
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast5.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
-			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0){
+			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
+			|| strcmp(Node->getName(),"Jugador")==0
+			|| strcmp(Node->getName(),"JugadorIA")==0){
 			
 			vision(RayCast5.m_hitFractions[i],Node);
 			//cout<<"RaycastIzquierda2::"<<Node->getName()<<endl;
@@ -536,6 +557,22 @@ void CorredorIA::vision(btScalar distancia,ISceneNode *nodo){
 		if(distancia<distanciaTurbo){
 		distanciaTurbo=distancia;
 		turbo=nodo;	
+		}
+	}
+
+
+
+	if(strcmp(nodo->getName(),"Jugador")==0
+	|| strcmp(nodo->getName(),"JugadorIA")==0){
+
+		if(distanciaEnemigo==0){
+		distanciaEnemigo=distancia;
+		enemigo=nodo;
+		}
+
+		if(distancia<distanciaEnemigo){
+		distanciaEnemigo=distancia;
+		enemigo=nodo;	
 		}
 	}
 

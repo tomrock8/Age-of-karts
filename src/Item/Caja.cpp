@@ -39,7 +39,7 @@ btRigidBody *Caja::inicializarFisicas()
 	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
 
 	// Create the shape
-	btVector3 HalfExtents(escala.getX() * 0.5f, escala.getY()* 0.5f, escala.getZ() * 0.5f);
+	btVector3 HalfExtents(escala.getX() * 1.5, escala.getY()* 1.5, escala.getZ() * 1.5);
 	btCollisionShape *Shape = new btBoxShape(HalfExtents);
 
 	// Add mass

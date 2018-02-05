@@ -75,17 +75,17 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.9); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(1.3); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
-	FuerzaFrenado = btScalar(-8000);
+	FuerzaFrenado = btScalar(-5000);
 	FuerzaFrenoMano = btScalar(700);
 	FuerzaFrenadoReposo = btScalar(60);
 	
 	//VALORES POR DEFECTO
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
-	Masa = btScalar(500);
+	Masa = btScalar(600);
 	FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	indiceGiroAlto=0.4;
@@ -116,10 +116,10 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaximaTurbo=410;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.1;
+			indiceGiroBajo=0.085;
 			velocidadLimiteGiro=150;
 			//------PESO------
-			Masa = btScalar(500);
+			//Masa = btScalar(500);
 			//-----HABILIDAD-----
 			num=1;
 			break;
@@ -132,11 +132,11 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaxima=370;
 			velocidadMaximaTurbo=415;
 			//----GIRO/MANEJO-----
-			indiceGiroAlto=0.3;
-			indiceGiroBajo=0.08;
+			indiceGiroAlto=0.4;
+			indiceGiroBajo=0.085;
 			velocidadLimiteGiro=130;
 			//------PESO------
-			Masa = btScalar(500);
+			//Masa = btScalar(500);
 			//-----HABILIDAD-----
 			num=2;
 			break;
@@ -153,7 +153,7 @@ void Corredor::setParametros(tipo_jugador t){
 			indiceGiroBajo=0.15;
 			velocidadLimiteGiro=180;
 			//------PESO------
-			Masa = btScalar(500);
+			//Masa = btScalar(500);
 			//-----HABILIDAD-----
 			num=3;
 			break;
@@ -166,11 +166,11 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaxima=385;
 			velocidadMaximaTurbo=425;
 			//----GIRO/MANEJO-----
-			indiceGiroAlto=0.26;
-			indiceGiroBajo=0.054;
+			indiceGiroAlto=0.4;
+			indiceGiroBajo=0.06;
 			velocidadLimiteGiro=110;
 			//------PESO------
-			Masa = btScalar(500);
+			//Masa = btScalar(500);
 			//-----HABILIDAD-----
 			num=4;
 			break;
@@ -251,7 +251,7 @@ void Corredor::InicializarFisicas()
 	//establecemos su centro de gravedad
 	btTransform localTransform;
 	localTransform.setIdentity();
-	localTransform.setOrigin(btVector3(0, 1, 0));
+	localTransform.setOrigin(btVector3(0, 1.7, 0));
 	CentroGravedad = new btCompoundShape();
 
 	//Forma Colision
@@ -339,9 +339,7 @@ btScalar Corredor::getdistanciaWaypoint() {
 btScalar Corredor::getdistanciaWaypointActual() {
 	return distanciaWaypointActual;
 }
-btScalar Corredor::getdistanciaWaypointAnterior() {
-	return distanciaWaypointAnterior;
-}
+
 int Corredor::getVueltas() {
 	return vueltas;
 }
@@ -818,64 +816,15 @@ void Corredor::decCargador() { cargador--; };
 //----------------------------------------//
 //-------CALCULO DE DISTANCIA-------------//
 //----------------------------------------//
-void Corredor::calculoDistanciaPunto() {
-
-
+btScalar Corredor::getDistanciaPunto(btVector3 vector) {
 
 	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
-	btVector3 posWaypoint(siguiente->getPosicion().getX(), siguiente->getPosicion().getY(), siguiente->getPosicion().getZ());
+	btVector3 posWaypoint(vector.getX(), vector.getY(), vector.getZ());
 
-	distanciaWaypoint = posCoche.distance2(posWaypoint);
-
-	//calulamos la distancia hasta el waypoint 
-	//cout << "WAYPOINT ACTUAL:" <<actual->getWaypoint()->getID() << endl;
-	//cout << "WAYPOINT SIGUIENTE:" << siguiente->getWaypoint()->getID() << endl;
-	/*
-	TextoPantalla * texto = TextoPantalla::getInstancia();
-	texto->agregar("DISTANCIA: ");
-	//cout <<"distanciaWaypoint: "<<distanciaWaypoint<<endl; 
-	texto->agregar(to_string(distanciaWaypoint) + "\n");
-
-	texto->agregar("WAYPOINT ACTUAL: ");
-	texto->agregar(to_string(actual->getWaypoint()->getID() - 6) + "\n");
-	texto->agregar("WAYPOINT SIGUIENTE: ");
-	texto->agregar(to_string(siguiente->getWaypoint()->getID() - 6) + "\n");
-	texto->agregar("WAYPOINT SIGUIENTE_AUX: ");
-	texto->agregar(to_string(siguiente_aux->getWaypoint()->getID() - 6) + "\n");
-	texto->agregar("VUELTA: ");
-	texto->agregar(to_string(vueltas) + "\n");
-	texto->agregar("Limite:" + to_string(getLimite()) + "\n");
-*/
-	
-
-
+	return posCoche.distance2(posWaypoint);
 
 }
-void Corredor::calculoDistanciaPuntoActual() {
 
-	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
-	btVector3 posWaypoint(actual->getPosicion().getX(), actual->getPosicion().getY(), actual->getPosicion().getZ());
-
-	distanciaWaypointActual = posCoche.distance2(posWaypoint);
-/*
-	TextoPantalla * texto = TextoPantalla::getInstancia();
-	texto->agregar("DISTANCIA ACTUAL: ");
-	texto->agregar(to_string(distanciaWaypointActual) + "\n");
-*/
-}
-void Corredor::calculoDistanciaPuntoAnterior() {
-
-	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
-	btVector3 posWaypoint(anterior->getPosicion().getX(), anterior->getPosicion().getY(), anterior->getPosicion().getZ());
-
-	distanciaWaypointAnterior = posCoche.distance2(posWaypoint);
-/*
-	TextoPantalla * texto = TextoPantalla::getInstancia();
-	texto->agregar("ANTERIOR: ");
-	//cout <<"DISTANCIA ANTERIOR: "<<distanciaWaypointAnterior<<" ID: "<<cuboNodo->getID()<<" WAYPOINT ANT: "<<anterior->getWaypoint()->getID()-6<<endl; 
-	texto->agregar(to_string(anterior->getWaypoint()->getID()-6)+"\n");
-*/
-}
 //----------------------------------------//
 //------------MOVIMIENTO------------------//
 //----------------------------------------//
@@ -937,6 +886,7 @@ void Corredor::girarDerecha()
 
 	vehiculo->setSteeringValue(FuerzaGiro, 0);
 	vehiculo->setSteeringValue(FuerzaGiro, 1);
+
 }
 void Corredor::girarIzquierda()
 {
@@ -948,6 +898,7 @@ void Corredor::girarIzquierda()
 	}
 	vehiculo->setSteeringValue(-FuerzaGiro, 0);
 	vehiculo->setSteeringValue(-FuerzaGiro, 1);
+	
 }
 void Corredor::frenodemano(bool activo)
 {
@@ -956,10 +907,10 @@ void Corredor::frenodemano(bool activo)
 		estado->setEstadoMovimiento(DERRAPA);
 		FuerzaGiro = btScalar(0.25);
 
-		//vehiculo->applyEngineForce(Fuerza, 0);
-		//vehiculo->applyEngineForce(Fuerza, 1);
-		//vehiculo->applyEngineForce(Fuerza, 2);
-		//vehiculo->applyEngineForce(Fuerza, 3);
+		vehiculo->applyEngineForce(FuerzaFrenado/2, 0);
+		vehiculo->applyEngineForce(FuerzaFrenado/2, 1);
+		vehiculo->applyEngineForce(FuerzaFrenado/2, 2);
+		vehiculo->applyEngineForce(FuerzaFrenado/2, 3);
 
 		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(friccion);
 		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(friccion);
@@ -1076,10 +1027,8 @@ void Corredor::update()
 	posicion.setZ(cuboNodo->getPosition().Z);
 	actualizarRuedas();
 	updateVectorDireccion();
-	calculoDistanciaPunto();
-	calculoDistanciaPuntoActual();
-	calculoDistanciaPuntoAnterior();
-	updateText();
+	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
+	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 	//cout<<"Posicion carrera: "<<posicionCarrera<<" ID: "<<cuboNodo->getID()<<endl;
 	//ActualizarRaytest();
 

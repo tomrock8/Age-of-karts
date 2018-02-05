@@ -21,12 +21,15 @@
 #include "Habilidad.hpp"
 #include "ItemTeledirigido.hpp"
 
+
 using namespace std;
 
 class Corredor: public RakNet::NetworkIDObject 
 {
   public:
-	Corredor(stringw rutaObj, btVector3 pos);
+  typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
+	Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo);
+	void setParametros(tipo_jugador t);
 	void InicializarFisicas();
 	void lanzarItem(Proyectil *item, int direcionItem);
 	void lanzarItemTeledirigido();
@@ -151,7 +154,8 @@ protected:
 	//estados de lanzamiento de objeto
 	bool checkItem;
 
-
+	btScalar indiceGiroAlto;
+	btScalar indiceGiroBajo;
 	int velocidadMaxima;
 	int velocidadMaximaTurbo;
 	int velocidadMaximaAtras;

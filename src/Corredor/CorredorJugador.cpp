@@ -1,7 +1,7 @@
 #include "CorredorJugador.hpp"
 #include "Client.hpp"
 
-CorredorJugador::CorredorJugador(stringw rutaObj, btVector3 pos) : Corredor(rutaObj, pos) {
+CorredorJugador::CorredorJugador(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos,tipo) {
 	checkItem = false;
 }
 

@@ -10,28 +10,25 @@
 //---CONSTRUCTOR CORREDOR--\*
 //-------------------------\*
 
-Corredor::Corredor(stringw rutaObj, btVector3 pos)
+Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 {
 	cargador = 0;
 	tipoObj = 0;
-	velocidadMaxima=380;
-	velocidadMaximaTurbo=420;
-	direccionContraria=0;
-	velocidadMaximaAtras=-100;
-	velocidadLimiteGiro=150;
 	turboActivado = false;
 	objetivoFijado = false;
 	aceiteActivado = false;
 	timerTurbo = 0;
 	timerAceite = 0;
 	limite = 0;
+	direccionContraria=0;
+	estado = new EstadosJugador();
+	vueltas = 1;
+	
 	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
 	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
 	//cuboNodo = smgr->addCubeSceneNode(1.5f);
 	if (cuboNodo) {
 		cuboNodo->setName("Jugador");
-		//cambiar a color rojo del coche
-		Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
 		cuboNodo->setScale(vector3df(1, 1, 1.5));
 		// Desactivar la iluminacion del cubo
 		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
@@ -39,12 +36,10 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 		cuboNodo->setRotation(vector3df(0.0f, 90.0f, 0.0f));
 	}
 
-	estado = new EstadosJugador();
-	vueltas = 1;
-
 	posicion.setX(pos.getX());
 	posicion.setY(pos.getY());
 	posicion.setZ(pos.getZ());
+
 	//escudo
 	escudo = new Escudo(pos, getNodo());
 	setProteccion(false);
@@ -76,26 +71,119 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos)
 	rueda4->setMaterialFlag(EMF_LIGHTING, false);
 
 
+	
+	
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
 	suspension = btScalar(1.9); // cuanto mas valor el chasis mas alto respecto a las ruedas
+<<<<<<< HEAD
 	FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
+=======
+>>>>>>> master
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
-	Masa = btScalar(500);
 	FuerzaFrenado = btScalar(-8000);
-	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
 	FuerzaFrenoMano = btScalar(700);
 	FuerzaFrenadoReposo = btScalar(60);
-
+	
+	//VALORES POR DEFECTO
+	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
+	Masa = btScalar(500);
+	FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
+	Fuerza = FuerzaMaxima;
+	indiceGiroAlto=0.4;
+	indiceGiroBajo=0.1;
+	velocidadMaxima=380;
+	velocidadMaximaTurbo=420;
+	velocidadLimiteGiro=150;
+	velocidadMaximaAtras=-100;
+	
 	if (cuboNodo) InicializarFisicas();
 
+	setParametros(tipo);
+
+}
+void Corredor::setParametros(tipo_jugador t){
+
+	//cambiar parametros en funcion del tipo
+	int num=0;
+	switch (t){
+		case GLADIADOR:
+			//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
+			cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
+			//----ACELERACION-----
+			FuerzaMaxima = btScalar(3800);
+			Fuerza = FuerzaMaxima;
+			//----VELOCIDAD-------
+			velocidadMaxima=360;
+			velocidadMaximaTurbo=410;
+			//----GIRO/MANEJO-----
+			indiceGiroAlto=0.4;
+			indiceGiroBajo=0.1;
+			velocidadLimiteGiro=150;
+			//------PESO------
+			Masa = btScalar(500);
+			//-----HABILIDAD-----
+			num=1;
+			break;
+		case PIRATA:
+			cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/green.png"));
+			//----ACELERACION-----
+			FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
+			Fuerza = FuerzaMaxima;
+			//----VELOCIDAD-------
+			velocidadMaxima=370;
+			velocidadMaximaTurbo=415;
+			//----GIRO/MANEJO-----
+			indiceGiroAlto=0.3;
+			indiceGiroBajo=0.08;
+			velocidadLimiteGiro=130;
+			//------PESO------
+			Masa = btScalar(500);
+			//-----HABILIDAD-----
+			num=2;
+			break;
+		case VIKINGO:
+			cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/blue.png"));
+			//----ACELERACION-----
+			FuerzaMaxima = btScalar(3600); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
+			Fuerza = FuerzaMaxima;
+			//----VELOCIDAD-------
+			velocidadMaxima=360;
+			velocidadMaximaTurbo=410;
+			//----GIRO/MANEJO-----
+			indiceGiroAlto=0.4;
+			indiceGiroBajo=0.2;
+			velocidadLimiteGiro=180;
+			//------PESO------
+			Masa = btScalar(500);
+			//-----HABILIDAD-----
+			num=3;
+			break;
+		case CHINO:
+			cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/yellow.png"));
+			//----ACELERACION-----
+			FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
+			Fuerza = FuerzaMaxima;
+			//----VELOCIDAD-------
+			velocidadMaxima=385;
+			velocidadMaximaTurbo=425;
+			//----GIRO/MANEJO-----
+			indiceGiroAlto=0.26;
+			indiceGiroBajo=0.054;
+			velocidadLimiteGiro=110;
+			//------PESO------
+			Masa = btScalar(500);
+			//-----HABILIDAD-----
+			num=4;
+			break;
+	}
 	//HABILIDADES
-	h = new Habilidad(4, this->getNodo());
+	h = new Habilidad(num, this->getNodo());
 	h->getNodo()->setVisible(false);
-	h->setPosicion(pos);
+	h->setPosicion(posicion);
 	h->setPadre(this->getNodo());
 }
 void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning)
@@ -851,9 +939,9 @@ void Corredor::girarDerecha()
 {
 	estado->setDireccionMovimiento(DERECHA);
 	if(vehiculo->getCurrentSpeedKmHour()<velocidadLimiteGiro){
-	FuerzaGiro = 0.4;
+		FuerzaGiro =indiceGiroAlto;
 	}else{
-	FuerzaGiro = 0.1;
+		FuerzaGiro =indiceGiroBajo;
 	}
 
 	vehiculo->setSteeringValue(FuerzaGiro, 0);
@@ -863,9 +951,9 @@ void Corredor::girarIzquierda()
 {
 	estado->setDireccionMovimiento(IZQUIERDA);
 	if(vehiculo->getCurrentSpeedKmHour()<velocidadLimiteGiro){
-	FuerzaGiro = 0.4;
+		FuerzaGiro = indiceGiroAlto;
 	}else{
-	FuerzaGiro = 0.1;
+		FuerzaGiro = indiceGiroBajo;
 	}
 	vehiculo->setSteeringValue(-FuerzaGiro, 0);
 	vehiculo->setSteeringValue(-FuerzaGiro, 1);

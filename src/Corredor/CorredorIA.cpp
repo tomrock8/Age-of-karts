@@ -114,8 +114,8 @@ void CorredorIA::movimiento()
 	if(giroFuerteDerecha){
 	//girarDerecha();
 	//frenar();
-	vehiculo->setSteeringValue(0.1, 0);
-	vehiculo->setSteeringValue(0.1, 1);
+	vehiculo->setSteeringValue(0.12, 0);
+	vehiculo->setSteeringValue(0.12, 1);
 	//frenodemano(true);
 
 	}
@@ -131,8 +131,8 @@ void CorredorIA::movimiento()
 	if(giroFuerteIzquierda){
 	//girarIzquierda();
 	//frenar();
-	vehiculo->setSteeringValue(-0.1, 0);
-	vehiculo->setSteeringValue(-0.1, 1);
+	vehiculo->setSteeringValue(-0.12, 0);
+	vehiculo->setSteeringValue(-0.12, 1);
 	//frenodemano(true);
 	
 	}

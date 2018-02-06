@@ -294,7 +294,7 @@ void CorredorIA::logicaDifusa() {
 		}	
 
 		TextoPantalla * texto = TextoPantalla::getInstancia(); 
-		texto->agregar("ACCION 1: "); 
+		//texto->agregar("ACCION 1: "); 
 		std::string agrega; 
 		if(distanciaLejos)
    			agrega = "ACELERA A TOPE"; 	
@@ -303,9 +303,9 @@ void CorredorIA::logicaDifusa() {
 		if(distanciaCerca)
     		agrega = "Echa el freno fiera"; 
 		
-		texto->agregar(agrega+"\n"); 
+		//texto->agregar(agrega+"\n"); 
 		
-		texto->agregar("ACCION 2: "); 
+		//texto->agregar("ACCION 2: "); 
 		if(noGiro)
 		agrega = "No GIRO";
 		if(giroFlojoDerecha)
@@ -317,7 +317,7 @@ void CorredorIA::logicaDifusa() {
 		if(giroFuerteIzquierda)
 		agrega = "Giro a tope I";
 
-		texto->agregar(agrega+"\n"); 
+		//texto->agregar(agrega+"\n"); 
 
 }
 

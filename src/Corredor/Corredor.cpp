@@ -1028,6 +1028,7 @@ void Corredor::update()
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
+	updateText();
 	//CuerpoColisionChasis->setGravity(btVector3(0,-30.f,0));
 	//CuerpoColisionChasis->applyGravity();
 	//cout<<"Posicion carrera: "<<posicionCarrera<<" ID: "<<cuboNodo->getID()<<endl;
@@ -1038,22 +1039,18 @@ void Corredor::update()
 void Corredor::updateText(){
 	TextoPantalla *texto =TextoPantalla::getInstancia();
 	texto->agregar("---------------------- \n");
-    texto->agregar("\n Rueda alante izquierda: ");
-	texto->agregar(to_string(vehiculo->getWheelInfo(0).m_engineForce));
-	texto->agregar("\n Rueda alante derecha: ");
-	texto->agregar(to_string(vehiculo->getWheelInfo(1).m_engineForce));
-	texto->agregar("\n Rueda atras izquierda:");
-	texto->agregar(to_string(vehiculo->getWheelInfo(2).m_engineForce));
-	texto->agregar("\n Rueda atras derecha: ");
-	texto->agregar(to_string(vehiculo->getWheelInfo(3).m_engineForce));
-	texto->agregar("\n VELOCIDAD: ");
+	texto->agregar("Jugador ");
+	texto->agregar(to_string(cuboNodo->getID())+"\n");
+	texto->agregar("VELOCIDAD: ");
 	texto->agregar(to_string(vehiculo->getCurrentSpeedKmHour()));
 	if (direccionContraria!=0){
 		texto->agregar("\nVAS EN DIRECCION CONTRARIA, JUGADOR: ");
 		texto->agregar(to_string(cuboNodo->getID())+"\n");
 	}
 	texto->agregar("\nPOSICION CARRERA: ");
-	texto->agregar(to_string(posicionCarrera) + "\n");
+	texto->agregar(to_string(posicionCarrera));
+	texto->agregar("\nOBJETO: ");
+	texto->agregar(to_string(tipoObj) + "\n");
 }
 
 void Corredor::updateTimerObstaculos() {

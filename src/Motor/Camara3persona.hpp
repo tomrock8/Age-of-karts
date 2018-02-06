@@ -13,6 +13,7 @@ public:
   Camara3persona();
   ~Camara3persona();
   void moveCamera(Corredor *pj1);
+  void movefpsCamera(Corredor *pj1);
   void moveCameraControl(Corredor *pj1);
   void moveCameraControlPointer(Corredor *pj1);
 
@@ -20,6 +21,7 @@ private:
   float direction;
   float zdirection;
   ICameraSceneNode *camera;
+  bool fpsActiva;
 };
 
 #endif /* CAMARA3PERSONA_H */

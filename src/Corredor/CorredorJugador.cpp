@@ -89,10 +89,6 @@ void CorredorJugador::actualizarItem() {
 				client->PlayerThrowObject();
 			//Llama a la funcion de la clase padre
 			usarObjetos();
-
-
-
-
 		}
 	}
 }

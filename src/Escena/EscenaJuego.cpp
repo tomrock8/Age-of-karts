@@ -116,6 +116,8 @@ void EscenaJuego::init() {
 	//	CAMARA
 	//-----------------------------
 	camara = new Camara3persona();
+	tipoCamara = 0;
+	cambioCamara = false;
 
 	//-----------------------------
 	//	GESTOR COLISIONES
@@ -225,8 +227,20 @@ void EscenaJuego::update() {
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		pj[0]->actualizarItem();
 		//pj[1]->actualizarItem();
-		camara->moveCameraControl(pj[0]); 
-		//camara->moveCamera(pj[0]);
+		switch(tipoCamara){
+			case 0:		//Camara 3a persona libre
+				camara->moveCameraControl(pj[0]); 
+			break;
+			case 1:		//Camara 3a persona fija
+				camara->moveCamera(pj[0]);
+			break;
+			case 2:		//Camara 1a persona
+				camara->movefpsCamera(pj[0]);
+			break;
+			case 3:
+				camara->moveCameraControlPointer(pj[0]);
+
+		}
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		pj[0]->update();
 		pj[1]->update();
@@ -316,6 +330,18 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		pj[i]->getRigidBody()->setCenterOfMassTransform(trans);
 		pj[i]->resetFuerzas();
 		//pj[0]->getNodo()->setPosition(pos);
+	}
+
+	if(teclado->isKeyup(KEY_KEY_C)){
+		if(cambioCamara)
+			cambioCamara = false;
+	}
+	if(teclado->isKeyDown(KEY_KEY_C)){
+		if(!cambioCamara){
+			tipoCamara++;
+			if(tipoCamara == 4) tipoCamara = 0;
+			cambioCamara = true;
+		}
 	}
 	if (teclado->isKeyDown(KEY_KEY_T)) {
 		float *resetPos = new float[3];

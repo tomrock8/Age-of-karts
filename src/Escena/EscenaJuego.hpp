@@ -45,6 +45,8 @@ private:
 	DebugDraw *debugDraw;
 
 	Camara3persona *camara;
+	int tipoCamara;
+	bool cambioCamara;
 	GestorColisiones *colisiones;
 
 	int lastFPS;

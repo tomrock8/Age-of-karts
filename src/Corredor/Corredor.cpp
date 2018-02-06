@@ -1060,7 +1060,12 @@ void Corredor::updateTimerObstaculos() {
 			Timer *t = Timer::getInstancia();
 			if (t->getTimer()-timerTeledirigido>=2){
 				
-				lanzarItemTeledirigido();
+    			if (!proteccion){ 
+          			lanzarItemTeledirigido(); 
+				}else{ 
+					setProteccion(false);
+					objetivoFijado=false;
+				}
 			}
 			if (t->getTimer()-timerTeledirigido>=3){
 				objetivoFijado=false;

@@ -75,7 +75,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.6); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(1.9); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -251,7 +251,7 @@ void Corredor::InicializarFisicas()
 	//establecemos su centro de gravedad
 	btTransform localTransform;
 	localTransform.setIdentity();
-	localTransform.setOrigin(btVector3(0, 2, 0));
+	localTransform.setOrigin(btVector3(0, 1, 0));
 	CentroGravedad = new btCompoundShape();
 
 	//Forma Colision
@@ -1028,10 +1028,6 @@ void Corredor::update()
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
-	if(strcmp(cuboNodo->getName(),"Jugador")==0){
-		cout<< CuerpoColisionChasis->getLinearVelocity().getY() << endl;
-		cout<< vehiculo->getCurrentSpeedKmHour()<< endl;
-	}
 	//CuerpoColisionChasis->setGravity(btVector3(0,-30.f,0));
 	//CuerpoColisionChasis->applyGravity();
 	//cout<<"Posicion carrera: "<<posicionCarrera<<" ID: "<<cuboNodo->getID()<<endl;

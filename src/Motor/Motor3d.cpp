@@ -8,6 +8,8 @@ Motor3d::Motor3d() {
 	anchoPantalla = 1280;
 	altoPantalla = 720;
 	device = createDevice(video::EDT_OPENGL, dimension2d<u32>(anchoPantalla, altoPantalla), 16, false, false, true, 0);
+	device->getCursorControl()->setVisible(false);
+
 	if (!device) 
 		std::cout << "ERROR AL CREAR EL DEVICE" << std::endl;
 

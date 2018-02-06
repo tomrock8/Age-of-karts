@@ -75,7 +75,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.9); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(1.6); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -119,7 +119,7 @@ void Corredor::setParametros(tipo_jugador t){
 			indiceGiroBajo=0.085;
 			velocidadLimiteGiro=150;
 			//------PESO------
-			//Masa = btScalar(500);
+			Masa = btScalar(400);
 			//-----HABILIDAD-----
 			num=1;
 			break;
@@ -136,7 +136,7 @@ void Corredor::setParametros(tipo_jugador t){
 			indiceGiroBajo=0.085;
 			velocidadLimiteGiro=130;
 			//------PESO------
-			//Masa = btScalar(500);
+			Masa = btScalar(400);
 			//-----HABILIDAD-----
 			num=2;
 			break;
@@ -153,7 +153,7 @@ void Corredor::setParametros(tipo_jugador t){
 			indiceGiroBajo=0.1;
 			velocidadLimiteGiro=180;
 			//------PESO------
-			//Masa = btScalar(500);
+			Masa = btScalar(400);
 			//-----HABILIDAD-----
 			num=3;
 			break;
@@ -170,7 +170,7 @@ void Corredor::setParametros(tipo_jugador t){
 			indiceGiroBajo=0.07;
 			velocidadLimiteGiro=110;
 			//------PESO------
-			//Masa = btScalar(500);
+			Masa = btScalar(1200);
 			//-----HABILIDAD-----
 			num=4;
 			break;
@@ -206,7 +206,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 		wheel.m_wheelsDampingCompression = 2.3f;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
 		wheel.m_wheelsDampingRelaxation =  4.4f;//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
-		wheel.m_rollInfluence = 0.1f;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
+		wheel.m_rollInfluence = 0;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 											//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
 		//wheel.m_maxSuspensionTravelCm = 10; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 
 
@@ -1028,6 +1028,10 @@ void Corredor::update()
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
+	if(strcmp(cuboNodo->getName(),"Jugador")==0){
+		cout<< CuerpoColisionChasis->getLinearVelocity().getY() << endl;
+		cout<< vehiculo->getCurrentSpeedKmHour()<< endl;
+	}
 	//CuerpoColisionChasis->setGravity(btVector3(0,-30.f,0));
 	//CuerpoColisionChasis->applyGravity();
 	//cout<<"Posicion carrera: "<<posicionCarrera<<" ID: "<<cuboNodo->getID()<<endl;

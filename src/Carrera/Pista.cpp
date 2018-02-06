@@ -45,7 +45,7 @@ Pista *Pista::getInstancia()
 void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 	Mapa = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh(mapa));
 	if (Mapa) {
-		Mapa->setName("MAPA1");
+		Mapa->setName("Mapa");
 		Mapa->setMaterialFlag(EMF_LIGHTING, false);
 	}
 

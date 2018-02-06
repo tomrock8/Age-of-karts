@@ -201,7 +201,7 @@ void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 	posicion.getY()-cuboNodo->getPosition().Y,
 	posicion.getZ()-cuboNodo->getPosition().Z);
 	
-	direccion.normalize();
+	//direccion.normalize();
 	anguloGiro = orientacionCoche.angle(direccion) *180/PI;
 	
 	btVector3 orientacionCocheGirada = orientacionCoche.rotate(btVector3(0, 1, 0),2*PI/180);
@@ -445,6 +445,10 @@ void CorredorIA::ActualizarRaytest() {
 			{
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast1.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
+			if(strcmp(Node->getName(),"Mapa")==0 ){
+				cout<<"VEO LA PUTA MIERDA DE MAPA"<< endl;
+				
+			}
 			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
 			|| strcmp(Node->getName(),"Jugador") ==0
 			|| strcmp(Node->getName(),"JugadorIA")==0){
@@ -464,6 +468,10 @@ void CorredorIA::ActualizarRaytest() {
 			{
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast2.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
+			if(strcmp(Node->getName(),"Mapa")==0 && RayCast2.m_hitFractions[i]<0.7){
+				cout<<"VEO LA PUTA MIERDA DE MAPA"<< endl;
+				calculoAnguloGiro(siguiente->getPosicion());
+			}
 			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
 			|| strcmp(Node->getName(),"Jugador")==0
 			|| strcmp(Node->getName(),"JugadorIA")==0){
@@ -482,6 +490,10 @@ void CorredorIA::ActualizarRaytest() {
 			{
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast3.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
+			if(strcmp(Node->getName(),"Mapa")==0 && RayCast3.m_hitFractions[i]<0.7){
+				cout<<"VEO LA PUTA MIERDA DE MAPA"<< endl;
+				calculoAnguloGiro(siguiente->getPosicion());
+			}
 			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
 			|| strcmp(Node->getName(),"Jugador")==0
 			|| strcmp(Node->getName(),"JugadorIA")==0){
@@ -498,6 +510,10 @@ void CorredorIA::ActualizarRaytest() {
 			{
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast4.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
+			if(strcmp(Node->getName(),"Mapa")==0 && RayCast4.m_hitFractions[i]<0.7){
+				cout<<"VEO LA PUTA MIERDA DE MAPA"<< endl;
+				calculoAnguloGiro(siguiente->getPosicion());
+			}
 			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
 			|| strcmp(Node->getName(),"Jugador")==0 
 			|| strcmp(Node->getName(),"JugadorIA")==0){
@@ -514,6 +530,10 @@ void CorredorIA::ActualizarRaytest() {
 			{
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast5.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
+			if(strcmp(Node->getName(),"Mapa")==0 && RayCast5.m_hitFractions[i]<0.7){
+				cout<<"VEO LA PUTA MIERDA DE MAPA"<< endl;
+				calculoAnguloGiro(siguiente->getPosicion());
+			}
 			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
 			|| strcmp(Node->getName(),"Jugador")==0
 			|| strcmp(Node->getName(),"JugadorIA")==0){

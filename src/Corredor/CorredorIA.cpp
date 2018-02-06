@@ -194,6 +194,7 @@ void CorredorIA::reposicionar(){
 		timerRecolocar=time->getTimer();
 	}
 }
+
 void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 
 	btVector3 orientacionCoche(orientacion.getX(),orientacion.getY(),orientacion.getZ());

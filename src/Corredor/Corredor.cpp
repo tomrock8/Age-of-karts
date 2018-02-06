@@ -75,7 +75,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.9); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(1.8); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -906,10 +906,10 @@ void Corredor::frenodemano(bool activo)
 		estado->setEstadoMovimiento(DERRAPA);
 		FuerzaGiro = btScalar(0.45);
 
-		vehiculo->applyEngineForce(FuerzaFrenado/2, 0);
-		vehiculo->applyEngineForce(FuerzaFrenado/2, 1);
-		vehiculo->applyEngineForce(FuerzaFrenado/2, 2);
-		vehiculo->applyEngineForce(FuerzaFrenado/2, 3);
+		vehiculo->applyEngineForce(FuerzaFrenado, 0);
+		vehiculo->applyEngineForce(FuerzaFrenado, 1);
+		vehiculo->applyEngineForce(FuerzaFrenado, 2);
+		vehiculo->applyEngineForce(FuerzaFrenado, 3);
 
 		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(friccion);
 		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(friccion);

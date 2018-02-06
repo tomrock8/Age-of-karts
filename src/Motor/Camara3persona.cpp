@@ -14,11 +14,11 @@ Camara3persona::~Camara3persona() {
 
 void Camara3persona::moveCamera(Corredor * pj1){
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
-	vector3df RelativeToCar(0,30,-40);
+	vector3df RelativeToCar(0,5,-10);
 	vector3df RelativeToCarTarget(0,1,0);
 	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCar);
 	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCarTarget);
-	RelativeToCar.Y = 30;
+	RelativeToCar.Y = 5;
 	RelativeToCarTarget.Y = 1;
 	camera->setPosition(RelativeToCar);
 	camera->setTarget(RelativeToCarTarget);

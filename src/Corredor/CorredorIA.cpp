@@ -64,6 +64,8 @@ void CorredorIA::movimiento()
 		tipoObj=0;
 		if(tipoObj==5)//el escudo se usa al instante
 		usarObjetos();
+		if(tipoObj==7)//el escudo se usa al instante
+		usarObjetos();
 		if(tipoObj==8)// poner condicion para que lo lance en rectas y a parte no los tire todos seguidos
 		tipoObj=0;
 		if(tipoObj==9)

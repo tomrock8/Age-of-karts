@@ -75,7 +75,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.3); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(1.6); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -85,7 +85,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	//VALORES POR DEFECTO
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
-	Masa = btScalar(600);
+	Masa = btScalar(300);
 	FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	indiceGiroAlto=0.4;
@@ -251,7 +251,7 @@ void Corredor::InicializarFisicas()
 	//establecemos su centro de gravedad
 	btTransform localTransform;
 	localTransform.setIdentity();
-	localTransform.setOrigin(btVector3(0, 1.7, 0));
+	localTransform.setOrigin(btVector3(0, 1.5, 0));
 	CentroGravedad = new btCompoundShape();
 
 	//Forma Colision
@@ -266,7 +266,6 @@ void Corredor::InicializarFisicas()
 
 	//rigidbody del coche
 	CuerpoColisionChasis = new btRigidBody(Masa, motionStateCoche, CentroGravedad, Inercia);
-
 	CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
 
 	//RaycastDel Coche

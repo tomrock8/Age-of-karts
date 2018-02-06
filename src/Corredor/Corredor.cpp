@@ -75,7 +75,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.6); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(1.9); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -85,7 +85,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	//VALORES POR DEFECTO
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
-	Masa = btScalar(300);
+	Masa = btScalar(400);
 	FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	indiceGiroAlto=0.4;
@@ -167,7 +167,7 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaximaTurbo=425;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.06;
+			indiceGiroBajo=0.07;
 			velocidadLimiteGiro=110;
 			//------PESO------
 			//Masa = btScalar(500);
@@ -190,9 +190,9 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	vehiculo->setCoordinateSystem(0, 1, 2); // 0, 1, 2
 
 											// Agrega las ruedas delanteras
-	vehiculo->addWheel((puntoConexionChasis * btVector3(4, 1, 2)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);
+	vehiculo->addWheel((puntoConexionChasis * btVector3(4, 1, 3)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);
 
-	vehiculo->addWheel((puntoConexionChasis * btVector3(-4, 1, 2)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);
+	vehiculo->addWheel((puntoConexionChasis * btVector3(-4, 1, 3)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);
 
 	// Agrega las ruedas traseras
 	vehiculo->addWheel((puntoConexionChasis * btVector3(4, 1, -3)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, false);
@@ -202,11 +202,11 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = 10;    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
-		wheel.m_wheelsDampingCompression = btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-		wheel.m_wheelsDampingRelaxation =  btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_suspensionStiffness = 20;    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
+		wheel.m_wheelsDampingCompression = 2.3f;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
+		wheel.m_wheelsDampingRelaxation =  4.4f;//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
-		wheel.m_rollInfluence = 0;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
+		wheel.m_rollInfluence = 0.1f;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 											//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
 		//wheel.m_maxSuspensionTravelCm = 10; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 
 
@@ -251,7 +251,7 @@ void Corredor::InicializarFisicas()
 	//establecemos su centro de gravedad
 	btTransform localTransform;
 	localTransform.setIdentity();
-	localTransform.setOrigin(btVector3(0, 1.5, 0));
+	localTransform.setOrigin(btVector3(0, 2, 0));
 	CentroGravedad = new btCompoundShape();
 
 	//Forma Colision
@@ -904,7 +904,7 @@ void Corredor::frenodemano(bool activo)
 	int friccion = 1.f;
 	if (activo) {
 		estado->setEstadoMovimiento(DERRAPA);
-		FuerzaGiro = btScalar(0.25);
+		FuerzaGiro = btScalar(0.45);
 
 		vehiculo->applyEngineForce(FuerzaFrenado/2, 0);
 		vehiculo->applyEngineForce(FuerzaFrenado/2, 1);
@@ -1028,6 +1028,8 @@ void Corredor::update()
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
+	//CuerpoColisionChasis->setGravity(btVector3(0,-30.f,0));
+	//CuerpoColisionChasis->applyGravity();
 	//cout<<"Posicion carrera: "<<posicionCarrera<<" ID: "<<cuboNodo->getID()<<endl;
 	//ActualizarRaytest();
 

@@ -669,10 +669,6 @@ void Corredor::soltarItem()
 {
 	setTipoObj(0);
 	setLimite(getLimite() + 2);
-	cout << "El limite se ha incrementado, ahora es : " << getLimite() << endl;
-	if (h->getHabilidadActiva() == true) {
-		setLimite(0);
-	}
 }
 
 /*
@@ -780,22 +776,6 @@ void Corredor::usarObjetos() {
 	else if(tipoObj == 8)	//TURBO TRIPLE
 	{
 		setTurbo(true, true, 26000);
-	}
-	else if (getTipoObj() == 9) //HABILIDAD
-	{
-		if (getLimite() >= 10) {//puedo lanzar la habilidad
-			h->getNodo()->setVisible(true);
-			h->setOrientacion(orientacion);
-			h->setPadre(this->getNodo());
-			h->setPosicion(posDisparo);
-			h->lanzarHabilidad();
-			items.push_back(h);
-			soltarItem();
-		}
-		else {
-			cout << "No puedes usar la habilidad si tu limite no es 10 o mas" << endl;
-		}
-
 	}
 	pista->setItems(items);
 
@@ -1050,7 +1030,7 @@ void Corredor::updateText(){
 	}
 	texto->agregar("\nPOSICION CARRERA: ");
 	texto->agregar(to_string(posicionCarrera) + "\n");
-	texto->agregar("\VUELTAS: ");
+	texto->agregar("VUELTAS: ");
 	texto->agregar(to_string(vueltas));
 	texto->agregar("\nOBJETO: ");
 	switch (tipoObj) {
@@ -1082,6 +1062,7 @@ void Corredor::updateText(){
 		texto->agregar("TURBO TRIPLE\n");
 		break;
 	}
+	texto->agregar("Habilidad: "+ to_string(limite) + "/10\n");
 }
 
 void Corredor::updateTimerObstaculos() {
@@ -1163,6 +1144,23 @@ void Corredor::actualizarRuedas()
 	rueda4->setRotation(vector3df(Euler.X, Euler.Y +180, Euler.Z));
 
 
+}
+
+void Corredor::lanzarHabilidad(){
+	if (getLimite() >= 10) {//puedo lanzar la habilidad
+		Pista *pista = Pista::getInstancia();
+		core::list<Item *> items = pista->getItems();
+		h->getNodo()->setVisible(true);
+		h->setOrientacion(orientacion);
+		h->setPadre(this->getNodo());
+		h->setPosicion(posDisparo);
+		h->lanzarHabilidad();
+		items.push_back(h);
+		setLimite(0);
+	}
+	else {
+		cout << "No puedes usar la habilidad si tu limite no es 10 o mas" << endl;
+	}
 }
 
 void Corredor::updateHabilidad() {

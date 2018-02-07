@@ -91,6 +91,9 @@ void CorredorJugador::actualizarItem() {
 			usarObjetos();
 		}
 	}
+	if(teclado->isKeyDown(KEY_KEY_O)){
+		lanzarHabilidad();
+	}
 }
 
 /*

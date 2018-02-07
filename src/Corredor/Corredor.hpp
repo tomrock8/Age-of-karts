@@ -92,6 +92,7 @@ class Corredor: public RakNet::NetworkIDObject
 	bool getCheckItem();
 	void setPosDisparo(btVector3 posDisparo);
 	void usarObjetos();
+	void lanzarHabilidad();
 
 
 	// Destructor

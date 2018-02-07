@@ -22,6 +22,9 @@ private:
   float zdirection;
   ICameraSceneNode *camera;
   bool fpsActiva;
+  float XCamera;
+  float YCamera;
+  float ZCamera;
 };
 
 #endif /* CAMARA3PERSONA_H */

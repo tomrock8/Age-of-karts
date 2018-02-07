@@ -4,9 +4,9 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 {
 
 	cuboNodo->setName("JugadorIA");
-	caja = NULL;
-	enemigo = NULL;
-	turbo= NULL;
+	caja = false;
+	enemigo = false;
+	turbo= false;
 	distanciaCaja = 0;
 	distanciaEnemigo = 0;
 	distanciaTurbo = 0;
@@ -20,8 +20,7 @@ void CorredorIA::movimiento()
 {
 	//LLmamos a la logica difusa para que nos de los valores de entrada
 	logicaDifusa();
-	
-	acelerar();
+	acelerarGirar();
 	
 
 	
@@ -32,6 +31,32 @@ void CorredorIA::movimiento()
 	
 	}
 	
+
+
+	if(tipoObj == 0){
+		//llamar a vision
+		visionArbol();
+	}else{
+
+		if(tipoObj == 1 || tipoObj == 6){ // si es un proyectil
+			//llamar a vision
+			visionArbol();
+		}else{
+
+			if(tipoObj == 3 || tipoObj == 7){ // si es un turbo
+
+				tipoObj=0;
+				
+			}else{
+				usarObjetos();
+
+			}
+
+		}
+	}
+
+
+	/*
 	//COJO LA caja mas cercana porq la veo
 	if(caja && turbo || caja && !turbo){
     //cout<< "sigoCAJA"<< endl;
@@ -90,10 +115,125 @@ void CorredorIA::movimiento()
 	}
 
 
+	*/
 	
 	
-	reposicionar();
 
+}
+
+void CorredorIA::visionArbol(){
+
+	if(!enemigo && !caja && !turbo){
+
+		seguirWaypoint();
+
+	}else{
+
+		if(pertenenciaCerca){
+
+			if(caja){
+
+				if(tipoObj!=0){
+
+					if(tipoObj == 2 || tipoObj == 4){
+
+						usarObjetos();
+
+					}else{
+					
+						seguirWaypoint();
+					
+					}
+
+				}else{
+					
+					calculoAnguloGiro(posicionCaja);
+
+				}
+
+			}else if(enemigo){
+
+				if(tipoObj!=0){
+
+					if(tipoObj == 1 || tipoObj == 6){
+
+						calculoAnguloGiro(posicionEnemigo);
+						if(noGiro)
+						usarObjetos();
+							
+					}else{
+						//condicion para adelantar
+						seguirWaypoint();
+					
+					}
+
+				}else{
+					//condicion para adelantar
+					seguirWaypoint();
+					
+				}
+
+			}else if(turbo){
+
+				calculoAnguloGiro(posicionTurbo);
+			}
+
+
+		}else if(pertenenciaMedia){
+
+			if(caja){
+
+				if(tipoObj!=0){
+
+						seguirWaypoint();
+
+				}else{
+					
+					calculoAnguloGiro(posicionCaja);
+
+				}
+
+			}else if(enemigo){
+
+				if(tipoObj!=0){
+
+					if(tipoObj == 1 || tipoObj == 6){
+
+						calculoAnguloGiro(posicionEnemigo);
+						if(noGiro)
+						usarObjetos();
+							
+					}else{
+						//condicion para adelantar
+						seguirWaypoint();
+					
+					}
+
+				}else{
+					//condicion para adelantar
+					seguirWaypoint();
+					
+				}
+
+			}else if(turbo){
+
+				calculoAnguloGiro(posicionTurbo);
+			}
+
+		}else if(pertenenciaLejos){
+
+			seguirWaypoint();
+
+		}
+
+	}
+
+}
+
+
+void CorredorIA::acelerarGirar(){
+
+	acelerar();
 
 	if(noGiro){
 	
@@ -136,6 +276,7 @@ void CorredorIA::movimiento()
 	
 	}
 
+	reposicionar();
 
 }
 
@@ -152,13 +293,16 @@ void CorredorIA::seguirWaypoint(){
 	
 	if(distanciaCentro<distanciaLado1 && distanciaCentro<distanciaLado2){
 	calculoAnguloGiro(siguiente->getPosicion());
+	
 	}
 	else{
  	if(distanciaLado1<distanciaCentro && distanciaLado1<distanciaLado2){
 	calculoAnguloGiro(siguiente->getVector1());
+	
 	}
 	if(distanciaLado2<distanciaCentro && distanciaLado2<distanciaLado1){
 	calculoAnguloGiro(siguiente->getVector2());
+	
 	}
 	}
 
@@ -214,12 +358,13 @@ void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 
 
 void CorredorIA::logicaDifusa() {
-	//GIRO DEL COCHE
-	pertenenciaCerca = FuncionTrapezoidal(distanciaWaypoint, 0, 0, 500, 2000);
-	pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint, 1500, 4000, 6000, 7000);
-	pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint, 6000, 7000, 9000, 100000);
+	
+	//DISTANCIA
+	pertenenciaCerca = FuncionTrapezoidal(distanciaObjetivo, 0, 0, 500, 2000);
+	pertenenciaMedia = FuncionTrapezoidal(distanciaObjetivo, 1500, 2500, 3500, 4500);
+	pertenenciaLejos = FuncionTrapezoidal(distanciaObjetivo, 4000, 6000, 8000, 100000);
 
-
+	//GIRO
 		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-40,0,40);
 		pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,5,20,35);
 		pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-5,-20,-35);
@@ -425,11 +570,11 @@ void CorredorIA::ActualizarRaytest() {
 	RayCast5.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast5);
 
-	caja=NULL;	
+	caja=false;	
 	distanciaCaja=0;
-	turbo=NULL;	
+	turbo=false;	
 	distanciaTurbo=0;
-	enemigo=NULL;
+	enemigo=false;
 	distanciaEnemigo=0;
 
 	
@@ -442,14 +587,13 @@ void CorredorIA::ActualizarRaytest() {
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast1.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
 			
-			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
+			if(strcmp(Node->getName(),"Caja")==0 &&  Node->isVisible() 
+			|| strcmp(Node->getName(),"Turbo")==0 
 			|| strcmp(Node->getName(),"Jugador") ==0
 			|| strcmp(Node->getName(),"JugadorIA")==0){
+
 			vision(RayCast1.m_hitFractions[i],Node);
-			//cout<<"RaycastCentral::"<<Node->getName()<<endl;
-			//cout<<"Distancia::"<<RayCast1.m_hitFractions[i] << endl;
-			//if(distanciaCaja<RayCast1.m_hitFractions[i])
-			//distanciaCaja = RayCast1.m_hitFractions[i];
+			
 			}
 		}
 			}
@@ -464,13 +608,15 @@ void CorredorIA::ActualizarRaytest() {
 			if(strcmp(Node->getName(),"Mapa")==0 && RayCast2.m_hitFractions[i]<0.7){
 				
 				calculoAnguloGiro(siguiente->getPosicion());
+				//posicionObjetivo= siguiente->getPosicion();
 			}
-			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
+			if(strcmp(Node->getName(),"Caja")==0 &&  Node->isVisible() 
+			|| strcmp(Node->getName(),"Turbo")==0 
 			|| strcmp(Node->getName(),"Jugador")==0
 			|| strcmp(Node->getName(),"JugadorIA")==0){
+
 			vision(RayCast2.m_hitFractions[i],Node);
-			//cout<<"RaycastDerecha1::"<<Node->getName()<<endl;
-			//cout<<"Distancia::"<<RayCast2.m_hitFractions[i] << endl;
+			
 			
 			}
 		}
@@ -486,13 +632,15 @@ void CorredorIA::ActualizarRaytest() {
 			if(strcmp(Node->getName(),"Mapa")==0 && RayCast3.m_hitFractions[i]<0.7){
 				
 				calculoAnguloGiro(siguiente->getPosicion());
+				//posicionObjetivo= siguiente->getPosicion();
 			}
-			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
+			if(strcmp(Node->getName(),"Caja")==0 &&  Node->isVisible() 
+			|| strcmp(Node->getName(),"Turbo")==0 
 			|| strcmp(Node->getName(),"Jugador")==0
 			|| strcmp(Node->getName(),"JugadorIA")==0){
+
 			vision(RayCast3.m_hitFractions[i],Node);
-			//cout<<"RaycastIzquierda1::"<<Node->getName()<<endl;
-			//cout<<"Distancia::"<<RayCast3.m_hitFractions[i] << endl;
+		
 			}
 		}
 			}
@@ -506,13 +654,15 @@ void CorredorIA::ActualizarRaytest() {
 			if(strcmp(Node->getName(),"Mapa")==0 && RayCast4.m_hitFractions[i]<0.7){
 				
 				calculoAnguloGiro(siguiente->getPosicion());
+				//posicionObjetivo= siguiente->getPosicion();
 			}
-			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
+			if(strcmp(Node->getName(),"Caja")==0 &&  Node->isVisible() 
+			|| strcmp(Node->getName(),"Turbo")==0 
 			|| strcmp(Node->getName(),"Jugador")==0 
 			|| strcmp(Node->getName(),"JugadorIA")==0){
+
 			vision(RayCast4.m_hitFractions[i],Node);
-			//cout<<"RaycastDerecha2::"<<Node->getName()<<endl;
-			//cout<<"Distancia::"<<RayCast4.m_hitFractions[i] << endl;
+		
 			}
 		}
 			}
@@ -526,20 +676,38 @@ void CorredorIA::ActualizarRaytest() {
 			if(strcmp(Node->getName(),"Mapa")==0 && RayCast5.m_hitFractions[i]<0.7){
 				
 				calculoAnguloGiro(siguiente->getPosicion());
+				//sposicionObjetivo= siguiente->getPosicion();
 			}
-			if(strcmp(Node->getName(),"Caja")==0 && tipoObj == 0 && Node->isVisible() || strcmp(Node->getName(),"Turbo")==0 
+			if(strcmp(Node->getName(),"Caja")==0 && Node->isVisible() 
+			|| strcmp(Node->getName(),"Turbo")==0 
 			|| strcmp(Node->getName(),"Jugador")==0
 			|| strcmp(Node->getName(),"JugadorIA")==0){
-			
+
 			vision(RayCast5.m_hitFractions[i],Node);
-			//cout<<"RaycastIzquierda2::"<<Node->getName()<<endl;
-			//cout<<"Distancia::"<<RayCast5.m_hitFractions[i] << endl;
+			
 			}
 		}
 			}
 	}
 
 
+	int distaux1=0;
+	int distaux2=0;
+
+	if((caja && enemigo && turbo) && tipoObj==0){
+		distanciaObjetivo = getDistanciaPunto(posicionCaja);
+	}else if(((!caja && enemigo && turbo) && tipoObj!=0) || ((caja && enemigo && turbo) && tipoObj!=0)){
+		distaux1=getDistanciaPunto(posicionEnemigo);
+		distaux2=getDistanciaPunto(posicionTurbo);
+			if(distaux1<distaux2){
+				distanciaObjetivo = getDistanciaPunto(posicionEnemigo);
+			}else{
+				distanciaObjetivo = getDistanciaPunto(posicionTurbo);
+			}	
+		
+	}else if(!caja && !turbo && enemigo){
+		distanciaObjetivo = getDistanciaPunto(posicionEnemigo);
+	}
 
 }
 
@@ -547,49 +715,66 @@ void CorredorIA::ActualizarRaytest() {
 
 void CorredorIA::vision(btScalar distancia,ISceneNode *nodo){
 
+
+
 	if(strcmp(nodo->getName(),"Caja")==0){
 
 
 		if(distanciaCaja==0){
 		distanciaCaja=distancia;
-		caja=nodo;
+		caja=true;
+		posicionCaja = btVector3(nodo->getPosition().X,nodo->getPosition().Y,nodo->getPosition().Z);
+		distanciaObjetivo = getDistanciaPunto(posicionCaja);
 		}
 
 		if(distancia<distanciaCaja){
 		distanciaCaja=distancia;
-		caja=nodo;	
+		caja=true;
+		posicionCaja = btVector3(nodo->getPosition().X,nodo->getPosition().Y,nodo->getPosition().Z);
+		distanciaObjetivo = getDistanciaPunto(posicionCaja);
 		}
-		
+
 	}
+	
+
+	if((strcmp(nodo->getName(),"Jugador")==0
+	|| strcmp(nodo->getName(),"JugadorIA")==0)){
+
+		if(distanciaEnemigo==0){
+		distanciaEnemigo=distancia;
+		enemigo=true;
+		posicionEnemigo = btVector3(nodo->getPosition().X,nodo->getPosition().Y,nodo->getPosition().Z);
+		distanciaObjetivo = getDistanciaPunto(posicionEnemigo);
+		}
+
+		if(distancia<distanciaEnemigo){
+		distanciaEnemigo=distancia;
+		enemigo=true;
+		posicionEnemigo = btVector3(nodo->getPosition().X,nodo->getPosition().Y,nodo->getPosition().Z);	
+		distanciaObjetivo = getDistanciaPunto(posicionEnemigo);
+		}
+	}
+
 
 	if(strcmp(nodo->getName(),"Turbo")==0){
 
 		if(distanciaTurbo==0){
 		distanciaTurbo=distancia;
-		turbo=nodo;
+		turbo=true;
+		posicionTurbo = btVector3(nodo->getPosition().X,nodo->getPosition().Y,nodo->getPosition().Z);
+		distanciaObjetivo = getDistanciaPunto(posicionTurbo);
 		}
 
 		if(distancia<distanciaTurbo){
 		distanciaTurbo=distancia;
-		turbo=nodo;	
+		turbo=true;
+		posicionTurbo = btVector3(nodo->getPosition().X,nodo->getPosition().Y,nodo->getPosition().Z);
+		distanciaObjetivo = getDistanciaPunto(posicionTurbo);	
 		}
 	}
 
+	
 
-
-	if(strcmp(nodo->getName(),"Jugador")==0
-	|| strcmp(nodo->getName(),"JugadorIA")==0){
-
-		if(distanciaEnemigo==0){
-		distanciaEnemigo=distancia;
-		enemigo=nodo;
-		}
-
-		if(distancia<distanciaEnemigo){
-		distanciaEnemigo=distancia;
-		enemigo=nodo;	
-		}
-	}
 
 
 }

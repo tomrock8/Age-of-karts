@@ -19,27 +19,32 @@ class CorredorIA : public Corredor
 	void calculoAnguloGiro(btVector3 posicion);
 	void ActualizarRaytest();
 
-	// Logica difusa
+	//Logica difusa
 	void logicaDifusa();
+	void acelerarGirar();
 	double FuncionTrapezoidal(double valor, double a, double b, double c, double d);
 	double FuncionTriangular(double valor, double a, double b, double c);
 	void vision(btScalar distancia,ISceneNode *nodo);
 	void seguirWaypoint();
-
+	void visionArbol();
 
 
   private:
 
 	btScalar anguloGiro;
+	btScalar distanciaObjetivo;
 	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
 	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
 	bool distanciaCerca,distanciaMedia,distanciaLejos;
 	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
 	
+	bool caja,turbo,enemigo;
 	float distanciaCaja,distanciaTurbo,distanciaEnemigo;
-	ISceneNode *caja;
-	ISceneNode *turbo;
-	ISceneNode *enemigo;
+
+	
+	btVector3 posicionCaja;
+	btVector3 posicionTurbo;
+	btVector3 posicionEnemigo;
 	btVector3 posicion_aux;
 	int timerRecolocar;
 };

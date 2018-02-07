@@ -668,7 +668,7 @@ void Corredor::resetFuerzas(){
 void Corredor::soltarItem()
 {
 	setTipoObj(0);
-	setLimite(getLimite() + 2);
+	setLimite(getLimite() + 10);
 }
 
 /*
@@ -884,21 +884,24 @@ void Corredor::frenodemano(bool activo)
 {
 	int friccion = 1.f;
 	if (activo) {
+		if(estado->getEstadoMovimiento() != 0 && estado->getEstadoMovimiento() != 4 && (estado->getDireccionMovimiento()==1 || estado->getDireccionMovimiento()==2)){
+			limite+=10;
+		}
+
 		estado->setEstadoMovimiento(DERRAPA);
 		FuerzaGiro = btScalar(0.45);
-
-		vehiculo->applyEngineForce(FuerzaFrenado, 0);
-		vehiculo->applyEngineForce(FuerzaFrenado, 1);
-		vehiculo->applyEngineForce(FuerzaFrenado, 2);
-		vehiculo->applyEngineForce(FuerzaFrenado, 3);
-
+		//Si dejas esto el coche va hacia atras
+		/*	vehiculo->applyEngineForce(FuerzaFrenado, 0);
+			vehiculo->applyEngineForce(FuerzaFrenado, 1);
+			vehiculo->applyEngineForce(FuerzaFrenado, 2);
+			vehiculo->applyEngineForce(FuerzaFrenado, 3);*/
 		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(friccion);
 		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(friccion);
 
 		vehiculo->getWheelInfo(2).m_frictionSlip = btScalar(friccion);
 		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(friccion);
-	
-	
+		
+		
 	}
 	else {
 		
@@ -1062,7 +1065,7 @@ void Corredor::updateText(){
 		texto->agregar("TURBO TRIPLE\n");
 		break;
 	}
-	texto->agregar("Habilidad: "+ to_string(limite) + "/10\n");
+	texto->agregar("Habilidad: "+ to_string(limite) + "/100\n");
 }
 
 void Corredor::updateTimerObstaculos() {
@@ -1147,7 +1150,7 @@ void Corredor::actualizarRuedas()
 }
 
 void Corredor::lanzarHabilidad(){
-	if (getLimite() >= 10) {//puedo lanzar la habilidad
+	if (getLimite() >= 100) {//puedo lanzar la habilidad
 		Pista *pista = Pista::getInstancia();
 		core::list<Item *> items = pista->getItems();
 		h->getNodo()->setVisible(true);
@@ -1159,7 +1162,7 @@ void Corredor::lanzarHabilidad(){
 		setLimite(0);
 	}
 	else {
-		cout << "No puedes usar la habilidad si tu limite no es 10 o mas" << endl;
+		cout << "No puedes usar la habilidad si tu limite no es 100 o mas" << endl;
 	}
 }
 

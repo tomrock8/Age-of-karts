@@ -24,7 +24,7 @@ class CorredorIA : public Corredor
 	double FuncionTrapezoidal(double valor, double a, double b, double c, double d);
 	double FuncionTriangular(double valor, double a, double b, double c);
 	void vision(btScalar distancia,ISceneNode *nodo);
-	void distanciaVector();
+	void seguirWaypoint();
 
 
 

@@ -21,17 +21,14 @@ void CorredorIA::movimiento()
 	//LLmamos a la logica difusa para que nos de los valores de entrada
 	logicaDifusa();
 	
-	//	if(distanciaCerca && vehiculo->getCurrentSpeedKmHour()>300){
-	//desacelerar();
-	//}else{
 	acelerar();
-	//}
+	
 
 	
 	//si no veo nada con el raycast sigo los waypoints	
-	if(!caja || !turbo || !enemigo){
+	if(!caja && !turbo && !enemigo){
 	//cout<< "sigoWAyPOINT"<< endl;
-	distanciaVector();
+	seguirWaypoint();
 	
 	}
 	
@@ -41,7 +38,7 @@ void CorredorIA::movimiento()
 	if(getDistanciaPunto(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z))<4000)
     calculoAnguloGiro(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z));
 
-	if(getDistanciaPunto(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z))<20){
+	if(getDistanciaPunto(btVector3(caja->getPosition().X,caja->getPosition().Y,caja->getPosition().Z))<50){
 		if(tipoObj==2 || tipoObj==4) // si son cajas falsas lo mejor es ponerlas junto a las de verdad
 		usarObjetos();	
 	}
@@ -142,7 +139,7 @@ void CorredorIA::movimiento()
 
 }
 
-void CorredorIA::distanciaVector(){
+void CorredorIA::seguirWaypoint(){
 
 	btScalar distanciaCentro=0;
 	btScalar distanciaLado1=0;
@@ -221,8 +218,6 @@ void CorredorIA::logicaDifusa() {
 	pertenenciaCerca = FuncionTrapezoidal(distanciaWaypoint, 0, 0, 500, 2000);
 	pertenenciaMedia = FuncionTrapezoidal(distanciaWaypoint, 1500, 4000, 6000, 7000);
 	pertenenciaLejos = FuncionTrapezoidal(distanciaWaypoint, 6000, 7000, 9000, 100000);
-
-
 
 
 		pertenenciaNoGiro= FuncionTriangular(anguloGiro,-40,0,40);

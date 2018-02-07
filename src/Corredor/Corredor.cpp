@@ -771,6 +771,7 @@ void Corredor::usarObjetos() {
 	}
 	else if (tipoObj == 7)	//FLECHA TELEDIRIGIDA
 	{
+		cout << "Teledirigido de Jugador " << cuboNodo->getID() << " - posicion: " << posicionCarrera << endl;
 		pt = new ItemTeledirigido(posDisparo);
 		pt->lanzarItemTeledirigido(posicionCarrera);
 		items.push_back(pt);
@@ -1048,9 +1049,39 @@ void Corredor::updateText(){
 		texto->agregar(to_string(cuboNodo->getID())+"\n");
 	}
 	texto->agregar("\nPOSICION CARRERA: ");
-	texto->agregar(to_string(posicionCarrera));
+	texto->agregar(to_string(posicionCarrera) + "\n");
+	texto->agregar("\VUELTAS: ");
+	texto->agregar(to_string(vueltas));
 	texto->agregar("\nOBJETO: ");
-	texto->agregar(to_string(tipoObj) + "\n");
+	switch (tipoObj) {
+	case 0: 
+		texto->agregar("NADA\n");
+		break;
+	case 1:
+		texto->agregar("FLECHA\n");
+		break;
+	case 2:
+		texto->agregar("CAJA FALSA\n");
+		break;
+	case 3:
+		texto->agregar("TURBO\n");
+		break;
+	case 4:
+		texto->agregar("ACEITE\n");
+		break;
+	case 5:
+		texto->agregar("ESCUDO\n");
+		break;
+	case 6:
+		texto->agregar("FLECHA TRIPLE\n");
+		break;
+	case 7:
+		texto->agregar("FLECHA TELEDIRIGIDA\n");
+		break;
+	case 8:
+		texto->agregar("TURBO TRIPLE\n");
+		break;
+	}
 }
 
 void Corredor::updateTimerObstaculos() {
@@ -1061,14 +1092,11 @@ void Corredor::updateTimerObstaculos() {
 				
     			if (!proteccion){ 
           			lanzarItemTeledirigido(); 
-				}else{ 
-					setProteccion(false);
-					objetivoFijado=false;
 				}
 			}
 			if (t->getTimer()-timerTeledirigido>=3){
 				objetivoFijado=false;
-
+				setProteccion(false);
 			}
 		}
 	}

@@ -21,12 +21,11 @@ class CorredorIA : public Corredor
 
 	//Logica difusa
 	void logicaDifusa();
-	void acelerarGirar();
 	double FuncionTrapezoidal(double valor, double a, double b, double c, double d);
 	double FuncionTriangular(double valor, double a, double b, double c);
 	void vision(btScalar distancia,ISceneNode *nodo);
 	void seguirWaypoint();
-	void visionArbol();
+	
 
 
   private:
@@ -35,11 +34,13 @@ class CorredorIA : public Corredor
 	btScalar distanciaObjetivo;
 	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
 	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
+	double pertenenciaVelocidadBaja,pertenenciaVelocidadMedia,pertenenciaVelocidadAlta;
 	bool distanciaCerca,distanciaMedia,distanciaLejos;
+	bool velocidadBaja,velocidadMedia,velocidadAlta;
 	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
 	
 	bool caja,turbo,enemigo;
-	float distanciaCaja,distanciaTurbo,distanciaEnemigo;
+	btScalar distanciaCaja,distanciaTurbo,distanciaEnemigo;
 
 	
 	btVector3 posicionCaja;

@@ -692,7 +692,7 @@ void Corredor::usarObjetos() {
 	core::list<Item *> items = pista->getItems();
 	if (getTipoObj() == 1)		// PROYECTIL
 	{
-		pro = new Proyectil(posDisparo);
+		pro = new Proyectil(btVector3(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10));
 		lanzarItem(pro, 1);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro->setLanzado(true);
 		items.push_back(pro);
@@ -906,10 +906,7 @@ void Corredor::frenodemano(bool activo)
 		estado->setEstadoMovimiento(DERRAPA);
 		FuerzaGiro = btScalar(0.45);
 
-		vehiculo->applyEngineForce(FuerzaFrenado, 0);
-		vehiculo->applyEngineForce(FuerzaFrenado, 1);
-		vehiculo->applyEngineForce(FuerzaFrenado, 2);
-		vehiculo->applyEngineForce(FuerzaFrenado, 3);
+		
 
 		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(friccion);
 		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(friccion);

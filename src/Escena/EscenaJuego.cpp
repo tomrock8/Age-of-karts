@@ -92,19 +92,19 @@ void EscenaJuego::init() {
 
 		pj[5] = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 290),Corredor::tipo_jugador::CHINO);
 		jugadores->aumentarJugadores();
-
+	
 
 
 		pj[0]->getNodo()->setID(0);
 		pj[1]->getNodo()->setID(1);
 		
 
-		
+	
 				pj[2]->getNodo()->setID(2);
 				pj[3]->getNodo()->setID(3);
 				pj[4]->getNodo()->setID(4);
 				pj[5]->getNodo()->setID(5);
-		
+	
 
 	}
 
@@ -244,7 +244,7 @@ void EscenaJuego::update() {
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		pj[0]->update();
 		pj[1]->update();
-
+		
 				pj[2]->update();
 				pj[3]->update();
 				pj[4]->update();

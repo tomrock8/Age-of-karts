@@ -88,8 +88,8 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	Masa = btScalar(400);
 	FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
-	indiceGiroAlto=0.4;
-	indiceGiroBajo=0.1;
+	indiceGiroAlto=btScalar(0.4);
+	indiceGiroBajo=btScalar(0.1);
 	velocidadMaxima=380;
 	velocidadMaximaTurbo=420;
 	velocidadLimiteGiro=150;
@@ -115,8 +115,8 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaxima=360;
 			velocidadMaximaTurbo=410;
 			//----GIRO/MANEJO-----
-			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.085;
+			indiceGiroAlto=btScalar(0.4);
+			indiceGiroBajo=btScalar(0.085);
 			velocidadLimiteGiro=150;
 			//------PESO------
 			Masa = btScalar(400);
@@ -132,8 +132,8 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaxima=370;
 			velocidadMaximaTurbo=415;
 			//----GIRO/MANEJO-----
-			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.085;
+			indiceGiroAlto=btScalar(0.4);
+			indiceGiroBajo=btScalar(0.085);
 			velocidadLimiteGiro=130;
 			//------PESO------
 			Masa = btScalar(400);
@@ -149,8 +149,8 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaxima=360;
 			velocidadMaximaTurbo=410;
 			//----GIRO/MANEJO-----
-			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.1;
+			indiceGiroAlto=btScalar(0.4);
+			indiceGiroBajo=btScalar(0.1);
 			velocidadLimiteGiro=180;
 			//------PESO------
 			Masa = btScalar(400);
@@ -166,8 +166,8 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaxima=385;
 			velocidadMaximaTurbo=425;
 			//----GIRO/MANEJO-----
-			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.07;
+			indiceGiroAlto=btScalar(0.4);
+			indiceGiroBajo=btScalar(0.07);
 			velocidadLimiteGiro=110;
 			//------PESO------
 			Masa = btScalar(1200);
@@ -202,11 +202,11 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = 20;    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
-		wheel.m_wheelsDampingCompression = 2.3f;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-		wheel.m_wheelsDampingRelaxation =  4.4f;//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_suspensionStiffness = btScalar(20);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
+		wheel.m_wheelsDampingCompression = btScalar(2.3f);//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
+		wheel.m_wheelsDampingRelaxation =  btScalar(4.4f);//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
-		wheel.m_rollInfluence = 0;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
+		wheel.m_rollInfluence = btScalar(0);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 											//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
 		//wheel.m_maxSuspensionTravelCm = 10; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 
 
@@ -602,7 +602,7 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 }
 void Corredor::SetFuerzaVelocidad(int turbo)
 {
-	Fuerza = turbo;
+	Fuerza = btScalar(turbo);
 }
 void Corredor::setFriccion(btScalar valor) {
 	for (int i = 0; i < vehiculo->getNumWheels(); i++) {
@@ -1033,7 +1033,7 @@ void Corredor::updateText(){
 	}
 	texto->agregar("\nPOSICION CARRERA: ");
 	texto->agregar(to_string(posicionCarrera) + "\n");
-	texto->agregar("VUELTAS: ");
+	texto->agregar("\nVUELTAS: ");
 	texto->agregar(to_string(vueltas));
 	texto->agregar("\nOBJETO: ");
 	switch (tipoObj) {

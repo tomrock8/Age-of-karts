@@ -3,7 +3,7 @@
 GestorJugadores *GestorJugadores::instancia = NULL;
 
 GestorJugadores::GestorJugadores() {
-	pj = new Corredor*[6];
+	//pj = new Corredor*[6];
 	numJugadores = 0;
 
 }
@@ -13,25 +13,25 @@ GestorJugadores::~GestorJugadores() {
 	cout << "Poco a poco, que son " << numJugadores << "\n";
 	for (int i = 0; i < numJugadores; i++) {
 		cout << i <<endl;
-		if (pj[i]) {
-			if (strcmp(pj[i]->getNodo()->getName(), "Jugador") == 0) {
-				CorredorJugador *cj = static_cast<CorredorJugador *>(pj[i]);
+		//if (pj.at(i)) {
+			if (strcmp(pj.at(i)->getNodo()->getName(), "Jugador") == 0) {
+				CorredorJugador *cj = static_cast<CorredorJugador *>(pj.at(i));
 				delete cj;
 			}
 			else {
-				if (strcmp(pj[i]->getNodo()->getName(), "JugadorIA") == 0) {
-					CorredorIA *cia = static_cast<CorredorIA *>(pj[i]);
+				if (strcmp(pj.at(i)->getNodo()->getName(), "JugadorIA") == 0) {
+					CorredorIA *cia = static_cast<CorredorIA *>(pj.at(i));
 					delete cia;
 				}
 				else {
-					if (strcmp(pj[i]->getNodo()->getName(), "JugadorRed") == 0) {
-						CorredorRed *cred = static_cast<CorredorRed *>(pj[i]);
+					if (strcmp(pj.at(i)->getNodo()->getName(), "JugadorRed") == 0) {
+						CorredorRed *cred = static_cast<CorredorRed *>(pj.at(i));
 						delete cred;
 					}
 				}
 			}
 
-		}
+		//}
 		cout << "! \n";
 	}
 
@@ -46,11 +46,11 @@ GestorJugadores *GestorJugadores::getInstancia() {
 	return instancia;
 }
 
-Corredor **GestorJugadores::getJugadores() {
+vector<Corredor*> GestorJugadores::getJugadores() {
 	return pj;
 }
 
-void GestorJugadores::setJugadores(Corredor **pj1) {
+void GestorJugadores::setJugadores(vector<Corredor*> pj1) {
 	pj = pj1;
 }
 
@@ -61,6 +61,7 @@ int GestorJugadores::getNumJugadores() {
 void GestorJugadores::aumentarJugadores() {
 	numJugadores++;
 }
+
 void GestorJugadores::decrementarJugadores() {
 	numJugadores--;
 }

@@ -59,7 +59,6 @@ private:
 	int tamCajas;
 	Caja     **arrayCajas;
 	
-	btScalar Masa;
 	ISceneNode *Mapa;
 
 	irr::core::list<Item *> Items;

@@ -2,12 +2,15 @@
 #define CLIENT_H
 
 #include <iostream>
+#include <vector>
 //#include "CorredorRed.hpp"
 //#include "CorredorJugador.hpp"
 #include "GestorJugadores.hpp"
 //#include "NetworkEnums.hpp"
 
 #define MAX_PLAYERS 10
+
+using namespace std;
 
 class Client
 {
@@ -55,7 +58,7 @@ private:
 	std::string clientPort;
 	std::string serverIP;
 
-	Corredor **player;
+	vector<Corredor*> player;
 	int controlPlayer;
 	int numPlayers;
 	bool spawned;

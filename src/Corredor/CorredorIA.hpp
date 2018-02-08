@@ -30,7 +30,7 @@ class CorredorIA : public Corredor
 
   private:
 
-	btScalar anguloGiro;
+	double anguloGiro;
 	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
 	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
 	bool distanciaCerca,distanciaMedia,distanciaLejos;

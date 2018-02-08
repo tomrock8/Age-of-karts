@@ -44,7 +44,7 @@ btRigidBody *Caja::inicializarFisicas()
 
 	// Add mass
 	btVector3 LocalInertia;
-	masa = 0;
+	masa = btScalar(0);
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
 	// Create the rigid body object

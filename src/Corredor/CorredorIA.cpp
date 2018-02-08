@@ -141,9 +141,9 @@ void CorredorIA::movimiento()
 
 void CorredorIA::seguirWaypoint(){
 
-	btScalar distanciaCentro=0;
-	btScalar distanciaLado1=0;
-	btScalar distanciaLado2=0;
+	btScalar distanciaCentro=btScalar(0);
+	btScalar distanciaLado1=btScalar(0);
+	btScalar distanciaLado2=btScalar(0);
 
 	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
 	distanciaCentro = getDistanciaPunto(siguiente->getPosicion());

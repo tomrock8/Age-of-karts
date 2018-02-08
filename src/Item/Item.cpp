@@ -9,7 +9,7 @@ Item::Item(btVector3 pos)
 
 	lanzado = false;
 
-	masa = 50;
+	masa = btScalar(50);
 	
 }
 

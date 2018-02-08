@@ -8,6 +8,7 @@
 #include "CorredorRed.hpp"
 #include "CorredorJugador.hpp"
 #include "CorredorIA.hpp"
+#include <vector>
 
 using namespace std;
 
@@ -17,10 +18,10 @@ public:
 	~GestorJugadores(void);
 
 	static GestorJugadores *getInstancia();
-	Corredor **getJugadores();
+	vector<Corredor*> getJugadores();
 	int getNumJugadores();
 
-	void setJugadores(Corredor **pj1);
+	void setJugadores(vector<Corredor*> pj1);
 
 	void aumentarJugadores();
 	void decrementarJugadores();
@@ -28,7 +29,7 @@ public:
 private:
 	GestorJugadores(void);
 	static GestorJugadores *instancia;
-	Corredor **pj;
+	vector<Corredor*> pj;
 	int numJugadores;
 
 

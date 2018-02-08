@@ -16,6 +16,7 @@
 #include "GestorJugadores.hpp"
 #include "GestorCarrera.hpp"
 #include "GestorColisiones.hpp"
+#include <vector>
 
 class EscenaJuego : public Escena {
 public:

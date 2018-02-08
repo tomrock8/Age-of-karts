@@ -25,11 +25,11 @@ void CorredorJugador::movimiento() {
 		comprobadorMovimiento = true;
 	}
 	if (teclado->isKeyDown(KEY_SPACE)) {
-		frenodemano(true);
+		frenodemano(true, false);
 		comprobadorMovimiento = true;
 	}
 	else {
-		frenodemano(false);
+		frenodemano(false, false);
 	}
 	if (teclado->isKeyDown(KEY_KEY_D)) {
 		girarDerecha();

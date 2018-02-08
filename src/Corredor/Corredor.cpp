@@ -783,13 +783,13 @@ void Corredor::usarObjetos() {
 void Corredor::aplicarAceite() {
 	//CuerpoColisionChasis->setAngularFactor(btScalar(120*PI/180));
 	//CuerpoColisionChasis->applyCentralForce(btVector3(100, 5.0f,100));
-	frenodemano(true);
+	frenodemano(true, false);
 	CuerpoColisionChasis->setAngularVelocity(btVector3(0, 40, 0));
 	for (int i = 0; i < 100; i++) {
 		girarIzquierda();
 	}
 	
-	frenodemano(false);
+	frenodemano(false, false);
 }
 void Corredor::incCargador() { cargador++; };
 void Corredor::decCargador() { cargador--; };
@@ -880,11 +880,11 @@ void Corredor::girarIzquierda()
 	vehiculo->setSteeringValue(-FuerzaGiro, 1);
 	
 }
-void Corredor::frenodemano(bool activo)
+void Corredor::frenodemano(bool activo, bool objeto)
 {
 	int friccion = 1.f;
 	if (activo) {
-		if(estado->getEstadoMovimiento() != 0 && estado->getEstadoMovimiento() != 4 && (estado->getDireccionMovimiento()==1 || estado->getDireccionMovimiento()==2)){
+		if(estado->getEstadoMovimiento() != 0 && estado->getEstadoMovimiento() != 4 && (estado->getDireccionMovimiento()==1 || estado->getDireccionMovimiento()==2) && !objeto){
 			limite+=10;
 		}
 

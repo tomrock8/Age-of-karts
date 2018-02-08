@@ -193,7 +193,7 @@ protected:
 	void desacelerar();
 	void girarDerecha();
 	void girarIzquierda();
-	void frenodemano(bool activo);
+	void frenodemano(bool activo, bool objeto);
 	virtual void movimiento() {}; // A implementar por derivadas
 
 	// UPDATES

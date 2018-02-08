@@ -21,7 +21,7 @@ void CorredorRed::movimiento(){
 	int direccionMovimiento = estados->getDireccionMovimiento();
 	//cout <<"Estado del jugador: "<<estadoMovimiento<<endl;
 	//cout <<"Direccion del jugador: "<<direccionMovimiento<<endl;
-    frenodemano(false);
+    frenodemano(false, false);
     switch (estadoMovimiento){
 
         case 0:
@@ -37,7 +37,7 @@ void CorredorRed::movimiento(){
         frenar();
 		break;
 		case 4:
-		frenodemano(true);
+		frenodemano(true, true);
 		break;
 		case 5:
 		desacelerar();

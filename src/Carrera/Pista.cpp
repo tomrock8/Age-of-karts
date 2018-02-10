@@ -95,9 +95,9 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 		getline(myfile, tamanyoArrayTurbo, ' ');
 
 
-		arrayWaypoints.resize(stoi(tamanyoArrayWaypoints));
-		arrayTurbos.resize(stoi(tamanyoArrayTurbo));
-		arrayCajas.resize(stoi(tamanyoArrayCajas));
+		
+		
+		//arrayCajas.resize(stoi(tamanyoArrayCajas));
 
 		while (!myfile.eof()) {
 
@@ -108,8 +108,9 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 
 
 			tipoObj = stoi(tipo);
+			Waypoint *w =new Waypoint();
 			if (tipoObj == 0) {//WAYPOINT
-				arrayWaypoints.at(tamWaypoints)= new Waypoint();
+				arrayWaypoints.push_back(w);
 				//=========================================//
 				//orientacion con respecto a la carretera  //
 				//=========================================//
@@ -124,45 +125,47 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 				getline(myfile, v1X, ' ');
 				getline(myfile, v1Y, ' ');
 				getline(myfile, v1Z, ' ');
-				arrayWaypoints.at(tamWaypoints)->setVector1(btVector3(stof(v1X), stof(v1Y), stof(v1Z)));
+				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector1(btVector3(stof(v1X), stof(v1Y), stof(v1Z)));
 				//vector2
 				getline(myfile, v2X, ' ');
 				getline(myfile, v2Y, ' ');
 				getline(myfile, v2Z, ' ');
-				arrayWaypoints.at(tamWaypoints)->setVector2(btVector3(stof(v2X), stof(v2Y), stof(v2Z)));
+				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector2(btVector3(stof(v2X), stof(v2Y), stof(v2Z)));
 				//=========================================//
 				//			rellenar los waypoints		   //
 				//=========================================//
 				//comento lo de la id de los waypoints porq da conflico con las cajas
-				arrayWaypoints.at(tamWaypoints)->getWaypoint()->setID(tamWaypoints);
+				arrayWaypoints.at(arrayWaypoints.size()-1)->getWaypoint()->setID(arrayWaypoints.size()-1);
 
-				if (tamWaypoints > 0 && tamWaypoints <= (stoi(tamanyoArrayWaypoints) - 2))
+				if (arrayWaypoints.size()-1 > 0 && arrayWaypoints.size()-1 <= (stoi(tamanyoArrayWaypoints) - 2))
 				{
-					arrayWaypoints.at(tamWaypoints - 1)->setSiguiente(arrayWaypoints.at(tamWaypoints));
+					arrayWaypoints.at(arrayWaypoints.size()-1 - 1)->setSiguiente(arrayWaypoints.at(arrayWaypoints.size()-1));
 
 				}
-				else if (tamWaypoints == (stoi(tamanyoArrayWaypoints) - 1)) {
-					arrayWaypoints.at(tamWaypoints - 1)->setSiguiente(arrayWaypoints.at(tamWaypoints));
+				else if (arrayWaypoints.size()-1 == (stoi(tamanyoArrayWaypoints) - 1)) {
+					arrayWaypoints.at(arrayWaypoints.size()-1 - 1)->setSiguiente(arrayWaypoints.at(arrayWaypoints.size()-1));
 
-					arrayWaypoints.at(tamWaypoints)->setSiguiente(arrayWaypoints[0]);
+					arrayWaypoints.at(arrayWaypoints.size()-1)->setSiguiente(arrayWaypoints[0]);
 
 				}
 				//cambiar a float y almacenar array de waypoints
-				arrayWaypoints.at(tamWaypoints)->setPosicion(stof(pX), stof(pY), stof(pZ));
-				arrayWaypoints.at(tamWaypoints)->setOrientacion(orientacion);//orientacion del waypoint
-				arrayWaypoints.at(tamWaypoints)->inicializarFisicas();
-				IMeshSceneNode *im = arrayWaypoints.at(tamWaypoints)->getWaypoint();
+				arrayWaypoints.at(arrayWaypoints.size()-1)->setPosicion(stof(pX), stof(pY), stof(pZ));
+				arrayWaypoints.at(arrayWaypoints.size()-1)->setOrientacion(orientacion);//orientacion del waypoint
+				arrayWaypoints.at(arrayWaypoints.size()-1)->inicializarFisicas();
+				IMeshSceneNode *im = arrayWaypoints.at(arrayWaypoints.size()-1)->getWaypoint();
 				GestorIDs::instancia().setIdentifier(im, im->getName());
 
 				tamWaypoints++;
 			}
 			if (tipoObj == 1) {//CAJA
-				arrayCajas.at(tamCajas) = new Caja(btVector3(stof(pX), stof(pY), stof(pZ)));
+				Caja *cj= new Caja(btVector3(stof(pX), stof(pY), stof(pZ)));
+				arrayCajas.push_back(cj);
 				tamCajas++;
 
 			}
 			if (tipoObj == 2) {//TURBO
-				arrayTurbos.at(tamTurbos) = new Turbo(btVector3(stof(pX), stof(pY), stof(pZ)), false);
+				Turbo *tb= new Turbo(btVector3(stof(pX), stof(pY), stof(pZ)), false);
+				arrayTurbos.push_back(tb);
 				tamTurbos++;
 			}
 			//cout << line << endl;

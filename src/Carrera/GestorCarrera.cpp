@@ -9,10 +9,11 @@ GestorCarrera::GestorCarrera() {
 
 }
 void GestorCarrera::update() {
+	pj2.resize(pj1.size());
 	for (int j = 0; j < jugadores->getNumJugadores(); j++) {
 		//if (pj1.at(j) != NULL) 
-			pj1.at(j)->setPosicionCarrera(pj1.at(j)->getNodo()->getID() + 1);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
-		pj2.resize(pj2.size()+1);
+		pj1.at(j)->setPosicionCarrera(pj1.at(j)->getNodo()->getID() + 1);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
+		//pj2.resize(pj2.size()+1);
 		pj2.at(j) = pj1.at(j);
 	}
 	int cont = 0;

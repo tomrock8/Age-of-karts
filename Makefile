@@ -28,16 +28,13 @@ exportAlt:
 
 
 altRun:
-	@./exec2
-	@echo "Ejecutando."
+
 	
 altRunRed:
-	@echo "Ejecutando."
-	@./exec2 2
+
 
 run:
-	@./exec
-	@echo "Ejecutando."
+
 
 export: 
 	LD_LIBRARY_PATH=./lib
@@ -54,7 +51,7 @@ exec: $(OBJETOS)
 	
 	g++ -g -o $@ $^  $(RUTAS) $(RUTAS_INTERNAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS)	
 
-	LD_LIBRARY_PATH=./lib ./exec
+	LD_LIBRARY_PATH=./lib 
 	@echo "Generado ejecutable."
 
 obj/%.o : src/%.cpp

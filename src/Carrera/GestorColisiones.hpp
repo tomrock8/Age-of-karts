@@ -21,7 +21,7 @@ class GestorColisiones
 public:
   GestorColisiones(){};
   void ComprobarColisiones();
-  bool JugadorCaja(Caja *cajas[]);
+  bool JugadorCaja(vector<Caja*> cajas);
   bool JugadorTurbo();
   bool objetoDestruible();
   bool JugadorEstatico();

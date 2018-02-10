@@ -8,7 +8,7 @@ void GestorColisiones::ComprobarColisiones()
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	jugadores = GestorJugadores::getInstancia();
 	Pista *pista = Pista::getInstancia();
-	Caja** cajas = pista->getArrayCaja();
+	vector<Caja*> cajas = pista->getArrayCaja();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	pj1 = jugadores->getJugadores();
@@ -240,7 +240,7 @@ bool GestorColisiones::JugadorProyectil()
 //
 // Comprobar colisiones entre Jugador y Caja
 //
-bool GestorColisiones::JugadorCaja(Caja **cajas)
+bool GestorColisiones::JugadorCaja(vector<Caja*> cajas)
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -259,14 +259,14 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 			//cout << "Tam Cajas: " << tamCajas << "- " << idB << endl;
 			for (int i = 0; i < tamCajas; i++)
 			{
-				if (cajas[i] != NULL)
+				if (cajas.at(i) != NULL)
 				{
-					if (cajas[i]->getNodo()->getID() == idB)
+					if (cajas.at(i)->getNodo()->getID() == idB)
 					{
 						for(int j = 0; j< jugadores->getNumJugadores(); j++)
 							//if(pj1.at(j)!=NULL)
 								if(nodoA->getID()== pj1.at(j)->getNodo()->getID()){
-									cajas[i]->romper(pj1.at(j));
+									cajas.at(i)->romper(pj1.at(j));
 								}
 					}
 				}

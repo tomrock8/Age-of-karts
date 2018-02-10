@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include "IrrlichtLib.hpp"
 #include "Motor3d.hpp"
 #include "Waypoint.hpp"
@@ -144,7 +145,7 @@ protected:
 	//objetos estaticos y dinamicos
 	Estatico * est;
 	Proyectil *pro;
-	Proyectil **proX3;
+	vector<Proyectil*> proX3;
 	Escudo *escudo;
 	EstadosJugador *estado;
 	btVector3 posDisparo;

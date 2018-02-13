@@ -13,7 +13,7 @@ CFLAGS := -ggdb -std=c++11
 
 all: objdir exec
 
-run: objdir exec run
+run: all run
 
 alt: objdir exec2 
 
@@ -28,13 +28,12 @@ exportAlt:
 
 
 altRun:
-
-	
-altRunRed:
-
+	@./exec2 
+	@echo "Ejecutando." 
 
 run:
-
+	@./exec 
+	@echo "Ejecutando." 
 
 export: 
 	LD_LIBRARY_PATH=./lib
@@ -51,7 +50,7 @@ exec: $(OBJETOS)
 	
 	g++ -g -o $@ $^  $(RUTAS) $(RUTAS_INTERNAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS)	
 
-	LD_LIBRARY_PATH=./lib 
+	LD_LIBRARY_PATH=./lib
 	@echo "Generado ejecutable."
 
 obj/%.o : src/%.cpp

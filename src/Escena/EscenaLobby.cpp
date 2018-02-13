@@ -57,69 +57,68 @@ void EscenaLobby::update() {
 }
 
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
-	CTeclado *teclado = CTeclado::getInstancia();
 
-	if (teclado->isKeyDown(KEY_ESCAPE)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
 
 	if (nElementos < 3) {
 		if (count <= 0) {
-			if (teclado->isKeyDown(KEY_KEY_1)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
 				texto += "1";
 				ipConexion += "1";
 				nElementos++;
 				count = 50;
 			}
-			if (teclado->isKeyDown(KEY_KEY_2)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
 				texto += "2";
 				ipConexion += "2";
 				nElementos++;
 				count = 50;
 			}
-			if (teclado->isKeyDown(KEY_KEY_3)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
 				texto += "3";
 				ipConexion += "3";
 				nElementos++;
 				count = 50;
 			}
-			if (teclado->isKeyDown(KEY_KEY_4)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)){
 				texto += "4";
 				ipConexion += "4";
 				nElementos++;
 				count = 50;
 			}
-			if (teclado->isKeyDown(KEY_KEY_5)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)){
 				texto += "5";
 				ipConexion += "5";
 				nElementos++;
 				count = 50;
 			}
-			if (teclado->isKeyDown(KEY_KEY_6)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)){
 				texto += "6";
 				ipConexion += "6";
 				nElementos++;
 				count = 50;
 			}
-			if (teclado->isKeyDown(KEY_KEY_7)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7)){
 				texto += "7";
 				ipConexion += "7";
 				nElementos++;
 				count = 50;
 			}
-			if (teclado->isKeyDown(KEY_KEY_8)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8)){
 				texto += "8";
 				ipConexion += "8";
 				nElementos++;
 				count = 50;
 			}
-			if (teclado->isKeyDown(KEY_KEY_9)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)){
 				texto += "9";
 				ipConexion += "9";
 				nElementos++;
 				count = 50;
 			}
-			if (teclado->isKeyDown(KEY_KEY_0)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)){
 				texto += "0";
 				ipConexion += "0";
 				nElementos++;

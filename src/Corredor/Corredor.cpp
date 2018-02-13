@@ -367,6 +367,7 @@ void Corredor::setPosicion(float *pos, float *ori) {
 
 }
 void Corredor::setPosicionCarrera(int i) {
+	if (vueltas<=4)
 	posicionCarrera = i;
 }
 void Corredor::setTipoObj()
@@ -1032,8 +1033,13 @@ void Corredor::updateText(){
 	}
 	texto->agregar("\nPOSICION CARRERA: ");
 	texto->agregar(to_string(posicionCarrera) + "\n");
-	texto->agregar("\nVUELTAS: ");
-	texto->agregar(to_string(vueltas));
+	texto->agregar("\nVUELTA: ");
+	if (vueltas>4){
+		texto->agregar("HA LLEGADO ");
+		texto->agregar(to_string(posicionCarrera)+"!\n");
+	}else{
+		texto->agregar(to_string(vueltas));
+	}
 	texto->agregar("\nOBJETO: ");
 	switch (tipoObj) {
 	case 0: 

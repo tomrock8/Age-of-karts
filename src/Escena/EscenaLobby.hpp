@@ -5,6 +5,8 @@
 
 #include "Motor3d.hpp"
 #include "Timer.hpp"
+#include "Graphics.hpp"
+
 
 class EscenaLobby : public Escena {
 public:

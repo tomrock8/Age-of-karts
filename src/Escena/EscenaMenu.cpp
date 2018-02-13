@@ -58,28 +58,27 @@ void EscenaMenu::update() {
 }
 
 Escena::tipo_escena EscenaMenu::comprobarInputs() {
-	CTeclado *teclado = CTeclado::getInstancia();
 
-	if (teclado->isKeyDown(KEY_ESCAPE)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 		return Escena::tipo_escena::SALIR; // Devuelve el estado de las escenas para que salga
 	}
 	else {
-		if (teclado->isKeyDown(KEY_KEY_1)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
 			cout << "SINGLE PLAYER\n"; 
 			return Escena::tipo_escena::CARRERA;
 		}
 		else {
-			if (teclado->isKeyDown(KEY_KEY_2)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
 
 				cout << "MULTI PLAYER\n";
 				return Escena::tipo_escena::LOBBY;
 			}
 			else {
-				if (teclado->isKeyDown(KEY_KEY_3)) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
 					cout << "OPCIONES\n";
 				}
 				else {
-					if (teclado->isKeyDown(KEY_KEY_4)) {
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)){
 						cout << "CREDITOS\n";
 						return Escena::tipo_escena::CREDITOS;
 					}

@@ -10,33 +10,32 @@ CorredorJugador::CorredorJugador(stringw rutaObj, btVector3 pos,Corredor::tipo_j
 	TODO: Modificar para detectar el input que se recibe.
 */
 void CorredorJugador::movimiento() {
-	CTeclado *teclado = CTeclado::getInstancia();
 
 	bool comprobadorMovimiento = false;
 
 	//-------ENTRADA TECLADO ----------//
-	if (teclado->isKeyDown(KEY_KEY_S)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
 		frenar();
 		//vehiculo-> set
 		comprobadorMovimiento = true;
 	}
-	else if (teclado->isKeyDown(KEY_KEY_W)) {
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
 		acelerar();
 		comprobadorMovimiento = true;
 	}
-	if (teclado->isKeyDown(KEY_SPACE)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
 		frenodemano(true, false);
 		comprobadorMovimiento = true;
 	}
 	else {
 		frenodemano(false, false);
 	}
-	if (teclado->isKeyDown(KEY_KEY_D)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
 		girarDerecha();
 
 		comprobadorMovimiento = true;
 	}
-	else if (teclado->isKeyDown(KEY_KEY_A)) {
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
 		girarIzquierda();
 		comprobadorMovimiento = true;
 	}
@@ -56,29 +55,27 @@ void CorredorJugador::update() {
 
 void CorredorJugador::actualizarItem() {
 
-	CTeclado *teclado = CTeclado::getInstancia();
-
 	int direccionItem = 1;
 	setPosDisparo(btVector3(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10));
 	btVector3 posDisparo2(cuboNodo->getPosition().X, cuboNodo->getPosition().Y - 1, cuboNodo->getPosition().Z);
 
-	if (teclado->isKeyDown(KEY_KEY_1)) setTipoObj(1);
-	if (teclado->isKeyDown(KEY_KEY_2)) setTipoObj(2);
-	if (teclado->isKeyDown(KEY_KEY_3)) setTipoObj(3);
-	if (teclado->isKeyDown(KEY_KEY_4)) setTipoObj(4);
-	if (teclado->isKeyDown(KEY_KEY_5)) setTipoObj(5);//escudo
-	if (teclado->isKeyDown(KEY_KEY_6)) setTipoObj(6);//proytectil x3
-	if (teclado->isKeyDown(KEY_KEY_7)) setTipoObj(7);//FlechaTeledirigida
-	if (teclado->isKeyDown(KEY_KEY_8)) setTipoObj(8);//TurboTriple
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) setTipoObj(1);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) setTipoObj(2);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) setTipoObj(3);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) setTipoObj(4);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) setTipoObj(5);//escudo
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)) setTipoObj(6);//proytectil x3
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7)) setTipoObj(7);//FlechaTeledirigida
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8)) setTipoObj(8);//TurboTriple
 
-	if (teclado->isKeyup(KEY_KEY_P))
+	/*if (sf::Keyboard::isKeyReleased(sf::Keyboard::P))
 	{
 		// comprobacion del item
 		if (getCheckItem() == true) {
 			setCheckItem(false);
 		}
 	}
-	else if (teclado->isKeyDown(KEY_KEY_P))
+	else*/ if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
 	{
 		if (getTipoObj() != 0 && !checkItem)
 		{
@@ -90,8 +87,12 @@ void CorredorJugador::actualizarItem() {
 			//Llama a la funcion de la clase padre
 			usarObjetos();
 		}
+	}else{
+		if (getCheckItem() == true) {
+			setCheckItem(false);
+		}
 	}
-	if(teclado->isKeyDown(KEY_KEY_O)){
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)){
 		lanzarHabilidad();
 	}
 }

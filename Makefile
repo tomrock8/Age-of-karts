@@ -1,11 +1,11 @@
 FUENTE := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
 
-LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lRakNetLibStatic  -lpthread 
+LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lRakNetLibStatic  -lpthread -lsfml-graphics -lsfml-window -lsfml-system
 LIBRERIAS_BULLET := -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader 
 
 RUTAS2 := -I. -I/usr/local/include/bullet/ 
-RUTAS := -I./include/irrlicht -I./include/raknet -I./include/irrlicht/include -I./include/bullet -L./lib 
+RUTAS := -I./include/irrlicht -I./include/raknet -I./include/irrlicht/include -I./include/bullet -I./include/SFML -L./lib -L./lib/sfml
 RUTAS_INTERNAS := -I./src -I./src/Carrera -I./src/Corredor -I./src/Escena -I./src/Item -I./src/Motor
 
 CFLAGS := -ggdb -std=c++11 

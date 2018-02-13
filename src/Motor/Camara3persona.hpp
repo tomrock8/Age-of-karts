@@ -6,6 +6,7 @@
 #include "IrrlichtLib.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "Corredor.hpp"
+#include "Graphics.hpp"
 
 class Camara3persona
 {

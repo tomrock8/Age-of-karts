@@ -315,7 +315,6 @@ void EscenaJuego::update() {
 }
 
 Escena::tipo_escena EscenaJuego::comprobarInputs() {
-	CTeclado *teclado = CTeclado::getInstancia();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	vector<Corredor*> pj = jugadores->getJugadores();
 	vector3df pos(-10, 0, 310);
@@ -324,7 +323,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		i = client->getControlPlayer();
 
 	//------- ENTRADA TECLADO ----------
-	if (teclado->isKeyDown(KEY_KEY_R)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
 		btVector3 btPos = pj.at(i)->getWaypointActual()->getPosicion();
 
 		btTransform trans;
@@ -338,18 +337,21 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		//pj.at(0)->getNodo()->setPosition(pos);
 	}
 
-	if(teclado->isKeyup(KEY_KEY_C)){
+	/*if (sf::Keyboard::isKeyReleased(sf::Keyboard::C)){
 		if(cambioCamara)
 			cambioCamara = false;
-	}
-	if(teclado->isKeyDown(KEY_KEY_C)){
+	}*/
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
 		if(!cambioCamara){
 			tipoCamara++;
 			if(tipoCamara == 4) tipoCamara = 0;
 			cambioCamara = true;
 		}
+	}else{
+		if(cambioCamara)
+			cambioCamara = false;
 	}
-	if (teclado->isKeyDown(KEY_KEY_T)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
 		float *resetPos = new float[3];
 		resetPos[0] = pos.X;
 		resetPos[1] = pos.Y + 40;
@@ -363,18 +365,18 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		pj.at(0)->setPosicion(resetPos, resetOri);
 	}
 
-	if (teclado->isKeyDown(KEY_ESCAPE)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 		if (tipoEscena == Escena::tipo_escena::ONLINE)
 			client->ShutDownClient();
 
 		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
 	}
 
-	if (teclado->isKeyDown(KEY_KEY_0)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)){
 		debug = 0;
 	}
 	else {
-		if (teclado->isKeyDown(KEY_KEY_9)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)){
 			debug = 1;
 		}
 	}

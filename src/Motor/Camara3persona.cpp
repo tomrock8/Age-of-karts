@@ -20,15 +20,14 @@ Camara3persona::~Camara3persona() {
 
 void Camara3persona::moveCamera(Corredor * pj1){
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
-	CTeclado *teclado = CTeclado::getInstancia();
 	vector3df RelativeToCar;
-	if (teclado->isKeyDown(KEY_KEY_Q) && XCamera3 >= 0) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && XCamera3 >= 0) {
 		if (XCamera3 < 30) {
 			XCamera3++;
 			ZCamera3 += 0.5;
 		}
 	}
-	else if (teclado->isKeyDown(KEY_KEY_E) && XCamera3 <= 0) {
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && XCamera3 <= 0) {
 		if (XCamera3 > -30) {
 			XCamera3--;
 			ZCamera3 += 0.5;
@@ -46,7 +45,7 @@ void Camara3persona::moveCamera(Corredor * pj1){
 	RelativeToCar.Y = 5;
 	RelativeToCar.Z = ZCamera3;
 	(XCamera3, 5, ZCamera3);
-	if(teclado->isKeyDown(KEY_KEY_L))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 		RelativeToCar.Z=-ZCamera3;
 
 	vector3df RelativeToCarTarget(0,1,0);
@@ -62,15 +61,14 @@ void Camara3persona::moveCamera(Corredor * pj1){
 void Camara3persona::movefpsCamera(Corredor * pj1){
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
 	vector3df RelativeToCar(0,1,0);
-	CTeclado *teclado = CTeclado::getInstancia();
 	vector3df RelativeToCarTarget;
-	if (teclado->isKeyDown(KEY_KEY_E) && XCamera1 >= 0) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && XCamera1 >= 0) {
 		if (XCamera1 < 30) {
 			XCamera1++;
 			ZCamera1 -= 0.5;
 		}
 	}
-	else if (teclado->isKeyDown(KEY_KEY_Q) && XCamera1 <= 0) {
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && XCamera1 <= 0) {
 		if (XCamera1 > -30) {
 			XCamera1--;
 			ZCamera1 -= 0.5;
@@ -87,7 +85,7 @@ void Camara3persona::movefpsCamera(Corredor * pj1){
 	RelativeToCarTarget.X = XCamera1;
 	RelativeToCarTarget.Y = 5;
 	RelativeToCarTarget.Z = ZCamera1;
-	if(teclado->isKeyDown(KEY_KEY_L))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 		RelativeToCarTarget.Z=-ZCamera1;
 	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCar);
 	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCarTarget);
@@ -103,7 +101,6 @@ void Camara3persona::movefpsCamera(Corredor * pj1){
 }
 
 void Camara3persona::moveCameraControl(Corredor *pj1) {
-	CTeclado *teclado = CTeclado::getInstancia();
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
 	core::vector3df cameraPos = camera->getAbsolutePosition();
 
@@ -111,20 +108,20 @@ void Camara3persona::moveCameraControl(Corredor *pj1) {
 	float change_y = 0.0f;
 
 
-	if (teclado->isKeyDown(KEY_UP)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 		change_y = 1.0f;
 	}
 	else {
-		if (teclado->isKeyDown(KEY_DOWN)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 			change_y = -1.0f;
 		}
 	}
 
-	if (teclado->isKeyDown(KEY_LEFT)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 		change_x = -1.0f;
 	}
 	else {
-		if (teclado->isKeyDown(KEY_RIGHT)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 			change_x = 1.0f;
 		}
 	}

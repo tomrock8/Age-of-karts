@@ -18,9 +18,6 @@ Motor3d::Motor3d() {
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
 
-	CTeclado *teclado = CTeclado::getInstancia();
-	setTeclado(teclado);
-
 	device->setWindowCaption(L"AGE OF KARTS");
 }
 
@@ -71,10 +68,4 @@ u16 Motor3d::getAltoPantalla() {
 
 IVideoDriver *Motor3d::getDriver() {
 	return driver;
-}
-
-
-// METODOS SET
-void Motor3d::setTeclado(CTeclado *teclado) {
-	device->setEventReceiver(teclado);
 }

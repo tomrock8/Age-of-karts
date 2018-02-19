@@ -23,7 +23,7 @@ void NodoDecision::decision(vector<NodoDecision*> &arrayNodos,int nodopadre,tipo
     NodoPadre=nullptr;
     }else{
     NodoPadre = arrayNodos.at(nodopadre);
-    setHijo();
+    NodoPadre->setHijo(this);
     }
 
     idNodo = arrayNodos.size();
@@ -42,7 +42,7 @@ void NodoDecision::accion(vector<NodoDecision*> &arrayNodos,int nodopadre,int ac
     NodoPadre=nullptr;
     }else{
     NodoPadre = arrayNodos.at(nodopadre);
-    setHijo();
+    NodoPadre->setHijo(this);
     }
     
     idNodo = arrayNodos.size();
@@ -214,9 +214,9 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
     return false;
 }
 
-void NodoDecision::setHijo(){
+void NodoDecision::setHijo(NodoDecision * nodo){
 
-    NodoPadre->getHijos().push_back(this);
+    NodosHijos.push_back(nodo);
 
 }
 

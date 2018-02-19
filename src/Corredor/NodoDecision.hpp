@@ -24,7 +24,7 @@ class NodoDecision
    
   void decision(vector<NodoDecision*> &arrayNodos,int nodopadre,tipo_nodo tipoNodo,tipo_parametro parametro,int valor,bool booleano);
   void accion(vector<NodoDecision*> &arrayNodos,int nodopadre,int accionIA);
-  void setHijo();
+  void setHijo(NodoDecision * nodo);
   vector<NodoDecision*> getHijos();
   bool getDecision();
   int getAccion();

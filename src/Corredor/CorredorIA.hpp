@@ -6,8 +6,12 @@
 #include "Corredor.hpp"
 #include "Motor3d.hpp"
 #include "Waypoint.hpp"
+#include "ArbolDecision.hpp"
 
 using namespace std;
+typedef enum {NADA1,ACELERAR,FRENAR,GIRARDERECHA,GIRARIZQUIERDA,GIRARFUERTEIZQUIERDA,GIRARFUERTEDERECHA,DISTANCIAOBJETIVOCAJA,
+DISTANCIAOBJETIVOENEMIGO,DISTANCIAOBJETIVOTURBO,SEGUIRWAYPOINT} acciones_IA;
+
 
 class CorredorIA : public Corredor
 {
@@ -35,14 +39,17 @@ class CorredorIA : public Corredor
 	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
 	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
 	double pertenenciaVelocidadBaja,pertenenciaVelocidadMedia,pertenenciaVelocidadAlta;
+	
 	bool distanciaCerca,distanciaMedia,distanciaLejos;
 	bool velocidadBaja,velocidadMedia,velocidadAlta;
 	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
-	
-	bool caja,turbo,enemigo;
+	bool caja,turbo,enemigo,Vision,Objeto;
+
 	btScalar distanciaCaja,distanciaTurbo,distanciaEnemigo;
 
+	ArbolDecision *arbolconduccion;	
 	
+
 	btVector3 posicionCaja;
 	btVector3 posicionTurbo;
 	btVector3 posicionEnemigo;

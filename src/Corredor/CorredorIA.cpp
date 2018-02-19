@@ -11,6 +11,40 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 	distanciaEnemigo = 0;
 	distanciaTurbo = 0;
 	timerRecolocar=0;
+
+	arbolconduccion = new ArbolDecision();
+	arbolconduccion->nuevoNodoDecision(0,NADA2,NADA3,0,false); // 0
+	arbolconduccion->nuevoNodoDecision(0,IGUAL,GIROFUERTEDERECHA,0,true); // 1
+	arbolconduccion->nuevoNodoDecision(0,IGUAL,GIROMEDIODERECHA,0,true); // 2
+	arbolconduccion->nuevoNodoDecision(0,IGUAL,NOGIRO,0,true); // 3
+	arbolconduccion->nuevoNodoDecision(0,IGUAL,GIROMEDIOIZQUIERDA,0,true); // 4
+	arbolconduccion->nuevoNodoDecision(0,IGUAL,GIROFUERTEIZQUIERDA,0,true);  // 5
+
+	arbolconduccion->nuevoNodoDecision(1,IGUAL,VELOCIDADBAJA,0,true); // 6
+	arbolconduccion->nuevoNodoDecision(1,IGUAL,VELOCIDADMEDIA,0,true); // 7
+	arbolconduccion->nuevoNodoDecision(1,IGUAL,VELOCIDADALTA,0,true); // 8
+
+	arbolconduccion->nuevoNodoAccion(6,1); //9
+	arbolconduccion->nuevoNodoAccion(7,1); //10
+	arbolconduccion->nuevoNodoAccion(8,2); //11
+
+	arbolconduccion->nuevoNodoAccion(2,1); //12
+
+	arbolconduccion->nuevoNodoAccion(2,1); // 13
+	arbolconduccion->nuevoNodoAccion(3,1); // 14
+	arbolconduccion->nuevoNodoAccion(4,1); // 15
+
+	arbolconduccion->nuevoNodoAccion(4,1); //16
+
+
+	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADBAJA,0,true); // 17
+	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADMEDIA,0,true); // 18
+	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADALTA,0,true); // 19
+
+	arbolconduccion->nuevoNodoAccion(17,1); //20
+	arbolconduccion->nuevoNodoAccion(18,1); //21
+	arbolconduccion->nuevoNodoAccion(19,2); //22
+
 }
 
 //-----------------------\*
@@ -19,10 +53,74 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 void CorredorIA::movimiento()
 {
 	//LLmamos a la logica difusa para que nos de los valores de entrada
-	
-	
 	logicaDifusa();
+
+	bool arraybooleanos[16] = { 
+	distanciaCerca,distanciaMedia,distanciaLejos, // del 0 al 2 distancias
+	velocidadBaja,velocidadMedia,velocidadAlta, // del 3 al 5 velocidades
+	noGiro,giroFlojoDerecha,giroFlojoIzquierda,giroFuerteDerecha,giroFuerteIzquierda, // del 6 al 10 conduccion
+	caja,turbo,enemigo,Vision,Objeto}; // del 11 al 15 vision 
 	
+	
+
+		
+
+		switch(arbolconduccion->recorrerArbol(arraybooleanos,tipoObj)){ //lo que devuelva el arbol conduccion
+
+        case NADA1:
+        break;
+
+        case ACELERAR:
+		acelerar();
+        break;
+
+        case FRENAR:
+        frenar();
+        break;
+
+        case GIRARDERECHA:
+        girarDerecha();
+        break;
+
+        case GIRARIZQUIERDA:
+        girarIzquierda();
+        break;
+
+        case GIRARFUERTEDERECHA:
+        vehiculo->setSteeringValue(0.15, 0);
+		vehiculo->setSteeringValue(0.15, 1);
+        break;
+
+        case GIRARFUERTEIZQUIERDA:
+        vehiculo->setSteeringValue(0.-15, 0);
+		vehiculo->setSteeringValue(0.-15, 1);
+        break;
+
+
+    }
+
+/*
+		switch(parametro){ //lo que devuelva el arbol de lanzar objeto
+        case NADA1:
+        break;
+
+        case SEGUIRWAYPOINT:
+		seguirWaypoint();
+        break;
+
+        case DISTANCIAOBJETIVOENEMIGO:
+        calculoAnguloGiro(posicionEnemigo);
+        break;
+
+        case DISTANCIAOBJETIVOTURBO:
+       	calculoAnguloGiro(posicionTurbo);
+        break;
+
+        case DISTANCIAOBJETIVOCAJA:
+        calculoAnguloGiro(posicionCaja);
+        break;
+
+    }
 
 	if(noGiro){
 	acelerar();
@@ -52,14 +150,13 @@ void CorredorIA::movimiento()
 	else if(velocidadMedia)
 	acelerar();
 	else if(velocidadMaxima)
-	desacelerar();
+	frenar();
 
 	vehiculo->setSteeringValue(0.15, 0);
 	vehiculo->setSteeringValue(0.15, 1);
 	//frenodemano(true);
 
 	}
-
 
 	if(giroFuerteIzquierda){
 	
@@ -68,23 +165,22 @@ void CorredorIA::movimiento()
 	else if(velocidadMedia)
 	acelerar();
 	else if(velocidadMaxima)
-	desacelerar();
+	frenar();
 
 	vehiculo->setSteeringValue(-0.15, 0);
 	vehiculo->setSteeringValue(-0.15, 1);
 	//frenodemano(true);
 	}
 
-
+*/
 	//objetos
 
-	if(tipoObj!=0){
+	if(Objeto){
 
-		if(enemigo || turbo){
+		if(Vision){
 
-			if(enemigo && !turbo){
-				distanciaObjetivo = distanciaEnemigo;
-				logicaDifusa();
+			if(enemigo){
+				
 				if(distanciaCerca){
 
 					if(tipoObj == 1 || tipoObj == 6){
@@ -107,54 +203,9 @@ void CorredorIA::movimiento()
 					seguirWaypoint();
 				}
 
-			}else if(enemigo && turbo){
+			}else if(turbo){
 
-				if(distanciaEnemigo<distanciaTurbo){
-					distanciaObjetivo = distanciaEnemigo;
-					logicaDifusa();
-					if(distanciaCerca){
-
-					if(tipoObj == 1 || tipoObj == 6){
-						calculoAnguloGiro(posicionEnemigo);
-						if(noGiro)
-						usarObjetos();
-					}
-
-				}else if(distanciaMedia){
-
-					if(tipoObj == 1 || tipoObj == 6){
-						calculoAnguloGiro(posicionEnemigo);
-						if(noGiro)
-						usarObjetos();
-					}
-
-
-				}else if(distanciaLejos){
-
-					seguirWaypoint();
-				}
-
-				}else{
-					distanciaObjetivo = distanciaTurbo;
-					logicaDifusa();
-					if(distanciaCerca){
-
-					calculoAnguloGiro(posicionTurbo);
-				}else if(distanciaMedia){
-
-					calculoAnguloGiro(posicionTurbo);
-
-				}else if(distanciaLejos){
-
-					seguirWaypoint();
-				}
-
-				}
-
-			}else if(!enemigo && turbo){
-
-				distanciaObjetivo = distanciaTurbo;
-				logicaDifusa();
+				
 					if(distanciaCerca){
 
 					calculoAnguloGiro(posicionTurbo);
@@ -189,11 +240,10 @@ void CorredorIA::movimiento()
 
 	}else{
 
-		if(caja || turbo){
+		if(Vision){
 
-			if(caja && !turbo){
-				distanciaObjetivo = distanciaCaja;
-				logicaDifusa();
+			if(caja){
+				
 				if(distanciaCerca){
 
 					calculoAnguloGiro(posicionCaja);
@@ -208,46 +258,9 @@ void CorredorIA::movimiento()
 					seguirWaypoint();
 				}
 
-			}else if(caja && turbo){
+			}else if(turbo){
 
-				if(distanciaCaja<distanciaTurbo){
-					distanciaObjetivo = distanciaCaja;
-					logicaDifusa();
-					if(distanciaCerca){
-
-					calculoAnguloGiro(posicionCaja);
-
-				}else if(distanciaMedia){
-
-					calculoAnguloGiro(posicionCaja);
-
-
-				}else if(distanciaLejos){
-
-					seguirWaypoint();
-				}
-
-				}else{
-					distanciaObjetivo = distanciaTurbo;
-					logicaDifusa();
-					if(distanciaCerca){
-
-					calculoAnguloGiro(posicionTurbo);
-				}else if(distanciaMedia){
-
-					calculoAnguloGiro(posicionTurbo);
-
-				}else if(distanciaLejos){
-
-					seguirWaypoint();
-				}
-
-				}
-
-			}else if(!caja && turbo){
-
-				distanciaObjetivo = distanciaTurbo;
-				logicaDifusa();
+				
 					if(distanciaCerca){
 
 					calculoAnguloGiro(posicionTurbo);
@@ -269,7 +282,7 @@ void CorredorIA::movimiento()
 
 	}
 
-
+	
 	reposicionar();
 }
 
@@ -356,13 +369,22 @@ void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 
 void CorredorIA::logicaDifusa() {
 	
+
+	if(tipoObj!=0){
+
+		Objeto=true;
+	}else{
+		Objeto=false;
+	}
+
+
 	//DISTANCIA
 	pertenenciaCerca = FuncionTrapezoidal(distanciaObjetivo, 0, 0, 1000, 3000);
 	pertenenciaMedia = FuncionTrapezoidal(distanciaObjetivo, 2000, 4000, 5000, 6000);
 	pertenenciaLejos = FuncionTrapezoidal(distanciaObjetivo, 5000, 8000, 9000, 100000);
 
 	//GIRO
-	pertenenciaNoGiro= FuncionTriangular(anguloGiro,-40,0,40);
+	pertenenciaNoGiro= FuncionTriangular(anguloGiro,-30,0,30);
 	pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,3,20,35);
 	pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-3,-20,-35);
 	pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,30,80,180);
@@ -410,6 +432,7 @@ void CorredorIA::logicaDifusa() {
 		distanciaMedia = false;
 
 	}
+
 	if (pertenenciaMedia > pertenenciaCerca && pertenenciaMedia > pertenenciaLejos) {
 		distanciaCerca = false;
 		distanciaLejos = false;
@@ -603,6 +626,7 @@ void CorredorIA::ActualizarRaytest() {
 	distanciaTurbo=0;
 	enemigo=false;
 	distanciaEnemigo=0;
+	Vision=false;
 
 	
 
@@ -702,8 +726,81 @@ void CorredorIA::ActualizarRaytest() {
 	}
 
 
-}
 
+	if(Objeto){
+
+		if(enemigo && turbo){
+
+			if(distanciaEnemigo<distanciaTurbo){
+					distanciaObjetivo = distanciaEnemigo;
+					logicaDifusa();
+					enemigo=true;
+					turbo=false;
+				}else{
+					distanciaObjetivo = distanciaTurbo;
+					logicaDifusa();
+					enemigo=false;
+					turbo=true;
+				}
+					Vision=true;
+	}else{
+					if(enemigo){			
+					distanciaObjetivo = distanciaEnemigo;
+					logicaDifusa();
+					caja=false;
+					turbo=false;
+					enemigo=true;
+					Vision=true;
+					}else if(turbo){
+					distanciaObjetivo = distanciaTurbo;
+					logicaDifusa();
+					caja=false;
+					turbo=true;
+					enemigo=false;
+					Vision=true;	
+				}
+	}
+
+	}else{
+
+		if(caja && turbo){
+
+			if(distanciaCaja<distanciaTurbo){
+					distanciaObjetivo = distanciaCaja;
+					logicaDifusa();
+					caja=true;
+					turbo=false;
+					enemigo=false;
+				}else{
+					distanciaObjetivo = distanciaTurbo;
+					logicaDifusa();
+					caja=false;
+					turbo=true;
+					enemigo=false;
+				}
+				Vision=true;
+		}else {
+					if(caja){			
+					distanciaObjetivo = distanciaCaja;
+					logicaDifusa();
+					caja=true;
+					turbo=false;
+					enemigo=false;
+					Vision=true;
+					}else if(turbo){
+					distanciaObjetivo = distanciaTurbo;
+					logicaDifusa();
+					caja=false;
+					turbo=true;
+					enemigo=false;
+					Vision=true;	
+					}
+			}
+
+	}
+
+	
+}
 
 
 void CorredorIA::vision(btScalar distancia,ISceneNode *nodo){

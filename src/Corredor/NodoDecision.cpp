@@ -214,7 +214,7 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
     return false;
 }
 
-void NodoDecision::setHijo(NodoDecision * nodo){
+void NodoDecision::setHijo(NodoDecision* nodo){
 
     NodosHijos.push_back(nodo);
 

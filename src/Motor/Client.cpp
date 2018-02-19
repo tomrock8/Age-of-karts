@@ -522,10 +522,10 @@ bool Client::getConnected(){
 }
 
 void Client::PlayerAction(){
-	/*int estado1 = players.at(numPlayers)->getEstados()->getEstadoMovimiento();
-	int estado2 = players.at(numPlayers)->getEstados()->getDireccionMovimiento();
-	int estado3 = players.at(numPlayers)->getEstados()->getEstadoObjeto();
-	int estado4 = players.at(numPlayers)->getEstados()->getEstadoCoche();
+	int estado1 = players.at(numPlayers-1)->getEstados()->getEstadoMovimiento();
+	int estado2 = players.at(numPlayers-1)->getEstados()->getDireccionMovimiento();
+	int estado3 = players.at(numPlayers-1)->getEstados()->getEstadoObjeto();
+	int estado4 = players.at(numPlayers-1)->getEstados()->getEstadoCoche();
 	typeID = ID_PLAYER_STATE;
 	RakNet::BitStream bsOut;
 
@@ -537,11 +537,11 @@ void Client::PlayerAction(){
 	bsOut.Write(controlPlayer);
 	
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-	*/
+	
 }
 
 void Client::PlayerMovement(){
-	/*btVector3 position = players.at(numPlayers)->getRigidBody()->getCenterOfMassPosition();
+	btVector3 position = players.at(numPlayers-1)->getRigidBody()->getCenterOfMassPosition();
 	float *pos = new float[3];
 
 	pos[0] = position.getX();
@@ -550,9 +550,9 @@ void Client::PlayerMovement(){
 
 	float *ori = new float[3];
 
-	ori[0] = players.at(numPlayers)->getNodo()->getRotation().X;
-	ori[1] = players.at(numPlayers)->getNodo()->getRotation().Y;
-	ori[2] = players.at(numPlayers)->getNodo()->getRotation().Z;
+	ori[0] = players.at(numPlayers-1)->getNodo()->getRotation().X;
+	ori[1] = players.at(numPlayers-1)->getNodo()->getRotation().Y;
+	ori[2] = players.at(numPlayers-1)->getNodo()->getRotation().Z;
 
 	typeID = ID_PLAYER_MOVE;
 	RakNet::BitStream bsOut;
@@ -567,7 +567,6 @@ void Client::PlayerMovement(){
 
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
-	*/
 }
 
 void Client::PlayerSetObject(int tipo){

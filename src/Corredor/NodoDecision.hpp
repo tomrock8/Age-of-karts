@@ -28,7 +28,8 @@ class NodoDecision
   vector<NodoDecision*> getHijos();
   bool getDecision();
   int getAccion();
-  bool getConsulta(bool arrayboleanos[], int obj);     
+  bool getConsulta(bool arrayboleanos[], int obj);   
+  bool getAccionB();
 
   private:
     

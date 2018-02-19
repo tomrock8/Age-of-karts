@@ -239,3 +239,7 @@ int NodoDecision::getAccion(){
     return tipoaccion;
 
 }
+
+bool NodoDecision::getAccionB() {
+	return Accion;
+}

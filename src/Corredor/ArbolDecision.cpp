@@ -59,8 +59,9 @@ int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj){
 
     }else{
 
-
-    return NodoRuta->getAccion();    
+    int auxiliar = NodoRuta->getAccion();
+    NodoRuta = arrayNodos.at(0);
+    return auxiliar;    
     //en el caso de que sea un nodo de accion devolver la accion tal cual
     }
 

@@ -9,9 +9,6 @@
 class CorredorRed : public Corredor
 {
 private:
-  /*Estatico * est;
-	Proyectil *pro;
-	Proyectil **proX3;*/
 
 public:
   CorredorRed(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo);

@@ -29,6 +29,7 @@ private:
 	int nElementos; // Numeros para la IP (los ultimos 3)
 	std::string ipConexion;
 	int count;
+	bool pressed;
 
 	IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
 

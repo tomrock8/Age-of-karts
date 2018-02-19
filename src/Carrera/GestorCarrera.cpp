@@ -9,6 +9,7 @@ GestorCarrera::GestorCarrera() {
 
 }
 void GestorCarrera::update() {
+	pj1 = jugadores->getJugadores();
 	pj2.resize(pj1.size());
 	for (int j = 0; j < jugadores->getNumJugadores(); j++) {
 		//if (pj1.at(j) != NULL) 
@@ -69,6 +70,7 @@ void GestorCarrera::update() {
 			}
 		}
 	}
+	jugadores->setJugadores(pj1);
 }
 
 int GestorCarrera::getCorredorIndexOriginal(int n) {

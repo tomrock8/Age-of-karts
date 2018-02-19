@@ -58,7 +58,7 @@ private:
 	std::string clientPort;
 	std::string serverIP;
 
-	vector<Corredor*> player;
+	vector<Corredor*> players;
 	int controlPlayer;
 	int numPlayers;
 	bool spawned;

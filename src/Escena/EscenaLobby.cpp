@@ -4,6 +4,9 @@ EscenaLobby::EscenaLobby() : Escena(Escena::tipo_escena::LOBBY) {
 	nElementos = 0;
 	count = 50;
 	pressed = true;
+	iniciado = false;
+	lanzado = false;
+	conectado = false;
 	ipConexion = "192.168.1.";
 
 	texto = L"ESC - SALIR\n\n";
@@ -55,6 +58,22 @@ void EscenaLobby::limpiar() {
 }
 
 void EscenaLobby::update() {
+	if (!iniciado) {
+		client = Client::getInstancia();
+		client->CreateClientInterface();
+		client->SetIP(ipConexion);
+		client->ClientStartup();
+		iniciado = true;
+	}
+	if (iniciado) {
+		client->ReceivePackets();
+		if (client->getConnected()) {
+			conectado = true;
+			texto = "Conexion establecida!\n";
+			texto += "Jugadores conectados: " + to_string(client->getNumPlayers()) + " / " + to_string(client->getMaxPlayers());
+		}
+	}
+
 }
 
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
@@ -62,110 +81,107 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
-
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		if (conectado) {
+			return Escena::tipo_escena::ONLINE;
+		}
+	}
 	if (nElementos < 3) {
-		//if (count <= 0) {
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
-				if (!pressed) {
-					texto += "1";
-					ipConexion += "1";
-					nElementos++;
-					count = 50;
-					pressed = true;
-				}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
+			if (!pressed) {
+				texto += "1";
+				ipConexion += "1";
+				nElementos++;
+				count = 50;
+				pressed = true;
 			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
-				if (!pressed) {
-					texto += "2";
-					ipConexion += "2";
-					nElementos++;
-					count = 50;
-					pressed = true;
-				}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
+			if (!pressed) {
+				texto += "2";
+				ipConexion += "2";
+				nElementos++;
+				count = 50;
+				pressed = true;
 			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
-				if (!pressed) {
-					texto += "3";
-					ipConexion += "3";
-					nElementos++;
-					count = 50;
-					pressed = true;
-				}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
+			if (!pressed) {
+				texto += "3";
+				ipConexion += "3";
+				nElementos++;
+				count = 50;
+				pressed = true;
 			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)){
-				if (!pressed) {
-					texto += "4";
-					ipConexion += "4";
-					nElementos++;
-					count = 50;
-					pressed = true;
-				}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)){
+			if (!pressed) {
+				texto += "4";
+				ipConexion += "4";
+				nElementos++;
+				count = 50;
+				pressed = true;
 			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)){
-				if (!pressed) {
-					texto += "5";
-					ipConexion += "5";
-					nElementos++;
-					count = 50;
-					pressed = true;
-				}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)){
+			if (!pressed) {
+				texto += "5";
+				ipConexion += "5";
+				nElementos++;
+				count = 50;
+				pressed = true;
 			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)){
-				if (!pressed) {
-					texto += "6";
-					ipConexion += "6";
-					nElementos++;
-					count = 50;
-					pressed = true;
-				}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)){
+			if (!pressed) {
+				texto += "6";
+				ipConexion += "6";
+				nElementos++;
+				count = 50;
+				pressed = true;
 			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7)){
-				if (!pressed) {
-					texto += "7";
-					ipConexion += "7";
-					nElementos++;
-					count = 50;
-					pressed = true;
-				}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7)){
+			if (!pressed) {
+				texto += "7";
+				ipConexion += "7";
+				nElementos++;
+				count = 50;
+				pressed = true;
 			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8)){
-				if (!pressed) {
-					texto += "8";
-					ipConexion += "8";
-					nElementos++;
-					count = 50;
-					pressed = true;
-				}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8)){
+			if (!pressed) {
+				texto += "8";
+				ipConexion += "8";
+				nElementos++;
+				count = 50;
+				pressed = true;
 			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)){
-				if (!pressed) {
-					texto += "9";
-					ipConexion += "9";
-					nElementos++;
-					count = 50;
-					pressed = true;
-				}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)){
+			if (!pressed) {
+				texto += "9";
+				ipConexion += "9";
+				nElementos++;
+				count = 50;
+				pressed = true;
 			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)){
-				if (!pressed) {
-					texto += "0";
-					ipConexion += "0";
-					nElementos++;
-					count = 50;
-					pressed = true;
-				}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)){
+			if (!pressed) {
+				texto += "0";
+				ipConexion += "0";
+				nElementos++;
+				count = 50;
+				pressed = true;
 			}
-			else pressed = false;
-			textoUI->setText(this->texto.c_str());
-		//}
-		//else
-		//	count--;
-
-		return Escena::tipo_escena::LOBBY;
+		}
+		else pressed = false;
+		textoUI->setText(this->texto.c_str());
 	}
 
-
-	return Escena::tipo_escena::ONLINE;
+	return Escena::tipo_escena::LOBBY;
 }
 
 std::string EscenaLobby::getIpConexion() {

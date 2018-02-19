@@ -28,11 +28,13 @@ public:
 	void PlayerAction();
 	void PlayerSetObject(int tipo);
 	void PlayerThrowObject();
-	int ReceivePackets(ISceneManager *escena);
-	void SpawnPlayer(ISceneManager *escena);
+	int ReceivePackets();
+	void SpawnPlayer();
 
 	int getControlPlayer();
 	bool getConnected();
+	int getNumPlayers();
+	int getMaxPlayers();
 	//void UpdateNetworkKeyboard(CTeclado *teclado);
 	
 private:

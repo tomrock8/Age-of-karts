@@ -44,9 +44,6 @@ void EscenaJuego::init() {
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
-		client->CreateClientInterface();
-		client->SetIP(ipConexion);
-		client->ClientStartup();
 	}
 
 	// Gravedad
@@ -272,7 +269,6 @@ void EscenaJuego::update() {
 
 		if (jugadores->getNumJugadores() != 0)
 			pj.at(controlPlayer)->update();
-		//pj.at(1)->update();
 
 		if (jugadores->getNumJugadores() != 0)
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {

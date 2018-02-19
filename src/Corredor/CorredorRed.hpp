@@ -6,7 +6,7 @@
 #include "Aceite.hpp"
 #include "Pista.hpp"
 
-class CorredorRed : public Corredor
+class CorredorRed : public Corredor, RakNet::NetworkIDObject
 {
 private:
 

@@ -147,7 +147,7 @@ void Client::UpdateNetworkKeyboard(CTeclado *teclado)
 //==================================================================================================================
 // funcion que recoge los paquetes recibidos por el cliente y realiza unas acciones u otras segun su identificador
 //==================================================================================================================
-int Client::ReceivePackets(ISceneManager *escena)
+int Client::ReceivePackets()
 {
 	//cout <<"me gustar ver la vida pasar" << endl;
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
@@ -483,7 +483,7 @@ void Client::ShutDownClient()
 	RakNet::RakPeerInterface::DestroyInstance(client);
 }
 
-void Client::SpawnPlayer(ISceneManager *escena)
+void Client::SpawnPlayer()
 {
 	if (!spawned)
 	{
@@ -521,6 +521,13 @@ bool Client::getConnected(){
 	return connected;
 }
 
+int Client::getNumPlayers() {
+	return numPlayers;
+}
+
+int Client::getMaxPlayers() {
+	return maxPlayers;
+}
 void Client::PlayerAction(){
 	int estado1 = players.at(numPlayers-1)->getEstados()->getEstadoMovimiento();
 	int estado2 = players.at(numPlayers-1)->getEstados()->getDireccionMovimiento();
@@ -537,7 +544,7 @@ void Client::PlayerAction(){
 	bsOut.Write(controlPlayer);
 	
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-	
+
 }
 
 void Client::PlayerMovement(){

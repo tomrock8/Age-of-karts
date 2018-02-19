@@ -13,7 +13,7 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 	timerRecolocar=0;
 
 	arbolconduccion = new ArbolDecision();
-	arbolconduccion->nuevoNodoDecision(0,NADA2,NADA3,0,false); // 0
+	arbolconduccion->nuevoNodoDecision(0,NADA2,NADA3,0,false); // 0 NODO PADRE
 	arbolconduccion->nuevoNodoDecision(0,IGUAL,GIROFUERTEDERECHA,0,true); // 1
 	arbolconduccion->nuevoNodoDecision(0,IGUAL,GIROMEDIODERECHA,0,true); // 2
 	arbolconduccion->nuevoNodoDecision(0,IGUAL,NOGIRO,0,true); // 3
@@ -28,22 +28,20 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 	arbolconduccion->nuevoNodoAccion(7,1); //10
 	arbolconduccion->nuevoNodoAccion(8,2); //11
 
-	arbolconduccion->nuevoNodoAccion(2,1); //12
+	
 
-	arbolconduccion->nuevoNodoAccion(2,1); // 13
-	arbolconduccion->nuevoNodoAccion(3,1); // 14
-	arbolconduccion->nuevoNodoAccion(4,1); // 15
-
-	arbolconduccion->nuevoNodoAccion(4,1); //16
+	arbolconduccion->nuevoNodoAccion(2,1); // 12
+	arbolconduccion->nuevoNodoAccion(3,1); // 13
+	arbolconduccion->nuevoNodoAccion(4,1); // 14
 
 
-	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADBAJA,0,true); // 17
-	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADMEDIA,0,true); // 18
-	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADALTA,0,true); // 19
+	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADBAJA,0,true); // 15
+	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADMEDIA,0,true); // 16
+	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADALTA,0,true); // 17
 
-	arbolconduccion->nuevoNodoAccion(17,1); //20
-	arbolconduccion->nuevoNodoAccion(18,1); //21
-	arbolconduccion->nuevoNodoAccion(19,2); //22
+	arbolconduccion->nuevoNodoAccion(15,1); //18
+	arbolconduccion->nuevoNodoAccion(16,1); //19
+	arbolconduccion->nuevoNodoAccion(17,2); //20
 
 }
 

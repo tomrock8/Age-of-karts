@@ -23,7 +23,7 @@ void NodoDecision::decision(vector<NodoDecision*> &arrayNodos,int nodopadre,tipo
     NodoPadre=nullptr;
     }else{
     NodoPadre = arrayNodos.at(nodopadre);
-    setHijo();    
+    setHijo();
     }
 
     idNodo = arrayNodos.size();

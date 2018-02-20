@@ -31,6 +31,7 @@ private:
 	int nElementos; // Numeros para la IP (los ultimos 3)
 	std::string ipConexion;
 	Client *client;
+	bool iniciar;
 	bool iniciado;
 	bool conectado;
 	bool lanzado;

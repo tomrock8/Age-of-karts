@@ -13,6 +13,7 @@ Server::Server(int maxPlay)
 	numSockets = 1; //numero de sockets
 	numIPs = 1; //numero de ips
 	numPlayers = 0; //numero de jugadores iniciales
+	numClients = 0; //Numero de clientes conectados
 	spawned = false; //false == el servidor aun no ha spwaneado su jugador ; true == ya ha spwaneado su jugador, no puede spwanear mas
 	maxPlayers = maxPlay; //asignacion del numero max de jugadores
 	serverPort = "6001"; //puerto que va a usar el servidor
@@ -127,6 +128,9 @@ void Server::ReceivePackets()
 		float posicion[3];
 		float rotacion[3];
 		int id;
+		
+		unsigned short numConnections;
+		RakNet::SystemAddress systems[10];
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -148,9 +152,17 @@ void Server::ReceivePackets()
 		//un nuevo cliente se ha conectado al servidor
 		case ID_NEW_INCOMING_CONNECTION:
 			std::cout << "ID_NEW_INCOMING_CONNECTION\n";
+			typeID = ID_LOAD_CURRENT_CLIENTS;
+			numConnections=10;
+			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+			bsOut.Write(typeID);
+			bsOut.Write(numConnections);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+			/*
 			typeID = ID_LOAD_CURRENT_PLAYERS;
 			bsOut.Write(typeID);
 			bsOut.Write(numPlayers);
+			
 			std::cout << "Numero de jugadores actuales: " << numPlayers << std::endl;
 
 			for (int i = 0; i < numPlayers; i++)
@@ -167,7 +179,7 @@ void Server::ReceivePackets()
 			}
 			//														 Ip del emisor, false para enviar a todos menos a la ip
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
-
+*/
 			break;
 
 		//cliente y servidor no comparten el mismo tipo de protocolo (IPv4-IPv6)

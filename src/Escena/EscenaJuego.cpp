@@ -197,7 +197,7 @@ void EscenaJuego::update() {
 	vector<Corredor*> pj = jugadores->getJugadores();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
-		client->ReceivePackets(Motor3d::instancia().getScene());
+		client->ReceivePackets();
 		//client->SpawnPlayer(smgr);
 	}
 	//cout << irrTimer->getTime() << endl;

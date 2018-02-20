@@ -14,6 +14,7 @@ Client::Client(int maxPlay)
 	maxPlayers = maxPlay;
 	serverPort = "6001"; //puerto de escucha del servidor a conectarse
 	numPlayers = 0;
+	numClients = 0;
 	spawned = false;   // true == el jugador del cliente ya ha spwaneado
 	netLoaded = false; // true == si todos los clientes de la partida han spwaneado
 	connected = false;
@@ -252,6 +253,7 @@ int Client::ReceivePackets()
 		case ID_CONNECTION_REQUEST_ACCEPTED:
 			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
 			connected = true;
+			numClients +=1;
 			return 3;
 			break;
 
@@ -280,8 +282,14 @@ int Client::ReceivePackets()
 
 			break;
 
+		case ID_LOAD_CURRENT_CLIENTS:
+			cout << "ID_LOAD_CURRENT_CLIENTS\n";
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(numClients);
+		break;
+
 		case ID_LOAD_CURRENT_PLAYERS:
-			int i;
+		/*	int i;
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(numPlayers);
 			std::cout << "Cargando numero de jugadores: " << numPlayers << std::endl;
@@ -324,8 +332,8 @@ int Client::ReceivePackets()
 			controlPlayer = i;
 			numPlayers++;
 			netLoaded = true;
+			*/
 			break;
-
 		case ID_PLAYER_MOVE:
 			if (netLoaded)
 			{
@@ -523,6 +531,10 @@ bool Client::getConnected(){
 
 int Client::getNumPlayers() {
 	return numPlayers;
+}
+
+int Client::getNumClients(){
+	return numClients;
 }
 
 int Client::getMaxPlayers() {

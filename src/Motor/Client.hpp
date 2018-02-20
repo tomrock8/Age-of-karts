@@ -34,6 +34,7 @@ public:
 	int getControlPlayer();
 	bool getConnected();
 	int getNumPlayers();
+	int getNumClients();
 	int getMaxPlayers();
 	//void UpdateNetworkKeyboard(CTeclado *teclado);
 	
@@ -45,6 +46,7 @@ private:
 	int numSockets;
 	int numIPs;
 	int maxPlayers;
+	int numClients;
 	bool netLoaded;
 	bool connected;
 	unsigned char packetIdentifier;

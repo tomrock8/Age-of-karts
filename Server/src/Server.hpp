@@ -11,6 +11,7 @@ class Server
         int numSockets;
         int numIPs;
         int maxPlayers;
+        int numClients;
         unsigned char packetIdentifier;
 
         RakNet::SocketDescriptor socketDescriptor;

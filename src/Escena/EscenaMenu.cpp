@@ -8,6 +8,7 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	texto += "ESC - SALIR\n\n\n";
 	texto += "        SocketWar 2017";
 
+	pressed = true;
 
 	u16 xPos = Motor3d::instancia().getAnchoPantalla() / 3;
 	u16 yPos = Motor3d::instancia().getAltoPantalla() / 4;
@@ -60,32 +61,23 @@ void EscenaMenu::update() {
 Escena::tipo_escena EscenaMenu::comprobarInputs() {
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-		return Escena::tipo_escena::SALIR; // Devuelve el estado de las escenas para que salga
-	}
-	else {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
-			cout << "SINGLE PLAYER\n"; 
-			return Escena::tipo_escena::CARRERA;
+		if(!pressed){
+			return Escena::tipo_escena::SALIR; // Devuelve el estado de las escenas para que salga
 		}
-		else {
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
+	}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
+		cout << "SINGLE PLAYER\n"; 
+		return Escena::tipo_escena::CARRERA;
+	}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
 
-				cout << "MULTI PLAYER\n";
-				return Escena::tipo_escena::LOBBY;
-			}
-			else {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
-					cout << "OPCIONES\n";
-				}
-				else {
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)){
-						cout << "CREDITOS\n";
-						return Escena::tipo_escena::CREDITOS;
-					}
-				}
-			}
-		}
+		cout << "MULTI PLAYER\n";
+		return Escena::tipo_escena::LOBBY;
 	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
+			cout << "OPCIONES\n";
+	}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)){
+		cout << "CREDITOS\n";
+		return Escena::tipo_escena::CREDITOS;
+	}else pressed = false;
 
 	return Escena::tipo_escena::MENU;
 }

@@ -208,7 +208,7 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
 
         break;
 
-        return false;
+           
     }
 
     return false;

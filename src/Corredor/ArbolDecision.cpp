@@ -1,9 +1,6 @@
 #include "ArbolDecision.hpp"
 
 
-
-
-
 ArbolDecision::ArbolDecision(){
 
     
@@ -44,13 +41,18 @@ int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj){
     if(NodoRuta->getDecision()){
     bool check = false; //boleano de control para salir del bucle
     int cont = 0;   // variable para incrementar el array de hijos 
+   
     while(!check){
-		if (!NodoRuta->getHijos().at(cont)->getAccionB())
+
+		if (!NodoRuta->getHijos().at(cont)->getAccionB()){
 			check = NodoRuta->getHijos().at(cont)->getConsulta(arrayboleanos, obj);
-		else
-			check = true;
-    if(!check)    
+        }else{
+            check = true;
+        }
+
+    if(!check){    
     cont++;
+        }
 
     }    
 

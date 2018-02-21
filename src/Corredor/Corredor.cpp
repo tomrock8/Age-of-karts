@@ -23,6 +23,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	direccionContraria=0;
 	estado = new EstadosJugador();
 	vueltas = 1;
+	maxvueltas=4;
 	
 	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
 	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
@@ -367,9 +368,13 @@ void Corredor::setPosicion(float *pos, float *ori) {
 
 }
 void Corredor::setPosicionCarrera(int i) {
-	if (vueltas<=4)
+	if (vueltas<=maxvueltas)
 	posicionCarrera = i;
 }
+void Corredor::setMaxVueltas(int i){
+	maxvueltas=i;
+}
+
 void Corredor::setTipoObj()
 {
 	int random;
@@ -1034,7 +1039,7 @@ void Corredor::updateText(){
 	texto->agregar("\nPOSICION CARRERA: ");
 	texto->agregar(to_string(posicionCarrera) + "\n");
 	texto->agregar("\nVUELTA: ");
-	if (vueltas>4){
+	if (vueltas>maxvueltas){
 		texto->agregar("HA LLEGADO ");
 		texto->agregar(to_string(posicionCarrera)+"!\n");
 	}else{

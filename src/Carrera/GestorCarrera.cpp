@@ -1,21 +1,34 @@
 #include "GestorCarrera.hpp"
 
 GestorCarrera::GestorCarrera() {
-	vueltas = 4;
+	vueltas = 2;
 	jugadores = GestorJugadores::getInstancia();
 	pj1 = jugadores->getJugadores();
 	jugadores->setJugadores(pj1);
+	for (int j = 0; j < jugadores->getNumJugadores(); j++)
+	pj1.at(j)->setMaxVueltas(vueltas);
 	//pj2 = new Corredor*[6];
 
 }
-void GestorCarrera::update() {
+bool GestorCarrera::update() {
+
+	
+	bool b=true;	//creamos un booleano para devolver si se ha terminado la partida
+
+	//Primero copiamos pj1 en pj2 (vector de jugadores)
 	pj2.resize(pj1.size());
 	for (int j = 0; j < jugadores->getNumJugadores(); j++) {
-		//if (pj1.at(j) != NULL) 
 		pj1.at(j)->setPosicionCarrera(pj1.at(j)->getNodo()->getID() + 1);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
-		//pj2.resize(pj2.size()+1);
 		pj2.at(j) = pj1.at(j);
+
+		if (pj1.at(j)->getVueltas()<=vueltas){	//comprobamos si todos los corredores han terminado
+			b=false;	
+		}
 	}
+	if (b==true){	
+		return b;  //Todos los corredores han terminado, no es necesario seguir haciendo update. Devolvemos al menu.
+	}
+
 	int cont = 0;
 	pj_aux = NULL;
 	//ordenamos el array de jugadores en pj2, en funcion de sus waypoints de mayor a menor

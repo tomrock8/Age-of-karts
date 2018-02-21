@@ -40,7 +40,7 @@ EscenaJuego::~EscenaJuego() {
 void EscenaJuego::init() {
 	//ARGUMENTOS MAIN
 	debug = 0;
-	
+	fin_carrera=false;
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
@@ -247,6 +247,9 @@ void EscenaJuego::update() {
 				camara->moveCameraControlPointer(pj.at(0));
 
 		}
+		if (fin_carrera)
+		textoDebug->agregar("\n CARRERA FINALIZADA. PULSA F PARA VOLVER.");
+
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		pj.at(0)->update();
 		pj.at(1)->update();
@@ -298,7 +301,9 @@ void EscenaJuego::update() {
 	}
 
 	if (jugadores->getNumJugadores() != 0)
-		gc->update();
+		if (gc->update())
+			fin_carrera=true;
+
 
 	jugadores->setJugadores(pj);
 
@@ -323,6 +328,10 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		i = client->getControlPlayer();
 
 	//------- ENTRADA TECLADO ----------
+	if (fin_carrera==true && sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
+		return Escena::tipo_escena::MENU;
+	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
 		btVector3 btPos = pj.at(i)->getWaypointActual()->getPosicion();
 

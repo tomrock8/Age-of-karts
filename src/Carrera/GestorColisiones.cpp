@@ -117,14 +117,15 @@ bool GestorColisiones::JugadorEstatico()
 		{
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
-				//if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
-					if (pj1.at(j)->getProteccion()==true) {
-						cout << "estoy protegido" << endl;
-						pj1.at(j)->setProteccion(false);
-						protegido = true;
+				if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
+					if (nodoA->getID()==pj1.at(j)->getNodo()->getID()){ 
+						if (pj1.at(j)->getProteccion()==true) {
+							cout << "estoy protegido" << endl;
+							pj1.at(j)->setProteccion(false);
+							protegido = true;
+						}
 					}
-
-			//	}
+				}
 			}
 			//Turbo *t = mapa->getTurbo();
 			//t->setFrenadaActivo(pj1Col, true);
@@ -196,14 +197,16 @@ bool GestorColisiones::JugadorProyectil()
 		{
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
-				//if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
-					if (pj1.at(j)->getProteccion()==true) {
-						cout << "estoy protegido " << endl;
-						pj1.at(j)->setProteccion(false);
-						protegido = true;
-						break;
+				if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
+					if (nodoA->getID()==pj1.at(j)->getNodo()->getID()){ 
+						if (pj1.at(j)->getProteccion()==true) {
+							cout << "estoy protegido " << endl;
+							pj1.at(j)->setProteccion(false);
+							protegido = true;
+							break;
+						}
 					}
-				//}
+				}
 			}
 
 			int idB = nodoB->getID();

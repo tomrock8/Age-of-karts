@@ -209,6 +209,15 @@ void Server::ReceivePackets()
 		//se ha perdido la conexion con uno de los clientes
 		case ID_CONNECTION_LOST:
 			std::cout << "ID_CONNECTION_LOST de " << p->systemAddress.ToString(true) << std::endl;
+			typeID = ID_LOAD_CURRENT_CLIENTS;
+			numConnections=10;
+			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+			id=numConnections;
+			bsOut.Write(typeID);
+			bsOut.Write(id);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+
+
 			break;
 
 		//se le notifica al cliente que el servidor ya ha alcanzado su numero maximo de usuarios y, por lo tanto, no puede acceder
@@ -227,7 +236,7 @@ void Server::ReceivePackets()
 			break;
 		
 		case ID_SPAWN_PLAYER:
-		std::cout << "SPAWN DE UN JUGADOR\n";
+			std::cout << "SPAWN DE UN JUGADOR\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(posicion[0]);
 			bsIn.Read(posicion[1]);
@@ -344,7 +353,14 @@ void Server::ReceivePackets()
 			bsIn.Read(playerDisconnect);
 			std::cout << "Jugador eliminado: " << playerDisconnect << " / " <<numPlayers << std::endl;
 
-			playerDisconnection(playerDisconnect);
+			//playerDisconnection(playerDisconnect);
+			typeID = ID_LOAD_CURRENT_CLIENTS;
+			numConnections=10;
+			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+			id=numConnections;
+			bsOut.Write(typeID);
+			bsOut.Write(id);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 
 			std::cout << "Jugador Borrado\n";
 

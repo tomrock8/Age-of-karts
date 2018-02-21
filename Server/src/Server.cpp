@@ -155,9 +155,10 @@ void Server::ReceivePackets()
 			typeID = ID_LOAD_CURRENT_CLIENTS;
 			numConnections=10;
 			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+			std::cout << "Numero de conexiones actuales: " << numConnections << std::endl;
 			bsOut.Write(typeID);
 			bsOut.Write(numConnections);
-			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			/*
 			typeID = ID_LOAD_CURRENT_PLAYERS;
 			bsOut.Write(typeID);

@@ -23,6 +23,7 @@ public:
 	void CreateClientInterface();
 	void SetIP(std::string ipConexion);
 	void ClientStartup();
+	void RaceStart();
 	void ShutDownClient();
 	void PlayerMovement();
 	void PlayerAction();

@@ -145,6 +145,17 @@ void Client::UpdateNetworkKeyboard(CTeclado *teclado)
 	}
 }*/
 
+void Client::RaceStart() {
+	std::cout << "Mandando iniciar carrera\n";
+
+	typeID = ID_RACE_START;
+	RakNet::BitStream bsOut;
+	bsOut.Write(typeID);
+	bsOut.Write(controlPlayer);
+
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+
 //==================================================================================================================
 // funcion que recoge los paquetes recibidos por el cliente y realiza unas acciones u otras segun su identificador
 //==================================================================================================================
@@ -253,8 +264,13 @@ int Client::ReceivePackets()
 		case ID_CONNECTION_REQUEST_ACCEPTED:
 			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
 			connected = true;
-			numClients +=1;
-			return 3;
+			controlPlayer = -1;
+
+			break;
+
+		case ID_RACE_START:
+			cout << "ID_RACE_START\n";
+			
 			break;
 
 		case ID_SPAWN_PLAYER:
@@ -286,6 +302,7 @@ int Client::ReceivePackets()
 			cout << "ID_LOAD_CURRENT_CLIENTS\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(numClients);
+			if (controlPlayer == -1) controlPlayer = numClients - 1;
 			cout << "Clientes: " << numClients << endl;
 		break;
 

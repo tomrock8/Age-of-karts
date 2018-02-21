@@ -16,7 +16,7 @@ tipoaccion=0;
 
 }
 
-void NodoDecision::decision(vector<NodoDecision*> &arrayNodos,int nodopadre,tipo_nodo tipodecision,tipo_parametro parametro,int valor,bool booleano){
+void NodoDecision::decision(vector<NodoDecision*> &arrayNodos,int nodopadre,tipo_nodo tipodecision,tipo_parametro parametro,int valor,bool valorb){
 
     Decision=true;
     if(arrayNodos.size()==0){
@@ -30,7 +30,7 @@ void NodoDecision::decision(vector<NodoDecision*> &arrayNodos,int nodopadre,tipo
     condiciones=tipodecision;
     this->parametro = parametro;
     this->valor=valor;
-    valorBoleano = booleano;
+    valorBoleano = valorb;
     arrayNodos.push_back(this);
 
 }
@@ -138,20 +138,18 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
         break;
 
         case IGUAL:
-
+            //cout<<"hola"<< endl;
             if(parametro != OBJNUMERO){
-
-                if(parametroaux==valorBoleano){
-
+                cout<<"VALOR BOOLEADNO: " << valorBoleano << " PARAMETRO AUX:" << parametroaux << endl;
+                
+                if(parametroaux==valorBoleano)
                     return true;
-                }
-
+            
             }else{
 
-                if(obj == valor){
-
-                    return true;
-                }
+                if(obj == valor)
+                return true;
+                
             }
 
 
@@ -161,57 +159,56 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
 
             if(parametro != OBJNUMERO){
 
-                if(parametroaux!=valorBoleano){
-
+                if(parametroaux!=valorBoleano)
                     return true;
-                }
+             
 
             }else{
 
-                if(obj != valor){
-
+                if(obj != valor)
                     return true;
-                }
+                   
             }
 
         break;
 
         case MAYOR:
 
-            if(obj>valor){
+            if(obj>valor)
                 return true;
-            }
+           
+
 
         break;
 
         case MAYOROIGUAL:
             
-            if(obj>=valor){
+            if(obj>=valor)
                 return true;
-            }
+            
 
         break;
 
         case MENOR:
             
-            if(obj<valor){
+            if(obj<valor)
                 return true;
-            }
+           
 
         break;
 
         case MENOROIGUAL:
             
-            if(obj<=valor){
+            if(obj<=valor)
                 return true;
-            }
+           
 
         break;
 
-           
+            
     }
-
-    return false;
+    //cout<<"hola"<< endl;
+    return false; 
 }
 
 void NodoDecision::setHijo(NodoDecision* nodo){

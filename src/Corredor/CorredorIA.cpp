@@ -24,24 +24,24 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 	arbolconduccion->nuevoNodoDecision(1,IGUAL,VELOCIDADMEDIA,0,true); // 7
 	arbolconduccion->nuevoNodoDecision(1,IGUAL,VELOCIDADALTA,0,true); // 8
 
-	arbolconduccion->nuevoNodoAccion(6,1); //9
-	arbolconduccion->nuevoNodoAccion(7,1); //10
-	arbolconduccion->nuevoNodoAccion(8,2); //11
+	arbolconduccion->nuevoNodoAccion(6,5); //9
+	arbolconduccion->nuevoNodoAccion(7,5); //10
+	arbolconduccion->nuevoNodoAccion(8,7); //11
 
 	
 
-	arbolconduccion->nuevoNodoAccion(2,1); // 12
+	arbolconduccion->nuevoNodoAccion(2,3); // 12
 	arbolconduccion->nuevoNodoAccion(3,1); // 13
-	arbolconduccion->nuevoNodoAccion(4,1); // 14
+	arbolconduccion->nuevoNodoAccion(4,4); // 14
 
 
 	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADBAJA,0,true); // 15
 	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADMEDIA,0,true); // 16
 	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADALTA,0,true); // 17
 
-	arbolconduccion->nuevoNodoAccion(15,1); //18
-	arbolconduccion->nuevoNodoAccion(16,1); //19
-	arbolconduccion->nuevoNodoAccion(17,2); //20
+	arbolconduccion->nuevoNodoAccion(15,6); //18
+	arbolconduccion->nuevoNodoAccion(16,6); //19
+	arbolconduccion->nuevoNodoAccion(17,8); //20
 
 }
 
@@ -52,7 +52,7 @@ void CorredorIA::movimiento()
 {
 	//LLmamos a la logica difusa para que nos de los valores de entrada
 	logicaDifusa();
-
+	
 	bool arraybooleanos[16] = { 
 	distanciaCerca,distanciaMedia,distanciaLejos, // del 0 al 2 distancias
 	velocidadBaja,velocidadMedia,velocidadAlta, // del 3 al 5 velocidades
@@ -61,37 +61,52 @@ void CorredorIA::movimiento()
 	
 	
 
-		
-
 		switch(arbolconduccion->recorrerArbol(arraybooleanos,tipoObj)){ //lo que devuelva el arbol conduccion
 
         case NADA1:
         break;
 
-        case ACELERAR:
+        case ACELERAR: //1
 		acelerar();
         break;
 
-        case FRENAR:
+        case FRENAR: //2
         frenar();
         break;
 
-        case GIRARDERECHA:
+        case ACELERARGIRARDERECHA://3
+		acelerar();
         girarDerecha();
         break;
 
-        case GIRARIZQUIERDA:
-        girarIzquierda();
+        case ACELERARGIRARIZQUIERDA://4
+        acelerar();
+		girarIzquierda();
         break;
 
-        case GIRARFUERTEDERECHA:
+        case ACELERARGIRARFUERTEDERECHA://5
+		//cout<<"pene"<<endl;
+		acelerar();
         vehiculo->setSteeringValue(0.15, 0);
 		vehiculo->setSteeringValue(0.15, 1);
         break;
 
-        case GIRARFUERTEIZQUIERDA:
-        vehiculo->setSteeringValue(0.-15, 0);
-		vehiculo->setSteeringValue(0.-15, 1);
+        case ACELERARGIRARFUERTEIZQUIERDA://6
+		acelerar();
+        vehiculo->setSteeringValue(-0.15, 0);
+		vehiculo->setSteeringValue(-0.15, 1);
+        break;
+
+		case FRENARGIRARFUERTEDERECHA://7
+		frenar();
+        vehiculo->setSteeringValue(0.15, 0);
+		vehiculo->setSteeringValue(0.15, 1);
+        break;
+
+		case FRENARGIRARFUERTEIZQUIERDA://8
+		frenar();
+        vehiculo->setSteeringValue(-0.15, 0);
+		vehiculo->setSteeringValue(-0.15, 1);
         break;
 
 

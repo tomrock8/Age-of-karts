@@ -138,13 +138,14 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
         break;
 
         case IGUAL:
-            //cout<<"hola"<< endl;
-            if(parametro != OBJNUMERO){
-                cout<<"VALOR BOOLEADNO: " << valorBoleano << " PARAMETRO AUX:" << parametroaux << endl;
-                
-                if(parametroaux==valorBoleano)
-                    return true;
             
+            if(parametro != OBJNUMERO){
+                cout<<"ParametroAux: " <<  parametroaux << "ParametroBoleano: " << valorBoleano << endl;
+                if(parametroaux==valorBoleano){
+                  //cout<<"hola"<< endl;
+                    return true;
+                    
+                }
             }else{
 
                 if(obj == valor)

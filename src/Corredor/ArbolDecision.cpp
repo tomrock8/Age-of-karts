@@ -38,6 +38,8 @@ void ArbolDecision::nuevoNodoAccion(int nodopadre,int tipoaccion){
 
 int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj){
 
+  
+
     if(NodoRuta->getDecision()){
     bool check = false; //boleano de control para salir del bucle
     int cont = 0;   // variable para incrementar el array de hijos 

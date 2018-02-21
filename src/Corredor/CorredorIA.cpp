@@ -4,9 +4,22 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 {
 
 	cuboNodo->setName("JugadorIA");
-	caja = false;
-	enemigo = false;
-	turbo= false;
+	caja = true;
+	enemigo = true;
+	turbo= true;
+	Vision=true;
+	Objeto=true;
+	distanciaCerca=true;
+	distanciaMedia=true;
+	distanciaLejos=true;
+	velocidadBaja=true;
+	velocidadMedia=true;
+	velocidadAlta=true;
+	giroFuerteDerecha=true;
+	giroFlojoDerecha=true;
+	noGiro=true;
+	giroFuerteIzquierda=true;
+	giroFlojoIzquierda=true;
 	distanciaCaja = 0;
 	distanciaEnemigo = 0;
 	distanciaTurbo = 0;
@@ -53,13 +66,14 @@ void CorredorIA::movimiento()
 	//LLmamos a la logica difusa para que nos de los valores de entrada
 	logicaDifusa();
 	
+
 	bool arraybooleanos[16] = { 
 	distanciaCerca,distanciaMedia,distanciaLejos, // del 0 al 2 distancias
 	velocidadBaja,velocidadMedia,velocidadAlta, // del 3 al 5 velocidades
 	noGiro,giroFlojoDerecha,giroFlojoIzquierda,giroFuerteDerecha,giroFuerteIzquierda, // del 6 al 10 conduccion
 	caja,turbo,enemigo,Vision,Objeto}; // del 11 al 15 vision 
 	
-	
+
 
 		switch(arbolconduccion->recorrerArbol(arraybooleanos,tipoObj)){ //lo que devuelva el arbol conduccion
 

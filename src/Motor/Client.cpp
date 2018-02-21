@@ -286,6 +286,7 @@ int Client::ReceivePackets()
 			cout << "ID_LOAD_CURRENT_CLIENTS\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(numClients);
+			cout << "Clientes: " << numClients << endl;
 		break;
 
 		case ID_LOAD_CURRENT_PLAYERS:

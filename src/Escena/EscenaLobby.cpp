@@ -84,6 +84,9 @@ void EscenaLobby::update() {
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+		if(conectado)
+			client->ShutDownClient();
+
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {

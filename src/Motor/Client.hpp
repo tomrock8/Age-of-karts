@@ -37,6 +37,7 @@ public:
 	int getNumPlayers();
 	int getNumClients();
 	int getMaxPlayers();
+	bool getStarted();
 	//void UpdateNetworkKeyboard(CTeclado *teclado);
 	
 private:
@@ -67,6 +68,7 @@ private:
 	int controlPlayer;
 	int numPlayers;
 	bool spawned;
+	bool started;
 
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 

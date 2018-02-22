@@ -185,6 +185,10 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	}else pressed = false;
 		textoUI->setText(this->texto.c_str());
 
+	if(iniciado)
+		if(client->getStarted())
+			return Escena::tipo_escena::ONLINE;
+			
 	return Escena::tipo_escena::LOBBY;
 }
 

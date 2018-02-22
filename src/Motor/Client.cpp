@@ -18,6 +18,7 @@ Client::Client(int maxPlay)
 	spawned = false;   // true == el jugador del cliente ya ha spwaneado
 	netLoaded = false; // true == si todos los clientes de la partida han spwaneado
 	connected = false;
+	started = false;
 }
 
 //==================================================================================
@@ -270,7 +271,7 @@ int Client::ReceivePackets()
 
 		case ID_RACE_START:
 			cout << "ID_RACE_START\n";
-			
+			started = true;
 			break;
 
 		case ID_SPAWN_PLAYER:
@@ -545,6 +546,10 @@ int Client::getControlPlayer(){
 
 bool Client::getConnected(){
 	return connected;
+}
+
+bool Client::getStarted(){
+	return started;
 }
 
 int Client::getNumPlayers() {

@@ -44,8 +44,8 @@ int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj){
     bool check = false; //boleano de control para salir del bucle
     int cont = 0;   // variable para incrementar el array de hijos 
    
-    while(!check){
-
+    while(!check && cont!=NodoRuta->getHijos().size()){
+        //cout<<"HOLA"<<endl;
 		if (!NodoRuta->getHijos().at(cont)->getAccionB()){
 			check = NodoRuta->getHijos().at(cont)->getConsulta(arrayboleanos, obj);
             
@@ -56,8 +56,13 @@ int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj){
     if(!check){    
     cont++;
         }
-
+    
     }    
+
+    if (cont==NodoRuta->getHijos().size()){
+         NodoRuta=arrayNodos.at(0);
+         return 1; // por si acaso no actualiza del todo bien le decimos que acelere 
+    }
 
     NodoRuta = NodoRuta->getHijos().at(cont);
     //llamamos al arbol recursivamente para que vaya navegando entre sus nodos 

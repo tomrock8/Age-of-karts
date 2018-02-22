@@ -11,7 +11,7 @@
 using namespace std;
 typedef enum {NADA1,ACELERAR,FRENAR,ACELERARGIRARDERECHA,ACELERARGIRARIZQUIERDA,ACELERARGIRARFUERTEDERECHA,ACELERARGIRARFUERTEIZQUIERDA,
 FRENARGIRARFUERTEDERECHA,FRENARGIRARFUERTEIZQUIERDA,
-DISTANCIAOBJETIVOCAJA,DISTANCIAOBJETIVOENEMIGO,DISTANCIAOBJETIVOTURBO,SEGUIRWAYPOINT} acciones_IA;
+DISTANCIAOBJETIVOCAJA,DISTANCIAOBJETIVOENEMIGO,DISTANCIAOBJETIVOTURBO,SEGUIRWAYPOINT,USAROBJETO} acciones_IA;
 
 
 class CorredorIA : public Corredor
@@ -23,7 +23,7 @@ class CorredorIA : public Corredor
 	void reposicionar();
 	void calculoAnguloGiro(btVector3 posicion);
 	void ActualizarRaytest();
-
+	void comprobarDireccion(ISceneNode *nodo);
 	//Logica difusa
 	void logicaDifusa();
 	double FuncionTrapezoidal(double valor, double a, double b, double c, double d);
@@ -45,10 +45,12 @@ class CorredorIA : public Corredor
 	bool velocidadBaja,velocidadMedia,velocidadAlta;
 	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
 	bool caja,turbo,enemigo,Vision,Objeto;
+	bool Waypoint;
 
 	btScalar distanciaCaja,distanciaTurbo,distanciaEnemigo;
 
-	ArbolDecision *arbolconduccion;	
+	ArbolDecision *arbolconduccion;
+	ArbolDecision *arbolobjetos;		
 	
 
 	btVector3 posicionCaja;

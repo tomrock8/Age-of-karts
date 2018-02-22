@@ -45,7 +45,6 @@ void EscenaJuego::init() {
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
 		controlPlayer = client->getControlPlayer();
-		cout << "ControlPlayer: " << controlPlayer << endl;
 	}else{
 		controlPlayer = 0;
 	}
@@ -75,7 +74,6 @@ void EscenaJuego::init() {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	vector<Corredor*> pj = jugadores->getJugadores();
 	Corredor* jugador;
-cout << "Empiezo a crear jugadores\n";
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		
 		jugador = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::CHINO);
@@ -135,7 +133,6 @@ cout << "Empiezo a crear jugadores\n";
 		pos2[5].setZ(290);
 		int numClients = client->getNumClients();
 		for(int i = 0; i< numClients; i++){
-			cout << "Creamos jugador " << i << endl;
 			jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
 			pj.push_back(jugador);
 			jugadores->aumentarJugadores();
@@ -221,7 +218,6 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
-	cout << "Entro UPDATE\n";
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
 	core::list<Item *> items = pistaca->getItems();

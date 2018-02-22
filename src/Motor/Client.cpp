@@ -564,7 +564,7 @@ int Client::getMaxPlayers() {
 	return maxPlayers;
 }
 void Client::PlayerAction(){
-	int estado1 = players.at(numPlayers-1)->getEstados()->getEstadoMovimiento();
+	/*int estado1 = players.at(numPlayers-1)->getEstados()->getEstadoMovimiento();
 	int estado2 = players.at(numPlayers-1)->getEstados()->getDireccionMovimiento();
 	int estado3 = players.at(numPlayers-1)->getEstados()->getEstadoObjeto();
 	int estado4 = players.at(numPlayers-1)->getEstados()->getEstadoCoche();
@@ -579,11 +579,11 @@ void Client::PlayerAction(){
 	bsOut.Write(controlPlayer);
 	
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-
+*/
 }
 
 void Client::PlayerMovement(){
-	btVector3 position = players.at(numPlayers-1)->getRigidBody()->getCenterOfMassPosition();
+	/*btVector3 position = players.at(numPlayers-1)->getRigidBody()->getCenterOfMassPosition();
 	float *pos = new float[3];
 
 	pos[0] = position.getX();
@@ -608,7 +608,7 @@ void Client::PlayerMovement(){
 	bsOut.Write(controlPlayer);
 
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-
+*/
 }
 
 void Client::PlayerSetObject(int tipo){

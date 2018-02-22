@@ -46,6 +46,8 @@ private:
 
 	DebugDraw *debugDraw;
 
+	int controlPlayer;
+
 	Camara3persona *camara;
 	int tipoCamara;
 	bool cambioCamara;

@@ -7,7 +7,6 @@ GestorCarrera::GestorCarrera() {
 	jugadores->setJugadores(pj1);
 	for (int j = 0; j < jugadores->getNumJugadores(); j++)
 	pj1.at(j)->setMaxVueltas(vueltas);
-	//pj2 = new Corredor*[6];
 	acum=1;
 }
 bool GestorCarrera::update() {
@@ -18,14 +17,24 @@ bool GestorCarrera::update() {
 	//Primero copiamos pj1 en pj2 (vector de jugadores)
 	pj2.resize(pj1.size());
 	for (int j = 0; j < jugadores->getNumJugadores(); j++) {
-		pj1.at(j)->setPosicionCarrera(pj1.at(j)->getNodo()->getID() + 1);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
+		pj1.at(j)->setPosicionCarrera(pj1.at(j)->getNodo()->getID() + 1,0);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
 		pj2.at(j) = pj1.at(j);
 
 		if (pj1.at(j)->getVueltas()<=vueltas){	//comprobamos si todos los corredores han terminado
 			b=false;	
 		}
 	}
-	if (b==true){	
+	if (b==true){
+		for (int j = 0; j < jugadores->getNumJugadores(); j++) {
+			if (j==0){	
+				pj_aux=pj1.at(j);
+			}else{
+				if (pj_aux->getPosicionCarrera()==pj1.at(j)->getPosicionCarrera()){
+					if (pj1.at(j)->getPosicionCarrera()!=jugadores->getNumJugadores())
+					pj1.at(j)->setPosicionCarrera(pj1.at(j)->getPosicionCarrera()+1,1);
+				}
+			}
+		}
 		return b;  //Todos los corredores han terminado, no es necesario seguir haciendo update. Devolvemos al menu.
 	}
 
@@ -56,11 +65,11 @@ bool GestorCarrera::update() {
 		//una vez ordenados por waypoints pasamos a clasificarlos, distinguiendo distancias entre waypoints en caso de ambiguedad (si estan el = waypoint)
 		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 			y = getCorredorIndexOriginal(i);					//cogemos el mismo corredor correspondiente en el array original pj1 (asociar pj1<-->pj2)
-			if (pj1.at(y)->getVueltas()>vueltas && acum<6){		//controlamos el numero de jugadores 
+			if (pj1.at(y)->getVueltas()>vueltas && acum<jugadores->getNumJugadores()){		//controlamos el numero de jugadores que han llegado
 				acum++;
 			}
 			if (pj1.at(y)->getVueltas()==num){				//para esa vuelta comprobamos los corredores									
-				pj1.at(y)->setPosicionCarrera(cont);       //modificamos posicion en pj1[y]
+				pj1.at(y)->setPosicionCarrera(cont,0);       //modificamos posicion en pj1[y]
 				cont++;
 			}
 			

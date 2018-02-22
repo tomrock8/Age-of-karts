@@ -367,9 +367,13 @@ void Corredor::setPosicion(float *pos, float *ori) {
 	CuerpoColisionChasis->setCenterOfMassTransform(trans);
 
 }
-void Corredor::setPosicionCarrera(int i) {
-	if (vueltas<=maxvueltas)
-	posicionCarrera = i;
+void Corredor::setPosicionCarrera(int i,int j) {
+	if (j==0){
+		if (vueltas<=maxvueltas)
+		posicionCarrera = i;
+	}else{
+		posicionCarrera = i;
+	}
 }
 void Corredor::setMaxVueltas(int i){
 	maxvueltas=i;

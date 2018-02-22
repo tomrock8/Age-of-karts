@@ -22,6 +22,7 @@ private:
 	Corredor *pj_aux;
 	GestorJugadores *jugadores;
 	int vueltas;
+	int acum;
 };
 
 #endif

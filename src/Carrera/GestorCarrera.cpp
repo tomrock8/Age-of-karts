@@ -1,14 +1,14 @@
 #include "GestorCarrera.hpp"
 
 GestorCarrera::GestorCarrera() {
-	vueltas = 2;
+	vueltas = 1;
 	jugadores = GestorJugadores::getInstancia();
 	pj1 = jugadores->getJugadores();
 	jugadores->setJugadores(pj1);
 	for (int j = 0; j < jugadores->getNumJugadores(); j++)
 	pj1.at(j)->setMaxVueltas(vueltas);
 	//pj2 = new Corredor*[6];
-
+	acum=1;
 }
 bool GestorCarrera::update() {
 
@@ -47,20 +47,24 @@ bool GestorCarrera::update() {
 			}
 		}
 	}
-	int aux = 0;
-	cont = 1;
+	cont = acum;
 	int y = -1;
-	for (int num = vueltas+1; num >= 1; num--) {
+	acum=1;
+	for (int num = vueltas; num >= 1; num--) {
 		y = -1;
 
 		//una vez ordenados por waypoints pasamos a clasificarlos, distinguiendo distancias entre waypoints en caso de ambiguedad (si estan el = waypoint)
 		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-			y = getCorredorIndexOriginal(i);   
-			if (pj1.at(y)->getVueltas()==num){
-				      										 //cogemos el mismo corredor correspondiente en el array original pj1 (asociar pj1<-->pj2)
+			y = getCorredorIndexOriginal(i);					//cogemos el mismo corredor correspondiente en el array original pj1 (asociar pj1<-->pj2)
+			if (pj1.at(y)->getVueltas()>vueltas && acum<6){		//controlamos el numero de jugadores 
+				acum++;
+			}
+			if (pj1.at(y)->getVueltas()==num){				//para esa vuelta comprobamos los corredores									
 				pj1.at(y)->setPosicionCarrera(cont);       //modificamos posicion en pj1[y]
 				cont++;
 			}
+			
+			
 		}
 	}
 }

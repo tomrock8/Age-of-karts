@@ -89,13 +89,6 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-		if (conectado) {
-			cout << "Entro en espacio\n";
-			client->RaceStart();
-			//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
-		}
-	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}

@@ -367,9 +367,13 @@ void Corredor::setPosicion(float *pos, float *ori) {
 	CuerpoColisionChasis->setCenterOfMassTransform(trans);
 
 }
-void Corredor::setPosicionCarrera(int i) {
-	if (vueltas<=maxvueltas)
-	posicionCarrera = i;
+void Corredor::setPosicionCarrera(int i,int j) { 
+  if (j==0){ 
+    if (vueltas<=maxvueltas) 
+    posicionCarrera = i; 
+  }else{ 
+    posicionCarrera = i; 
+  } 
 }
 void Corredor::setMaxVueltas(int i){
 	maxvueltas=i;
@@ -1030,8 +1034,6 @@ void Corredor::updateText(){
 	texto->agregar("---------------------- \n");
 	texto->agregar("Jugador ");
 	texto->agregar(to_string(cuboNodo->getID())+"\n");
-	texto->agregar("VELOCIDAD: ");
-	texto->agregar(to_string(vehiculo->getCurrentSpeedKmHour()));
 	if (direccionContraria!=0){
 		texto->agregar("\nVAS EN DIRECCION CONTRARIA, JUGADOR: ");
 		texto->agregar(to_string(cuboNodo->getID())+"\n");
@@ -1045,37 +1047,7 @@ void Corredor::updateText(){
 	}else{
 		texto->agregar(to_string(vueltas));
 	}
-	texto->agregar("\nOBJETO: ");
-	switch (tipoObj) {
-	case 0: 
-		texto->agregar("NADA\n");
-		break;
-	case 1:
-		texto->agregar("FLECHA\n");
-		break;
-	case 2:
-		texto->agregar("CAJA FALSA\n");
-		break;
-	case 3:
-		texto->agregar("TURBO\n");
-		break;
-	case 4:
-		texto->agregar("ACEITE\n");
-		break;
-	case 5:
-		texto->agregar("ESCUDO\n");
-		break;
-	case 6:
-		texto->agregar("FLECHA TRIPLE\n");
-		break;
-	case 7:
-		texto->agregar("FLECHA TELEDIRIGIDA\n");
-		break;
-	case 8:
-		texto->agregar("TURBO TRIPLE\n");
-		break;
-	}
-	texto->agregar("Habilidad: "+ to_string(limite) + "/100\n");
+
 }
 
 void Corredor::updateTimerObstaculos() {

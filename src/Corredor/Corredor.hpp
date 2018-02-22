@@ -59,7 +59,7 @@ class Corredor: public RakNet::NetworkIDObject
 	
 
 	//waypoints
-	void setPosicionCarrera(int i,int j);
+	void setPosicionCarrera(int i);
 	int getPosicionCarrera();
 	void setMaxVueltas(int i);
 	btScalar getDistanciaPunto(btVector3 vector);

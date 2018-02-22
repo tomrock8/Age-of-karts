@@ -235,6 +235,19 @@ void Server::ReceivePackets()
 			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
 			break;
 		
+		case ID_RACE_START:
+			std::cout<<"ID_RACE_START\n";
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			if(id==0){
+				typeID = ID_RACE_START;
+				bsOut.Write(typeID);
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			}else{
+				std::cout << "No eres host\n";
+			}
+			break;	
+
 		case ID_SPAWN_PLAYER:
 			std::cout << "SPAWN DE UN JUGADOR\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));

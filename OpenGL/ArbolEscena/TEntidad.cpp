@@ -1,17 +1,18 @@
 #include "TEntidad.hpp"
 
+std::stack<glm::mat4> TEntidad::matStack;
+glm::mat4 TEntidad::viewMatrix;
+glm::mat4 TEntidad::projectionMatrix;
+glm::mat4 TEntidad::MVPmatrix;
+
+
+/*
 //-------------------//
 //-----CONSTRUCTOR---//
 //-------------------//
 TEntidad::TEntidad(){
-	// Genera una matriz difícil de leer pero al menos es 4x4
-	projectionMatrix = glm::perspective(
-		glm::radians(90.0f), 	// El campo de visión vertical:zoom 90° (extra ancho) y 30° (zoom aumentado)
-		4.0f / 3.0f,				// Proporción.ventana 4/3 == 800/600  // Se debera controlar en opciones si se hace ventana redimensionable
-		0.1f,						// Plano de corte cercano. Tan grande como sea posible o tendrás problemas de precisión.
-		100.0f						// Plano de corte lejano. Tan pequeño como se pueda.
-	);
 	
+
 }
 //-------------------//
 //-----DESTRUCTOR----//
@@ -23,7 +24,7 @@ TEntidad::~TEntidad() {
 //-----MEDOTOS SET----//
 //--------------------//
 void TEntidad::setModelView(GLfloat x, GLfloat y, GLfloat z) {
-	viewMatrix = glm::translate(glm::mat4(), glm::vec3(x,y,z));
+//	viewMatrix = glm::translate(glm::mat4(), glm::vec3(x,y,z));
 }
 
 void TEntidad::setMVPMatrix(glm::mat4 MVP) {//Almacenar la matriz MVP p
@@ -33,13 +34,13 @@ void TEntidad::setMVPMatrix(glm::mat4 MVP) {//Almacenar la matriz MVP p
 //---METODOS GET-----//
 //-------------------//
 glm::mat4 TEntidad::getprojectionMatrix() {
-	return projectionMatrix;
+	//return projectionMatrix;
 }
 glm::mat4 TEntidad::getViewMatrix() {
-	return viewMatrix;
+	//return viewMatrix;
 }
 glm::mat4 TEntidad::getMVPMatrix() {
-	return MVPmatrix;
+	//return MVPmatrix;
 }
 //-------------------//
 //------DIBUJADO-----//
@@ -50,3 +51,4 @@ void TEntidad::beginDraw() {
 void TEntidad::endDraw() {
 
 }
+*/

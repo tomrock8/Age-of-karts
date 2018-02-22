@@ -1,9 +1,7 @@
-#pragma once
+#ifndef TTRANSFORM_H
+#define TTRANSFORM_H
+
 #include <iostream>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp> 
-#include <glm/gtc/matrix_transform.hpp>
 #include "TEntidad.hpp"
 
 using namespace std;
@@ -13,6 +11,8 @@ class TTransform : public TEntidad
 public:
 	//----constructor---//
 	TTransform();
+	//----destructor----//
+	~TTransform();
 	//--Gestionar la matriz--//
 	void cargar(glm::mat4 mat);				//recoge una matriz y la carga
 	//---Transformacion-----//
@@ -23,10 +23,11 @@ public:
 	void escalar(GLfloat x, GLfloat y, GLfloat z);
 
 	//--Sobrecarga de metodos de dibujado de entidad--//
-	void beginDraw();
-	void endDraw();
+	virtual void beginDraw() override;
+	virtual void endDraw() override;
 private:
 	//TMatriz4x4 matriz
 	glm::mat4 matriz;
 }; 
+#endif
 

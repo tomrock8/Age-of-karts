@@ -1,6 +1,8 @@
 #include "TCamara.hpp"
 
+TCamara::TCamara() {
 
+}
 
 void TCamara::setPerspectiva(GLfloat Height, GLfloat Width, GLfloat corteCercano, GLfloat corteLejano,GLfloat grados) {
 	projectionMatrix = glm::perspective(
@@ -10,7 +12,7 @@ void TCamara::setPerspectiva(GLfloat Height, GLfloat Width, GLfloat corteCercano
 		corteLejano						// Plano de corte lejano. Tan pequeño como se pueda.
 	);
 	
-
+	
 }
 void TCamara::setParalela(GLfloat Height, GLfloat Width, GLfloat corteCercano, GLfloat corteLejano, GLfloat grados) {
 	projectionMatrix = glm::ortho(
@@ -34,6 +36,7 @@ dibujar la escena deben definirse antes de dibujar
 el resto de entidades.
 Los metodos beginDraw y endDraw de las cámaras y las luces suelen estar vacios.*/
 void TCamara::beginDraw() {
+	std::cout << "Cargo Camara" << std::endl;
 
 }
 void TCamara::endDraw() {

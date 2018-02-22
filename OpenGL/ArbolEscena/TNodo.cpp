@@ -8,7 +8,16 @@ TNodo::TNodo() {
 //----DESTRUCTOR-----//
 //-------------------//
 TNodo::~TNodo() {
+	delete entidad;
+	delete padre;
+	//Borrado de hijos
+	for (int i = 0; i < hijos.size(); i++) {
+		delete(hijos.at(i));
+	}
 	
+}
+void TNodo::inicializarMotor() {
+
 }
 //----------------------//
 //----MANEJO DE HIJOS---//
@@ -56,14 +65,20 @@ TNodo *TNodo::getPadre() {
 //------ARBOL EN PREORDEN----//
 //---------------------------//
 void TNodo::draw() {
-
-	entidad->beginDraw();
+	if (entidad != NULL) {
+		entidad->beginDraw();
+	}
 	for (int i = 0; i < hijos.size(); i++) {
+		std::cout << "Entro a dibujar el hijo" << std::endl;
+
 		hijos.at(i)->draw();
 	}
 	/*	for (std::list<TNodo *>::iterator Iterator = hijos.begin(); Iterator != hijos.end(); Iterator++) {
 			TNodo *TNodoActual= *Iterator;
 			TNodoActual->draw();
 		}*/
-	entidad->endDraw();
+	if (entidad != NULL) {
+		entidad->endDraw();
+	}
+	
 }

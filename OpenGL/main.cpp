@@ -1,15 +1,58 @@
-
+//la malla lo primero que se llame puesto que al tener GLEW, requiere que este en primera linea( 5 horas para verlo)
+#define GLEW_STATIC
+#include "libGL.hpp"
+#include "Motor/TMotor.hpp"
 #include "TEntidad.hpp"
 #include "TNodo.hpp"
 #include "TTransform.hpp"
-#include "TMalla.hpp"
 #include "TLuz.hpp"
 #include "TCamara.hpp"
+#include <iostream>
+#include <math.h>
+
+int main(void) {
+	TMotor m = TMotor::instancia();
+	//----------------------------------------------------------------------//
+	//-------------------------------TIMER----------------------------------//
+	//----------------------------------------------------------------------//
+	double sec = 0.0;									//glfwSetTime para empezar donde se quiera
+	
+	//----------------------------------------------------------------------//
+	//--------------------------BUCLE DEL JUEGO-----------------------------//
+	//----------------------------------------------------------------------//
+//	arbolEscena();
+	while (!glfwWindowShouldClose(m.getVentana())) {
+
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);					//Limpia el buffer del color
+
+		//--------------------------------//
+		//------R E N D E R I Z A D O-----//
+		//--------------------------------//
+
+		//sec = glfwGetTime();
+		//std::cout << sec << std::endl;
+
+		//--interpolacion--//
+		glfwSwapBuffers(m.getVentana());						//swap los bufers de pantalla (trasero y delantero)
+		glfwPollEvents();						    	//comprobamos si hay algun evento que se haya activado (raton, teclado, joystick)
+
+	}
 
 
-int main() {
+	glfwTerminate();									//Terminar GLFW, limpiando todos los recursos alocados por GLFW
+
+	return 0;
+
+
+
+
+}
+
+void arbolEscena() {
 
 	//---COSNTRUCCION ARBOL DE NODOS-----//
+	
 	TNodo *Escena    = new TNodo();
 	TNodo *RotaLuz   = new TNodo();
 	TNodo *RotaCam   = new TNodo();
@@ -31,8 +74,8 @@ int main() {
 	RotaCoche->addHijo(TraslaCoche);
 	TraslaCoche->setPadre(RotaCoche);
 	//SIGUIENTE NIVEL DE NODOS SE EXPANDIRA DEPENDIENDO DE LA CANTIDAD DE JUGADORES
-	TNodo * Luz1     = new TNodo();
-	TNodo * Cam1     = new TNodo();
+	TNodo * Luz1    = new TNodo();
+	TNodo * Cam1    = new TNodo();
 	TNodo * Coche1  = new TNodo();
 	TraslaLuz->addHijo(Luz1);
 	Luz1->setPadre(TraslaLuz);
@@ -40,8 +83,6 @@ int main() {
 	Cam1->setPadre(TraslaCam);
 	TraslaCoche->addHijo(Coche1);
 	Coche1->setPadre(TraslaCoche);
-
-
 	// --Transformaciones rotacion
 	TTransform *TransfRotaLuz = new TTransform();
 	TTransform *TransfRotaCam = new TTransform();
@@ -62,14 +103,15 @@ int main() {
 	//--Entidades a los nodos luz camara y coche--//
 	TLuz *entLuz = new TLuz();
 	TCamara *entCam = new TCamara();
-	TMalla *entMallaCoche = new TMalla();
+	//TMalla *entMallaCoche = new TMalla();
+	//entMallaCoche->cargaMalla("assets/caja.obj");
 	Luz1->setEntidad(entLuz);
 	Cam1->setEntidad(entCam);
-	Coche1->setEntidad(entMallaCoche);
+	//Coche1->setEntidad(entMallaCoche);
 
 
 	Escena->draw();
 
 	std::cout << "Hola que haces" << std::endl;
-	return 0;
+
 }

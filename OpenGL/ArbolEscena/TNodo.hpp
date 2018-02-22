@@ -1,7 +1,9 @@
-#pragma once
+#ifndef TNODO_H
+#define TNODO_H
 
-#include  <GLFW/glfw3.h>
-#include  <iostream>
+
+
+#include <iostream>
 #include <fstream>
 #include <vector>
 #include "TEntidad.hpp"
@@ -29,7 +31,8 @@ public:
 	//--------------------//
 	bool setEntidad(TEntidad *n);
 	void setPadre(TNodo *p);
-		
+	//inicializar motor// no va a qui pero para probar es lo que hay
+	void inicializarMotor();
 	//--Dibujar la entidad asociada al nodo--//
 	void draw();
 private:
@@ -38,3 +41,4 @@ private:
 	TNodo *padre;
 
 };
+#endif

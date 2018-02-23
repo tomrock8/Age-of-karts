@@ -287,7 +287,6 @@ void EscenaJuego::update() {
 		//cout << jugadores->getNumJugadores() << endl;
 		//if (jugadores->getNumJugadores() != 0)
 		//	pj.at(controlPlayer)->actualizarItem();
-		client->UpdateNetworkKeyboard();
 		
 		if (jugadores->getNumJugadores() != 0)
 		//	camara->moveCamera(pj[controlPlayer]);
@@ -312,6 +311,7 @@ void EscenaJuego::update() {
 				tiempoRefresco = clock();
 			}
 			client->PlayerAction();
+			client->UpdateNetworkKeyboard();
 		}
 	}
 

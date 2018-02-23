@@ -295,7 +295,7 @@ void Server::ReceivePackets()
 			bsIn.Read(rotacion[2]);
 			bsIn.Read(id);
 			if(id == numPlayers) id--;  //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
-			player[id]->setPositionRotation(posicion, rotacion);
+			//player[id]->setPositionRotation(posicion, rotacion);
 			//*posicion = *networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->getPosition();
 			//networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->setPosition(posicion);
 			typeID = ID_PLAYER_MOVE;

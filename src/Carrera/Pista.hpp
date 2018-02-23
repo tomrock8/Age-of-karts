@@ -9,6 +9,7 @@
 #include "Item.hpp"
 #include <string>
 #include <fstream>
+#include <vector>
 #include "Waypoint.hpp"
 #include "Turbo.hpp"
 #include "Caja.hpp"
@@ -32,11 +33,11 @@ public:
 	void setItems(irr::core::list<Item *> itemMetodo);
 	// METODOS GET
 	core::list<Item *> getItems();
-	Turbo **getArrayTurbo();
-	Caja **getArrayCaja();
-	void setArrayCaja(Caja **cajas);
+	vector<Turbo*> getArrayTurbo();
+	vector<Caja*> getArrayCaja();
+	void setArrayCaja(vector<Caja*> caja);
 	int getTamCajas();
-	Waypoint **getArrayWaypoints();
+	vector<Waypoint*> getArrayWaypoints();
 	Turbo* getTurbo();
 	Turbo* getTurbo(int id);
 	int getTamArrayWaypoints();
@@ -51,15 +52,14 @@ private:
 	btDefaultMotionState *MotionState; // posicion del cuerpo de colision
 	
 	int tamWaypoints;
-	Waypoint **arrayWaypoints;
+	vector<Waypoint*> arrayWaypoints;
 
 	int tamTurbos;
-	Turbo    **arrayTurbos;
+	vector<Turbo*> arrayTurbos;
 	
 	int tamCajas;
-	Caja     **arrayCajas;
+	vector<Caja*> arrayCajas;
 	
-	btScalar Masa;
 	ISceneNode *Mapa;
 
 	irr::core::list<Item *> Items;

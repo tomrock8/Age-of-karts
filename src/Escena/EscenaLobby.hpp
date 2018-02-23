@@ -5,6 +5,8 @@
 
 #include "Motor3d.hpp"
 #include "Timer.hpp"
+#include "Graphics.hpp"
+
 
 class EscenaLobby : public Escena {
 public:
@@ -24,9 +26,17 @@ public:
 	// METODOS SET
 
 private:
+	bool lanzarServer;
+
 	int nElementos; // Numeros para la IP (los ultimos 3)
 	std::string ipConexion;
+	Client *client;
+	bool iniciar;
+	bool iniciado;
+	bool conectado;
+	bool lanzado;
 	int count;
+	bool pressed;
 
 	IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
 

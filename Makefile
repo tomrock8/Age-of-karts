@@ -1,11 +1,11 @@
 FUENTE := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
 
-LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lRakNetLibStatic  -lpthread 
+LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lRakNetLibStatic  -lpthread -lsfml-graphics -lsfml-window -lsfml-system
 LIBRERIAS_BULLET := -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader 
 
 RUTAS2 := -I. -I/usr/local/include/bullet/ 
-RUTAS := -I./include/irrlicht -I./include/raknet -I./include/irrlicht/include -I./include/bullet -L./lib 
+RUTAS := -I./include/irrlicht -I./include/raknet -I./include/irrlicht/include -I./include/bullet -I./include/SFML -L./lib -L./lib/sfml
 RUTAS_INTERNAS := -I./src -I./src/Carrera -I./src/Corredor -I./src/Escena -I./src/Item -I./src/Motor
 
 CFLAGS := -ggdb -std=c++11 
@@ -13,7 +13,7 @@ CFLAGS := -ggdb -std=c++11
 
 all: objdir exec
 
-run: objdir exec run
+run: all run
 
 alt: objdir exec2 
 
@@ -28,16 +28,12 @@ exportAlt:
 
 
 altRun:
-	@./exec2
-	@echo "Ejecutando."
-	
-altRunRed:
-	@echo "Ejecutando."
-	@./exec2 2
+	@./exec2 
+	@echo "Ejecutando." 
 
 run:
-	@./exec
-	@echo "Ejecutando."
+	@./exec 
+	@echo "Ejecutando." 
 
 export: 
 	LD_LIBRARY_PATH=./lib
@@ -54,7 +50,7 @@ exec: $(OBJETOS)
 	
 	g++ -g -o $@ $^  $(RUTAS) $(RUTAS_INTERNAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS)	
 
-	LD_LIBRARY_PATH=./lib ./exec
+	LD_LIBRARY_PATH=./lib
 	@echo "Generado ejecutable."
 
 obj/%.o : src/%.cpp

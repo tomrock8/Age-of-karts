@@ -10,12 +10,14 @@
 #include "MotorFisicas.hpp"
 #include "DebugFisicas.hpp"
 #include "Camara3persona.hpp"
-#include "Client.hpp"
 
 #include "Pista.hpp"
 #include "GestorJugadores.hpp"
 #include "GestorCarrera.hpp"
 #include "GestorColisiones.hpp"
+#include <vector>
+#include "Graphics.hpp"
+
 
 class EscenaJuego : public Escena {
 public:
@@ -44,6 +46,8 @@ private:
 
 	DebugDraw *debugDraw;
 
+	int controlPlayer;
+
 	Camara3persona *camara;
 	int tipoCamara;
 	bool cambioCamara;
@@ -58,6 +62,7 @@ private:
 
 	clock_t tiempoRefresco;
 	GestorCarrera *gc;
+	bool fin_carrera;
 };
 
 #endif /* ESCENAJUEGO_H */

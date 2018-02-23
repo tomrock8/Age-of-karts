@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include "IrrlichtLib.hpp"
 #include "Motor3d.hpp"
 #include "Waypoint.hpp"
@@ -33,7 +34,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void InicializarFisicas();
 	void lanzarItem(Proyectil *item, int direcionItem);
 	void lanzarItemTeledirigido();
-	void virtual lanzarItemRed(){};
+	virtual void lanzarItemRed(){};
 	void aplicarAceite();
 	void setAceite();
 	void resetFuerzas();
@@ -58,8 +59,9 @@ class Corredor: public RakNet::NetworkIDObject
 	
 
 	//waypoints
-	void setPosicionCarrera(int i);
+	void setPosicionCarrera(int i,int j);
 	int getPosicionCarrera();
+	void setMaxVueltas(int i);
 	btScalar getDistanciaPunto(btVector3 vector);
 	btScalar getdistanciaWaypoint();
 	btScalar getdistanciaWaypointActual();
@@ -92,6 +94,7 @@ class Corredor: public RakNet::NetworkIDObject
 	bool getCheckItem();
 	void setPosDisparo(btVector3 posDisparo);
 	void usarObjetos();
+	void lanzarHabilidad();
 
 
 	// Destructor
@@ -115,6 +118,7 @@ protected:
 	Waypoint *siguiente_aux; // Punto Siguiente
 	int vueltas;
 	int posicionCarrera;
+	int maxvueltas;
 
 	// parametros IA
 	btScalar distanciaWaypoint;
@@ -143,7 +147,7 @@ protected:
 	//objetos estaticos y dinamicos
 	Estatico * est;
 	Proyectil *pro;
-	Proyectil **proX3;
+	vector<Proyectil*> proX3;
 	Escudo *escudo;
 	EstadosJugador *estado;
 	btVector3 posDisparo;
@@ -192,7 +196,7 @@ protected:
 	void desacelerar();
 	void girarDerecha();
 	void girarIzquierda();
-	void frenodemano(bool activo);
+	void frenodemano(bool activo, bool objeto);
 	virtual void movimiento() {}; // A implementar por derivadas
 
 	// UPDATES

@@ -10,7 +10,7 @@ Estatico::Estatico(btVector3 posicionItem) : Item(posicionItem) {
 	escala.setY(3);
 	escala.setZ(3);
 	nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
-
+	posicionItem.setY(posicionItem.getY()-1);
 	posicion = posicionItem;
 	nodo->setPosition(vector3df(posicion.getX(),posicion.getY(),posicion.getZ()));
 

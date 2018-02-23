@@ -11,7 +11,7 @@ ItemTeledirigido::ItemTeledirigido(btVector3 posicionItem) : Item(posicionItem) 
 	//posicion = posicionItem;
 	//nodo->setPosition(posicion);
 
-	masa = 10000;
+	masa = btScalar(10000);
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);

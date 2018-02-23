@@ -40,13 +40,13 @@ EscenaJuego::~EscenaJuego() {
 void EscenaJuego::init() {
 	//ARGUMENTOS MAIN
 	debug = 0;
-	
+	fin_carrera=false;
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
-		client->CreateClientInterface();
-		client->SetIP(ipConexion);
-		client->ClientStartup();
+		controlPlayer = client->getControlPlayer();
+	}else{
+		controlPlayer = 0;
 	}
 
 	// Gravedad
@@ -70,27 +70,34 @@ void EscenaJuego::init() {
 	//	JUGADORES
 	//-----------------------------
 	//Posicion del nodo y el bloque de colisiones centralizado:
+
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	Corredor **pj = jugadores->getJugadores();
-
+	vector<Corredor*> pj = jugadores->getJugadores();
+	Corredor* jugador;
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		pj[0] = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::CHINO);
+		
+		jugador = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::CHINO);
+		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
 
-		pj[1] = new CorredorIA("assets/coche.obj", btVector3(-10, 0, 280),Corredor::tipo_jugador::GLADIADOR);
+		jugador = new CorredorIA("assets/coche.obj", btVector3(-10, 0, 280),Corredor::tipo_jugador::GLADIADOR);
+		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
 
-	
-		pj[2] = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 300),Corredor::tipo_jugador::PIRATA);
+		jugador = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 300),Corredor::tipo_jugador::PIRATA);
+		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
 
-		pj[3] = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 280),Corredor::tipo_jugador::VIKINGO);
+		jugador = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 280),Corredor::tipo_jugador::VIKINGO);
+		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
 
-		pj[4] = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 300),Corredor::tipo_jugador::GLADIADOR);
+		jugador = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 300),Corredor::tipo_jugador::GLADIADOR);
+		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
 
-		pj[5] = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 290),Corredor::tipo_jugador::CHINO);
+		jugador = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 290),Corredor::tipo_jugador::CHINO);
+		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
 	
 
@@ -98,14 +105,38 @@ void EscenaJuego::init() {
 		pj[0]->getNodo()->setID(0);
 		pj[1]->getNodo()->setID(1);
 		
+			pj.at(2)->getNodo()->setID(2);
+			pj.at(3)->getNodo()->setID(3);
+			pj.at(4)->getNodo()->setID(4);
+			pj.at(5)->getNodo()->setID(5);
+		
 
-	
-				pj[2]->getNodo()->setID(2);
-				pj[3]->getNodo()->setID(3);
-				pj[4]->getNodo()->setID(4);
-				pj[5]->getNodo()->setID(5);
-	
-
+	}else{
+		btVector3 pos2[6];
+		pos2[0].setX(-10);
+		pos2[0].setY(0);
+		pos2[0].setZ(310);
+		pos2[1].setX(-10);
+		pos2[1].setY(0);
+		pos2[1].setZ(290);
+		pos2[2].setX(-20);
+		pos2[2].setY(0);
+		pos2[2].setZ(310);
+		pos2[3].setX(-20);
+		pos2[3].setY(0);
+		pos2[3].setZ(290);
+		pos2[4].setX(-30);
+		pos2[4].setY(0);
+		pos2[4].setZ(310);
+		pos2[5].setX(-30);
+		pos2[5].setY(0);
+		pos2[5].setZ(290);
+		int numClients = client->getNumClients();
+		for(int i = 0; i< numClients; i++){
+			jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
+			pj.push_back(jugador);
+			jugadores->aumentarJugadores();
+		}
 	}
 
 	jugadores->setJugadores(pj);
@@ -137,7 +168,7 @@ void EscenaJuego::init() {
 void EscenaJuego::dibujar() {
 
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	Corredor **pj = jugadores->getJugadores();
+	vector<Corredor*> pj = jugadores->getJugadores();
 
 	//------- RENDER ----------
 	Motor3d::instancia().iniciarDibujado();
@@ -152,10 +183,10 @@ void EscenaJuego::dibujar() {
 		/*
 		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
 		
-				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj[2]);
-				CorredorIA *COMENARDOSAUXILIAR3 = static_cast<CorredorIA *>(pj[3]);
-				CorredorIA *COMENARDOSAUXILIAR4 = static_cast<CorredorIA *>(pj[4]);
-				CorredorIA *COMENARDOSAUXILIAR5 = static_cast<CorredorIA *>(pj[5]);
+				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj.at(2));
+				CorredorIA *COMENARDOSAUXILIAR3 = static_cast<CorredorIA *>(pj.at(3));
+				CorredorIA *COMENARDOSAUXILIAR4 = static_cast<CorredorIA *>(pj.at(4));
+				CorredorIA *COMENARDOSAUXILIAR5 = static_cast<CorredorIA *>(pj.at(5));
 		
 
 		//COMENARDOSAUXILIAR->update();
@@ -192,11 +223,10 @@ void EscenaJuego::update() {
 	Pista *pistaca = Pista::getInstancia();
 	core::list<Item *> items = pistaca->getItems();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	Corredor **pj = jugadores->getJugadores();
+	vector<Corredor*> pj = jugadores->getJugadores();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
-		client->ReceivePackets(Motor3d::instancia().getScene());
-		//client->SpawnPlayer(smgr);
+		client->ReceivePackets();
 	}
 	//cout << irrTimer->getTime() << endl;
 	textoDebug->limpiar();
@@ -225,60 +255,52 @@ void EscenaJuego::update() {
 
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 	pj = jugadores->getJugadores();
-	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		pj[0]->actualizarItem();
-		//pj[1]->actualizarItem();
-		switch(tipoCamara){
-			case 0:		//Camara 3a persona libre
-				camara->moveCameraControl(pj[0]); 
-			break;
-			case 1:		//Camara 3a persona fija
-				camara->moveCamera(pj[0]);
-			break;
-			case 2:		//Camara 1a persona
-				camara->movefpsCamera(pj[0]);
-			break;
-			case 3:
-				camara->moveCameraControlPointer(pj[0]);
+	switch(tipoCamara){
+		case 0:		//Camara 3a persona libre
+			camara->moveCameraControl(pj.at(controlPlayer)); 
+		break;
+		case 1:		//Camara 3a persona fija
+			camara->moveCamera(pj.at(controlPlayer));
+		break;
+		case 2:		//Camara 1a persona
+			camara->movefpsCamera(pj.at(controlPlayer));
+		break;
+		case 3:
+			camara->moveCameraControlPointer(pj.at(controlPlayer));
 
-		}
+	}
+	if (tipoEscena != Escena::tipo_escena::ONLINE) {
+		pj.at(controlPlayer)->actualizarItem();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
-		pj[0]->update();
-		pj[1]->update();
+		pj.at(controlPlayer)->update();
+		pj.at(1)->update();
+
+				pj.at(2)->update();
+				pj.at(3)->update();
+				pj.at(4)->update();
+				pj.at(5)->update();
 		
-				pj[2]->update();
-				pj[3]->update();
-				pj[4]->update();
-				pj[5]->update();
-		
-		//textoDebug->agregar(pj[0]->toString());
+		//textoDebug->agregar(pj.at(0)->toString());
 	}
 	else {
 		//cout << jugadores->getNumJugadores() << endl;
-		int controlPlayer = client->getControlPlayer();
-		if (jugadores->getNumJugadores() != 0)
-			pj[controlPlayer]->actualizarItem();
+		//if (jugadores->getNumJugadores() != 0)
+		//	pj.at(controlPlayer)->actualizarItem();
 
 		if (jugadores->getNumJugadores() != 0)
 		//	camara->moveCamera(pj[controlPlayer]);
-			camara->moveCameraControl(pj[controlPlayer]);
+			camara->moveCameraControl(pj.at(controlPlayer));
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
 		if (jugadores->getNumJugadores() != 0)
-			pj[controlPlayer]->update();
-		//pj[1]->update();
-
-		if (jugadores->getNumJugadores() != 0)
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-				if (i != controlPlayer) {
-					pj[i]->updateRed();
-				}
+				pj.at(i)->updateRed();
 			}
 
 		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 		if (jugadores->getNumJugadores() != 0)
-			textoDebug->agregar(pj[controlPlayer]->toString());
+			textoDebug->agregar(pj.at(controlPlayer)->toString());
 
 		if (jugadores->getNumJugadores() != 0) {
 			clock_t tiempoActual = clock();
@@ -293,7 +315,9 @@ void EscenaJuego::update() {
 	}
 
 	if (jugadores->getNumJugadores() != 0)
-		gc->update();
+		if (gc->update())
+			fin_carrera=true;
+
 
 	jugadores->setJugadores(pj);
 
@@ -310,66 +334,72 @@ void EscenaJuego::update() {
 }
 
 Escena::tipo_escena EscenaJuego::comprobarInputs() {
-	CTeclado *teclado = CTeclado::getInstancia();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	Corredor **pj = jugadores->getJugadores();
+	vector<Corredor*> pj = jugadores->getJugadores();
 	vector3df pos(-10, 0, 310);
 	int i = 0;
 	if (tipoEscena == Escena::tipo_escena::ONLINE)
 		i = client->getControlPlayer();
 
 	//------- ENTRADA TECLADO ----------
-	if (teclado->isKeyDown(KEY_KEY_R)) {
-		btVector3 btPos = pj[i]->getWaypointActual()->getPosicion();
+	if (fin_carrera==true && sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
+		return Escena::tipo_escena::MENU;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+		btVector3 btPos = pj.at(i)->getWaypointActual()->getPosicion();
 
 		btTransform trans;
 		trans.setOrigin(btPos);
 		btQuaternion quaternion;
-		quaternion.setEulerZYX(pj[i]->getNodo()->getRotation().Z* PI / 180, pj[i]->getNodo()->getRotation().Y * PI / 180, pj[i]->getNodo()->getRotation().X* PI / 180);
+		quaternion.setEulerZYX(pj.at(i)->getNodo()->getRotation().Z* PI / 180, pj.at(i)->getNodo()->getRotation().Y * PI / 180, pj.at(i)->getNodo()->getRotation().X* PI / 180);
 		trans.setRotation(quaternion);
 
-		pj[i]->getRigidBody()->setCenterOfMassTransform(trans);
-		pj[i]->resetFuerzas();
-		//pj[0]->getNodo()->setPosition(pos);
+		pj.at(i)->getRigidBody()->setCenterOfMassTransform(trans);
+		pj.at(i)->resetFuerzas();
+		//pj.at(0)->getNodo()->setPosition(pos);
 	}
 
-	if(teclado->isKeyup(KEY_KEY_C)){
+	/*if (sf::Keyboard::isKeyReleased(sf::Keyboard::C)){
 		if(cambioCamara)
 			cambioCamara = false;
-	}
-	if(teclado->isKeyDown(KEY_KEY_C)){
+	}*/
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
 		if(!cambioCamara){
 			tipoCamara++;
 			if(tipoCamara == 4) tipoCamara = 0;
 			cambioCamara = true;
 		}
+	}else{
+		if(cambioCamara)
+			cambioCamara = false;
 	}
-	if (teclado->isKeyDown(KEY_KEY_T)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
 		float *resetPos = new float[3];
 		resetPos[0] = pos.X;
 		resetPos[1] = pos.Y + 40;
 		resetPos[2] = pos.Z;
 
 		float *resetOri = new float[3];
-		resetOri[0] = pj[0]->getNodo()->getRotation().Z;
-		resetOri[1] = pj[0]->getNodo()->getRotation().Y;
-		resetOri[2] = pj[0]->getNodo()->getRotation().X;
+		resetOri[0] = pj.at(0)->getNodo()->getRotation().Z;
+		resetOri[1] = pj.at(0)->getNodo()->getRotation().Y;
+		resetOri[2] = pj.at(0)->getNodo()->getRotation().X;
 
-		pj[0]->setPosicion(resetPos, resetOri);
+		pj.at(0)->setPosicion(resetPos, resetOri);
 	}
 
-	if (teclado->isKeyDown(KEY_ESCAPE)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 		if (tipoEscena == Escena::tipo_escena::ONLINE)
 			client->ShutDownClient();
 
 		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
 	}
 
-	if (teclado->isKeyDown(KEY_KEY_0)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)){
 		debug = 0;
 	}
 	else {
-		if (teclado->isKeyDown(KEY_KEY_9)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)){
 			debug = 1;
 		}
 	}

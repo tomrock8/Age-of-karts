@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "IrrlichtLib.hpp"
-#include "CTeclado.hpp"
 
 using namespace std;
 
@@ -27,8 +26,6 @@ public:
 	u16 getAnchoPantalla();
 	u16 getAltoPantalla();
 
-	// Metodos SET
-	void setTeclado(CTeclado *teclado);
 
 private:
 	Motor3d();

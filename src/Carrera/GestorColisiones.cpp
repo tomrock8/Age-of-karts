@@ -8,7 +8,7 @@ void GestorColisiones::ComprobarColisiones()
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	jugadores = GestorJugadores::getInstancia();
 	Pista *pista = Pista::getInstancia();
-	Caja** cajas = pista->getArrayCaja();
+	vector<Caja*> cajas = pista->getArrayCaja();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	core::list<btRigidBody *> objetos = bullet->getObjetos();
 	pj1 = jugadores->getJugadores();
@@ -55,10 +55,10 @@ bool GestorColisiones::JugadorWaypoint(){
         if (strcmp("Waypoint", nodoB->getName()) == 0)
         {
 			for(int i = 0; i< jugadores->getNumJugadores(); i++){
-				if(pj1[i]!=NULL)
-					if(nodoA->getID() == pj1[i]->getNodo()->getID()){
+				//if(pj1.at(i)!=NULL)
+					if(nodoA->getID() == pj1.at(i)->getNodo()->getID()){
 						
-						pj1[i]->setWaypointActual(nodoB);
+						pj1.at(i)->setWaypointActual(nodoB);
 						
 						return true;	
 					}
@@ -86,8 +86,8 @@ bool GestorColisiones::JugadorTurbo()
 		if (strcmp("Turbo", nodoB->getName()) == 0)
 		{
 			for( int i = 0; i< jugadores->getNumJugadores(); i++)
-				if(nodoA->getID() == pj1[i]->getNodo()->getID())
-					pj1[i]->setTurbo(true, false,26000);
+				if(nodoA->getID() == pj1.at(i)->getNodo()->getID())
+					pj1.at(i)->setTurbo(true, false,26000);
 					
 			//cout << "Jugador - Turbo\n";
 			return true;
@@ -117,13 +117,14 @@ bool GestorColisiones::JugadorEstatico()
 		{
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
-				if (pj1[j] != NULL) {//tengo un personaje, y voy a ver si tiene escudo
-					if (pj1[j]->getProteccion()==true) {
-						cout << "estoy protegido" << endl;
-						pj1[j]->setProteccion(false);
-						protegido = true;
+				if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
+					if (nodoA->getID()==pj1.at(j)->getNodo()->getID()){ 
+						if (pj1.at(j)->getProteccion()==true) {
+							cout << "estoy protegido" << endl;
+							pj1.at(j)->setProteccion(false);
+							protegido = true;
+						}
 					}
-
 				}
 			}
 			//Turbo *t = mapa->getTurbo();
@@ -143,16 +144,16 @@ bool GestorColisiones::JugadorEstatico()
 							aceite = true;
 						}
 						for(int j = 0; j< jugadores->getNumJugadores(); j++){
-								if(pj1[j]!=NULL)
-									if (nodoA->getID()== pj1[j]->getNodo()->getID()){
+								//if(pj1.at(j)!=NULL)
+									if (nodoA->getID()== pj1.at(j)->getNodo()->getID()){
 										if(aceite)
 										{
-											pj1[j]->setAceite();
+											pj1.at(j)->setAceite();
 										}
 										else
 										{
 											cout << "Caja Falsa\n";
-											pj1[j]->resetFuerzas();
+											pj1.at(j)->resetFuerzas();
 										}
 									}
 							}
@@ -196,12 +197,14 @@ bool GestorColisiones::JugadorProyectil()
 		{
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
-				if (pj1[j] != NULL) {//tengo un personaje, y voy a ver si tiene escudo
-					if (pj1[j]->getProteccion()==true) {
-						cout << "estoy protegido " << endl;
-						pj1[j]->setProteccion(false);
-						protegido = true;
-						break;
+				if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
+					if (nodoA->getID()==pj1.at(j)->getNodo()->getID()){ 
+						if (pj1.at(j)->getProteccion()==true) {
+							cout << "estoy protegido " << endl;
+							pj1.at(j)->setProteccion(false);
+							protegido = true;
+							break;
+						}
 					}
 				}
 			}
@@ -216,9 +219,9 @@ bool GestorColisiones::JugadorProyectil()
 					if(!protegido)
 					{
 						for(int j = 0; j< jugadores->getNumJugadores(); j++){
-							if(pj1[j]!=NULL)
-								if (nodoA->getID()== pj1[j]->getNodo()->getID()){
-									pj1[j]->resetFuerzas();
+							//if(pj1.at(j)!=NULL)
+								if (nodoA->getID()== pj1.at(j)->getNodo()->getID()){
+									pj1.at(j)->resetFuerzas();
 								}
 						}
 					}
@@ -240,7 +243,7 @@ bool GestorColisiones::JugadorProyectil()
 //
 // Comprobar colisiones entre Jugador y Caja
 //
-bool GestorColisiones::JugadorCaja(Caja **cajas)
+bool GestorColisiones::JugadorCaja(vector<Caja*> cajas)
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -259,14 +262,14 @@ bool GestorColisiones::JugadorCaja(Caja **cajas)
 			//cout << "Tam Cajas: " << tamCajas << "- " << idB << endl;
 			for (int i = 0; i < tamCajas; i++)
 			{
-				if (cajas[i] != NULL)
+				if (cajas.at(i) != NULL)
 				{
-					if (cajas[i]->getNodo()->getID() == idB)
+					if (cajas.at(i)->getNodo()->getID() == idB)
 					{
 						for(int j = 0; j< jugadores->getNumJugadores(); j++)
-							if(pj1[j]!=NULL)
-								if(nodoA->getID()== pj1[j]->getNodo()->getID()){
-									cajas[i]->romper(pj1[j]);
+							//if(pj1.at(j)!=NULL)
+								if(nodoA->getID()== pj1.at(j)->getNodo()->getID()){
+									cajas.at(i)->romper(pj1.at(j));
 								}
 					}
 				}

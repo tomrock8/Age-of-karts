@@ -2,12 +2,15 @@
 #define CLIENT_H
 
 #include <iostream>
+#include <vector>
 //#include "CorredorRed.hpp"
 //#include "CorredorJugador.hpp"
 #include "GestorJugadores.hpp"
 //#include "NetworkEnums.hpp"
 
 #define MAX_PLAYERS 10
+
+using namespace std;
 
 class Client
 {
@@ -20,16 +23,21 @@ public:
 	void CreateClientInterface();
 	void SetIP(std::string ipConexion);
 	void ClientStartup();
+	void RaceStart();
 	void ShutDownClient();
 	void PlayerMovement();
 	void PlayerAction();
 	void PlayerSetObject(int tipo);
 	void PlayerThrowObject();
-	int ReceivePackets(ISceneManager *escena);
-	void SpawnPlayer(ISceneManager *escena);
+	int ReceivePackets();
+	void SpawnPlayer();
 
 	int getControlPlayer();
 	bool getConnected();
+	int getNumPlayers();
+	int getNumClients();
+	int getMaxPlayers();
+	bool getStarted();
 	//void UpdateNetworkKeyboard(CTeclado *teclado);
 	
 private:
@@ -40,6 +48,7 @@ private:
 	int numSockets;
 	int numIPs;
 	int maxPlayers;
+	int numClients;
 	bool netLoaded;
 	bool connected;
 	unsigned char packetIdentifier;
@@ -55,10 +64,11 @@ private:
 	std::string clientPort;
 	std::string serverIP;
 
-	Corredor **player;
+	vector<Corredor*> players;
 	int controlPlayer;
 	int numPlayers;
 	bool spawned;
+	bool started;
 
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 

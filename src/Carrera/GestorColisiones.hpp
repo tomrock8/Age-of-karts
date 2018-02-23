@@ -13,7 +13,7 @@
 #include "MotorFisicas.hpp"
 #include "GestorJugadores.hpp"
 #include <iostream>
-
+#include <vector>
 using namespace std;
 
 class GestorColisiones
@@ -21,7 +21,7 @@ class GestorColisiones
 public:
   GestorColisiones(){};
   void ComprobarColisiones();
-  bool JugadorCaja(Caja *cajas[]);
+  bool JugadorCaja(vector<Caja*> cajas);
   bool JugadorTurbo();
   bool objetoDestruible();
   bool JugadorEstatico();
@@ -30,7 +30,7 @@ public:
   //bool JugadorItemTeledirigido();
 
 private:
-  Corredor **pj1;
+  vector<Corredor*> pj1;
   GestorJugadores *jugadores;
   ISceneNode *nodoA;
   ISceneNode *nodoB;

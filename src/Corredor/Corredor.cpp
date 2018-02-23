@@ -23,6 +23,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	direccionContraria=0;
 	estado = new EstadosJugador();
 	vueltas = 1;
+	maxvueltas=4;
 	
 	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
 	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
@@ -88,8 +89,8 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	Masa = btScalar(400);
 	FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
-	indiceGiroAlto=0.4;
-	indiceGiroBajo=0.1;
+	indiceGiroAlto=btScalar(0.4);
+	indiceGiroBajo=btScalar(0.1);
 	velocidadMaxima=380;
 	velocidadMaximaTurbo=420;
 	velocidadLimiteGiro=150;
@@ -115,8 +116,8 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaxima=360;
 			velocidadMaximaTurbo=410;
 			//----GIRO/MANEJO-----
-			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.085;
+			indiceGiroAlto=btScalar(0.4);
+			indiceGiroBajo=btScalar(0.085);
 			velocidadLimiteGiro=150;
 			//------PESO------
 			Masa = btScalar(400);
@@ -132,8 +133,8 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaxima=370;
 			velocidadMaximaTurbo=415;
 			//----GIRO/MANEJO-----
-			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.085;
+			indiceGiroAlto=btScalar(0.4);
+			indiceGiroBajo=btScalar(0.085);
 			velocidadLimiteGiro=130;
 			//------PESO------
 			Masa = btScalar(400);
@@ -149,8 +150,8 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaxima=360;
 			velocidadMaximaTurbo=410;
 			//----GIRO/MANEJO-----
-			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.1;
+			indiceGiroAlto=btScalar(0.4);
+			indiceGiroBajo=btScalar(0.1);
 			velocidadLimiteGiro=180;
 			//------PESO------
 			Masa = btScalar(400);
@@ -166,8 +167,8 @@ void Corredor::setParametros(tipo_jugador t){
 			velocidadMaxima=385;
 			velocidadMaximaTurbo=425;
 			//----GIRO/MANEJO-----
-			indiceGiroAlto=0.4;
-			indiceGiroBajo=0.07;
+			indiceGiroAlto=btScalar(0.4);
+			indiceGiroBajo=btScalar(0.07);
 			velocidadLimiteGiro=110;
 			//------PESO------
 			Masa = btScalar(1200);
@@ -202,11 +203,11 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = 20;    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
-		wheel.m_wheelsDampingCompression = 2.3f;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-		wheel.m_wheelsDampingRelaxation =  4.4f;//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_suspensionStiffness = btScalar(20);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
+		wheel.m_wheelsDampingCompression = btScalar(2.3f);//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
+		wheel.m_wheelsDampingRelaxation =  btScalar(4.4f);//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
-		wheel.m_rollInfluence = 0;       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
+		wheel.m_rollInfluence = btScalar(0);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 											//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
 		//wheel.m_maxSuspensionTravelCm = 10; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 
 
@@ -366,9 +367,18 @@ void Corredor::setPosicion(float *pos, float *ori) {
 	CuerpoColisionChasis->setCenterOfMassTransform(trans);
 
 }
-void Corredor::setPosicionCarrera(int i) {
-	posicionCarrera = i;
+void Corredor::setPosicionCarrera(int i,int j) { 
+  if (j==0){ 
+    if (vueltas<=maxvueltas) 
+    posicionCarrera = i; 
+  }else{ 
+    posicionCarrera = i; 
+  } 
 }
+void Corredor::setMaxVueltas(int i){
+	maxvueltas=i;
+}
+
 void Corredor::setTipoObj()
 {
 	int random;
@@ -602,7 +612,7 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 }
 void Corredor::SetFuerzaVelocidad(int turbo)
 {
-	Fuerza = turbo;
+	Fuerza = btScalar(turbo);
 }
 void Corredor::setFriccion(btScalar valor) {
 	for (int i = 0; i < vehiculo->getNumWheels(); i++) {
@@ -668,11 +678,7 @@ void Corredor::resetFuerzas(){
 void Corredor::soltarItem()
 {
 	setTipoObj(0);
-	setLimite(getLimite() + 2);
-	cout << "El limite se ha incrementado, ahora es : " << getLimite() << endl;
-	if (h->getHabilidadActiva() == true) {
-		setLimite(0);
-	}
+	setLimite(getLimite() + 10);
 }
 
 /*
@@ -728,7 +734,7 @@ void Corredor::usarObjetos() {
 	}
 	else if (getTipoObj() == 6)	//FLECHA TRIPLE
 	{
-		proX3 = new Proyectil *[3];
+		proX3.resize(3);
 		btVector3 orientacioncentral(orientacion.getX(), orientacion.getY(), orientacion.getZ());
 		btVector3 centro(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10);
 		btVector3 orientacionderecha = orientacioncentral.rotate(btVector3(0, 1, 0), 10 * PI / 180);
@@ -737,31 +743,30 @@ void Corredor::usarObjetos() {
 		btVector3 d(cuboNodo->getPosition().X + orientacionderecha.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 10);
 		for (int i = 0; i < 3; i++) {
 
-
+			
 			if (i == 0) {
-				proX3[i] = new Proyectil(iz);
-				proX3[i]->inicializarFisicas();
-				proX3[i]->getRigidBody()->setCollisionFlags(proX3[i]->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-				proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionizquierda.getX() * 400, 5.0f, orientacionizquierda.getZ() * 400));
+				proX3.at(i)= new Proyectil(iz);
+				proX3.at(i)->inicializarFisicas();
+				proX3.at(i)->getRigidBody()->setCollisionFlags(proX3.at(i)->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+				proX3.at(i)->getRigidBody()->setLinearVelocity(btVector3(orientacionizquierda.getX() * 400, 5.0f, orientacionizquierda.getZ() * 400));
 			}
 			if (i == 1) {
-
-				proX3[i] = new Proyectil(centro);
-				proX3[i]->inicializarFisicas();
-				proX3[i]->getRigidBody()->setCollisionFlags(proX3[i]->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-				proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacioncentral.getX() * 400, 5.0f, orientacioncentral.getZ() * 400));
+				proX3.at(i)= new Proyectil(centro);
+				proX3.at(i)->inicializarFisicas();
+				proX3.at(i)->getRigidBody()->setCollisionFlags(proX3.at(i)->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+				proX3.at(i)->getRigidBody()->setLinearVelocity(btVector3(orientacioncentral.getX() * 400, 5.0f, orientacioncentral.getZ() * 400));
 			}
 			if (i == 2) {
 
-				proX3[i] = new Proyectil(d);
-				proX3[i]->inicializarFisicas();
-				proX3[i]->getRigidBody()->setCollisionFlags(proX3[i]->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-				proX3[i]->getRigidBody()->setLinearVelocity(btVector3(orientacionderecha.getX() * 400, 5.0f, orientacionderecha.getZ() * 400));
+				proX3.at(i)= new Proyectil(d);
+				proX3.at(i)->inicializarFisicas();
+				proX3.at(i)->getRigidBody()->setCollisionFlags(proX3.at(i)->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+				proX3.at(i)->getRigidBody()->setLinearVelocity(btVector3(orientacionderecha.getX() * 400, 5.0f, orientacionderecha.getZ() * 400));
 			}
-			proX3[i]->setLanzado(true);
+			proX3.at(i)->setLanzado(true);
 			
 
-			items.push_back(proX3[i]);
+			items.push_back(proX3.at(i));
 
 
 
@@ -771,6 +776,7 @@ void Corredor::usarObjetos() {
 	}
 	else if (tipoObj == 7)	//FLECHA TELEDIRIGIDA
 	{
+		cout << "Teledirigido de Jugador " << cuboNodo->getID() << " - posicion: " << posicionCarrera << endl;
 		pt = new ItemTeledirigido(posDisparo);
 		pt->lanzarItemTeledirigido(posicionCarrera);
 		items.push_back(pt);
@@ -780,35 +786,19 @@ void Corredor::usarObjetos() {
 	{
 		setTurbo(true, true, 26000);
 	}
-	else if (getTipoObj() == 9) //HABILIDAD
-	{
-		if (getLimite() >= 10) {//puedo lanzar la habilidad
-			h->getNodo()->setVisible(true);
-			h->setOrientacion(orientacion);
-			h->setPadre(this->getNodo());
-			h->setPosicion(posDisparo);
-			h->lanzarHabilidad();
-			items.push_back(h);
-			soltarItem();
-		}
-		else {
-			cout << "No puedes usar la habilidad si tu limite no es 10 o mas" << endl;
-		}
-
-	}
 	pista->setItems(items);
 
 }
 void Corredor::aplicarAceite() {
 	//CuerpoColisionChasis->setAngularFactor(btScalar(120*PI/180));
 	//CuerpoColisionChasis->applyCentralForce(btVector3(100, 5.0f,100));
-	frenodemano(true);
+	frenodemano(true, false);
 	CuerpoColisionChasis->setAngularVelocity(btVector3(0, 40, 0));
 	for (int i = 0; i < 100; i++) {
 		girarIzquierda();
 	}
 	
-	frenodemano(false);
+	frenodemano(false, false);
 }
 void Corredor::incCargador() { cargador++; };
 void Corredor::decCargador() { cargador--; };
@@ -899,22 +889,29 @@ void Corredor::girarIzquierda()
 	vehiculo->setSteeringValue(-FuerzaGiro, 1);
 	
 }
-void Corredor::frenodemano(bool activo)
+void Corredor::frenodemano(bool activo, bool objeto)
 {
 	int friccion = 1.f;
 	if (activo) {
+		if(estado->getEstadoMovimiento() != 0 && estado->getEstadoMovimiento() != 4 && (estado->getDireccionMovimiento()==1 || estado->getDireccionMovimiento()==2) && !objeto){
+			limite+=10;
+		}
+
 		estado->setEstadoMovimiento(DERRAPA);
 		FuerzaGiro = btScalar(0.45);
 
-		
+		vehiculo->applyEngineForce(FuerzaFrenado, 0);
+		vehiculo->applyEngineForce(FuerzaFrenado, 1);
+		vehiculo->applyEngineForce(FuerzaFrenado, 2);
+		vehiculo->applyEngineForce(FuerzaFrenado, 3);
 
 		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(friccion);
 		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(friccion);
 
 		vehiculo->getWheelInfo(2).m_frictionSlip = btScalar(friccion);
 		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(friccion);
-	
-	
+		
+		
 	}
 	else {
 		
@@ -1003,6 +1000,11 @@ void Corredor::update()
 	if((vehiculo->getCurrentSpeedKmHour()>velocidadMaxima && !turboActivado) || (turboActivado && vehiculo->getCurrentSpeedKmHour()>velocidadMaximaTurbo)){
 		limitadorVelocidad();
 	}
+	for (unsigned int i = 0; i< sf::Joystick::Count; ++i)
+	{
+		if (sf::Joystick::isConnected(i))
+			std::cout << "Joystick " << i << " is connected!" << std::endl;
+	}
 	Timer *time = Timer::getInstancia();
 	if (turboActivado) {
 		if (time->getTimer() - timerTurbo >= 1) {
@@ -1037,17 +1039,53 @@ void Corredor::updateText(){
 	TextoPantalla *texto =TextoPantalla::getInstancia();
 	texto->agregar("---------------------- \n");
 	texto->agregar("Jugador ");
-	texto->agregar(to_string(cuboNodo->getID())+"\n");
-	texto->agregar("VELOCIDAD: ");
-	texto->agregar(to_string(vehiculo->getCurrentSpeedKmHour()));
+	texto->agregar(to_string(cuboNodo->getID()));
+	//texto->agregar("VELOCIDAD: ");
+	//texto->agregar(to_string(vehiculo->getCurrentSpeedKmHour()));
 	if (direccionContraria!=0){
 		texto->agregar("\nVAS EN DIRECCION CONTRARIA, JUGADOR: ");
 		texto->agregar(to_string(cuboNodo->getID())+"\n");
 	}
-	texto->agregar("\nPOSICION CARRERA: ");
+	texto->agregar(" - POSICION: ");
 	texto->agregar(to_string(posicionCarrera));
+	texto->agregar(" - VUELTA: ");
+	if (vueltas>maxvueltas){
+		texto->agregar("HA LLEGADO ");
+		texto->agregar(to_string(posicionCarrera)+"!\n");
+	}else{
+		texto->agregar(to_string(vueltas));
+	}
 	texto->agregar("\nOBJETO: ");
-	texto->agregar(to_string(tipoObj) + "\n");
+	switch (tipoObj) {
+	case 0: 
+		texto->agregar("NADA\n");
+		break;
+	case 1:
+		texto->agregar("FLECHA\n");
+		break;
+	case 2:
+		texto->agregar("CAJA FALSA\n");
+		break;
+	case 3:
+		texto->agregar("TURBO\n");
+		break;
+	case 4:
+		texto->agregar("ACEITE\n");
+		break;
+	case 5:
+		texto->agregar("ESCUDO\n");
+		break;
+	case 6:
+		texto->agregar("FLECHA TRIPLE\n");
+		break;
+	case 7:
+		texto->agregar("FLECHA TELEDIRIGIDA\n");
+		break;
+	case 8:
+		texto->agregar("TURBO TRIPLE\n");
+		break;
+	}
+	texto->agregar("Habilidad: "+ to_string(limite) + "/100\n");
 }
 
 void Corredor::updateTimerObstaculos() {
@@ -1058,14 +1096,11 @@ void Corredor::updateTimerObstaculos() {
 				
     			if (!proteccion){ 
           			lanzarItemTeledirigido(); 
-				}else{ 
-					setProteccion(false);
-					objetivoFijado=false;
 				}
 			}
 			if (t->getTimer()-timerTeledirigido>=3){
 				objetivoFijado=false;
-
+				setProteccion(false);
 			}
 		}
 	}
@@ -1132,6 +1167,23 @@ void Corredor::actualizarRuedas()
 	rueda4->setRotation(vector3df(Euler.X, Euler.Y +180, Euler.Z));
 
 
+}
+
+void Corredor::lanzarHabilidad(){
+	if (getLimite() >= 100) {//puedo lanzar la habilidad
+		Pista *pista = Pista::getInstancia();
+		core::list<Item *> items = pista->getItems();
+		h->getNodo()->setVisible(true);
+		h->setOrientacion(orientacion);
+		h->setPadre(this->getNodo());
+		h->setPosicion(posDisparo);
+		h->lanzarHabilidad();
+		items.push_back(h);
+		setLimite(0);
+	}
+	else {
+		cout << "No puedes usar la habilidad si tu limite no es 100 o mas" << endl;
+	}
 }
 
 void Corredor::updateHabilidad() {
@@ -1214,3 +1266,8 @@ Corredor::~Corredor() {
 	delete vehiculo;
 	cout << "SALGO DESTRUCTOR CORREDOR\n";
 }
+		//Si dejas esto el coche va hacia atras
+		/*	vehiculo->applyEngineForce(FuerzaFrenado, 0);
+			vehiculo->applyEngineForce(FuerzaFrenado, 1);
+			vehiculo->applyEngineForce(FuerzaFrenado, 2);
+			vehiculo->applyEngineForce(FuerzaFrenado, 3);*/

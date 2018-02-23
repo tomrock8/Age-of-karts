@@ -4,6 +4,7 @@
 #include "Escena.hpp"
 
 #include "Motor3d.hpp"
+#include "Graphics.hpp"
 
 class EscenaMenu : public Escena {
 public:
@@ -23,6 +24,8 @@ public:
 private:
 
 	IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
+
+	bool pressed;
 
 	stringw texto; // Texto a mostrar en pantalla
 	IGUIStaticText *textoUI; // Nodo de irrlicht

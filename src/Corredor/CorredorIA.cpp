@@ -438,9 +438,9 @@ void CorredorIA::movimiento()
 
 void CorredorIA::seguirWaypoint(){
 
-	btScalar distanciaCentro=0;
-	btScalar distanciaLado1=0;
-	btScalar distanciaLado2=0;
+	btScalar distanciaCentro=btScalar(0);
+	btScalar distanciaLado1=btScalar(0);
+	btScalar distanciaLado2=btScalar(0);
 
 	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
 	distanciaCentro = getDistanciaPunto(siguiente->getPosicion());
@@ -471,7 +471,7 @@ void CorredorIA::reposicionar(){
 		
 	}
 	if (time->getTimer()-timerRecolocar>4){
-		if (abs(abs(posicion_aux.getX())-abs(posicion.getX()))<2 && abs(abs(posicion_aux.getZ())-abs(posicion.getZ()))<2){
+		if ((unsigned)((unsigned)(posicion_aux.getX())-(unsigned)(posicion.getX()))<2 && (unsigned)((unsigned)(posicion_aux.getZ())-(unsigned)(posicion.getZ()))<2){
 			btVector3 btPos = actual->getPosicion();
 
 			btTransform trans;

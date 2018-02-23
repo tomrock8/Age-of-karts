@@ -60,17 +60,16 @@ void EscenaCreditos::update() {
 }
 
 Escena::tipo_escena EscenaCreditos::comprobarInputs() {
-	CTeclado *teclado = CTeclado::getInstancia();
 
-	if (teclado->isKeyDown(KEY_RETURN)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
 	else {
-		if (teclado->isKeyDown(KEY_KEY_1)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
 			cout << "SINGLE PLAYER\n";
 		}
 		else {
-			if (teclado->isKeyDown(KEY_KEY_2)) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
 				cout << "MULTI PLAYER\n";
 			}
 		}

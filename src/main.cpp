@@ -25,7 +25,6 @@ int main(int argc, char* argv[]) {
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
 	Motor3d::instancia().cerrar();
 
-	cout << "\n\ncaca";
 
 	return 0;
 }

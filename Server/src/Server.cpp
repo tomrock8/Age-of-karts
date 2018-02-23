@@ -13,6 +13,7 @@ Server::Server(int maxPlay)
 	numSockets = 1; //numero de sockets
 	numIPs = 1; //numero de ips
 	numPlayers = 0; //numero de jugadores iniciales
+	numClients = 0; //Numero de clientes conectados
 	spawned = false; //false == el servidor aun no ha spwaneado su jugador ; true == ya ha spwaneado su jugador, no puede spwanear mas
 	maxPlayers = maxPlay; //asignacion del numero max de jugadores
 	serverPort = "6001"; //puerto que va a usar el servidor
@@ -127,6 +128,9 @@ void Server::ReceivePackets()
 		float posicion[3];
 		float rotacion[3];
 		int id;
+		
+		unsigned short numConnections;
+		RakNet::SystemAddress systems[10];
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -148,9 +152,19 @@ void Server::ReceivePackets()
 		//un nuevo cliente se ha conectado al servidor
 		case ID_NEW_INCOMING_CONNECTION:
 			std::cout << "ID_NEW_INCOMING_CONNECTION\n";
+			typeID = ID_LOAD_CURRENT_CLIENTS;
+			numConnections=10;
+			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+			id=numConnections;
+			std::cout << "Numero de conexiones actuales: " << id << std::endl;
+			bsOut.Write(typeID);
+			bsOut.Write(id);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			/*
 			typeID = ID_LOAD_CURRENT_PLAYERS;
 			bsOut.Write(typeID);
 			bsOut.Write(numPlayers);
+			
 			std::cout << "Numero de jugadores actuales: " << numPlayers << std::endl;
 
 			for (int i = 0; i < numPlayers; i++)
@@ -167,7 +181,7 @@ void Server::ReceivePackets()
 			}
 			//														 Ip del emisor, false para enviar a todos menos a la ip
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
-
+*/
 			break;
 
 		//cliente y servidor no comparten el mismo tipo de protocolo (IPv4-IPv6)
@@ -195,6 +209,15 @@ void Server::ReceivePackets()
 		//se ha perdido la conexion con uno de los clientes
 		case ID_CONNECTION_LOST:
 			std::cout << "ID_CONNECTION_LOST de " << p->systemAddress.ToString(true) << std::endl;
+			typeID = ID_LOAD_CURRENT_CLIENTS;
+			numConnections=10;
+			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+			id=numConnections;
+			bsOut.Write(typeID);
+			bsOut.Write(id);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+
+
 			break;
 
 		//se le notifica al cliente que el servidor ya ha alcanzado su numero maximo de usuarios y, por lo tanto, no puede acceder
@@ -212,8 +235,21 @@ void Server::ReceivePackets()
 			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
 			break;
 		
+		case ID_RACE_START:
+			std::cout<<"ID_RACE_START\n";
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			if(id==0){
+				typeID = ID_RACE_START;
+				bsOut.Write(typeID);
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			}else{
+				std::cout << "No eres host\n";
+			}
+			break;	
+
 		case ID_SPAWN_PLAYER:
-		std::cout << "SPAWN DE UN JUGADOR\n";
+			std::cout << "SPAWN DE UN JUGADOR\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(posicion[0]);
 			bsIn.Read(posicion[1]);
@@ -330,7 +366,14 @@ void Server::ReceivePackets()
 			bsIn.Read(playerDisconnect);
 			std::cout << "Jugador eliminado: " << playerDisconnect << " / " <<numPlayers << std::endl;
 
-			playerDisconnection(playerDisconnect);
+			//playerDisconnection(playerDisconnect);
+			typeID = ID_LOAD_CURRENT_CLIENTS;
+			numConnections=10;
+			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+			id=numConnections;
+			bsOut.Write(typeID);
+			bsOut.Write(id);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 
 			std::cout << "Jugador Borrado\n";
 

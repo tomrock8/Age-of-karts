@@ -1,7 +1,7 @@
 #ifndef ESCENA_H
 #define ESCENA_H
 
-
+#include "Client.hpp"
 
 class Escena {
 public:

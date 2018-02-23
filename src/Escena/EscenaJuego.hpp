@@ -10,7 +10,6 @@
 #include "MotorFisicas.hpp"
 #include "DebugFisicas.hpp"
 #include "Camara3persona.hpp"
-#include "Client.hpp"
 
 #include "Pista.hpp"
 #include "GestorJugadores.hpp"
@@ -46,6 +45,8 @@ private:
 	int debug;
 
 	DebugDraw *debugDraw;
+
+	int controlPlayer;
 
 	Camara3persona *camara;
 	int tipoCamara;

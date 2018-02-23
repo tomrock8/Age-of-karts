@@ -44,9 +44,9 @@ void EscenaJuego::init() {
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
-		client->CreateClientInterface();
-		client->SetIP(ipConexion);
-		client->ClientStartup();
+		controlPlayer = client->getControlPlayer();
+	}else{
+		controlPlayer = 0;
 	}
 
 	// Gravedad
@@ -74,7 +74,6 @@ void EscenaJuego::init() {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	vector<Corredor*> pj = jugadores->getJugadores();
 	Corredor* jugador;
-
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		
 		jugador = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::CHINO);
@@ -112,6 +111,32 @@ void EscenaJuego::init() {
 			pj.at(5)->getNodo()->setID(5);
 		
 
+	}else{
+		btVector3 pos2[6];
+		pos2[0].setX(-10);
+		pos2[0].setY(0);
+		pos2[0].setZ(310);
+		pos2[1].setX(-10);
+		pos2[1].setY(0);
+		pos2[1].setZ(290);
+		pos2[2].setX(-20);
+		pos2[2].setY(0);
+		pos2[2].setZ(310);
+		pos2[3].setX(-20);
+		pos2[3].setY(0);
+		pos2[3].setZ(290);
+		pos2[4].setX(-30);
+		pos2[4].setY(0);
+		pos2[4].setZ(310);
+		pos2[5].setX(-30);
+		pos2[5].setY(0);
+		pos2[5].setZ(290);
+		int numClients = client->getNumClients();
+		for(int i = 0; i< numClients; i++){
+			jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
+			pj.push_back(jugador);
+			jugadores->aumentarJugadores();
+		}
 	}
 
 	jugadores->setJugadores(pj);
@@ -200,8 +225,7 @@ void EscenaJuego::update() {
 	vector<Corredor*> pj = jugadores->getJugadores();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
-		client->ReceivePackets(Motor3d::instancia().getScene());
-		//client->SpawnPlayer(smgr);
+		client->ReceivePackets();
 	}
 	//cout << irrTimer->getTime() << endl;
 	textoDebug->limpiar();
@@ -230,28 +254,24 @@ void EscenaJuego::update() {
 
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 	pj = jugadores->getJugadores();
+	switch(tipoCamara){
+		case 0:		//Camara 3a persona libre
+			camara->moveCameraControl(pj.at(controlPlayer)); 
+		break;
+		case 1:		//Camara 3a persona fija
+			camara->moveCamera(pj.at(controlPlayer));
+		break;
+		case 2:		//Camara 1a persona
+			camara->movefpsCamera(pj.at(controlPlayer));
+		break;
+		case 3:
+			camara->moveCameraControlPointer(pj.at(controlPlayer));
+
+	}
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		pj.at(0)->actualizarItem();
-		//pj.at(1)->actualizarItem();
-		switch(tipoCamara){
-			case 0:		//Camara 3a persona libre
-				camara->moveCameraControl(pj.at(0)); 
-			break;
-			case 1:		//Camara 3a persona fija
-				camara->moveCamera(pj.at(0));
-			break;
-			case 2:		//Camara 1a persona
-				camara->movefpsCamera(pj.at(0));
-			break;
-			case 3:
-				camara->moveCameraControlPointer(pj.at(0));
-
-		}
-		if (fin_carrera)
-		textoDebug->agregar("\n CARRERA FINALIZADA. PULSA F PARA VOLVER.");
-
+		pj.at(controlPlayer)->actualizarItem();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
-		pj.at(0)->update();
+		pj.at(controlPlayer)->update();
 		pj.at(1)->update();
 
 				pj.at(2)->update();
@@ -263,9 +283,8 @@ void EscenaJuego::update() {
 	}
 	else {
 		//cout << jugadores->getNumJugadores() << endl;
-		int controlPlayer = client->getControlPlayer();
-		if (jugadores->getNumJugadores() != 0)
-			pj.at(controlPlayer)->actualizarItem();
+		//if (jugadores->getNumJugadores() != 0)
+		//	pj.at(controlPlayer)->actualizarItem();
 
 		if (jugadores->getNumJugadores() != 0)
 		//	camara->moveCamera(pj[controlPlayer]);
@@ -274,14 +293,8 @@ void EscenaJuego::update() {
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
 		if (jugadores->getNumJugadores() != 0)
-			pj.at(controlPlayer)->update();
-		//pj.at(1)->update();
-
-		if (jugadores->getNumJugadores() != 0)
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-				if (i != controlPlayer) {
-					pj.at(i)->updateRed();
-				}
+				pj.at(i)->updateRed();
 			}
 
 		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");

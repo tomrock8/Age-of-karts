@@ -3,10 +3,15 @@
 EscenaLobby::EscenaLobby() : Escena(Escena::tipo_escena::LOBBY) {
 	nElementos = 0;
 	count = 50;
-	ipConexion = "192.168.1.";
+	pressed = true;
+	iniciar = false;
+	iniciado = false;
+	lanzado = false;
+	conectado = false;
+	ipConexion = "";
 
 	texto = L"ESC - SALIR\n\n";
-	texto = "Introduce IP para iniciar partida online: 192.168.1.";
+	texto = "Introduce IP para iniciar partida online: ";
 
 
 	u16 xPos = Motor3d::instancia().getAnchoPantalla() / 3;
@@ -54,86 +59,137 @@ void EscenaLobby::limpiar() {
 }
 
 void EscenaLobby::update() {
+	if (iniciar && !iniciado) {
+		client = Client::getInstancia();
+		client->CreateClientInterface();
+		client->SetIP(ipConexion);
+		client->ClientStartup();
+		iniciado = true;
+	}
+	if (iniciado) {
+		client->ReceivePackets();
+		if (client->getConnected()) {
+			conectado = true;
+			texto = L"Conexion establecida!\n";
+			texto += "Jugadores conectados: ";
+			texto += to_string(client->getNumClients()).c_str(); 
+			texto += " / " ;
+			texto += to_string(client->getMaxPlayers()).c_str();
+			texto += "\n Pulse espacio para iniciar la partida\n";
+		}
+	}
+
 }
 
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+		if(conectado)
+			client->ShutDownClient();
+
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
-
-	if (nElementos < 3) {
-		if (count <= 0) {
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
-				texto += "1";
-				ipConexion += "1";
-				nElementos++;
-				count = 50;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
-				texto += "2";
-				ipConexion += "2";
-				nElementos++;
-				count = 50;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
-				texto += "3";
-				ipConexion += "3";
-				nElementos++;
-				count = 50;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)){
-				texto += "4";
-				ipConexion += "4";
-				nElementos++;
-				count = 50;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)){
-				texto += "5";
-				ipConexion += "5";
-				nElementos++;
-				count = 50;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)){
-				texto += "6";
-				ipConexion += "6";
-				nElementos++;
-				count = 50;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7)){
-				texto += "7";
-				ipConexion += "7";
-				nElementos++;
-				count = 50;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8)){
-				texto += "8";
-				ipConexion += "8";
-				nElementos++;
-				count = 50;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)){
-				texto += "9";
-				ipConexion += "9";
-				nElementos++;
-				count = 50;
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)){
-				texto += "0";
-				ipConexion += "0";
-				nElementos++;
-				count = 50;
-			}
-			textoUI->setText(this->texto.c_str());
-		}
-		else
-			count--;
-
-		return Escena::tipo_escena::LOBBY;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		if (!pressed) {
+			pressed = true;
+			if (conectado) {
+				cout << "Entro en espacio\n";
+				client->RaceStart();
+				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
+			}
+		}
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+		if(!pressed){
+			iniciar = true;					//Conectar con el servidor de la IP
+			pressed = true;
+		}
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
+		if (!pressed) {
+			texto += "1";
+			ipConexion += "1";
+			pressed = true;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
+		if (!pressed) {
+			texto += "2";
+			ipConexion += "2";
+			pressed = true;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
+		if (!pressed) {
+			texto += "3";
+			ipConexion += "3";
+			pressed = true;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)){
+		if (!pressed) {
+			texto += "4";
+			ipConexion += "4";
+			pressed = true;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)){
+		if (!pressed) {
+			texto += "5";
+			ipConexion += "5";
+			pressed = true;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)){
+		if (!pressed) {
+			texto += "6";
+			ipConexion += "6";
+			pressed = true;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7)){
+		if (!pressed) {
+			texto += "7";
+			ipConexion += "7";
+			pressed = true;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8)){
+		if (!pressed) {
+			texto += "8";
+			ipConexion += "8";
+			pressed = true;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)){
+		if (!pressed) {
+			texto += "9";
+			ipConexion += "9";
+			pressed = true;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)){
+		if (!pressed) {
+			texto += "0";
+			ipConexion += "0";
+			pressed = true;
+		}
+	}
+	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Period)){
+		if(!pressed){
+			texto += ".";
+			ipConexion += ".";
+			pressed=true;
+		}
+	}else pressed = false;
+		textoUI->setText(this->texto.c_str());
 
-
-	return Escena::tipo_escena::ONLINE;
+	if(iniciado)
+		if(client->getStarted())
+			return Escena::tipo_escena::ONLINE;
+			
+	return Escena::tipo_escena::LOBBY;
 }
 
 std::string EscenaLobby::getIpConexion() {

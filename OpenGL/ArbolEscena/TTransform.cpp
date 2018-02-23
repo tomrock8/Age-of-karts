@@ -104,14 +104,23 @@ glPushMatrix() realiza una copia de la matriz superior y la pone encima de la pi
 glPopMatrix() elimina la matriz superior, quedando en la parte superior la pila de la matriz que estava en el momento de la llamada 
 a la funcion glPushMatrix().
 */
+
 void TTransform::beginDraw()
 {	//Apilar matriz actual
-	glPushMatrix();
+	std::cout << "Cargo Malla" << std::endl;
+	std::cout << "Apilo" << std::endl;
 
+	matStack.push(matriz);//no vale
 	//Multiplicar la matriz de la transformación a la matriz actual
+	//viewMatrix = viewMatrix*matriz;
+
+	viewMatrix = viewMatrix * matriz;
 	
 }
 void TTransform::endDraw() {
 	//Desapilar matriz y ponerla como actual
+	std::cout << "Desapilo" << std::endl;
+	matStack.pop();
+
 	glPopMatrix();
 }

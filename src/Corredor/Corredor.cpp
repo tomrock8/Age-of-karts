@@ -23,6 +23,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	direccionContraria=0;
 	estado = new EstadosJugador();
 	vueltas = 1;
+	maxvueltas=4;
 	
 	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
 	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
@@ -366,10 +367,18 @@ void Corredor::setPosicion(float *pos, float *ori) {
 	CuerpoColisionChasis->setCenterOfMassTransform(trans);
 
 }
-void Corredor::setPosicionCarrera(int i) {
-	if (vueltas<=4)
-	posicionCarrera = i;
+void Corredor::setPosicionCarrera(int i,int j) { 
+  if (j==0){ 
+    if (vueltas<=maxvueltas) 
+    posicionCarrera = i; 
+  }else{ 
+    posicionCarrera = i; 
+  } 
 }
+void Corredor::setMaxVueltas(int i){
+	maxvueltas=i;
+}
+
 void Corredor::setTipoObj()
 {
 	int random;
@@ -1029,17 +1038,17 @@ void Corredor::updateText(){
 	TextoPantalla *texto =TextoPantalla::getInstancia();
 	texto->agregar("---------------------- \n");
 	texto->agregar("Jugador ");
-	texto->agregar(to_string(cuboNodo->getID())+"\n");
-	texto->agregar("VELOCIDAD: ");
-	texto->agregar(to_string(vehiculo->getCurrentSpeedKmHour()));
+	texto->agregar(to_string(cuboNodo->getID()));
+	//texto->agregar("VELOCIDAD: ");
+	//texto->agregar(to_string(vehiculo->getCurrentSpeedKmHour()));
 	if (direccionContraria!=0){
 		texto->agregar("\nVAS EN DIRECCION CONTRARIA, JUGADOR: ");
 		texto->agregar(to_string(cuboNodo->getID())+"\n");
 	}
-	texto->agregar("\nPOSICION CARRERA: ");
-	texto->agregar(to_string(posicionCarrera) + "\n");
-	texto->agregar("\nVUELTA: ");
-	if (vueltas>4){
+	texto->agregar(" - POSICION: ");
+	texto->agregar(to_string(posicionCarrera));
+	texto->agregar(" - VUELTA: ");
+	if (vueltas>maxvueltas){
 		texto->agregar("HA LLEGADO ");
 		texto->agregar(to_string(posicionCarrera)+"!\n");
 	}else{

@@ -40,7 +40,7 @@ EscenaJuego::~EscenaJuego() {
 void EscenaJuego::init() {
 	//ARGUMENTOS MAIN
 	debug = 0;
-	
+	fin_carrera=false;
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
@@ -314,7 +314,9 @@ void EscenaJuego::update() {
 	}
 
 	if (jugadores->getNumJugadores() != 0)
-		gc->update();
+		if (gc->update())
+			fin_carrera=true;
+
 
 	jugadores->setJugadores(pj);
 
@@ -339,6 +341,10 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		i = client->getControlPlayer();
 
 	//------- ENTRADA TECLADO ----------
+	if (fin_carrera==true && sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
+		return Escena::tipo_escena::MENU;
+	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
 		btVector3 btPos = pj.at(i)->getWaypointActual()->getPosicion();
 

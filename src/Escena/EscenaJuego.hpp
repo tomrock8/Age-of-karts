@@ -62,6 +62,7 @@ private:
 
 	clock_t tiempoRefresco;
 	GestorCarrera *gc;
+	bool fin_carrera;
 };
 
 #endif /* ESCENAJUEGO_H */

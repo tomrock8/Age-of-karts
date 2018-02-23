@@ -10,7 +10,7 @@ using namespace std;
 class GestorCarrera {
 public:
 	GestorCarrera();
-	void update();
+	bool update();
 	//int getCorredorIndex();
 	int getCorredorIndexOriginal(int n);
 	void setVueltas(int i);
@@ -22,6 +22,7 @@ private:
 	Corredor *pj_aux;
 	GestorJugadores *jugadores;
 	int vueltas;
+	int acum;
 };
 
 #endif

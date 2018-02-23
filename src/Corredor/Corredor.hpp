@@ -36,6 +36,11 @@ class Corredor: public RakNet::NetworkIDObject
 	// Destructor
 	~Corredor();
 	void acelerar();
+	void frenar();
+	void desacelerar();
+	void girarDerecha();
+	void girarIzquierda();
+	void frenodemano(bool activo, bool objeto);
 	//objetos
 	void lanzarItem(Proyectil *item, int direcionItem);
 	void lanzarItemTeledirigido();
@@ -199,11 +204,6 @@ protected:
 	// Movimiento del corredor
 	//void acelerar();
 	
-	void frenar();
-	void desacelerar();
-	void girarDerecha();
-	void girarIzquierda();
-	void frenodemano(bool activo, bool objeto);
 	virtual void movimiento() = 0; // A implementar por derivadas
 	virtual void updateHijos() =0 ;
 	// UPDATES

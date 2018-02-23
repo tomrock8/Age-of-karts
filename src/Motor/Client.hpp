@@ -24,6 +24,7 @@ public:
 	void SetIP(std::string ipConexion);
 	void ClientStartup();
 	void RaceStart();
+	void UpdateNetworkKeyboard();
 	void ShutDownClient();
 	void PlayerMovement();
 	void PlayerAction();
@@ -38,7 +39,8 @@ public:
 	int getNumClients();
 	int getMaxPlayers();
 	bool getStarted();
-	//void UpdateNetworkKeyboard(CTeclado *teclado);
+
+	void setNetloaded(bool b);
 	
 private:
 	Client(int maxPlay);
@@ -69,6 +71,7 @@ private:
 	int numPlayers;
 	bool spawned;
 	bool started;
+	bool pressed;
 
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 

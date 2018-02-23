@@ -8,6 +8,7 @@ private:
 float posicion[3];
 float rotacion[3];
 int id;
+int accion;
 int estado1;
 int estado2;
 int estado3;
@@ -21,6 +22,8 @@ public:
   void setPositionRotation(float pos[3], float rot[3]);
   void setEstados(int e1, int e2, int e3, int e4);
   int getID();
+  int getAccion();
+  void setAccion(int a);
   void acelerar();
   void frenar();
   void girarA();

@@ -137,6 +137,7 @@ void EscenaJuego::init() {
 			pj.push_back(jugador);
 			jugadores->aumentarJugadores();
 		}
+		client->setNetloaded(true);
 	}
 
 	jugadores->setJugadores(pj);
@@ -286,13 +287,13 @@ void EscenaJuego::update() {
 		//cout << jugadores->getNumJugadores() << endl;
 		//if (jugadores->getNumJugadores() != 0)
 		//	pj.at(controlPlayer)->actualizarItem();
-
+		client->UpdateNetworkKeyboard();
+		
 		if (jugadores->getNumJugadores() != 0)
 		//	camara->moveCamera(pj[controlPlayer]);
 			camara->moveCameraControl(pj.at(controlPlayer));
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
-
 		if (jugadores->getNumJugadores() != 0)
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 				pj.at(i)->update();

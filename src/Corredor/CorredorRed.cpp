@@ -8,8 +8,7 @@ CorredorRed::CorredorRed(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador t
 
 
 void CorredorRed::updateHijos(){
-    
-
+	
 }
 
 void CorredorRed::movimiento(){

@@ -90,6 +90,7 @@ bool GestorCarrera::update() {
 		}
 	}
 	jugadores->setJugadores(pj1);
+	return false;
 }
 
 int GestorCarrera::getCorredorIndexOriginal(int n) {

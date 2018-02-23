@@ -583,6 +583,9 @@ void Client::PlayerAction(){
 }
 
 void Client::PlayerMovement(){
+
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	players = jugadores->getJugadores();
 	btVector3 position = players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition();
 	float *pos = new float[3];
 
@@ -592,9 +595,9 @@ void Client::PlayerMovement(){
 
 	float *ori = new float[3];
 
-	ori[0] = players.at(numPlayers-1)->getNodo()->getRotation().X;
-	ori[1] = players.at(numPlayers-1)->getNodo()->getRotation().Y;
-	ori[2] = players.at(numPlayers-1)->getNodo()->getRotation().Z;
+	ori[0] = players.at(controlPlayer)->getNodo()->getRotation().X;
+	ori[1] = players.at(controlPlayer)->getNodo()->getRotation().Y;
+	ori[2] = players.at(controlPlayer)->getNodo()->getRotation().Z;
 
 	typeID = ID_PLAYER_MOVE;
 	RakNet::BitStream bsOut;

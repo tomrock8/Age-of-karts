@@ -295,7 +295,7 @@ void EscenaJuego::update() {
 
 		if (jugadores->getNumJugadores() != 0)
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-				pj.at(i)->updateRed();
+				pj.at(i)->update();
 			}
 
 		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");

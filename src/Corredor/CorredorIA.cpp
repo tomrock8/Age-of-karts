@@ -1022,10 +1022,21 @@ void CorredorIA::vision(btScalar distancia,ISceneNode *nodo){
 }
 
 
-void comprobarDireccion(ISceneNode *nodo){
+void CorredorIA::comprobarDireccion(ISceneNode *nodo){
 
 
 	
 
 
+}
+
+
+
+void CorredorIA::updateHijos(){
+
+}
+
+
+void CorredorIA::actualizarItem(){
+	
 }

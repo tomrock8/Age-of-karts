@@ -19,7 +19,9 @@ class CorredorIA : public Corredor
   public:
 	CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo);
 
-	void movimiento();
+	virtual void movimiento() override;
+	virtual void updateHijos() override;
+	virtual void actualizarItem() override;
 	void reposicionar();
 	void calculoAnguloGiro(btVector3 posicion);
 	void ActualizarRaytest();

@@ -25,10 +25,10 @@ public:
 	EscenaJuego(tipo_escena tipo, std::string);
 	~EscenaJuego();
 
-	void init();
-	void dibujar();
-	void limpiar();
-	void update();
+	virtual void init() override;
+	virtual void dibujar() override;
+	virtual void limpiar() override;
+	virtual void update() override;
 	Escena::tipo_escena comprobarInputs();
 
 	// METODOS GET

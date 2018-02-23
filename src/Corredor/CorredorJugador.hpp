@@ -14,8 +14,9 @@ class CorredorJugador : public Corredor
 {
   public:
 	CorredorJugador(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo);
-	void actualizarItem();
-	void movimiento();
+	virtual void movimiento() override;
+	virtual void updateHijos() override;
+	virtual void actualizarItem() override;
 	std::string toString();
 	bool setComprobadorMovimiento(bool s);
 	void update();

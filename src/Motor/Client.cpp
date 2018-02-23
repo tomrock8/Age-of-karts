@@ -425,7 +425,7 @@ int Client::ReceivePackets()
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(id);
 				cout <<" el jugador "<< id<<" lanza el objeto" << endl;
-				players.at(id)->lanzarItemRed();
+				//players.at(id)->lanzarItemRed();
 			}
 
 		case ID_REFRESH_SERVER:

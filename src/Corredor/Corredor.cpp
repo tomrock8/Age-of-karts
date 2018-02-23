@@ -1014,11 +1014,11 @@ void Corredor::update()
 		}
 	}
 
-
+	movimiento();
 	updateTimerObstaculos();
 	updateEstado();
 	if (h->getHabilidadActiva())updateHabilidad();
-	movimiento();
+	
 	comprobarSueloRuedas();
 	posicion.setX(cuboNodo->getPosition().X);
 	posicion.setY(cuboNodo->getPosition().Y);
@@ -1028,11 +1028,9 @@ void Corredor::update()
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 	updateText();
-	//CuerpoColisionChasis->setGravity(btVector3(0,-30.f,0));
-	//CuerpoColisionChasis->applyGravity();
-	//cout<<"Posicion carrera: "<<posicionCarrera<<" ID: "<<cuboNodo->getID()<<endl;
-	//ActualizarRaytest();
-
+	updateHijos();
+	
+	
 }
 
 void Corredor::updateText(){

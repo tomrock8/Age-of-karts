@@ -128,6 +128,7 @@ void Server::ReceivePackets()
 		float posicion[3];
 		float rotacion[3];
 		int id;
+		int param;
 		
 		unsigned short numConnections;
 		RakNet::SystemAddress systems[10];
@@ -247,6 +248,15 @@ void Server::ReceivePackets()
 				std::cout << "No eres host\n";
 			}
 			break;	
+
+		case ID_SEND_KEY_PRESS:
+			std::cout << "ID_SEND_KEY_PRESS\n";
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			bsIn.Read(param);
+			//player[id]->setAccion(param);
+			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			break;
 
 		case ID_SPAWN_PLAYER:
 			std::cout << "SPAWN DE UN JUGADOR\n";

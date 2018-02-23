@@ -99,11 +99,11 @@ void EscenaJuego::init() {
 		jugador = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 290),Corredor::tipo_jugador::CHINO);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
+	
 
 
-
-		pj.at(0)->getNodo()->setID(0);
-		pj.at(1)->getNodo()->setID(1);
+		pj[0]->getNodo()->setID(0);
+		pj[1]->getNodo()->setID(1);
 		
 			pj.at(2)->getNodo()->setID(2);
 			pj.at(3)->getNodo()->setID(3);
@@ -137,6 +137,7 @@ void EscenaJuego::init() {
 			pj.push_back(jugador);
 			jugadores->aumentarJugadores();
 		}
+		client->setNetloaded(true);
 	}
 
 	jugadores->setJugadores(pj);
@@ -180,7 +181,8 @@ void EscenaJuego::dibujar() {
 	Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
 	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj.at(1));
+		/*
+		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
 		
 				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj.at(2));
 				CorredorIA *COMENARDOSAUXILIAR3 = static_cast<CorredorIA *>(pj.at(3));
@@ -195,7 +197,7 @@ void EscenaJuego::dibujar() {
 				COMENARDOSAUXILIAR3->ActualizarRaytest();
 				COMENARDOSAUXILIAR4->ActualizarRaytest();
 				COMENARDOSAUXILIAR5->ActualizarRaytest();
-		
+		*/
 
 		//Para poder dibujar putas lineas de mierda
 	}
@@ -285,16 +287,16 @@ void EscenaJuego::update() {
 		//cout << jugadores->getNumJugadores() << endl;
 		//if (jugadores->getNumJugadores() != 0)
 		//	pj.at(controlPlayer)->actualizarItem();
-
+		client->UpdateNetworkKeyboard();
+		
 		if (jugadores->getNumJugadores() != 0)
 		//	camara->moveCamera(pj[controlPlayer]);
 			camara->moveCameraControl(pj.at(controlPlayer));
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
-
 		if (jugadores->getNumJugadores() != 0)
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-				pj.at(i)->updateRed();
+				pj.at(i)->update();
 			}
 
 		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");

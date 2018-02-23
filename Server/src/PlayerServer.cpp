@@ -54,3 +54,11 @@ void PlayerServer::girarA(){
 void PlayerServer::girarB(){
 
 }
+
+void PlayerServer::setAccion(int a){
+    accion = a;
+}
+
+int PlayerServer::getAccion(){
+    return accion;
+}

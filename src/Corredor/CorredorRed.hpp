@@ -13,12 +13,13 @@ private:
 public:
   CorredorRed(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo);
   //virtual void update() override;
-  void updateRed();
-  void movimiento();
+  virtual void updateHijos() override;
+ 	virtual void movimiento() override;
+   virtual void actualizarItem() override;
   void acelerarRed();
   void frenarRed();
   void girarDRed();
   void girarIRed();
-  void lanzarItemRed();
+ 
 
 };

@@ -30,32 +30,41 @@ class Corredor: public RakNet::NetworkIDObject
   public:
   typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
 	Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo);
-	void setParametros(tipo_jugador t);
 	void InicializarFisicas();
+	void resetFuerzas();
+	void limitadorVelocidad();
+	// Destructor
+	~Corredor();
+	void acelerar();
+	void frenar();
+	void desacelerar();
+	void girarDerecha();
+	void girarIzquierda();
+	void frenodemano(bool activo, bool objeto);
+	//objetos
 	void lanzarItem(Proyectil *item, int direcionItem);
 	void lanzarItemTeledirigido();
-	virtual void lanzarItemRed(){};
 	void aplicarAceite();
-	void setAceite();
-	void resetFuerzas();
-	void updateTimerObstaculos();
-	void setObjetivoTelederigido();
 	void soltarItem();
-	virtual void actualizarItem(){}; // A implementar por derivadas
 	void incCargador();
 	void decCargador();
-	void SetFuerzaVelocidad(int turbo);
-	std::string toString();
+
+	//metodos SET
+	void setAceite();
+	void setObjetivoTelederigido();
+	void setParametros(tipo_jugador t);
 	void setTipoObj();
 	void setTipoObj(int i);
-	void acelerar();
+	void SetFuerzaVelocidad(int turbo);
 	void setFriccion(btScalar valor);
 	void setTurbo(bool activo, bool objeto,int valor);
 	void setWaypointActual(ISceneNode *nodo);
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
 	void setLimite(int s);
-	void limitadorVelocidad();
+
+	
+	std::string toString();
 	
 
 	//waypoints
@@ -69,9 +78,12 @@ class Corredor: public RakNet::NetworkIDObject
 	
 	// Update
 	void update();
+	void updateTimerObstaculos();
 	void updateEstado();
 	void updateText();
 	void comprobarSueloRuedas();
+	virtual void actualizarItem()=0;
+
 
 	// Metodos GET
 	IMeshSceneNode *getNodo();
@@ -87,7 +99,7 @@ class Corredor: public RakNet::NetworkIDObject
 	bool getProteccion();
 	EstadosJugador *getEstados();
 	int getLimite();
-	virtual void updateRed() {}; 
+
 
 	//estado de los objetos a usar
 	void setCheckItem(bool s);
@@ -97,8 +109,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void lanzarHabilidad();
 
 
-	// Destructor
-	~Corredor();
+	
 
 protected:
 	//objetos
@@ -192,13 +203,9 @@ protected:
 
 	// Movimiento del corredor
 	//void acelerar();
-	void frenar();
-	void desacelerar();
-	void girarDerecha();
-	void girarIzquierda();
-	void frenodemano(bool activo, bool objeto);
-	virtual void movimiento() {}; // A implementar por derivadas
-
+	
+	virtual void movimiento() = 0; // A implementar por derivadas
+	virtual void updateHijos() =0 ;
 	// UPDATES
 	void actualizarRuedas();
 	void updateVectorDireccion();

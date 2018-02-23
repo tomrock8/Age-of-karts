@@ -6,16 +6,9 @@ CorredorRed::CorredorRed(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador t
 	cuboNodo->setName("JugadorRed");
 }
 
-/*void CorredorRed::update(){
-	cout << "POLLAS \n";
-}*/
 
-void CorredorRed::updateRed(){
-    movimiento();
-	actualizarRuedas();
-	EstadosJugador *estados = this->getEstados();
-	estados->update();
-
+void CorredorRed::updateHijos(){
+	
 }
 
 void CorredorRed::movimiento(){
@@ -64,14 +57,7 @@ void CorredorRed::movimiento(){
     
 }
 
-void CorredorRed::lanzarItemRed(){
 
-	Pista *pista = Pista::getInstancia();
-	core::list<Item *> items = pista->getItems();
-	int direccionItem = 1;
-	setPosDisparo(btVector3(cuboNodo->getPosition().X + orientacion.getX() * 5, cuboNodo->getPosition().Y+10, cuboNodo->getPosition().Z + orientacion.getZ() * 5));
-	usarObjetos();
-}
 
 void CorredorRed::acelerarRed(){
 	acelerar();
@@ -86,4 +72,8 @@ void CorredorRed::girarDRed(){
 
 void CorredorRed::girarIRed(){
     girarIzquierda();
+}
+
+void CorredorRed::actualizarItem(){
+	
 }

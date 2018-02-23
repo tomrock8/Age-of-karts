@@ -19,6 +19,7 @@ Client::Client(int maxPlay)
 	netLoaded = false; // true == si todos los clientes de la partida han spwaneado
 	connected = false;
 	started = false;
+	pressed = true;
 }
 
 //==================================================================================
@@ -93,58 +94,34 @@ void Client::ClientStartup()
 	//si todo el proceso tiene exito, se avisa al usuario de que el cliente se ha creado y conectado al servidor
 	std::cout << "Cliente creado!\n";
 }
-/*
-void Client::UpdateNetworkKeyboard(CTeclado *teclado)
+
+void Client::UpdateNetworkKeyboard()
 {
-	vector3df posicion;
-
-	if (spawned && netLoaded)
+	if (netLoaded)
 	{
-		if (teclado->isKeyDown(KEY_KEY_W))
-		{
-			player[controlPlayer]->move = 1;
-		}
-		else if (teclado->isKeyDown(KEY_KEY_S))
-		{
-			player[controlPlayer]->move = -1;
-		}
-		else
-		{
-			player[controlPlayer]->move = 0;
-		}
-
-		if (teclado->isKeyDown(KEY_KEY_A))
-		{
-			player[controlPlayer]->turn = 1;
-		}
-		else if (teclado->isKeyDown(KEY_KEY_D))
-		{
-			player[controlPlayer]->turn = -1;
-		}
-		else
-		{
-			player[controlPlayer]->turn = 0;
-		}
-
-		posicion = player[controlPlayer]->getPosition();
-		posicion.X += player[controlPlayer]->move;
-		posicion.Z += player[controlPlayer]->turn;
-		player[controlPlayer]->setPosition(posicion);
-		int posX = posicion.X;
-		int posY = posicion.Y;
-		int posZ = posicion.Z;
-
+		int accion = 0;
+		typeID = ID_SEND_KEY_PRESS;
 		RakNet::BitStream bsOut;
-		typeID = ID_PLAYER_MOVE;
 		bsOut.Write(typeID);
-		bsOut.Write(posX);
-		bsOut.Write(posY);
-		bsOut.Write(posZ);
-		bsOut.Write(player[controlPlayer]->GetNetworkID());
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) { // Acelera
+			if (!pressed) {
+				pressed = true;
+				accion = 1;
+			}
+		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){ //Frena
+			if(!pressed){
+				pressed = true;
+				accion = 2;
+			}
+		}else pressed = false;
 
-		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+		bsOut.Write(controlPlayer);
+		bsOut.Write(accion);
+		if(pressed)
+			client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
 	}
-}*/
+}
 
 void Client::RaceStart() {
 	std::cout << "Mandando iniciar carrera\n";
@@ -200,6 +177,7 @@ int Client::ReceivePackets()
 		btVector3 pos;
 		float x,y,z;
 		int id;
+		int param;
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -272,6 +250,28 @@ int Client::ReceivePackets()
 		case ID_RACE_START:
 			cout << "ID_RACE_START\n";
 			started = true;
+			break;
+
+		case ID_SEND_KEY_PRESS:
+			cout << "ID_PRESS_KEY_PRESS\n";
+
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			bsIn.Read(param);
+
+			switch(param){
+				case 0:
+				break;
+				case 1:
+        			players.at(id)->acelerar();
+				break;
+
+				case 2: 
+        			players.at(id)->frenar();
+
+				break;
+			}
+
 			break;
 
 		case ID_SPAWN_PLAYER:
@@ -425,7 +425,7 @@ int Client::ReceivePackets()
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(id);
 				cout <<" el jugador "<< id<<" lanza el objeto" << endl;
-				players.at(id)->lanzarItemRed();
+				//players.at(id)->lanzarItemRed();
 			}
 
 		case ID_REFRESH_SERVER:
@@ -628,4 +628,8 @@ void Client::PlayerThrowObject(){
 	bsOut.Write(typeID);
 	bsOut.Write(controlPlayer);
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+
+void Client::setNetloaded(bool b){
+	netLoaded = b;
 }

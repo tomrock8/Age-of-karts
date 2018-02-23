@@ -48,10 +48,13 @@ void CorredorJugador::movimiento() {
 
 }
 
-void CorredorJugador::update() {
-	Corredor::update();
-	movimiento();
+
+
+void CorredorJugador::updateHijos(){
+
 }
+
+
 
 void CorredorJugador::actualizarItem() {
 

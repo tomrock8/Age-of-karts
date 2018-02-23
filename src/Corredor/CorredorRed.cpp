@@ -6,6 +6,10 @@ CorredorRed::CorredorRed(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador t
 	cuboNodo->setName("JugadorRed");
 }
 
+/*void CorredorRed::update(){
+	cout << "POLLAS \n";
+}*/
+
 void CorredorRed::updateRed(){
     movimiento();
 	actualizarRuedas();

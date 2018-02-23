@@ -283,8 +283,8 @@ void EscenaJuego::update() {
 	}
 	else {
 		//cout << jugadores->getNumJugadores() << endl;
-		if (jugadores->getNumJugadores() != 0)
-			pj.at(controlPlayer)->actualizarItem();
+		//if (jugadores->getNumJugadores() != 0)
+		//	pj.at(controlPlayer)->actualizarItem();
 
 		if (jugadores->getNumJugadores() != 0)
 		//	camara->moveCamera(pj[controlPlayer]);
@@ -293,13 +293,8 @@ void EscenaJuego::update() {
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 
 		if (jugadores->getNumJugadores() != 0)
-			pj.at(controlPlayer)->update();
-
-		if (jugadores->getNumJugadores() != 0)
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-				if (i != controlPlayer) {
-					pj.at(i)->updateRed();
-				}
+				pj.at(i)->updateRed();
 			}
 
 		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");

@@ -45,6 +45,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void decCargador();
 
 	//metodos SET
+	void setID(int i);
 	void setAceite();
 	void setObjetivoTelederigido();
 	void setParametros(tipo_jugador t);
@@ -85,6 +86,8 @@ class Corredor: public RakNet::NetworkIDObject
 	btRaycastVehicle *getVehiculo();
 	btRigidBody *getRigidBody();
 	btVector3 getVectorDireccion();
+	const char* getNombre();
+	int getID();
 	int getCargador();
 	int getTipoObj();
 	bool getTurbo();
@@ -138,7 +141,8 @@ protected:
 	btRigidBody *CuerpoColisionChasis;
 	btCompoundShape *CentroGravedad;
 
-	
+	const char* nombre;
+	int id;
 	int cargador;
 	int tipoObj; // si es 0 no tengo nada
 	bool turboActivado; // para saber cuando esta activado turbo

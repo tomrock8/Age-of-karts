@@ -118,7 +118,7 @@ bool GestorColisiones::JugadorEstatico()
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
 				if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
-					if (nodoA->getID()==pj1.at(j)->getNodo()->getID()){ 
+					if (nodoA->getID()==pj1.at(j)->getID()){ 
 						if (pj1.at(j)->getProteccion()==true) {
 							cout << "estoy protegido" << endl;
 							pj1.at(j)->setProteccion(false);
@@ -133,7 +133,7 @@ bool GestorColisiones::JugadorEstatico()
 			for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
 			{
 				Item *item = *Iterator;
-				if (item->getNodo()->getID() == idB)
+				if (item->getID() == idB)
 				{
 					cout << "Colisiono\n";
 					if(!protegido)
@@ -145,7 +145,7 @@ bool GestorColisiones::JugadorEstatico()
 						}
 						for(int j = 0; j< jugadores->getNumJugadores(); j++){
 								//if(pj1.at(j)!=NULL)
-									if (nodoA->getID()== pj1.at(j)->getNodo()->getID()){
+									if (nodoA->getID()== pj1.at(j)->getID()){
 										if(aceite)
 										{
 											pj1.at(j)->setAceite();
@@ -198,7 +198,7 @@ bool GestorColisiones::JugadorProyectil()
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
 				if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
-					if (nodoA->getID()==pj1.at(j)->getNodo()->getID()){ 
+					if (nodoA->getID()==pj1.at(j)->getID()){ 
 						if (pj1.at(j)->getProteccion()==true) {
 							cout << "estoy protegido " << endl;
 							pj1.at(j)->setProteccion(false);
@@ -213,14 +213,14 @@ bool GestorColisiones::JugadorProyectil()
 			for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
 			{
 				Item *item = *Iterator;
-				if (item->getNodo()->getID() == idB)
+				if (item->getID() == idB)
 				{
 					cout << "Colisiono\n";
 					if(!protegido)
 					{
 						for(int j = 0; j< jugadores->getNumJugadores(); j++){
 							//if(pj1.at(j)!=NULL)
-								if (nodoA->getID()== pj1.at(j)->getNodo()->getID()){
+								if (nodoA->getID()== pj1.at(j)->getID()){
 									pj1.at(j)->resetFuerzas();
 								}
 						}
@@ -264,11 +264,11 @@ bool GestorColisiones::JugadorCaja(vector<Caja*> cajas)
 			{
 				if (cajas.at(i) != NULL)
 				{
-					if (cajas.at(i)->getNodo()->getID() == idB)
+					if (cajas.at(i)->getID() == idB)
 					{
 						for(int j = 0; j< jugadores->getNumJugadores(); j++)
 							//if(pj1.at(j)!=NULL)
-								if(nodoA->getID()== pj1.at(j)->getNodo()->getID()){
+								if(nodoA->getID()== pj1.at(j)->getID()){
 									cajas.at(i)->romper(pj1.at(j));
 								}
 					}
@@ -305,7 +305,7 @@ bool GestorColisiones::objetoDestruible()
 			{
 				Item *item = *Iterator;
 				//cout << "NodoB: " << idB << " == NodoItem: " << item->getNodo()->getID() << endl;
-				if (item->getNodo()->getID() == idB)
+				if (item->getID() == idB)
 				{
 					//cout << "Entro\n";
 					item->Delete();

@@ -154,6 +154,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 				arrayWaypoints.at(arrayWaypoints.size()-1)->inicializarFisicas();
 				IMeshSceneNode *im = arrayWaypoints.at(arrayWaypoints.size()-1)->getWaypoint();
 				GestorIDs::instancia().setIdentifier(im, im->getName());
+								arrayWaypoints.at(arrayWaypoints.size()-1)->setID(GestorIDs::instancia().getIDLibre() - 1);
 
 				tamWaypoints++;
 			}
@@ -221,7 +222,7 @@ Turbo *Pista::getTurbo() {
 
 Turbo *Pista::getTurbo(int id) {
 	for (int i = 0; i < tamTurbos; i++) {
-		if (arrayTurbos.at(i)->getId() == id) {
+		if (arrayTurbos.at(i)->getID() == id) {
 			return arrayTurbos.at(i);
 		}
 	}

@@ -75,6 +75,9 @@ Waypoint *Waypoint::getNextWaypoint() {
 IMeshSceneNode *Waypoint::getWaypoint() {
 	return waypoint;
 }
+int Waypoint::getID(){
+	return id;
+}
 
 Waypoint::~Waypoint() {
 	cout << "ENTRO DELETE WAYPOINT " <<endl;
@@ -92,4 +95,7 @@ btVector3 Waypoint::getVector1() {
 }
 btVector3 Waypoint::getVector2() {
 	return vector2;
+}
+void Waypoint::setID(int i){
+	id=i;
 }

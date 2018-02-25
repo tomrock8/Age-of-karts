@@ -17,7 +17,7 @@ bool GestorCarrera::update() {
 	//Primero copiamos pj1 en pj2 (vector de jugadores)
 	pj2.resize(pj1.size());
 	for (int j = 0; j < jugadores->getNumJugadores(); j++) {
-		pj1.at(j)->setPosicionCarrera(pj1.at(j)->getNodo()->getID() + 1,0);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
+		pj1.at(j)->setPosicionCarrera(pj1.at(j)->getID() + 1,0);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
 		pj2.at(j) = pj1.at(j);
 
 		if (pj1.at(j)->getVueltas()<=vueltas){	//comprobamos si todos los corredores han terminado
@@ -39,11 +39,11 @@ bool GestorCarrera::update() {
 	//ordenamos el array de jugadores en pj2, en funcion de sus waypoints de mayor a menor
 	for (int j = 0; j < jugadores->getNumJugadores() - 1; j++) {
 		for (int k = 0; k < jugadores->getNumJugadores() - 1; k++) {
-			if (pj2.at(k)->getWaypointActual()->getWaypoint()->getID() < pj2.at(k + 1)->getWaypointActual()->getWaypoint()->getID()) {
+			if (pj2.at(k)->getWaypointActual()->getID() < pj2.at(k + 1)->getWaypointActual()->getID()) {
 				pj_aux = pj2.at(k);
 				pj2.at(k) = pj2.at(k + 1);
 				pj2.at(k + 1) = pj_aux;
-			}else if (pj2.at(k)->getWaypointActual()->getWaypoint()->getID() == pj2.at(k+1)->getWaypointActual()->getWaypoint()->getID()) {  //si estan en el mismo waypoint
+			}else if (pj2.at(k)->getWaypointActual()->getID() == pj2.at(k+1)->getWaypointActual()->getID()) {  //si estan en el mismo waypoint
 				if (pj2.at(k)->getdistanciaWaypoint() > pj2.at(k+1)->getdistanciaWaypoint()) {     //si la distancia del waypoint pj1[y] es menor, su posicion en carrera aumenta (cont--)
 					pj_aux = pj2.at(k);
 					pj2.at(k) = pj2.at(k + 1);
@@ -95,7 +95,7 @@ bool GestorCarrera::update() {
 
 int GestorCarrera::getCorredorIndexOriginal(int n) {
 	for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-		if (pj2.at(n)->getNodo()->getID() == pj1.at(i)->getNodo()->getID()) {
+		if (pj2.at(n)->getID() == pj1.at(i)->getID()) {
 			return i;
 		}
 	}

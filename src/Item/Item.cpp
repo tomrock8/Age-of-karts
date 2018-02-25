@@ -116,6 +116,10 @@ IMeshSceneNode *Item::getNodo()
 const char* Item::getNombre(){
 	return nombre;
 }
+int Item::getID(){
+	return id;
+}
+
 void Item::setNombre(const char* name){
 	nombre=name;
 }

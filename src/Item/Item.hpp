@@ -22,6 +22,7 @@ public:
   bool Delete();
   IMeshSceneNode *getNodo();
   btRigidBody *getRigidBody();
+  int getID();
   void setLanzado(bool b);
   bool getLanzado();
   void setNombre(const char* name);

@@ -139,7 +139,9 @@ Caja::~Caja() {
 	
 	cout << " SALGO.\n";
 }
-
+int Caja::getID(){
+	return id;
+}
 
 IMeshSceneNode *Caja::getNodo() { 
 	return nodo; 

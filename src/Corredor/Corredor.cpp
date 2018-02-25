@@ -30,6 +30,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	//cuboNodo = smgr->addCubeSceneNode(1.5f);
 	if (cuboNodo) {
 		cuboNodo->setName("Jugador");
+		
 		cuboNodo->setScale(vector3df(1, 1, 1.5));
 		// Desactivar la iluminacion del cubo
 		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
@@ -352,6 +353,13 @@ bool Corredor::getCheckItem() {
 EstadosJugador *Corredor::getEstados() {
 	return estado;
 }
+const char* Corredor::getNombre(){
+	return nombre;
+}
+int Corredor::getID(){
+	return id;
+}
+
 //-----------------------------//
 //---------METODOS SET---------//
 //-----------------------------//
@@ -551,11 +559,11 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	//se puedan coger las cajas.
 
 	bool b=false;	//booleano para comprobar si esta siguiendo bien los waypoints
-	if (nodo->getID() > actual->getWaypoint()->getID() && nodo->getID() == siguiente_aux->getWaypoint()->getID()) {
+	if (nodo->getID() > actual->getID() && nodo->getID() == siguiente_aux->getID()) {
 
 		actual = actual->getNextWaypoint();
 		siguiente = actual->getNextWaypoint();
-		if (actual->getWaypoint()->getID() == siguiente_aux->getWaypoint()->getID()){
+		if (actual->getID() == siguiente_aux->getID()){
 			siguiente_aux = siguiente;
 			b=true;
 			direccionContraria=0;
@@ -564,7 +572,7 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 
 	if (nodo->getID() - 6 == 0) { //caso de vuelta completa
 
-		if (siguiente_aux->getWaypoint()->getID() - 6 == 0) {
+		if (siguiente_aux->getID() - 6 == 0) {
 			//cout<<"HAS DADO UNA VUELTA"<<endl;
 			vueltas++;
 			actual = siguiente_aux;
@@ -581,9 +589,9 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	}
 	Pista *mapa = Pista::getInstancia();
 	//comprobadores direccion opuesta
-	if ((b==false && nodo->getID()<siguiente_aux->getWaypoint()->getID()-4 && nodo->getID() - 6 != 0) || (mapa->getTamArrayWaypoints()-1 == nodo->getID() - 6 && (actual->getWaypoint()->getID()-6!=mapa->getTamArrayWaypoints()-1))) {
+	if ((b==false && nodo->getID()<siguiente_aux->getID()-4 && nodo->getID() - 6 != 0) || (mapa->getTamArrayWaypoints()-1 == nodo->getID() - 6 && (actual->getID()-6!=mapa->getTamArrayWaypoints()-1))) {
 		direccionContraria=1;
-		if ((mapa->getTamArrayWaypoints()-1 == nodo->getID() - 6 && (actual->getWaypoint()->getID()-6!=mapa->getTamArrayWaypoints()-1))){
+		if ((mapa->getTamArrayWaypoints()-1 == nodo->getID() - 6 && (actual->getID()-6!=mapa->getTamArrayWaypoints()-1))){
 			direccionContraria=2;	//va marcha atras en la meta id=0 la comprobacion es distinta (por ser mayor el id siempre, tanto para alante como para atras)
 		}
 	}
@@ -667,7 +675,10 @@ void Corredor::setAceite(){
 	Timer *time = Timer::getInstancia();
 	timerAceite = time->getTimer();
 }
-
+void Corredor::setID(int i){
+	id=i;
+	cuboNodo->setID(id);
+}
 void Corredor::resetFuerzas(){
 	CuerpoColisionChasis->clearForces();
 	btVector3 zeroVector(0,0,0);
@@ -776,7 +787,7 @@ void Corredor::usarObjetos() {
 	}
 	else if (tipoObj == 7)	//FLECHA TELEDIRIGIDA
 	{
-		cout << "Teledirigido de Jugador " << cuboNodo->getID() << " - posicion: " << posicionCarrera << endl;
+		cout << "Teledirigido de Jugador " << this->getID() << " - posicion: " << posicionCarrera << endl;
 		pt = new ItemTeledirigido(posDisparo);
 		pt->lanzarItemTeledirigido(posicionCarrera);
 		items.push_back(pt);
@@ -1037,12 +1048,12 @@ void Corredor::updateText(){
 	TextoPantalla *texto =TextoPantalla::getInstancia();
 	texto->agregar("---------------------- \n");
 	texto->agregar("Jugador ");
-	texto->agregar(to_string(cuboNodo->getID()));
+	texto->agregar(to_string(this->getID()));
 	//texto->agregar("VELOCIDAD: ");
 	//texto->agregar(to_string(vehiculo->getCurrentSpeedKmHour()));
 	if (direccionContraria!=0){
 		texto->agregar("\nVAS EN DIRECCION CONTRARIA, JUGADOR: ");
-		texto->agregar(to_string(cuboNodo->getID())+"\n");
+		texto->agregar(to_string(this->getID())+"\n");
 	}
 	texto->agregar(" - POSICION: ");
 	texto->agregar(to_string(posicionCarrera));

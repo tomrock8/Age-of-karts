@@ -102,13 +102,13 @@ void EscenaJuego::init() {
 	
 
 
-		pj[0]->getNodo()->setID(0);
-		pj[1]->getNodo()->setID(1);
+		pj[0]->setID(0);
+		pj[1]->setID(1);
 		
-			pj.at(2)->getNodo()->setID(2);
-			pj.at(3)->getNodo()->setID(3);
-			pj.at(4)->getNodo()->setID(4);
-			pj.at(5)->getNodo()->setID(5);
+			pj.at(2)->setID(2);
+			pj.at(3)->setID(3);
+			pj.at(4)->setID(4);
+			pj.at(5)->setID(5);
 		
 
 	}else{

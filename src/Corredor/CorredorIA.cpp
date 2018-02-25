@@ -2,8 +2,8 @@
 
 CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos, tipo)
 {
-
-	cuboNodo->setName("JugadorIA");
+	nombre="JugadorIA";
+	cuboNodo->setName(nombre);
 	caja = false;
 	enemigo = false;
 	turbo= false;

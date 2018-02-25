@@ -3,6 +3,7 @@
 
 CorredorJugador::CorredorJugador(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos,tipo) {
 	checkItem = false;
+	nombre="Jugador";
 }
 
 /**

@@ -43,7 +43,7 @@ Turbo::Turbo(btVector3 pos, bool estado) {
 	bullet->setObjetos(objetos);
 }
 
-int Turbo::getId() {
+int Turbo::getID() {
 	return id;
 }
 bool Turbo::getTurboActivo() {
@@ -71,7 +71,7 @@ void Turbo::setTurboTocado(bool s) {
 }
 //destructor
 Turbo::~Turbo() {
-	cout << "ENTRO DELETE TURBO: " << turbo->getID();
+	cout << "ENTRO DELETE TURBO: " << this->getID();
 
 	// Los rigid body se borran desde el motor de fisicas
 	// delete rigidBody;

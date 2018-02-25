@@ -30,14 +30,14 @@ public:
   void setOrientacion(float grados);
   void setVector1(btVector3 p1);
   void setVector2(btVector3 p2);
-
+  void setID(int i);
   //metodos GET
   IMeshSceneNode *getWaypoint();
   btVector3 getPosicion();
   Waypoint *getNextWaypoint();
   btVector3 getVector1();
   btVector3 getVector2();
-
+  int getID();
 private:
 	IMeshSceneNode * waypoint;
 	Waypoint *siguiente; // Siguiente punto
@@ -50,7 +50,7 @@ private:
   //vectores
   btVector3 vector1;
   btVector3 vector2;
-
+  int id;
 };
 
 #endif /* WAYPOINT_H */

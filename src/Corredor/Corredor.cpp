@@ -1055,6 +1055,8 @@ void Corredor::updateText(){
 		texto->agregar("\nVAS EN DIRECCION CONTRARIA, JUGADOR: ");
 		texto->agregar(to_string(this->getID())+"\n");
 	}
+        texto->agregar(" SIGUIENTE WAY: ");
+        texto->agregar(to_string(siguiente->getID()-6)+"\n");
 	texto->agregar(" - POSICION: ");
 	texto->agregar(to_string(posicionCarrera));
 	texto->agregar(" - VUELTA: ");

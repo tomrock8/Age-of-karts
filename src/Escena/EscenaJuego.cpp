@@ -41,6 +41,7 @@ void EscenaJuego::init() {
 	//ARGUMENTOS MAIN
 	debug = 0;
 	fin_carrera=false;
+        GestorIDs::instancia().restartID();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
@@ -252,7 +253,9 @@ void EscenaJuego::update() {
 	}
 	pistaca->setItems(items);
 
-
+	if (fin_carrera){
+		textoDebug->agregar("CARRERA FINALIZADA, PULSA F.");
+	}
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 	pj = jugadores->getJugadores();
 	switch(tipoCamara){

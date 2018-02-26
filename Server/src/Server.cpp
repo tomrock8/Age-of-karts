@@ -436,7 +436,7 @@ void Server::ShutDownServer()
 //=======================================================================================================================
 void Server::refreshServer()
 {
-	std::cout << "Refresco\n";
+	//std::cout << "Refresco\n";
 
 	//tipo de RakNet para el mensaje de salida
 	RakNet::BitStream bsOut;

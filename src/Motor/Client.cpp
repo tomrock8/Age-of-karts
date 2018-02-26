@@ -589,35 +589,36 @@ void Client::PlayerAction(){
 
 void Client::PlayerMovement(){
 
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	players = jugadores->getJugadores();
-	btVector3 position = players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition();
-	float *pos = new float[3];
+	if(netLoaded){
+		GestorJugadores *jugadores = GestorJugadores::getInstancia();
+		players = jugadores->getJugadores();
+		btVector3 position = players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition();
+		float *pos = new float[3];
 
-	pos[0] = position.getX();
-	pos[1] = position.getY();
-	pos[2] = position.getZ();
+		pos[0] = position.getX();
+		pos[1] = position.getY();
+		pos[2] = position.getZ();
 
-	float *ori = new float[3];
+		float *ori = new float[3];
 
-	ori[0] = players.at(controlPlayer)->getNodo()->getRotation().X;
-	ori[1] = players.at(controlPlayer)->getNodo()->getRotation().Y;
-	ori[2] = players.at(controlPlayer)->getNodo()->getRotation().Z;
+		ori[0] = players.at(controlPlayer)->getNodo()->getRotation().X;
+		ori[1] = players.at(controlPlayer)->getNodo()->getRotation().Y;
+		ori[2] = players.at(controlPlayer)->getNodo()->getRotation().Z;
 
-	typeID = ID_PLAYER_MOVE;
-	RakNet::BitStream bsOut;
-	bsOut.Write(typeID);
-	bsOut.Write(pos[0]);
-	bsOut.Write(pos[1]);
-	bsOut.Write(pos[2]);
-	bsOut.Write(ori[0]);
-	bsOut.Write(ori[1]);
-	bsOut.Write(ori[2]);
-	bsOut.Write(controlPlayer);
-	std::cout << "Control: " << controlPlayer << std::endl;
+		typeID = ID_PLAYER_MOVE;
+		RakNet::BitStream bsOut;
+		bsOut.Write(typeID);
+		bsOut.Write(pos[0]);
+		bsOut.Write(pos[1]);
+		bsOut.Write(pos[2]);
+		bsOut.Write(ori[0]);
+		bsOut.Write(ori[1]);
+		bsOut.Write(ori[2]);
+		bsOut.Write(controlPlayer);
+		//std::cout << "Control: " << controlPlayer << std::endl;
 
-	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-
+		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	}
 }
 
 void Client::PlayerSetObject(int tipo){

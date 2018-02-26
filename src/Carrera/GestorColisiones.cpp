@@ -174,14 +174,40 @@ bool GestorColisiones::JugadorEstatico()
 
 			//cout << "Jugador - Turbo\n";
 		}
-	}else if (strcmp("Proyectil", nodoA->getName()) == 0 {
-		if (strcmp("Estatico", nodoB->getName()) == 0)
-		{
-			for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
-			{
-				//encontrar proyectil y estatico con las ids de los nodos (y entonces borrar ambos)
-			}
-		}
+	}else if (strcmp("Estatico", nodoA->getName()) == 0 && strcmp("Proyectil", nodoB->getName()) == 0 || strcmp("Proyectil", nodoA->getName()) == 0 && strcmp("Estatico", nodoB->getName()) == 0) {
+
+                Item *itemProyectil;
+                int idB = nodoB->getID();
+                int idA = nodoA->getID();
+                bool b=false;
+                for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
+                {
+                        Item *item = *Iterator;
+                        if (item->getID() == idA)
+                        {
+                                itemProyectil=item;
+                                for (core::list<Item *>::Iterator Iterator2 = items.begin(); Iterator2 != items.end(); ++Iterator2)
+                                {
+                                        item = *Iterator2;
+                                        if (item->getID() == idB){
+                                                b=true;
+                                                item->Delete();
+                                                Iterator2 = items.erase(Iterator2);
+                                                pista->setItems(items);	
+                                                break;
+                                        }
+                                }
+                                if (b==true){
+                                        itemProyectil->Delete();
+                                        Iterator = items.erase(Iterator);
+                                        pista->setItems(items);	
+                                        break;
+                                }
+                        }
+                        //encontrar proyectil y estatico con las ids de los nodos (y entonces borrar ambos)
+                }
+
+		
 	}
 	return false;
 }

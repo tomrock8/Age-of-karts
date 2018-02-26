@@ -201,7 +201,7 @@ bool GestorColisiones::JugadorEstatico()
                                         itemProyectil->Delete();
                                         Iterator = items.erase(Iterator);
                                         pista->setItems(items);	
-                                        break;
+                                        	return true;
                                 }
                         }
                         //encontrar proyectil y estatico con las ids de los nodos (y entonces borrar ambos)

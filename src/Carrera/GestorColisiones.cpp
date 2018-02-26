@@ -174,6 +174,14 @@ bool GestorColisiones::JugadorEstatico()
 
 			//cout << "Jugador - Turbo\n";
 		}
+	}else if (strcmp("Proyectil", nodoA->getName()) == 0 {
+		if (strcmp("Estatico", nodoB->getName()) == 0)
+		{
+			for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
+			{
+				//encontrar proyectil y estatico con las ids de los nodos (y entonces borrar ambos)
+			}
+		}
 	}
 	return false;
 }

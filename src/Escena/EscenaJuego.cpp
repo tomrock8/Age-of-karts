@@ -356,7 +356,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		btTransform trans;
 		trans.setOrigin(btPos);
 		btQuaternion quaternion;
-		quaternion.setEulerZYX(pj.at(i)->getNodo()->getRotation().Z* PI / 180, pj.at(i)->getNodo()->getRotation().Y * PI / 180, pj.at(i)->getNodo()->getRotation().X* PI / 180);
+		quaternion.setEulerZYX(pj.at(i)->getWaypointActual()->getRotation().getZ()* PI / 180, pj.at(i)->getWaypointActual()->getRotation().getY() * PI / 180, pj.at(i)->getWaypointActual()->getRotation().getX()* PI / 180);
 		trans.setRotation(quaternion);
 
 		pj.at(i)->getRigidBody()->setCenterOfMassTransform(trans);

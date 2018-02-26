@@ -37,6 +37,7 @@ public:
   Waypoint *getNextWaypoint();
   btVector3 getVector1();
   btVector3 getVector2();
+  btVector3 getRotation();
   int getID();
 private:
 	IMeshSceneNode * waypoint;

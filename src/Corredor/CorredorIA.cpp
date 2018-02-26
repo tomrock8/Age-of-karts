@@ -477,7 +477,7 @@ void CorredorIA::reposicionar(){
 			btTransform trans;
 			trans.setOrigin(btPos);
 			btQuaternion quaternion;
-			quaternion.setEulerZYX(cuboNodo->getRotation().Z* PI / 180, cuboNodo->getRotation().Y * PI / 180, cuboNodo->getRotation().X* PI / 180);
+			quaternion.setEulerZYX(this->getWaypointActual()->getRotation().getZ()* PI / 180, this->getWaypointActual()->getRotation().getY() * PI / 180, this->getWaypointActual()->getRotation().getX()* PI / 180);
 			trans.setRotation(quaternion);
 
 			CuerpoColisionChasis->setCenterOfMassTransform(trans);

@@ -67,7 +67,9 @@ void Waypoint::setOrientacion(float grado) {
 btVector3 Waypoint::getPosicion() {
 	return btVector3(waypoint->getPosition().X, waypoint->getPosition().Y, waypoint->getPosition().Z);
 }
-
+btVector3 Waypoint::getRotation() {
+	return btVector3(waypoint->getRotation().X, waypoint->getRotation().Y, waypoint->getRotation().Z);
+}
 Waypoint *Waypoint::getNextWaypoint() {
 	return siguiente;
 }

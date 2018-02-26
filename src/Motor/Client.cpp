@@ -275,7 +275,7 @@ int Client::ReceivePackets()
 			break;
 
 		case ID_SEND_KEY_PRESS:
-			cout << "ID_PRESS_KEY_PRESS\n";
+			//cout << "ID_PRESS_KEY_PRESS\n";
 
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
@@ -598,10 +598,8 @@ void Client::PlayerMovement(){
 
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	players = jugadores->getJugadores();
-	std::cout << "Core 0 \n";
 	btVector3 position = players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition();
 	float *pos = new float[3];
-	std::cout << "Core 1 \n";
 
 	pos[0] = position.getX();
 	pos[1] = position.getY();
@@ -609,12 +607,10 @@ void Client::PlayerMovement(){
 
 	float *ori = new float[3];
 
-	std::cout << "Core 2 \n";
 	ori[0] = players.at(controlPlayer)->getNodo()->getRotation().X;
 	ori[1] = players.at(controlPlayer)->getNodo()->getRotation().Y;
 	ori[2] = players.at(controlPlayer)->getNodo()->getRotation().Z;
 
-	std::cout << "Core 3 \n";
 	typeID = ID_PLAYER_MOVE;
 	RakNet::BitStream bsOut;
 	bsOut.Write(typeID);
@@ -625,8 +621,8 @@ void Client::PlayerMovement(){
 	bsOut.Write(ori[1]);
 	bsOut.Write(ori[2]);
 	bsOut.Write(controlPlayer);
+	std::cout << "Control: " << controlPlayer << std::endl;
 
-	std::cout << "Core 4 \n";
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
 }

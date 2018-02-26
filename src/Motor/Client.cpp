@@ -99,26 +99,47 @@ void Client::UpdateNetworkKeyboard()
 {
 	if (netLoaded)
 	{
-		int accion = 0;
+		int estadoMovimiento = 0;
+		int direccionMovimiento = 0;
 		typeID = ID_SEND_KEY_PRESS;
 		RakNet::BitStream bsOut;
 		bsOut.Write(typeID);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) { // Acelera
-			if (!pressed) {
+			//if (!pressed) {
 				pressed = true;
-				accion = 1;
-			}
+				estadoMovimiento = 1;
+			//}
 		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){ //Frena
-			if(!pressed){
+			//if(!pressed){
 				pressed = true;
-				accion = 2;
-			}
-		}else pressed = false;
+				estadoMovimiento = 2;
+			//}
+		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){ //Freno de mano
+			//if(!pressed){
+				pressed = true;
+				estadoMovimiento = 4;
+			//}
+		} else {
+			estadoMovimiento = 5;
+		}
+		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){ //Giro izq
+			//if(!pressed){
+				pressed = true;
+				direccionMovimiento = 1;
+			//}
+		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){ //Giro dcha
+			//if(!pressed){
+				pressed = true;
+				direccionMovimiento = 2;
+			//}
+		}
 
 		bsOut.Write(controlPlayer);
-		bsOut.Write(accion);
-		if(pressed)
-			client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+		bsOut.Write(estadoMovimiento);
+		bsOut.Write(direccionMovimiento);
+		//if(pressed)
+		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
 	}
 }
@@ -178,6 +199,7 @@ int Client::ReceivePackets()
 		float x,y,z;
 		int id;
 		int param;
+		int param2;
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -258,19 +280,9 @@ int Client::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			bsIn.Read(param);
-
-			switch(param){
-				case 0:
-				break;
-				case 1:
-        			players.at(id)->acelerar();
-				break;
-
-				case 2: 
-        			players.at(id)->frenar();
-
-				break;
-			}
+			bsIn.Read(param2);
+        	players.at(id)->getEstados()->setEstadoMovimiento(param);
+			players.at(id)->getEstados()->setDireccionMovimiento(param2);
 
 			break;
 
@@ -586,8 +598,10 @@ void Client::PlayerMovement(){
 
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	players = jugadores->getJugadores();
+	std::cout << "Core 0 \n";
 	btVector3 position = players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition();
 	float *pos = new float[3];
+	std::cout << "Core 1 \n";
 
 	pos[0] = position.getX();
 	pos[1] = position.getY();
@@ -595,10 +609,12 @@ void Client::PlayerMovement(){
 
 	float *ori = new float[3];
 
+	std::cout << "Core 2 \n";
 	ori[0] = players.at(controlPlayer)->getNodo()->getRotation().X;
 	ori[1] = players.at(controlPlayer)->getNodo()->getRotation().Y;
 	ori[2] = players.at(controlPlayer)->getNodo()->getRotation().Z;
 
+	std::cout << "Core 3 \n";
 	typeID = ID_PLAYER_MOVE;
 	RakNet::BitStream bsOut;
 	bsOut.Write(typeID);
@@ -610,6 +626,7 @@ void Client::PlayerMovement(){
 	bsOut.Write(ori[2]);
 	bsOut.Write(controlPlayer);
 
+	std::cout << "Core 4 \n";
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
 }

@@ -129,6 +129,7 @@ void Server::ReceivePackets()
 		float rotacion[3];
 		int id;
 		int param;
+		int param2;
 		
 		unsigned short numConnections;
 		RakNet::SystemAddress systems[10];
@@ -254,6 +255,7 @@ void Server::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			bsIn.Read(param);
+			bsIn.Read(param2);
 			//player[id]->setAccion(param);
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;

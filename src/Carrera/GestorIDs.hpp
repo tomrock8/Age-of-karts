@@ -9,6 +9,7 @@ class GestorIDs {
 public:
 	void setIdentifier(ISceneNode *nodo, const char *nombre);
 	int getIDLibre();
+        void restartID();
 	static GestorIDs &instancia();
 
 private:

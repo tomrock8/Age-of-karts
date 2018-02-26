@@ -41,6 +41,7 @@ void EscenaJuego::init() {
 	//ARGUMENTOS MAIN
 	debug = 0;
 	fin_carrera=false;
+        GestorIDs::instancia().restartID();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
@@ -181,7 +182,7 @@ void EscenaJuego::dibujar() {
 	Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
 	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		/*
+		
 		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
 		
 				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj.at(2));
@@ -197,7 +198,7 @@ void EscenaJuego::dibujar() {
 				COMENARDOSAUXILIAR3->ActualizarRaytest();
 				COMENARDOSAUXILIAR4->ActualizarRaytest();
 				COMENARDOSAUXILIAR5->ActualizarRaytest();
-		*/
+		
 
 		//Para poder dibujar putas lineas de mierda
 	}
@@ -253,7 +254,9 @@ void EscenaJuego::update() {
 	}
 	pistaca->setItems(items);
 
-
+	if (fin_carrera){
+		textoDebug->agregar("CARRERA FINALIZADA, PULSA F.");
+	}
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 	pj = jugadores->getJugadores();
 	switch(tipoCamara){

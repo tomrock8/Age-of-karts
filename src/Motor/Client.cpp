@@ -442,14 +442,7 @@ int Client::ReceivePackets()
 
 		case ID_REFRESH_SERVER:
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-			for (int i = 0; i < numPlayers; i++)
-			{
-				bsIn.Read(posicion.getX());
-				bsIn.Read(posicion.getY());
-				bsIn.Read(posicion.getZ());
-				//player[i]->setPosition(posicion);
-			}
-			netLoaded = true;
+			PlayerMovement();
 
 			break;
 

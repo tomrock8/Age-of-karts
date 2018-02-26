@@ -18,6 +18,7 @@ int main()
     server->CreateServerInterface();
     server->ServerStartup();
 
+	clock_t tiempoRefresco = clock();
     // -----------------------------
     //  GAME LOOP
     // -----------------------------
@@ -25,6 +26,13 @@ int main()
     while (true)
     {
         server->ReceivePackets();
+        clock_t tiempoActual = clock();
+        clock_t timediff = tiempoActual - tiempoRefresco;
+        float timediff_sec = ((float)timediff) / 100000;
+        if (timediff_sec >= 0.01) {
+            server->refreshServer();
+            tiempoRefresco = clock();
+        }
         if(server->getCommands()==1) return 0;
             //if(refresco==0){
             //    server->refreshServer();

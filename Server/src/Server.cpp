@@ -442,7 +442,7 @@ void Server::refreshServer()
 	RakNet::BitStream bsOut;
 
 	//vector de posicion de Irrlicht
-	float* posicion;
+	//float* posicion;
 
 	//ID del mensaje que notifica el refresco
 	typeID = ID_REFRESH_SERVER;
@@ -450,19 +450,19 @@ void Server::refreshServer()
 	//se escribe el tipo de ID en el mensaje de salida
 	bsOut.Write(typeID);
 
-	std::cout << numPlayers << std::endl;
+	//std::cout << numPlayers << std::endl;
 
 	//entidades a refrescar
-	for (int i = 0; i < numPlayers; i++)
+	/*for (int i = 0; i < numPlayers; i++)
 	{
 		posicion = player[i]->getPosition();
 		bsOut.Write(posicion[0]);
 		bsOut.Write(posicion[1]);
 		bsOut.Write(posicion[2]);
-	}
+	}*/
 
 	//se envia el mensaje de salida
-	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 }
 
 int Server::getCommands(){

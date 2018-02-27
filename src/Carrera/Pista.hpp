@@ -30,9 +30,9 @@ public:
 	
 	// METODOS SET
 	void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
-	void setItems(irr::core::list<Item *> itemMetodo);
+	void setItems(vector<Item *> itemMetodo);
 	// METODOS GET
-	core::list<Item *> getItems();
+	vector<Item *> getItems();
 	vector<Turbo*> getArrayTurbo();
 	vector<Caja*> getArrayCaja();
 	void setArrayCaja(vector<Caja*> caja);
@@ -62,7 +62,7 @@ private:
 	
 	ISceneNode *Mapa;
 
-	irr::core::list<Item *> Items;
+	vector<Item *> Items;
 
 
 	//fisicas del mapa

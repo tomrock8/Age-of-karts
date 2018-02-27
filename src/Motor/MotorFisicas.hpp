@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
@@ -19,10 +20,10 @@ public:
 	// METODOS GET
 	static MotorFisicas *getInstancia();
 	btDynamicsWorld *getMundo();
-	irr::core::list<btRigidBody *> getObjetos();
+	vector<btRigidBody *> getObjetos();
 	
 	// METODOS SET
-	void setObjetos(irr::core::list<btRigidBody *> objetos);
+	void setObjetos(vector<btRigidBody *> objetos);
 
 private:
 	MotorFisicas(void);
@@ -32,7 +33,7 @@ private:
 	btDefaultCollisionConfiguration *confColision;
 	btCollisionDispatcher *dispatcher;
 	btSequentialImpulseConstraintSolver *solver;
-	core::list<btRigidBody *> objetos;
+	vector<btRigidBody *> objetos;
 	btDynamicsWorld *mundo;
 
 

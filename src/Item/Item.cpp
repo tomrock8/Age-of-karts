@@ -18,7 +18,7 @@ btRigidBody *Item::inicializarFisicas()
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	core::list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
@@ -74,15 +74,15 @@ bool Item::Delete()
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	core::list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator)
+	for (int i=0;i<objetos.size();i++)
 	{
-		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(*Iterator)->getUserPointer());
+		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
 		if (nodoActual->getID() == id)
 		{
 
-			btRigidBody *Object = *Iterator;
+			btRigidBody *Object = objetos.at(i);
 
 			// Delete irrlicht node
 			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
@@ -98,7 +98,7 @@ bool Item::Delete()
 			delete Object->getMotionState();
 			delete Object;
 
-			Iterator = objetos.erase(Iterator);
+			objetos.erase(objetos.begin()+i);
 			bullet->setObjetos(objetos);
 			return true;
 		}

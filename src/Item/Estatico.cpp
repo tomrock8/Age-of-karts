@@ -25,7 +25,7 @@ btRigidBody *Estatico::inicializarFisicas() {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	core::list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();

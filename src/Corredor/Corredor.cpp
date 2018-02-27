@@ -236,7 +236,7 @@ void Corredor::InicializarFisicas()
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	//posicion inicial
 	btTransform transCoche;
@@ -706,7 +706,7 @@ Tipos de objeto:
 */
 void Corredor::usarObjetos() {
 	Pista *pista = Pista::getInstancia();
-	core::list<Item *> items = pista->getItems();
+	vector<Item *> items = pista->getItems();
 	if (getTipoObj() == 1)		// PROYECTIL
 	{
 		pro = new Proyectil(btVector3(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10));
@@ -1183,7 +1183,7 @@ void Corredor::actualizarRuedas()
 void Corredor::lanzarHabilidad(){
 	if (getLimite() >= 100) {//puedo lanzar la habilidad
 		Pista *pista = Pista::getInstancia();
-		core::list<Item *> items = pista->getItems();
+		vector<Item *> items = pista->getItems();
 		h->getNodo()->setVisible(true);
 		h->setOrientacion(orientacion);
 		h->setPadre(this->getNodo());

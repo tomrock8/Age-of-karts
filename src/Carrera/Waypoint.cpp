@@ -13,7 +13,7 @@ Waypoint::Waypoint() {
 void Waypoint::inicializarFisicas() {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	//posicion origem 
 	btTransform transform;
@@ -67,13 +67,18 @@ void Waypoint::setOrientacion(float grado) {
 btVector3 Waypoint::getPosicion() {
 	return btVector3(waypoint->getPosition().X, waypoint->getPosition().Y, waypoint->getPosition().Z);
 }
-
+btVector3 Waypoint::getRotation() {
+	return btVector3(waypoint->getRotation().X, waypoint->getRotation().Y, waypoint->getRotation().Z);
+}
 Waypoint *Waypoint::getNextWaypoint() {
 	return siguiente;
 }
 
 IMeshSceneNode *Waypoint::getWaypoint() {
 	return waypoint;
+}
+int Waypoint::getID(){
+	return id;
 }
 
 Waypoint::~Waypoint() {
@@ -92,4 +97,7 @@ btVector3 Waypoint::getVector1() {
 }
 btVector3 Waypoint::getVector2() {
 	return vector2;
+}
+void Waypoint::setID(int i){
+	id=i;
 }

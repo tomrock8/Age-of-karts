@@ -24,7 +24,7 @@ public:
 	// METODOS GET
 	bool getTurboActivo();
 	int getTiempoTurbo();
-	int getId();
+	int getID();
 	//destructor
 	~Turbo();
 private:

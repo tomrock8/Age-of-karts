@@ -41,6 +41,7 @@ void EscenaJuego::init() {
 	//ARGUMENTOS MAIN
 	debug = 0;
 	fin_carrera=false;
+        GestorIDs::instancia().restartID();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
@@ -102,13 +103,13 @@ void EscenaJuego::init() {
 	
 
 
-		pj[0]->getNodo()->setID(0);
-		pj[1]->getNodo()->setID(1);
+		pj[0]->setID(0);
+		pj[1]->setID(1);
 		
-			pj.at(2)->getNodo()->setID(2);
-			pj.at(3)->getNodo()->setID(3);
-			pj.at(4)->getNodo()->setID(4);
-			pj.at(5)->getNodo()->setID(5);
+			pj.at(2)->setID(2);
+			pj.at(3)->setID(3);
+			pj.at(4)->setID(4);
+			pj.at(5)->setID(5);
 		
 
 	}else{
@@ -180,7 +181,7 @@ void EscenaJuego::dibujar() {
 	Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
 	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		/*
+		
 		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
 		
 				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj.at(2));
@@ -196,7 +197,7 @@ void EscenaJuego::dibujar() {
 				COMENARDOSAUXILIAR3->ActualizarRaytest();
 				COMENARDOSAUXILIAR4->ActualizarRaytest();
 				COMENARDOSAUXILIAR5->ActualizarRaytest();
-		*/
+		
 
 		//Para poder dibujar putas lineas de mierda
 	}
@@ -221,7 +222,7 @@ void EscenaJuego::limpiar() {
 void EscenaJuego::update() {
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
-	core::list<Item *> items = pistaca->getItems();
+	vector<Item *> items = pistaca->getItems();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	vector<Corredor*> pj = jugadores->getJugadores();
 
@@ -239,20 +240,21 @@ void EscenaJuego::update() {
 		pistaca->getArrayCaja()[i]->comprobarRespawn(); // TODO: MOVER AL UPDATE DE PISTACA
 	}
 
-	for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
+	for (int i=0;i<items.size();i++)
 	{
-		Item *item = *Iterator;
-		if(item->getLanzado()){
-			if(item->comprobarDestructor()){
-				item->Delete();
-				Iterator = items.erase(Iterator);
+		if(items.at(i)->getLanzado()){
+			if(items.at(i)->comprobarDestructor()){
+				items.at(i)->Delete();
+				items.erase(items.begin()+i);
 				break;
 			}
 		}
 	}
 	pistaca->setItems(items);
 
-
+	if (fin_carrera){
+		textoDebug->agregar("CARRERA FINALIZADA, PULSA F.");
+	}
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 	pj = jugadores->getJugadores();
 	switch(tipoCamara){
@@ -352,7 +354,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		btTransform trans;
 		trans.setOrigin(btPos);
 		btQuaternion quaternion;
-		quaternion.setEulerZYX(pj.at(i)->getNodo()->getRotation().Z* PI / 180, pj.at(i)->getNodo()->getRotation().Y * PI / 180, pj.at(i)->getNodo()->getRotation().X* PI / 180);
+		quaternion.setEulerZYX(pj.at(i)->getWaypointActual()->getRotation().getZ()* PI / 180, pj.at(i)->getWaypointActual()->getRotation().getY() * PI / 180, pj.at(i)->getWaypointActual()->getRotation().getX()* PI / 180);
 		trans.setRotation(quaternion);
 
 		pj.at(i)->getRigidBody()->setCenterOfMassTransform(trans);
@@ -410,12 +412,12 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
 	int c = 0;
-	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
+	for (int i=0;i<objetos.size();i++){
 		c++;
-		UpdateRender(*Iterator);
+		UpdateRender(objetos.at(i));
 	}
 }
 

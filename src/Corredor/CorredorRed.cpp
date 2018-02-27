@@ -3,7 +3,8 @@
 
 CorredorRed::CorredorRed(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos, tipo)
 {
-	cuboNodo->setName("JugadorRed");
+	nombre="JugadorRed";
+	cuboNodo->setName(nombre);
 }
 
 

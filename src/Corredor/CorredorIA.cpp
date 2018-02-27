@@ -2,8 +2,8 @@
 
 CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos, tipo)
 {
-
-	cuboNodo->setName("JugadorIA");
+	nombre="JugadorIA";
+	cuboNodo->setName(nombre);
 	caja = false;
 	enemigo = false;
 	turbo= false;
@@ -217,7 +217,7 @@ void CorredorIA::movimiento()
 {
 	//LLmamos a la logica difusa para que nos de los valores de entrada
 	//seguirWaypoint();
-	ActualizarRaytest();
+	//ActualizarRaytest();
 	logicaDifusa();
 	
 
@@ -477,7 +477,7 @@ void CorredorIA::reposicionar(){
 			btTransform trans;
 			trans.setOrigin(btPos);
 			btQuaternion quaternion;
-			quaternion.setEulerZYX(cuboNodo->getRotation().Z* PI / 180, cuboNodo->getRotation().Y * PI / 180, cuboNodo->getRotation().X* PI / 180);
+			quaternion.setEulerZYX(this->getWaypointActual()->getRotation().getZ()* PI / 180, this->getWaypointActual()->getRotation().getY() * PI / 180, this->getWaypointActual()->getRotation().getX()* PI / 180);
 			trans.setRotation(quaternion);
 
 			CuerpoColisionChasis->setCenterOfMassTransform(trans);

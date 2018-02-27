@@ -13,6 +13,10 @@ void GestorIDs::setIdentifier(ISceneNode *nodo, const char *nombre){
 int GestorIDs::getIDLibre(){
     return id;
 }
+void GestorIDs::restartID(){
+    id=6;
+}
+
 GestorIDs &GestorIDs::instancia(){
 	static GestorIDs _instancia;
     return _instancia;

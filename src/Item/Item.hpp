@@ -8,6 +8,7 @@
 #include "MotorFisicas.hpp"
 #include "GestorIDs.hpp"
 #include <iostream>
+#include <vector>
 #include <ctime>
 
 using namespace std;
@@ -23,6 +24,7 @@ public:
   bool Delete();
   IMeshSceneNode *getNodo();
   btRigidBody *getRigidBody();
+  int getID();
   void setLanzado(bool b);
   bool getLanzado();
   void setNombre(const char* name);

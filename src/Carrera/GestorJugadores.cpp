@@ -14,17 +14,17 @@ GestorJugadores::~GestorJugadores() {
 	for (int i = 0; i < numJugadores; i++) {
 		cout << i <<endl;
 		//if (pj.at(i)) {
-			if (strcmp(pj.at(i)->getNodo()->getName(), "Jugador") == 0) {
+			if (strcmp(pj.at(i)->getNombre(), "Jugador") == 0) {
 				CorredorJugador *cj = static_cast<CorredorJugador *>(pj.at(i));
 				delete cj;
 			}
 			else {
-				if (strcmp(pj.at(i)->getNodo()->getName(), "JugadorIA") == 0) {
+				if (strcmp(pj.at(i)->getNombre(), "JugadorIA") == 0) {
 					CorredorIA *cia = static_cast<CorredorIA *>(pj.at(i));
 					delete cia;
 				}
 				else {
-					if (strcmp(pj.at(i)->getNodo()->getName(), "JugadorRed") == 0) {
+					if (strcmp(pj.at(i)->getNombre(), "JugadorRed") == 0) {
 						CorredorRed *cred = static_cast<CorredorRed *>(pj.at(i));
 						delete cred;
 					}

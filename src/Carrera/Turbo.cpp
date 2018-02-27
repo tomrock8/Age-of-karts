@@ -5,7 +5,7 @@ Turbo::Turbo(btVector3 pos, bool estado) {
 	turboTocado = estado;
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	
-	list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 	turbo = Motor3d::instancia().getScene()->addCubeSceneNode(5.0f);
 	escala = btVector3(2.5f, 0.2f, 1.25f);
 	turbo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
@@ -43,7 +43,7 @@ Turbo::Turbo(btVector3 pos, bool estado) {
 	bullet->setObjetos(objetos);
 }
 
-int Turbo::getId() {
+int Turbo::getID() {
 	return id;
 }
 bool Turbo::getTurboActivo() {
@@ -71,7 +71,7 @@ void Turbo::setTurboTocado(bool s) {
 }
 //destructor
 Turbo::~Turbo() {
-	cout << "ENTRO DELETE TURBO: " << turbo->getID();
+	cout << "ENTRO DELETE TURBO: " << this->getID();
 
 	// Los rigid body se borran desde el motor de fisicas
 	// delete rigidBody;

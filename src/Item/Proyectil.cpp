@@ -11,7 +11,7 @@ Proyectil::Proyectil(btVector3 posicionItem) : Item(posicionItem) {
 	escala.setY(5);
 	escala.setZ(5);
 	nodo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
-
+        posicionItem.setY(posicionItem.getY()-1);
 	posicion = posicionItem;
 	nodo->setPosition(vector3df(posicion.getX(), posicion.getY(), posicion.getZ()));
 

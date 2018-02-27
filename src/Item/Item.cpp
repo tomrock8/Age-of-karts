@@ -8,7 +8,6 @@ Item::Item(btVector3 pos)
 {
 
 	lanzado = false;
-
 	masa = btScalar(50);
 	
 }
@@ -112,6 +111,7 @@ btRigidBody *Item::getRigidBody()
 IMeshSceneNode *Item::getNodo()
 {
 	return nodo;
+	
 }
 const char* Item::getNombre(){
 	return nombre;

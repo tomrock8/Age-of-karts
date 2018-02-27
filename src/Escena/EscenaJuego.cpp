@@ -190,7 +190,7 @@ void EscenaJuego::dibujar() {
 		
 
 		//COMENARDOSAUXILIAR->update();
-		COMENARDOSAUXILIAR1->ActualizarRaytest();
+		 
 		
 				COMENARDOSAUXILIAR2->ActualizarRaytest();
 				COMENARDOSAUXILIAR3->ActualizarRaytest();
@@ -273,7 +273,7 @@ void EscenaJuego::update() {
 		pj.at(controlPlayer)->actualizarItem();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		pj.at(controlPlayer)->update();
-		pj.at(1)->update();
+				pj.at(1)->update();
 
 				pj.at(2)->update();
 				pj.at(3)->update();

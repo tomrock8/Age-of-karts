@@ -76,7 +76,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.8); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(1.9); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -177,11 +177,78 @@ void Corredor::setParametros(tipo_jugador t){
 			break;
 	}
 	//HABILIDADES
-	h = new Habilidad(num, this->getNodo());
-	h->getNodo()->setVisible(false);
-	h->setPosicion(posicion);
-	h->setPadre(this->getNodo());
+	habilidadJugador = new Habilidad(num, this->getNodo());
+	habilidadJugador->getNodo()->setVisible(false);
+	habilidadJugador->setPosicion(posicion);
+	habilidadJugador->setPadre(this->getNodo());
 }
+
+//-----------------------------//
+//----------FISICAS------------//
+//-----------------------------//
+void Corredor::InicializarFisicas()
+{
+	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	btDynamicsWorld *mundo = bullet->getMundo();
+	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
+
+	//posicion inicial
+	btTransform transCoche;
+	transCoche.setIdentity();
+	btVector3 posTransCoche = btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+	transCoche.setOrigin(posTransCoche);
+	btQuaternion quaternion;
+	quaternion.setEulerZYX(cuboNodo->getRotation().Z* PI / 180, cuboNodo->getRotation().Y * PI / 180, cuboNodo->getRotation().X* PI / 180);
+	transCoche.setRotation(quaternion);
+
+	//Motionstate
+	motionStateCoche = new btDefaultMotionState(transCoche); //motionState = interpolacion
+
+	//establecemos su centro de gravedad
+	btTransform localTransform;
+	localTransform.setIdentity();
+	localTransform.setOrigin(btVector3(0, 1.5, 0));
+	CentroGravedad = new btCompoundShape();
+
+	//Forma Colision
+	btVector3 TamanyoFormaColision(cuboNodo->getScale().X, cuboNodo->getScale().Y, cuboNodo->getScale().Z * 2);
+	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
+	FormaColision = new btBoxShape(TamanyoFormaColision);
+	//masa coche
+	btVector3 Inercia(0, 0, 0);
+	FormaColision->calculateLocalInertia(Masa, Inercia);
+
+	CentroGravedad->addChildShape(localTransform, FormaColision);
+
+	//rigidbody del coche
+	CuerpoColisionChasis = new btRigidBody(Masa, motionStateCoche, CentroGravedad, Inercia);
+	CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
+
+	//RaycastDel Coche
+	RayCastVehiculo = new btDefaultVehicleRaycaster(mundo);
+	btRaycastVehicle::btVehicleTuning tuning;
+
+	vehiculo = new btRaycastVehicle(tuning, CuerpoColisionChasis, RayCastVehiculo);
+
+	CuerpoColisionChasis->setActivationState(DISABLE_DEACTIVATION);
+	
+	mundo->addVehicle(vehiculo);
+	//vehiculo->setActivationState(DISABLE_DEACTIVATION);
+	//almacenar el puntero al nodo irrlicht  para poder actualizar sus valores
+
+	objetos.push_back(CuerpoColisionChasis);
+
+	CrearRuedas(vehiculo, tuning);
+	mundo->addRigidBody(CuerpoColisionChasis);
+	bullet->setObjetos(objetos);
+	//rigidBody->applyGravity();
+
+	// luego declaramos sus ruedas
+
+	// inicializamos la posicion de las ruedas
+
+}
+
 void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning)
 {
 
@@ -208,93 +275,18 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 		wheel.m_wheelsDampingRelaxation =  btScalar(4.4f);//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = btScalar(0);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
-											//wheel.m_maxSuspensionForce = 40000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
-		//wheel.m_maxSuspensionTravelCm = 10; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 
-
-											   /*
-											   * PARAMETROS EN RUEDAS DISPONIBLES
-											   * wheel.m_chassisConnectionCS = connectionPointCS;
-											   * wheel.m_wheelDirectionCS = wheelDirectionCS0;
-											   * wheel.m_wheelAxleCS = wheelAxleCS;
-											   * wheel.m_suspensionRestLength = suspensionRestLength;
-											   * wheel.m_wheelRadius = wheelRadius;
-											   * wheel.m_suspensionStiffness = tuning.m_suspensionStiffness;
-											   * wheel.m_wheelsDampingCompression = tuning.m_suspensionCompression;
-											   * wheel.m_wheelsDampingRelaxation = tuning.m_suspensionDamping;
-											   * wheel.m_frictionSlip = tuning.m_frictionSlip;
-											   * wheel.m_bIsFrontWheel = isFrontWheel;
-											   * wheel.m_maxSuspensionTravelCm = tuning.m_maxSuspensionTravelCm;
-											   * wheel.m_maxSuspensionForce = tuning.m_maxSuspensionForce;
-											   */
+		wheel.m_maxSuspensionForce = 30000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
+		//wheel.m_maxSuspensionTravelCm = 10; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 										   
 	}
 }
-//-----------------------------//
-//----------FISICAS------------//
-//-----------------------------//
-void Corredor::InicializarFisicas()
-{
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
-	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
 
-	//posicion inicial
-	btTransform transCoche;
-	transCoche.setIdentity();
-	btVector3 posTransCoche = btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
-	transCoche.setOrigin(posTransCoche);
-	btQuaternion quaternion;
-	quaternion.setEulerZYX(cuboNodo->getRotation().Z* PI / 180, cuboNodo->getRotation().Y * PI / 180, cuboNodo->getRotation().X* PI / 180);
-	transCoche.setRotation(quaternion);
 
-	//Motionstate
-	motionStateCoche = new btDefaultMotionState(transCoche); //motionState = interpolacion
 
-	//establecemos su centro de gravedad
-	btTransform localTransform;
-	localTransform.setIdentity();
-	localTransform.setOrigin(btVector3(0, 1, 0));
-	CentroGravedad = new btCompoundShape();
-
-	//Forma Colision
-	btVector3 TamanyoFormaColision(cuboNodo->getScale().X, cuboNodo->getScale().Y, cuboNodo->getScale().Z * 2);
-	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
-	FormaColision = new btBoxShape(TamanyoFormaColision);
-	//masa coche
-	btVector3 Inercia(0, 0, 0);
-	FormaColision->calculateLocalInertia(Masa, Inercia);
-
-	CentroGravedad->addChildShape(localTransform, FormaColision);
-
-	//rigidbody del coche
-	CuerpoColisionChasis = new btRigidBody(Masa, motionStateCoche, CentroGravedad, Inercia);
-	CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
-
-	//RaycastDel Coche
-	RayCastVehiculo = new btDefaultVehicleRaycaster(mundo);
-	btRaycastVehicle::btVehicleTuning tuning;
-
-	vehiculo = new btRaycastVehicle(tuning, CuerpoColisionChasis, RayCastVehiculo);
-
-	CuerpoColisionChasis->setActivationState(DISABLE_DEACTIVATION);
-	mundo->addVehicle(vehiculo);
-	//vehiculo->setActivationState(DISABLE_DEACTIVATION);
-	//almacenar el puntero al nodo irrlicht  para poder actualizar sus valores
-
-	objetos.push_back(CuerpoColisionChasis);
-
-	CrearRuedas(vehiculo, tuning);
-	mundo->addRigidBody(CuerpoColisionChasis);
-	bullet->setObjetos(objetos);
-	//rigidBody->applyGravity();
-
-	// luego declaramos sus ruedas
-
-	// inicializamos la posicion de las ruedas
-
-}
 void Corredor::BorrarFisicas()
 {
 }
+
+
 //-----------------------------//
 //---------METODOS GET---------//
 //-----------------------------//
@@ -522,7 +514,7 @@ void Corredor::setTipoObj()
 			tipoObj = 8;
 	}
 
-	cout << "Posicion: " << posicionCarrera << " - NumRandom: " << random << " - Objeto: " << tipoObj << endl;
+	//cout << "Posicion: " << posicionCarrera << " - NumRandom: " << random << " - Objeto: " << tipoObj << endl;
 
 	if(tipoObj == 8)
 		cargador = 3;
@@ -544,6 +536,7 @@ void Corredor::setTipoObj(int i)
 	cout << "el objeto --- " << i << " ---" << endl;
 	//cout << "Random ------>" << tipoObj << endl;
 }
+
 void Corredor::setWaypointActual(ISceneNode *nodo)
 {
 	//de momento lo pongo así, no da la segunda vuelta pero habria que mirar cuales se han visitado y cuales no
@@ -693,6 +686,7 @@ Tipos de objeto:
 	8. Turbo Triple
 	9. HABILIDAD (No entra en el pool de objetos)
 */
+
 void Corredor::usarObjetos() {
 	Pista *pista = Pista::getInstancia();
 	core::list<Item *> items = pista->getItems();
@@ -700,6 +694,7 @@ void Corredor::usarObjetos() {
 	{
 		pro = new Proyectil(btVector3(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10));
 		lanzarItem(pro, 1);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		
 		pro->setLanzado(true);
 		items.push_back(pro);
 		soltarItem();
@@ -1017,7 +1012,7 @@ void Corredor::update()
 	movimiento();
 	updateTimerObstaculos();
 	updateEstado();
-	if (h->getHabilidadActiva())updateHabilidad();
+	if (habilidadJugador->getHabilidadActiva())updateHabilidad();
 	
 	comprobarSueloRuedas();
 	posicion.setX(cuboNodo->getPosition().X);
@@ -1171,12 +1166,12 @@ void Corredor::lanzarHabilidad(){
 	if (getLimite() >= 100) {//puedo lanzar la habilidad
 		Pista *pista = Pista::getInstancia();
 		core::list<Item *> items = pista->getItems();
-		h->getNodo()->setVisible(true);
-		h->setOrientacion(orientacion);
-		h->setPadre(this->getNodo());
-		h->setPosicion(posDisparo);
-		h->lanzarHabilidad();
-		items.push_back(h);
+		habilidadJugador->getNodo()->setVisible(true);
+		habilidadJugador->setOrientacion(orientacion);
+		habilidadJugador->setPadre(this->getNodo());
+		habilidadJugador->setPosicion(posDisparo);
+		habilidadJugador->lanzarHabilidad();
+		items.push_back(habilidadJugador);
 		setLimite(0);
 	}
 	else {
@@ -1186,14 +1181,14 @@ void Corredor::lanzarHabilidad(){
 
 void Corredor::updateHabilidad() {
 	Timer *tiempo = Timer::getInstancia();
-	int inicioHabilidad = h->getInicioHabilidad();
+	int inicioHabilidad = habilidadJugador->getInicioHabilidad();
 
 
 	if (tiempo->getTimer() - inicioHabilidad >= 3) {
 		//cout << "Se acaba el tiro\n";
-		h->setHabilidadActiva(false);
-		h->getNodo()->setVisible(false);
-		h->eliminarFisicas();
+		habilidadJugador->setHabilidadActiva(false);
+		habilidadJugador->getNodo()->setVisible(false);
+		habilidadJugador->eliminarFisicas();
 
 	}
 }
@@ -1264,8 +1259,4 @@ Corredor::~Corredor() {
 	delete vehiculo;
 	cout << "SALGO DESTRUCTOR CORREDOR\n";
 }
-		//Si dejas esto el coche va hacia atras
-		/*	vehiculo->applyEngineForce(FuerzaFrenado, 0);
-			vehiculo->applyEngineForce(FuerzaFrenado, 1);
-			vehiculo->applyEngineForce(FuerzaFrenado, 2);
-			vehiculo->applyEngineForce(FuerzaFrenado, 3);*/
+		

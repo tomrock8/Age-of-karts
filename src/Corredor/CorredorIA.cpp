@@ -303,13 +303,13 @@ void CorredorIA::movimiento()
         break;
 
 		case FRENARGIRARFUERTEDERECHA://7
-		frenar();
+		desacelerar();
         vehiculo->setSteeringValue(0.15, 0);
 		vehiculo->setSteeringValue(0.15, 1);
         break;
 
 		case FRENARGIRARFUERTEIZQUIERDA://8
-		frenar();
+		desacelerar();
         vehiculo->setSteeringValue(-0.15, 0);
 		vehiculo->setSteeringValue(-0.15, 1);
         break;
@@ -718,7 +718,7 @@ void CorredorIA::ActualizarRaytest() {
 	btVector3 fin(cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y -1, cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
 
-	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	//mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast1(inicio, fin);
 	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast1.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -728,7 +728,7 @@ void CorredorIA::ActualizarRaytest() {
 	inicio = btVector3(Raycast23*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() );
 	fin = btVector3(Raycast23*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
-	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	//mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast2(inicio, fin);
 	RayCast2.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast2.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -739,7 +739,7 @@ void CorredorIA::ActualizarRaytest() {
 	inicio = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() );
 	fin = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
-	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	//mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast3(inicio, fin);
 	RayCast3.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast3.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -750,7 +750,7 @@ void CorredorIA::ActualizarRaytest() {
 	inicio = btVector3(Raycast45*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ() );
 	fin = btVector3(Raycast45*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
-	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	//mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast4(inicio, fin);
 	RayCast4.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast4.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -760,7 +760,7 @@ void CorredorIA::ActualizarRaytest() {
 	inicio = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ());
 	fin = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
-	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	//mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast5(inicio, fin);
 	RayCast5.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast5.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -783,7 +783,6 @@ void CorredorIA::ActualizarRaytest() {
 			{
 		ISceneNode *Node = static_cast<ISceneNode *>(RayCast1.m_collisionObjects[i]->getUserPointer());
 		if (Node) {
-
 
 			if(strcmp(Node->getName(),"Caja")==0 &&  Node->isVisible() 
 			|| strcmp(Node->getName(),"Turbo")==0 
@@ -884,12 +883,10 @@ void CorredorIA::ActualizarRaytest() {
 
 			if(distanciaEnemigo<distanciaTurbo){
 					distanciaObjetivo = distanciaEnemigo;
-					//logicaDifusa();
 					enemigo=true;
 					turbo=false;
 				}else{
 					distanciaObjetivo = distanciaTurbo;
-					//logicaDifusa();
 					enemigo=false;
 					turbo=true;
 				}
@@ -897,14 +894,12 @@ void CorredorIA::ActualizarRaytest() {
 	}else{
 					if(enemigo){			
 					distanciaObjetivo = distanciaEnemigo;
-					//logicaDifusa();
 					caja=false;
 					turbo=false;
 					enemigo=true;
 					Vision=true;
 					}else if(turbo){
 					distanciaObjetivo = distanciaTurbo;
-					//logicaDifusa();
 					caja=false;
 					turbo=true;
 					enemigo=false;
@@ -918,13 +913,11 @@ void CorredorIA::ActualizarRaytest() {
 
 			if(distanciaCaja<distanciaTurbo){
 					distanciaObjetivo = distanciaCaja;
-					//logicaDifusa();
 					caja=true;
 					turbo=false;
 					enemigo=false;
 				}else{
 					distanciaObjetivo = distanciaTurbo;
-					//logicaDifusa();
 					caja=false;
 					turbo=true;
 					enemigo=false;
@@ -933,14 +926,12 @@ void CorredorIA::ActualizarRaytest() {
 		}else {
 					if(caja){			
 					distanciaObjetivo = distanciaCaja;
-					//logicaDifusa();
 					caja=true;
 					turbo=false;
 					enemigo=false;
 					Vision=true;
 					}else if(turbo){
 					distanciaObjetivo = distanciaTurbo;
-					//logicaDifusa();
 					caja=false;
 					turbo=true;
 					enemigo=false;
@@ -1024,8 +1015,6 @@ void CorredorIA::vision(btScalar distancia,ISceneNode *nodo){
 
 void CorredorIA::comprobarDireccion(ISceneNode *nodo){
 
-
-	
 
 
 }

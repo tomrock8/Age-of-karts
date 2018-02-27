@@ -5,7 +5,7 @@ Caja::Caja(btVector3 posicionCaja) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
-	tamanyo = 1.0f;
+	
 	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/caja.obj"));
 	nombre = "Caja";
 	GestorIDs::instancia().setIdentifier(nodo, nombre);

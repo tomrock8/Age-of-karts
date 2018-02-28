@@ -13,7 +13,7 @@ Waypoint::Waypoint() {
 void Waypoint::inicializarFisicas() {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	//posicion origem 
 	btTransform transform;

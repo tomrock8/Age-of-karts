@@ -8,6 +8,7 @@
 #include "MotorFisicas.hpp"
 #include "GestorIDs.hpp"
 #include <iostream>
+#include <vector>
 #include <ctime>
 
 using namespace std;
@@ -15,6 +16,7 @@ using namespace std;
 class Item
 {
 public:
+
   Item(int tipo);
   Item(btVector3 pos);
   btRigidBody *inicializarFisicas();
@@ -31,6 +33,7 @@ public:
   bool comprobarDestructor();
 
 protected:
+
   IMeshSceneNode *nodo;
   btRigidBody *rigidBody;
   btScalar masa;

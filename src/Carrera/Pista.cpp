@@ -185,11 +185,11 @@ void Pista::BorrarFisicas() {
 	// a implementar
 }
 
-irr::core::list<Item *> Pista::getItems() {
+vector<Item *> Pista::getItems() {
 	return Items;
 }
 
-void Pista::setItems(irr::core::list<Item *> itemMetodo) {
+void Pista::setItems(vector<Item *> itemMetodo) {
 	Items = itemMetodo;
 }
 vector<Waypoint*> Pista::getArrayWaypoints() {

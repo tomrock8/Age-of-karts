@@ -192,7 +192,7 @@ void EscenaJuego::dibujar() {
 		
 
 		//COMENARDOSAUXILIAR->update();
-		COMENARDOSAUXILIAR1->ActualizarRaytest();
+		 
 		
 				COMENARDOSAUXILIAR2->ActualizarRaytest();
 				COMENARDOSAUXILIAR3->ActualizarRaytest();
@@ -223,7 +223,7 @@ void EscenaJuego::limpiar() {
 void EscenaJuego::update() {
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
-	core::list<Item *> items = pistaca->getItems();
+	vector<Item *> items = pistaca->getItems();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	vector<Corredor*> pj = jugadores->getJugadores();
 
@@ -241,13 +241,12 @@ void EscenaJuego::update() {
 		pistaca->getArrayCaja()[i]->comprobarRespawn(); // TODO: MOVER AL UPDATE DE PISTACA
 	}
 
-	for (core::list<Item *>::Iterator Iterator = items.begin(); Iterator != items.end(); ++Iterator)
+	for (int i=0;i<items.size();i++)
 	{
-		Item *item = *Iterator;
-		if(item->getLanzado()){
-			if(item->comprobarDestructor()){
-				item->Delete();
-				Iterator = items.erase(Iterator);
+		if(items.at(i)->getLanzado()){
+			if(items.at(i)->comprobarDestructor()){
+				items.at(i)->Delete();
+				items.erase(items.begin()+i);
 				break;
 			}
 		}
@@ -277,7 +276,7 @@ void EscenaJuego::update() {
 		pj.at(controlPlayer)->actualizarItem();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		pj.at(controlPlayer)->update();
-		pj.at(1)->update();
+				pj.at(1)->update();
 
 				pj.at(2)->update();
 				pj.at(3)->update();
@@ -414,12 +413,12 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
 	int c = 0;
-	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator) {
+	for (int i=0;i<objetos.size();i++){
 		c++;
-		UpdateRender(*Iterator);
+		UpdateRender(objetos.at(i));
 	}
 }
 

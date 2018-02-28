@@ -40,8 +40,6 @@ private:
 	int finalHabilidad;
 	bool habilidadActiva;
 	
-
-
 	//nodo padre
 	ISceneNode* NodoVehiculo;
 

@@ -36,11 +36,7 @@ class Corredor: public RakNet::NetworkIDObject
 	// Destructor
 	~Corredor();
 	void acelerar();
-	void frenar();
-	void desacelerar();
-	void girarDerecha();
-	void girarIzquierda();
-	void frenodemano(bool activo, bool objeto);
+
 	//objetos
 	void lanzarItem(Proyectil *item, int direcionItem);
 	void lanzarItemTeledirigido();
@@ -115,10 +111,9 @@ class Corredor: public RakNet::NetworkIDObject
 	
 
 protected:
-	//objetos
-	IMesh * coche;
-	
 
+	//Irrlicht
+	IMesh * coche;
 	IMeshSceneNode *cuboNodo;
 	IMeshSceneNode *rueda1;
 	IMeshSceneNode *rueda2;
@@ -134,7 +129,7 @@ protected:
 	int posicionCarrera;
 	int maxvueltas;
 
-	// parametros IA
+	// Control de vueltas
 	btScalar distanciaWaypoint;
 	btScalar distanciaWaypointActual;
 	btScalar distanciaWaypointAnterior;
@@ -157,28 +152,34 @@ protected:
 	int timerTeledirigido;
 	int timerAceite;
 	
-	ItemTeledirigido *pt;
+	
 
 	//objetos estaticos y dinamicos
+	ItemTeledirigido *pt;
 	Estatico * est;
 	Proyectil *pro;
 	vector<Proyectil*> proX3;
 	Escudo *escudo;
 	EstadosJugador *estado;
 	btVector3 posDisparo;
+
 	//habilidad 
-	Habilidad * h;
+	Habilidad * habilidadJugador;
+
 	int limite;
 	//estados de lanzamiento de objeto
 	bool checkItem;
 
-	btScalar indiceGiroAlto;
-	btScalar indiceGiroBajo;
+	
 	int velocidadMaxima;
 	int velocidadMaximaTurbo;
 	int velocidadMaximaAtras;
 	int velocidadLimiteGiro;
 	int direccionContraria;
+
+
+	btScalar indiceGiroAlto;
+	btScalar indiceGiroBajo;
 	btVector3 posicion;
 	btVector3 direccionRuedas;
 	btVector3 rotacionRuedas;
@@ -210,6 +211,7 @@ protected:
 	
 	virtual void movimiento() = 0; // A implementar por derivadas
 	virtual void updateHijos() =0 ;
+
 	// UPDATES
 	void actualizarRuedas();
 	void updateVectorDireccion();

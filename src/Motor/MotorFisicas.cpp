@@ -68,11 +68,11 @@ btDynamicsWorld *MotorFisicas::getMundo() {
 	return mundo;
 }
 
-irr::core::list<btRigidBody *> MotorFisicas::getObjetos() {
+vector<btRigidBody *> MotorFisicas::getObjetos() {
 	return objetos;
 }
 
-void MotorFisicas::setObjetos(irr::core::list<btRigidBody *> obj) {
+void MotorFisicas::setObjetos(vector<btRigidBody *> obj) {
 	objetos = obj;
 }
 

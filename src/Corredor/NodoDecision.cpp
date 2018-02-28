@@ -55,6 +55,7 @@ void NodoDecision::accion(vector<NodoDecision*> &arrayNodos,int nodopadre,int ac
 bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
     
     bool parametroaux = false;              
+    bool resultado = false;
 
 
     switch(parametro){
@@ -142,15 +143,14 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
             if(parametro != OBJNUMERO){
                 
                 if(parametroaux==valorBoleano)
-                    return true;
+                    resultado = true;
                      
             }else{
 
                 if(obj == valor)
-                return true;
+                    resultado = true;
                 
             }
-
 
         break;
 
@@ -159,13 +159,13 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
             if(parametro != OBJNUMERO){
 
                 if(parametroaux!=valorBoleano)
-                    return true;
+                    resultado = true;
              
 
             }else{
 
                 if(obj != valor)
-                    return true;
+                    resultado = true;
                    
             }
 
@@ -174,24 +174,21 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
         case MAYOR:
 
             if(obj>valor)
-                return true;
+                resultado = true;
            
-
-
         break;
 
         case MAYOROIGUAL:
             
             if(obj>=valor)
-                return true;
-            
+                resultado = true;
 
         break;
 
         case MENOR:
             
             if(obj<valor)
-                return true;
+               resultado = true;
            
 
         break;
@@ -199,15 +196,13 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
         case MENOROIGUAL:
             
             if(obj<=valor)
-                return true;
+                resultado = true;
            
 
         break;
-
-            
     }
    
-    return false; 
+    return resultado; 
 }
 
 void NodoDecision::setHijo(NodoDecision* nodo){

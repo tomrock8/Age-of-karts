@@ -28,10 +28,10 @@ public:
    ~Caja();
 
 private:
+
   IMeshSceneNode *nodo;
   btRigidBody *rigidBody;
   btScalar masa;
-  f32 tamanyo;
   btVector3 escala;
   btVector3 posicion;
   const char *nombre;

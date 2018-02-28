@@ -4,8 +4,8 @@ Caja::Caja(btVector3 posicionCaja) {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	irr::core::list<btRigidBody *> objetos = bullet->getObjetos();
-	tamanyo = 1.0f;
+	vector<btRigidBody *> objetos = bullet->getObjetos();
+
 	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/caja.obj"));
 	nombre = "Caja";
 	GestorIDs::instancia().setIdentifier(nodo, nombre);
@@ -75,14 +75,14 @@ void Caja::comprobarRespawn() {
 void Caja::romper(Corredor *pj1Col) {
 	Timer *time = Timer::getInstancia();
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	core::list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator)
+	for (int i=0;i<objetos.size();i++)
 	{
-		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(*Iterator)->getUserPointer());
+		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
 		if (nodoActual->getID() == id)
 		{
-			btRigidBody *Object = *Iterator;
+			btRigidBody *Object = objetos.at(i);
 
 			// Delete irrlicht node
 			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
@@ -101,15 +101,15 @@ void Caja::Delete()
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	core::list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	for (list<btRigidBody *>::Iterator Iterator = objetos.begin(); Iterator != objetos.end(); ++Iterator)
+	for (int i=0;i<objetos.size();i++)
 	{
-		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(*Iterator)->getUserPointer());
+		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
 		if (nodoActual->getID() == id)
 		{
 
-			btRigidBody *Object = *Iterator;
+			btRigidBody *Object = objetos.at(i);
 
 			// Delete irrlicht node
 			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
@@ -123,7 +123,7 @@ void Caja::Delete()
 			delete Object->getMotionState();
 			delete Object->getCollisionShape();
 			delete Object;
-			Iterator = objetos.erase(Iterator);
+			objetos.erase(objetos.begin()+i);
 			bullet->setObjetos(objetos);
 
 			break;

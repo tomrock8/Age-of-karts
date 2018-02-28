@@ -25,7 +25,7 @@ btRigidBody *Estatico::inicializarFisicas() {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	core::list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
@@ -49,7 +49,7 @@ btRigidBody *Estatico::inicializarFisicas() {
 	// Store a pointer to the irrlicht node so we can update it later
 	rigidBody->setUserPointer((void *)(nodo));
 	if (masa != 0)
-		rigidBody->setActivationState(DISABLE_DEACTIVATION);
+	rigidBody->setActivationState(DISABLE_DEACTIVATION);
 	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	// Add it to the world
 	mundo->addRigidBody(rigidBody);

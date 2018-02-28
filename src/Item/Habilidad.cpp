@@ -126,7 +126,7 @@ void Habilidad::lanzarHabilidad() {
 void Habilidad::eliminarFisicas() {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	core::list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 	// Remove the object from the world
 	mundo->removeRigidBody(rigidBody);
 	bullet->setObjetos(objetos);
@@ -163,7 +163,7 @@ void Habilidad::inicializarFisicas(int tipo) {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	core::list<btRigidBody *> objetos = bullet->getObjetos();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	// Set the initial position of the object
 

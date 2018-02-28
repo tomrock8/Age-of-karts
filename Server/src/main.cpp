@@ -42,6 +42,7 @@ int main()
 	vector3df pos;
 
 	clock_t tiempoRefresco;
+    clock_t tiempoRefrescoServer;
 	GestorCarrera *gc;
 	bool fin_carrera;
     std::string mensaje;
@@ -173,6 +174,7 @@ int main()
 	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
 	DeltaTime = 0;
 	tiempoRefresco = clock();
+	tiempoRefrescoServer = clock();
     // -----------------------------
     //  GAME LOOP
     // -----------------------------
@@ -244,11 +246,12 @@ int main()
             //client->UpdateNetworkKeyboard();
         }     
         clock_t tiempoActual = clock();
-        clock_t timediff = tiempoActual - tiempoRefresco;
+        clock_t timediff = tiempoActual - tiempoRefrescoServer;
         float timediff_sec = ((float)timediff) / 100000;
         if (timediff_sec >= 0.01) {
+            cout<<"REFRESCO\n";
             server->refreshServer();
-            tiempoRefresco = clock();
+            tiempoRefrescoServer = clock();
         }
         if(server->getCommands()==1) return 0;
         

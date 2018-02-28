@@ -283,7 +283,7 @@ void Server::ReceivePackets()
 			break;	
 
 		case ID_SEND_KEY_PRESS:
-			std::cout << "ID_SEND_KEY_PRESS\n";
+			//std::cout << "ID_SEND_KEY_PRESS\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			bsIn.Read(param);
@@ -476,16 +476,16 @@ void Server::refreshServer()
 	//std::cout << "Refresco\n";
 
 	//tipo de RakNet para el mensaje de salida
-	RakNet::BitStream bsOut;
+	//RakNet::BitStream bsOut;
 
 	//vector de posicion de Irrlicht
 	//float* posicion;
 
 	//ID del mensaje que notifica el refresco
-	typeID = ID_REFRESH_SERVER;
+	//typeID = ID_REFRESH_SERVER;
 
 	//se escribe el tipo de ID en el mensaje de salida
-	bsOut.Write(typeID);
+	//bsOut.Write(typeID);
 
 	//std::cout << numPlayers << std::endl;
 
@@ -497,6 +497,37 @@ void Server::refreshServer()
 		bsOut.Write(posicion[1]);
 		bsOut.Write(posicion[2]);
 	}*/
+	float *pos = new float[3];
+	float *ori = new float[3];
+
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	players = jugadores->getJugadores();
+	typeID = ID_REFRESH_SERVER;
+	RakNet::BitStream bsOut;
+	
+	bsOut.Write(typeID);
+
+	for(int i = 0; i<players.size(); i++){
+		btVector3 position = players.at(i)->getRigidBody()->getCenterOfMassPosition();
+		
+		pos[0] = position.getX();
+		pos[1] = position.getY();
+		pos[2] = position.getZ();
+
+		
+		ori[0] = players.at(i)->getNodo()->getRotation().X;
+		ori[1] = players.at(i)->getNodo()->getRotation().Y;
+		ori[2] = players.at(i)->getNodo()->getRotation().Z;
+
+		bsOut.Write(pos[0]);
+		bsOut.Write(pos[1]);
+		bsOut.Write(pos[2]);
+		bsOut.Write(ori[0]);
+		bsOut.Write(ori[1]);
+		bsOut.Write(ori[2]);
+		bsOut.Write(i);
+	}
+	//std::cout << "Control: " << controlPlayer << std::endl;
 
 	//se envia el mensaje de salida
 	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);

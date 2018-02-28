@@ -442,7 +442,23 @@ int Client::ReceivePackets()
 
 		case ID_REFRESH_SERVER:
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-			PlayerMovement();
+			if(netLoaded){
+				float *pos = new float[3];
+				float *ori = new float[3];
+				for(int i=0; i<players.size(); i++){
+
+					bsIn.Read(pos[0]);
+					bsIn.Read(pos[1]);
+					bsIn.Read(pos[2]);
+					bsIn.Read(ori[0]);
+					bsIn.Read(ori[1]);
+					bsIn.Read(ori[2]);
+					bsIn.Read(id);
+					
+					players.at(id)->setPosicion(pos, ori);
+				}
+			}
+			//PlayerMovement();
 
 			break;
 

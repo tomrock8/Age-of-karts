@@ -7,6 +7,7 @@
 #include "Corredor.hpp"
 #include "CorredorJugador.hpp"
 #include "CorredorIA.hpp"
+#include "CorredorRed.hpp"
 #include <vector>
 
 using namespace std;

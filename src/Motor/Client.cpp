@@ -452,18 +452,7 @@ int Client::ReceivePackets()
 
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(playerDisconnect);
-
-			//player[playerDisconnect]->deleteMesh();
-			//delete player[playerDisconnect];
 			players.erase(players.begin() + playerDisconnect);
-			/*for(int i=0; i<numPlayers; i++){	//Recorre todos los players
-				if(playerDisconnect<=i){		//Si se encuentra con playerDisconnect asigna la posicion siguiente a esta
-					if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
-						player[i]=player[i+1];
-					else
-						player[i]=NULL;
-				}
-			}*/
 			numPlayers--;
 			jugadores->decrementarJugadores();
 			if(controlPlayer>playerDisconnect)	//Si el jugador controlado por este cliente esta por arriba del jugador eliminado se debe reducir

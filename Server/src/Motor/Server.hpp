@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "CorredorRed.hpp"
+#include "GestorJugadores.hpp"
 #include <ctime>
 
 #define MAX_CLIENTS 4
@@ -21,6 +21,10 @@ class Server
         RakNet::MessageID typeID;
         RakNet::Packet *p;
 
+        vector<Corredor*> players;
+        int controlPlayer;
+        int numPlayers;
+        bool spawned;
         unsigned char GetPacketIdentifier(RakNet::Packet *p);
         void DebugServerInfo();
 
@@ -42,9 +46,5 @@ class Server
         std::string serverIP;
         std::string relayString;
 
-        CorredorRed *player[MAX_PLAYERS];
-        int controlPlayer;
-        int numPlayers;
-        bool spawned;
 
 };

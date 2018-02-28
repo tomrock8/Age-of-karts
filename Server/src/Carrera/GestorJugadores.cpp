@@ -1,5 +1,4 @@
 #include "GestorJugadores.hpp"
-#include "CorredorRed.hpp"
 
 GestorJugadores *GestorJugadores::instancia = NULL;
 

@@ -114,12 +114,13 @@ void Server::DebugServerInfo()
 void Server::ReceivePackets()
 {
 
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	//bucle donde se reciben los distintos paquetes, se tratan y se deasignan
 	for (p = server->Receive(); p; server->DeallocatePacket(p), p = server->Receive())
 	{
 		//se coge el identificador del paquete recibido para los casos del switch
 		packetIdentifier = GetPacketIdentifier(p);
-
+		players = jugadores->getJugadores();
 		//se inicializan el tipo de RakNet para los mensajes de entrada y salida
 		RakNet::BitStream bsIn(p->data, p->length, false); //|mensaje de entrada
 		RakNet::BitStream bsOut;						   //|mensaje de salida	
@@ -149,6 +150,8 @@ void Server::ReceivePackets()
 		int id;
 		int param;
 		int param2;
+
+		CorredorRed *jugador;
 		
 		unsigned short numConnections;
 		RakNet::SystemAddress systems[10];
@@ -263,6 +266,14 @@ void Server::ReceivePackets()
 			if(id==0){
 				typeID = ID_RACE_START;
 				bsOut.Write(typeID);
+				numConnections=10;
+				server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+				id=numConnections;
+				for(int i= 0; i<id; i++){
+					jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
+					players.push_back(jugador);
+					jugadores->aumentarJugadores();
+				}
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			}else{
 				std::cout << "No eres host\n";
@@ -281,13 +292,13 @@ void Server::ReceivePackets()
 
 		case ID_SPAWN_PLAYER:
 			std::cout << "SPAWN DE UN JUGADOR\n";
-			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			/*bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(posicion[0]);
 			bsIn.Read(posicion[1]);
 			bsIn.Read(posicion[2]);
 			bsIn.Read(playerNetworkID);
 			std::cout <<posicion[0] <<", "<<posicion[1] << ", " <<posicion[2] << std::endl;
-			player[numPlayers] = new CorredorRed("assets/coche.obj", pos2[0], Corredor::tipo_jugador::CHINO);
+			players[numPlayers] = new CorredorRed("assets/coche.obj", pos2[0], Corredor::tipo_jugador::CHINO);
 			//player[numPlayers]->setPosition(posicion);
 			player[numPlayers]->SetNetworkIDManager(&networkIDManager);
 			player[numPlayers]->SetNetworkID(playerNetworkID);
@@ -303,7 +314,7 @@ void Server::ReceivePackets()
 			numPlayers++;
 
 			std::cout << "Jugador creado, en total: " << numPlayers << std::endl;
-
+*/
 			break;
 
 		case ID_PLAYER_MOVE:
@@ -356,7 +367,7 @@ void Server::ReceivePackets()
 			break;
 
 		case ID_PLAYER_SET_OBJECT:
-
+/*
 			int t;
 
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -373,10 +384,11 @@ void Server::ReceivePackets()
 			bsOut.Write(id);
 
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+			*/
 			break;	
 
 		case ID_PLAYER_THROW_OBJECT:
-
+/*
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			if(id == numPlayers) id--; //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
@@ -388,6 +400,7 @@ void Server::ReceivePackets()
 			bsOut.Write(id);
 
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+			*/
 			break;
 
 		case ID_PLAYER_DISCONNECT:
@@ -414,6 +427,7 @@ void Server::ReceivePackets()
 
 			break;
 		}
+		jugadores->setJugadores(players);
 	}
 }
 
@@ -533,22 +547,12 @@ void Server::GetConnectionList(){
 }
 
 void Server::playerDisconnection(int playerDisconnect){
-	RakNet::BitStream bsOut;						   //|mensaje de salida	
-	delete player[playerDisconnect];
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	players = jugadores->getJugadores();
+	RakNet::BitStream bsOut;	
+	players.at(playerDisconnect)->~Corredor();					   //|mensaje de salida	
+	players.erase(players.begin()+playerDisconnect);
 	std::cout<< "NumPlayers: " << numPlayers << std::endl;
-	for(int i=0; i<numPlayers; i++){	//Recorre todos los players
-		std::cout << "Player " << i << std::endl;
-		if(playerDisconnect<=i){		//Si se encuentra con playerDisconnect asigna la posicion siguiente a esta
-			std::cout << "Reorganizo Array\n";
-			if(i<numPlayers-1){			//Si la posicion es la final asigna null al ultimo player para evitar basura
-				std::cout << "Asigno i + 1 a i\n";
-				player[i]=player[i+1];
-			}else{
-				std::cout << "Asigno i a NULL\n";
-				player[i]=NULL;
-			}
-		}
-	}
 
 	numPlayers--;
 

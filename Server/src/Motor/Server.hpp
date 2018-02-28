@@ -25,6 +25,9 @@ class Server
         int controlPlayer;
         int numPlayers;
         bool spawned;
+
+        bool started;
+
         unsigned char GetPacketIdentifier(RakNet::Packet *p);
         void DebugServerInfo();
 

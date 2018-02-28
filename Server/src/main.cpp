@@ -29,8 +29,6 @@ int main()
 
 	DebugDraw *debugDraw;
 
-	int controlPlayer;
-
 	Camara3persona *camara;
 	int tipoCamara;
 	bool cambioCamara;
@@ -59,7 +57,6 @@ int main()
     GestorIDs::instancia().restartID();
 
 	
-	controlPlayer = 0;
 
 	// Gravedad
 	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -50.f, 0.0));
@@ -183,6 +180,7 @@ int main()
     while (Motor3d::instancia().getDevice()->run())
     {
 
+        server->ReceivePackets();
         //========================================================
         //EMPIEZA UPDATE
         //========================================================
@@ -193,7 +191,6 @@ int main()
         jugadores = GestorJugadores::getInstancia();
         vector<Corredor*> pj = jugadores->getJugadores();
 
-        server->ReceivePackets();
         
         //cout << irrTimer->getTime() << endl;
         textoDebug->limpiar();
@@ -225,38 +222,15 @@ int main()
         pj = jugadores->getJugadores();
 
         camara->moveCameraControlServer();
-        /*switch(tipoCamara){
-            case 0:		//Camara 3a persona libre
-                camara->moveCameraControl(pj.at(controlPlayer)); 
-            break;
-            case 1:		//Camara 3a persona fija
-                camara->moveCamera(pj.at(controlPlayer));
-            break;
-            case 2:		//Camara 1a persona
-                camara->movefpsCamera(pj.at(controlPlayer));
-            break;
-            case 3:
-                camara->moveCameraControlPointer(pj.at(controlPlayer));
-
-        }*/
         
-        //cout << jugadores->getNumJugadores() << endl;
-        //if (jugadores->getNumJugadores() != 0)
-        //	pj.at(controlPlayer)->actualizarItem();
-        
-        if (jugadores->getNumJugadores() != 0)
-        //	camara->moveCamera(pj[controlPlayer]);
-            camara->moveCameraControl(pj.at(controlPlayer));
         colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
                                             //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
-        if (jugadores->getNumJugadores() != 0)
+        if (jugadores->getNumJugadores() != 0){
             for (int i = 0; i < jugadores->getNumJugadores(); i++) {
                 pj.at(i)->update();
             }
+        }
 
-        textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-        if (jugadores->getNumJugadores() != 0)
-            textoDebug->agregar(pj.at(controlPlayer)->toString());
 
         if (jugadores->getNumJugadores() != 0) {
             clock_t tiempoActual = clock();
@@ -279,9 +253,10 @@ int main()
         if(server->getCommands()==1) return 0;
         
 
-        if (jugadores->getNumJugadores() != 0)
+        if (jugadores->getNumJugadores() != 0){
             if (gc->update())
                 fin_carrera=true;
+        }
 
 
         jugadores->setJugadores(pj);

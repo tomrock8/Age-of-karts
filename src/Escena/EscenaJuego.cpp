@@ -135,6 +135,7 @@ void EscenaJuego::init() {
 		int numClients = client->getNumClients();
 		for(int i = 0; i< numClients; i++){
 			jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
+			jugador->setID(i);
 			pj.push_back(jugador);
 			jugadores->aumentarJugadores();
 		}
@@ -290,9 +291,6 @@ void EscenaJuego::update() {
 		//if (jugadores->getNumJugadores() != 0)
 		//	pj.at(controlPlayer)->actualizarItem();
 		
-		if (jugadores->getNumJugadores() != 0)
-		//	camara->moveCamera(pj[controlPlayer]);
-			camara->moveCameraControl(pj.at(controlPlayer));
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 		if (jugadores->getNumJugadores() != 0)

@@ -10,6 +10,7 @@
 //======================================================================
 Server::Server(int maxPlay)
 {
+	started = false; //Indica si la carrera ha empezado
 	numSockets = 1; //numero de sockets
 	numIPs = 1; //numero de ips
 	numPlayers = 0; //numero de jugadores iniciales
@@ -271,6 +272,7 @@ void Server::ReceivePackets()
 				id=numConnections;
 				for(int i= 0; i<id; i++){
 					jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
+					jugador->setID(i);
 					players.push_back(jugador);
 					jugadores->aumentarJugadores();
 				}
@@ -286,6 +288,8 @@ void Server::ReceivePackets()
 			bsIn.Read(id);
 			bsIn.Read(param);
 			bsIn.Read(param2);
+			players.at(id)->getEstados()->setEstadoMovimiento(param);
+			players.at(id)->getEstados()->setDireccionMovimiento(param2);
 			//player[id]->setAccion(param);
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;

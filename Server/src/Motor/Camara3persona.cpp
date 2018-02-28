@@ -154,20 +154,20 @@ void Camara3persona::moveCameraControlServer() {
 	float change_y = 0.0f;
 
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad8)) {
 		change_y = 1.0f;
 	}
 	else {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad2)) {
 			change_y = -1.0f;
 		}
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad4)) {
 		change_x = -1.0f;
 	}
 	else {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad6)) {
 			change_x = 1.0f;
 		}
 	}

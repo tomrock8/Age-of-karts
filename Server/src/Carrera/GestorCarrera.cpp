@@ -4,18 +4,20 @@ GestorCarrera::GestorCarrera() {
 	vueltas = 1;
 	jugadores = GestorJugadores::getInstancia();
 	pj1 = jugadores->getJugadores();
-	jugadores->setJugadores(pj1);
 	for (int j = 0; j < jugadores->getNumJugadores(); j++)
 	pj1.at(j)->setMaxVueltas(vueltas);
 	acum=1;
+	jugadores->setJugadores(pj1);
 }
 bool GestorCarrera::update() {
 
-	
+	jugadores = GestorJugadores::getInstancia();
+	pj1 = jugadores->getJugadores();
 	bool b=true;	//creamos un booleano para devolver si se ha terminado la partida
 
 	//Primero copiamos pj1 en pj2 (vector de jugadores)
 	pj2.resize(pj1.size());
+
 	for (int j = 0; j < jugadores->getNumJugadores(); j++) {
 		pj1.at(j)->setPosicionCarrera(pj1.at(j)->getID() + 1,0);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
 		pj2.at(j) = pj1.at(j);

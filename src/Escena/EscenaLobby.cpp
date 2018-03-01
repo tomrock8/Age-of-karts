@@ -71,11 +71,15 @@ void EscenaLobby::update() {
 		if (client->getConnected()) {
 			conectado = true;
 			texto = L"Conexion establecida!\n";
-			texto += "Jugadores conectados: ";
+			texto += "Eres el Jugador ";
+			texto += to_string(client->getControlPlayer()).c_str(); 
+			texto += "\nJugadores conectados: ";
 			texto += to_string(client->getNumClients()).c_str(); 
 			texto += " / " ;
 			texto += to_string(client->getMaxPlayers()).c_str();
-			texto += "\n Pulse espacio para iniciar la partida\n";
+			texto += "\n Selecciona personaje: " ;
+			texto += to_string(client->getMaxPlayers()).c_str();
+			texto += "\n\n Pulse espacio para iniciar la partida\n";
 		}
 	}
 

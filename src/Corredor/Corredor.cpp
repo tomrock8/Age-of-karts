@@ -972,6 +972,19 @@ void Corredor::comprobarSueloRuedas()
 */
 }
 
+void Corredor::recolocarWaypoint(){
+	btVector3 btPos = actual->getPosicion();
+
+	btTransform trans;
+	
+	trans.setOrigin(btPos);
+	btQuaternion quaternion;
+	quaternion.setEulerZYX(actual->getRotation().getZ()* PI / 180, actual->getRotation().getY() * PI / 180, actual->getRotation().getX()* PI / 180);
+	trans.setRotation(quaternion);
+
+	CuerpoColisionChasis->setCenterOfMassTransform(trans);
+	resetFuerzas();
+}
 
 //---------------------------------------//
 //--------DEBUG TEXTO PANTALLA-----------//

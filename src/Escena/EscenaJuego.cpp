@@ -360,24 +360,6 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		return Escena::tipo_escena::MENU;
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-		btVector3 btPos = pj.at(i)->getWaypointActual()->getPosicion();
-
-		btTransform trans;
-		trans.setOrigin(btPos);
-		btQuaternion quaternion;
-		quaternion.setEulerZYX(pj.at(i)->getWaypointActual()->getRotation().getZ()* PI / 180, pj.at(i)->getWaypointActual()->getRotation().getY() * PI / 180, pj.at(i)->getWaypointActual()->getRotation().getX()* PI / 180);
-		trans.setRotation(quaternion);
-
-		pj.at(i)->getRigidBody()->setCenterOfMassTransform(trans);
-		pj.at(i)->resetFuerzas();
-		//pj.at(0)->getNodo()->setPosition(pos);
-	}
-
-	/*if (sf::Keyboard::isKeyReleased(sf::Keyboard::C)){
-		if(cambioCamara)
-			cambioCamara = false;
-	}*/
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
 		if(!cambioCamara){
 			tipoCamara++;

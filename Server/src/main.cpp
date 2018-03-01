@@ -129,6 +129,7 @@ int main()
         jugadores = GestorJugadores::getInstancia();
         vector<Corredor*> pj = jugadores->getJugadores();
 
+		//Comprobamos si el servidor ha iniciado la partida (para iniciar el contador)
         if (server->getStarted()){
 			if (checkInit==false){
 				t->restartTimer(); 
@@ -140,7 +141,7 @@ int main()
 			} 
 			if (t->getTimer()==4){ 
 				for (int i = 0; i < jugadores->getNumJugadores(); i++) { 
-				pj.at(i)->getEstados()->setEstadoCarrera(CARRERA); 
+				pj.at(i)->getEstados()->setEstadoCarrera(1); 
 				} 
 			} 
 		}

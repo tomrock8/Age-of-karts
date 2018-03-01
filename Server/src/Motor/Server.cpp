@@ -278,6 +278,7 @@ void Server::ReceivePackets()
 					players.push_back(jugador);
 					jugadores->aumentarJugadores();
 				}
+				started=true;
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			}else{
 				std::cout << "No eres host\n";

@@ -314,6 +314,9 @@ void Server::ReceivePackets()
 			
 			players.at(id)->getEstados()->setEstadoMovimiento(param);
 			players.at(id)->getEstados()->setDireccionMovimiento(param2);
+			if(reset){
+				players.at(id)->recolocarWaypoint();
+			}
 			//player[id]->setAccion(param);
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;

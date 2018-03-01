@@ -138,11 +138,11 @@ void Client::UpdateNetworkKeyboard()
 			//}
 		}
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)){ //ResetWaypoint
 			reset = true;
 		}
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){ //Lanzar Item
 			lanzar = true;
 		}
 

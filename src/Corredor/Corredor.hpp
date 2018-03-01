@@ -213,6 +213,7 @@ protected:
 	void girarDerecha();
 	void girarIzquierda();
 	void frenodemano(bool activo, bool objeto);
+	void recolocarWaypoint();
 
 	virtual void movimiento() = 0; // A implementar por derivadas
 	virtual void updateHijos() =0 ;

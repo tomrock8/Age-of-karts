@@ -1021,11 +1021,12 @@ void Corredor::update()
 			setTurbo(false, false, 0);
 		}
 	}
-	if (estado->getEstadoCarrera()!=PARRILLA)
-	movimiento();
+	if (estado->getEstadoCarrera()!=PARRILLA){
+		movimiento();
+		updateEstado();
+	}
 
 	updateTimerObstaculos();
-	updateEstado();
 	if (habilidadJugador->getHabilidadActiva())updateHabilidad();
 	
 	comprobarSueloRuedas();

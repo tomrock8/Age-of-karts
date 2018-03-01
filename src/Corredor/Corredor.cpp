@@ -25,6 +25,8 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	vueltas = 1;
 	maxvueltas=4;
 	
+	estado->setEstadoCarrera(PARRILLA);
+
 	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
 	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
 	//cuboNodo = smgr->addCubeSceneNode(1.5f);
@@ -1019,10 +1021,12 @@ void Corredor::update()
 			setTurbo(false, false, 0);
 		}
 	}
-
-	movimiento();
+	if (estado->getEstadoCarrera()!=PARRILLA){
+		movimiento();
+		updateEstado();
+	}
 	updateTimerObstaculos();
-	updateEstado();
+	
 	if (habilidadJugador->getHabilidadActiva())updateHabilidad();
 	
 	comprobarSueloRuedas();

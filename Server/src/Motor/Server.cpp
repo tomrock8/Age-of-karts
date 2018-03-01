@@ -151,6 +151,8 @@ void Server::ReceivePackets()
 		int id;
 		int param;
 		int param2;
+		bool reset = false;
+		bool lanzar = false;
 
 		CorredorRed *jugador;
 		
@@ -276,6 +278,7 @@ void Server::ReceivePackets()
 					players.push_back(jugador);
 					jugadores->aumentarJugadores();
 				}
+				started=true;
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			}else{
 				std::cout << "No eres host\n";
@@ -288,6 +291,9 @@ void Server::ReceivePackets()
 			bsIn.Read(id);
 			bsIn.Read(param);
 			bsIn.Read(param2);
+			bsIn.Read(reset);
+			bsIn.Read(lanzar);
+			
 			players.at(id)->getEstados()->setEstadoMovimiento(param);
 			players.at(id)->getEstados()->setDireccionMovimiento(param2);
 			//player[id]->setAccion(param);
@@ -595,4 +601,12 @@ void Server::playerDisconnection(int playerDisconnect){
 	bsOut.Write(typeID);
 	bsOut.Write(playerDisconnect);
 	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+
+void Server::setStarted(bool b){
+	started = b;
+}
+
+bool Server::getStarted(){
+	return started;
 }

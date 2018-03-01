@@ -205,3 +205,25 @@ estado_objeto EstadosJugador::getEstadoObjeto(){
 estado_coche EstadosJugador::getEstadoCoche(){
     return estadoCoche;
 }
+
+void EstadosJugador::setEstadoCarrera(estado_carrera carrera){
+	estadoCarrera=carrera;
+}
+void EstadosJugador::setEstadoCarrera(int carrera){
+	switch (carrera){
+
+        case 0:
+        estadoCarrera = PARRILLA;
+		break;
+		case 1:
+        estadoCarrera = CARRERA;
+		break;
+		case 2:
+        estadoCarrera = FIN;
+		break;
+
+	}
+}
+estado_carrera EstadosJugador::getEstadoCarrera(){
+	return estadoCarrera;
+}

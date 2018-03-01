@@ -41,6 +41,8 @@ class Server
         int getCommands();
         void GetConnectionList();
         void playerDisconnection(int playerDisconnect);
+        void setStarted(bool b);
+        bool getStarted();
         
         RakNet::RakPeerInterface *server;
 

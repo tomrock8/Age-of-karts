@@ -101,6 +101,8 @@ void Client::UpdateNetworkKeyboard()
 	{
 		int estadoMovimiento = 0;
 		int direccionMovimiento = 0;
+		bool reset = false;
+		bool lanzar = false;
 		typeID = ID_SEND_KEY_PRESS;
 		RakNet::BitStream bsOut;
 		bsOut.Write(typeID);
@@ -135,9 +137,19 @@ void Client::UpdateNetworkKeyboard()
 			//}
 		}
 
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+			reset = true;
+		}
+
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){
+			lanzar = true;
+		}
+
 		bsOut.Write(controlPlayer);
 		bsOut.Write(estadoMovimiento);
 		bsOut.Write(direccionMovimiento);
+		bsOut.Write(reset);
+		bsOut.Write(lanzar);
 		//if(pressed)
 		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 

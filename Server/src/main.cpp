@@ -116,7 +116,20 @@ int main()
 	bool checkInit=false;
     while (Motor3d::instancia().getDevice()->run())
     {
-		if (server->getStarted()){
+		
+        server->ReceivePackets();
+		
+        //========================================================
+        //EMPIEZA UPDATE
+        //========================================================
+    
+        TextoPantalla *textoDebug = TextoPantalla::getInstancia();
+        Pista *pistaca = Pista::getInstancia();
+        vector<Item *> items = pistaca->getItems();
+        jugadores = GestorJugadores::getInstancia();
+        vector<Corredor*> pj = jugadores->getJugadores();
+
+        if (server->getStarted()){
 			if (checkInit==false){
 				t->restartTimer(); 
 				checkInit=true;
@@ -131,19 +144,6 @@ int main()
 				} 
 			} 
 		}
-        server->ReceivePackets();
-		
-        //========================================================
-        //EMPIEZA UPDATE
-        //========================================================
-    
-        TextoPantalla *textoDebug = TextoPantalla::getInstancia();
-        Pista *pistaca = Pista::getInstancia();
-        vector<Item *> items = pistaca->getItems();
-        jugadores = GestorJugadores::getInstancia();
-        vector<Corredor*> pj = jugadores->getJugadores();
-
-        
         //cout << irrTimer->getTime() << endl;
         textoDebug->limpiar();
 

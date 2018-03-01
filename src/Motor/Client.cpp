@@ -97,6 +97,7 @@ void Client::ClientStartup()
 
 void Client::UpdateNetworkKeyboard()
 {
+
 	if (netLoaded)
 	{
 		int estadoMovimiento = 0;
@@ -153,6 +154,8 @@ void Client::UpdateNetworkKeyboard()
 		//if(pressed)
 		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
+	}else{
+		
 	}
 }
 
@@ -166,7 +169,17 @@ void Client::RaceStart() {
 
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
+void Client::ChangeCharacter(bool i) {
+	std::cout << "Cambiando personaje\n";
+	
+	typeID = ID_CHANGE_CHARACTER;
+	RakNet::BitStream bsOut;
+	bsOut.Write(typeID);
+	bsOut.Write(controlPlayer);
+	bsOut.Write(i);	//false == izquierda ;; true == derecha
 
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
 //==================================================================================================================
 // funcion que recoge los paquetes recibidos por el cliente y realiza unas acciones u otras segun su identificador
 //==================================================================================================================
@@ -212,6 +225,7 @@ int Client::ReceivePackets()
 		int id;
 		int param;
 		int param2;
+		bool parambool;
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -280,7 +294,24 @@ int Client::ReceivePackets()
 			controlPlayer = -1;
 
 			break;
+		case ID_CHANGE_CHARACTER:
+			std::cout<<"ID_CHANGE_CHARACTER\n";
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			bsIn.Read(parambool);
+			param=players.at(id)->getTipoJugador();	//a partir de ahora param es el tipo de jugador
+			if (param==0 && parambool==false){
+				param=4;
+			}else if (param==4 && parambool==true){
+				param2=0;
+			}else if (parambool){
+				param++;
+			}else{
+				param--;
+			}
+			players.at(id)->setTipoJugador(param);
 
+			break;
 		case ID_RACE_START:
 			cout << "ID_RACE_START\n";
 			started = true;

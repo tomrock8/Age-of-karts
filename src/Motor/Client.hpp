@@ -30,9 +30,10 @@ public:
 	void PlayerAction();
 	void PlayerSetObject(int tipo);
 	void PlayerThrowObject();
+	void ChangeCharacter(bool i);
 	int ReceivePackets();
 	void SpawnPlayer();
-
+	
 	int getControlPlayer();
 	bool getConnected();
 	int getNumPlayers();

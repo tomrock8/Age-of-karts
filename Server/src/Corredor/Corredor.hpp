@@ -49,7 +49,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void setID(int i);
 	void setAceite();
 	void setObjetivoTelederigido();
-	void setParametros(tipo_jugador t);
+	void setParametros();
 	void setTipoObj();
 	void setTipoObj(int i);
 	void SetFuerzaVelocidad(int turbo);
@@ -59,6 +59,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
 	void setLimite(int s);
+	void setTipoJugador(int tj);
 
 	
 	std::string toString();
@@ -98,6 +99,7 @@ class Corredor: public RakNet::NetworkIDObject
 	bool getProteccion();
 	EstadosJugador *getEstados();
 	int getLimite();
+	tipo_jugador getTipoJugador();
 
 
 	//estado de los objetos a usar
@@ -162,6 +164,9 @@ protected:
 	Escudo *escudo;
 	EstadosJugador *estado;
 	btVector3 posDisparo;
+	
+	//tipo jugador
+	tipo_jugador tipojugador;
 
 	//habilidad 
 	Habilidad * habilidadJugador;

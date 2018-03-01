@@ -93,15 +93,31 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
-	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 		if (!pressed) {
 			pressed = true;
 			if (conectado) {
 				cout << "Entro en espacio\n";
 				client->RaceStart();
+				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
+			}
+		}
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+		if (!pressed) {
+			pressed = true;
+			if (conectado) {
+				cout << "Entro en cambiar jugador izquierda\n";
+				client->ChangeCharacter(false);
+				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
+			}
+		}
+
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+		if (!pressed) {
+			pressed = true;
+			if (conectado) {
+				cout << "Entro en cambiar jugador derecha\n";
+				client->ChangeCharacter(true);
 				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 			}
 		}

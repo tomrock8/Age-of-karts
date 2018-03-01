@@ -153,7 +153,7 @@ void Server::ReceivePackets()
 		int param2;
 		bool reset = false;
 		bool lanzar = false;
-
+		bool parambool = false;
 		CorredorRed *jugador;
 		
 		unsigned short numConnections;
@@ -261,7 +261,25 @@ void Server::ReceivePackets()
 		case ID_CONNECTION_REQUEST_ACCEPTED:
 			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
 			break;
-		
+		case ID_CHANGE_CHARACTER:
+			std::cout<<"ID_CHANGE_CHARACTER\n";
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			bsIn.Read(parambool);
+			param=players.at(id)->getTipoJugador();	//a partir de ahora param es el tipo de jugador
+			if (param==0 && parambool==false){
+				param=4;
+			}else if (param==4 && parambool==true){
+				param2=0;
+			}else if (parambool){
+				param++;
+			}else{
+				param--;
+			}
+			players.at(id)->setTipoJugador(param);
+			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+
+			break;
 		case ID_RACE_START:
 			std::cout<<"ID_RACE_START\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -412,7 +430,7 @@ void Server::ReceivePackets()
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 			*/
 			break;
-
+	
 		case ID_PLAYER_DISCONNECT:
 			std::cout << "Borrando player\n";
 			int playerDisconnect;

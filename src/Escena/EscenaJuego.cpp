@@ -41,7 +41,9 @@ void EscenaJuego::init() {
 	//ARGUMENTOS MAIN
 	debug = 0;
 	fin_carrera=false;
-        GestorIDs::instancia().restartID();
+	t = Timer::getInstancia();
+	t->restartTimer();
+    GestorIDs::instancia().restartID();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
@@ -272,6 +274,17 @@ void EscenaJuego::update() {
 		case 3:
 			camara->moveCameraControlPointer(pj.at(controlPlayer));
 
+	}
+
+	
+	if (t->getTimer()<=3 && t->getTimer()>=1){
+		int desc=4-t->getTimer();
+		textoDebug->agregar(to_string(desc));
+	}
+	if (t->getTimer()==4){
+		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
+		}
 	}
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		pj.at(controlPlayer)->actualizarItem();

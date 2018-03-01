@@ -13,6 +13,7 @@ typedef enum {QUIETO, AVANZA, MARCHA_ATRAS, FRENA, DERRAPA, DESACELERA} estado_m
 typedef enum {RECTO,IZQUIERDA, DERECHA} direccion_movimiento;
 typedef enum {NADA, FLECHA, CAJA_FALSA, TURBO, ACEITE, ESCUDO, FLECHA_TRIPLE,ITEM_TELEDIRIGIDO,HABILIDAD} estado_objeto;
 typedef enum {POR_DEFECTO, CON_TURBO, CON_ESCUDO} estado_coche;
+typedef enum {PARRILLA, CARRERA, FIN} estado_carrera;
 
 
 
@@ -23,6 +24,7 @@ class EstadosJugador
   direccion_movimiento direccion;
   estado_objeto objeto;
   estado_coche estadoCoche;
+  estado_carrera estadoCarrera;
 
   public:
   EstadosJugador();
@@ -39,6 +41,9 @@ class EstadosJugador
   void setEstadoCoche(estado_coche coche);
   void setEstadoCoche(int coche);
   estado_coche getEstadoCoche();
+  void setEstadoCarrera(estado_carrera carrera);
+  void setEstadoCarrera(int carrera);
+  estado_carrera getEstadoCarrera();
 };
 
 #endif 

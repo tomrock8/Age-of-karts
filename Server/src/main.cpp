@@ -12,6 +12,7 @@
 #include <vector>
 #include "Graphics.hpp"
 #include "Server.hpp"
+#include "Timer.hpp"
 
 
 const int W_WIDTH = 1024;
@@ -57,7 +58,9 @@ int main()
 	fin_carrera=false;
     GestorIDs::instancia().restartID();
 
-	
+	Timer *t = Timer::getInstancia(); 
+  	
+    GestorIDs::instancia().restartID(); 
 
 	// Gravedad
 	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -50.f, 0.0));
@@ -82,76 +85,7 @@ int main()
 	//Posicion del nodo y el bloque de colisiones centralizado:
 
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-/*	vector<Corredor*> pj = jugadores->getJugadores();
-	Corredor* jugador;
-	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		
-		jugador = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::CHINO);
-		pj.push_back(jugador);
-		jugadores->aumentarJugadores();
 
-		jugador = new CorredorIA("assets/coche.obj", btVector3(-10, 0, 280),Corredor::tipo_jugador::GLADIADOR);
-		pj.push_back(jugador);
-		jugadores->aumentarJugadores();
-
-		jugador = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 300),Corredor::tipo_jugador::PIRATA);
-		pj.push_back(jugador);
-		jugadores->aumentarJugadores();
-
-		jugador = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 280),Corredor::tipo_jugador::VIKINGO);
-		pj.push_back(jugador);
-		jugadores->aumentarJugadores();
-
-		jugador = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 300),Corredor::tipo_jugador::GLADIADOR);
-		pj.push_back(jugador);
-		jugadores->aumentarJugadores();
-
-		jugador = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 290),Corredor::tipo_jugador::CHINO);
-		pj.push_back(jugador);
-		jugadores->aumentarJugadores();
-	
-
-
-		pj[0]->setID(0);
-		pj[1]->setID(1);
-		
-			pj.at(2)->setID(2);
-			pj.at(3)->setID(3);
-			pj.at(4)->setID(4);
-			pj.at(5)->setID(5);
-		
-
-	}else{
-		btVector3 pos2[6];
-		pos2[0].setX(-10);
-		pos2[0].setY(0);
-		pos2[0].setZ(310);
-		pos2[1].setX(-10);
-		pos2[1].setY(0);
-		pos2[1].setZ(290);
-		pos2[2].setX(-20);
-		pos2[2].setY(0);
-		pos2[2].setZ(310);
-		pos2[3].setX(-20);
-		pos2[3].setY(0);
-		pos2[3].setZ(290);
-		pos2[4].setX(-30);
-		pos2[4].setY(0);
-		pos2[4].setZ(310);
-		pos2[5].setX(-30);
-		pos2[5].setY(0);
-		pos2[5].setZ(290);
-		int numClients = client->getNumClients();
-		for(int i = 0; i< numClients; i++){
-			jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
-			pj.push_back(jugador);
-			jugadores->aumentarJugadores();
-		}
-		client->setNetloaded(true);
-	}
-
-	jugadores->setJugadores(pj);
-*/
 	gc = new GestorCarrera();
 
 	//-----------------------------
@@ -179,10 +113,26 @@ int main()
     //  GAME LOOP
     // -----------------------------
     RakSleep(30);
+	bool checkInit=false;
     while (Motor3d::instancia().getDevice()->run())
     {
-
+		if (server->getStarted()){
+			if (checkInit==false){
+				t->restartTimer(); 
+				checkInit=true;
+			}
+			if (t->getTimer()<=3 && t->getTimer()>=1){ 
+				int desc=4-t->getTimer(); 
+				textoDebug->agregar(to_string(desc)); 
+			} 
+			if (t->getTimer()==4){ 
+				for (int i = 0; i < jugadores->getNumJugadores(); i++) { 
+				pj.at(i)->getEstados()->setEstadoCarrera(CARRERA); 
+				} 
+			} 
+		}
         server->ReceivePackets();
+		
         //========================================================
         //EMPIEZA UPDATE
         //========================================================

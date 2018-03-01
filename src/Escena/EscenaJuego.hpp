@@ -17,6 +17,7 @@
 #include "GestorColisiones.hpp"
 #include <vector>
 #include "Graphics.hpp"
+#include "Timer.hpp"
 
 
 class EscenaJuego : public Escena {
@@ -63,6 +64,7 @@ private:
 	clock_t tiempoRefresco;
 	GestorCarrera *gc;
 	bool fin_carrera;
+	Timer *t;
 };
 
 #endif /* ESCENAJUEGO_H */

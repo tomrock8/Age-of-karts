@@ -266,7 +266,7 @@ int main()
 
         int fps = Motor3d::instancia().getDriver()->getFPS();
         if (lastFPS != fps) {
-            core::stringw tmp(L"Age of karts [");
+            core::stringw tmp(L"Age of karts SERVER [");
             tmp += Motor3d::instancia().getDriver()->getName();
             tmp += L"] fps: ";
             tmp += fps;
@@ -310,7 +310,7 @@ int main()
         //ACABA DRAW
         //========================================================
     
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && Motor3d::instancia().getDevice()->isWindowActive()){
             server->ShutDownServer();
             Motor3d::instancia().getDevice()->drop();
             return 0;
@@ -344,7 +344,7 @@ void UpdateRender(btRigidBody *TObject) {
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0) {
+	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
 	}
 	else

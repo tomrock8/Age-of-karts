@@ -430,7 +430,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0) {
+	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
 	}
 	else

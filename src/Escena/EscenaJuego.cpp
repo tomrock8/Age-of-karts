@@ -135,9 +135,11 @@ void EscenaJuego::init() {
 		int numClients = client->getNumClients();
 		for(int i = 0; i< numClients; i++){
 			jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
+			jugador->setID(i);
 			pj.push_back(jugador);
 			jugadores->aumentarJugadores();
 		}
+		client->setNetloaded(true);
 	}
 
 	jugadores->setJugadores(pj);
@@ -288,13 +290,9 @@ void EscenaJuego::update() {
 		//cout << jugadores->getNumJugadores() << endl;
 		//if (jugadores->getNumJugadores() != 0)
 		//	pj.at(controlPlayer)->actualizarItem();
-
-		if (jugadores->getNumJugadores() != 0)
-		//	camara->moveCamera(pj[controlPlayer]);
-			camara->moveCameraControl(pj.at(controlPlayer));
+		
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
-
 		if (jugadores->getNumJugadores() != 0)
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 				pj.at(i)->update();
@@ -309,10 +307,11 @@ void EscenaJuego::update() {
 			clock_t timediff = tiempoActual - tiempoRefresco;
 			float timediff_sec = ((float)timediff) / 100000;
 			if (timediff_sec >= 0.01) {
-				client->PlayerMovement();
+				//client->PlayerMovement();
 				tiempoRefresco = clock();
 			}
 			client->PlayerAction();
+			client->UpdateNetworkKeyboard();
 		}
 	}
 
@@ -431,7 +430,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0) {
+	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
 	}
 	else

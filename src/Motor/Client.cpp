@@ -19,6 +19,7 @@ Client::Client(int maxPlay)
 	netLoaded = false; // true == si todos los clientes de la partida han spwaneado
 	connected = false;
 	started = false;
+	pressed = true;
 }
 
 //==================================================================================
@@ -93,58 +94,55 @@ void Client::ClientStartup()
 	//si todo el proceso tiene exito, se avisa al usuario de que el cliente se ha creado y conectado al servidor
 	std::cout << "Cliente creado!\n";
 }
-/*
-void Client::UpdateNetworkKeyboard(CTeclado *teclado)
+
+void Client::UpdateNetworkKeyboard()
 {
-	vector3df posicion;
-
-	if (spawned && netLoaded)
+	if (netLoaded)
 	{
-		if (teclado->isKeyDown(KEY_KEY_W))
-		{
-			player[controlPlayer]->move = 1;
-		}
-		else if (teclado->isKeyDown(KEY_KEY_S))
-		{
-			player[controlPlayer]->move = -1;
-		}
-		else
-		{
-			player[controlPlayer]->move = 0;
-		}
-
-		if (teclado->isKeyDown(KEY_KEY_A))
-		{
-			player[controlPlayer]->turn = 1;
-		}
-		else if (teclado->isKeyDown(KEY_KEY_D))
-		{
-			player[controlPlayer]->turn = -1;
-		}
-		else
-		{
-			player[controlPlayer]->turn = 0;
-		}
-
-		posicion = player[controlPlayer]->getPosition();
-		posicion.X += player[controlPlayer]->move;
-		posicion.Z += player[controlPlayer]->turn;
-		player[controlPlayer]->setPosition(posicion);
-		int posX = posicion.X;
-		int posY = posicion.Y;
-		int posZ = posicion.Z;
-
+		int estadoMovimiento = 0;
+		int direccionMovimiento = 0;
+		typeID = ID_SEND_KEY_PRESS;
 		RakNet::BitStream bsOut;
-		typeID = ID_PLAYER_MOVE;
 		bsOut.Write(typeID);
-		bsOut.Write(posX);
-		bsOut.Write(posY);
-		bsOut.Write(posZ);
-		bsOut.Write(player[controlPlayer]->GetNetworkID());
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) { // Acelera
+			//if (!pressed) {
+				pressed = true;
+				estadoMovimiento = 1;
+			//}
+		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){ //Frena
+			//if(!pressed){
+				pressed = true;
+				estadoMovimiento = 2;
+			//}
+		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){ //Freno de mano
+			//if(!pressed){
+				pressed = true;
+				estadoMovimiento = 4;
+			//}
+		} else {
+			estadoMovimiento = 5;
+		}
+		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){ //Giro izq
+			//if(!pressed){
+				pressed = true;
+				direccionMovimiento = 1;
+			//}
+		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){ //Giro dcha
+			//if(!pressed){
+				pressed = true;
+				direccionMovimiento = 2;
+			//}
+		}
 
+		bsOut.Write(controlPlayer);
+		bsOut.Write(estadoMovimiento);
+		bsOut.Write(direccionMovimiento);
+		//if(pressed)
 		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
 	}
-}*/
+}
 
 void Client::RaceStart() {
 	std::cout << "Mandando iniciar carrera\n";
@@ -200,6 +198,8 @@ int Client::ReceivePackets()
 		btVector3 pos;
 		float x,y,z;
 		int id;
+		int param;
+		int param2;
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -272,6 +272,18 @@ int Client::ReceivePackets()
 		case ID_RACE_START:
 			cout << "ID_RACE_START\n";
 			started = true;
+			break;
+
+		case ID_SEND_KEY_PRESS:
+			//cout << "ID_PRESS_KEY_PRESS\n";
+
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			bsIn.Read(param);
+			bsIn.Read(param2);
+        	players.at(id)->getEstados()->setEstadoMovimiento(param);
+			players.at(id)->getEstados()->setDireccionMovimiento(param2);
+
 			break;
 
 		case ID_SPAWN_PLAYER:
@@ -430,14 +442,23 @@ int Client::ReceivePackets()
 
 		case ID_REFRESH_SERVER:
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-			for (int i = 0; i < numPlayers; i++)
-			{
-				bsIn.Read(posicion.getX());
-				bsIn.Read(posicion.getY());
-				bsIn.Read(posicion.getZ());
-				//player[i]->setPosition(posicion);
+			if(netLoaded){
+				float *pos = new float[3];
+				float *ori = new float[3];
+				for(int i=0; i<players.size(); i++){
+
+					bsIn.Read(pos[0]);
+					bsIn.Read(pos[1]);
+					bsIn.Read(pos[2]);
+					bsIn.Read(ori[0]);
+					bsIn.Read(ori[1]);
+					bsIn.Read(ori[2]);
+					bsIn.Read(id);
+					
+					players.at(id)->setPosicion(pos, ori);
+				}
 			}
-			netLoaded = true;
+			//PlayerMovement();
 
 			break;
 
@@ -447,18 +468,7 @@ int Client::ReceivePackets()
 
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(playerDisconnect);
-
-			//player[playerDisconnect]->deleteMesh();
-			//delete player[playerDisconnect];
 			players.erase(players.begin() + playerDisconnect);
-			/*for(int i=0; i<numPlayers; i++){	//Recorre todos los players
-				if(playerDisconnect<=i){		//Si se encuentra con playerDisconnect asigna la posicion siguiente a esta
-					if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
-						player[i]=player[i+1];
-					else
-						player[i]=NULL;
-				}
-			}*/
 			numPlayers--;
 			jugadores->decrementarJugadores();
 			if(controlPlayer>playerDisconnect)	//Si el jugador controlado por este cliente esta por arriba del jugador eliminado se debe reducir
@@ -583,32 +593,37 @@ void Client::PlayerAction(){
 }
 
 void Client::PlayerMovement(){
-	/*btVector3 position = players.at(numPlayers-1)->getRigidBody()->getCenterOfMassPosition();
-	float *pos = new float[3];
 
-	pos[0] = position.getX();
-	pos[1] = position.getY();
-	pos[2] = position.getZ();
+	if(netLoaded){
+		GestorJugadores *jugadores = GestorJugadores::getInstancia();
+		players = jugadores->getJugadores();
+		btVector3 position = players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition();
+		float *pos = new float[3];
 
-	float *ori = new float[3];
+		pos[0] = position.getX();
+		pos[1] = position.getY();
+		pos[2] = position.getZ();
 
-	ori[0] = players.at(numPlayers-1)->getNodo()->getRotation().X;
-	ori[1] = players.at(numPlayers-1)->getNodo()->getRotation().Y;
-	ori[2] = players.at(numPlayers-1)->getNodo()->getRotation().Z;
+		float *ori = new float[3];
 
-	typeID = ID_PLAYER_MOVE;
-	RakNet::BitStream bsOut;
-	bsOut.Write(typeID);
-	bsOut.Write(pos[0]);
-	bsOut.Write(pos[1]);
-	bsOut.Write(pos[2]);
-	bsOut.Write(ori[0]);
-	bsOut.Write(ori[1]);
-	bsOut.Write(ori[2]);
-	bsOut.Write(controlPlayer);
+		ori[0] = players.at(controlPlayer)->getNodo()->getRotation().X;
+		ori[1] = players.at(controlPlayer)->getNodo()->getRotation().Y;
+		ori[2] = players.at(controlPlayer)->getNodo()->getRotation().Z;
 
-	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-*/
+		typeID = ID_PLAYER_MOVE;
+		RakNet::BitStream bsOut;
+		bsOut.Write(typeID);
+		bsOut.Write(pos[0]);
+		bsOut.Write(pos[1]);
+		bsOut.Write(pos[2]);
+		bsOut.Write(ori[0]);
+		bsOut.Write(ori[1]);
+		bsOut.Write(ori[2]);
+		bsOut.Write(controlPlayer);
+		//std::cout << "Control: " << controlPlayer << std::endl;
+
+		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	}
 }
 
 void Client::PlayerSetObject(int tipo){
@@ -628,4 +643,8 @@ void Client::PlayerThrowObject(){
 	bsOut.Write(typeID);
 	bsOut.Write(controlPlayer);
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+
+void Client::setNetloaded(bool b){
+	netLoaded = b;
 }

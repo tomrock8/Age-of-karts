@@ -35,7 +35,9 @@ class Corredor: public RakNet::NetworkIDObject
 	void limitadorVelocidad();
 	// Destructor
 	~Corredor();
+	
 	void acelerar();
+	void recolocarWaypoint();
 
 	//objetos
 	void lanzarItem(Proyectil *item, int direcionItem);

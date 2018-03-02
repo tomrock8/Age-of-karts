@@ -22,6 +22,7 @@ class Server
         RakNet::Packet *p;
 
         vector<Corredor*> players;
+        vector<int> clientes;
         int controlPlayer;
         int numPlayers;
         bool spawned;

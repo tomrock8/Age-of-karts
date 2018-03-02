@@ -703,6 +703,7 @@ Tipos de objeto:
 void Corredor::usarObjetos() {
 	Pista *pista = Pista::getInstancia();
 	vector<Item *> items = pista->getItems();
+	std::cout << "Tipo obj: " << getTipoObj() << " / " << items.size() << std::endl;
 	if (getTipoObj() == 1)		// PROYECTIL
 	{
 		pro = new Proyectil(btVector3(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10));
@@ -794,6 +795,8 @@ void Corredor::usarObjetos() {
 	{
 		setTurbo(true, true, 26000);
 	}
+	std::cout << "Tipo obj: " << getTipoObj() << " / " << items.size() << std::endl;
+	
 	pista->setItems(items);
 
 }

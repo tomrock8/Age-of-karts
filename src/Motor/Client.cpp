@@ -212,6 +212,8 @@ int Client::ReceivePackets()
 		int id;
 		int param;
 		int param2;
+		bool reset = false;
+		bool lanzar = false;
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -293,9 +295,16 @@ int Client::ReceivePackets()
 			bsIn.Read(id);
 			bsIn.Read(param);
 			bsIn.Read(param2);
+			bsIn.Read(reset);
+			bsIn.Read(lanzar);
         	players.at(id)->getEstados()->setEstadoMovimiento(param);
 			players.at(id)->getEstados()->setDireccionMovimiento(param2);
-
+			if(reset){
+				players.at(id)->recolocarWaypoint();
+			}
+			if(lanzar){
+				players.at(id)->usarObjetos();
+			}
 			break;
 
 		case ID_SPAWN_PLAYER:
@@ -465,9 +474,12 @@ int Client::ReceivePackets()
 					bsIn.Read(ori[0]);
 					bsIn.Read(ori[1]);
 					bsIn.Read(ori[2]);
+					bsIn.Read(param);
 					bsIn.Read(id);
 					
 					players.at(id)->setPosicion(pos, ori);
+					if(param!=players.at(id)->getTipoObj())
+						players.at(id)->setTipoObj(param);
 				}
 			}
 			//PlayerMovement();

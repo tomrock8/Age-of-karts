@@ -336,7 +336,8 @@ int Client::ReceivePackets()
 				players.at(id)->recolocarWaypoint();
 			}
 			if(lanzar){
-				players.at(id)->usarObjetos();
+				if(players.at(id)->getTipoObj() != 0)
+					players.at(id)->usarObjetos();
 			}
 			break;
 

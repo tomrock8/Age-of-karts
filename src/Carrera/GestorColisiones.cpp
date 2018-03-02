@@ -126,7 +126,7 @@ bool GestorColisiones::JugadorEstatico()
 				}
 			}
 			//Turbo *t = mapa->getTurbo();
-					cout << "Items: " << items.size();
+			cout << "Items: " << items.size() << std::endl;
 			//t->setFrenadaActivo(pj1Col, true);
 			int idB = nodoB->getID();
 			for (int i=0;i<items.size();i++){

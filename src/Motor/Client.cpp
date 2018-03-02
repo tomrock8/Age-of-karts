@@ -371,7 +371,7 @@ int Client::ReceivePackets()
 			param=numClients;
 			bsIn.Read(numClients);
 			if (param<numClients){
-			//	arrayTipoCorredor.push_back(3);
+				arrayTipoCorredor.push_back(3);
 			}
 			if (controlPlayer == -1) controlPlayer = numClients - 1;
 			cout << "Clientes: " << numClients << endl;

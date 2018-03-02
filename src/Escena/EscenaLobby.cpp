@@ -90,7 +90,7 @@ void EscenaLobby::update() {
 		
 			for (int i=0;i<size;i++){
 				if (i!=client->getControlPlayer()){
-					texto += "Jugador ";
+					texto += "\nJugador ";
 					texto += to_string(i).c_str();
 					texto += " - Personaje: ";
 					texto += to_string(client->getArrayTipoCorredor().at(i)).c_str();

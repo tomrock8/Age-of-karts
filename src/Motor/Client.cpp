@@ -371,7 +371,7 @@ int Client::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			param=numClients;
 			bsIn.Read(numClients);
-			if (param<numClients){
+			if (param<numClients && arrayTipoCorredor.size()<numClients){
 				arrayTipoCorredor.push_back(3);
 			}else if (numClients<arrayTipoCorredor.size()){
 				arrayTipoCorredor.resize(numClients);

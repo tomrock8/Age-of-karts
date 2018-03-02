@@ -136,8 +136,7 @@ void EscenaJuego::init() {
 		pos2[5].setZ(290);
 		int numClients = client->getNumClients();
 		Corredor::tipo_jugador tj;
-		for(int i = 0; i< numClients; i++){	
-			cout<<"que pasa aqui"<<endl;		
+		for(int i = 0; i< numClients; i++){		
 			if (client->getTipoCorredor(i)==0){
 				tj=Corredor::tipo_jugador::GLADIADOR;
 			}else if (client->getTipoCorredor(i)==1){

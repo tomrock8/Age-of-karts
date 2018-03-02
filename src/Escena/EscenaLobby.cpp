@@ -87,7 +87,7 @@ void EscenaLobby::update() {
 			cout<<client->getControlPlayer()<<endl;
 			if (client->getControlPlayer()<size && client->getControlPlayer()!=-1)
 			texto += to_string(client->getTipoCorredor(client->getControlPlayer())).c_str();
-		
+			
 			for (int i=0;i<size;i++){
 				if (i!=client->getControlPlayer()){
 					texto += "\nJugador ";

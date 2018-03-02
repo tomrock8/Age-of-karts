@@ -18,6 +18,7 @@ public:
 	virtual void limpiar() override;
 	virtual void update() override;
 	Escena::tipo_escena comprobarInputs();
+	void mostrarTipoPersonaje(int i);
 
 
 	// METODOS GET

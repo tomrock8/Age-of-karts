@@ -93,14 +93,18 @@ void Client::ClientStartup()
 
 	//si todo el proceso tiene exito, se avisa al usuario de que el cliente se ha creado y conectado al servidor
 	std::cout << "Cliente creado!\n";
+	arrayTipoCorredor.push_back(3);
 }
 
 void Client::UpdateNetworkKeyboard()
 {
+
 	if (netLoaded)
 	{
 		int estadoMovimiento = 0;
 		int direccionMovimiento = 0;
+		bool reset = false;
+		bool lanzar = false;
 		typeID = ID_SEND_KEY_PRESS;
 		RakNet::BitStream bsOut;
 		bsOut.Write(typeID);
@@ -135,12 +139,24 @@ void Client::UpdateNetworkKeyboard()
 			//}
 		}
 
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)){ //ResetWaypoint
+			reset = true;
+		}
+
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){ //Lanzar Item
+			lanzar = true;
+		}
+
 		bsOut.Write(controlPlayer);
 		bsOut.Write(estadoMovimiento);
 		bsOut.Write(direccionMovimiento);
+		bsOut.Write(reset);
+		bsOut.Write(lanzar);
 		//if(pressed)
 		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
+	}else{
+		
 	}
 }
 
@@ -154,7 +170,17 @@ void Client::RaceStart() {
 
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
+void Client::ChangeCharacter(bool i) {
+	std::cout << "Cambiando personaje\n";
+	
+	typeID = ID_CHANGE_CHARACTER;
+	RakNet::BitStream bsOut;
+	bsOut.Write(typeID);
+	bsOut.Write(controlPlayer);
+	bsOut.Write(i);	//false == izquierda ;; true == derecha
 
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
 //==================================================================================================================
 // funcion que recoge los paquetes recibidos por el cliente y realiza unas acciones u otras segun su identificador
 //==================================================================================================================
@@ -200,6 +226,9 @@ int Client::ReceivePackets()
 		int id;
 		int param;
 		int param2;
+		bool reset = false;
+		bool lanzar = false;
+		bool parambool;
 
 
 		//switch para comprobar el tipo de paquete recibido
@@ -268,7 +297,26 @@ int Client::ReceivePackets()
 			controlPlayer = -1;
 
 			break;
+		case ID_CHANGE_CHARACTER:
+			std::cout<<"ID_CHANGE_CHARACTER_CLIENT\n";
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			bsIn.Read(parambool);
+			if (id<arrayTipoCorredor.size() && id!=-1)
+			param=arrayTipoCorredor.at(id);	//a partir de ahora param es el tipo de jugador
+			if (param==0 && parambool==false){
+				param=3;
+			}else if (param==3 && parambool==true){
+				param=0;
+			}else if (parambool){
+				param++;
+			}else{
+				param--;
+			}
+			if (id!=-1)
+			arrayTipoCorredor.at(id)=param;
 
+			break;
 		case ID_RACE_START:
 			cout << "ID_RACE_START\n";
 			started = true;
@@ -281,9 +329,17 @@ int Client::ReceivePackets()
 			bsIn.Read(id);
 			bsIn.Read(param);
 			bsIn.Read(param2);
+			bsIn.Read(reset);
+			bsIn.Read(lanzar);
         	players.at(id)->getEstados()->setEstadoMovimiento(param);
 			players.at(id)->getEstados()->setDireccionMovimiento(param2);
-
+			if(reset){
+				players.at(id)->recolocarWaypoint();
+			}
+			if(lanzar){
+				if(players.at(id)->getTipoObj() != 0)
+					players.at(id)->usarObjetos();
+			}
 			break;
 
 		case ID_SPAWN_PLAYER:
@@ -314,7 +370,13 @@ int Client::ReceivePackets()
 		case ID_LOAD_CURRENT_CLIENTS:
 			cout << "ID_LOAD_CURRENT_CLIENTS\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			param=numClients;
 			bsIn.Read(numClients);
+			if (param<numClients && arrayTipoCorredor.size()<numClients){
+				arrayTipoCorredor.push_back(3);
+			}else if (numClients<arrayTipoCorredor.size()){
+				//arrayTipoCorredor.resize(numClients);
+			}
 			if (controlPlayer == -1) controlPlayer = numClients - 1;
 			cout << "Clientes: " << numClients << endl;
 		break;
@@ -442,7 +504,26 @@ int Client::ReceivePackets()
 
 		case ID_REFRESH_SERVER:
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-			PlayerMovement();
+			if(netLoaded){
+				float *pos = new float[3];
+				float *ori = new float[3];
+				for(int i=0; i<players.size(); i++){
+
+					bsIn.Read(pos[0]);
+					bsIn.Read(pos[1]);
+					bsIn.Read(pos[2]);
+					bsIn.Read(ori[0]);
+					bsIn.Read(ori[1]);
+					bsIn.Read(ori[2]);
+					bsIn.Read(param);
+					bsIn.Read(id);
+					
+					players.at(id)->setPosicion(pos, ori);
+					if(param!=players.at(id)->getTipoObj())
+						players.at(id)->setTipoObj(param);
+				}
+			}
+			//PlayerMovement();
 
 			break;
 
@@ -452,18 +533,7 @@ int Client::ReceivePackets()
 
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(playerDisconnect);
-
-			//player[playerDisconnect]->deleteMesh();
-			//delete player[playerDisconnect];
 			players.erase(players.begin() + playerDisconnect);
-			/*for(int i=0; i<numPlayers; i++){	//Recorre todos los players
-				if(playerDisconnect<=i){		//Si se encuentra con playerDisconnect asigna la posicion siguiente a esta
-					if(i<numPlayers-1)			//Si la posicion es la final asigna null al ultimo player para evitar basura
-						player[i]=player[i+1];
-					else
-						player[i]=NULL;
-				}
-			}*/
 			numPlayers--;
 			jugadores->decrementarJugadores();
 			if(controlPlayer>playerDisconnect)	//Si el jugador controlado por este cliente esta por arriba del jugador eliminado se debe reducir
@@ -567,6 +637,12 @@ int Client::getNumClients(){
 
 int Client::getMaxPlayers() {
 	return maxPlayers;
+}
+vector<int> Client::getArrayTipoCorredor(){
+	return arrayTipoCorredor;
+}
+int Client::getTipoCorredor(int i){
+	return arrayTipoCorredor.at(i);
 }
 void Client::PlayerAction(){
 	/*int estado1 = players.at(numPlayers-1)->getEstados()->getEstadoMovimiento();

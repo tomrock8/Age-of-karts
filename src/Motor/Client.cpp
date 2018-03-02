@@ -302,6 +302,7 @@ int Client::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			bsIn.Read(parambool);
+			if (id<arrayTipoCorredor.size() && id!=-1)
 			param=arrayTipoCorredor.at(id);	//a partir de ahora param es el tipo de jugador
 			if (param==0 && parambool==false){
 				param=3;

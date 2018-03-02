@@ -84,16 +84,18 @@ void EscenaLobby::update() {
 			texto += to_string(client->getControlPlayer()).c_str();
 			texto += "\n <-- Selecciona Personaje -->: " ;
 			//if (size>client->getControlPlayer())
-			cout<<client->getControlPlayer()<<endl;
+			//cout<<client->getControlPlayer()<<endl;
 			if (client->getControlPlayer()<size && client->getControlPlayer()!=-1)
-			texto += to_string(client->getTipoCorredor(client->getControlPlayer())).c_str();
+			mostrarTipoPersonaje(client->getControlPlayer());
+			//texto += to_string(client->getTipoCorredor(client->getControlPlayer())).c_str();
 			
 			for (int i=0;i<size;i++){
 				if (i!=client->getControlPlayer()){
 					texto += "\nJugador ";
 					texto += to_string(i).c_str();
 					texto += " - Personaje: ";
-					texto += to_string(client->getArrayTipoCorredor().at(i)).c_str();
+					mostrarTipoPersonaje(i);
+					
 				}
 			}
 			texto += "\n\n Pulse espacio para iniciar la partida\n";
@@ -101,6 +103,17 @@ void EscenaLobby::update() {
 		}
 	}
 
+}
+void EscenaLobby::mostrarTipoPersonaje(int i){
+	if (client->getArrayTipoCorredor().at(i)==0){
+		texto += "GLADIADOR ";	
+	}else if (client->getArrayTipoCorredor().at(i)==1){
+		texto += "PIRATA ";
+	}else if (client->getArrayTipoCorredor().at(i)==2){
+		texto += "VIKINGO ";
+	}else if (client->getArrayTipoCorredor().at(i)==3){
+		texto += "GUERRERO CHINO ";
+	}
 }
 
 Escena::tipo_escena EscenaLobby::comprobarInputs() {

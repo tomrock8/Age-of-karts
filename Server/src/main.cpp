@@ -200,7 +200,7 @@ int main()
         clock_t timediff = tiempoActual - tiempoRefrescoServer;
         float timediff_sec = ((float)timediff) / 100000;
         if (timediff_sec >= 0.01) {
-            cout<<"REFRESCO\n";
+            //cout<<"REFRESCO\n";
             server->refreshServer();
             tiempoRefrescoServer = clock();
         }

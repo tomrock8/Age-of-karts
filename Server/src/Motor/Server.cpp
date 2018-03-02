@@ -319,6 +319,9 @@ void Server::ReceivePackets()
 			if(reset){
 				players.at(id)->recolocarWaypoint();
 			}
+			if(lanzar){
+				players.at(id)->usarObjetos();
+			}
 			//player[id]->setAccion(param);
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;
@@ -502,32 +505,9 @@ void Server::ShutDownServer()
 //=======================================================================================================================
 void Server::refreshServer()
 {
-	//std::cout << "Refresco\n";
-
-	//tipo de RakNet para el mensaje de salida
-	//RakNet::BitStream bsOut;
-
-	//vector de posicion de Irrlicht
-	//float* posicion;
-
-	//ID del mensaje que notifica el refresco
-	//typeID = ID_REFRESH_SERVER;
-
-	//se escribe el tipo de ID en el mensaje de salida
-	//bsOut.Write(typeID);
-
-	//std::cout << numPlayers << std::endl;
-
-	//entidades a refrescar
-	/*for (int i = 0; i < numPlayers; i++)
-	{
-		posicion = player[i]->getPosition();
-		bsOut.Write(posicion[0]);
-		bsOut.Write(posicion[1]);
-		bsOut.Write(posicion[2]);
-	}*/
 	float *pos = new float[3];
 	float *ori = new float[3];
+	int tipoObj;
 
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	players = jugadores->getJugadores();
@@ -548,12 +528,15 @@ void Server::refreshServer()
 		ori[1] = players.at(i)->getNodo()->getRotation().Y;
 		ori[2] = players.at(i)->getNodo()->getRotation().Z;
 
+		tipoObj = players.at(i)->getTipoObj();
+
 		bsOut.Write(pos[0]);
 		bsOut.Write(pos[1]);
 		bsOut.Write(pos[2]);
 		bsOut.Write(ori[0]);
 		bsOut.Write(ori[1]);
 		bsOut.Write(ori[2]);
+		bsOut.Write(tipoObj);
 		bsOut.Write(i);
 	}
 	//std::cout << "Control: " << controlPlayer << std::endl;

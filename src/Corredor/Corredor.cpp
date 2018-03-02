@@ -102,7 +102,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	if (cuboNodo) InicializarFisicas();
 
-	setParametros(tipo);
+	setParametros();
 
 }
 void Corredor::setParametros(){
@@ -354,7 +354,7 @@ const char* Corredor::getNombre(){
 int Corredor::getID(){
 	return id;
 }
-tipo_jugador getTipoJugador(){
+Corredor::tipo_jugador Corredor::getTipoJugador(){
 	return tipojugador;
 }
 
@@ -643,16 +643,16 @@ void Corredor::setTipoJugador(int tj){
 	switch (tj){
 
         case 0:
-        estadoCoche = GLADIADOR;
+        tipojugador = GLADIADOR;
 		break;
 		case 1:
-        estadoCoche = PIRATA;
+        tipojugador = PIRATA;
 		break;
 		case 2:
-        estadoCoche = VIKINGO;
+        tipojugador = VIKINGO;
 		break;
 		case 3:
-        estadoCoche = CHINO;
+        tipojugador = CHINO;
 		break;
 	}
 }
@@ -993,6 +993,19 @@ void Corredor::comprobarSueloRuedas()
 */
 }
 
+void Corredor::recolocarWaypoint(){
+	btVector3 btPos = actual->getPosicion();
+
+	btTransform trans;
+	
+	trans.setOrigin(btPos);
+	btQuaternion quaternion;
+	quaternion.setEulerZYX(actual->getRotation().getZ()* PI / 180, actual->getRotation().getY() * PI / 180, actual->getRotation().getX()* PI / 180);
+	trans.setRotation(quaternion);
+
+	CuerpoColisionChasis->setCenterOfMassTransform(trans);
+	resetFuerzas();
+}
 
 //---------------------------------------//
 //--------DEBUG TEXTO PANTALLA-----------//
@@ -1046,8 +1059,8 @@ void Corredor::update()
 		movimiento();
 		updateEstado();
 	}
-
 	updateTimerObstaculos();
+	
 	if (habilidadJugador->getHabilidadActiva())updateHabilidad();
 	
 	comprobarSueloRuedas();

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "GestorJugadores.hpp"
 #include <ctime>
+#include <vector>
 
 #define MAX_CLIENTS 4
 #define MAX_PLAYERS 6
@@ -27,6 +28,7 @@ class Server
         bool spawned;
 
         bool started;
+        vector<int> arrayTipoCorredor;
 
         unsigned char GetPacketIdentifier(RakNet::Packet *p);
         void DebugServerInfo();

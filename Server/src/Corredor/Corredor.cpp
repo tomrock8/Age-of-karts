@@ -102,7 +102,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	if (cuboNodo) InicializarFisicas();
 
-	setParametros(tipo);
+	setParametros();
 
 }
 void Corredor::setParametros(){
@@ -354,7 +354,7 @@ const char* Corredor::getNombre(){
 int Corredor::getID(){
 	return id;
 }
-tipo_jugador getTipoJugador(){
+Corredor::tipo_jugador Corredor::getTipoJugador(){
 	return tipojugador;
 }
 
@@ -643,16 +643,16 @@ void Corredor::setTipoJugador(int tj){
 	switch (tj){
 
         case 0:
-        estadoCoche = GLADIADOR;
+        tipojugador = GLADIADOR;
 		break;
 		case 1:
-        estadoCoche = PIRATA;
+        tipojugador = PIRATA;
 		break;
 		case 2:
-        estadoCoche = VIKINGO;
+        tipojugador = VIKINGO;
 		break;
 		case 3:
-        estadoCoche = CHINO;
+        tipojugador = CHINO;
 		break;
 	}
 }

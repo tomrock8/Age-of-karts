@@ -93,6 +93,7 @@ void Client::ClientStartup()
 
 	//si todo el proceso tiene exito, se avisa al usuario de que el cliente se ha creado y conectado al servidor
 	std::cout << "Cliente creado!\n";
+	arrayTipoCorredor.push_back(3);
 }
 
 void Client::UpdateNetworkKeyboard()
@@ -295,21 +296,22 @@ int Client::ReceivePackets()
 
 			break;
 		case ID_CHANGE_CHARACTER:
-			std::cout<<"ID_CHANGE_CHARACTER\n";
+			std::cout<<"ID_CHANGE_CHARACTER_CLIENT\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			bsIn.Read(parambool);
-			param=players.at(id)->getTipoJugador();	//a partir de ahora param es el tipo de jugador
+			param=arrayTipoCorredor.at(id);	//a partir de ahora param es el tipo de jugador
 			if (param==0 && parambool==false){
 				param=4;
 			}else if (param==4 && parambool==true){
-				param2=0;
+				param=0;
 			}else if (parambool){
 				param++;
 			}else{
 				param--;
 			}
-			players.at(id)->setTipoJugador(param);
+			if (id!=-1)
+			arrayTipoCorredor.at(id)=param;
 
 			break;
 		case ID_RACE_START:
@@ -357,7 +359,11 @@ int Client::ReceivePackets()
 		case ID_LOAD_CURRENT_CLIENTS:
 			cout << "ID_LOAD_CURRENT_CLIENTS\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			param=numClients;
 			bsIn.Read(numClients);
+			if (param<numClients){
+			//	arrayTipoCorredor.push_back(3);
+			}
 			if (controlPlayer == -1) controlPlayer = numClients - 1;
 			cout << "Clientes: " << numClients << endl;
 		break;
@@ -615,6 +621,12 @@ int Client::getNumClients(){
 
 int Client::getMaxPlayers() {
 	return maxPlayers;
+}
+vector<int> Client::getArrayTipoCorredor(){
+	return arrayTipoCorredor;
+}
+int Client::getTipoCorredor(int i){
+	return arrayTipoCorredor.at(i);
 }
 void Client::PlayerAction(){
 	/*int estado1 = players.at(numPlayers-1)->getEstados()->getEstadoMovimiento();

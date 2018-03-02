@@ -187,6 +187,7 @@ void Server::ReceivePackets()
 			bsOut.Write(typeID);
 			bsOut.Write(id);
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			arrayTipoCorredor.push_back(3);
 			/*
 			typeID = ID_LOAD_CURRENT_PLAYERS;
 			bsOut.Write(typeID);
@@ -262,21 +263,22 @@ void Server::ReceivePackets()
 			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
 			break;
 		case ID_CHANGE_CHARACTER:
-			std::cout<<"ID_CHANGE_CHARACTER\n";
+			std::cout<<"ID_CHANGE_CHARACTER_SERVER\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			bsIn.Read(parambool);
-			param=players.at(id)->getTipoJugador();	//a partir de ahora param es el tipo de jugador
+			param=arrayTipoCorredor.at(id);
 			if (param==0 && parambool==false){
 				param=4;
 			}else if (param==4 && parambool==true){
-				param2=0;
+				param=0;
 			}else if (parambool){
 				param++;
 			}else{
 				param--;
 			}
-			players.at(id)->setTipoJugador(param);
+			if (id!=-1)
+			arrayTipoCorredor.at(id)=param;
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 
 			break;

@@ -68,18 +68,36 @@ void EscenaLobby::update() {
 	}
 	if (iniciado) {
 		client->ReceivePackets();
+		
+		int size=client->getArrayTipoCorredor().size();
+		vector<int> array=client->getArrayTipoCorredor();
+		cout<<"miau"<<size<<endl;
 		if (client->getConnected()) {
 			conectado = true;
 			texto = L"Conexion establecida!\n";
-			texto += "Eres el Jugador ";
-			texto += to_string(client->getControlPlayer()).c_str(); 
+			 
 			texto += "\nJugadores conectados: ";
 			texto += to_string(client->getNumClients()).c_str(); 
 			texto += " / " ;
 			texto += to_string(client->getMaxPlayers()).c_str();
-			texto += "\n Selecciona personaje: " ;
-			texto += to_string(client->getMaxPlayers()).c_str();
+			texto += "\nEres el Jugador ";
+			texto += to_string(client->getControlPlayer()).c_str();
+			texto += "\n <-- Selecciona Personaje -->: " ;
+			//if (size>client->getControlPlayer())
+			cout<<client->getControlPlayer()<<endl;
+			if (client->getControlPlayer()<size && client->getControlPlayer()!=-1)
+			texto += to_string(client->getTipoCorredor(client->getControlPlayer())).c_str();
+		
+			for (int i=0;i<size;i++){
+				if (i!=client->getControlPlayer()){
+					texto += "Jugador ";
+					texto += to_string(i).c_str();
+					texto += " - Personaje: ";
+					texto += to_string(client->getArrayTipoCorredor().at(i)).c_str();
+				}
+			}
 			texto += "\n\n Pulse espacio para iniciar la partida\n";
+			
 		}
 	}
 

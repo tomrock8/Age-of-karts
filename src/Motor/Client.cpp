@@ -304,8 +304,8 @@ int Client::ReceivePackets()
 			bsIn.Read(parambool);
 			param=arrayTipoCorredor.at(id);	//a partir de ahora param es el tipo de jugador
 			if (param==0 && parambool==false){
-				param=4;
-			}else if (param==4 && parambool==true){
+				param=3;
+			}else if (param==3 && parambool==true){
 				param=0;
 			}else if (parambool){
 				param++;
@@ -373,6 +373,8 @@ int Client::ReceivePackets()
 			bsIn.Read(numClients);
 			if (param<numClients){
 				arrayTipoCorredor.push_back(3);
+			}else if (numClients<arrayTipoCorredor.size()){
+				arrayTipoCorredor.resize(numClients);
 			}
 			if (controlPlayer == -1) controlPlayer = numClients - 1;
 			cout << "Clientes: " << numClients << endl;

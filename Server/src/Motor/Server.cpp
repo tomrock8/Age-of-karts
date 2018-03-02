@@ -168,7 +168,7 @@ void Server::ReceivePackets()
 		case ID_DISCONNECTION_NOTIFICATION:
 			std::cout << "ID_DISCONNECTION_NOTIFICATION de " << p->systemAddress.ToString(true) << std::endl;
 			std::cout<< "NumPlayers: " << numPlayers << std::endl;
-			
+			arrayTipoCorredor.resize(numPlayers);
 			break;
 
 		//el cliente ya esta conectado (en caso de realizar un connect)
@@ -269,8 +269,8 @@ void Server::ReceivePackets()
 			bsIn.Read(parambool);
 			param=arrayTipoCorredor.at(id);
 			if (param==0 && parambool==false){
-				param=4;
-			}else if (param==4 && parambool==true){
+				param=3;
+			}else if (param==3 && parambool==true){
 				param=0;
 			}else if (parambool){
 				param++;

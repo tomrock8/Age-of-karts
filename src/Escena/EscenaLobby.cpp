@@ -71,7 +71,7 @@ void EscenaLobby::update() {
 		
 		int size=client->getArrayTipoCorredor().size();
 		vector<int> array=client->getArrayTipoCorredor();
-		cout<<"miau"<<size<<endl;
+		//cout<<"miau"<<size<<endl;
 		if (client->getConnected()) {
 			conectado = true;
 			texto = L"Conexion establecida!\n";

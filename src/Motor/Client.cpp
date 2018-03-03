@@ -372,9 +372,12 @@ int Client::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			param=numClients;
 			bsIn.Read(numClients);
+			
 			if (param<numClients && arrayTipoCorredor.size()<numClients){
 				arrayTipoCorredor.push_back(3);
 			}else if (param>numClients){
+				bsIn.Read(param2);
+				arrayTipoCorredor.erase(arrayTipoCorredor.begin()+param2);
 				controlPlayer--;
 				while (controlPlayer>=numClients){
 					controlPlayer--;
@@ -577,12 +580,11 @@ unsigned char Client::GetPacketIdentifier(RakNet::Packet *p)
 void Client::ShutDownClient()
 {
 	std::cout << "Cerrando cliente\n";
-
+	arrayTipoCorredor.erase(arrayTipoCorredor.begin()+controlPlayer);
 	typeID = ID_PLAYER_DISCONNECT;
 	RakNet::BitStream bsOut;
 	bsOut.Write(typeID);
 	bsOut.Write(controlPlayer); 
-	arrayTipoCorredor.erase(arrayTipoCorredor.begin()+controlPlayer);
 	
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 

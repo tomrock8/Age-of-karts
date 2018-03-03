@@ -453,6 +453,7 @@ void Server::ReceivePackets()
 			id=numConnections;
 			bsOut.Write(typeID);
 			bsOut.Write(id);
+			bsOut.Write(playerDisconnect);
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 
 			std::cout << "Jugador Borrado\n";

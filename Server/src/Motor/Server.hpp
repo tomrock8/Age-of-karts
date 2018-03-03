@@ -29,6 +29,7 @@ class Server
         bool spawned;
 
         bool started;
+        vector<int> arrayReady;
         vector<int> arrayTipoCorredor;
 
         unsigned char GetPacketIdentifier(RakNet::Packet *p);

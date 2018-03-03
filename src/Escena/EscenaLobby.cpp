@@ -71,6 +71,7 @@ void EscenaLobby::update() {
 		
 		int size=client->getArrayTipoCorredor().size();
 		vector<int> array=client->getArrayTipoCorredor();
+		int id_player=client->getControlPlayer();
 		//cout<<"miau"<<size<<endl;
 		if (client->getConnected()) {
 			conectado = true;
@@ -81,18 +82,53 @@ void EscenaLobby::update() {
 			texto += " / " ;
 			texto += to_string(client->getMaxPlayers()).c_str();
 			texto += "\nEres el Jugador ";
-			texto += to_string(client->getControlPlayer()).c_str();
+			texto += to_string(id_player).c_str();
+			if (id_player==0){
+				texto += " (Host)";
+			}
+			bool bc=true;
+			if (id_player<client->getArrayReady().size()){
+				if (client->getArrayReady().at(id_player)==0 && client->getArrayReady().size()>1){
+					bc=false;
+					for (int c=0;c<client->getArrayReady().size();c++){
+						if (client->getArrayReady().at(c)==0 && c!=0){
+							bc=true;
+						}	
+					}
+					if (bc==false){
+						texto += " [Listo] ";
+					}else{
+						texto += " [No listo] ";
+					}
+					
+				}else{
+					texto += " [Listo] ";
+				}
+			}
 			texto += "\n <-- Selecciona Personaje -->: " ;
+			
 			//if (size>client->getControlPlayer())
 			//cout<<client->getControlPlayer()<<endl;
-			if (client->getControlPlayer()<size && client->getControlPlayer()!=-1)
-			mostrarTipoPersonaje(client->getControlPlayer());
+			if (id_player<size && id_player!=-1)
+			mostrarTipoPersonaje(id_player);
 			//texto += to_string(client->getTipoCorredor(client->getControlPlayer())).c_str();
-			
+			texto += "\n";
 			for (int i=0;i<size;i++){
-				if (i!=client->getControlPlayer()){
+				if (i!=id_player){
 					texto += "\nJugador ";
 					texto += to_string(i).c_str();
+					if (i==0){
+						texto += " (Host)";
+					}
+					if (client->getArrayReady().at(i)==0){
+						if (bc==false){
+							texto += " [Listo] ";
+						}else{
+							texto += " [No listo] ";
+						}
+					}else{
+						texto += " [Listo] ";
+					}
 					texto += " - Personaje: ";
 					mostrarTipoPersonaje(i);
 					

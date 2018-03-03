@@ -183,10 +183,12 @@ void Server::ReceivePackets()
 			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
 			id=numConnections;
 			std::cout << "Numero de conexiones actuales: " << id << std::endl;
+			arrayTipoCorredor.push_back(3);
+			arrayReady.push_back(0);
 			bsOut.Write(typeID);
 			bsOut.Write(id);
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-			arrayTipoCorredor.push_back(3);
+			
 			/*
 			typeID = ID_LOAD_CURRENT_PLAYERS;
 			bsOut.Write(typeID);
@@ -280,29 +282,48 @@ void Server::ReceivePackets()
 			arrayTipoCorredor.at(id)=param;
 			}
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-
+			parambool=false;
 			break;
 		case ID_RACE_START:
 			std::cout<<"ID_RACE_START\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
-			if(id==0){
-				typeID = ID_RACE_START;
-				bsOut.Write(typeID);
-				numConnections=10;
-				server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
-				id=numConnections;
-				for(int i= 0; i<id; i++){
-					jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
-					jugador->setID(i);
-					players.push_back(jugador);
-					jugadores->aumentarJugadores();
+			if (id!=0){
+				if (arrayReady.at(id)==1){
+					arrayReady.at(id)=0;
+				}else{
+					arrayReady.at(id)=1;
 				}
-				started=true;
+				typeID = ID_READY_CLIENT;
+				bsOut.Write(typeID);
+				bsOut.Write(id);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			}else if(id==0){
+				for (int n=0;n<arrayReady.size();n++){
+					if (arrayReady.at(n)==0 && n!=0){
+						parambool=true;
+						break;
+					}
+				}
+				if (parambool==false && arrayReady.size()>0){
+					typeID = ID_RACE_START;
+					bsOut.Write(typeID);
+					numConnections=10;
+					server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+					id=numConnections;
+					for(int i= 0; i<id; i++){
+						jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
+						jugador->setID(i);
+						players.push_back(jugador);
+						jugadores->aumentarJugadores();
+					}
+					started=true;
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+				}
 			}else{
 				std::cout << "No eres host\n";
 			}
+			parambool=false;
 			break;	
 
 		case ID_SEND_KEY_PRESS:
@@ -446,6 +467,7 @@ void Server::ReceivePackets()
 			bsIn.Read(playerDisconnect);
 			std::cout << "Jugador eliminado: " << playerDisconnect << " / " <<numPlayers << std::endl;
 			arrayTipoCorredor.erase(arrayTipoCorredor.begin()+playerDisconnect);
+			arrayReady.erase(arrayReady.begin()+playerDisconnect);
 			//playerDisconnection(playerDisconnect);
 			typeID = ID_LOAD_CURRENT_CLIENTS;
 			numConnections=10;

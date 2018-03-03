@@ -302,7 +302,7 @@ int Client::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			bsIn.Read(parambool);
-			if (id<arrayTipoCorredor.size() && id!=-1)
+			if (id<arrayTipoCorredor.size() && id!=-1){
 			param=arrayTipoCorredor.at(id);	//a partir de ahora param es el tipo de jugador
 			if (param==0 && parambool==false){
 				param=3;
@@ -313,8 +313,8 @@ int Client::ReceivePackets()
 			}else{
 				param--;
 			}
-			if (id!=-1)
 			arrayTipoCorredor.at(id)=param;
+			}
 
 			break;
 		case ID_RACE_START:
@@ -374,8 +374,12 @@ int Client::ReceivePackets()
 			bsIn.Read(numClients);
 			if (param<numClients && arrayTipoCorredor.size()<numClients){
 				arrayTipoCorredor.push_back(3);
-			}else if (numClients<arrayTipoCorredor.size()){
-				arrayTipoCorredor.resize(numClients);
+			}else if (param>numClients){
+				controlPlayer--;
+				while (controlPlayer>=numClients){
+					controlPlayer--;
+				}
+				//arrayTipoCorredor.resize(numClients);
 			}
 			if (controlPlayer == -1) controlPlayer = numClients - 1;
 			cout << "Clientes: " << numClients << endl;
@@ -578,7 +582,8 @@ void Client::ShutDownClient()
 	RakNet::BitStream bsOut;
 	bsOut.Write(typeID);
 	bsOut.Write(controlPlayer); 
-
+	arrayTipoCorredor.erase(arrayTipoCorredor.begin()+controlPlayer);
+	
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
 	client->Shutdown(300);

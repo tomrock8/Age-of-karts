@@ -168,7 +168,6 @@ void Server::ReceivePackets()
 		case ID_DISCONNECTION_NOTIFICATION:
 			std::cout << "ID_DISCONNECTION_NOTIFICATION de " << p->systemAddress.ToString(true) << std::endl;
 			std::cout<< "NumPlayers: " << numPlayers << std::endl;
-			arrayTipoCorredor.resize(numPlayers);
 			break;
 
 		//el cliente ya esta conectado (en caso de realizar un connect)
@@ -267,7 +266,8 @@ void Server::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			bsIn.Read(parambool);
-			param=arrayTipoCorredor.at(id);
+			if (id<arrayTipoCorredor.size() && id!=-1){
+			param=arrayTipoCorredor.at(id);	//a partir de ahora param es el tipo de jugador
 			if (param==0 && parambool==false){
 				param=3;
 			}else if (param==3 && parambool==true){
@@ -277,8 +277,8 @@ void Server::ReceivePackets()
 			}else{
 				param--;
 			}
-			if (id!=-1)
 			arrayTipoCorredor.at(id)=param;
+			}
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 
 			break;
@@ -445,7 +445,7 @@ void Server::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(playerDisconnect);
 			std::cout << "Jugador eliminado: " << playerDisconnect << " / " <<numPlayers << std::endl;
-
+			arrayTipoCorredor.erase(arrayTipoCorredor.begin()+playerDisconnect);
 			//playerDisconnection(playerDisconnect);
 			typeID = ID_LOAD_CURRENT_CLIENTS;
 			numConnections=10;

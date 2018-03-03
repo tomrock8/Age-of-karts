@@ -183,7 +183,7 @@ void Server::ReceivePackets()
 			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
 			id=numConnections;
 			std::cout << "Numero de conexiones actuales: " << id << std::endl;
-			arrayTipoCorredor.push_back(3);
+			arrayTipoCorredor.push_back(3);		//inicializamos los vectores de ready y tipo
 			arrayReady.push_back(0);
 			bsOut.Write(typeID);
 			bsOut.Write(id);
@@ -288,24 +288,24 @@ void Server::ReceivePackets()
 			std::cout<<"ID_RACE_START\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
-			if (id!=0){
+			if (id!=0){		//si no eres host puedes alternar entre listo o no listo
 				if (arrayReady.at(id)==1){
 					arrayReady.at(id)=0;
 				}else{
 					arrayReady.at(id)=1;
 				}
 				typeID = ID_READY_CLIENT;
-				bsOut.Write(typeID);
+				bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
 				bsOut.Write(id);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-			}else if(id==0){
-				for (int n=0;n<arrayReady.size();n++){
+			}else if(id==0){		//si eres host
+				for (int n=0;n<arrayReady.size();n++){		//comprobamos si todos los corredores menos el host estan listos
 					if (arrayReady.at(n)==0 && n!=0){
 						parambool=true;
 						break;
 					}
 				}
-				if (parambool==false && arrayReady.size()>0){
+				if (parambool==false && arrayReady.size()>0){		//si todos estan listos y ha recorrido el bucle empieza la carrera
 					typeID = ID_RACE_START;
 					bsOut.Write(typeID);
 					numConnections=10;

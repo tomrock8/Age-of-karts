@@ -319,6 +319,7 @@ int Client::ReceivePackets()
 
 			break;
 		case ID_READY_CLIENT:
+			//cambiamos el valor de ready en el cliente
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			if (arrayReady.at(id)==0){
@@ -384,10 +385,10 @@ int Client::ReceivePackets()
 			param=numClients;
 			bsIn.Read(numClients);
 			
-			if (param<numClients && arrayTipoCorredor.size()<numClients){
+			if (param<numClients && arrayTipoCorredor.size()<numClients){		//si el numclientes recibido es mayor que el que habia sumamos un cliente a los vectores
 				arrayTipoCorredor.push_back(3);
 				arrayReady.push_back(0);
-			}else if (param>numClients){
+			}else if (param>numClients){		//si el numero de clientes recibido es menor que el que habia borramos clientes de los vectores y actualizamos los contadores de jugador
 				bsIn.Read(param2);
 				arrayTipoCorredor.erase(arrayTipoCorredor.begin()+param2);
 				arrayReady.erase(arrayReady.begin()+param2);

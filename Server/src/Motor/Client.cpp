@@ -94,6 +94,7 @@ void Client::ClientStartup()
 	//si todo el proceso tiene exito, se avisa al usuario de que el cliente se ha creado y conectado al servidor
 	std::cout << "Cliente creado!\n";
 	arrayTipoCorredor.push_back(3);
+	arrayReady.push_back(0);
 }
 
 void Client::UpdateNetworkKeyboard()
@@ -317,6 +318,17 @@ int Client::ReceivePackets()
 			}
 
 			break;
+		case ID_READY_CLIENT:
+			//cambiamos el valor de ready en el cliente
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			if (arrayReady.at(id)==0){
+				arrayReady.at(id)=1;
+			}else{
+				arrayReady.at(id)=0;
+			}
+			
+		break;
 		case ID_RACE_START:
 			cout << "ID_RACE_START\n";
 			started = true;
@@ -373,11 +385,13 @@ int Client::ReceivePackets()
 			param=numClients;
 			bsIn.Read(numClients);
 			
-			if (param<numClients && arrayTipoCorredor.size()<numClients){
+			if (param<numClients && arrayTipoCorredor.size()<numClients){		//si el numclientes recibido es mayor que el que habia sumamos un cliente a los vectores
 				arrayTipoCorredor.push_back(3);
-			}else if (param>numClients){
+				arrayReady.push_back(0);
+			}else if (param>numClients){		//si el numero de clientes recibido es menor que el que habia borramos clientes de los vectores y actualizamos los contadores de jugador
 				bsIn.Read(param2);
 				arrayTipoCorredor.erase(arrayTipoCorredor.begin()+param2);
+				arrayReady.erase(arrayReady.begin()+param2);
 				controlPlayer--;
 				while (controlPlayer>=numClients){
 					controlPlayer--;
@@ -581,6 +595,7 @@ void Client::ShutDownClient()
 {
 	std::cout << "Cerrando cliente\n";
 	arrayTipoCorredor.erase(arrayTipoCorredor.begin()+controlPlayer);
+	arrayReady.erase(arrayReady.begin()+controlPlayer);
 	typeID = ID_PLAYER_DISCONNECT;
 	RakNet::BitStream bsOut;
 	bsOut.Write(typeID);
@@ -650,6 +665,9 @@ vector<int> Client::getArrayTipoCorredor(){
 }
 int Client::getTipoCorredor(int i){
 	return arrayTipoCorredor.at(i);
+}
+vector<int> Client::getArrayReady(){
+	return arrayReady;
 }
 void Client::PlayerAction(){
 	/*int estado1 = players.at(numPlayers-1)->getEstados()->getEstadoMovimiento();

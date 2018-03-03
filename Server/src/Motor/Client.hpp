@@ -40,6 +40,7 @@ public:
 	int getNumClients();
 	int getMaxPlayers();
 	vector<int> getArrayTipoCorredor();
+	vector<int> getArrayReady();
 	int getTipoCorredor(int i);
 	bool getStarted();
 
@@ -76,7 +77,7 @@ private:
 	bool started;
 	bool pressed;
 	vector<int> arrayTipoCorredor;
-	
+	vector<int> arrayReady;
 
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 

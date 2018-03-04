@@ -620,6 +620,7 @@ void Client::SpawnPlayer()
 {
 	if (!spawned)
 	{
+		/*
 		vector3df pos(10, 20, 300);
 		player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
 		vector3df posicion;
@@ -641,6 +642,7 @@ void Client::SpawnPlayer()
 		controlPlayer = numPlayers;
 		numPlayers++;
 		spawned = true;
+		*/
 	}
 }
 

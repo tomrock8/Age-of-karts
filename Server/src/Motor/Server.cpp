@@ -177,14 +177,15 @@ void Server::ReceivePackets()
 
 		//un nuevo cliente se ha conectado al servidor
 		case ID_NEW_INCOMING_CONNECTION:
-			std::cout << "ID_NEW_INCOMING_CONNECTION\n";
-			typeID = ID_LOAD_CURRENT_CLIENTS;
+			std::cout << "ID_NEW_INCOMING_CONNECTION\n";			
 			numConnections=10;
 			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
 			id=numConnections;
 			std::cout << "Numero de conexiones actuales: " << id << std::endl;
 			arrayTipoCorredor.push_back(3);		//inicializamos los vectores de ready y tipo
 			arrayReady.push_back(0);
+			cout<<"HE CREADO LOS ARRAYS EN EL SERVIDOR\n";
+			typeID = ID_LOAD_CURRENT_CLIENTS;
 			bsOut.Write(typeID);
 			bsOut.Write(id);
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
@@ -244,6 +245,7 @@ void Server::ReceivePackets()
 			id=numConnections;
 			bsOut.Write(typeID);
 			bsOut.Write(id);
+			bsOut.Write(arrayTipoCorredor.size()-1);
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 
 

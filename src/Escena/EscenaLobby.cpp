@@ -143,7 +143,7 @@ void EscenaLobby::update() {
 					texto += "\n\n Todos listos. Pulse espacio para iniciar la partida\n";
 				}else{
 					if (checkReadyMe){
-						texto += "\n\n Esperando a los demás jugadores (Pulsa espacio para cancelar)\n";
+						texto += "\n\n Esperando a los demas jugadores (Pulsa espacio para cancelar)\n";
 					}else{
 						texto += "\n\n Pulsa espacio para indicar que estas listo\n";
 					}
@@ -151,7 +151,7 @@ void EscenaLobby::update() {
 				
 			}else{	//no host
 				if (checkReadyMe){
-					texto += "\n\n Esperando a los demás jugadoress (Pulsa espacio para cancelar)\n";
+					texto += "\n\n Esperando a los demas jugadores (Pulsa espacio para cancelar)\n";
 				}else{
 					texto += "\n\n Pulsa espacio para indicar que estas listo\n";	
 				}

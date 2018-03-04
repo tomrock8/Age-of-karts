@@ -88,10 +88,10 @@ void Client::ClientStartup()
 	//un mensaje de "connection attempt failed" por terminal
 	RakAssert(car == RakNet::CONNECTION_ATTEMPT_STARTED);
 
-	//si todo el proceso tiene exito, se avisa al usuario de que el cliente se ha creado y conectado al servidor
-	std::cout << "Cliente creado!\n";
 	arrayTipoCorredor.push_back(3);
 	arrayReady.push_back(0);
+	//si todo el proceso tiene exito, se avisa al usuario de que el cliente se ha creado y conectado al servidor
+	std::cout << "Cliente creado!\n";
 }
 
 /*======================================================================
@@ -325,10 +325,12 @@ int Client::ReceivePackets()
 				//cambiamos el valor de ready en el cliente
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(id);
-				if (arrayReady.at(id)==0){
-					arrayReady.at(id)=1;
-				}else{
-					arrayReady.at(id)=0;
+				if (id!=-1 && id<arrayReady.size()){
+					if (arrayReady.at(id)==0){
+						arrayReady.at(id)=1;
+					}else{
+						arrayReady.at(id)=0;
+					}
 				}
 				
 			break;
@@ -389,13 +391,15 @@ int Client::ReceivePackets()
 			//Actualiza los clientes conectados en el servidor para cambiar los datos del lobby
 			case ID_LOAD_CURRENT_CLIENTS:
 				cout << "ID_LOAD_CURRENT_CLIENTS\n";
-				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				param=numClients;
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(numClients);
 				
-				if (param<numClients && arrayTipoCorredor.size()<numClients){		//si el numclientes recibido es mayor que el que habia sumamos un cliente a los vectores
+				cout<<"HE LLEGADO A CLIENTE\n";
+				if (param<numClients && arrayTipoCorredor.size()<numClients && arrayReady.size()<numClients){		//si el numclientes recibido es mayor que el que habia sumamos un cliente a los vectores
 					arrayTipoCorredor.push_back(3);
 					arrayReady.push_back(0);
+					cout<<"HE CREADO LOS ARRAYS EN EL CLIENTE\n";
 				}else if (param>numClients){		//si el numero de clientes recibido es menor que el que habia borramos clientes de los vectores y actualizamos los contadores de jugador
 					bsIn.Read(param2);
 					arrayTipoCorredor.erase(arrayTipoCorredor.begin()+param2);

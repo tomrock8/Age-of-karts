@@ -90,12 +90,12 @@ void EscenaLobby::update() {
 			if (id_player<client->getArrayReady().size()){		//comprobamos que la id del jugador no supere el tamnyo del vector de ready
 				if (client->getArrayReady().at(id_player)==0 && client->getArrayReady().size()>1){		//si estas no ready y hay mas jugadires 
 					for (int c=0;c<client->getArrayReady().size();c++){
-						if (client->getArrayReady().at(c)==0 && c!=0){	//comprobamos si han aceptado todos menos el host
+						if (client->getArrayReady().at(c)==0){	//comprobamos si han aceptado todos menos el host
 							bc=true;
 							break;
 						}	
 					}
-					if (bc==false && id_player==0){		//si todos los  clientes han aceptado menos tu y eres host
+					if (bc==false){		//si todos los  clientes han aceptado menos tu y eres host
 						texto += " [Listo] ";
 					}else{		//si no han aceptado todos
 						texto += " [No listo] ";
@@ -121,11 +121,7 @@ void EscenaLobby::update() {
 						texto += " (Host)";
 					}
 					if (client->getArrayReady().at(i)==0){	//jugador no listo
-						if (bc==false && i==0){	//no listo pero es host y todos los demas han aceptado
-							texto += " [Listo] ";
-						}else{
 							texto += " [No listo] ";
-						}
 					}else{	//jugador listo
 						texto += " [Listo] ";
 					}

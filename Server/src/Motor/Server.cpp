@@ -305,6 +305,21 @@ void Server::ReceivePackets()
 						break;
 					}
 				}
+				if (arrayReady.size()>1 && arrayReady.at(id)==0){
+					arrayReady.at(id)=1;
+					typeID = ID_READY_CLIENT;
+					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
+					bsOut.Write(id);
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+					break;
+				}else if (arrayReady.size()>1 && arrayReady.at(id)==1 && parambool==true){
+					arrayReady.at(id)=0;
+					typeID = ID_READY_CLIENT;
+					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
+					bsOut.Write(id);
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+					break;
+				}
 				if (parambool==false && arrayReady.size()>0){		//si todos estan listos y ha recorrido el bucle empieza la carrera
 					typeID = ID_RACE_START;
 					bsOut.Write(typeID);

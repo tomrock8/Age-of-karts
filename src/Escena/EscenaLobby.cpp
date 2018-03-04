@@ -68,11 +68,15 @@ void EscenaLobby::update() {
 	}
 	if (iniciado) {
 		client->ReceivePackets();
-		
+
+		bool checkReady=true;
+		bool checkReadyMe=true;
+		bool bc=false;
 		int size=client->getArrayTipoCorredor().size();
 		vector<int> array=client->getArrayTipoCorredor();
 		int id_player=client->getControlPlayer();
-		//cout<<"miau"<<size<<endl;
+
+
 		if (client->getConnected()) {
 			conectado = true;
 			texto = L"Conexion establecida!\n";
@@ -83,21 +87,24 @@ void EscenaLobby::update() {
 			texto += to_string(client->getMaxPlayers()).c_str();
 			texto += "\nEres el Jugador ";
 			texto += to_string(id_player).c_str();
+		
 			if (id_player==0){
 				texto += " (Host)";
 			}
-			bool bc=false;
+			
 			if (id_player<client->getArrayReady().size()){		//comprobamos que la id del jugador no supere el tamnyo del vector de ready
-				if (client->getArrayReady().at(id_player)==0 && client->getArrayReady().size()>1){		//si estas no ready y hay mas jugadires 
+				if (client->getArrayReady().at(id_player)==0 && client->getArrayReady().size()>1){		//si estas no ready y hay mas jugadores 
 					for (int c=0;c<client->getArrayReady().size();c++){
-						if (client->getArrayReady().at(c)==0){	//comprobamos si han aceptado todos menos el host
+						if (client->getArrayReady().at(c)==0){	//comprobamos si han aceptado todos
 							bc=true;
 							break;
 						}	
 					}
-					if (bc==false){		//si todos los  clientes han aceptado menos tu y eres host
+					if (bc==false){		//si todos los  clientes han aceptado
 						texto += " [Listo] ";
 					}else{		//si no han aceptado todos
+						checkReady=false;
+						checkReadyMe=false;
 						texto += " [No listo] ";
 					}
 					
@@ -107,12 +114,11 @@ void EscenaLobby::update() {
 			}
 			texto += "\n <-- Selecciona Personaje -->: " ;
 			
-			//if (size>client->getControlPlayer())
-			//cout<<client->getControlPlayer()<<endl;
 			if (id_player<size && id_player!=-1)
 			mostrarTipoPersonaje(id_player);
-			//texto += to_string(client->getTipoCorredor(client->getControlPlayer())).c_str();
+			
 			texto += "\n";
+			//recorremos todos los demas jugadores que estan en la lobby
 			for (int i=0;i<size;i++){
 				if (i!=id_player){
 					texto += "\nJugador ";
@@ -121,7 +127,8 @@ void EscenaLobby::update() {
 						texto += " (Host)";
 					}
 					if (client->getArrayReady().at(i)==0){	//jugador no listo
-							texto += " [No listo] ";
+						checkReady=false;
+						texto += " [No listo] ";
 					}else{	//jugador listo
 						texto += " [Listo] ";
 					}
@@ -130,13 +137,31 @@ void EscenaLobby::update() {
 					
 				}
 			}
-			texto += "\n\n Pulse espacio para iniciar la partida\n";
-			
+			// Parte en la que se comprueba la situacion antes de empezar la apartida
+			if (id_player==0){	//host
+				if (checkReady){
+					texto += "\n\n Todos listos. Pulse espacio para iniciar la partida\n";
+				}else{
+					if (checkReadyMe){
+						texto += "\n\n Esperando a los demás jugadores (Pulsa espacio para cancelar)\n";
+					}else{
+						texto += "\n\n Pulsa espacio para indicar que estas listo\n";
+					}
+				}
+				
+			}else{	//no host
+				if (checkReadyMe){
+					texto += "\n\n Esperando a los demás jugadoress (Pulsa espacio para cancelar)\n";
+				}else{
+					texto += "\n\n Pulsa espacio para indicar que estas listo\n";	
+				}
+				
+			}
 		}
 	}
 
 }
-void EscenaLobby::mostrarTipoPersonaje(int i){
+void EscenaLobby::mostrarTipoPersonaje(int i){		//traduce de int a texto (tipo de personaje)
 	if (client->getArrayTipoCorredor().at(i)==0){
 		texto += "GLADIADOR ";	
 	}else if (client->getArrayTipoCorredor().at(i)==1){

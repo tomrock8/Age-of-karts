@@ -34,6 +34,7 @@ public:
 	int ReceivePackets();
 	void SpawnPlayer();
 	
+	//METODOS GET
 	int getControlPlayer();
 	bool getConnected();
 	int getNumPlayers();
@@ -44,6 +45,7 @@ public:
 	int getTipoCorredor(int i);
 	bool getStarted();
 
+	//METODOS SET
 	void setNetloaded(bool b);
 	
 private:

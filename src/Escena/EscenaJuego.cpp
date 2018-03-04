@@ -333,7 +333,7 @@ void EscenaJuego::update() {
 				//client->PlayerMovement();
 				tiempoRefresco = clock();
 			}
-			client->PlayerAction();
+			//client->PlayerAction();
 			client->UpdateNetworkKeyboard();
 		}
 	}

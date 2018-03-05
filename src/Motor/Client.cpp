@@ -579,7 +579,7 @@ int Client::ReceivePackets()
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(playerDisconnect);
 				if (started) {
-					players.erase(players.begin() + playerDisconnect);
+					//players.erase(players.begin() + playerDisconnect);
 					numPlayers--;
 					jugadores->decrementarJugadores();
 				}

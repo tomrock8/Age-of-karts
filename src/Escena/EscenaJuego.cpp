@@ -134,7 +134,7 @@ void EscenaJuego::init() {
 		pos2[5].setX(-30);
 		pos2[5].setY(0);
 		pos2[5].setZ(290);
-		int numClients = client->getNumClients();
+		int numClients = client->getClientes().size();
 		Corredor::tipo_jugador tj;
 		for(int i = 0; i< numClients; i++){		
 			if (client->getClientes().at(i).tipoCorredor == 0){

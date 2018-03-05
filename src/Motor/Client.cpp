@@ -368,9 +368,9 @@ int Client::ReceivePackets()
 				bsIn.Read(id);
 				if (id!=-1 && id<clientes.size()){
 					if (clientes.at(id).ready){
-						clientes.at(id).ready= true;
+						clientes.at(id).ready= false;
 					}else{
-						clientes.at(id).ready = false;
+						clientes.at(id).ready = true;
 					}
 				}
 				

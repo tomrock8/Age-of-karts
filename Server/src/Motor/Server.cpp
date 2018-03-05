@@ -314,20 +314,20 @@ void Server::ReceivePackets()
 				bsOut.Write(id);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			}else if(id==0){		//si eres host
-				for (int n=0;n<clientes.size();n++){		//comprobamos si todos los corredores menos el host estan listos
-					if (!clientes.at(id).ready && n!=0){
+				for (int n=1;n<clientes.size();n++){		//comprobamos si todos los corredores menos el host estan listos
+					if (!clientes.at(id).ready){
 						parambool=true;
 						break;
 					}
 				}
-				if (clientes.size()>1 && !clientes.at(id).ready){
+				if (clientes.size()>1 && !clientes.at(id).ready){ //Si no estas solo y no estas listo
 					clientes.at(id).ready=true;
 					typeID = ID_READY_CLIENT;
 					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
 					bsOut.Write(id);
 					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 					break;
-				}else if (clientes.size()>1 && clientes.at(id).ready && parambool==true){
+				}else if (clientes.size()>1 && clientes.at(id).ready && parambool==true){ //Si no estas solo y estas listo, pero algun cliente no
 					clientes.at(id).ready = false;
 					typeID = ID_READY_CLIENT;
 					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
@@ -341,8 +341,18 @@ void Server::ReceivePackets()
 					numConnections=10;
 					server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
 					id=numConnections;
-					for(int i= 0; i<id; i++){
-						jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
+					Corredor::tipo_jugador tj;
+					for(int i= 0; i<id; i++){		
+						if (clientes.at(i).tipoCorredor == 0){
+							tj=Corredor::tipo_jugador::GLADIADOR;
+						}else if (clientes.at(i).tipoCorredor == 1){
+							tj=Corredor::tipo_jugador::PIRATA;
+						}else if (clientes.at(i).tipoCorredor == 2){
+							tj=Corredor::tipo_jugador::VIKINGO;
+						}else if (clientes.at(i).tipoCorredor == 3){
+							tj=Corredor::tipo_jugador::CHINO;
+						}
+						jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
 						jugador->setID(i);
 						players.push_back(jugador);
 						jugadores->aumentarJugadores();

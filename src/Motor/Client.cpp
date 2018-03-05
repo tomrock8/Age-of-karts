@@ -578,11 +578,15 @@ int Client::ReceivePackets()
 
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(playerDisconnect);
-				players.erase(players.begin() + playerDisconnect);
-				numPlayers--;
-				jugadores->decrementarJugadores();
+				if (started) {
+					players.erase(players.begin() + playerDisconnect);
+					numPlayers--;
+					jugadores->decrementarJugadores();
+				}
 				if(controlPlayer>playerDisconnect)	//Si el jugador controlado por este cliente esta por arriba del jugador eliminado se debe reducir
 					controlPlayer--;				//controlPlayer para no cambiar de jugador con la reordenacion del array
+
+				clientes.erase(clientes.begin() + playerDisconnect);
 
 				break;
 

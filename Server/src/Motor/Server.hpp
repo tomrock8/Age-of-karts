@@ -50,7 +50,7 @@ class Server
         void refreshServer();
         int getCommands();
         void GetConnectionList();
-        void playerDisconnection(int playerDisconnect);
+        void playerDisconnection(std::string str_param);
         void setStarted(bool b);
         bool getStarted();
         

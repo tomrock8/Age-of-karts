@@ -172,8 +172,10 @@ void Server::ReceivePackets()
 
 		//uno de los clientes se ha desconectado del servidor
 		case ID_DISCONNECTION_NOTIFICATION:
-			std::cout << "ID_DISCONNECTION_NOTIFICATION de " << p->systemAddress.ToString(true) << std::endl;
+			paramString = p->systemAddress.ToString(true);
+			std::cout << "ID_DISCONNECTION_NOTIFICATION de " << paramString << std::endl;
 			std::cout<< "NumPlayers: " << numPlayers << std::endl;
+			playerDisconnection(paramString);
 			break;
 
 		//el cliente ya esta conectado (en caso de realizar un connect)
@@ -254,26 +256,7 @@ void Server::ReceivePackets()
 			paramString = p->systemAddress.ToString(true);
 			std::cout << "ID_CONNECTION_LOST de " << p->systemAddress.ToString(true) << std::endl;
 			
-			for(int i= 0; i< clientes.size(); i++){
-				if(paramString.compare(clientes.at(i).ip) == 0){
-					param = i;
-					break;
-				}
-			}
-			std::cout << "Jugador eliminado: " << param << " / " <<numPlayers << std::endl;
-			//param es la id del jugador desconectado
-			clientes.erase(clientes.begin()+param);
-			
-			if(started){
-				//Borrar players tambien
-				players.erase(players.begin()+param);
-			}
-
-			typeID = ID_PLAYER_DISCONNECT;
-			bsOut.Write(typeID);
-			bsOut.Write(param);
-			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-			
+			playerDisconnection(paramString);
 
 			break;
 
@@ -659,7 +642,7 @@ int Server::getCommands(){
 			int index;
 			std::cout << "Introduzca el indice para kick: \n";
 			std::cin>>index;
-			playerDisconnection(index);
+			playerDisconnection(clientes.at(index).ip);
 			server->CloseConnection(server->GetSystemAddressFromIndex(index), true, 0);
 		}
 	}
@@ -677,8 +660,30 @@ void Server::GetConnectionList(){
 	}
 }
 
-void Server::playerDisconnection(int playerDisconnect){
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+void Server::playerDisconnection(std::string str_param){
+	int param;
+	RakNet::BitStream bsOut;
+	for(int i= 0; i< clientes.size(); i++){
+		if(str_param.compare(clientes.at(i).ip) == 0){
+			param = i;
+			break;
+		}
+	}
+	std::cout << "Jugador eliminado: " << param << " / " <<clientes.size() << std::endl;
+	//param es la id del jugador desconectado
+	clientes.erase(clientes.begin()+param);
+	
+	if(started){
+		//Borrar players tambien
+		players.erase(players.begin()+param);
+	}
+
+	typeID = ID_PLAYER_DISCONNECT;
+	bsOut.Write(typeID);
+	bsOut.Write(param);
+	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+	
+	/*GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	players = jugadores->getJugadores();
 	RakNet::BitStream bsOut;	
 	players.at(playerDisconnect)->~Corredor();					   //|mensaje de salida	
@@ -691,6 +696,7 @@ void Server::playerDisconnection(int playerDisconnect){
 	bsOut.Write(typeID);
 	bsOut.Write(playerDisconnect);
 	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	*/
 }
 
 void Server::setStarted(bool b){

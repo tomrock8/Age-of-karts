@@ -88,8 +88,7 @@ void Client::ClientStartup()
 	//un mensaje de "connection attempt failed" por terminal
 	RakAssert(car == RakNet::CONNECTION_ATTEMPT_STARTED);
 
-	arrayTipoCorredor.push_back(3);
-	arrayReady.push_back(0);
+
 	//si todo el proceso tiene exito, se avisa al usuario de que el cliente se ha creado y conectado al servidor
 	std::cout << "Cliente creado!\n";
 }
@@ -404,7 +403,6 @@ int Client::ReceivePackets()
 					bsIn.Read(param2);
 					arrayTipoCorredor.erase(arrayTipoCorredor.begin()+param2);
 					arrayReady.erase(arrayReady.begin()+param2);
-					controlPlayer--;
 					while (controlPlayer>=numClients){
 						controlPlayer--;
 					}

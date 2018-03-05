@@ -2,9 +2,16 @@
 #include <iostream>
 #include "GestorJugadores.hpp"
 #include <ctime>
+#include <vector>
 
 #define MAX_CLIENTS 4
 #define MAX_PLAYERS 6
+
+struct structClientes{
+    std::string ip;
+    int tipoCorredor;
+    bool ready;
+};
 
 class Server
 {
@@ -27,6 +34,9 @@ class Server
         bool spawned;
 
         bool started;
+        vector<int> arrayReady;
+        vector<int> arrayTipoCorredor;
+        vector<structClientes> clientes;
 
         unsigned char GetPacketIdentifier(RakNet::Packet *p);
         void DebugServerInfo();
@@ -40,7 +50,7 @@ class Server
         void refreshServer();
         int getCommands();
         void GetConnectionList();
-        void playerDisconnection(int playerDisconnect);
+        void playerDisconnection(std::string str_param);
         void setStarted(bool b);
         bool getStarted();
         

@@ -40,6 +40,9 @@ void CorredorJugador::movimiento() {
 		girarIzquierda();
 		comprobadorMovimiento = true;
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+			recolocarWaypoint();
+	}
 
 	if (!comprobadorMovimiento) {
 		if (!turboActivado) {

@@ -153,7 +153,13 @@ void Server::ReceivePackets()
 		int param2;
 		bool reset = false;
 		bool lanzar = false;
+		bool parambool = false;
 
+		RakNet::RakString paramRakString;
+		std::string paramString;
+			
+		structClientes client;	
+		
 		CorredorRed *jugador;
 		
 		unsigned short numConnections;
@@ -166,9 +172,10 @@ void Server::ReceivePackets()
 
 		//uno de los clientes se ha desconectado del servidor
 		case ID_DISCONNECTION_NOTIFICATION:
-			std::cout << "ID_DISCONNECTION_NOTIFICATION de " << p->systemAddress.ToString(true) << std::endl;
+			paramString = p->systemAddress.ToString(true);
+			std::cout << "ID_DISCONNECTION_NOTIFICATION de " << paramString << std::endl;
 			std::cout<< "NumPlayers: " << numPlayers << std::endl;
-			
+			playerDisconnection(paramString);
 			break;
 
 		//el cliente ya esta conectado (en caso de realizar un connect)
@@ -179,14 +186,25 @@ void Server::ReceivePackets()
 		//un nuevo cliente se ha conectado al servidor
 		case ID_NEW_INCOMING_CONNECTION:
 			std::cout << "ID_NEW_INCOMING_CONNECTION\n";
-			typeID = ID_LOAD_CURRENT_CLIENTS;
+			client.ip = p->systemAddress.ToString(true);
+			client.tipoCorredor = 3;
+			client.ready = false;
+			clientes.push_back(client);
 			numConnections=10;
 			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
-			id=numConnections;
-			std::cout << "Numero de conexiones actuales: " << id << std::endl;
+			param=numConnections;
+			std::cout << "Numero de conexiones actuales: " << param << std::endl;
+			typeID = ID_LOAD_CURRENT_CLIENTS;
 			bsOut.Write(typeID);
-			bsOut.Write(id);
+			bsOut.Write(param);
+			for(int i = 0; i<clientes.size(); i++){
+				paramRakString = clientes.at(i).ip.c_str();
+				bsOut.Write(paramRakString);
+				bsOut.Write(clientes.at(i).tipoCorredor);
+				bsOut.Write(clientes.at(i).ready);
+			}
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			
 			/*
 			typeID = ID_LOAD_CURRENT_PLAYERS;
 			bsOut.Write(typeID);
@@ -235,15 +253,10 @@ void Server::ReceivePackets()
 
 		//se ha perdido la conexion con uno de los clientes
 		case ID_CONNECTION_LOST:
+			paramString = p->systemAddress.ToString(true);
 			std::cout << "ID_CONNECTION_LOST de " << p->systemAddress.ToString(true) << std::endl;
-			typeID = ID_LOAD_CURRENT_CLIENTS;
-			numConnections=10;
-			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
-			id=numConnections;
-			bsOut.Write(typeID);
-			bsOut.Write(id);
-			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-
+			
+			playerDisconnection(paramString);
 
 			break;
 
@@ -261,28 +274,90 @@ void Server::ReceivePackets()
 		case ID_CONNECTION_REQUEST_ACCEPTED:
 			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
 			break;
-		
+		case ID_CHANGE_CHARACTER:
+			std::cout<<"ID_CHANGE_CHARACTER_SERVER\n";
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			bsIn.Read(parambool);
+			if (id<arrayTipoCorredor.size() && id!=-1){
+			param=arrayTipoCorredor.at(id);	//a partir de ahora param es el tipo de jugador
+			if (param==0 && parambool==false){
+				param=3;
+			}else if (param==3 && parambool==true){
+				param=0;
+			}else if (parambool){
+				param++;
+			}else{
+				param--;
+			}
+			clientes.at(id).tipoCorredor=param;
+			}
+			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			parambool=false;
+			break;
 		case ID_RACE_START:
 			std::cout<<"ID_RACE_START\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
-			if(id==0){
-				typeID = ID_RACE_START;
-				bsOut.Write(typeID);
-				numConnections=10;
-				server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
-				id=numConnections;
-				for(int i= 0; i<id; i++){
-					jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
-					jugador->setID(i);
-					players.push_back(jugador);
-					jugadores->aumentarJugadores();
+			if (id!=0){		//si no eres host puedes alternar entre listo o no listo
+				if (clientes.at(id).ready){
+					clientes.at(id).ready=false;
+				}else{
+					clientes.at(id).ready=true;
 				}
-				started=true;
+				typeID = ID_READY_CLIENT;
+				bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
+				bsOut.Write(id);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-			}else{
-				std::cout << "No eres host\n";
+			}else if(id==0){		//si eres host
+				for (int n=1;n<clientes.size();n++){		//comprobamos si todos los corredores menos el host estan listos
+					if (!clientes.at(id).ready){
+						parambool=true;
+						break;
+					}
+				}
+				if (clientes.size()>1 && !clientes.at(id).ready){ //Si no estas solo y no estas listo
+					clientes.at(id).ready=true;
+					typeID = ID_READY_CLIENT;
+					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
+					bsOut.Write(id);
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+					break;
+				}else if (clientes.size()>1 && clientes.at(id).ready && parambool==true){ //Si no estas solo y estas listo, pero algun cliente no
+					clientes.at(id).ready = false;
+					typeID = ID_READY_CLIENT;
+					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
+					bsOut.Write(id);
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+					break;
+				}
+				if (parambool==false && clientes.size()>0){		//si todos estan listos y ha recorrido el bucle empieza la carrera
+					typeID = ID_RACE_START;
+					bsOut.Write(typeID);
+					numConnections=10;
+					server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+					id=numConnections;
+					Corredor::tipo_jugador tj;
+					for(int i= 0; i<id; i++){		
+						if (clientes.at(i).tipoCorredor == 0){
+							tj=Corredor::tipo_jugador::GLADIADOR;
+						}else if (clientes.at(i).tipoCorredor == 1){
+							tj=Corredor::tipo_jugador::PIRATA;
+						}else if (clientes.at(i).tipoCorredor == 2){
+							tj=Corredor::tipo_jugador::VIKINGO;
+						}else if (clientes.at(i).tipoCorredor == 3){
+							tj=Corredor::tipo_jugador::CHINO;
+						}
+						jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
+						jugador->setID(i);
+						players.push_back(jugador);
+						jugadores->aumentarJugadores();
+					}
+					started=true;
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+				}
 			}
+			parambool=false;
 			break;	
 
 		case ID_SEND_KEY_PRESS:
@@ -296,6 +371,12 @@ void Server::ReceivePackets()
 			
 			players.at(id)->getEstados()->setEstadoMovimiento(param);
 			players.at(id)->getEstados()->setDireccionMovimiento(param2);
+			if(reset){
+				players.at(id)->recolocarWaypoint();
+			}
+			if(lanzar){
+				players.at(id)->usarObjetos();
+			}
 			//player[id]->setAccion(param);
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;
@@ -412,23 +493,35 @@ void Server::ReceivePackets()
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 			*/
 			break;
-
+	
 		case ID_PLAYER_DISCONNECT:
 			std::cout << "Borrando player\n";
 			int playerDisconnect;
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(playerDisconnect);
 			std::cout << "Jugador eliminado: " << playerDisconnect << " / " <<numPlayers << std::endl;
-
+			clientes.erase(clientes.begin()+playerDisconnect);
 			//playerDisconnection(playerDisconnect);
+			if(started){
+				//Borrar players tambien
+
+			}
 			typeID = ID_LOAD_CURRENT_CLIENTS;
 			numConnections=10;
 			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
-			id=numConnections;
+			param=numConnections;
+			std::cout << "Numero de conexiones actuales: " << param << std::endl;
+			typeID = ID_LOAD_CURRENT_CLIENTS;
 			bsOut.Write(typeID);
-			bsOut.Write(id);
+			bsOut.Write(param);
+			for(int i = 0; i<clientes.size(); i++){
+				paramRakString = clientes.at(i).ip.c_str();
+				bsOut.Write(paramRakString);
+				bsOut.Write(clientes.at(i).tipoCorredor);
+				bsOut.Write(clientes.at(i).ready);
+			}
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-
+			
 			std::cout << "Jugador Borrado\n";
 
 			break;
@@ -479,32 +572,9 @@ void Server::ShutDownServer()
 //=======================================================================================================================
 void Server::refreshServer()
 {
-	//std::cout << "Refresco\n";
-
-	//tipo de RakNet para el mensaje de salida
-	//RakNet::BitStream bsOut;
-
-	//vector de posicion de Irrlicht
-	//float* posicion;
-
-	//ID del mensaje que notifica el refresco
-	//typeID = ID_REFRESH_SERVER;
-
-	//se escribe el tipo de ID en el mensaje de salida
-	//bsOut.Write(typeID);
-
-	//std::cout << numPlayers << std::endl;
-
-	//entidades a refrescar
-	/*for (int i = 0; i < numPlayers; i++)
-	{
-		posicion = player[i]->getPosition();
-		bsOut.Write(posicion[0]);
-		bsOut.Write(posicion[1]);
-		bsOut.Write(posicion[2]);
-	}*/
 	float *pos = new float[3];
 	float *ori = new float[3];
+	int tipoObj;
 
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	players = jugadores->getJugadores();
@@ -525,12 +595,15 @@ void Server::refreshServer()
 		ori[1] = players.at(i)->getNodo()->getRotation().Y;
 		ori[2] = players.at(i)->getNodo()->getRotation().Z;
 
+		tipoObj = players.at(i)->getTipoObj();
+
 		bsOut.Write(pos[0]);
 		bsOut.Write(pos[1]);
 		bsOut.Write(pos[2]);
 		bsOut.Write(ori[0]);
 		bsOut.Write(ori[1]);
 		bsOut.Write(ori[2]);
+		bsOut.Write(tipoObj);
 		bsOut.Write(i);
 	}
 	//std::cout << "Control: " << controlPlayer << std::endl;
@@ -569,7 +642,7 @@ int Server::getCommands(){
 			int index;
 			std::cout << "Introduzca el indice para kick: \n";
 			std::cin>>index;
-			playerDisconnection(index);
+			playerDisconnection(clientes.at(index).ip);
 			server->CloseConnection(server->GetSystemAddressFromIndex(index), true, 0);
 		}
 	}
@@ -587,8 +660,30 @@ void Server::GetConnectionList(){
 	}
 }
 
-void Server::playerDisconnection(int playerDisconnect){
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+void Server::playerDisconnection(std::string str_param){
+	int param;
+	RakNet::BitStream bsOut;
+	for(int i= 0; i< clientes.size(); i++){
+		if(str_param.compare(clientes.at(i).ip) == 0){
+			param = i;
+			break;
+		}
+	}
+	std::cout << "Jugador eliminado: " << param << " / " <<clientes.size() << std::endl;
+	//param es la id del jugador desconectado
+	clientes.erase(clientes.begin()+param);
+	
+	if(started){
+		//Borrar players tambien
+		players.erase(players.begin()+param);
+	}
+
+	typeID = ID_PLAYER_DISCONNECT;
+	bsOut.Write(typeID);
+	bsOut.Write(param);
+	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+	
+	/*GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	players = jugadores->getJugadores();
 	RakNet::BitStream bsOut;	
 	players.at(playerDisconnect)->~Corredor();					   //|mensaje de salida	
@@ -601,6 +696,7 @@ void Server::playerDisconnection(int playerDisconnect){
 	bsOut.Write(typeID);
 	bsOut.Write(playerDisconnect);
 	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	*/
 }
 
 void Server::setStarted(bool b){

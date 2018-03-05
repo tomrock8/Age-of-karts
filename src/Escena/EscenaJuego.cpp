@@ -135,8 +135,18 @@ void EscenaJuego::init() {
 		pos2[5].setY(0);
 		pos2[5].setZ(290);
 		int numClients = client->getNumClients();
-		for(int i = 0; i< numClients; i++){
-			jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
+		Corredor::tipo_jugador tj;
+		for(int i = 0; i< numClients; i++){		
+			if (client->getClientes().at(i).tipoCorredor == 0){
+				tj=Corredor::tipo_jugador::GLADIADOR;
+			}else if (client->getClientes().at(i).tipoCorredor == 1){
+				tj=Corredor::tipo_jugador::PIRATA;
+			}else if (client->getClientes().at(i).tipoCorredor == 2){
+				tj=Corredor::tipo_jugador::VIKINGO;
+			}else if (client->getClientes().at(i).tipoCorredor == 3){
+				tj=Corredor::tipo_jugador::CHINO;
+			}
+			jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
 			jugador->setID(i);
 			pj.push_back(jugador);
 			jugadores->aumentarJugadores();
@@ -323,7 +333,7 @@ void EscenaJuego::update() {
 				//client->PlayerMovement();
 				tiempoRefresco = clock();
 			}
-			client->PlayerAction();
+			//client->PlayerAction();
 			client->UpdateNetworkKeyboard();
 		}
 	}

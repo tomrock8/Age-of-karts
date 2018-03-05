@@ -68,17 +68,109 @@ void EscenaLobby::update() {
 	}
 	if (iniciado) {
 		client->ReceivePackets();
+
+		bool checkReady=true;
+		bool checkReadyMe=true;
+		bool bc=false;
+		vector<structClientes> clientes=client->getClientes();
+		int size=clientes.size();
+		int id_player=client->getControlPlayer();
+
+
 		if (client->getConnected()) {
 			conectado = true;
 			texto = L"Conexion establecida!\n";
-			texto += "Jugadores conectados: ";
+			 
+			texto += "\nJugadores conectados: ";
 			texto += to_string(client->getNumClients()).c_str(); 
 			texto += " / " ;
 			texto += to_string(client->getMaxPlayers()).c_str();
-			texto += "\n Pulse espacio para iniciar la partida\n";
+			texto += "\nEres el Jugador ";
+			texto += to_string(id_player).c_str();
+		
+			if (id_player==0){
+				texto += " (Host)";
+			}
+			
+			if (id_player < clientes.size()){		//comprobamos que la id del jugador no supere el tamnyo del vector de ready
+				if (clientes.at(id_player).ready==false && clientes.size() > 1){		//si estas no ready y hay mas jugadores 
+					for (int c=0;c<clientes.size();c++){
+						if (clientes.at(c).ready==0){	//comprobamos si han aceptado todos
+							bc=true;
+							break;
+						}	
+					}
+					if (bc==false){		//si todos los  clientes han aceptado
+						texto += " [Listo] ";
+					}else{		//si no han aceptado todos
+						checkReady=false;
+						checkReadyMe=false;
+						texto += " [No listo] ";
+					}
+					
+				}else{		///si estas solo tu 
+					texto += " [Listo] ";
+				}
+			}
+			texto += "\n <-- Selecciona Personaje -->: " ;
+			
+			if (id_player<size && id_player!=-1)
+			mostrarTipoPersonaje(id_player);
+			
+			texto += "\n";
+			//recorremos todos los demas jugadores que estan en la lobby
+			for (int i=0;i<size;i++){
+				if (i!=id_player){
+					texto += "\nJugador ";
+					texto += to_string(i).c_str();
+					if (i==0){
+						texto += " (Host)";
+					}
+					if (clientes.at(i).ready==0){	//jugador no listo
+						checkReady=false;
+						texto += " [No listo] ";
+					}else{	//jugador listo
+						texto += " [Listo] ";
+					}
+					texto += " - Personaje: ";
+					mostrarTipoPersonaje(i);
+					
+				}
+			}
+			// Parte en la que se comprueba la situacion antes de empezar la apartida
+			if (id_player==0){	//host
+				if (checkReady){
+					texto += "\n\n Todos listos. Pulse espacio para iniciar la partida\n";
+				}else{
+					if (checkReadyMe){
+						texto += "\n\n Esperando a los demas jugadores (Pulsa espacio para cancelar)\n";
+					}else{
+						texto += "\n\n Pulsa espacio para indicar que estas listo\n";
+					}
+				}
+				
+			}else{	//no host
+				if (checkReadyMe){
+					texto += "\n\n Esperando a los demas jugadores (Pulsa espacio para cancelar)\n";
+				}else{
+					texto += "\n\n Pulsa espacio para indicar que estas listo\n";	
+				}
+				
+			}
 		}
 	}
 
+}
+void EscenaLobby::mostrarTipoPersonaje(int i){		//traduce de int a texto (tipo de personaje)
+	if (client->getClientes().at(i).tipoCorredor == 0){
+		texto += "GLADIADOR ";	
+	}else if (client->getClientes().at(i).tipoCorredor == 1){
+		texto += "PIRATA ";
+	}else if (client->getClientes().at(i).tipoCorredor == 2){
+		texto += "VIKINGO ";
+	}else if (client->getClientes().at(i).tipoCorredor == 3){
+		texto += "GUERRERO CHINO ";
+	}
 }
 
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
@@ -89,15 +181,31 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
-	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 		if (!pressed) {
 			pressed = true;
 			if (conectado) {
 				cout << "Entro en espacio\n";
 				client->RaceStart();
+				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
+			}
+		}
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+		if (!pressed) {
+			pressed = true;
+			if (conectado) {
+				cout << "Entro en cambiar jugador izquierda\n";
+				client->ChangeCharacter(false);
+				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
+			}
+		}
+
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+		if (!pressed) {
+			pressed = true;
+			if (conectado) {
+				cout << "Entro en cambiar jugador derecha\n";
+				client->ChangeCharacter(true);
 				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 			}
 		}

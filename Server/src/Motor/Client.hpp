@@ -30,16 +30,22 @@ public:
 	void PlayerAction();
 	void PlayerSetObject(int tipo);
 	void PlayerThrowObject();
+	void ChangeCharacter(bool i);
 	int ReceivePackets();
 	void SpawnPlayer();
-
+	
+	//METODOS GET
 	int getControlPlayer();
 	bool getConnected();
 	int getNumPlayers();
 	int getNumClients();
 	int getMaxPlayers();
+	vector<int> getArrayTipoCorredor();
+	vector<int> getArrayReady();
+	int getTipoCorredor(int i);
 	bool getStarted();
 
+	//METODOS SET
 	void setNetloaded(bool b);
 	
 private:
@@ -72,6 +78,8 @@ private:
 	bool spawned;
 	bool started;
 	bool pressed;
+	vector<int> arrayTipoCorredor;
+	vector<int> arrayReady;
 
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 

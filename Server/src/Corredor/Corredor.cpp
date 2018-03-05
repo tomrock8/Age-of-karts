@@ -25,6 +25,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	vueltas = 1;
 	maxvueltas=4;
 	
+	tipojugador=tipo;
 	estado->setEstadoCarrera(PARRILLA);
 
 	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
@@ -101,14 +102,14 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	if (cuboNodo) InicializarFisicas();
 
-	setParametros(tipo);
+	setParametros();
 
 }
-void Corredor::setParametros(tipo_jugador t){
+void Corredor::setParametros(){
 
 	//cambiar parametros en funcion del tipo
 	int num=0;
-	switch (t){
+	switch (tipojugador){
 		case GLADIADOR:
 			//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
 			cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
@@ -352,6 +353,9 @@ const char* Corredor::getNombre(){
 }
 int Corredor::getID(){
 	return id;
+}
+Corredor::tipo_jugador Corredor::getTipoJugador(){
+	return tipojugador;
 }
 
 //-----------------------------//
@@ -634,6 +638,23 @@ void Corredor::setCheckItem(bool s) {
 }
 void Corredor::setPosDisparo(btVector3 s) {
 	posDisparo = s;
+}
+void Corredor::setTipoJugador(int tj){
+	switch (tj){
+
+        case 0:
+        tipojugador = GLADIADOR;
+		break;
+		case 1:
+        tipojugador = PIRATA;
+		break;
+		case 2:
+        tipojugador = VIKINGO;
+		break;
+		case 3:
+        tipojugador = CHINO;
+		break;
+	}
 }
 //-------------------------------------//
 //-------TRATAMIENTOS OBJETOS----------//
@@ -972,6 +993,19 @@ void Corredor::comprobarSueloRuedas()
 */
 }
 
+void Corredor::recolocarWaypoint(){
+	btVector3 btPos = actual->getPosicion();
+
+	btTransform trans;
+	
+	trans.setOrigin(btPos);
+	btQuaternion quaternion;
+	quaternion.setEulerZYX(actual->getRotation().getZ()* PI / 180, actual->getRotation().getY() * PI / 180, actual->getRotation().getX()* PI / 180);
+	trans.setRotation(quaternion);
+
+	CuerpoColisionChasis->setCenterOfMassTransform(trans);
+	resetFuerzas();
+}
 
 //---------------------------------------//
 //--------DEBUG TEXTO PANTALLA-----------//
@@ -1025,8 +1059,8 @@ void Corredor::update()
 		movimiento();
 		updateEstado();
 	}
-
 	updateTimerObstaculos();
+	
 	if (habilidadJugador->getHabilidadActiva())updateHabilidad();
 	
 	comprobarSueloRuedas();

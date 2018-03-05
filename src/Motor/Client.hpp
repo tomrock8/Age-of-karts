@@ -83,9 +83,7 @@ private:
 	bool started;
 	bool pressed;
 	vector<structClientes> clientes;
-	vector<int> arrayTipoCorredor;
-	vector<int> arrayReady;
-
+	
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 
 };

@@ -618,15 +618,15 @@ unsigned char Client::GetPacketIdentifier(RakNet::Packet *p)
 void Client::ShutDownClient()
 {
 	std::cout << "Cerrando cliente\n";
-	arrayTipoCorredor.erase(arrayTipoCorredor.begin()+controlPlayer);
-	arrayReady.erase(arrayReady.begin()+controlPlayer);
+	/*
+	clientes.erase(clientes.begin()+controlPlayer);
 	typeID = ID_PLAYER_DISCONNECT;
 	RakNet::BitStream bsOut;
 	bsOut.Write(typeID);
 	bsOut.Write(controlPlayer); 
 	
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-
+*/
 	client->Shutdown(300);
 	RakNet::RakPeerInterface::DestroyInstance(client);
 }

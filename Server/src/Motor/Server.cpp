@@ -251,16 +251,39 @@ void Server::ReceivePackets()
 
 		//se ha perdido la conexion con uno de los clientes
 		case ID_CONNECTION_LOST:
+			paramString = p->systemAddress.ToString(true);
 			std::cout << "ID_CONNECTION_LOST de " << p->systemAddress.ToString(true) << std::endl;
+			
+			int playerDisconnect;
+			for(int i= 0; i< clientes.size(); i++){
+				if(strcmp(paramString, clientes.at(i).ip) == 0){
+					playerDisconnect = i;
+					break;
+				}
+			}
+			std::cout << "Jugador eliminado: " << playerDisconnect << " / " <<numPlayers << std::endl;
+			clientes.erase(clientes.begin()+playerDisconnect);
+			//playerDisconnection(playerDisconnect);
+			if(started){
+				//Borrar players tambien
+
+			}
 			typeID = ID_LOAD_CURRENT_CLIENTS;
 			numConnections=10;
 			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
 			param=numConnections;
+			std::cout << "Numero de conexiones actuales: " << param << std::endl;
+			typeID = ID_LOAD_CURRENT_CLIENTS;
 			bsOut.Write(typeID);
 			bsOut.Write(param);
-			bsOut.Write(arrayTipoCorredor.size()-1);
+			for(int i = 0; i<clientes.size(); i++){
+				paramRakString = clientes.at(i).ip.c_str();
+				bsOut.Write(paramRakString);
+				bsOut.Write(clientes.at(i).tipoCorredor);
+				bsOut.Write(clientes.at(i).ready);
+			}
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-
+			
 
 			break;
 
@@ -506,15 +529,26 @@ void Server::ReceivePackets()
 			std::cout << "Jugador eliminado: " << playerDisconnect << " / " <<numPlayers << std::endl;
 			clientes.erase(clientes.begin()+playerDisconnect);
 			//playerDisconnection(playerDisconnect);
+			if(started){
+				//Borrar players tambien
+
+			}
 			typeID = ID_LOAD_CURRENT_CLIENTS;
 			numConnections=10;
 			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
-			id=numConnections;
+			param=numConnections;
+			std::cout << "Numero de conexiones actuales: " << param << std::endl;
+			typeID = ID_LOAD_CURRENT_CLIENTS;
 			bsOut.Write(typeID);
-			bsOut.Write(id);
-			bsOut.Write(playerDisconnect);
+			bsOut.Write(param);
+			for(int i = 0; i<clientes.size(); i++){
+				paramRakString = clientes.at(i).ip.c_str();
+				bsOut.Write(paramRakString);
+				bsOut.Write(clientes.at(i).tipoCorredor);
+				bsOut.Write(clientes.at(i).ready);
+			}
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-
+			
 			std::cout << "Jugador Borrado\n";
 
 			break;

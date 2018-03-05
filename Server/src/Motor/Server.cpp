@@ -311,7 +311,7 @@ void Server::ReceivePackets()
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			}else if(id==0){		//si eres host
 				for (int n=1;n<clientes.size();n++){		//comprobamos si todos los corredores menos el host estan listos
-					if (!clientes.at(id).ready){
+					if (!clientes.at(n).ready){
 						parambool=true;
 						break;
 					}
@@ -675,7 +675,7 @@ void Server::playerDisconnection(std::string str_param){
 	
 	if(started){
 		//Borrar players tambien
-		players.erase(players.begin()+param);
+		//players.erase(players.begin()+param);
 	}
 
 	typeID = ID_PLAYER_DISCONNECT;

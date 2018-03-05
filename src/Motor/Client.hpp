@@ -10,6 +10,12 @@
 
 #define MAX_PLAYERS 10
 
+struct structClientes{
+    std::string ip;
+    int tipoCorredor;
+    bool ready;
+};
+
 using namespace std;
 
 class Client
@@ -40,9 +46,7 @@ public:
 	int getNumPlayers();
 	int getNumClients();
 	int getMaxPlayers();
-	vector<int> getArrayTipoCorredor();
-	vector<int> getArrayReady();
-	int getTipoCorredor(int i);
+	vector<structClientes> getClientes();
 	bool getStarted();
 
 	//METODOS SET
@@ -78,6 +82,7 @@ private:
 	bool spawned;
 	bool started;
 	bool pressed;
+	vector<structClientes> clientes;
 	vector<int> arrayTipoCorredor;
 	vector<int> arrayReady;
 

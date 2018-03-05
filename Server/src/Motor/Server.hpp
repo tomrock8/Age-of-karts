@@ -7,6 +7,12 @@
 #define MAX_CLIENTS 4
 #define MAX_PLAYERS 6
 
+struct structClientes{
+    std::string ip;
+    int tipoCorredor;
+    bool ready;
+};
+
 class Server
 {
     private:
@@ -23,7 +29,6 @@ class Server
         RakNet::Packet *p;
 
         vector<Corredor*> players;
-        vector<int> clientes;
         int controlPlayer;
         int numPlayers;
         bool spawned;
@@ -31,6 +36,7 @@ class Server
         bool started;
         vector<int> arrayReady;
         vector<int> arrayTipoCorredor;
+        vector<structClientes> clientes;
 
         unsigned char GetPacketIdentifier(RakNet::Packet *p);
         void DebugServerInfo();

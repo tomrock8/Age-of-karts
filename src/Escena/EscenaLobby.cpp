@@ -72,8 +72,8 @@ void EscenaLobby::update() {
 		bool checkReady=true;
 		bool checkReadyMe=true;
 		bool bc=false;
-		int size=client->getArrayTipoCorredor().size();
-		vector<int> array=client->getArrayTipoCorredor();
+		vector<structClientes> clientes=client->getClientes();
+		int size=clientes.size();
 		int id_player=client->getControlPlayer();
 
 
@@ -92,10 +92,10 @@ void EscenaLobby::update() {
 				texto += " (Host)";
 			}
 			
-			if (id_player<client->getArrayReady().size()){		//comprobamos que la id del jugador no supere el tamnyo del vector de ready
-				if (client->getArrayReady().at(id_player)==0 && client->getArrayReady().size()>1){		//si estas no ready y hay mas jugadores 
-					for (int c=0;c<client->getArrayReady().size();c++){
-						if (client->getArrayReady().at(c)==0){	//comprobamos si han aceptado todos
+			if (id_player < clientes.size()){		//comprobamos que la id del jugador no supere el tamnyo del vector de ready
+				if (clientes.at(id_player).ready==false && clientes.size() > 1){		//si estas no ready y hay mas jugadores 
+					for (int c=0;c<clientes.size();c++){
+						if (clientes.at(c).ready==0){	//comprobamos si han aceptado todos
 							bc=true;
 							break;
 						}	
@@ -126,7 +126,7 @@ void EscenaLobby::update() {
 					if (i==0){
 						texto += " (Host)";
 					}
-					if (client->getArrayReady().at(i)==0){	//jugador no listo
+					if (clientes.at(i).ready==0){	//jugador no listo
 						checkReady=false;
 						texto += " [No listo] ";
 					}else{	//jugador listo
@@ -162,13 +162,13 @@ void EscenaLobby::update() {
 
 }
 void EscenaLobby::mostrarTipoPersonaje(int i){		//traduce de int a texto (tipo de personaje)
-	if (client->getArrayTipoCorredor().at(i)==0){
+	if (client->getClientes().at(i).tipoCorredor == 0){
 		texto += "GLADIADOR ";	
-	}else if (client->getArrayTipoCorredor().at(i)==1){
+	}else if (client->getClientes().at(i).tipoCorredor == 1){
 		texto += "PIRATA ";
-	}else if (client->getArrayTipoCorredor().at(i)==2){
+	}else if (client->getClientes().at(i).tipoCorredor == 2){
 		texto += "VIKINGO ";
-	}else if (client->getArrayTipoCorredor().at(i)==3){
+	}else if (client->getClientes().at(i).tipoCorredor == 3){
 		texto += "GUERRERO CHINO ";
 	}
 }

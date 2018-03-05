@@ -137,13 +137,13 @@ void EscenaJuego::init() {
 		int numClients = client->getNumClients();
 		Corredor::tipo_jugador tj;
 		for(int i = 0; i< numClients; i++){		
-			if (client->getTipoCorredor(i)==0){
+			if (client->getClientes().at(i).tipoCorredor == 0){
 				tj=Corredor::tipo_jugador::GLADIADOR;
-			}else if (client->getTipoCorredor(i)==1){
+			}else if (client->getClientes().at(i).tipoCorredor == 1){
 				tj=Corredor::tipo_jugador::PIRATA;
-			}else if (client->getTipoCorredor(i)==2){
+			}else if (client->getClientes().at(i).tipoCorredor == 2){
 				tj=Corredor::tipo_jugador::VIKINGO;
-			}else if (client->getTipoCorredor(i)==3){
+			}else if (client->getClientes().at(i).tipoCorredor == 3){
 				tj=Corredor::tipo_jugador::CHINO;
 			}
 			jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);

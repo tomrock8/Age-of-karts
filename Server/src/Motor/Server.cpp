@@ -154,6 +154,12 @@ void Server::ReceivePackets()
 		bool reset = false;
 		bool lanzar = false;
 		bool parambool = false;
+
+		RakNet::RakString paramRakString;
+		std::string paramString;
+			
+		structClientes client;	
+		
 		CorredorRed *jugador;
 		
 		unsigned short numConnections;
@@ -177,17 +183,24 @@ void Server::ReceivePackets()
 
 		//un nuevo cliente se ha conectado al servidor
 		case ID_NEW_INCOMING_CONNECTION:
-			std::cout << "ID_NEW_INCOMING_CONNECTION\n";			
+			std::cout << "ID_NEW_INCOMING_CONNECTION\n";
+			client.ip = p->systemAddress.ToString(true);
+			client.tipoCorredor = 3;
+			client.ready = false;
+			clientes.push_back(client);
 			numConnections=10;
 			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
-			id=numConnections;
-			std::cout << "Numero de conexiones actuales: " << id << std::endl;
-			arrayTipoCorredor.push_back(3);		//inicializamos los vectores de ready y tipo
-			arrayReady.push_back(0);
-			cout<<"HE CREADO LOS ARRAYS EN EL SERVIDOR\n";
+			param=numConnections;
+			std::cout << "Numero de conexiones actuales: " << param << std::endl;
 			typeID = ID_LOAD_CURRENT_CLIENTS;
 			bsOut.Write(typeID);
-			bsOut.Write(id);
+			bsOut.Write(param);
+			for(int i = 0; i<clientes.size(); i++){
+				paramRakString = clientes.at(i).ip.c_str();
+				bsOut.Write(paramRakString);
+				bsOut.Write(clientes.at(i).tipoCorredor);
+				bsOut.Write(clientes.at(i).ready);
+			}
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			
 			/*
@@ -242,9 +255,9 @@ void Server::ReceivePackets()
 			typeID = ID_LOAD_CURRENT_CLIENTS;
 			numConnections=10;
 			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
-			id=numConnections;
+			param=numConnections;
 			bsOut.Write(typeID);
-			bsOut.Write(id);
+			bsOut.Write(param);
 			bsOut.Write(arrayTipoCorredor.size()-1);
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 
@@ -281,7 +294,7 @@ void Server::ReceivePackets()
 			}else{
 				param--;
 			}
-			arrayTipoCorredor.at(id)=param;
+			clientes.at(id).tipoCorredor=param;
 			}
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			parambool=false;
@@ -291,38 +304,38 @@ void Server::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			if (id!=0){		//si no eres host puedes alternar entre listo o no listo
-				if (arrayReady.at(id)==1){
-					arrayReady.at(id)=0;
+				if (clientes.at(id).ready){
+					clientes.at(id).ready=false;
 				}else{
-					arrayReady.at(id)=1;
+					clientes.at(id).ready=true;
 				}
 				typeID = ID_READY_CLIENT;
 				bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
 				bsOut.Write(id);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			}else if(id==0){		//si eres host
-				for (int n=0;n<arrayReady.size();n++){		//comprobamos si todos los corredores menos el host estan listos
-					if (arrayReady.at(n)==0 && n!=0){
+				for (int n=0;n<clientes.size();n++){		//comprobamos si todos los corredores menos el host estan listos
+					if (!clientes.at(id).ready && n!=0){
 						parambool=true;
 						break;
 					}
 				}
-				if (arrayReady.size()>1 && arrayReady.at(id)==0){
-					arrayReady.at(id)=1;
+				if (clientes.size()>1 && !clientes.at(id).ready){
+					clientes.at(id).ready=true;
 					typeID = ID_READY_CLIENT;
 					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
 					bsOut.Write(id);
 					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 					break;
-				}else if (arrayReady.size()>1 && arrayReady.at(id)==1 && parambool==true){
-					arrayReady.at(id)=0;
+				}else if (clientes.size()>1 && clientes.at(id).ready && parambool==true){
+					clientes.at(id).ready = false;
 					typeID = ID_READY_CLIENT;
 					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
 					bsOut.Write(id);
 					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 					break;
 				}
-				if (parambool==false && arrayReady.size()>0){		//si todos estan listos y ha recorrido el bucle empieza la carrera
+				if (parambool==false && clientes.size()>0){		//si todos estan listos y ha recorrido el bucle empieza la carrera
 					typeID = ID_RACE_START;
 					bsOut.Write(typeID);
 					numConnections=10;
@@ -337,8 +350,6 @@ void Server::ReceivePackets()
 					started=true;
 					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 				}
-			}else{
-				std::cout << "No eres host\n";
 			}
 			parambool=false;
 			break;	
@@ -483,8 +494,7 @@ void Server::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(playerDisconnect);
 			std::cout << "Jugador eliminado: " << playerDisconnect << " / " <<numPlayers << std::endl;
-			arrayTipoCorredor.erase(arrayTipoCorredor.begin()+playerDisconnect);
-			arrayReady.erase(arrayReady.begin()+playerDisconnect);
+			clientes.erase(clientes.begin()+playerDisconnect);
 			//playerDisconnection(playerDisconnect);
 			typeID = ID_LOAD_CURRENT_CLIENTS;
 			numConnections=10;

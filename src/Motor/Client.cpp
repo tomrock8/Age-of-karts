@@ -229,7 +229,10 @@ int Client::ReceivePackets()
 		bool lanzar = false;
 		bool parambool;
 
+		RakNet::RakString paramRakString;
+		std::string paramString;
 
+		structClientes clientAux;
 		//switch para comprobar el tipo de paquete recibido
 		switch (packetIdentifier)
 		{
@@ -297,14 +300,53 @@ int Client::ReceivePackets()
 
 				break;
 
+			//Actualiza los clientes conectados en el servidor para cambiar los datos del lobby
+			case ID_LOAD_CURRENT_CLIENTS:
+				cout << "ID_LOAD_CURRENT_CLIENTS\n";
+				param2=numClients;
+				clientes.clear();
+				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+				bsIn.Read(numClients);
+				for(int i = 0; i< numClients ; i++){
+					bsIn.Read(paramRakString);	//Ip
+					paramString = paramRakString;
+					clientAux.ip = paramString;
+					bsIn.Read(param); //Tipo
+					clientAux.tipoCorredor = param;
+					bsIn.Read(parambool); //Listo
+					clientAux.ready = parambool;
+					clientes.push_back(clientAux);
+				}
+
+				/*
+				cout<<"HE LLEGADO A CLIENTE\n";
+				if (param<numClients && arrayTipoCorredor.size()<numClients && arrayReady.size()<numClients){		//si el numclientes recibido es mayor que el que habia sumamos un cliente a los vectores
+					arrayTipoCorredor.push_back(3);
+					arrayReady.push_back(0);
+					cout<<"HE CREADO LOS ARRAYS EN EL CLIENTE\n";
+				}else if (param>numClients){		//si el numero de clientes recibido es menor que el que habia borramos clientes de los vectores y actualizamos los contadores de jugador
+					bsIn.Read(param2);
+					arrayTipoCorredor.erase(arrayTipoCorredor.begin()+param2);
+					arrayReady.erase(arrayReady.begin()+param2);
+					while (controlPlayer>=numClients){
+						controlPlayer--;
+					}
+					//arrayTipoCorredor.resize(numClients);
+				}
+				if (controlPlayer == -1) controlPlayer = numClients - 1;
+				*/
+				if (controlPlayer == -1) controlPlayer = numClients - 1;
+				cout << "Clientes: " << numClients << endl;
+			break;
+
 			//Algun cliente ha cambiado de personaje en el lobby
 			case ID_CHANGE_CHARACTER:
 				std::cout<<"ID_CHANGE_CHARACTER_CLIENT\n";
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(id);
 				bsIn.Read(parambool);
-				if (id<arrayTipoCorredor.size() && id!=-1){
-				param=arrayTipoCorredor.at(id);	//a partir de ahora param es el tipo de jugador
+				if (id<clientes.size() && id!=-1){
+				param=clientes.at(id).tipoCorredor;	//a partir de ahora param es el tipo de jugador
 				if (param==0 && parambool==false){
 					param=3;
 				}else if (param==3 && parambool==true){
@@ -314,7 +356,7 @@ int Client::ReceivePackets()
 				}else{
 					param--;
 				}
-				arrayTipoCorredor.at(id)=param;
+				clientes.at(id).tipoCorredor=param;
 				}
 
 				break;
@@ -324,11 +366,11 @@ int Client::ReceivePackets()
 				//cambiamos el valor de ready en el cliente
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(id);
-				if (id!=-1 && id<arrayReady.size()){
-					if (arrayReady.at(id)==0){
-						arrayReady.at(id)=1;
+				if (id!=-1 && id<clientes.size()){
+					if (clientes.at(id).ready){
+						clientes.at(id).ready= true;
 					}else{
-						arrayReady.at(id)=0;
+						clientes.at(id).ready = false;
 					}
 				}
 				
@@ -386,31 +428,6 @@ int Client::ReceivePackets()
 				numPlayers++;
 
 				break;
-			
-			//Actualiza los clientes conectados en el servidor para cambiar los datos del lobby
-			case ID_LOAD_CURRENT_CLIENTS:
-				cout << "ID_LOAD_CURRENT_CLIENTS\n";
-				param=numClients;
-				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-				bsIn.Read(numClients);
-				
-				cout<<"HE LLEGADO A CLIENTE\n";
-				if (param<numClients && arrayTipoCorredor.size()<numClients && arrayReady.size()<numClients){		//si el numclientes recibido es mayor que el que habia sumamos un cliente a los vectores
-					arrayTipoCorredor.push_back(3);
-					arrayReady.push_back(0);
-					cout<<"HE CREADO LOS ARRAYS EN EL CLIENTE\n";
-				}else if (param>numClients){		//si el numero de clientes recibido es menor que el que habia borramos clientes de los vectores y actualizamos los contadores de jugador
-					bsIn.Read(param2);
-					arrayTipoCorredor.erase(arrayTipoCorredor.begin()+param2);
-					arrayReady.erase(arrayReady.begin()+param2);
-					while (controlPlayer>=numClients){
-						controlPlayer--;
-					}
-					//arrayTipoCorredor.resize(numClients);
-				}
-				if (controlPlayer == -1) controlPlayer = numClients - 1;
-				cout << "Clientes: " << numClients << endl;
-			break;
 
 			//Caso desactualizado: Cargar los jugadores conectados actualmente a la partida
 			case ID_LOAD_CURRENT_PLAYERS:
@@ -674,14 +691,10 @@ int Client::getNumClients(){
 int Client::getMaxPlayers() {
 	return maxPlayers;
 }
-vector<int> Client::getArrayTipoCorredor(){
-	return arrayTipoCorredor;
-}
-int Client::getTipoCorredor(int i){
-	return arrayTipoCorredor.at(i);
-}
-vector<int> Client::getArrayReady(){
-	return arrayReady;
+
+
+vector<structClientes> Client::getClientes(){
+	return clientes;
 }
 
 //===========================================================================

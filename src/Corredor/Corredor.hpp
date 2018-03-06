@@ -165,8 +165,6 @@ protected:
 	//tipo jugador
 	tipo_jugador tipojugador;
 
-	tipo_jugador tipojugador;
-
 	int limite;
 	//estados de lanzamiento de objeto
 	bool checkItem;

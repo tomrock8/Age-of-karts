@@ -2,9 +2,6 @@
 #define HABILIDAD_H
 
 #include "Item.hpp"
-#include "Motor3d.hpp"
-#include "MotorFisicas.hpp"
-#include "Timer.hpp"
 
 using namespace std;
 
@@ -12,40 +9,21 @@ class Habilidad : public Item
 {
 public:
   
-  Habilidad(int tipo, ISceneNode* n);
-  void HabilidadGladiador();
-  void HabilidadPirata();
-  void HabilidadVikingo();
-  void HabilidadChino();
-  void lanzarHabilidad();
-  //get
-  int getInicioHabilidad();
-  bool getHabilidadActiva();
-  int getTipo();
-  //SET
-  void setHabilidadActiva(bool s);
-  void setOrientacion(btVector3 o);
-  void setPosicion(btVector3 po);
-  void setPadre(ISceneNode* n);
-  void inicializarFisicas(int tipo);
-  void eliminarFisicas();
+  Habilidad(int tipo, ISceneNode* n,btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,float tamanyoNodo,btScalar radio,
+  float alturaLanzamiento);
+  virtual void lanzarItem(int direccion,btVector3 orientacion) override;
+  virtual void updateHijos() override;
+  void movimiento();
+
 
 private:
-	int tipoHabilidad;
-	btCompoundShape *CentroGravedad;
-	//objetos
-	IMesh * objetoHabilidad;
-	Timer *tiempo;
-	int inicioHabilidad;
-	int finalHabilidad;
-	bool habilidadActiva;
-	
-	//nodo padre
-	ISceneNode* NodoVehiculo;
 
-	//variables
-	//btVector3 posicion;
-	btVector3 orientacion;
+	int tipoHabilidad;
+  bool habilidadActiva;
+	//objetos
+	IMesh *objetoHabilidad;
+	ISceneNode* NodoVehiculo;
+  btVector3 orientacion;
 	
 };
 

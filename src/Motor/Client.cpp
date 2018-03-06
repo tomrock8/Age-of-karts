@@ -344,9 +344,19 @@ int Client::ReceivePackets()
 				std::cout<<"ID_CHANGE_CHARACTER_CLIENT\n";
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(id);
-				bsIn.Read(param);
+				bsIn.Read(parambool);
 				if (id<clientes.size() && id!=-1){
-					clientes.at(id).tipoCorredor=param;
+				param=clientes.at(id).tipoCorredor;	//a partir de ahora param es el tipo de jugador
+				if (param==0 && parambool==false){
+					param=3;
+				}else if (param==3 && parambool==true){
+					param=0;
+				}else if (parambool){
+					param++;
+				}else{
+					param--;
+				}
+				clientes.at(id).tipoCorredor=param;
 				}
 
 				break;

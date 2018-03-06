@@ -246,6 +246,7 @@ void EscenaJuego::update() {
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client->ReceivePackets();
+		controlPlayer = client->getControlPlayer();
 	}
 	//cout << irrTimer->getTime() << endl;
 	textoDebug->limpiar();

@@ -278,20 +278,25 @@ void Server::ReceivePackets()
 			std::cout<<"ID_CHANGE_CHARACTER_SERVER\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
-			bsIn.Read(parambool);
-			if (id<arrayTipoCorredor.size() && id!=-1){
-			param=arrayTipoCorredor.at(id);	//a partir de ahora param es el tipo de jugador
-			if (param==0 && parambool==false){
-				param=3;
-			}else if (param==3 && parambool==true){
-				param=0;
-			}else if (parambool){
-				param++;
-			}else{
-				param--;
+			bsIn.Read(parambool);					//True = ++; False == --
+			if (id<clientes.size() && id!=-1){
+				param=clientes.at(id).tipoCorredor;	//a partir de ahora param es el tipo de jugador
+				if (param==0 && parambool==false){
+					param=3;
+				}else if (param==3 && parambool==true){
+					param=0;
+				}else if (parambool){
+					param++;
+				}else{
+					param--;
+				}
+				clientes.at(id).tipoCorredor=param;
 			}
-			clientes.at(id).tipoCorredor=param;
-			}
+			std::cout << "Ahora el corredor " << id << " tiene el corredor " << param << endl;
+			typeID = ID_CHANGE_CHARACTER;
+			bsOut.Read(typeID);
+			bsOut.Read(id);
+			bsOut.Read(param);
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			parambool=false;
 			break;
@@ -663,6 +668,8 @@ void Server::GetConnectionList(){
 void Server::playerDisconnection(std::string str_param){
 	int param;
 	RakNet::BitStream bsOut;
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	players = jugadores->getJugadores();
 	for(int i= 0; i< clientes.size(); i++){
 		if(str_param.compare(clientes.at(i).ip) == 0){
 			param = i;
@@ -675,7 +682,8 @@ void Server::playerDisconnection(std::string str_param){
 	
 	if(started){
 		//Borrar players tambien
-		//players.erase(players.begin()+param);
+		players.erase(players.begin()+param);
+		jugadores->decrementarJugadores();
 	}
 
 	typeID = ID_PLAYER_DISCONNECT;
@@ -683,6 +691,8 @@ void Server::playerDisconnection(std::string str_param){
 	bsOut.Write(param);
 	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 	
+	jugadores->setJugadores(players);
+
 	/*GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	players = jugadores->getJugadores();
 	RakNet::BitStream bsOut;	

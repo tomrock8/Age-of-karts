@@ -11,29 +11,18 @@
 #include "Shader/Shader.hpp"
 
 using namespace std;
-struct vertex {
-	glm::vec3 position;
-	glm::vec3 normal;
-	glm::vec3 textCoord;
-};
-struct texture {
-	GLuint id;
-	string type; //difusa, especular
-};
+
+
+
 class TRecursoMalla :public TRecurso
 {
-	
+
 public:
 	//---constructor---//
 	TRecursoMalla(string path);
 	//---destructor---//
 	~TRecursoMalla();
-	//--------------------------------//
-	//-------------ASSIMP-------------//
-	//--------------------------------//
-	void loadModel(string n);
-	void processNode(aiNode *node, const aiScene *scene);
-	void processMesh(aiMesh *mesh, const aiScene *scene);
+
 	//--------------------------------//
 	//-------HERENCIA DE RECURSOS-----//
 	//--------------------------------//
@@ -42,24 +31,41 @@ public:
 	//-------------------------------//
 	//----------METODOS DE GET-------//
 	//-------------------------------//
-	vector<vertex> *getVertices();
-	vector<GLuint> *getIndices();
+	/*vector<vertex> *getVertices();
+	vector<GLuint> *getIndices();*/
 
 	//-------------------------------//
 	//----------DIBUJADO-------------//
 	//-------------------------------//
-	void draw(Shader shader);
+	void draw(Shader *shader, glm::mat4 modelMatrix);
 
 
 private:
-	std::vector<vertex> vertices;
-	std::vector<GLuint> indices;
-	std::vector<texture> textures;
+	//std::vector<vertex> vertices;
+	//std::vector<GLuint> indices;
+	//-------------------------------------------------//
+	//--vectores para almacenar los datos de la malla--//
+	//-------------------------------------------------//
+	std::vector<glm::vec3> vertex;
+	std::vector<glm::vec3> normal;
+	std::vector<glm::vec2> uv;
+	std::vector<unsigned short> indices;
 
-	
-	long nTriangle;
+	GLuint buffer[4];	// buffer para almacenar los ids de los vectores
+
+	//variables de renderizado
+	GLuint VAO;// Vertex Array Object*/
+	//GLuint VBO;//|
+	//GLuint EBO;//|Vertex Buffer Object
+
 	//char *nombre;
 	//----funciones privadas------//
+	void inicializar();
+	//--------------------------------//
+	//-------------ASSIMP-------------//
+	//--------------------------------//
+	void loadModel(string n);
+	void processNode(aiNode *node, const aiScene *scene);
+	void processMesh(aiMesh *mesh, const aiScene *scene);
 };
 #endif
-

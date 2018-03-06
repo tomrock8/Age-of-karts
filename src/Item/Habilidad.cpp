@@ -55,6 +55,9 @@ void Habilidad::lanzarItem(int direccion,btVector3 orientacion){
 	this->orientacion = orientacion;
 
 	
+	if(tipoHabilidad==2){
+		
+	}
 
 	if(tipoHabilidad == 1){ // PIRATA
 
@@ -88,24 +91,20 @@ void Habilidad::movimiento(){
 		trans.setOrigin(btVector3(NodoVehiculo->getPosition().X + orientacion.getX() *15,NodoVehiculo->getPosition().Y,NodoVehiculo->getPosition().Z + orientacion.getZ() *15));
 
 		orientacion = orientacion.rotate(btVector3(0, 1, 0),giro*PI/180);
-		nodo->setRotation(vector3df(nodo->getRotation().X,nodo->getRotation().Y+5,nodo->getRotation().Z));
+		nodo->setRotation(vector3df(nodo->getRotation().X,nodo->getRotation().Y,nodo->getRotation().Z));
 		quaternion.setEulerZYX(0,nodo->getRotation().Y * PI/180,0);
 
 		trans.setRotation(quaternion);
+
+	
 		rigidBody->setCenterOfMassTransform(trans);
 
-		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 20000, 0, orientacion.getZ() * 20000));
+		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 30000, 0, orientacion.getZ() * 30000));
 		break;
 
 		case 3: // GLADIADOR
 
-		trans.setOrigin(btVector3(NodoVehiculo->getPosition().X ,NodoVehiculo->getPosition().Y+5,NodoVehiculo->getPosition().Z ));
-		quaternion.setEulerZYX(0,NodoVehiculo->getRotation().Y * PI/180,0);
-		trans.setRotation(quaternion);
-		rigidBody->setCenterOfMassTransform(trans);
-		rigidBody->setCenterOfMassTransform(trans);
-		rigidBody->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-		rigidBody->setGravity(btVector3(0,0,0));
+		
 		
 		break;
 

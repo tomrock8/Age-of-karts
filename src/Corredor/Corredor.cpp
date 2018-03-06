@@ -26,6 +26,9 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	maxvueltas=4;
 	tipojugador=tipo;
 	
+	tipojugador=tipo;
+	estado->setEstadoCarrera(PARRILLA);
+
 	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
 	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
 	//cuboNodo = smgr->addCubeSceneNode(1.5f);
@@ -349,6 +352,9 @@ const char* Corredor::getNombre(){
 int Corredor::getID(){
 	return id;
 }
+Corredor::tipo_jugador Corredor::getTipoJugador(){
+	return tipojugador;
+}
 
 //-----------------------------//
 //---------METODOS SET---------//
@@ -631,6 +637,23 @@ void Corredor::setCheckItem(bool s) {
 void Corredor::setPosDisparo(btVector3 s) {
 	posDisparo = s;
 }
+void Corredor::setTipoJugador(int tj){
+	switch (tj){
+
+        case 0:
+        tipojugador = GLADIADOR;
+		break;
+		case 1:
+        tipojugador = PIRATA;
+		break;
+		case 2:
+        tipojugador = VIKINGO;
+		break;
+		case 3:
+        tipojugador = CHINO;
+		break;
+	}
+}
 //-------------------------------------//
 //-------TRATAMIENTOS OBJETOS----------//
 //-------------------------------------//
@@ -799,6 +822,8 @@ void Corredor::usarObjetos() {
 	{
 		setTurbo(true, true, 26000);
 	}
+	std::cout << "Tipo obj: " << getTipoObj() << " / " << items.size() << std::endl;
+	
 	pista->setItems(items);
 
 }
@@ -976,6 +1001,19 @@ void Corredor::comprobarSueloRuedas()
 */
 }
 
+void Corredor::recolocarWaypoint(){
+	btVector3 btPos = actual->getPosicion();
+
+	btTransform trans;
+	
+	trans.setOrigin(btPos);
+	btQuaternion quaternion;
+	quaternion.setEulerZYX(actual->getRotation().getZ()* PI / 180, actual->getRotation().getY() * PI / 180, actual->getRotation().getX()* PI / 180);
+	trans.setRotation(quaternion);
+
+	CuerpoColisionChasis->setCenterOfMassTransform(trans);
+	resetFuerzas();
+}
 
 //---------------------------------------//
 //--------DEBUG TEXTO PANTALLA-----------//
@@ -1025,8 +1063,10 @@ void Corredor::update()
 			setTurbo(false, false, 0);
 		}
 	}
-
-	movimiento();
+	if (estado->getEstadoCarrera()!=PARRILLA){
+		movimiento();
+		updateEstado();
+	}
 	updateTimerObstaculos();
 	updateEstado();
 	//if (habilidadJugador->getHabilidadActiva())updateHabilidad();

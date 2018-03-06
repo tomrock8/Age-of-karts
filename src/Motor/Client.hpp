@@ -10,6 +10,12 @@
 
 #define MAX_PLAYERS 10
 
+struct structClientes{
+    std::string ip;
+    int tipoCorredor;
+    bool ready;
+};
+
 using namespace std;
 
 class Client
@@ -24,21 +30,27 @@ public:
 	void SetIP(std::string ipConexion);
 	void ClientStartup();
 	void RaceStart();
+	void UpdateNetworkKeyboard();
 	void ShutDownClient();
 	void PlayerMovement();
 	void PlayerAction();
 	void PlayerSetObject(int tipo);
 	void PlayerThrowObject();
+	void ChangeCharacter(bool i);
 	int ReceivePackets();
 	void SpawnPlayer();
-
+	
+	//METODOS GET
 	int getControlPlayer();
 	bool getConnected();
 	int getNumPlayers();
 	int getNumClients();
 	int getMaxPlayers();
+	vector<structClientes> getClientes();
 	bool getStarted();
-	//void UpdateNetworkKeyboard(CTeclado *teclado);
+
+	//METODOS SET
+	void setNetloaded(bool b);
 	
 private:
 	Client(int maxPlay);
@@ -69,7 +81,9 @@ private:
 	int numPlayers;
 	bool spawned;
 	bool started;
-
+	bool pressed;
+	vector<structClientes> clientes;
+	
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 
 };

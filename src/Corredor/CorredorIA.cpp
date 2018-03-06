@@ -472,15 +472,7 @@ void CorredorIA::reposicionar(){
 	}
 	if (time->getTimer()-timerRecolocar>4){
 		if ((unsigned)((unsigned)(posicion_aux.getX())-(unsigned)(posicion.getX()))<2 && (unsigned)((unsigned)(posicion_aux.getZ())-(unsigned)(posicion.getZ()))<2){
-			btVector3 btPos = actual->getPosicion();
-
-			btTransform trans;
-			trans.setOrigin(btPos);
-			btQuaternion quaternion;
-			quaternion.setEulerZYX(this->getWaypointActual()->getRotation().getZ()* PI / 180, this->getWaypointActual()->getRotation().getY() * PI / 180, this->getWaypointActual()->getRotation().getX()* PI / 180);
-			trans.setRotation(quaternion);
-
-			CuerpoColisionChasis->setCenterOfMassTransform(trans);
+			recolocarWaypoint();
 			timerRecolocar=time->getTimer();
 			//cout<<"recolocado"<<endl;
 		}else{

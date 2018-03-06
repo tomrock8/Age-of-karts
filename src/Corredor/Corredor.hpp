@@ -35,7 +35,9 @@ class Corredor: public RakNet::NetworkIDObject
 	void limitadorVelocidad();
 	// Destructor
 	~Corredor();
+	
 	void acelerar();
+	void recolocarWaypoint();
 
 	//objetos
 	void lanzarItemTeledirigido();
@@ -58,6 +60,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
 	void setLimite(int s);
+	void setTipoJugador(int tj);
 
 	
 	std::string toString();
@@ -97,6 +100,7 @@ class Corredor: public RakNet::NetworkIDObject
 	bool getProteccion();
 	EstadosJugador *getEstados();
 	int getLimite();
+	tipo_jugador getTipoJugador();
 
 
 	//estado de los objetos a usar
@@ -157,6 +161,9 @@ protected:
 	
 	EstadosJugador *estado;
 	btVector3 posDisparo;
+	
+	//tipo jugador
+	tipo_jugador tipojugador;
 
 	tipo_jugador tipojugador;
 
@@ -202,12 +209,12 @@ protected:
 
 	// Movimiento del corredor
 	//void acelerar();
-	
 	void frenar();
 	void desacelerar();
 	void girarDerecha();
 	void girarIzquierda();
 	void frenodemano(bool activo, bool objeto);
+
 	virtual void movimiento() = 0; // A implementar por derivadas
 	virtual void updateHijos() =0 ;
 

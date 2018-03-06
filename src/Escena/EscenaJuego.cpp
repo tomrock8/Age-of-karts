@@ -41,7 +41,9 @@ void EscenaJuego::init() {
 	//ARGUMENTOS MAIN
 	debug = 0;
 	fin_carrera=false;
-        GestorIDs::instancia().restartID();
+	t = Timer::getInstancia();
+	t->restartTimer();
+    GestorIDs::instancia().restartID();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client = Client::getInstancia();
@@ -133,12 +135,24 @@ void EscenaJuego::init() {
 		pos2[5].setX(-30);
 		pos2[5].setY(0);
 		pos2[5].setZ(290);
-		int numClients = client->getNumClients();
-		for(int i = 0; i< numClients; i++){
-			jugador = new CorredorRed("assets/coche.obj", pos2[i], Corredor::tipo_jugador::CHINO);
+		int numClients = client->getClientes().size();
+		Corredor::tipo_jugador tj;
+		for(int i = 0; i< numClients; i++){		
+			if (client->getClientes().at(i).tipoCorredor == 0){
+				tj=Corredor::tipo_jugador::GLADIADOR;
+			}else if (client->getClientes().at(i).tipoCorredor == 1){
+				tj=Corredor::tipo_jugador::PIRATA;
+			}else if (client->getClientes().at(i).tipoCorredor == 2){
+				tj=Corredor::tipo_jugador::VIKINGO;
+			}else if (client->getClientes().at(i).tipoCorredor == 3){
+				tj=Corredor::tipo_jugador::CHINO;
+			}
+			jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
+			jugador->setID(i);
 			pj.push_back(jugador);
 			jugadores->aumentarJugadores();
 		}
+		client->setNetloaded(true);
 	}
 
 	jugadores->setJugadores(pj);
@@ -276,6 +290,17 @@ void EscenaJuego::update() {
 			camara->moveCameraControlPointer(pj.at(controlPlayer));
 
 	}
+
+	
+	if (t->getTimer()<=3 && t->getTimer()>=1){
+		int desc=4-t->getTimer();
+		textoDebug->agregar(to_string(desc));
+	}
+	if (t->getTimer()==4){
+		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
+		}
+	}
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		pj.at(controlPlayer)->actualizarItem();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
@@ -294,13 +319,9 @@ void EscenaJuego::update() {
 		//cout << jugadores->getNumJugadores() << endl;
 		//if (jugadores->getNumJugadores() != 0)
 		//	pj.at(controlPlayer)->actualizarItem();
-
-		if (jugadores->getNumJugadores() != 0)
-		//	camara->moveCamera(pj[controlPlayer]);
-			camara->moveCameraControl(pj.at(controlPlayer));
+		
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
-
 		if (jugadores->getNumJugadores() != 0)
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 				pj.at(i)->update();
@@ -315,10 +336,11 @@ void EscenaJuego::update() {
 			clock_t timediff = tiempoActual - tiempoRefresco;
 			float timediff_sec = ((float)timediff) / 100000;
 			if (timediff_sec >= 0.01) {
-				client->PlayerMovement();
+				//client->PlayerMovement();
 				tiempoRefresco = clock();
 			}
-			client->PlayerAction();
+			//client->PlayerAction();
+			client->UpdateNetworkKeyboard();
 		}
 	}
 
@@ -354,24 +376,6 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		return Escena::tipo_escena::MENU;
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-		btVector3 btPos = pj.at(i)->getWaypointActual()->getPosicion();
-
-		btTransform trans;
-		trans.setOrigin(btPos);
-		btQuaternion quaternion;
-		quaternion.setEulerZYX(pj.at(i)->getWaypointActual()->getRotation().getZ()* PI / 180, pj.at(i)->getWaypointActual()->getRotation().getY() * PI / 180, pj.at(i)->getWaypointActual()->getRotation().getX()* PI / 180);
-		trans.setRotation(quaternion);
-
-		pj.at(i)->getRigidBody()->setCenterOfMassTransform(trans);
-		pj.at(i)->resetFuerzas();
-		//pj.at(0)->getNodo()->setPosition(pos);
-	}
-
-	/*if (sf::Keyboard::isKeyReleased(sf::Keyboard::C)){
-		if(cambioCamara)
-			cambioCamara = false;
-	}*/
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
 		if(!cambioCamara){
 			tipoCamara++;
@@ -437,7 +441,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0) {
+	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
 		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
 	}
 	else

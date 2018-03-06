@@ -88,7 +88,7 @@ void Caja::romper(Corredor *pj1Col) {
 			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
 			Node->setVisible(false);
 			timer = time->getTimer();
-			if (pj1Col->getTipoObj() == 0 && strcmp(pj1Col->getNodo()->getName(), "JugadorRed") != 0) {
+			if (pj1Col->getTipoObj() == 0) {
 				std::cout<< "Entro al objeto\n";
 				pj1Col->setTipoObj();
 			}

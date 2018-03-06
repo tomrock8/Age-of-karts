@@ -344,19 +344,9 @@ int Client::ReceivePackets()
 				std::cout<<"ID_CHANGE_CHARACTER_CLIENT\n";
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(id);
-				bsIn.Read(parambool);
+				bsIn.Read(param);
 				if (id<clientes.size() && id!=-1){
-				param=clientes.at(id).tipoCorredor;	//a partir de ahora param es el tipo de jugador
-				if (param==0 && parambool==false){
-					param=3;
-				}else if (param==3 && parambool==true){
-					param=0;
-				}else if (parambool){
-					param++;
-				}else{
-					param--;
-				}
-				clientes.at(id).tipoCorredor=param;
+					clientes.at(id).tipoCorredor=param;
 				}
 
 				break;
@@ -579,8 +569,8 @@ int Client::ReceivePackets()
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(playerDisconnect);
 				if (started) {
-					//players.erase(players.begin() + playerDisconnect);
-					numPlayers--;
+					players.erase(players.begin() + playerDisconnect);
+					//numPlayers--;
 					jugadores->decrementarJugadores();
 				}
 				if(controlPlayer>playerDisconnect)	//Si el jugador controlado por este cliente esta por arriba del jugador eliminado se debe reducir

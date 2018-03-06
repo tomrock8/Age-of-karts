@@ -142,6 +142,7 @@ int main()
 			if (t->getTimer()==4){ 
 				for (int i = 0; i < jugadores->getNumJugadores(); i++) { 
 				pj.at(i)->getEstados()->setEstadoCarrera(1); 
+				    pj.at(i)->getEstados()->setEstadoCarrera(1); 
 				} 
 			} 
 		}

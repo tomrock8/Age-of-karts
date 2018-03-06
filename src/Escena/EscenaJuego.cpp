@@ -84,7 +84,7 @@ void EscenaJuego::init() {
 		jugador = new CorredorIA("assets/coche.obj", btVector3(-10, 0, 280),Corredor::tipo_jugador::GLADIADOR);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
-
+/*
 		jugador = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 300),Corredor::tipo_jugador::PIRATA);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
@@ -100,17 +100,18 @@ void EscenaJuego::init() {
 		jugador = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 290),Corredor::tipo_jugador::CHINO);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
-	
+*/	
 
 
 		pj[0]->setID(0);
+
 		pj[1]->setID(1);
-		
+/*		
 			pj.at(2)->setID(2);
 			pj.at(3)->setID(3);
 			pj.at(4)->setID(4);
 			pj.at(5)->setID(5);
-		
+*/		
 
 	}else{
 		btVector3 pos2[6];
@@ -176,14 +177,15 @@ void EscenaJuego::dibujar() {
 	Motor3d::instancia().getScene()->drawAll();
 
 	//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
+	/*
 	SMaterial materialDriver;
 	materialDriver.Lighting = false;
 	Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
 	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		
-		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
-		
+		//CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
+		/*
 				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj.at(2));
 				CorredorIA *COMENARDOSAUXILIAR3 = static_cast<CorredorIA *>(pj.at(3));
 				CorredorIA *COMENARDOSAUXILIAR4 = static_cast<CorredorIA *>(pj.at(4));
@@ -191,16 +193,18 @@ void EscenaJuego::dibujar() {
 		
 
 		//COMENARDOSAUXILIAR->update();
-		 
-		
+		 */
+		//		COMENARDOSAUXILIAR1->ActualizarRaytest();
+			/*
 				COMENARDOSAUXILIAR2->ActualizarRaytest();
 				COMENARDOSAUXILIAR3->ActualizarRaytest();
 				COMENARDOSAUXILIAR4->ActualizarRaytest();
 				COMENARDOSAUXILIAR5->ActualizarRaytest();
-		
+	
 
 		//Para poder dibujar putas lineas de mierda
 	}
+	*/	
 	//Para poder dibujar putas lineas de mierda
 	if (debug) {
 		SMaterial debugMat;
@@ -241,12 +245,13 @@ void EscenaJuego::update() {
 	}
 
 	for (int i=0;i<items.size();i++)
-	{
+	{	
 		if(items.at(i)->getLanzado()){
-			if(items.at(i)->comprobarDestructor()){
-				items.at(i)->Delete();
-				items.erase(items.begin()+i);
-				break;
+
+			if(items.at(i)->update()){
+			items.erase(items.begin()+i);
+			break;
+			
 			}
 		}
 	}
@@ -275,13 +280,14 @@ void EscenaJuego::update() {
 		pj.at(controlPlayer)->actualizarItem();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		pj.at(controlPlayer)->update();
+				
 				pj.at(1)->update();
-
+/*
 				pj.at(2)->update();
 				pj.at(3)->update();
 				pj.at(4)->update();
 				pj.at(5)->update();
-		
+		*/
 		//textoDebug->agregar(pj.at(0)->toString());
 	}
 	else {

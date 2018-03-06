@@ -1,6 +1,7 @@
 #include "Estatico.hpp"
 
-Estatico::Estatico(btVector3 posicionItem) : Item(posicionItem) {
+Estatico::Estatico(btVector3 posicionItem) {
+	/*
 	tamanyo = 1.0f;
 	nodo = Motor3d::instancia().getScene()->addCubeSceneNode(tamanyo);
 	GestorIDs::instancia().setIdentifier(nodo,"Estatico");
@@ -19,8 +20,9 @@ Estatico::Estatico(btVector3 posicionItem) : Item(posicionItem) {
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
 	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	nodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/gust.png"));
+*/
 }
-
+/*
 btRigidBody *Estatico::inicializarFisicas() {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
@@ -62,3 +64,4 @@ btRigidBody *Estatico::inicializarFisicas() {
 void Estatico::soltarItem() {
 	//otro que se fue al corredor bitches :(
 }
+*/

@@ -27,6 +27,7 @@ public:
   bool JugadorEstatico();
   bool JugadorWaypoint();
   bool JugadorProyectil();
+  bool ItemTeledirigidoWaypoint(vector<Item*> items);
   //bool JugadorItemTeledirigido();
 
 private:

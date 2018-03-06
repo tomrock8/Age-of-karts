@@ -38,7 +38,6 @@ class Corredor: public RakNet::NetworkIDObject
 	void acelerar();
 
 	//objetos
-	void lanzarItem(Proyectil *item, int direcionItem);
 	void lanzarItemTeledirigido();
 	void aplicarAceite();
 	void soltarItem();
@@ -49,7 +48,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void setID(int i);
 	void setAceite();
 	void setObjetivoTelederigido();
-	void setParametros(tipo_jugador t);
+	void setParametros();
 	void setTipoObj();
 	void setTipoObj(int i);
 	void SetFuerzaVelocidad(int turbo);
@@ -155,16 +154,11 @@ protected:
 	
 
 	//objetos estaticos y dinamicos
-	ItemTeledirigido *pt;
-	Estatico * est;
-	Proyectil *pro;
-	vector<Proyectil*> proX3;
-	Escudo *escudo;
+	
 	EstadosJugador *estado;
 	btVector3 posDisparo;
 
-	//habilidad 
-	Habilidad * habilidadJugador;
+	tipo_jugador tipojugador;
 
 	int limite;
 	//estados de lanzamiento de objeto
@@ -220,7 +214,7 @@ protected:
 	// UPDATES
 	void actualizarRuedas();
 	void updateVectorDireccion();
-	void updateHabilidad();
+
 };
 
 #endif /* CORREDOR_H */

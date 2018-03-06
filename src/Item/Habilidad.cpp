@@ -1,217 +1,125 @@
 #include "Habilidad.hpp"
 
-Habilidad::Habilidad(int tipo, ISceneNode* n) : Item(tipo) {
+Habilidad::Habilidad(int tipo, ISceneNode* n,btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,float tamanyoNodo,btScalar radio,
+  float alturaLanzamiento)
+: Item(posicion,escala,masa,tiempoDesctruccion,fcolision,tamanyoNodo,radio,alturaLanzamiento) {
 	//almacenamos tipo de habilidad
 	tipoHabilidad = tipo;
 	NodoVehiculo = n;
-	habilidadActiva = false;//hasta que no se lanze no se activa
+	
+	switch(tipoHabilidad){
 
-
-
-	if (tipoHabilidad == 1) {
+		case 1:
 		objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/onda.obj");
-		HabilidadGladiador();
-	}
-	else if (tipoHabilidad == 2) {
-		objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadGladiador.obj");
-		HabilidadPirata();
-	}
-	else if (tipoHabilidad == 3) {
+		nombre = "HabilidadPirata";
+		break;
+
+		case 2:
 		objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadVikingo.obj");
-		HabilidadVikingo();
-	}
-	else if (tipoHabilidad == 4) {
+		nombre = "HabilidadVikingo";
+		break;
+
+		case 3:
+		objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadGladiador.obj");
+		nombre = "HabilidadGladiador";
+		break;
+
+		case 4:
 		objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadChino.obj");
-		HabilidadChino();
+		nombre = "HabilidadChino";
+		break;
+
 	}
+		nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
+		nodo->setPosition(vector3df(posicion.getX(), posicion.getY(), posicion.getZ()));
+		nodo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
+		//nodo->setVisible(false);
+		nodo->setMaterialFlag(EMF_LIGHTING, false);
+		nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+		//nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL);
+
+		GestorIDs::instancia().setIdentifier(nodo,"Estatico");
+		id=nodo->getID();
+		nodo->setName(nombre);
+
+		inicializarFisicas();
 }
 
 
-void Habilidad::HabilidadPirata() {
-	tamanyo = 2.0f;
-	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
-	nombre = "HabilidadPirata";
-	nodo->setName(nombre);
-	nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL); //transparencia
-
-	nodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	escala.setX(3);
-	escala.setY(3);
-	escala.setZ(3);
-	nodo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
-	nodo->setPosition(vector3df(posicion.getX(), posicion.getY(), posicion.getZ()));
-	id = 1235;//esto habra que tocarlo posible null
-	nodo->setID(id);
-}
-void Habilidad::HabilidadVikingo() {//Se queda en stand by, no se puede asignar con irrlicht la fisica necesaria, todo se hace con openGL
-	tamanyo = 5.0f;
-	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
-	nombre = "HabilidadVikingo";
-	nodo->setName(nombre);
-	nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL); //transparencia
-
-	nodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	escala.setX(1);
-	escala.setY(1);
-	escala.setZ(1);
-	nodo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
-	nodo->setParent(NodoVehiculo);
-	posicion = btVector3(NodoVehiculo->getPosition().X, NodoVehiculo->getPosition().Y, NodoVehiculo->getPosition().Z);
-	id = 1236;//esto habra que tocarlo posible null
-	nodo->setID(id);
-
-	scene::ISceneNodeAnimator* anim = Motor3d::instancia().getScene()->createFlyCircleAnimator(core::vector3df(0, 0, 0), 10.0f, 0.01f);
-	if (anim)
-	{
-		nodo->addAnimator(anim);
-		anim->drop();
-	}
-}
-void Habilidad::HabilidadGladiador() {//Se queda en stand by, no se puede asignar con irrlicht la fisica necesaria, todo se hace con openGL
-
-	tamanyo = 10.0f;
-	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
-	nombre = "HabilidadGladiador";
-	nodo->setName(nombre);
-	nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL); //transparencia
-
-	nodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	escala.setX(10);
-	escala.setY(10);
-	escala.setZ(10);
-	nodo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
-	nodo->setParent(NodoVehiculo);
-	posicion = btVector3(NodoVehiculo->getPosition().X, NodoVehiculo->getPosition().Y, NodoVehiculo->getPosition().Z);
-	id = 1234;//esto habra que tocarlo posible null
-	nodo->setID(id);
 
 
-}
-void Habilidad::HabilidadChino() {
 
-	tamanyo = 2.0f;
-	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
-	nombre = "HabilidadChino";
-	nodo->setName(nombre);
-	nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL); //transparencia
 
-	nodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	escala.setX(1);
-	escala.setY(1);
-	escala.setZ(1);
-	nodo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
-	nodo->setParent(NodoVehiculo);
-	posicion = btVector3(NodoVehiculo->getPosition().X, NodoVehiculo->getPosition().Y, NodoVehiculo->getPosition().Z);
-	id = 1237;//esto habra que tocarlo posible null
-	nodo->setID(id);
-}
-void Habilidad::lanzarHabilidad() {
-	tiempo = Timer::getInstancia();
-	tiempo->getInstancia();
-	inicioHabilidad = tiempo->getTimer();
-	habilidadActiva = true;
-	//btRigidBody *rigidBody = inicializarFisicas(tipoHabilidad);
-	inicializarFisicas(tipoHabilidad);
-	if (tipoHabilidad == 2) {//pirata
-		this->getRigidBody()->setGravity(btVector3(0, 0, 0));
-		this->getRigidBody()->setLinearVelocity(btVector3(orientacion.getX() * 100, 5.0f, orientacion.getZ() * 100));
-	}
-	if (tipoHabilidad == 4) {
-		this->getRigidBody()->setGravity(btVector3(0, 0, 0));
+void Habilidad::lanzarItem(int direccion,btVector3 orientacion){
+
+	this->orientacion = orientacion;
+
+	
+
+	if(tipoHabilidad == 1){ // PIRATA
+
+		rigidBody->setGravity(btVector3(0,-300,0));
+		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 300, 1.0f, orientacion.getZ() * 300));
 
 	}
 
-
-}
-void Habilidad::eliminarFisicas() {
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
-	// Remove the object from the world
-	mundo->removeRigidBody(rigidBody);
-	bullet->setObjetos(objetos);
-}
-int Habilidad::getInicioHabilidad() {
-	return inicioHabilidad;
 }
 
-bool Habilidad::getHabilidadActiva() {
-	return habilidadActiva;
-}
+void Habilidad::updateHijos(){
 
-void Habilidad::setHabilidadActiva(bool s) {
-	habilidadActiva = s;
-}
-void Habilidad::setOrientacion(btVector3 o) {
-	orientacion = o;
-
-}
-void Habilidad::setPosicion(btVector3 p) {
-	posicion = p;
+	movimiento();
 
 }
 
-void Habilidad::setPadre(ISceneNode* n) {
-	NodoVehiculo = n;
-}
 
-int Habilidad::getTipo() {
-	return tipoHabilidad;
-}
+void Habilidad::movimiento(){
 
-void Habilidad::inicializarFisicas(int tipo) {
-
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
-
-	// Set the initial position of the object
-
-	btTransform Transform;
-	Transform.setIdentity();
-	if (tipoHabilidad == 1 || tipoHabilidad == 4) {//solo la del chino y gladiador seguira al coche
-		Transform.setOrigin(btVector3(Habilidad::getNodo()->getPosition().X, Habilidad::getNodo()->getPosition().Y, Habilidad::getNodo()->getPosition().Z));
-	}
-	else {
-		Transform.setOrigin(posicion);
-	}
+	btTransform trans;
+	btQuaternion quaternion;
+	int giro =0;
+	
+		
+	switch(tipoHabilidad){
 
 
+		case 2: // VIKINGO
 
-	MotionState = new btDefaultMotionState(Transform);
+		giro=8;
+		trans.setOrigin(btVector3(NodoVehiculo->getPosition().X + orientacion.getX() *15,NodoVehiculo->getPosition().Y,NodoVehiculo->getPosition().Z + orientacion.getZ() *15));
 
+		orientacion = orientacion.rotate(btVector3(0, 1, 0),giro*PI/180);
+		nodo->setRotation(vector3df(nodo->getRotation().X,nodo->getRotation().Y+5,nodo->getRotation().Z));
+		quaternion.setEulerZYX(0,nodo->getRotation().Y * PI/180,0);
 
-	// Create the shape
-	/*if ( tipo == 2) {
+		trans.setRotation(quaternion);
+		rigidBody->setCenterOfMassTransform(trans);
 
-		btScalar esfera(16);
-		Shape = new btSphereShape(esfera);
+		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 20000, 0, orientacion.getZ() * 20000));
+		break;
+
+		case 3: // GLADIADOR
+
+		trans.setOrigin(btVector3(NodoVehiculo->getPosition().X ,NodoVehiculo->getPosition().Y+5,NodoVehiculo->getPosition().Z ));
+		quaternion.setEulerZYX(0,NodoVehiculo->getRotation().Y * PI/180,0);
+		trans.setRotation(quaternion);
+		rigidBody->setCenterOfMassTransform(trans);
+		rigidBody->setCenterOfMassTransform(trans);
+		rigidBody->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		rigidBody->setGravity(btVector3(0,0,0));
+		
+		break;
+
+		case 4: //CHINICO
+		trans.setOrigin(btVector3(NodoVehiculo->getPosition().X ,NodoVehiculo->getPosition().Y+2,NodoVehiculo->getPosition().Z ));
+		quaternion.setEulerZYX(NodoVehiculo->getRotation().X * PI/180,NodoVehiculo->getRotation().Y * PI/180,NodoVehiculo->getRotation().Z * PI/180);
+		trans.setRotation(quaternion);
+		rigidBody->setCenterOfMassTransform(trans);
+		rigidBody->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		rigidBody->setGravity(btVector3(0,0,0));
+		break;
 
 	}
-	else {*/
-	btVector3 HalfExtents(escala.getX() * 0.5f, escala.getY() * 0.5f, escala.getZ() * 0.5f);
-	Shape = new btBoxShape(HalfExtents);
-	//}
 
-	// Add mass
-	btVector3 LocalInertia;
-
-	masa = 10;
-	Shape->calculateLocalInertia(masa, LocalInertia);
-
-	// Create the rigid body object
-	rigidBody = new btRigidBody(masa, MotionState, Shape, LocalInertia);
-
-	btTransform t;
-	rigidBody->getMotionState()->getWorldTransform(t);
-	// Store a pointer to the irrlicht node so we can update it later
-	rigidBody->setUserPointer((void *)(this->getNodo()));
-	if (masa != 0)
-		rigidBody->setActivationState(DISABLE_DEACTIVATION);
-	// Add it to the world
-	mundo->addRigidBody(rigidBody);
-	objetos.push_back(rigidBody);
-	bullet->setObjetos(objetos);
 
 
 }

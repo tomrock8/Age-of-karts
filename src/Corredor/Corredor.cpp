@@ -24,6 +24,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	estado = new EstadosJugador();
 	vueltas = 1;
 	maxvueltas=4;
+	tipojugador=tipo;
 	
 	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
 	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
@@ -43,7 +44,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	posicion.setZ(pos.getZ());
 
 	//escudo
-	escudo = new Escudo(pos, getNodo());
+	//escudo = new Escudo(pos, getNodo());
 	setProteccion(false);
 
 	
@@ -99,14 +100,14 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	if (cuboNodo) InicializarFisicas();
 
-	setParametros(tipo);
+	setParametros();
 
 }
-void Corredor::setParametros(tipo_jugador t){
+void Corredor::setParametros(){
 
 	//cambiar parametros en funcion del tipo
 	int num=0;
-	switch (t){
+	switch (tipojugador){
 		case GLADIADOR:
 			//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
 			cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
@@ -177,11 +178,7 @@ void Corredor::setParametros(tipo_jugador t){
 			num=4;
 			break;
 	}
-	//HABILIDADES
-	habilidadJugador = new Habilidad(num, this->getNodo());
-	habilidadJugador->getNodo()->setVisible(false);
-	habilidadJugador->setPosicion(posicion);
-	habilidadJugador->setPadre(this->getNodo());
+	
 }
 
 //-----------------------------//
@@ -232,6 +229,7 @@ void Corredor::InicializarFisicas()
 	vehiculo = new btRaycastVehicle(tuning, CuerpoColisionChasis, RayCastVehiculo);
 
 	CuerpoColisionChasis->setActivationState(DISABLE_DEACTIVATION);
+	
 	
 	mundo->addVehicle(vehiculo);
 	//vehiculo->setActivationState(DISABLE_DEACTIVATION);
@@ -621,7 +619,7 @@ void Corredor::setFriccion(btScalar valor) {
 	}
 }
 void Corredor::setProteccion(bool s) {
-	escudo->getNodo()->setVisible(s);
+	//escudo->getNodo()->setVisible(s);
 	proteccion = s;
 }
 void Corredor::setLimite(int s) {
@@ -636,22 +634,7 @@ void Corredor::setPosDisparo(btVector3 s) {
 //-------------------------------------//
 //-------TRATAMIENTOS OBJETOS----------//
 //-------------------------------------//
-void Corredor::lanzarItem(Proyectil *item, int direccionItem)
-{
-	/*
-	Recibe un item de jugadorCorredor o jugadorIA y le aplica una velocidad para lanzarlo
-	direccionItem: 1=Delante//
-	-1=Atras	//
-	*/
-	btRigidBody *rigidItem = item->inicializarFisicas();
-	rigidItem->setCollisionFlags(rigidItem->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	if (direccionItem == 1)
-		item->getRigidBody()->setLinearVelocity(btVector3(orientacion.getX() * 400, 5.0f, orientacion.getZ() * 400));
-	else if (direccionItem == -1)
-		item->getRigidBody()->setLinearVelocity(btVector3(-orientacion.getX() * 400, 20.0f, -orientacion.getZ() * 400));
-	tipoObj = 0;
-	decCargador();
-}
+
 void Corredor::lanzarItemTeledirigido()
 {
 	resetFuerzas();
@@ -701,92 +684,116 @@ Tipos de objeto:
 void Corredor::usarObjetos() {
 	Pista *pista = Pista::getInstancia();
 	vector<Item *> items = pista->getItems();
+		
+		btVector3 posicion(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10);
+		btVector3 escala(2,2,2);
+		btScalar masa=50;
+		float tiempoDestruccion=15;
+		float tamanyoNodo=3;
+		btScalar radio=8;
+		float alt=1;
+
 	if (getTipoObj() == 1)		// PROYECTIL
 	{
-		pro = new Proyectil(btVector3(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10));
-		lanzarItem(pro, 1);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
-		
+	
+		Proyectil *pro = new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		pro->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro->setLanzado(true);
 		items.push_back(pro);
+
+		
 		soltarItem();
+		
 	}
 	else if (getTipoObj() == 2)	//CAJA FALSA
 	{
-		posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
-		posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
-		CajaFalsa *est = new CajaFalsa(posDisparo);
-		est->inicializarFisicas();
-		soltarItem();
+		alt=-1;
+		masa=0;
+		posicion.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
+		posicion.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
+		CajaFalsa *est = new CajaFalsa(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
 		items.push_back(est);
+		
+		soltarItem();
 	}
 	else if (getTipoObj() == 3)	//TURBO
 	{
 		setTurbo(true, true, 26000);
 	}
 	else if (getTipoObj() == 4)	//ACEITE
-	{
-		posDisparo.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
-		posDisparo.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
-		Aceite *est2 = new Aceite(posDisparo);
-		est2->inicializarFisicas();
-		//est2->getRigidBody()->setCollisionFlags(est2->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-		soltarItem();
+	{	
+		alt=-1;
+		masa=0;
+		posicion.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
+		posicion.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
+		Aceite *est2 = new Aceite(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
 		items.push_back(est2);
+	
+		soltarItem();
 	}
 	else if (getTipoObj() == 5)	//ESCUDO
 	{
-		if (getProteccion() == false) setProteccion(true);
+		//if (getProteccion() == false) setProteccion(true);
+		//decCargador();
+		alt=2;
+		masa=50;
+		radio=8;
+		escala = btVector3(10,10,10);
+		tiempoDestruccion=50;
+		posicion= btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+		posicion.setY(posicion.getY()+alt);
+		Escudo *escudo = new Escudo(cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt);
+		escudo->setLanzado(true);
+		items.push_back(escudo);
 		soltarItem();
 	}
 	else if (getTipoObj() == 6)	//FLECHA TRIPLE
 	{
-		proX3.resize(3);
+		
 		btVector3 orientacioncentral(orientacion.getX(), orientacion.getY(), orientacion.getZ());
 		btVector3 centro(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10);
 		btVector3 orientacionderecha = orientacioncentral.rotate(btVector3(0, 1, 0), 10 * PI / 180);
 		btVector3 orientacionizquierda = orientacioncentral.rotate(btVector3(0, 1, 0), -10 * PI / 180);
 		btVector3 iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 10);
 		btVector3 d(cuboNodo->getPosition().X + orientacionderecha.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 10);
-		for (int i = 0; i < 3; i++) {
+		
+				posicion=iz;
+				Proyectil *pro1= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+				//pro1->inicializarFisicas();
+				pro1->lanzarItem(1,orientacionizquierda);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+				pro1->setLanzado(true);
+				items.push_back(pro1);
 
+				posicion=centro;
+				Proyectil *pro2= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+				//pro2->inicializarFisicas();
+				pro2->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+				pro2->setLanzado(true);
+				items.push_back(pro2);
 			
-			if (i == 0) {
-				proX3.at(i)= new Proyectil(iz);
-				proX3.at(i)->inicializarFisicas();
-				proX3.at(i)->getRigidBody()->setCollisionFlags(proX3.at(i)->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-				proX3.at(i)->getRigidBody()->setLinearVelocity(btVector3(orientacionizquierda.getX() * 400, 5.0f, orientacionizquierda.getZ() * 400));
-			}
-			if (i == 1) {
-				proX3.at(i)= new Proyectil(centro);
-				proX3.at(i)->inicializarFisicas();
-				proX3.at(i)->getRigidBody()->setCollisionFlags(proX3.at(i)->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-				proX3.at(i)->getRigidBody()->setLinearVelocity(btVector3(orientacioncentral.getX() * 400, 5.0f, orientacioncentral.getZ() * 400));
-			}
-			if (i == 2) {
-
-				proX3.at(i)= new Proyectil(d);
-				proX3.at(i)->inicializarFisicas();
-				proX3.at(i)->getRigidBody()->setCollisionFlags(proX3.at(i)->getRigidBody()->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-				proX3.at(i)->getRigidBody()->setLinearVelocity(btVector3(orientacionderecha.getX() * 400, 5.0f, orientacionderecha.getZ() * 400));
-			}
-			proX3.at(i)->setLanzado(true);
+				posicion=d;
+				Proyectil *pro3= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+				//pro3->inicializarFisicas();
+				pro3->lanzarItem(1,orientacionderecha);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+				pro3->setLanzado(true);
+				items.push_back(pro3);
 			
 
-			items.push_back(proX3.at(i));
-
-
-
-
-		}
-		soltarItem();
+				//decCargador();
+				soltarItem();
 	}
 	else if (tipoObj == 7)	//FLECHA TELEDIRIGIDA
 	{
-		cout << "Teledirigido de Jugador " << this->getID() << " - posicion: " << posicionCarrera << endl;
-		pt = new ItemTeledirigido(posDisparo);
-		pt->lanzarItemTeledirigido(posicionCarrera);
+		//cout << "Teledirigido de Jugador " << this->getID() << " - posicion: " << posicionCarrera << endl;
+		alt=1;
+		posicion.setY(posicion.getY()+alt);
+		ItemTeledirigido *pt = new ItemTeledirigido(posicion,escala,masa,50,CUBO,tamanyoNodo,radio,alt);
+		pt->setWaypoint(actual);
+		pt->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		pt->setLanzado(true);
 		items.push_back(pt);
 		soltarItem();
+		
 	}
 	else if(tipoObj == 8)	//TURBO TRIPLE
 	{
@@ -953,20 +960,19 @@ void Corredor::limitadorVelocidad(){
 void Corredor::comprobarSueloRuedas()
 {
 /*
+	int cont=0;
 	for(int i = 0; i < vehiculo->getNumWheels(); i++){
 	if(!vehiculo->getWheelInfo(i).m_raycastInfo.m_isInContact){
 		
-		vehiculo->applyEngineForce(0, 0);
-		vehiculo->applyEngineForce(0, 1);
-		vehiculo->applyEngineForce(0, 2);
-		vehiculo->applyEngineForce(0, 3);
-		vehiculo->setSteeringValue(0, 0);
-		vehiculo->setSteeringValue(0, 1);
+		cont++;
 		//cout<<"LA RUEDA :: "<< i << "NO ESTA EN CONTACTO"<<endl;
 	}	
 	
 	}	
 
+	if(cont==4){
+
+	}
 */
 }
 
@@ -1023,7 +1029,7 @@ void Corredor::update()
 	movimiento();
 	updateTimerObstaculos();
 	updateEstado();
-	if (habilidadJugador->getHabilidadActiva())updateHabilidad();
+	//if (habilidadJugador->getHabilidadActiva())updateHabilidad();
 	
 	comprobarSueloRuedas();
 	posicion.setX(cuboNodo->getPosition().X);
@@ -1035,7 +1041,6 @@ void Corredor::update()
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 	updateText();
 	updateHijos();
-	
 	
 }
 
@@ -1095,21 +1100,7 @@ void Corredor::updateText(){
 }
 
 void Corredor::updateTimerObstaculos() {
-	if (pt != NULL) {	
-		if (objetivoFijado){
-			Timer *t = Timer::getInstancia();
-			if (t->getTimer()-timerTeledirigido>=2){
-				
-    			if (!proteccion){ 
-          			lanzarItemTeledirigido(); 
-				}
-			}
-			if (t->getTimer()-timerTeledirigido>=3){
-				objetivoFijado=false;
-				setProteccion(false);
-			}
-		}
-	}
+
 	if (aceiteActivado){
 		Timer *t2 = Timer::getInstancia();
 			if (t2->getTimer()-timerAceite>=0){
@@ -1179,32 +1170,76 @@ void Corredor::lanzarHabilidad(){
 	if (getLimite() >= 100) {//puedo lanzar la habilidad
 		Pista *pista = Pista::getInstancia();
 		vector<Item *> items = pista->getItems();
-		habilidadJugador->getNodo()->setVisible(true);
-		habilidadJugador->setOrientacion(orientacion);
-		habilidadJugador->setPadre(this->getNodo());
-		habilidadJugador->setPosicion(posDisparo);
-		habilidadJugador->lanzarHabilidad();
+		
+		btVector3 posicion(cuboNodo->getPosition().X + orientacion.getX() * 20, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 20);
+		btVector3 escala(5,5,5);
+		btScalar masa=100;
+		float tiempoDestruccion=40;
+		float tamanyoNodo=3;
+		btScalar radio=12;
+		float alt=10;
+
+		Habilidad * habilidadJugador;
+
+		switch(tipojugador){
+
+		case PIRATA:	
+		
+		masa=100;
+		radio=12;
+		alt=10;
+
+		posicion.setY(posicion.getY()+alt);
+		habilidadJugador = new Habilidad(1,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt);
+		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		habilidadJugador->setLanzado(true);
+		
+		break;
+
+		case VIKINGO:
+		escala = btVector3(2,2,2);	
+		masa=0;
+		radio=0;
+		alt=2;	
+		posicion.setY(posicion.getY()+alt);
+		habilidadJugador = new Habilidad(2,cuboNodo,posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		habilidadJugador->setLanzado(true);	
+		break;
+
+		case GLADIADOR:
+		habilidadJugador = new Habilidad(3,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt);
+		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		habilidadJugador->setLanzado(true);
+		break;
+
+		case CHINO:
+		posicion = btVector3(cuboNodo->getPosition().X , cuboNodo->getPosition().Y, cuboNodo->getPosition().Z );
+		escala = btVector3(3,3,3);
+		masa=100;	
+		alt=2;
+		posicion.setY(posicion.getY()+alt);
+		habilidadJugador = new Habilidad(4,cuboNodo,posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		habilidadJugador->setLanzado(true);	
+		break;
+
+			
+
+
+		}
 		items.push_back(habilidadJugador);
+
+		pista->setItems(items);
 		setLimite(0);
+
 	}
 	else {
 		cout << "No puedes usar la habilidad si tu limite no es 100 o mas" << endl;
 	}
 }
 
-void Corredor::updateHabilidad() {
-	Timer *tiempo = Timer::getInstancia();
-	int inicioHabilidad = habilidadJugador->getInicioHabilidad();
 
-
-	if (tiempo->getTimer() - inicioHabilidad >= 3) {
-		//cout << "Se acaba el tiro\n";
-		habilidadJugador->setHabilidadActiva(false);
-		habilidadJugador->getNodo()->setVisible(false);
-		habilidadJugador->eliminarFisicas();
-
-	}
-}
 void Corredor::updateEstado() {
 	if (vehiculo->getCurrentSpeedKmHour() < 0.5 && vehiculo->getCurrentSpeedKmHour() > -0.5) {
 		estado->setEstadoMovimiento(QUIETO);
@@ -1262,7 +1297,7 @@ void Corredor::updateVectorDireccion()
 	orientacion = btVector3(sin(anguloX), 0, cos(anguloZ));
 
 	orientacion.normalize();
-	//cout<< "ORIENTACION XNORMAL=="<< orientacion.X << " ORIENTACION ZNORMAL=="<< orientacion.Z  << endl;
+	//cout<< "ORIENTACION XNORMAL COCHE=="<< orientacion.getX() << " ORIENTACION ZNORMAL COCHE=="<< orientacion.getZ()  << endl;
 }
 //---------------------------------------//
 //--------------DESTRUCTOR---------------//

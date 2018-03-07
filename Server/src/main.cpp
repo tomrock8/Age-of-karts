@@ -157,6 +157,7 @@ int main()
             pistaca->getArrayCaja()[i]->comprobarRespawn(); // TODO: MOVER AL UPDATE DE PISTACA
         }
 
+        //std::cout << "Items: " << items.size() << endl;
         for (int i=0;i<items.size();i++)
         {
             if(items.at(i)->getLanzado()){

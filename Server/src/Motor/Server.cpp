@@ -623,6 +623,8 @@ int Server::getCommands(){
 	std::string mensajePort;
 	char msj[2048];
 	RakNet::RakNetStatistics *rss;
+	int index;
+	int objeto;
 	if(kbhit()){
 		std::cin >> mensaje;
 		if(mensaje.compare("shut")==0){
@@ -649,6 +651,27 @@ int Server::getCommands(){
 			std::cin>>index;
 			playerDisconnection(clientes.at(index).ip);
 			server->CloseConnection(server->GetSystemAddressFromIndex(index), true, 0);
+		}else if(mensaje.compare("obj") == 0) {
+			if(started){
+				std::cout << "Introduzca numero de jugador: \n";
+				GetConnectionList();
+				std::cin >> index;
+				std::cout << "Introduzca numero de objeto: \n";
+				std::cout << "1. Flecha\n";
+				std::cout << "2. Caja Falsa\n";
+				std::cout << "3. Turbo\n";
+				std::cout << "4. Aceite\n";
+				std::cout << "5. Escudo\n";
+				std::cout << "6. Flecha Triple\n";
+				std::cout << "7. Teledirigido\n";
+				std::cout << "8. Turbo Triple\n";
+				std::cin >> objeto;
+				GestorJugadores *jugadores = GestorJugadores::getInstancia();
+				players = jugadores->getJugadores();
+				if(objeto < 9 && objeto > -1 && index < jugadores->getNumJugadores() && index > -1){
+					players[index]->setTipoObj(objeto);
+				}else std::cout << "Parametros incorrectos\n";
+			}
 		}
 	}
 	return 0;

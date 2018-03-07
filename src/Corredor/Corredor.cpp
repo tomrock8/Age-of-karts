@@ -355,6 +355,10 @@ int Corredor::getID(){
 Corredor::tipo_jugador Corredor::getTipoJugador(){
 	return tipojugador;
 }
+bool Corredor::getAceiteActivado(){
+	return aceiteActivado;
+}
+
 
 //-----------------------------//
 //---------METODOS SET---------//

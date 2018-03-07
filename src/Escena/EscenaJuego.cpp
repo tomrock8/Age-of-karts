@@ -79,7 +79,7 @@ void EscenaJuego::init() {
 	Corredor* jugador;
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		
-		jugador = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::VIKINGO);
+		jugador = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::CHINO);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
 
@@ -424,7 +424,7 @@ void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	vector<btRigidBody *> objetos = bullet->getObjetos();
-	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
+	mundo->stepSimulation(TDeltaTime * 0.01f, 1);
 	int c = 0;
 	for (int i=0;i<objetos.size();i++){
 		c++;

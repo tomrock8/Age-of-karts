@@ -1224,7 +1224,7 @@ void Corredor::lanzarHabilidad(){
 		btScalar radio=12;
 		float alt=10;
 
-		Habilidad * habilidadJugador;
+		Habilidad * habilidadJugador = NULL;
 
 		switch(tipojugador){
 

@@ -238,7 +238,7 @@ bool GestorColisiones::Escudoitems(){
 
 			if(idPadreEscudo == idPadreObjeto){
 			return false;
-			cout<<"HOLAPIXA"<<endl;
+		
 			}
 			else{
 				
@@ -286,7 +286,7 @@ if (strcmp("Escudo", nodoB->getName()) == 0){
 
 			if(idPadreEscudo == idPadreObjeto){
 			return false;
-			cout<<"HOLAPIXICA"<<endl;
+		
 			}
 			else{
 				

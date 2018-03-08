@@ -377,7 +377,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	if (fin_carrera==true && sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
 		if (tipoEscena == Escena::tipo_escena::ONLINE && controlPlayer==0){
 			client->FinalizarCarrera();
-		}else{
+		}else if(!tipoEscena == Escena::tipo_escena::ONLINE){
 			return Escena::tipo_escena::MENU;
 		}
 	}

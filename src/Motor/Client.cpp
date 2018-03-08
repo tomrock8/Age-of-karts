@@ -396,7 +396,7 @@ int Client::ReceivePackets()
 				bsIn.Read(param2);
 				bsIn.Read(reset);
 				bsIn.Read(lanzar);
-                                cout<<"id: "<<id<<"---"<<"players.size(): "<<players.size()<<endl;
+                               // cout<<"id: "<<id<<"---"<<"players.size(): "<<players.size()<<endl;
                                 if (players.size()>id && id!=-1){
                                     players.at(id)->getEstados()->setEstadoMovimiento(param);
                                     players.at(id)->getEstados()->setDireccionMovimiento(param2);

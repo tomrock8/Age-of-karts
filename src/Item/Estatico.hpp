@@ -2,20 +2,26 @@
 #define ESTATICO_H
 
 #include "Item.hpp"
-#include "GestorIDs.hpp"
+
 using namespace std;
 
-class Estatico : public Item
+class Estatico 
 {
   public:
+
     Estatico(btVector3 posicionItem);
+    ~Estatico();
+   /*
     void soltarItem();
     btRigidBody *inicializarFisicas();
 	//~Estatico();
+*/  
   private:
-	  btDefaultMotionState * MotionState;
+	 /*
+    btDefaultMotionState * MotionState;
 	  btCollisionShape *Shape;
     bool colision;
+*/
 };
 
 #endif

@@ -86,7 +86,7 @@ void EscenaJuego::init() {
 		jugador = new CorredorIA("assets/coche.obj", btVector3(-10, 0, 280),Corredor::tipo_jugador::GLADIADOR);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
-
+/*
 		jugador = new CorredorIA("assets/coche.obj", btVector3(-50, 0, 300),Corredor::tipo_jugador::PIRATA);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
@@ -102,17 +102,18 @@ void EscenaJuego::init() {
 		jugador = new CorredorIA("assets/coche.obj", btVector3(-100, 0, 290),Corredor::tipo_jugador::CHINO);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
-	
+*/	
 
 
 		pj[0]->setID(0);
+
 		pj[1]->setID(1);
-		
+/*		
 			pj.at(2)->setID(2);
 			pj.at(3)->setID(3);
 			pj.at(4)->setID(4);
 			pj.at(5)->setID(5);
-		
+*/		
 
 	}else{
 		btVector3 pos2[6];
@@ -134,7 +135,7 @@ void EscenaJuego::init() {
 		pos2[5].setX(-30);
 		pos2[5].setY(0);
 		pos2[5].setZ(290);
-		int numClients = client->getNumClients();
+		int numClients = client->getClientes().size();
 		Corredor::tipo_jugador tj;
 		for(int i = 0; i< numClients; i++){		
 			if (client->getClientes().at(i).tipoCorredor == 0){
@@ -190,14 +191,15 @@ void EscenaJuego::dibujar() {
 	Motor3d::instancia().getScene()->drawAll();
 
 	//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
+	/*
 	SMaterial materialDriver;
 	materialDriver.Lighting = false;
 	Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
 	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		
-		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
-		
+		//CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
+		/*
 				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj.at(2));
 				CorredorIA *COMENARDOSAUXILIAR3 = static_cast<CorredorIA *>(pj.at(3));
 				CorredorIA *COMENARDOSAUXILIAR4 = static_cast<CorredorIA *>(pj.at(4));
@@ -205,16 +207,18 @@ void EscenaJuego::dibujar() {
 		
 
 		//COMENARDOSAUXILIAR->update();
-		 
-		
+		 */
+		//		COMENARDOSAUXILIAR1->ActualizarRaytest();
+			/*
 				COMENARDOSAUXILIAR2->ActualizarRaytest();
 				COMENARDOSAUXILIAR3->ActualizarRaytest();
 				COMENARDOSAUXILIAR4->ActualizarRaytest();
 				COMENARDOSAUXILIAR5->ActualizarRaytest();
-		
+	
 
 		//Para poder dibujar putas lineas de mierda
 	}
+	*/	
 	//Para poder dibujar putas lineas de mierda
 	if (debug) {
 		SMaterial debugMat;
@@ -234,6 +238,7 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
+	cout<<"sigo aqui\n";
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
 	vector<Item *> items = pistaca->getItems();
@@ -242,6 +247,7 @@ void EscenaJuego::update() {
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client->ReceivePackets();
+		controlPlayer = client->getControlPlayer();
 	}
 	//cout << irrTimer->getTime() << endl;
 	textoDebug->limpiar();
@@ -255,12 +261,13 @@ void EscenaJuego::update() {
 	}
 
 	for (int i=0;i<items.size();i++)
-	{
+	{	
 		if(items.at(i)->getLanzado()){
-			if(items.at(i)->comprobarDestructor()){
-				items.at(i)->Delete();
-				items.erase(items.begin()+i);
-				break;
+
+			if(items.at(i)->update()){
+			items.erase(items.begin()+i);
+			break;
+			
 			}
 		}
 	}
@@ -300,13 +307,14 @@ void EscenaJuego::update() {
 		pj.at(controlPlayer)->actualizarItem();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		pj.at(controlPlayer)->update();
+				
 				pj.at(1)->update();
-
+/*
 				pj.at(2)->update();
 				pj.at(3)->update();
 				pj.at(4)->update();
 				pj.at(5)->update();
-		
+		*/
 		//textoDebug->agregar(pj.at(0)->toString());
 	}
 	else {
@@ -367,9 +375,15 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 
 	//------- ENTRADA TECLADO ----------
 	if (fin_carrera==true && sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
-		return Escena::tipo_escena::MENU;
+		if (tipoEscena == Escena::tipo_escena::ONLINE && controlPlayer==0){
+			client->FinalizarCarrera();
+		}else{
+			return Escena::tipo_escena::MENU;
+		}
 	}
-
+	if (tipoEscena == Escena::tipo_escena::ONLINE && !client->getStarted()){
+		return Escena::tipo_escena::LOBBY;
+	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
 		if(!cambioCamara){
 			tipoCamara++;
@@ -417,7 +431,7 @@ void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	vector<btRigidBody *> objetos = bullet->getObjetos();
-	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
+	mundo->stepSimulation(TDeltaTime * 0.01f, 1);
 	int c = 0;
 	for (int i=0;i<objetos.size();i++){
 		c++;
@@ -448,4 +462,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	Euler *= RADTODEG;
 	Node->setRotation(Euler);
 
+}
+std::string EscenaJuego::getIpConexion(){
+	return ipConexion;
 }

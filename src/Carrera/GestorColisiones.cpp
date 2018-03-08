@@ -9,6 +9,7 @@ void GestorColisiones::ComprobarColisiones()
 	jugadores = GestorJugadores::getInstancia();
 	Pista *pista = Pista::getInstancia();
 	vector<Caja*> cajas = pista->getArrayCaja();
+	vector<Item*> items = pista->getItems();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	pj1 = jugadores->getJugadores();
 	int numManifolds = mundo->getDispatcher()->getNumManifolds();
@@ -31,13 +32,14 @@ void GestorColisiones::ComprobarColisiones()
 				   cout<<"------------------------ID PROYECTIL ITEM CORRUPTO: ";
 			   }
 			}*/
-
+			if (ItemTeledirigidoWaypoint(items))continue;
 			if (JugadorCaja(cajas))continue;
 			if (JugadorTurbo())continue;
 			if (JugadorWaypoint())continue;
 			if (objetoDestruible())continue;
 			if (JugadorProyectil())break;
 			if (JugadorEstatico())break;
+			
 			//if (JugadorItemTeledirigido())continue;
 
 		}
@@ -70,6 +72,56 @@ bool GestorColisiones::JugadorWaypoint(){
 
 }
 
+
+bool GestorColisiones::ItemTeledirigidoWaypoint(vector<Item*> items){
+
+
+	if (strcmp("Estatico", nodoA->getName()) == 0){
+			 if (strcmp("Waypoint", nodoB->getName()) == 0)
+        {
+			
+	int idA = nodoA->getID();		
+	for (int i=0;i<items.size();i++){
+		if (items.at(i)->getID() == idA){
+
+						if(strcmp("ItemTeledirigido", items.at(i)->getNombre()) == 0){
+						items.at(i)->setColision(nodoB->getID());
+						
+						return true;	
+						}	
+					
+					
+			
+	}
+		
+	}
+}
+}
+
+if (strcmp("Estatico", nodoB->getName()) == 0){
+			 if (strcmp("Waypoint", nodoA->getName()) == 0)
+        {
+			
+	int idB = nodoB->getID();		
+	for (int i=0;i<items.size();i++){
+		if (items.at(i)->getID() == idB){
+
+						if(strcmp("ItemTeledirigido", items.at(i)->getNombre()) == 0){
+						items.at(i)->setColision(nodoA->getID());
+						
+						return true;	
+						}
+					
+					
+			
+	}
+		
+	}
+}
+}
+
+	return false;
+}
 
 
 //

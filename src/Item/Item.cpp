@@ -1,18 +1,26 @@
 #include "Item.hpp"
 
 
-Item::Item(int tipo) {
-}
 
-Item::Item(btVector3 pos)
+Item::Item(btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,float tamanyoNodo,btScalar radio,float alturaLanzamiento)
 {
 
+	colision=false;
 	lanzado = false;
-	masa = btScalar(50);
-	
+	this->masa = masa;
+	this->posicion = posicion;
+	this->escala=escala;
+	this->tiempoDesctruccion=tiempoDesctruccion;
+	this->tamanyoNodo=tamanyoNodo;
+	this->radio=radio;
+	this->fcolision=fcolision;
+	this->alturaLanzamiento=alturaLanzamiento;
+
+
+
 }
 
-btRigidBody *Item::inicializarFisicas()
+void Item::inicializarFisicas()
 {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
@@ -23,31 +31,44 @@ btRigidBody *Item::inicializarFisicas()
 	Transform.setIdentity();
 	Transform.setOrigin(posicion);
 	MotionState = new btDefaultMotionState(Transform);
-
+	btVector3 HalfExtents(escala.getX() *1.5, escala.getY()*1.5, escala.getZ()*1.5 );
 	// Create the shape
-	btVector3 HalfExtents(escala.getX() * 0.5f, escala.getY() * 0.5f, escala.getZ() * 0.5f);
-	Shape = new btBoxShape(HalfExtents);
+	switch(fcolision){
+
+		case CUBO:
+		Shape = new btBoxShape(HalfExtents);
+		break;
+
+		case ESFERA:
+		Shape = new btSphereShape(radio);
+		break;
+
+		case CILINDRO:
+		Shape = new btCylinderShape(HalfExtents);
+		break;
+
+	}
 
 	// Add mass
 	btVector3 LocalInertia;
-
-	
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
 	// Create the rigid body object
 	rigidBody = new btRigidBody(masa, MotionState, Shape, LocalInertia);
-	btTransform t;
-	rigidBody->getMotionState()->getWorldTransform(t);
-	// Store a pointer to the irrlicht node so we can update it later
-	rigidBody->setUserPointer((void *)(nodo));
+	
 	if (masa != 0)
-		rigidBody->setActivationState(DISABLE_DEACTIVATION);
+	rigidBody->setActivationState(DISABLE_DEACTIVATION);
+	else
+	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	
+
+	rigidBody->setUserPointer((void *)(nodo));
+	
 	// Add it to the world
 	mundo->addRigidBody(rigidBody);
 	objetos.push_back(rigidBody);
 	bullet->setObjetos(objetos);
-	rigidBody->setGravity(btVector3(0, -6, 0));
-	return rigidBody;
+	
 }
 
 void Item::setLanzado(bool b) {
@@ -63,13 +84,26 @@ bool Item::getLanzado()
 bool Item::comprobarDestructor(){
 	clock_t timediff = clock() - tiempoLanzado;
 	float timediff_sec = ((float)timediff) / 100000;
-	if (timediff_sec >= 15) {
+	if (timediff_sec >= tiempoDesctruccion) {
 		return true;
 	}
 	return false;
 }
 
-bool Item::Delete()
+
+bool Item::update(){
+			
+	if(comprobarDestructor()){
+	Delete();
+	return true;
+	}else{
+	updateHijos();
+	return false;
+	}
+}
+
+
+void Item::Delete()
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -99,11 +133,12 @@ bool Item::Delete()
 
 			objetos.erase(objetos.begin()+i);
 			bullet->setObjetos(objetos);
-			return true;
+			
 		}
 	}
-	return false;
+
 }
+
 btRigidBody *Item::getRigidBody()
 {
 	return rigidBody;
@@ -120,9 +155,17 @@ int Item::getID(){
 	return id;
 }
 
-void Item::setNombre(const char* name){
-	nombre=name;
+void Item::setNombre(const char* nombre){
+	this->nombre=nombre;
 }
-void Item::setMasa(btScalar mass){
-	masa=mass;
+void Item::setMasa(btScalar masa){
+	this->masa=masa;
+}
+
+
+void Item::setColision(int id){
+
+	idwaypoint=id;
+	colision=true;
+
 }

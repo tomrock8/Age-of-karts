@@ -1,32 +1,61 @@
 #include "Escudo.hpp"
-#include "Motor3d.hpp"
 
-Escudo::Escudo(btVector3 posicionItem, ISceneNode* parent) : Item(posicionItem)
+
+Escudo::Escudo(ISceneNode* n,btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,float tamanyoNodo,btScalar radio,
+float alturaLanzamiento) : Item(posicion,escala,masa,tiempoDesctruccion,fcolision,tamanyoNodo,radio,alturaLanzamiento)
 {
 	// -----------------------------
 	//  PREPARAR LA VENTANA
 	// -----------------------------
+	NodoVehiculo=n;
+	
+	objetoHabilidad =  Motor3d::instancia().getScene()->getMesh("assets/Objetos/escudo.obj");
+	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
+	nodo->setPosition(vector3df(posicion.getX(), posicion.getY(), posicion.getZ()));
+	nodo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
+	
+
+	nodo->setMaterialFlag(EMF_LIGHTING, false);
+	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+	nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL);
+
+	GestorIDs::instancia().setIdentifier(nodo,"Estatico");
+	id=nodo->getID();
+
 	nombre = "Escudo";
+	nodo->setName("Escudo");
 
-//	EscudoNodo->setName("Escudo"+idItem);
-	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/escudo.obj"));
-	escala.setX(5);
-	escala.setY(5);
-	escala.setZ(5);
-	nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
-	//nodo = smgr->addSphereSceneNode(5.0f);
-	nodo->setParent(parent);
-	//4smgr->getMeshManipulator()->setVertexColors(nodo->getMesh(), SColor(50));
-	nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL); //transparencia
+	inicializarFisicas();
 
-	nodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-	nodo->setName(nombre);
+	
+	rigidBody->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
-
-
-
+	
 }
-Escudo::~Escudo() {
-	delete nodo;
+
+
+void Escudo::lanzarItem(int direccion,btVector3 orientacion){
+	
+}
+
+void Escudo::updateHijos(){
+	movimiento();
+}
+
+
+
+void Escudo::movimiento(){
+
+
+		nodo->setPosition(NodoVehiculo->getPosition());
+		nodo->setRotation(NodoVehiculo->getRotation());
+		btTransform trans;
+		btQuaternion quaternion;
+		trans.setOrigin(btVector3(NodoVehiculo->getPosition().X ,NodoVehiculo->getPosition().Y+2,NodoVehiculo->getPosition().Z ));
+		quaternion.setEulerZYX(NodoVehiculo->getRotation().X * PI/180,NodoVehiculo->getRotation().Y * PI/180,NodoVehiculo->getRotation().Z * PI/180);
+		trans.setRotation(quaternion);
+		rigidBody->setCenterOfMassTransform(trans);
+		rigidBody->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		rigidBody->setGravity(btVector3(0,0,0));
 }
 

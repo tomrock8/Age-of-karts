@@ -217,7 +217,7 @@ void CorredorIA::movimiento()
 {
 	//LLmamos a la logica difusa para que nos de los valores de entrada
 	//seguirWaypoint();
-	//ActualizarRaytest();
+	ActualizarRaytest();
 	logicaDifusa();
 	
 

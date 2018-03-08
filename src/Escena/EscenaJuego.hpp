@@ -33,7 +33,7 @@ public:
 	Escena::tipo_escena comprobarInputs();
 
 	// METODOS GET
-
+	std::string getIpConexion();
 
 	// METODOS SET
 

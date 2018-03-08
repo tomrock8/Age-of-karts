@@ -1,0 +1,64 @@
+#version 330 core
+// Variables de salia
+out vec4 FragColor;
+
+// Variables de entrada desde el VertexShader
+in vec2 TexCoords;
+in vec3 fragPos; // Vector de entrada del Vertex
+in vec3 normal;  // Vector de normales
+
+struct Light {
+    vec3 position;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+uniform sampler2D texture_diffuse1;
+uniform Light light_1;
+uniform vec3 colorRandom;
+uniform vec3 posCamara;
+
+//vec3  colorRandom(0.3, 0.8, 0.2);
+
+
+void main()
+{    
+    //======================================================
+    // CALCULO DE LA LUZ: MODELO DE PHONG
+    //======================================================
+
+    // ---- AMBIENTE ----
+    //Se multiplica por el color de la luz que incide sobre el objeto
+    vec3 ambient = light_1.ambient * colorRandom;
+
+    // ---- DIFUSA ----
+    //Calcular la direccion entre la fuente de luz y la posicion en el mundo
+    vec3 lightDir = normalize(light_1.position - fragPos);  //|Se necesitan normalizar los vectores
+    vec3 norm = normalize(normal);                  //|para que sean unitarios
+
+    //Calcular normal entre el vector luz y la normal de cada vertice
+    //para obtener la influencia de la luz difusa sobre cada superficie
+    //max = no queremos el valor negativo del resultado
+    float diff = max(dot(norm, lightDir), 0.0);
+    //lo multiplicamos por el color de la luz
+    vec3 diffuse = light_1.diffuse * diff * colorRandom;
+
+    
+    // ---- ESPECULAR ----
+    //Calcular el vector direccion de la camara y el reflejo con la normal
+    vec3 viewDir = normalize(posCamara - fragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+
+    //Calcular el componente especular
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0f); //32 = valor de brillo, cuanto mas alto mas brillante
+    vec3 specular = light_1.specular * spec * colorRandom;
+    
+
+    //Luz resultante: ambient+diffuse+specular
+    //vec3 result = ambient+diffuse+specular;
+    vec3 result = ambient+diffuse+specular;
+
+    //Se asigna el color resultante a la variable de salida
+    FragColor = vec4(result, 1.0);
+}

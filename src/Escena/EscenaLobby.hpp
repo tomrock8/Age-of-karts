@@ -10,7 +10,7 @@
 
 class EscenaLobby : public Escena {
 public:
-	EscenaLobby();
+	EscenaLobby(Escena::tipo_escena tipo, std::string ipC);
 	~EscenaLobby();
 
 	virtual void init() override;
@@ -38,7 +38,7 @@ private:
 	bool lanzado;
 	int count;
 	bool pressed;
-
+	bool firstInit;
 	IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
 
 	stringw texto; // Texto a mostrar en pantalla

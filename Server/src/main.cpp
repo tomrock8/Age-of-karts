@@ -56,7 +56,7 @@ int main()
     
     debug = 0;
 	fin_carrera=false;
-    GestorIDs::instancia().restartID();
+
 
 	Timer *t = Timer::getInstancia(); 
   	
@@ -142,6 +142,7 @@ int main()
 			if (t->getTimer()==4){ 
 				for (int i = 0; i < jugadores->getNumJugadores(); i++) { 
 				pj.at(i)->getEstados()->setEstadoCarrera(1); 
+				    pj.at(i)->getEstados()->setEstadoCarrera(1); 
 				} 
 			} 
 		}
@@ -156,6 +157,7 @@ int main()
             pistaca->getArrayCaja()[i]->comprobarRespawn(); // TODO: MOVER AL UPDATE DE PISTACA
         }
 
+        //std::cout << "Items: " << items.size() << endl;
         for (int i=0;i<items.size();i++)
         {
             if(items.at(i)->getLanzado()){
@@ -277,7 +279,7 @@ void UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	vector<btRigidBody *> objetos = bullet->getObjetos();
-	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
+    mundo->stepSimulation(TDeltaTime * 0.01f, 1);
 	int c = 0;
 	for (int i=0;i<objetos.size();i++){
 		c++;

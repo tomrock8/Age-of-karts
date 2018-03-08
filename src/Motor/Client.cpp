@@ -172,12 +172,14 @@ void Client::ChangeCharacter(bool i) {
 	std::cout << "Cambiando personaje\n";
 	
 	typeID = ID_CHANGE_CHARACTER;
+	std::cout << "Cambiando personaje2\n";
 	RakNet::BitStream bsOut;
 	bsOut.Write(typeID);
 	bsOut.Write(controlPlayer);
 	bsOut.Write(i);	//false == izquierda ;; true == derecha
-
+	std::cout << "Cambiando personaje3\n";
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	std::cout << "Cambiando personaje4\n";
 }
 //==================================================================================================================
 // funcion que recoge los paquetes recibidos por el cliente y realiza unas acciones u otras segun su identificador
@@ -381,7 +383,10 @@ int Client::ReceivePackets()
 				cout << "ID_RACE_START\n";
 				started = true;
 				break;
+			case ID_RETURN_LOBBY:
+				started = false;
 
+				break;
 			//Recibimos la pulsacion de teclado de algun cliente
 			case ID_SEND_KEY_PRESS:
 
@@ -391,15 +396,18 @@ int Client::ReceivePackets()
 				bsIn.Read(param2);
 				bsIn.Read(reset);
 				bsIn.Read(lanzar);
-				players.at(id)->getEstados()->setEstadoMovimiento(param);
-				players.at(id)->getEstados()->setDireccionMovimiento(param2);
-				if(reset){
-					players.at(id)->recolocarWaypoint();
-				}
-				if(lanzar){
-					if(players.at(id)->getTipoObj() != 0)
-						players.at(id)->usarObjetos();
-				}
+                                cout<<"id: "<<id<<"---"<<"players.size(): "<<players.size()<<endl;
+                                if (players.size()>id && id!=-1){
+                                    players.at(id)->getEstados()->setEstadoMovimiento(param);
+                                    players.at(id)->getEstados()->setDireccionMovimiento(param2);
+                                    if(reset){
+                                            players.at(id)->recolocarWaypoint();
+                                    }
+                                    if(lanzar){
+                                            if(players.at(id)->getTipoObj() != 0)
+                                                    players.at(id)->usarObjetos();
+                                    }
+                                }
 				break;
 			
 			//Caso desactualizado: Spawn de un jugador estando la partida empezada
@@ -580,7 +588,7 @@ int Client::ReceivePackets()
 				bsIn.Read(playerDisconnect);
 				if (started) {
 					players.erase(players.begin() + playerDisconnect);
-					numPlayers--;
+					//numPlayers--;
 					jugadores->decrementarJugadores();
 				}
 				if(controlPlayer>playerDisconnect)	//Si el jugador controlado por este cliente esta por arriba del jugador eliminado se debe reducir
@@ -667,6 +675,13 @@ void Client::SpawnPlayer()
 		spawned = true;
 		*/
 	}
+}
+void Client::FinalizarCarrera(){
+	typeID = ID_RETURN_LOBBY;
+	RakNet::BitStream bsOut;
+	bsOut.Write(typeID);
+	
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
 //===========================================================================

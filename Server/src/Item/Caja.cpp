@@ -89,6 +89,7 @@ void Caja::romper(Corredor *pj1Col) {
 			Node->setVisible(false);
 			timer = time->getTimer();
 			if (pj1Col->getTipoObj() == 0) {
+				std::cout<< "Entro al objeto\n";
 				pj1Col->setTipoObj();
 			}
 

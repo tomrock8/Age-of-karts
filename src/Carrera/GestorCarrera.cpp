@@ -1,7 +1,7 @@
 #include "GestorCarrera.hpp"
 
 GestorCarrera::GestorCarrera() {
-	vueltas = 2;
+	vueltas = 0;
 	jugadores = GestorJugadores::getInstancia();
 	pj1 = jugadores->getJugadores();
 	jugadores->setJugadores(pj1);

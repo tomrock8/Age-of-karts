@@ -99,6 +99,7 @@ class Corredor: public RakNet::NetworkIDObject
 	bool getProteccion();
 	EstadosJugador *getEstados();
 	int getLimite();
+	bool getAceiteActivado();
 	tipo_jugador getTipoJugador();
 
 

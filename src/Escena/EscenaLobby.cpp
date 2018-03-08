@@ -1,18 +1,27 @@
 #include "EscenaLobby.hpp"
 
-EscenaLobby::EscenaLobby() : Escena(Escena::tipo_escena::LOBBY) {
+EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tipo) {
 	nElementos = 0;
 	count = 50;
+	ipConexion = ipC;
+    cout<<ipConexion<<endl;
+	if (ipConexion==""){	
+		texto = L"ESC - SALIR\n\n";
+		texto = "Introduce IP para iniciar partida online: ";
+        iniciar = false;
+		iniciado = false;
+		firstInit = true;
+	}else{
+        iniciar = true;
+		iniciado = false;
+		firstInit = false;
+
+    }
+        	
 	pressed = true;
-	iniciar = false;
-	iniciado = false;
 	lanzado = false;
 	conectado = false;
-	ipConexion = "";
-
-	texto = L"ESC - SALIR\n\n";
-	texto = "Introduce IP para iniciar partida online: ";
-
+	
 
 	u16 xPos = Motor3d::instancia().getAnchoPantalla() / 3;
 	u16 yPos = Motor3d::instancia().getAltoPantalla() / 4;
@@ -31,7 +40,6 @@ EscenaLobby::EscenaLobby() : Escena(Escena::tipo_escena::LOBBY) {
 	logoAOK = Motor3d::instancia().getDriver()->getTexture("assets/logoAOK.png");
 	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));
 }
-
 EscenaLobby::~EscenaLobby() {
 	cout << "Destructor ESCENA LOBBY. Entro.";
 	limpiar();
@@ -60,10 +68,18 @@ void EscenaLobby::limpiar() {
 
 void EscenaLobby::update() {
 	if (iniciar && !iniciado) {
-		client = Client::getInstancia();
-		client->CreateClientInterface();
-		client->SetIP(ipConexion);
-		client->ClientStartup();
+		if (firstInit){
+			client = Client::getInstancia();
+			client->CreateClientInterface();
+			client->SetIP(ipConexion);
+			client->ClientStartup();
+			
+		}else{
+			client = Client::getInstancia();
+                        cout<<"started: "<<client->getStarted()<<endl;
+                        cout<<"control player: "<<client->getControlPlayer()<<endl;
+			client->setNetloaded(false);
+		}
 		iniciado = true;
 	}
 	if (iniciado) {

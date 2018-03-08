@@ -9,6 +9,7 @@ void GestorColisiones::ComprobarColisiones()
 	jugadores = GestorJugadores::getInstancia();
 	Pista *pista = Pista::getInstancia();
 	vector<Caja*> cajas = pista->getArrayCaja();
+	vector<Item*> items = pista->getItems();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	pj1 = jugadores->getJugadores();
 	int numManifolds = mundo->getDispatcher()->getNumManifolds();
@@ -31,13 +32,14 @@ void GestorColisiones::ComprobarColisiones()
 				   cout<<"------------------------ID PROYECTIL ITEM CORRUPTO: ";
 			   }
 			}*/
-
+			if (ItemTeledirigidoWaypoint(items))continue;
 			if (JugadorCaja(cajas))continue;
 			if (JugadorTurbo())continue;
 			if (JugadorWaypoint())continue;
 			if (objetoDestruible())continue;
 			if (JugadorProyectil())break;
 			if (JugadorEstatico())break;
+			
 			//if (JugadorItemTeledirigido())continue;
 
 		}
@@ -70,6 +72,56 @@ bool GestorColisiones::JugadorWaypoint(){
 
 }
 
+
+bool GestorColisiones::ItemTeledirigidoWaypoint(vector<Item*> items){
+
+
+	if (strcmp("Estatico", nodoA->getName()) == 0){
+			 if (strcmp("Waypoint", nodoB->getName()) == 0)
+        {
+			
+	int idA = nodoA->getID();		
+	for (int i=0;i<items.size();i++){
+		if (items.at(i)->getID() == idA){
+
+						if(strcmp("ItemTeledirigido", items.at(i)->getNombre()) == 0){
+						items.at(i)->setColision(nodoB->getID());
+						
+						return true;	
+						}	
+					
+					
+			
+	}
+		
+	}
+}
+}
+
+if (strcmp("Estatico", nodoB->getName()) == 0){
+			 if (strcmp("Waypoint", nodoA->getName()) == 0)
+        {
+			
+	int idB = nodoB->getID();		
+	for (int i=0;i<items.size();i++){
+		if (items.at(i)->getID() == idB){
+
+						if(strcmp("ItemTeledirigido", items.at(i)->getNombre()) == 0){
+						items.at(i)->setColision(nodoA->getID());
+						
+						return true;	
+						}
+					
+					
+			
+	}
+		
+	}
+}
+}
+
+	return false;
+}
 
 
 //
@@ -108,7 +160,6 @@ bool GestorColisiones::JugadorEstatico()
 	Pista *mapa = Pista::getInstancia();
 	bool protegido=false;
 	bool aceite = false;
-	//cout << TimeStamp << endl;
 
 	if (strcmp("Jugador", nodoA->getName()) == 0 || strcmp("JugadorIA", nodoA->getName()) == 0 || strcmp("JugadorRed", nodoA->getName()) == 0)
 	{
@@ -127,13 +178,16 @@ bool GestorColisiones::JugadorEstatico()
 				}
 			}
 			//Turbo *t = mapa->getTurbo();
+			cout << "Items: " << items.size() << std::endl;
 			//t->setFrenadaActivo(pj1Col, true);
 			int idB = nodoB->getID();
 			for (int i=0;i<items.size();i++){
+					cout << "ENTRO 1\n";
 				if (items.at(i)->getID() == idB)
 				{
 					if(!protegido)
 					{
+					cout << "ENTRO2\n";
 						if (strcmp("Aceite", items.at(i)->getNombre()) == 0){	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
 							aceite = true;
 						}
@@ -156,7 +210,7 @@ bool GestorColisiones::JugadorEstatico()
 					items.at(i)->Delete();
 					items.erase(items.begin()+i);
 					pista->setItems(items);
-						
+					cout << "ENTRO\n";
 					//}
 					//else { 
 					//	item->setColision(true);
@@ -166,7 +220,6 @@ bool GestorColisiones::JugadorEstatico()
 				}
 			}
 
-			//cout << "Jugador - Turbo\n";
 		}
 	}else if (strcmp("Estatico", nodoA->getName()) == 0 && strcmp("Proyectil", nodoB->getName()) == 0 || strcmp("Proyectil", nodoA->getName()) == 0 && strcmp("Estatico", nodoB->getName()) == 0) {
 

@@ -29,6 +29,8 @@ private:
   float XCamera1;
   float YCamera1;
   float ZCamera1;
+  float auxX;
+  float auxZ;
 };
 
 #endif /* CAMARA3PERSONA_H */

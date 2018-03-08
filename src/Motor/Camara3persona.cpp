@@ -10,6 +10,8 @@ Camara3persona::Camara3persona() {
 	XCamera1 = 0;
 	YCamera1 = 10;
 	ZCamera1 = 20;
+	auxX=0;
+	auxZ=0;
 }
 
 Camara3persona::~Camara3persona() {
@@ -21,13 +23,13 @@ Camara3persona::~Camara3persona() {
 void Camara3persona::moveCamera(Corredor * pj1){
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
 	vector3df RelativeToCar;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && XCamera3 >= 0) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && XCamera3 >= 0) {
 		if (XCamera3 < 30) {
 			XCamera3++;
 			ZCamera3 += 0.5;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && XCamera3 <= 0) {
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && XCamera3 <= 0) {
 		if (XCamera3 > -30) {
 			XCamera3--;
 			ZCamera3 += 0.5;
@@ -48,13 +50,36 @@ void Camara3persona::moveCamera(Corredor * pj1){
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 		RelativeToCar.Z=-ZCamera3;
 
+	float incremento = 0.05;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+		if(auxX < 2)
+			auxX += incremento;
+	}else  if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+		if(auxX > -2)
+			auxX-= incremento;
+	}else{
+		if(auxX < 0){
+			auxX+=incremento;
+		}else if(auxX > 0){
+			auxX-=incremento;
+		}
+	}
+	RelativeToCar.X += auxX;
+
 	vector3df RelativeToCarTarget(0,1,0);
+		
 	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCar);
 	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCarTarget);
 	RelativeToCar.Y = 5;
 	RelativeToCarTarget.Y = 1;
-	camera->setPosition(RelativeToCar);
-	camera->setTarget(RelativeToCarTarget);
+	if (!pj1->getAceiteActivado()){
+		camera->setPosition(RelativeToCar);
+		camera->setTarget(RelativeToCarTarget);
+	}else{
+		camera->setPosition(camera->getPosition());
+		camera->setTarget(camera->getTarget());
+	}
 	fpsActiva = false;
 }
 
@@ -62,6 +87,8 @@ void Camara3persona::movefpsCamera(Corredor * pj1){
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
 	vector3df RelativeToCar(0,1,0);
 	vector3df RelativeToCarTarget;
+
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && XCamera1 >= 0) {
 		if (XCamera1 < 30) {
 			XCamera1++;
@@ -82,6 +109,12 @@ void Camara3persona::movefpsCamera(Corredor * pj1){
 		XCamera1--;
 		ZCamera1 += 0.5;
 	}
+
+	
+	
+		
+
+
 	RelativeToCarTarget.X = XCamera1;
 	RelativeToCarTarget.Y = 5;
 	RelativeToCarTarget.Z = ZCamera1;

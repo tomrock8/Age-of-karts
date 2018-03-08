@@ -238,6 +238,7 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
+	cout<<"sigo aqui\n";
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
 	vector<Item *> items = pistaca->getItems();
@@ -374,9 +375,15 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 
 	//------- ENTRADA TECLADO ----------
 	if (fin_carrera==true && sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
-		return Escena::tipo_escena::MENU;
+		if (tipoEscena == Escena::tipo_escena::ONLINE && controlPlayer==0){
+			client->FinalizarCarrera();
+		}else{
+			return Escena::tipo_escena::MENU;
+		}
 	}
-
+	if (tipoEscena == Escena::tipo_escena::ONLINE && !client->getStarted()){
+		return Escena::tipo_escena::LOBBY;
+	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
 		if(!cambioCamara){
 			tipoCamara++;
@@ -424,7 +431,7 @@ void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	vector<btRigidBody *> objetos = bullet->getObjetos();
-	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
+	mundo->stepSimulation(TDeltaTime * 0.01f, 1);
 	int c = 0;
 	for (int i=0;i<objetos.size();i++){
 		c++;
@@ -455,4 +462,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	Euler *= RADTODEG;
 	Node->setRotation(Euler);
 
+}
+std::string EscenaJuego::getIpConexion(){
+	return ipConexion;
 }

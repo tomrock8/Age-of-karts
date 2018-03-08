@@ -1,12 +1,12 @@
 #include "Habilidad.hpp"
 
-Habilidad::Habilidad(int tipo, ISceneNode* n,btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,float tamanyoNodo,btScalar radio,
-  float alturaLanzamiento)
-: Item(posicion,escala,masa,tiempoDesctruccion,fcolision,tamanyoNodo,radio,alturaLanzamiento) {
+Habilidad::Habilidad(int tipo, ISceneNode* n,btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,btVector3 tamanyoNodo,btScalar radio,
+float alturaLanzamiento,int idNodo) : Item(posicion,escala,masa,tiempoDesctruccion,fcolision,tamanyoNodo,radio,alturaLanzamiento,idNodo) {
 	//almacenamos tipo de habilidad
 	tipoHabilidad = tipo;
 	NodoVehiculo = n;
-	
+	cont=0;
+
 	switch(tipoHabilidad){
 
 		case 1:
@@ -32,7 +32,7 @@ Habilidad::Habilidad(int tipo, ISceneNode* n,btVector3 posicion,btVector3 escala
 	}
 		nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
 		nodo->setPosition(vector3df(posicion.getX(), posicion.getY(), posicion.getZ()));
-		nodo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
+		nodo->setScale(vector3df(tamanyoNodo.getX(), tamanyoNodo.getY(), tamanyoNodo.getZ()));
 		//nodo->setVisible(false);
 		nodo->setMaterialFlag(EMF_LIGHTING, false);
 		nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
@@ -43,6 +43,13 @@ Habilidad::Habilidad(int tipo, ISceneNode* n,btVector3 posicion,btVector3 escala
 		nodo->setName(nombre);
 
 		inicializarFisicas();
+
+		if(tipoHabilidad==4 || tipoHabilidad==2 ||tipoHabilidad==3){
+		rigidBody->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		rigidBody->setGravity(btVector3(0,0,0));
+		rigidBody->setActivationState(DISABLE_DEACTIVATION);
+		}
+
 }
 
 
@@ -54,10 +61,6 @@ void Habilidad::lanzarItem(int direccion,btVector3 orientacion){
 
 	this->orientacion = orientacion;
 
-	
-	if(tipoHabilidad==2){
-		
-	}
 
 	if(tipoHabilidad == 1){ // PIRATA
 
@@ -79,7 +82,7 @@ void Habilidad::movimiento(){
 
 	btTransform trans;
 	btQuaternion quaternion;
-	int giro =0;
+	int giro=0;
 	
 		
 	switch(tipoHabilidad){
@@ -87,19 +90,24 @@ void Habilidad::movimiento(){
 
 		case 2: // VIKINGO
 
-		giro=8;
+		giro=15;
 		trans.setOrigin(btVector3(NodoVehiculo->getPosition().X + orientacion.getX() *15,NodoVehiculo->getPosition().Y,NodoVehiculo->getPosition().Z + orientacion.getZ() *15));
 
 		orientacion = orientacion.rotate(btVector3(0, 1, 0),giro*PI/180);
-		nodo->setRotation(vector3df(nodo->getRotation().X,nodo->getRotation().Y,nodo->getRotation().Z));
+		nodo->setRotation(vector3df(nodo->getRotation().X,cont,nodo->getRotation().Z));
 		quaternion.setEulerZYX(0,nodo->getRotation().Y * PI/180,0);
 
 		trans.setRotation(quaternion);
 
-	
 		rigidBody->setCenterOfMassTransform(trans);
+		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 100000, 0, orientacion.getZ() * 100000));
 
-		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 30000, 0, orientacion.getZ() * 30000));
+		cont+=90;
+
+		if(cont==360)
+		cont=0;
+		
+
 		break;
 
 		case 3: // GLADIADOR
@@ -113,8 +121,7 @@ void Habilidad::movimiento(){
 		quaternion.setEulerZYX(NodoVehiculo->getRotation().X * PI/180,NodoVehiculo->getRotation().Y * PI/180,NodoVehiculo->getRotation().Z * PI/180);
 		trans.setRotation(quaternion);
 		rigidBody->setCenterOfMassTransform(trans);
-		rigidBody->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-		rigidBody->setGravity(btVector3(0,0,0));
+		
 		break;
 
 	}

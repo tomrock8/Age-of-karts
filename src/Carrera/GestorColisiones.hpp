@@ -14,6 +14,7 @@
 #include "GestorJugadores.hpp"
 #include <iostream>
 #include <vector>
+#include "Timer.hpp"
 using namespace std;
 
 class GestorColisiones
@@ -27,7 +28,11 @@ public:
   bool JugadorEstatico();
   bool JugadorWaypoint();
   bool JugadorProyectil();
-  bool ItemTeledirigidoWaypoint(vector<Item*> items);
+  bool ItemTeledirigidoWaypoint();
+  bool Escudoitems();
+  bool HabilidadesItems();
+  bool HabilidadesJugadores();
+
   //bool JugadorItemTeledirigido();
 
 private:
@@ -35,6 +40,8 @@ private:
   GestorJugadores *jugadores;
   ISceneNode *nodoA;
   ISceneNode *nodoB;
+  clock_t tiempoLanzado;
+  bool control;
 };
 
 #endif

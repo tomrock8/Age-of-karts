@@ -32,12 +32,26 @@ void GestorColisiones::ComprobarColisiones()
 				   cout<<"------------------------ID PROYECTIL ITEM CORRUPTO: ";
 			   }
 			}*/
-			if (ItemTeledirigidoWaypoint(items))continue;
+			
+			
+			if (ItemTeledirigidoWaypoint())continue;
+			
 			if (JugadorCaja(cajas))continue;
+			
 			if (JugadorTurbo())continue;
+			
 			if (JugadorWaypoint())continue;
+			
 			if (objetoDestruible())continue;
+			
+			if (HabilidadesJugadores())continue;
+
+			if(Escudoitems())break;
+
+			if(HabilidadesItems())break;
+
 			if (JugadorProyectil())break;
+			
 			if (JugadorEstatico())break;
 			
 			//if (JugadorItemTeledirigido())continue;
@@ -73,8 +87,10 @@ bool GestorColisiones::JugadorWaypoint(){
 }
 
 
-bool GestorColisiones::ItemTeledirigidoWaypoint(vector<Item*> items){
+bool GestorColisiones::ItemTeledirigidoWaypoint(){
 
+	Pista *pista = Pista::getInstancia();
+	vector<Item *> items = pista->getItems();
 
 	if (strcmp("Estatico", nodoA->getName()) == 0){
 			 if (strcmp("Waypoint", nodoB->getName()) == 0)
@@ -88,9 +104,7 @@ bool GestorColisiones::ItemTeledirigidoWaypoint(vector<Item*> items){
 						items.at(i)->setColision(nodoB->getID());
 						
 						return true;	
-						}	
-					
-					
+						}			
 			
 	}
 		
@@ -121,6 +135,273 @@ if (strcmp("Estatico", nodoB->getName()) == 0){
 }
 
 	return false;
+}
+
+bool GestorColisiones::HabilidadesJugadores(){
+	Pista *pista = Pista::getInstancia();
+	vector<Item *> items = pista->getItems();
+	int idPadreUlti=0;
+	
+	if(strcmp("Jugador", nodoA->getName()) == 0 || strcmp("JugadorIA", nodoA->getName()) == 0 || strcmp("JugadorRed", nodoA->getName()) == 0){
+	if (strcmp("HabilidadVikingo", nodoB->getName()) == 0 
+	|| strcmp("HabilidadPirata", nodoB->getName()) == 0 
+	|| strcmp("HabilidadGladiador", nodoB->getName()) == 0 
+	|| strcmp("HabilidadChino", nodoB->getName()) == 0){
+
+		int idA = nodoA->getID();
+		int idB = nodoB->getID();
+
+			for (int i=0;i<items.size();i++){
+				if(items.at(i)->getID() == idB){
+						idPadreUlti = items.at(i)->getIDPadre();
+				}
+			}
+
+			if(idPadreUlti==idA)
+			return false;
+			else{
+				pj1.at(idA)->resetFuerzas();
+				return true;
+			}
+
+			}
+
+	}
+
+
+	if(strcmp("Jugador", nodoB->getName()) == 0 || strcmp("JugadorIA", nodoB->getName()) == 0 || strcmp("JugadorRed", nodoB->getName()) == 0){
+	if (strcmp("HabilidadVikingo", nodoA->getName()) == 0 
+	|| strcmp("HabilidadPirata", nodoA->getName()) == 0 
+	|| strcmp("HabilidadGladiador", nodoA->getName()) == 0 
+	|| strcmp("HabilidadChino", nodoA->getName()) == 0){
+
+		int idA = nodoA->getID();
+		int idB = nodoB->getID();
+
+			for (int i=0;i<items.size();i++){
+				if(items.at(i)->getID() == idA){
+						idPadreUlti = items.at(i)->getIDPadre();
+				}
+			}
+
+			if(idPadreUlti==idB)
+			return false;
+			else{
+				pj1.at(idB)->resetFuerzas();
+				return true;
+			}
+
+			}
+
+	}
+	
+
+
+
+	return false;
+}
+
+bool GestorColisiones::Escudoitems(){
+
+
+	Pista *pista = Pista::getInstancia();
+	vector<Item *> items = pista->getItems();
+	
+	int idEscudo=0;
+	int idObjeto=0;
+	int idPadreEscudo=0;
+	int idPadreObjeto=0;
+
+	if (strcmp("Escudo", nodoA->getName()) == 0){
+		if (strcmp("Estatico", nodoB->getName()) == 0 
+		|| strcmp("Proyectil", nodoB->getName()) == 0
+		||strcmp("HabilidadVikingo", nodoB->getName()) == 0 
+		|| strcmp("HabilidadPirata", nodoB->getName()) == 0 
+		|| strcmp("HabilidadGladiador", nodoB->getName()) == 0 
+		|| strcmp("HabilidadChino", nodoB->getName()) == 0){
+		
+			int idA = nodoA->getID();
+			int idB = nodoB->getID();
+			for (int i=0;i<items.size();i++){
+
+						if(items.at(i)->getID() == idA){
+						idPadreEscudo = items.at(i)->getIDPadre();
+						idEscudo=i;	
+							}
+							
+						if (items.at(i)->getID() == idB){
+						idPadreObjeto= items.at(i)->getIDPadre();
+						idObjeto=i;	
+						
+							}		
+	}
+
+			if(idPadreEscudo == idPadreObjeto){
+			return false;
+			cout<<"HOLAPIXA"<<endl;
+			}
+			else{
+				
+				items.at(idEscudo)->Delete();
+				items.erase(items.begin()+idEscudo);
+				
+
+				for (int i=0;i<items.size();i++){
+					if(items.at(i)->getID() == idB){
+					items.at(i)->Delete();
+					items.erase(items.begin()+i);
+				
+				}
+				}
+				pista->setItems(items);
+				return true;	
+			}	
+}
+	}
+
+
+if (strcmp("Escudo", nodoB->getName()) == 0){
+		if (strcmp("Estatico", nodoA->getName()) == 0 
+		|| strcmp("Proyectil", nodoA->getName()) == 0
+		|| strcmp("HabilidadVikingo", nodoA->getName()) == 0 
+		|| strcmp("HabilidadPirata", nodoA->getName()) == 0 
+		|| strcmp("HabilidadGladiador", nodoA->getName()) == 0 
+		|| strcmp("HabilidadChino", nodoA->getName()) == 0){
+		
+			int idA = nodoA->getID();
+			int idB = nodoB->getID();
+			for (int i=0;i<items.size();i++){
+
+						if(items.at(i)->getID() == idB){
+						idPadreEscudo = items.at(i)->getIDPadre();
+						idEscudo=i;	
+							}
+							
+						if (items.at(i)->getID() == idA){
+						idPadreObjeto= items.at(i)->getIDPadre();
+						idObjeto=i;	
+						
+							}		
+	}
+
+			if(idPadreEscudo == idPadreObjeto){
+			return false;
+			cout<<"HOLAPIXICA"<<endl;
+			}
+			else{
+				
+				items.at(idEscudo)->Delete();
+				items.erase(items.begin()+idEscudo);
+				
+				for (int i=0;i<items.size();i++){
+					if(items.at(i)->getID() == idA){
+					items.at(i)->Delete();
+					items.erase(items.begin()+i);
+					
+				}
+				}
+				pista->setItems(items);
+				return true;	
+			}	
+}
+	}
+
+	return false;
+}
+
+
+bool GestorColisiones::HabilidadesItems(){
+
+	Pista *pista = Pista::getInstancia();
+	vector<Item *> items = pista->getItems();
+	int idUlti=0;
+	int idObjeto=0;
+	int idPadreUlti=0;
+	int idPadreObjeto=0;
+
+	if (strcmp("HabilidadVikingo", nodoA->getName()) == 0 
+	|| strcmp("HabilidadPirata", nodoA->getName()) == 0 
+	|| strcmp("HabilidadGladiador", nodoA->getName()) == 0 
+	|| strcmp("HabilidadChino", nodoA->getName()) == 0){
+		
+		if (strcmp("Estatico", nodoB->getName()) == 0 
+		|| strcmp("Proyectil", nodoB->getName()) == 0){
+
+			int idA = nodoA->getID();
+			int idB = nodoB->getID();
+			for (int i=0;i<items.size();i++){
+
+						if(items.at(i)->getID() == idA){
+						idPadreUlti = items.at(i)->getIDPadre();
+						idUlti=i;
+						
+							}
+							
+						if (items.at(i)->getID() == idB){
+						idPadreObjeto= items.at(i)->getIDPadre();
+						idObjeto=i;	
+							
+							}		
+	}
+
+			if(idPadreUlti == idPadreObjeto){
+			return false;
+			}
+			else{
+				
+				items.at(idObjeto)->Delete();
+				items.erase(items.begin()+idObjeto);
+				pista->setItems(items);
+				
+				return true;	
+			}	
+}
+	}
+
+
+if (strcmp("HabilidadVikingo", nodoB->getName()) == 0 
+	|| strcmp("HabilidadPirata", nodoB->getName()) == 0 
+	|| strcmp("HabilidadGladiador", nodoB->getName()) == 0 
+	|| strcmp("HabilidadChino", nodoB->getName()) == 0){
+		
+		if (strcmp("Estatico", nodoA->getName()) == 0 
+		|| strcmp("Proyectil", nodoA->getName()) == 0){
+
+			int idA = nodoA->getID();
+			int idB = nodoB->getID();
+			for (int i=0;i<items.size();i++){
+
+						if(items.at(i)->getID() == idB){
+						idPadreUlti = items.at(i)->getIDPadre();
+						idUlti=i;
+						
+							}
+							
+						if (items.at(i)->getID() == idA){
+						idPadreObjeto= items.at(i)->getIDPadre();
+						idObjeto=i;	
+							
+							}		
+	}
+
+			if(idPadreUlti == idPadreObjeto){
+			return false;
+			}
+			else{
+				
+				items.at(idObjeto)->Delete();
+				items.erase(items.begin()+idObjeto);
+				pista->setItems(items);
+				
+				return true;	
+			}	
+}
+	}
+
+
+	return false;
+
+
 }
 
 

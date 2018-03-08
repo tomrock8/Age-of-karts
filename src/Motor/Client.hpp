@@ -6,6 +6,7 @@
 //#include "CorredorRed.hpp"
 //#include "CorredorJugador.hpp"
 #include "GestorJugadores.hpp"
+#include "Escena.hpp"
 //#include "NetworkEnums.hpp"
 
 #define MAX_PLAYERS 10
@@ -39,6 +40,7 @@ public:
 	void ChangeCharacter(bool i);
 	int ReceivePackets();
 	void SpawnPlayer();
+	void FinalizarCarrera();
 	
 	//METODOS GET
 	int getControlPlayer();

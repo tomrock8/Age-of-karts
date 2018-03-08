@@ -44,6 +44,10 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 			ipConexion = static_cast<EscenaLobby*>(anterior)->getIpConexion();
 			cout << ipConexion << "\n";
 		}
+		if (anterior->getTipoEscena() == Escena::tipo_escena::ONLINE && tipo == Escena::tipo_escena::LOBBY) {
+			ipConexion = static_cast<EscenaJuego*>(anterior)->getIpConexion();
+			cout << ipConexion << "\n";
+		}
 
 
 		escenaActiva->limpiar();
@@ -161,9 +165,10 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion)
 		return true;
 
 	case Escena::tipo_escena::LOBBY:
-		escenaActiva = new EscenaLobby();
+		escenaActiva = new EscenaLobby(Escena::tipo_escena::LOBBY,ipConexion);
 		agregaEscena(escenaActiva);
 		cambioEscena = Escena::tipo_escena::LOBBY;
+		
 		return true;
 
 	case Escena::tipo_escena::MENU:

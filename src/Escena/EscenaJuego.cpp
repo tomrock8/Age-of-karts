@@ -238,6 +238,7 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
+	cout<<"sigo aqui\n";
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
 	vector<Item *> items = pistaca->getItems();
@@ -374,9 +375,15 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 
 	//------- ENTRADA TECLADO ----------
 	if (fin_carrera==true && sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
-		return Escena::tipo_escena::MENU;
+		if (tipoEscena == Escena::tipo_escena::ONLINE && controlPlayer==0){
+			client->FinalizarCarrera();
+		}else{
+			return Escena::tipo_escena::MENU;
+		}
 	}
-
+	if (tipoEscena == Escena::tipo_escena::ONLINE && !client->getStarted()){
+		return Escena::tipo_escena::LOBBY;
+	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
 		if(!cambioCamara){
 			tipoCamara++;
@@ -455,4 +462,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	Euler *= RADTODEG;
 	Node->setRotation(Euler);
 
+}
+std::string EscenaJuego::getIpConexion(){
+	return ipConexion;
 }

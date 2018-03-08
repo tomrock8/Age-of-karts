@@ -364,7 +364,14 @@ void Server::ReceivePackets()
 			}
 			parambool=false;
 			break;	
-
+		case ID_RETURN_LOBBY:
+		std::cout << "ID_RETURN_LOBBY\n";
+			started=false;
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			typeID = ID_RETURN_LOBBY;
+			bsOut.Write(typeID);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			break;	
 		case ID_SEND_KEY_PRESS:
 			//std::cout << "ID_SEND_KEY_PRESS\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));

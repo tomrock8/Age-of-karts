@@ -56,7 +56,7 @@ int main()
     
     debug = 0;
 	fin_carrera=false;
-    GestorIDs::instancia().restartID();
+
 
 	Timer *t = Timer::getInstancia(); 
   	
@@ -279,7 +279,7 @@ void UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	vector<btRigidBody *> objetos = bullet->getObjetos();
-	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
+    mundo->stepSimulation(TDeltaTime * 0.01f, 1);
 	int c = 0;
 	for (int i=0;i<objetos.size();i++){
 		c++;

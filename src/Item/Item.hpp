@@ -21,16 +21,20 @@ class Item
 public:
 
   
-  Item(btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,float tamanyoNodo,btScalar radio,float alturaLanzamiento);
+  Item(btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,btVector3 tamanyoNodo,btScalar radio,float alturaLanzamiento
+  ,int idNodo);
   void inicializarFisicas();
   virtual void lanzarItem(int direccion,btVector3 orientacion)=0;
   virtual void updateHijos()=0;
   bool update();
   void Delete();
 
+    
   IMeshSceneNode *getNodo();
   btRigidBody *getRigidBody();
   int getID();
+  int getIDPadre();
+  void setIDPadre(int id);
   void setLanzado(bool b);
   void setColision(int id);
 
@@ -56,11 +60,12 @@ protected:
   btVector3 escala;
   btVector3 posicion;
 
+  int idNodoPadre;
   int idwaypoint;
   float alturaLanzamiento;
   forma_Colision fcolision;
   btScalar radio;
-  float tamanyoNodo;
+  btVector3 tamanyoNodo;
   float tiempoDesctruccion;
   const char *nombre;
   int id;

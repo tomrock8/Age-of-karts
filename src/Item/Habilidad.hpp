@@ -9,8 +9,8 @@ class Habilidad : public Item
 {
 public:
   
-  Habilidad(int tipo, ISceneNode* n,btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,float tamanyoNodo,btScalar radio,
-  float alturaLanzamiento);
+  Habilidad(int tipo, ISceneNode* n,btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,btVector3 tamanyoNodo,btScalar radio,
+  float alturaLanzamiento,int idNodo);
   virtual void lanzarItem(int direccion,btVector3 orientacion) override;
   virtual void updateHijos() override;
   void movimiento();
@@ -18,6 +18,7 @@ public:
 
 private:
 
+  int cont;
 	int tipoHabilidad;
   bool habilidadActiva;
 	//objetos

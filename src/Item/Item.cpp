@@ -2,11 +2,13 @@
 
 
 
-Item::Item(btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,float tamanyoNodo,btScalar radio,float alturaLanzamiento)
+Item::Item(btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,btVector3 tamanyoNodo,btScalar radio,
+float alturaLanzamiento,int idNodo)
 {
 
 	colision=false;
 	lanzado = false;
+	idNodoPadre=idNodo;
 	this->masa = masa;
 	this->posicion = posicion;
 	this->escala=escala;
@@ -15,7 +17,7 @@ Item::Item(btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctru
 	this->radio=radio;
 	this->fcolision=fcolision;
 	this->alturaLanzamiento=alturaLanzamiento;
-
+	
 
 
 }
@@ -31,7 +33,7 @@ void Item::inicializarFisicas()
 	Transform.setIdentity();
 	Transform.setOrigin(posicion);
 	MotionState = new btDefaultMotionState(Transform);
-	btVector3 HalfExtents(escala.getX() *1.5, escala.getY()*1.5, escala.getZ()*1.5 );
+	btVector3 HalfExtents(escala.getX() , escala.getY(), escala.getZ());
 	// Create the shape
 	switch(fcolision){
 
@@ -155,6 +157,10 @@ int Item::getID(){
 	return id;
 }
 
+int Item::getIDPadre(){
+	return idNodoPadre;
+}
+
 void Item::setNombre(const char* nombre){
 	this->nombre=nombre;
 }
@@ -162,6 +168,9 @@ void Item::setMasa(btScalar masa){
 	this->masa=masa;
 }
 
+void Item::setIDPadre(int id){
+	idNodoPadre=id;
+}
 
 void Item::setColision(int id){
 

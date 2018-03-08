@@ -712,14 +712,14 @@ void Corredor::usarObjetos() {
 		btVector3 escala(2,2,2);
 		btScalar masa=50;
 		float tiempoDestruccion=15;
-		float tamanyoNodo=3;
+		btVector3 tamanyoNodo(3,3,3);
 		btScalar radio=8;
 		float alt=1;
 
 	if (getTipoObj() == 1)		// PROYECTIL
 	{
 	
-		Proyectil *pro = new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		Proyectil *pro = new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		pro->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro->setLanzado(true);
 		items.push_back(pro);
@@ -734,7 +734,7 @@ void Corredor::usarObjetos() {
 		masa=0;
 		posicion.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
 		posicion.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
-		CajaFalsa *est = new CajaFalsa(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		CajaFalsa *est = new CajaFalsa(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		items.push_back(est);
 		
 		soltarItem();
@@ -749,7 +749,7 @@ void Corredor::usarObjetos() {
 		masa=0;
 		posicion.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
 		posicion.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
-		Aceite *est2 = new Aceite(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		Aceite *est2 = new Aceite(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		items.push_back(est2);
 	
 		soltarItem();
@@ -762,10 +762,11 @@ void Corredor::usarObjetos() {
 		masa=50;
 		radio=8;
 		escala = btVector3(10,10,10);
+		tamanyoNodo= btVector3(9,9,9);
 		tiempoDestruccion=50;
 		posicion= btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
 		posicion.setY(posicion.getY()+alt);
-		Escudo *escudo = new Escudo(cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt);
+		Escudo *escudo = new Escudo(cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
 		escudo->setLanzado(true);
 		items.push_back(escudo);
 		soltarItem();
@@ -781,21 +782,21 @@ void Corredor::usarObjetos() {
 		btVector3 d(cuboNodo->getPosition().X + orientacionderecha.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 10);
 		
 				posicion=iz;
-				Proyectil *pro1= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+				Proyectil *pro1= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 				//pro1->inicializarFisicas();
 				pro1->lanzarItem(1,orientacionizquierda);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 				pro1->setLanzado(true);
 				items.push_back(pro1);
 
 				posicion=centro;
-				Proyectil *pro2= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+				Proyectil *pro2= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 				//pro2->inicializarFisicas();
 				pro2->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 				pro2->setLanzado(true);
 				items.push_back(pro2);
 			
 				posicion=d;
-				Proyectil *pro3= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+				Proyectil *pro3= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 				//pro3->inicializarFisicas();
 				pro3->lanzarItem(1,orientacionderecha);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 				pro3->setLanzado(true);
@@ -810,7 +811,7 @@ void Corredor::usarObjetos() {
 		//cout << "Teledirigido de Jugador " << this->getID() << " - posicion: " << posicionCarrera << endl;
 		alt=1;
 		posicion.setY(posicion.getY()+alt);
-		ItemTeledirigido *pt = new ItemTeledirigido(posicion,escala,masa,50,CUBO,tamanyoNodo,radio,alt);
+		ItemTeledirigido *pt = new ItemTeledirigido(posicion,escala,masa,50,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		pt->setWaypoint(actual);
 		pt->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pt->setLanzado(true);
@@ -1215,7 +1216,7 @@ void Corredor::lanzarHabilidad(){
 		btVector3 escala(5,5,5);
 		btScalar masa=100;
 		float tiempoDestruccion=40;
-		float tamanyoNodo=3;
+		btVector3 tamanyoNodo(3,3,3);
 		btScalar radio=12;
 		float alt=10;
 
@@ -1230,36 +1231,39 @@ void Corredor::lanzarHabilidad(){
 		alt=10;
 
 		posicion.setY(posicion.getY()+alt);
-		habilidadJugador = new Habilidad(1,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt);
+		habilidadJugador = new Habilidad(1,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);
 		
 		break;
 
 		case VIKINGO:
-		escala = btVector3(2,2,2);	
+		escala = btVector3(3,3,3);	
 		masa=0;
-		radio=0;
+		radio=8;
 		alt=2;	
+
 		posicion.setY(posicion.getY()+alt);
-		habilidadJugador = new Habilidad(2,cuboNodo,posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		habilidadJugador = new Habilidad(2,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);	
 		break;
 
 		case GLADIADOR:
-		habilidadJugador = new Habilidad(3,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt);
+		habilidadJugador = new Habilidad(3,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);
 		break;
 
 		case CHINO:
 		posicion = btVector3(cuboNodo->getPosition().X , cuboNodo->getPosition().Y, cuboNodo->getPosition().Z );
-		escala = btVector3(3,3,3);
+		tamanyoNodo = btVector3(2,2,2);
+		escala = btVector3(5,7,10);
 		masa=100;	
 		alt=2;
+
 		posicion.setY(posicion.getY()+alt);
-		habilidadJugador = new Habilidad(4,cuboNodo,posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		habilidadJugador = new Habilidad(4,cuboNodo,posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);	
 		break;

@@ -1,9 +1,8 @@
 #include "Escudo.hpp"
 
 
-Escudo::Escudo(ISceneNode* n,btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,float tamanyoNodo,btScalar radio,
-float alturaLanzamiento) : Item(posicion,escala,masa,tiempoDesctruccion,fcolision,tamanyoNodo,radio,alturaLanzamiento)
-{
+Escudo::Escudo(ISceneNode* n,btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,btVector3 tamanyoNodo,btScalar radio,
+float alturaLanzamiento,int idNodo) : Item(posicion,escala,masa,tiempoDesctruccion,fcolision,tamanyoNodo,radio,alturaLanzamiento,idNodo) {
 	// -----------------------------
 	//  PREPARAR LA VENTANA
 	// -----------------------------
@@ -12,7 +11,7 @@ float alturaLanzamiento) : Item(posicion,escala,masa,tiempoDesctruccion,fcolisio
 	objetoHabilidad =  Motor3d::instancia().getScene()->getMesh("assets/Objetos/escudo.obj");
 	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
 	nodo->setPosition(vector3df(posicion.getX(), posicion.getY(), posicion.getZ()));
-	nodo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
+	nodo->setScale(vector3df(tamanyoNodo.getX(), tamanyoNodo.getY(), tamanyoNodo.getZ()));
 	
 
 	nodo->setMaterialFlag(EMF_LIGHTING, false);
@@ -29,7 +28,7 @@ float alturaLanzamiento) : Item(posicion,escala,masa,tiempoDesctruccion,fcolisio
 
 	
 	rigidBody->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-
+	rigidBody->setGravity(btVector3(0,0,0));
 	
 }
 
@@ -55,7 +54,7 @@ void Escudo::movimiento(){
 		quaternion.setEulerZYX(NodoVehiculo->getRotation().X * PI/180,NodoVehiculo->getRotation().Y * PI/180,NodoVehiculo->getRotation().Z * PI/180);
 		trans.setRotation(quaternion);
 		rigidBody->setCenterOfMassTransform(trans);
-		rigidBody->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-		rigidBody->setGravity(btVector3(0,0,0));
+		
+		
 }
 

@@ -12,7 +12,6 @@
 #include "btBulletCollisionCommon.h"
 #include "MotorFisicas.hpp"
 #include "ItemTeledirigido.hpp"
-#include "Estatico.hpp"
 #include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 #include "RaknetIncludes.hpp"

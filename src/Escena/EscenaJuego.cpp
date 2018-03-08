@@ -79,7 +79,7 @@ void EscenaJuego::init() {
 	Corredor* jugador;
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		
-		jugador = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::VIKINGO);
+		jugador = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::CHINO);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
 

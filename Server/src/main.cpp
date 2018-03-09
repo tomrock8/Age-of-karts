@@ -145,7 +145,11 @@ int main()
 				    pj.at(i)->getEstados()->setEstadoCarrera(1); 
 				} 
 			} 
-		}
+		}else{
+            fin_carrera=false;
+            pj = jugadores->getJugadores();
+            gc = new GestorCarrera();
+        }
         //cout << irrTimer->getTime() << endl;
         textoDebug->limpiar();
 

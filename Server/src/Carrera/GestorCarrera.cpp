@@ -14,10 +14,8 @@ bool GestorCarrera::update() {
 	jugadores = GestorJugadores::getInstancia();
 	pj1 = jugadores->getJugadores();
 	bool b=true;	//creamos un booleano para devolver si se ha terminado la partida
-
 	//Primero copiamos pj1 en pj2 (vector de jugadores)
 	pj2.resize(pj1.size());
-
 	for (int j = 0; j < jugadores->getNumJugadores(); j++) {
 		pj1.at(j)->setPosicionCarrera(pj1.at(j)->getID() + 1,0);   //Asignamos para empezar la carrera las posiciones de los corredores en parrilla, en función de las ids.
 		pj2.at(j) = pj1.at(j);
@@ -35,7 +33,6 @@ bool GestorCarrera::update() {
 	if (b==true){	
 		return b;  //Todos los corredores han terminado, no es necesario seguir haciendo update. Devolvemos al menu.
 	}
-
 	int cont = 0;
 	pj_aux = NULL;
 	//ordenamos el array de jugadores en pj2, en funcion de sus waypoints de mayor a menor
@@ -59,11 +56,14 @@ bool GestorCarrera::update() {
 
 	
 	for (int num = vueltas+acum; num >= 1; num--) {
+
 		y = -1;
 		bool bc=false;
 		//una vez ordenados por waypoints pasamos a clasificarlos, distinguiendo distancias entre waypoints en caso de ambiguedad (si estan el = waypoint)
 		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+
 			y = getCorredorIndexOriginal(i);					//cogemos el mismo corredor correspondiente en el array original pj1 (asociar pj1<-->pj2)
+
 			if (pj1.at(y)->getVueltas()>vueltas){
 				if (bc==false){   
 					pj_aux=pj1.at(y); 
@@ -71,6 +71,7 @@ bool GestorCarrera::update() {
 				}else{ 
 					if (pj_aux->getPosicionCarrera()==pj1.at(y)->getPosicionCarrera()){
 						if (pj_aux->getPosicionCarrera()!=1){ 
+							if (y!=0)
 							if (pj_aux->getPosicionCarrera()-1!=pj1.at(y-1)->getPosicionCarrera()){ 
 								pj_aux->setPosicionCarrera(pj_aux->getPosicionCarrera()-1,1);
 							}
@@ -83,7 +84,7 @@ bool GestorCarrera::update() {
 					pj_aux=pj1.at(y);
 				} 
 			}
-			if (pj1.at(y)->getVueltas()==num){				//para esa vuelta comprobamos los corredores									
+			if (pj1.at(y)->getVueltas()==num){				//para esa vuelta comprobamos los corredores								
 				pj1.at(y)->setPosicionCarrera(cont,0);       //modificamos posicion en pj1[y]
 				cont++;
 			}

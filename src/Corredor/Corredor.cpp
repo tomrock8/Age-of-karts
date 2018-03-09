@@ -337,6 +337,9 @@ btScalar Corredor::getdistanciaWaypointActual() {
 int Corredor::getVueltas() {
 	return vueltas;
 }
+void Corredor::setVueltas(int j) {
+	vueltas=j;
+}
 int Corredor::getLimite() {
 	return limite;
 }

@@ -654,6 +654,9 @@ void Corredor::setTipoJugador(int tj){
 		break;
 	}
 }
+void Corredor::setVueltas(int j) {
+	vueltas=j;
+}
 //-------------------------------------//
 //-------TRATAMIENTOS OBJETOS----------//
 //-------------------------------------//

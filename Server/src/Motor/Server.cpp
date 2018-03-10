@@ -745,7 +745,12 @@ void Server::playerDisconnection(std::string str_param){
 }
 void Server::resetPlayers(){
     if (players.size()>0){
-        
+        GestorJugadores *jugadores = GestorJugadores::getInstancia();
+        for (int i=0;i<jugadores->getJugadores().size();i++){
+        cout<<"borrando nodos corredor\n";
+        jugadores->getJugadores().at(i)->~Corredor(); 
+        }
+       cout<<"GUAY\n";
 	cout << "Voy a entrar en el destructor de bullet. Deseadme suerte...\n";
 	delete MotorFisicas::getInstancia();
 	cout << "Bien!\n";
@@ -763,10 +768,11 @@ void Server::resetPlayers(){
     for (int i=0;i<clientes.size();i++){
         clientes.at(i).ready=false;
     }
-    
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+    jugadores = GestorJugadores::getInstancia();
+	cout<<"borrando corredoresdores\n";
     players.clear();
 	players = jugadores->getJugadores();
+    cout<<"GUAY\n";
 	cout << "Set jugadores. Tamanyo: "<<players.size() <<"\n";
 	//jugadores->setJugadores(players);
     }

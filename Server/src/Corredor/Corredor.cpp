@@ -1347,6 +1347,12 @@ void Corredor::updateVectorDireccion()
 //---------------------------------------//
 Corredor::~Corredor() {
 	cout << "\nENTRO DESTRUCTOR CORREDOR. ";
+	rueda1->remove();
+	rueda2->remove();
+	rueda3->remove();
+	rueda4->remove();
+	cuboNodo->remove();
+
 	delete vehiculo;
 	cout << "SALGO DESTRUCTOR CORREDOR\n";
 }

@@ -34,7 +34,8 @@ GestorJugadores::~GestorJugadores() {
 		//}
 		cout << "! \n";
 	}
-
+	pj.clear();
+	numJugadores=0;
 	instancia = nullptr;
 	cout << "SALGO DESTRUCTOR DE GESTOR JUGADORES\n";
 }

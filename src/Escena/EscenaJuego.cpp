@@ -238,7 +238,6 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
-	cout<<"sigo aqui\n";
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
 	vector<Item *> items = pistaca->getItems();

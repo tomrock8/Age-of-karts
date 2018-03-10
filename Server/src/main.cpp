@@ -119,6 +119,9 @@ int main()
     {
         
         server->ReceivePackets();
+        //========================================================
+        //EMPIEZA INIT
+        //========================================================
         if (iniciar && !server->getStarted()){
             debug = 0;
             fin_carrera=false;
@@ -215,7 +218,8 @@ int main()
                     pj.at(i)->getEstados()->setEstadoCarrera(1); 
                 } 
             } 
-            
+            //cout<<"jugadores->getnum: "<<jugadores->getNumJugadores();
+            //cout<<"size: "<<pj.size()<<endl;
             //cout << irrTimer->getTime() << endl;
             textoDebug->limpiar();
             

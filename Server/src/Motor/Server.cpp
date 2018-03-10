@@ -760,8 +760,12 @@ void Server::resetPlayers(){
 	/*for (int i=0;i<players.size();i++){
          players.at(i)->setVueltas(1);
          }*/
+    for (int i=0;i<clientes.size();i++){
+        clientes.at(i).ready=false;
+    }
+    
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-        players.clear();
+    players.clear();
 	players = jugadores->getJugadores();
 	cout << "Set jugadores. Tamanyo: "<<players.size() <<"\n";
 	//jugadores->setJugadores(players);

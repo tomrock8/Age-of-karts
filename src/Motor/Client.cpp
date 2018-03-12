@@ -20,6 +20,7 @@ Client::Client(int maxPlay)
 	connected = false; // true == si esta conectado con el servidor
 	started = false;	//True == si ha recibido el paquete con ID_RACE_START
 	pressed = true;		//true ==  si esta pulsando alguna tecla, para evitar la saturacion de mensajes iguales
+	timeStamp = 1;		//Variable para controlar la prediccion de movimiento por parte del cliente
 }
 
 //==================================================================================
@@ -396,7 +397,7 @@ int Client::ReceivePackets()
 				bsIn.Read(param2);
 				bsIn.Read(reset);
 				bsIn.Read(lanzar);
-                                cout<<"id: "<<id<<"---"<<"players.size(): "<<players.size()<<endl;
+                               // cout<<"id: "<<id<<"---"<<"players.size(): "<<players.size()<<endl;
                                 if (players.size()>id && id!=-1){
                                     players.at(id)->getEstados()->setEstadoMovimiento(param);
                                     players.at(id)->getEstados()->setDireccionMovimiento(param2);
@@ -624,6 +625,46 @@ unsigned char Client::GetPacketIdentifier(RakNet::Packet *p)
 		return (unsigned char)p->data[0];
 }
 
+//===========================================================================
+// El cliente manda todos los estados disponibles al servidor para distribuirlos
+//
+//	Packet:
+//		- ID
+//		- TimeStamp
+//		- Position[3]
+//		- Rotation[3]
+//		- EstadosJugador[5]
+//
+//===========================================================================
+void Client::PlayerMovement(){
+
+	if(started){
+		GestorJugadores *jugadores = GestorJugadores::getInstancia();
+		players = jugadores->getJugadores();
+		EstadosJugador *estados = players.at(controlPlayer)->getEstados();
+		RakNet::BitStream bsOut;
+		typeID = ID_PLAYER_MOVE;
+		bsOut.Write(typeID);
+		bsOut.Write(timeStamp);
+		timeStamp ++;
+		bsOut.Write(controlPlayer);
+		bsOut.Write(players.at(controlPlayer)->getNodo()->getPosition().X);
+		bsOut.Write(players.at(controlPlayer)->getNodo()->getPosition().Y);
+		bsOut.Write(players.at(controlPlayer)->getNodo()->getPosition().Z);
+		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().X);
+		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().Y);
+		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().Z);
+		bsOut.Write(estados->getEstadoMovimiento());
+		bsOut.Write(estados->getDireccionMovimiento());
+		bsOut.Write(estados->getEstadoObjeto());
+		bsOut.Write(estados->getEstadoCoche());
+		bsOut.Write(estados->getEstadoCarrera());
+
+
+		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	}
+}
+
 //==================================================================================
 // se cierra la conexion con el servidor y se destruye la instancia del cliente
 //==================================================================================
@@ -643,40 +684,12 @@ void Client::ShutDownClient()
 	RakNet::RakPeerInterface::DestroyInstance(client);
 }
 
-
-//===========================================================================
-//	METODO DESACTUALIZADO: Utilizado para crear al corredor cuando se conecta con el servidor
-//===========================================================================
-void Client::SpawnPlayer()
-{
-	if (!spawned)
-	{
-		/*
-		vector3df pos(10, 20, 300);
-		player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
-		vector3df posicion;
-		posicion = player[numPlayers]->getNodo()->getPosition();
-		typeID = ID_SPAWN_PLAYER;
-		player[numPlayers]->SetNetworkIDManager(&networkIDManager);
-		playerNetworkID = player[numPlayers]->GetNetworkID();
-		assert(networkIDManager.GET_OBJECT_FROM_ID<CorredorRed *>(playerNetworkID) == player[numPlayers]);
-
-		RakNet::BitStream bsOut;
-		bsOut.Write(typeID);
-
-		bsOut.Write(posicion.X); //Posicion X
-		bsOut.Write(posicion.Y); //Posicion Y
-		bsOut.Write(posicion.Z); //Posicion Z
-		bsOut.Write(player[numPlayers]->GetNetworkID());
-		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-
-		controlPlayer = numPlayers;
-		numPlayers++;
-		spawned = true;
-		*/
-	}
-}
 void Client::FinalizarCarrera(){
+	for (int i=0;i<clientes.size();i++){
+        clientes.at(i).ready=false;
+    }
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	players = jugadores->getJugadores();
 	typeID = ID_RETURN_LOBBY;
 	RakNet::BitStream bsOut;
 	bsOut.Write(typeID);
@@ -732,6 +745,39 @@ void Client::setNetloaded(bool b){
 
 
 //===========================================================================
+//	METODO DESACTUALIZADO: Utilizado para crear al corredor cuando se conecta con el servidor
+//===========================================================================
+void Client::SpawnPlayer()
+{
+	if (!spawned)
+	{
+		/*
+		vector3df pos(10, 20, 300);
+		player[numPlayers] = new CorredorRed("assets/coche.obj", pos);
+		vector3df posicion;
+		posicion = player[numPlayers]->getNodo()->getPosition();
+		typeID = ID_SPAWN_PLAYER;
+		player[numPlayers]->SetNetworkIDManager(&networkIDManager);
+		playerNetworkID = player[numPlayers]->GetNetworkID();
+		assert(networkIDManager.GET_OBJECT_FROM_ID<CorredorRed *>(playerNetworkID) == player[numPlayers]);
+
+		RakNet::BitStream bsOut;
+		bsOut.Write(typeID);
+
+		bsOut.Write(posicion.X); //Posicion X
+		bsOut.Write(posicion.Y); //Posicion Y
+		bsOut.Write(posicion.Z); //Posicion Z
+		bsOut.Write(player[numPlayers]->GetNetworkID());
+		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
+		controlPlayer = numPlayers;
+		numPlayers++;
+		spawned = true;
+		*/
+	}
+}
+
+//===========================================================================
 //	METODO DESACTUALIZADO: se recogen todos los estados del jugador y se envian al servidor para que los actualice
 //===========================================================================
 void Client::PlayerAction(){
@@ -751,43 +797,6 @@ void Client::PlayerAction(){
 	
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 */
-}
-
-//===========================================================================
-//	METODO DESACTUALIZADO:  El cliente recoge su posicion y su orientacion y se la manda al servidor para actualizarlo en el resto de clientes
-//===========================================================================
-void Client::PlayerMovement(){
-
-	if(netLoaded){
-		GestorJugadores *jugadores = GestorJugadores::getInstancia();
-		players = jugadores->getJugadores();
-		btVector3 position = players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition();
-		float *pos = new float[3];
-
-		pos[0] = position.getX();
-		pos[1] = position.getY();
-		pos[2] = position.getZ();
-
-		float *ori = new float[3];
-
-		ori[0] = players.at(controlPlayer)->getNodo()->getRotation().X;
-		ori[1] = players.at(controlPlayer)->getNodo()->getRotation().Y;
-		ori[2] = players.at(controlPlayer)->getNodo()->getRotation().Z;
-
-		typeID = ID_PLAYER_MOVE;
-		RakNet::BitStream bsOut;
-		bsOut.Write(typeID);
-		bsOut.Write(pos[0]);
-		bsOut.Write(pos[1]);
-		bsOut.Write(pos[2]);
-		bsOut.Write(ori[0]);
-		bsOut.Write(ori[1]);
-		bsOut.Write(ori[2]);
-		bsOut.Write(controlPlayer);
-		//std::cout << "Control: " << controlPlayer << std::endl;
-
-		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-	}
 }
 
 //===========================================================================

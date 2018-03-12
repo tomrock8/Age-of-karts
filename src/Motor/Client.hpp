@@ -17,6 +17,7 @@ struct structClientes{
     bool ready;
 };
 
+
 using namespace std;
 
 class Client
@@ -81,6 +82,7 @@ private:
 	vector<Corredor*> players;
 	int controlPlayer;
 	int numPlayers;
+	int timeStamp;
 	bool spawned;
 	bool started;
 	bool pressed;

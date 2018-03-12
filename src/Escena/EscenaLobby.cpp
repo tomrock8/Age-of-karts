@@ -76,8 +76,8 @@ void EscenaLobby::update() {
 			
 		}else{
 			client = Client::getInstancia();
-                        cout<<"started: "<<client->getStarted()<<endl;
-                        cout<<"control player: "<<client->getControlPlayer()<<endl;
+			cout<<"started: "<<client->getStarted()<<endl;
+			cout<<"control player: "<<client->getControlPlayer()<<endl;			
 			client->setNetloaded(false);
 		}
 		iniciado = true;

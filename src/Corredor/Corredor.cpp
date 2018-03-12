@@ -337,6 +337,9 @@ btScalar Corredor::getdistanciaWaypointActual() {
 int Corredor::getVueltas() {
 	return vueltas;
 }
+void Corredor::setVueltas(int j) {
+	vueltas=j;
+}
 int Corredor::getLimite() {
 	return limite;
 }
@@ -1224,7 +1227,7 @@ void Corredor::lanzarHabilidad(){
 		btScalar radio=12;
 		float alt=10;
 
-		Habilidad * habilidadJugador;
+		Habilidad * habilidadJugador = NULL;
 
 		switch(tipojugador){
 

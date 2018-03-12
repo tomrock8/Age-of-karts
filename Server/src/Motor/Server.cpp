@@ -154,6 +154,7 @@ void Server::ReceivePackets()
 		bool reset = false;
 		bool lanzar = false;
 		bool parambool = false;
+		structPrediccion prediccionAux;
 
 		RakNet::RakString paramRakString;
 		std::string paramString;
@@ -356,6 +357,14 @@ void Server::ReceivePackets()
 						jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
 						jugador->setID(i);
 						players.push_back(jugador);
+						prediccionAux.timeStamp = 0;
+						prediccionAux.posicion[0] = pos2[i].getX();
+						prediccionAux.posicion[1] = pos2[i].getY();
+						prediccionAux.posicion[2] = pos2[i].getZ();
+						prediccionAux.rotacion[0] = pos2[i].getX();
+						prediccionAux.rotacion[1] = pos2[i].getY();
+						prediccionAux.rotacion[2] = pos2[i].getZ();
+						clientes.at(i).prediccion.push_back(prediccionAux);
 						jugadores->aumentarJugadores();
 					}
 					started=true;
@@ -422,28 +431,26 @@ void Server::ReceivePackets()
 
 		case ID_PLAYER_MOVE:
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-			bsIn.Read(posicion[0]);
-			bsIn.Read(posicion[1]);
-			bsIn.Read(posicion[2]);
-			bsIn.Read(rotacion[0]);
-			bsIn.Read(rotacion[1]);
-			bsIn.Read(rotacion[2]);
-			bsIn.Read(id);
-			//if(id == numPlayers) id--;  //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
-			//player[id]->setPositionRotation(posicion, rotacion);
-			//*posicion = *networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->getPosition();
-			//networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->setPosition(posicion);
-			typeID = ID_PLAYER_MOVE;
-			bsOut.Write(typeID);
-			bsOut.Write(posicion[0]);
-			bsOut.Write(posicion[1]);
-			bsOut.Write(posicion[2]);
-			bsOut.Write(rotacion[0]);
-			bsOut.Write(rotacion[1]);
-			bsOut.Write(rotacion[2]);
-			bsOut.Write(id);
+			bsIn.Read(param2);		//TIMESTAMP
+			bsIn.Read(id);			//CONTROLPLAYER
+			bsIn.Read(posicion[0]); //POSICION ACTUAL
+			bsIn.Read(posicion[1]);	//
+			bsIn.Read(posicion[2]);	//
+			bsIn.Read(rotacion[0]);	//ROTACION
+			bsIn.Read(rotacion[1]);	//
+			bsIn.Read(rotacion[2]);	//
+			bsIn.Read(param);		//ESTADOS
+			players.at(id)->getEstados()->setEstadoMovimiento(param);
+			bsIn.Read(param);		//
+			players.at(id)->getEstados()->setDireccionMovimiento(param);
+			bsIn.Read(param);		//
+			players.at(id)->getEstados()->setEstadoObjeto(param);
+			bsIn.Read(param);		//
+			players.at(id)->getEstados()->setEstadoCoche(param);
+			bsIn.Read(param);		//
+			players.at(id)->getEstados()->setEstadoCarrera(param);
 
-			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+			//server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 
 			break;
 

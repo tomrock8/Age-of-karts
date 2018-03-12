@@ -151,6 +151,8 @@ void Server::ReceivePackets()
 		int id;
 		int param;
 		int param2;
+		float paramFloat;
+		float diff = 0.01;
 		bool reset = false;
 		bool lanzar = false;
 		bool parambool = false;
@@ -364,7 +366,7 @@ void Server::ReceivePackets()
 						prediccionAux.rotacion[0] = pos2[i].getX();
 						prediccionAux.rotacion[1] = pos2[i].getY();
 						prediccionAux.rotacion[2] = pos2[i].getZ();
-						clientes.at(i).prediccion.push_back(prediccionAux);
+						clientes.at(i).prediccion = prediccionAux;
 						jugadores->aumentarJugadores();
 					}
 					started=true;
@@ -433,12 +435,14 @@ void Server::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(param2);		//TIMESTAMP
 			bsIn.Read(id);			//CONTROLPLAYER
-			bsIn.Read(posicion[0]); //POSICION ACTUAL
-			bsIn.Read(posicion[1]);	//
-			bsIn.Read(posicion[2]);	//
-			bsIn.Read(rotacion[0]);	//ROTACION
-			bsIn.Read(rotacion[1]);	//
-			bsIn.Read(rotacion[2]);	//
+			bsIn.Read(prediccionAux.posicion[0]); //POSICION ACTUAL
+			bsIn.Read(prediccionAux.posicion[1]);	//
+			bsIn.Read(prediccionAux.posicion[2]);	//
+			bsIn.Read(prediccionAux.rotacion[0]);	//ROTACION
+			bsIn.Read(prediccionAux.rotacion[1]);	//
+			bsIn.Read(prediccionAux.rotacion[2]);	//
+			prediccionAux.timeStamp = param2;
+
 			bsIn.Read(param);		//ESTADOS
 			players.at(id)->getEstados()->setEstadoMovimiento(param);
 			bsIn.Read(param);		//
@@ -449,6 +453,31 @@ void Server::ReceivePackets()
 			players.at(id)->getEstados()->setEstadoCoche(param);
 			bsIn.Read(param);		//
 			players.at(id)->getEstados()->setEstadoCarrera(param);
+			
+			parambool = false;
+			paramFloat = prediccionAux.posicion[0] - clientes.at(id).prediccion.posicion[0];
+			if(paramFloat < diff && paramFloat > -diff)
+				parambool = true;
+			paramFloat = prediccionAux.posicion[1] - clientes.at(id).prediccion.posicion[1];
+			if(paramFloat < diff && paramFloat > -diff)
+				parambool = true;
+			paramFloat = prediccionAux.posicion[2] - clientes.at(id).prediccion.posicion[2];
+			if(paramFloat < diff && paramFloat > -diff)
+				parambool = true;
+			paramFloat = prediccionAux.rotacion[0] - clientes.at(id).prediccion.rotacion[0];
+			if(paramFloat < diff && paramFloat > -diff)
+				parambool = true;
+			paramFloat = prediccionAux.rotacion[1] - clientes.at(id).prediccion.rotacion[1];
+			if(paramFloat < diff && paramFloat > -diff)
+				parambool = true;
+			paramFloat = prediccionAux.rotacion[2] - clientes.at(id).prediccion.rotacion[2];
+			if(paramFloat < diff && paramFloat > -diff)
+				parambool = true;
+
+			if(parambool){
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+			}
+
 
 			//server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 

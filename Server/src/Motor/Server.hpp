@@ -17,7 +17,7 @@ struct structClientes{
     std::string ip;
     int tipoCorredor;
     bool ready;
-    vector<structPrediccion> prediccion;
+    structPrediccion prediccion;
 };
 
 

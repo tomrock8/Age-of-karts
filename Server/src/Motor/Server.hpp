@@ -61,6 +61,7 @@ class Server
         void playerDisconnection(std::string str_param);
         void setStarted(bool b);
         bool getStarted();
+        void resetPlayers();
         
         RakNet::RakPeerInterface *server;
 

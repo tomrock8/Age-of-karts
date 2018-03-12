@@ -238,7 +238,6 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
-	cout<<"sigo aqui\n";
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
 	vector<Item *> items = pistaca->getItems();
@@ -376,12 +375,17 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	//------- ENTRADA TECLADO ----------
 	if (fin_carrera==true && sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
 		if (tipoEscena == Escena::tipo_escena::ONLINE && controlPlayer==0){
+			for (int i=0;i<pj.size();i++){
+				pj.at(i)->setVueltas(1);
+			}
+			jugadores->setJugadores(pj);
 			client->FinalizarCarrera();
 		}else if(!tipoEscena == Escena::tipo_escena::ONLINE){
 			return Escena::tipo_escena::MENU;
 		}
 	}
 	if (tipoEscena == Escena::tipo_escena::ONLINE && !client->getStarted()){
+		
 		return Escena::tipo_escena::LOBBY;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){

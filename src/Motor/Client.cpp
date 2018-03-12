@@ -685,6 +685,11 @@ void Client::ShutDownClient()
 }
 
 void Client::FinalizarCarrera(){
+	for (int i=0;i<clientes.size();i++){
+        clientes.at(i).ready=false;
+    }
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	players = jugadores->getJugadores();
 	typeID = ID_RETURN_LOBBY;
 	RakNet::BitStream bsOut;
 	bsOut.Write(typeID);

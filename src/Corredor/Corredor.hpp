@@ -60,6 +60,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void setPosicion(float *pos, float *ori);
 	void setLimite(int s);
 	void setTipoJugador(int tj);
+	void setVueltas(int j);
 
 	
 	std::string toString();

@@ -7,11 +7,19 @@
 #define MAX_CLIENTS 4
 #define MAX_PLAYERS 6
 
+struct structPrediccion{
+	int timeStamp;
+	float posicion[];
+	float rotacion[];
+};
+
 struct structClientes{
     std::string ip;
     int tipoCorredor;
     bool ready;
+    vector<structPrediccion> prediccion;
 };
+
 
 class Server
 {

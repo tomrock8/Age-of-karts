@@ -114,70 +114,71 @@ void Server::DebugServerInfo()
 //==================================================================================================================
 void Server::ReceivePackets()
 {
-    
-    GestorJugadores *jugadores = GestorJugadores::getInstancia();
-    //bucle donde se reciben los distintos paquetes, se tratan y se deasignan
-    for (p = server->Receive(); p; server->DeallocatePacket(p), p = server->Receive())
-    {
-        //se coge el identificador del paquete recibido para los casos del switch
-        packetIdentifier = GetPacketIdentifier(p);
-        players = jugadores->getJugadores();
-        //se inicializan el tipo de RakNet para los mensajes de entrada y salida
-        RakNet::BitStream bsIn(p->data, p->length, false); //|mensaje de entrada
-        RakNet::BitStream bsOut;						   //|mensaje de salida	
-        
-        //vector de posicion de Irrlicht
-        float posicion[3];
-        float rotacion[3];
-        btVector3 pos2[6];
-        pos2[0].setX(-10);
-        pos2[0].setY(0);
-        pos2[0].setZ(310);
-        pos2[1].setX(-10);
-        pos2[1].setY(0);
-        pos2[1].setZ(290);
-        pos2[2].setX(-20);
-        pos2[2].setY(0);
-        pos2[2].setZ(310);
-        pos2[3].setX(-20);
-        pos2[3].setY(0);
-        pos2[3].setZ(290);
-        pos2[4].setX(-30);
-        pos2[4].setY(0);
-        pos2[4].setZ(310);
-        pos2[5].setX(-30);
-        pos2[5].setY(0);
-        pos2[5].setZ(290);
-        int id;
-        int param;
-        int param2;
-        bool reset = false;
-        bool lanzar = false;
-        bool parambool = false;
-        
-        RakNet::RakString paramRakString;
-        std::string paramString;
-        
-        structClientes client;	
-        
-        CorredorRed *jugador;
-        
-        unsigned short numConnections;
-        RakNet::SystemAddress systems[10];
-        
-        
-        //switch para comprobar el tipo de paquete recibido
-        switch (packetIdentifier)
-        {
-            
-            //uno de los clientes se ha desconectado del servidor
-            case ID_DISCONNECTION_NOTIFICATION:
-                paramString = p->systemAddress.ToString(true);
-                std::cout << "ID_DISCONNECTION_NOTIFICATION de " << paramString << std::endl;
-                std::cout<< "NumPlayers: " << numPlayers << std::endl;
-                playerDisconnection(paramString);
-                break;
-                
+
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	//bucle donde se reciben los distintos paquetes, se tratan y se deasignan
+	for (p = server->Receive(); p; server->DeallocatePacket(p), p = server->Receive())
+	{
+		//se coge el identificador del paquete recibido para los casos del switch
+		packetIdentifier = GetPacketIdentifier(p);
+		players = jugadores->getJugadores();
+		//se inicializan el tipo de RakNet para los mensajes de entrada y salida
+		RakNet::BitStream bsIn(p->data, p->length, false); //|mensaje de entrada
+		RakNet::BitStream bsOut;						   //|mensaje de salida	
+
+		//vector de posicion de Irrlicht
+		float posicion[3];
+		float rotacion[3];
+		btVector3 pos2[6];
+		pos2[0].setX(-10);
+		pos2[0].setY(0);
+		pos2[0].setZ(310);
+		pos2[1].setX(-10);
+		pos2[1].setY(0);
+		pos2[1].setZ(290);
+		pos2[2].setX(-20);
+		pos2[2].setY(0);
+		pos2[2].setZ(310);
+		pos2[3].setX(-20);
+		pos2[3].setY(0);
+		pos2[3].setZ(290);
+		pos2[4].setX(-30);
+		pos2[4].setY(0);
+		pos2[4].setZ(310);
+		pos2[5].setX(-30);
+		pos2[5].setY(0);
+		pos2[5].setZ(290);
+		int id;
+		int param;
+		int param2;
+		bool reset = false;
+		bool lanzar = false;
+		bool parambool = false;
+		structPrediccion prediccionAux;
+
+		RakNet::RakString paramRakString;
+		std::string paramString;
+			
+		structClientes client;	
+		
+		CorredorRed *jugador;
+		
+		unsigned short numConnections;
+		RakNet::SystemAddress systems[10];
+
+
+		//switch para comprobar el tipo de paquete recibido
+		switch (packetIdentifier)
+		{
+
+		//uno de los clientes se ha desconectado del servidor
+		case ID_DISCONNECTION_NOTIFICATION:
+			paramString = p->systemAddress.ToString(true);
+			std::cout << "ID_DISCONNECTION_NOTIFICATION de " << paramString << std::endl;
+			std::cout<< "NumPlayers: " << numPlayers << std::endl;
+			playerDisconnection(paramString);
+			break;
+
 		//el cliente ya esta conectado (en caso de realizar un connect)
             case ID_ALREADY_CONNECTED:
                 std::cout << "ID_ALREADY_CONNECTED\n";
@@ -314,102 +315,108 @@ void Server::ReceivePackets()
                 break;
                 
 		//se ha aceptado la conexion con un cliente
-            case ID_CONNECTION_REQUEST_ACCEPTED:
-                std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
-                break;
-            case ID_CHANGE_CHARACTER:
-                std::cout<<"ID_CHANGE_CHARACTER_SERVER\n";
-                bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-                bsIn.Read(id);
-                bsIn.Read(parambool);					//True = ++; False == --
-                if (id<clientes.size() && id!=-1){
-                    param=clientes.at(id).tipoCorredor;	//a partir de ahora param es el tipo de jugador
-                    if (param==0 && parambool==false){
-                        param=3;
-                    }else if (param==3 && parambool==true){
-                        param=0;
-                    }else if (parambool){
-                        param++;
-                    }else{
-                        param--;
-                    }
-                    clientes.at(id).tipoCorredor=param;
-                }
-                std::cout << "Ahora el corredor " << id << " tiene el corredor " << param << endl;
-                typeID = ID_CHANGE_CHARACTER;
-                bsOut.Read(typeID);
-                bsOut.Read(id);
-                bsOut.Read(param);
-                server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-                parambool=false;
-                break;
-            case ID_RACE_START:
-                std::cout<<"ID_RACE_START\n";
-                bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-                bsIn.Read(id);
-                if (id!=-1 && id<clientes.size()){
-                    if (id!=0){		//si no eres host puedes alternar entre listo o no listo
-                        if (clientes.at(id).ready){
-                            clientes.at(id).ready=false;
-                        }else{
-                            clientes.at(id).ready=true;
-                        }
-                        typeID = ID_READY_CLIENT;
-                        bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
-                        bsOut.Write(id);
-                        server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-                    }else if(id==0){		//si eres host
-                        for (int n=1;n<clientes.size();n++){		//comprobamos si todos los corredores menos el host estan listos
-                            if (!clientes.at(n).ready){
-                                parambool=true;
-                                break;
-                            }
-                        }
-                        if (clientes.size()>1 && !clientes.at(id).ready){ //Si no estas solo y no estas listo
-                            clientes.at(id).ready=true;
-                            typeID = ID_READY_CLIENT;
-                            bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
-                            bsOut.Write(id);
-                            server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-                            break;
-                        }else if (clientes.size()>1 && clientes.at(id).ready && parambool==true){ //Si no estas solo y estas listo, pero algun cliente no
-                            clientes.at(id).ready = false;
-                            typeID = ID_READY_CLIENT;
-                            bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
-                            bsOut.Write(id);
-                            server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-                            break;
-                        }
-                        if (parambool==false && clientes.size()>0){		//si todos estan listos y ha recorrido el bucle empieza la carrera
-                            typeID = ID_RACE_START;
-                            bsOut.Write(typeID);
-                            numConnections=10;
-                            server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
-                            id=numConnections;
-                            Corredor::tipo_jugador tj;
-                            for(int i= 0; i<id; i++){		
-                                if (clientes.at(i).tipoCorredor == 0){
-                                    tj=Corredor::tipo_jugador::GLADIADOR;
-                                }else if (clientes.at(i).tipoCorredor == 1){
-                                    tj=Corredor::tipo_jugador::PIRATA;
-                                }else if (clientes.at(i).tipoCorredor == 2){
-                                    tj=Corredor::tipo_jugador::VIKINGO;
-                                }else if (clientes.at(i).tipoCorredor == 3){
-                                    tj=Corredor::tipo_jugador::CHINO;
-                                }
-                                jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
-                                jugador->setID(i);
-                                players.push_back(jugador);
-                                jugadores->aumentarJugadores();
-                            }
-                            started=true;
-                            server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-                        }
-                    }
-                }
-                parambool=false;
-                break;	
-            case ID_RETURN_LOBBY:
+		case ID_CONNECTION_REQUEST_ACCEPTED:
+			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
+			break;
+		case ID_CHANGE_CHARACTER:
+			std::cout<<"ID_CHANGE_CHARACTER_SERVER\n";
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			bsIn.Read(parambool);					//True = ++; False == --
+			if (id<clientes.size() && id!=-1){
+				param=clientes.at(id).tipoCorredor;	//a partir de ahora param es el tipo de jugador
+				if (param==0 && parambool==false){
+					param=3;
+				}else if (param==3 && parambool==true){
+					param=0;
+				}else if (parambool){
+					param++;
+				}else{
+					param--;
+				}
+				clientes.at(id).tipoCorredor=param;
+			}
+			std::cout << "Ahora el corredor " << id << " tiene el corredor " << param << endl;
+			typeID = ID_CHANGE_CHARACTER;
+			bsOut.Read(typeID);
+			bsOut.Read(id);
+			bsOut.Read(param);
+			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			parambool=false;
+			break;
+		case ID_RACE_START:
+			std::cout<<"ID_RACE_START\n";
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			if (id!=0){		//si no eres host puedes alternar entre listo o no listo
+				if (clientes.at(id).ready){
+					clientes.at(id).ready=false;
+				}else{
+					clientes.at(id).ready=true;
+				}
+				typeID = ID_READY_CLIENT;
+				bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
+				bsOut.Write(id);
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			}else if(id==0){		//si eres host
+				for (int n=1;n<clientes.size();n++){		//comprobamos si todos los corredores menos el host estan listos
+					if (!clientes.at(n).ready){
+						parambool=true;
+						break;
+					}
+				}
+				if (clientes.size()>1 && !clientes.at(id).ready){ //Si no estas solo y no estas listo
+					clientes.at(id).ready=true;
+					typeID = ID_READY_CLIENT;
+					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
+					bsOut.Write(id);
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+					break;
+				}else if (clientes.size()>1 && clientes.at(id).ready && parambool==true){ //Si no estas solo y estas listo, pero algun cliente no
+					clientes.at(id).ready = false;
+					typeID = ID_READY_CLIENT;
+					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
+					bsOut.Write(id);
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+					break;
+				}
+				if (parambool==false && clientes.size()>0){		//si todos estan listos y ha recorrido el bucle empieza la carrera
+					typeID = ID_RACE_START;
+					bsOut.Write(typeID);
+					numConnections=10;
+					server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+					id=numConnections;
+					Corredor::tipo_jugador tj;
+					for(int i= 0; i<id; i++){		
+						if (clientes.at(i).tipoCorredor == 0){
+							tj=Corredor::tipo_jugador::GLADIADOR;
+						}else if (clientes.at(i).tipoCorredor == 1){
+							tj=Corredor::tipo_jugador::PIRATA;
+						}else if (clientes.at(i).tipoCorredor == 2){
+							tj=Corredor::tipo_jugador::VIKINGO;
+						}else if (clientes.at(i).tipoCorredor == 3){
+							tj=Corredor::tipo_jugador::CHINO;
+						}
+						jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
+						jugador->setID(i);
+						players.push_back(jugador);
+						prediccionAux.timeStamp = 0;
+						prediccionAux.posicion[0] = pos2[i].getX();
+						prediccionAux.posicion[1] = pos2[i].getY();
+						prediccionAux.posicion[2] = pos2[i].getZ();
+						prediccionAux.rotacion[0] = pos2[i].getX();
+						prediccionAux.rotacion[1] = pos2[i].getY();
+						prediccionAux.rotacion[2] = pos2[i].getZ();
+						clientes.at(i).prediccion.push_back(prediccionAux);
+						jugadores->aumentarJugadores();
+					}
+					started=true;
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+				}
+			}
+			parambool=false;
+			break;	
+		case ID_RETURN_LOBBY:
 		std::cout << "ID_RETURN_LOBBY\n";
                 started=false;
                 deleteEntities();

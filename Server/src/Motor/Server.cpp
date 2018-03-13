@@ -477,7 +477,7 @@ void Server::ReceivePackets()
 			paramFloat = prediccionAux.rotacion[2] - clientes.at(id).prediccion.rotacion[2];
 			if(paramFloat < diff && paramFloat > -diff)
 				parambool = true;
-
+			clientes.at(id).prediccion = prediccionAux;
 			if(parambool){
 				std::cout << "Envio correccion\n";
 				typeID = ID_PLAYER_REFRESH;

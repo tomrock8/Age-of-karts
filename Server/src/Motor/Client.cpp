@@ -498,7 +498,7 @@ int Client::ReceivePackets()
 				break;
 
 			// Actualiza el objeto que le ha tocado a un cliente en una caja
-			case ID_PLAYER_SET_OBJECT:
+			case ID_PLAYER_REFRESH:
 				if (netLoaded)
 				{
 					int t, id;
@@ -760,7 +760,7 @@ void Client::PlayerMovement(){
 //	METODO DESACTUALIZADO: Al romper una caja, se le manda al servidor el item recogido
 //===========================================================================
 void Client::PlayerSetObject(int tipo){
-	typeID = ID_PLAYER_SET_OBJECT;
+	//typeID = ID_PLAYER_SET_OBJECT;
 	RakNet::BitStream bsOut;
 	cout <<"He cogido el objeto ---"<< tipo <<" --- y lo comparto con los demas"<< endl;
 	bsOut.Write(typeID);

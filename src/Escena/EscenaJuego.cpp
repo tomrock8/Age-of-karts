@@ -301,6 +301,7 @@ void EscenaJuego::update() {
 		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
 		}
+		colisiones->IniciarTimer();
 	}
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		pj.at(controlPlayer)->actualizarItem();
@@ -380,7 +381,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 			}
 			jugadores->setJugadores(pj);
 			client->FinalizarCarrera();
-		}else if(!tipoEscena == Escena::tipo_escena::ONLINE){
+    	}else if(tipoEscena != Escena::tipo_escena::ONLINE){ 
 			return Escena::tipo_escena::MENU;
 		}
 	}

@@ -61,6 +61,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void setLimite(int s);
 	void setTipoJugador(int tj);
 	void setVueltas(int j);
+	void setTiempoVuelta(float t);
 
 	
 	std::string toString();
@@ -74,6 +75,8 @@ class Corredor: public RakNet::NetworkIDObject
 	btScalar getdistanciaWaypoint();
 	btScalar getdistanciaWaypointActual();
 	int getVueltas();
+	float getMaxVuetas();
+	float getTiempoVueltaTotal();
 	
 	// Update
 	void update();
@@ -157,7 +160,8 @@ protected:
 	int timerAceite;
 	
 	
-
+	float tiempoVuelta;
+	float tiempoVueltaTotal;
 	//objetos estaticos y dinamicos
 	
 	EstadosJugador *estado;

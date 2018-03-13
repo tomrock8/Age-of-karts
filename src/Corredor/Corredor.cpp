@@ -25,6 +25,8 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	vueltas = 1;
 	maxvueltas=4;
 	tipojugador=tipo;
+	tiempoVuelta=0.f;
+	tiempoVueltaTotal=0.f;
 	
 	tipojugador=tipo;
 	estado->setEstadoCarrera(PARRILLA);
@@ -361,7 +363,9 @@ Corredor::tipo_jugador Corredor::getTipoJugador(){
 bool Corredor::getAceiteActivado(){
 	return aceiteActivado;
 }
-
+float Corredor::getMaxVuetas(){
+	return maxvueltas;
+}
 
 //-----------------------------//
 //---------METODOS SET---------//
@@ -578,6 +582,9 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 
 		if (siguiente_aux->getID() - 6 == 0) {
 			//cout<<"HAS DADO UNA VUELTA"<<endl;
+			if (getMaxVuetas()>=getVueltas()){
+				cout<<"VUELTA: "<<tiempoVuelta<<endl;	
+			}
 			vueltas++;
 			actual = siguiente_aux;
 			siguiente = actual->getNextWaypoint();
@@ -660,6 +667,14 @@ void Corredor::setTipoJugador(int tj){
         tipojugador = CHINO;
 		break;
 	}
+}
+
+void Corredor::setTiempoVuelta(float t){
+	tiempoVueltaTotal+=t;
+	tiempoVuelta=t;
+}
+float Corredor::getTiempoVueltaTotal(){
+	return tiempoVueltaTotal;	
 }
 //-------------------------------------//
 //-------TRATAMIENTOS OBJETOS----------//
@@ -1113,6 +1128,10 @@ void Corredor::updateText(){
 		texto->agregar(to_string(posicionCarrera)+"!\n");
 	}else{
 		texto->agregar(to_string(vueltas));
+	}
+	if (tiempoVuelta!=0){
+	texto->agregar("\nTIEMPO DE VUELTA: ");
+	texto->agregar(to_string(tiempoVuelta));
 	}
 	texto->agregar("\nOBJETO: ");
 	switch (tipoObj) {

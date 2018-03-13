@@ -255,12 +255,14 @@ int main()
             colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
             //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
             if (jugadores->getNumJugadores() != 0){
+                std::cout << "Llego aqui? \n";
                 for (int i = 0; i < jugadores->getNumJugadores(); i++) {
                     pj.at(i)->update();
                 }
             }
             
            
+            /*
             if (jugadores->getNumJugadores() != 0) {
                 clock_t tiempoActual = clock();
                 clock_t timediff = tiempoActual - tiempoRefresco;
@@ -269,15 +271,14 @@ int main()
                     //client->PlayerMovement();
                     tiempoRefresco = clock();
                 }
-                //client->PlayerAction();
-                //client->UpdateNetworkKeyboard();
-            }     
+            }
+            */     
             clock_t tiempoActual = clock();
             clock_t timediff = tiempoActual - tiempoRefrescoServer;
             float timediff_sec = ((float)timediff) / 100000;
             if (timediff_sec >= 0.01) {
                 //cout<<"REFRESCO\n";
-                server->refreshServer();
+                //server->refreshServer();
                 tiempoRefrescoServer = clock();
             }
             if(server->getCommands()==1) return 0;

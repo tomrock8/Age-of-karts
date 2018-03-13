@@ -356,6 +356,7 @@ void Server::ReceivePackets()
 						}else if (clientes.at(i).tipoCorredor == 3){
 							tj=Corredor::tipo_jugador::CHINO;
 						}
+						std::cout << "Creo jugador \n";
 						jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
 						jugador->setID(i);
 						players.push_back(jugador);
@@ -368,7 +369,9 @@ void Server::ReceivePackets()
 						prediccionAux.rotacion[2] = pos2[i].getZ();
 						clientes.at(i).prediccion = prediccionAux;
 						jugadores->aumentarJugadores();
+						std::cout << "Meto jugador\n";
 					}
+					std::cout << "Salgo de crear jugadores\n";
 					started=true;
 					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 				}
@@ -433,6 +436,7 @@ void Server::ReceivePackets()
 
 		case ID_PLAYER_MOVE:
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			std::cout << "Entro a playerMove\n";
 			bsIn.Read(param2);		//TIMESTAMP
 			bsIn.Read(id);			//CONTROLPLAYER
 			bsIn.Read(prediccionAux.posicion[0]); //POSICION ACTUAL
@@ -475,6 +479,15 @@ void Server::ReceivePackets()
 				parambool = true;
 
 			if(parambool){
+				std::cout << "Envio correccion\n";
+				typeID = ID_PLAYER_REFRESH;
+				bsOut.Write(typeID);
+				bsOut.Write(players.at(id)->getNodo()->getPosition().X);
+				bsOut.Write(players.at(id)->getNodo()->getPosition().Y);
+				bsOut.Write(players.at(id)->getNodo()->getPosition().Z);
+				bsOut.Write(players.at(id)->getNodo()->getRotation().X);
+				bsOut.Write(players.at(id)->getNodo()->getRotation().Y);
+				bsOut.Write(players.at(id)->getNodo()->getRotation().Z);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 			}
 
@@ -505,7 +518,7 @@ void Server::ReceivePackets()
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 			break;
 
-		case ID_PLAYER_SET_OBJECT:
+		case ID_PLAYER_REFRESH:
 /*
 			int t;
 

@@ -201,6 +201,7 @@ int Client::ReceivePackets()
 		RakNet::BitStream bsOut;						   //|mensaje de salida
 
 		btVector3 posicion;
+		btVector3 rotacion;
 		//Posiciones de salida en la parrilla
 		btVector3 pos2[6];
 		pos2[0].setX(-10);
@@ -525,18 +526,21 @@ int Client::ReceivePackets()
 
 				break;
 
-			// Actualiza el objeto que le ha tocado a un cliente en una caja
-			case ID_PLAYER_SET_OBJECT:
-				if (netLoaded)
+			// Corregir posicion por orden del server
+			case ID_PLAYER_REFRESH:
+				if (started)
 				{
-					int t, id;
-
+					float *pos = new float[3];
+					float *ori = new float[3];
 					bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-					bsIn.Read(t);
-					bsIn.Read(id);
-					cout <<" asignando al jugador *** "<< id <<" *** ";
-					players.at(id)->setTipoObj(t);
+					bsIn.Read(pos[0]);
+					bsIn.Read(pos[1]);
+					bsIn.Read(pos[2]);
+					bsIn.Read(ori[0]);
+					bsIn.Read(ori[1]);
+					bsIn.Read(ori[2]);
 
+					players.at(controlPlayer)->setPosicion(pos, ori);
 				}
 
 				break;
@@ -803,7 +807,7 @@ void Client::PlayerAction(){
 //	METODO DESACTUALIZADO: Al romper una caja, se le manda al servidor el item recogido
 //===========================================================================
 void Client::PlayerSetObject(int tipo){
-	typeID = ID_PLAYER_SET_OBJECT;
+	//typeID = ID_PLAYER_SET_OBJECT;
 	RakNet::BitStream bsOut;
 	cout <<"He cogido el objeto ---"<< tipo <<" --- y lo comparto con los demas"<< endl;
 	bsOut.Write(typeID);

@@ -181,30 +181,73 @@ void Server::ReceivePackets()
 		//el cliente ya esta conectado (en caso de realizar un connect)
             case ID_ALREADY_CONNECTED:
                 std::cout << "ID_ALREADY_CONNECTED\n";
+                bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+                server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+                param=numConnections;
+                if (!started){
+                    std::cout << "Numero de conexiones actuales: " << param << std::endl;
+                    typeID = ID_LOAD_CURRENT_CLIENTS;
+                    bsOut.Write(typeID);
+                    bsOut.Write(param);
+                    for(int i= 0; i< clientes.size(); i++){
+                        paramRakString = clientes.at(i).ip.c_str();
+                        bsOut.Write(paramRakString);
+                        bsOut.Write(clientes.at(i).tipoCorredor);
+                        bsOut.Write(clientes.at(i).ready);
+                    } 
+                    server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+                }else{
+                    playerDisconnection(p->systemAddress.ToString(true));                    
+                }
                 break;
-                
+            case ID_CHECK_ALREADY_CONNECTED:
+                std::cout << "ID_ALREADY_CONNECTED\n";
+                bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+                server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+                param=numConnections;
+                if (!started){
+                    std::cout << "Numero de conexiones actuales: " << param << std::endl;
+                    typeID = ID_LOAD_CURRENT_CLIENTS;
+                    bsOut.Write(typeID);
+                    bsOut.Write(param);
+                    for(int i= 0; i< clientes.size(); i++){
+                        paramRakString = clientes.at(i).ip.c_str();
+                        bsOut.Write(paramRakString);
+                        bsOut.Write(clientes.at(i).tipoCorredor);
+                        bsOut.Write(clientes.at(i).ready);
+                    } 
+                    server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+                }else{
+                    playerDisconnection(p->systemAddress.ToString(true));                    
+                }
+                break;    
 		//un nuevo cliente se ha conectado al servidor
             case ID_NEW_INCOMING_CONNECTION:
                 std::cout << "ID_NEW_INCOMING_CONNECTION\n";
-                client.ip = p->systemAddress.ToString(true);
-                client.tipoCorredor = 3;
-                client.ready = false;
-                clientes.push_back(client);
-                numConnections=10;
                 server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
                 param=numConnections;
-                std::cout << "Numero de conexiones actuales: " << param << std::endl;
-                typeID = ID_LOAD_CURRENT_CLIENTS;
-                bsOut.Write(typeID);
-                bsOut.Write(param);
-                for(int i = 0; i<clientes.size(); i++){
-                    paramRakString = clientes.at(i).ip.c_str();
-                    bsOut.Write(paramRakString);
-                    bsOut.Write(clientes.at(i).tipoCorredor);
-                    bsOut.Write(clientes.at(i).ready);
+                if (!started || param <= 4){
+                    client.ip = p->systemAddress.ToString(true);
+                    client.tipoCorredor = 3;
+                    client.ready = false;
+                    clientes.push_back(client);
+                    numConnections=10;
+                    server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+                    param=numConnections;
+                    std::cout << "Numero de conexiones actuales: " << param << std::endl;
+                    typeID = ID_LOAD_CURRENT_CLIENTS;
+                    bsOut.Write(typeID);
+                    bsOut.Write(param);
+                    for(int i = 0; i<clientes.size(); i++){
+                        paramRakString = clientes.at(i).ip.c_str();
+                        bsOut.Write(paramRakString);
+                        bsOut.Write(clientes.at(i).tipoCorredor);
+                        bsOut.Write(clientes.at(i).ready);
+                    }
+                    server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+                }else{
+                    playerDisconnection(p->systemAddress.ToString(true));               
                 }
-                server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-                
                 /*
                  typeID = ID_LOAD_CURRENT_PLAYERS;
                  bsOut.Write(typeID);
@@ -369,7 +412,7 @@ void Server::ReceivePackets()
             case ID_RETURN_LOBBY:
 		std::cout << "ID_RETURN_LOBBY\n";
                 started=false;
-                resetPlayers();
+                deleteEntities();
                 bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
                 typeID = ID_RETURN_LOBBY;
                 bsOut.Write(typeID);
@@ -719,6 +762,7 @@ void Server::playerDisconnection(std::string str_param){
         //Borrar players tambien
         players.erase(players.begin()+param);
         jugadores->decrementarJugadores();
+        //jugadores->getJugadores().at(param)->~Corredor(); 
     }
     
     typeID = ID_PLAYER_DISCONNECT;
@@ -743,7 +787,7 @@ void Server::playerDisconnection(std::string str_param){
      server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
      */
 }
-void Server::resetPlayers(){
+void Server::deleteEntities(){
     if (players.size()>0){
         GestorJugadores *jugadores = GestorJugadores::getInstancia();
         for (int i=0;i<jugadores->getJugadores().size();i++){

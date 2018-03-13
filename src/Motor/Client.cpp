@@ -20,6 +20,8 @@ Client::Client(int maxPlay)
 	connected = false; // true == si esta conectado con el servidor
 	started = false;	//True == si ha recibido el paquete con ID_RACE_START
 	pressed = true;		//true ==  si esta pulsando alguna tecla, para evitar la saturacion de mensajes iguales
+	disconnection=false;
+	aux=0;
 }
 
 //==================================================================================
@@ -77,7 +79,7 @@ void Client::ClientStartup()
 	//se inicia el cliente especificando el numero de conexiones permitidas, la descripcion de los sockets
 	//y el numero de descriptores pasados
 	client->Startup(8, &socketDescriptor, 1);
-
+	disconnection=false;
 	//true == se realizan pings de manera constante para comprobar el buen funcionamiento de la conexion
 	client->SetOccasionalPing(true);
 
@@ -188,6 +190,9 @@ int Client::ReceivePackets()
 {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	//bucle que trata todos los paquetes recibidos en esta iteracion
+	if (disconnection){
+		return 1;
+	}
 	for (p = client->Receive(); p; client->DeallocatePacket(p), p = client->Receive())
 	{
 		players = jugadores->getJugadores();
@@ -242,11 +247,24 @@ int Client::ReceivePackets()
 			//uno de los clientes se ha desconectado del servidor
 			case ID_DISCONNECTION_NOTIFICATION:
 				std::cout << "ID_DISCONNECTION_NOTIFICATION de " << p->systemAddress.ToString(true) << std::endl;
+				disconnection=true;
 				break;
 
 			//el cliente ya esta conectado (en caso de realizar un connect)
 			case ID_ALREADY_CONNECTED:
 				std::cout << "ID_ALREADY_CONNECTED\n";
+				/*typeID = ID_ALREADY_CONNECTED;
+                bsOut.Write(typeID);
+				client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true); NO ENVIA*/ 
+				if (aux!=1){
+					aux=1;
+					serverIP="1";
+					ClientStartup();
+				}
+				//serverIP=aux;
+				//ClientStartup();
+				//disconnection=true;
+				//return 3;
 				break;
 
 			//un nuevo cliente se ha conectado al servidor
@@ -270,6 +288,7 @@ int Client::ReceivePackets()
 			//se le notifica al cliente que ha sido expulsado del servidor por x motivos
 			case ID_CONNECTION_BANNED:
 				std::cout << "Has sido baneado del server!\n";
+				return 1;
 				break;
 
 			//la conexion del cliente con el servidor ha fallado
@@ -287,11 +306,13 @@ int Client::ReceivePackets()
 			//se le notifica al cliente que el servidor ya ha alcanzado su numero maximo de usuarios y, por lo tanto, no puede acceder
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
 				std::cout << "Lo sentimos, el servidor ya esta lleno\n";
+				return 1;
 				break;
 
 			//el cliente ha proporcionado una contrasenya de acceso incorrecta
 			case ID_INVALID_PASSWORD:
 				std::cout << "Acceso denegado! Introduzca la clave correcta\n";
+				return 1;
 				break;
 
 			//se ha aceptado la conexion con un cliente
@@ -299,7 +320,7 @@ int Client::ReceivePackets()
 				std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
 				connected = true;
 				controlPlayer = -1;
-
+				aux=0;
 				break;
 
 			//Actualiza los clientes conectados en el servidor para cambiar los datos del lobby
@@ -595,7 +616,7 @@ int Client::ReceivePackets()
 					controlPlayer--;				//controlPlayer para no cambiar de jugador con la reordenacion del array
 
 				clientes.erase(clientes.begin() + playerDisconnect);
-
+				ShutDownClient();
 				break;
 
 			default:
@@ -639,8 +660,12 @@ void Client::ShutDownClient()
 	
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 */
+	connected=false;
+	started=false;
+	disconnection=true;
 	client->Shutdown(300);
 	RakNet::RakPeerInterface::DestroyInstance(client);
+	std::cout << "Cerrando cliente2\n";
 }
 
 
@@ -728,7 +753,13 @@ void Client::setNetloaded(bool b){
 	netLoaded = b;
 }
 
-
+void Client::ActualizarClienteConectado(){
+	cout<<"voy a actualizar el cliente conectado\n";
+	RakNet::BitStream bsOut;
+	typeID = ID_CHECK_ALREADY_CONNECTED;
+    bsOut.Write(typeID);
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
 //===========================================================================
 //
 //	METODOS DESACTUALIZADOS

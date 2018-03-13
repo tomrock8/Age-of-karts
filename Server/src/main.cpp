@@ -196,7 +196,9 @@ int main()
         vector<Item *> items = pistaca->getItems();
         jugadores = GestorJugadores::getInstancia();
         vector<Corredor*> pj = jugadores->getJugadores();
-        
+        if(pj.size()==0){
+            server->setStarted(false);
+        }
         //Comprobamos si el servidor ha iniciado la partida (para iniciar el contador)
         if (!server->getStarted()){
             fin_carrera=false;
@@ -280,7 +282,7 @@ int main()
                 server->refreshServer();
                 tiempoRefrescoServer = clock();
             }
-            if(server->getCommands()==1) return 0;
+            
             
             
             if (jugadores->getNumJugadores() != 0){
@@ -291,6 +293,7 @@ int main()
             
             jugadores->setJugadores(pj);
         }
+        if(server->getCommands()==1) return 0;
         int fps = Motor3d::instancia().getDriver()->getFPS();
         if (lastFPS != fps) {
             core::stringw tmp(L"Age of karts SERVER [");

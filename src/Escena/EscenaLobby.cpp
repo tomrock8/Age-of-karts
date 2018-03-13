@@ -2,9 +2,12 @@
 
 EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tipo) {
 	nElementos = 0;
-	count = 50;
+	nElementos2 = 0;
+	count = 3;
 	ipConexion = ipC;
     cout<<ipConexion<<endl;
+	time= Timer::getInstancia();
+	texto2="";
 	if (ipConexion==""){	
 		texto = L"ESC - SALIR\n\n";
 		texto = "Introduce IP para iniciar partida online: ";
@@ -67,7 +70,15 @@ void EscenaLobby::limpiar() {
 }
 
 void EscenaLobby::update() {
+	bool show=false;
+	
+	
 	if (iniciar && !iniciado) {
+		show=true;
+		count=0;
+		texto2="";
+		nElementos2=time->getTimer();
+		nElementos=time->getTimer();
 		if (firstInit){
 			client = Client::getInstancia();
 			client->CreateClientInterface();
@@ -83,8 +94,45 @@ void EscenaLobby::update() {
 		iniciado = true;
 	}
 	if (iniciado) {
-		client->ReceivePackets();
-
+		
+		if (show){
+			texto += "\nConectando";
+			show=false;
+		}
+		//cout<<"timer: "<<time->getTimer()-nElementos2<<endl;
+		if (time->getTimer()-nElementos2==1){
+			if (count<=6){
+				texto2 +=".";
+				count++;
+				
+			}else{
+				texto2="";
+				texto = "\nConectando";
+				count=0;
+			
+			}
+			nElementos2=time->getTimer();
+			//time->restartTimer();
+		}
+		
+		texto += texto2;
+		texto2="";
+		if (client->ReceivePackets()==3){
+			cout<<"voy a entrar\n";
+			client->ActualizarClienteConectado();
+		}
+		if (client->ReceivePackets()==1 || time->getTimer()-nElementos>8){
+			cout<<"BORRANDO VOY++++++\n";
+			texto = "Conexion fallida! \nVuelve a introducir IP para iniciar partida online: ";
+        	iniciar = false;
+			iniciado = false;
+			ipConexion="";
+			texto2="";
+			client->ShutDownClient();
+			nElementos=time->getTimer();
+		}
+		
+		
 		bool checkReady=true;
 		bool checkReadyMe=true;
 		bool bc=false;
@@ -94,6 +142,7 @@ void EscenaLobby::update() {
 
 
 		if (client->getConnected()) {
+			nElementos=time->getTimer();
 			conectado = true;
 			texto = L"Conexion establecida!\n";
 			 

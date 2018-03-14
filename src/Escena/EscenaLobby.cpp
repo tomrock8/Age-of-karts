@@ -10,7 +10,9 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	texto2="";
 	if (ipConexion==""){	
 		texto = L"ESC - SALIR\n\n";
-		texto = "Introduce IP para iniciar partida online: ";
+		//texto = "Introduce IP para iniciar partida online: ";
+		texto += "1. Crear Sala\n 2. Unirse\n";
+		selection=true;
         iniciar = false;
 		iniciado = false;
 		firstInit = true;
@@ -86,9 +88,7 @@ void EscenaLobby::update() {
 			client->ClientStartup();
 			
 		}else{
-			client = Client::getInstancia();
-			cout<<"started: "<<client->getStarted()<<endl;
-			cout<<"control player: "<<client->getControlPlayer()<<endl;			
+			client = Client::getInstancia();	
 			client->setNetloaded(false);
 		}
 		iniciado = true;
@@ -246,7 +246,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !selection) {
 		if (!pressed) {
 			pressed = true;
 			if (conectado) {
@@ -255,7 +255,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 			}
 		}
-	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !selection){
 		if (!pressed) {
 			pressed = true;
 			if (conectado) {
@@ -265,7 +265,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 		}
 
-	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !selection){
 		if (!pressed) {
 			pressed = true;
 			if (conectado) {
@@ -274,82 +274,93 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 			}
 		}
-	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !selection){
 		if(!pressed){
 			iniciar = true;					//Conectar con el servidor de la IP
 			pressed = true;
 		}
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
 		if (!pressed) {
+			if (!selection){
 			texto += "1";
 			ipConexion += "1";
+			}else{
+				selection=false;
+				iniciar = true;
+				ipConexion="127.0.0.1";
+			}
 			pressed = true;
 		}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
 		if (!pressed) {
+			if (!selection){
 			texto += "2";
 			ipConexion += "2";
+			}else{
+				selection=false;
+				texto = "Introduce IP para iniciar partida online: ";
+			}
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && !selection){
 		if (!pressed) {
 			texto += "3";
 			ipConexion += "3";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && !selection){
 		if (!pressed) {
 			texto += "4";
 			ipConexion += "4";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5) && !selection){
 		if (!pressed) {
 			texto += "5";
 			ipConexion += "5";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6) && !selection){
 		if (!pressed) {
 			texto += "6";
 			ipConexion += "6";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7) && !selection){
 		if (!pressed) {
 			texto += "7";
 			ipConexion += "7";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8) && !selection){
 		if (!pressed) {
 			texto += "8";
 			ipConexion += "8";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9) && !selection){
 		if (!pressed) {
 			texto += "9";
 			ipConexion += "9";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && !selection){
 		if (!pressed) {
 			texto += "0";
 			ipConexion += "0";
 			pressed = true;
 		}
 	}
-	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Period)){
+	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Period) && !selection){
 		if(!pressed){
 			texto += ".";
 			ipConexion += ".";

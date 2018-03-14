@@ -46,6 +46,7 @@ private:
 	stringw texto2;
 	IGUIStaticText *textoUI; // Nodo de irrlicht
 	ITexture* logoAOK; // Textura del logo del juego
+	bool selection;
 };
 
 #endif /* ESCENALOBBY_H */

@@ -77,7 +77,8 @@ bool GestorColisiones::JugadorWaypoint(){
 						if (nodoB->getID()-6==0 && pj1.at(i)->getWaypointSiguiente()->getWaypoint()->getID()-6==0){
 							clock_t timediff = clock() - tiempoInicio;
 							float timediff_sec = ((float)timediff) / CLOCKS_PER_SEC;
-							cout<<"timediff_sec: "<<timediff_sec<<endl;
+							
+							///cout<<"timediff_sec: "<<timediff_sec<<endl;
 							if (pj1.at(i)->getMaxVuetas()>=pj1.at(i)->getVueltas()){
 								pj1.at(i)->setTiempoVuelta(timediff_sec-pj1.at(i)->getTiempoVueltaTotal());
 							}

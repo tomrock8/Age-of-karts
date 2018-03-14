@@ -9,8 +9,8 @@
 
 struct structPrediccion{
 	int timeStamp;
-	float posicion[];
-	float rotacion[];
+	float posicion[3];
+	float rotacion[3];
 };
 
 struct structClientes{

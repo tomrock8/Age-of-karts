@@ -152,7 +152,7 @@ void Server::ReceivePackets()
 		int param;
 		int param2;
 		float paramFloat;
-		float diff = 0.01;
+		float diff = 2.1;
 		bool reset = false;
 		bool lanzar = false;
 		bool parambool = false;
@@ -211,7 +211,7 @@ void Server::ReceivePackets()
                 /*
                  typeID = ID_LOAD_CURRENT_PLAYERS;
                  bsOut.Write(typeID);
-                 bsOut.Write(numPlayers);
+                 bsOut.Woniririte(numPlayers);
                  
                  std::cout << "Numero de jugadores actuales: " << numPlayers << std::endl;
                  
@@ -459,27 +459,46 @@ void Server::ReceivePackets()
 			players.at(id)->getEstados()->setEstadoCarrera(param);
 			
 			parambool = false;
-			paramFloat = prediccionAux.posicion[0] - clientes.at(id).prediccion.posicion[0];
-			if(paramFloat < diff && paramFloat > -diff)
+			std::cout << "Posicion Y: " << players.at(id)->getNodo()->getRotation().Y << " - " << clientes.at(id).prediccion.rotacion[1] << std::endl;
+			std::cout << "Posicion Z: " << players.at(id)->getNodo()->getRotation().Z << " - " << clientes.at(id).prediccion.rotacion[2] << std::endl;
+			paramFloat = players.at(id)->getNodo()->getPosition().X - clientes.at(id).prediccion.posicion[0];
+			if(paramFloat > diff || paramFloat < -diff){
+				std::cout << "Posicion X\n";
 				parambool = true;
-			paramFloat = prediccionAux.posicion[1] - clientes.at(id).prediccion.posicion[1];
-			if(paramFloat < diff && paramFloat > -diff)
+			}
+			paramFloat = players.at(id)->getNodo()->getPosition().Y - clientes.at(id).prediccion.posicion[1];
+			if(paramFloat > diff || paramFloat < -diff)
+				std::cout << "Posicion Y\n";
 				parambool = true;
-			paramFloat = prediccionAux.posicion[2] - clientes.at(id).prediccion.posicion[2];
-			if(paramFloat < diff && paramFloat > -diff)
+			paramFloat = players.at(id)->getNodo()->getPosition().Z - clientes.at(id).prediccion.posicion[2];
+			if(paramFloat > diff || paramFloat < -diff){
+				std::cout << "Posicion Z\n";
 				parambool = true;
-			paramFloat = prediccionAux.rotacion[0] - clientes.at(id).prediccion.rotacion[0];
-			if(paramFloat < diff && paramFloat > -diff)
+			}
+			paramFloat = players.at(id)->getNodo()->getRotation().X - clientes.at(id).prediccion.rotacion[0];
+			if(paramFloat > diff || paramFloat < -diff){
+				std::cout << "Rotacion X\n";
 				parambool = true;
-			paramFloat = prediccionAux.rotacion[1] - clientes.at(id).prediccion.rotacion[1];
-			if(paramFloat < diff && paramFloat > -diff)
+			}
+			paramFloat = players.at(id)->getNodo()->getRotation().Y - clientes.at(id).prediccion.rotacion[1];
+			if(paramFloat > diff || paramFloat < -diff){
+				std::cout << "Rotacion Y\n";
 				parambool = true;
-			paramFloat = prediccionAux.rotacion[2] - clientes.at(id).prediccion.rotacion[2];
-			if(paramFloat < diff && paramFloat > -diff)
+			}
+			paramFloat = players.at(id)->getNodo()->getRotation().Z - clientes.at(id).prediccion.rotacion[2];
+			if(paramFloat > diff || paramFloat < -diff){
+				std::cout << "Rotacion Z\n";
 				parambool = true;
-			clientes.at(id).prediccion = prediccionAux;
+			}
 			if(parambool){
 				std::cout << "Envio correccion\n";
+				prediccionAux.posicion[0] = players.at(id)->getNodo()->getPosition().X;
+				prediccionAux.posicion[1] = players.at(id)->getNodo()->getPosition().Y;
+				prediccionAux.posicion[2] = players.at(id)->getNodo()->getPosition().Z;
+				prediccionAux.rotacion[0] = players.at(id)->getNodo()->getRotation().X;
+				prediccionAux.rotacion[1] = players.at(id)->getNodo()->getRotation().Y;
+				prediccionAux.rotacion[2] = players.at(id)->getNodo()->getRotation().Z;
+
 				typeID = ID_PLAYER_REFRESH;
 				bsOut.Write(typeID);
 				bsOut.Write(players.at(id)->getNodo()->getPosition().X);
@@ -491,6 +510,8 @@ void Server::ReceivePackets()
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 			}
 
+			clientes.at(id).prediccion = prediccionAux;
+			
 
 			//server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 

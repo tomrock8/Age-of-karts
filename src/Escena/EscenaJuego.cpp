@@ -148,9 +148,9 @@ void EscenaJuego::init() {
 			}else if (client->getClientes().at(i).tipoCorredor == 3){
 				tj=Corredor::tipo_jugador::CHINO;
 			}
-			if(i = controlPlayer)
+			if(i == controlPlayer){
 				jugador = new CorredorJugador("assets/coche.obj", pos2[i], tj);
-			else
+			}else
 				jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
 			jugador->setID(i);
 			pj.push_back(jugador);
@@ -317,7 +317,7 @@ void EscenaJuego::update() {
 				pj.at(3)->update();
 				pj.at(4)->update();
 				pj.at(5)->update();
-		*/
+*/
 		//textoDebug->agregar(pj.at(0)->toString());
 	}
 	else {

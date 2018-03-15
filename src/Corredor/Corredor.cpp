@@ -27,7 +27,8 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	tipojugador=tipo;
 	tiempoVuelta=0.f;
 	tiempoVueltaTotal=0.f;
-	
+	tiempoHabilidad=0;
+	habilidadLanzada=false;
 	tipojugador=tipo;
 	estado->setEstadoCarrera(PARRILLA);
 
@@ -1294,6 +1295,10 @@ void Corredor::lanzarHabilidad(){
 		habilidadJugador = new Habilidad(4,cuboNodo,posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);	
+		setTurbo(true, true, 40000);
+		tiempoHabilidad=tiempoDestruccion;
+		habilidadLanzada=true;
+
 		break;
 
 			

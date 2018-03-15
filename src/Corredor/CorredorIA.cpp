@@ -22,6 +22,7 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 	giroFlojoIzquierda=false;
 	enemigoatras=false;
 	enemigolados=false;
+	habilidad=false;
 	distanciaCaja = 0;
 	distanciaEnemigo = 0;
 	distanciaTurbo = 0;
@@ -42,173 +43,204 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 
 
 	arbolconduccion = new ArbolDecision();
-	arbolconduccion->nuevoNodoDecision(0,NADA2,NADA3,0,false); // 0 NODO PADRE
+	arbolconduccion->nuevoNodoDecision(0,0,NADA2,NADA3,0,false); // 0 NODO PADRE
 	
 	//NodosHijos
-	arbolconduccion->nuevoNodoDecision(0,IGUAL,GIROFUERTEDERECHA,0,true); // 1 GiroFuertederecha
-	arbolconduccion->nuevoNodoDecision(0,IGUAL,GIROMEDIODERECHA,0,true); // 2 GiroDerecha
-	arbolconduccion->nuevoNodoDecision(0,IGUAL,NOGIRO,0,true); // 3 NoGiro
-	arbolconduccion->nuevoNodoDecision(0,IGUAL,GIROMEDIOIZQUIERDA,0,true); // 4 GiroIzquierda
- 	arbolconduccion->nuevoNodoDecision(0,IGUAL,GIROFUERTEIZQUIERDA,0,true);  // 5 GiroFuerteIzquierda
+	arbolconduccion->nuevoNodoDecision(0,1,IGUAL,GIROFUERTEDERECHA,0,true); // 1 GiroFuertederecha
+	arbolconduccion->nuevoNodoDecision(0,2,IGUAL,GIROMEDIODERECHA,0,true); // 2 GiroDerecha
+	arbolconduccion->nuevoNodoDecision(0,3,IGUAL,NOGIRO,0,true); // 3 NoGiro
+	arbolconduccion->nuevoNodoDecision(0,4,IGUAL,GIROMEDIOIZQUIERDA,0,true); // 4 GiroIzquierda
+ 	arbolconduccion->nuevoNodoDecision(0,5,IGUAL,GIROFUERTEIZQUIERDA,0,true);  // 5 GiroFuerteIzquierda
 
 	//GiroFuertederecha 1
-	arbolconduccion->nuevoNodoDecision(1,IGUAL,VELOCIDADBAJA,0,true); // 6
-	arbolconduccion->nuevoNodoDecision(1,IGUAL,VELOCIDADMEDIA,0,true); // 7
-	arbolconduccion->nuevoNodoDecision(1,IGUAL,VELOCIDADALTA,0,true); // 8
+	arbolconduccion->nuevoNodoDecision(1,6,IGUAL,VELOCIDADBAJA,0,true); // 6
+	arbolconduccion->nuevoNodoDecision(1,7,IGUAL,VELOCIDADMEDIA,0,true); // 7
+	arbolconduccion->nuevoNodoDecision(1,8,IGUAL,VELOCIDADALTA,0,true); // 8
 
-	arbolconduccion->nuevoNodoAccion(6,5); //9
-	arbolconduccion->nuevoNodoAccion(7,5); //10
-	arbolconduccion->nuevoNodoAccion(8,7); //11
+	arbolconduccion->nuevoNodoAccion(6,9,5); //9
+	arbolconduccion->nuevoNodoAccion(7,10,5); //10
+	arbolconduccion->nuevoNodoAccion(8,11,7); //11
 
 	//GiroDerecha 2
-	arbolconduccion->nuevoNodoAccion(2,3); // 12
+	arbolconduccion->nuevoNodoAccion(2,12,3); // 12
 	//NoGiro 3
-	arbolconduccion->nuevoNodoAccion(3,1); // 13
+	arbolconduccion->nuevoNodoAccion(3,13,1); // 13
 	//GiroIzquierda 4
-	arbolconduccion->nuevoNodoAccion(4,4); // 14
+	arbolconduccion->nuevoNodoAccion(4,14,4); // 14
 
 	//GiroFuerteIzquierda 5
-	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADBAJA,0,true); // 15
-	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADMEDIA,0,true); // 16
-	arbolconduccion->nuevoNodoDecision(5,IGUAL,VELOCIDADALTA,0,true); // 17
+	arbolconduccion->nuevoNodoDecision(5,15,IGUAL,VELOCIDADBAJA,0,true); // 15
+	arbolconduccion->nuevoNodoDecision(5,16,IGUAL,VELOCIDADMEDIA,0,true); // 16
+	arbolconduccion->nuevoNodoDecision(5,17,IGUAL,VELOCIDADALTA,0,true); // 17
 
-	arbolconduccion->nuevoNodoAccion(15,6); //18
-	arbolconduccion->nuevoNodoAccion(16,6); //19
-	arbolconduccion->nuevoNodoAccion(17,8); //20
+	arbolconduccion->nuevoNodoAccion(15,18,6); //18
+	arbolconduccion->nuevoNodoAccion(16,19,6); //19
+	arbolconduccion->nuevoNodoAccion(17,20,8); //20
 
 
-
+//numero de nodos 60
 	arbolobjetos = new ArbolDecision();
-	arbolobjetos->nuevoNodoDecision(0,NADA2,NADA3,0,false); // 0 NODO PADRE
+	arbolobjetos->nuevoNodoDecision(0,0,NADA2,NADA3,0,false); // 0 NODO PADRE
+
+		
+	arbolobjetos->nuevoNodoDecision(0,59,IGUAL,HABILIDADD,0,true);
+	arbolobjetos->nuevoNodoDecision(0,60,IGUAL,HABILIDADD,0,false);
+
+	arbolobjetos->nuevoNodoDecision(59,61,IGUAL,JUGADOR,0,true); //GLADIADOR
+	arbolobjetos->nuevoNodoDecision(59,62,IGUAL,JUGADOR,1,true); //PIRATA
+	arbolobjetos->nuevoNodoDecision(59,63,IGUAL,JUGADOR,2,true); //VIKINGO	
+	arbolobjetos->nuevoNodoDecision(59,64,IGUAL,JUGADOR,3,true); //CHINO
+
+	arbolobjetos->nuevoNodoAccion(64,65,14);
+
+	arbolobjetos->nuevoNodoDecision(62,66,IGUAL,ENEMIGO,0,true);
+	arbolobjetos->nuevoNodoDecision(62,72,IGUAL,ENEMIGO,0,false);
+	arbolobjetos->nuevoNodoDecision(66,67,IGUAL,NOGIRO,0,true);
+	arbolobjetos->nuevoNodoDecision(66,68,IGUAL,NOGIRO,0,false);
+	arbolobjetos->nuevoNodoAccion(67,69,14);
+	arbolobjetos->nuevoNodoAccion(68,70,10);
+	arbolobjetos->nuevoNodoAccion(72,73,12);
+
+	arbolobjetos->nuevoNodoDecision(61,71,IGUAL,ENEMIGOLADO,0,true);
+	arbolobjetos->nuevoNodoDecision(61,74,IGUAL,ENEMIGOLADO,0,false);
+	arbolobjetos->nuevoNodoAccion(71,75,14);
+	arbolobjetos->nuevoNodoAccion(74,76,12);
+
+	arbolobjetos->nuevoNodoDecision(63,77,IGUAL,ENEMIGOLADO,0,true);
+	arbolobjetos->nuevoNodoDecision(63,78,IGUAL,ENEMIGOLADO,0,false);
+	arbolobjetos->nuevoNodoAccion(77,79,14);
+	arbolobjetos->nuevoNodoAccion(78,80,12);
+
+
 
 	//NodosHijos
-	arbolobjetos->nuevoNodoDecision(0,IGUAL,OBJBOOLEANO,0,true); // 1 Objeto
-	arbolobjetos->nuevoNodoDecision(0,IGUAL,OBJBOOLEANO,0,false); // 2 !Objeto
+	arbolobjetos->nuevoNodoDecision(60,1,IGUAL,OBJBOOLEANO,0,true); // 1 Objeto
+	arbolobjetos->nuevoNodoDecision(60,2,IGUAL,OBJBOOLEANO,0,false); // 2 !Objeto
 
 	//Objeto 1
-	arbolobjetos->nuevoNodoDecision(1,IGUAL,VISION,0,true); // 3 Vision
-	arbolobjetos->nuevoNodoDecision(1,IGUAL,VISION,0,false); // 4 !Vision
+	arbolobjetos->nuevoNodoDecision(1,3,IGUAL,VISION,0,true); // 3 Vision
+	arbolobjetos->nuevoNodoDecision(1,4,IGUAL,VISION,0,false); // 4 !Vision
 
 	//Vision 3
-	arbolobjetos->nuevoNodoDecision(3,IGUAL,ENEMIGO,0,true); // 5 Enemigo
-	arbolobjetos->nuevoNodoDecision(3,IGUAL,TURBOO,0,true); // 6 Turbo
+	arbolobjetos->nuevoNodoDecision(3,5,IGUAL,ENEMIGO,0,true); // 5 Enemigo
+	arbolobjetos->nuevoNodoDecision(3,6,IGUAL,TURBOO,0,true); // 6 Turbo
 
 	//Enemigo 5
-	arbolobjetos->nuevoNodoDecision(5,IGUAL,DISTANCIACERCA,0,true); // 7 CERCA
-	arbolobjetos->nuevoNodoDecision(5,IGUAL,DISTANCIAMEDIA,0,true); // 8 MEDIO
-	arbolobjetos->nuevoNodoDecision(5,IGUAL,DISTANCIALEJOS,0,true); // 9 LEJOS
+	arbolobjetos->nuevoNodoDecision(5,7,IGUAL,DISTANCIACERCA,0,true); // 7 CERCA
+	arbolobjetos->nuevoNodoDecision(5,8,IGUAL,DISTANCIAMEDIA,0,true); // 8 MEDIO
+	arbolobjetos->nuevoNodoDecision(5,9,IGUAL,DISTANCIALEJOS,0,true); // 9 LEJOS
 
 	//CERCA 7
-	arbolobjetos->nuevoNodoDecision(7,IGUAL,OBJNUMERO,1,false); // 10 OBJ1
-	arbolobjetos->nuevoNodoDecision(7,IGUAL,OBJNUMERO,6,false); // 11 OBJ6
+	arbolobjetos->nuevoNodoDecision(7,10,IGUAL,OBJNUMERO,1,false); // 10 OBJ1
+	arbolobjetos->nuevoNodoDecision(7,11,IGUAL,OBJNUMERO,6,false); // 11 OBJ6
 
 	//OBJ1 10
-	arbolobjetos->nuevoNodoDecision(10,IGUAL,NOGIRO,0,true); // 12 NOGIRO
-	arbolobjetos->nuevoNodoDecision(10,IGUAL,NOGIRO,0,false);// 13 !NOGIRO
+	arbolobjetos->nuevoNodoDecision(10,12,IGUAL,NOGIRO,0,true); // 12 NOGIRO
+	arbolobjetos->nuevoNodoDecision(10,13,IGUAL,NOGIRO,0,false);// 13 !NOGIRO
 
 	//NOGIRO 12
-	arbolobjetos->nuevoNodoAccion(12,13); // 14 Lanzo el objeto accion a concretar
+	arbolobjetos->nuevoNodoAccion(12,14,13); // 14 Lanzo el objeto accion a concretar
 	//!NOGIRO 13
-	arbolobjetos->nuevoNodoAccion(13,10); // 15 Sigo al objetivo accion a concretar
+	arbolobjetos->nuevoNodoAccion(13,15,10); // 15 Sigo al objetivo accion a concretar
 
 	//OBJ6 11
-	arbolobjetos->nuevoNodoDecision(11,IGUAL,NOGIRO,0,true); // 16 NOGIRO
-	arbolobjetos->nuevoNodoDecision(11,IGUAL,NOGIRO,0,false);// 17 !NOGIRO
+	arbolobjetos->nuevoNodoDecision(11,16,IGUAL,NOGIRO,0,true); // 16 NOGIRO
+	arbolobjetos->nuevoNodoDecision(11,17,IGUAL,NOGIRO,0,false);// 17 !NOGIRO
 
 	//NOGIRO 16
-	arbolobjetos->nuevoNodoAccion(16,13); // 18 Lanzo el objeto accion a concretar
+	arbolobjetos->nuevoNodoAccion(16,18,13); // 18 Lanzo el objeto accion a concretar
 	//!NOGIRO 17
-	arbolobjetos->nuevoNodoAccion(17,10); // 19 Sigo al objetivo accion a concretar
+	arbolobjetos->nuevoNodoAccion(17,19,10); // 19 Sigo al objetivo accion a concretar
 
 	//MEDIO 8
-	arbolobjetos->nuevoNodoDecision(8,IGUAL,OBJNUMERO,1,false); // 20 OBJ1
-	arbolobjetos->nuevoNodoDecision(8,IGUAL,OBJNUMERO,6,false); // 21 OBJ6
+	arbolobjetos->nuevoNodoDecision(8,20,IGUAL,OBJNUMERO,1,false); // 20 OBJ1
+	arbolobjetos->nuevoNodoDecision(8,21,IGUAL,OBJNUMERO,6,false); // 21 OBJ6
 
 	//OBJ1 20
-	arbolobjetos->nuevoNodoDecision(20,IGUAL,NOGIRO,0,true); // 22 NOGIRO
-	arbolobjetos->nuevoNodoDecision(20,IGUAL,NOGIRO,0,false);// 23 !NOGIRO
+	arbolobjetos->nuevoNodoDecision(20,22,IGUAL,NOGIRO,0,true); // 22 NOGIRO
+	arbolobjetos->nuevoNodoDecision(20,23,IGUAL,NOGIRO,0,false);// 23 !NOGIRO
 
 	//NOGIRO 22
-	arbolobjetos->nuevoNodoAccion(22,13); // 24 Lanzo el objeto accion a concretar
+	arbolobjetos->nuevoNodoAccion(22,24,13); // 24 Lanzo el objeto accion a concretar
 	//!NOGIRO 23
-	arbolobjetos->nuevoNodoAccion(23,10); // 25 Sigo al objetivo accion a concretar
+	arbolobjetos->nuevoNodoAccion(23,25,10); // 25 Sigo al objetivo accion a concretar
 
 	//OBJ6 21
-	arbolobjetos->nuevoNodoDecision(21,IGUAL,NOGIRO,0,true); // 26 NOGIRO
-	arbolobjetos->nuevoNodoDecision(21,IGUAL,NOGIRO,0,false);// 27 !NOGIRO
+	arbolobjetos->nuevoNodoDecision(21,26,IGUAL,NOGIRO,0,true); // 26 NOGIRO
+	arbolobjetos->nuevoNodoDecision(21,27,IGUAL,NOGIRO,0,false);// 27 !NOGIRO
 
 	//NOGIRO 26
-	arbolobjetos->nuevoNodoAccion(26,13); // 28 Lanzo el objeto accion a concretar
+	arbolobjetos->nuevoNodoAccion(26,28,13); // 28 Lanzo el objeto accion a concretar
 	//!NOGIRO 27
-	arbolobjetos->nuevoNodoAccion(27,10); // 29 Sigo al objetivo accion a concretar
+	arbolobjetos->nuevoNodoAccion(27,29,10); // 29 Sigo al objetivo accion a concretar
 
 	//LEJOS 9
-	arbolobjetos->nuevoNodoAccion(9,12); // 30 Sigo al waypoint a concretar
+	arbolobjetos->nuevoNodoAccion(9,30,12); // 30 Sigo al waypoint a concretar
 
 
 	//TURBO 6
-	arbolobjetos->nuevoNodoDecision(6,IGUAL,DISTANCIACERCA,0,true); // 31 CERCA
-	arbolobjetos->nuevoNodoDecision(6,IGUAL,DISTANCIAMEDIA,0,true); // 32 MEDIO
-	arbolobjetos->nuevoNodoDecision(6,IGUAL,DISTANCIALEJOS,0,true); // 33 LEJOS
+	arbolobjetos->nuevoNodoDecision(6,31,IGUAL,DISTANCIACERCA,0,true); // 31 CERCA
+	arbolobjetos->nuevoNodoDecision(6,32,IGUAL,DISTANCIAMEDIA,0,true); // 32 MEDIO
+	arbolobjetos->nuevoNodoDecision(6,33,IGUAL,DISTANCIALEJOS,0,true); // 33 LEJOS
 
 	//CERCA 31
-	arbolobjetos->nuevoNodoAccion(31,11); // 34 Sigo al TURBO a concretar
+	arbolobjetos->nuevoNodoAccion(31,34,11); // 34 Sigo al TURBO a concretar
 	//MEDIO 32
-	arbolobjetos->nuevoNodoAccion(32,11); // 35 Sigo al TURBO a concretar
+	arbolobjetos->nuevoNodoAccion(32,35,11); // 35 Sigo al TURBO a concretar
 	//LEJOS 33
-	arbolobjetos->nuevoNodoAccion(33,12); // 36 Sigo al waypoint a concretar
+	arbolobjetos->nuevoNodoAccion(33,36,12); // 36 Sigo al waypoint a concretar
 
 
 	//!VISION 4
-	arbolobjetos->nuevoNodoDecision(4,IGUAL,OBJNUMERO,1,true); // 37 OBJ1
+	arbolobjetos->nuevoNodoDecision(4,37,IGUAL,OBJNUMERO,1,true); // 37 OBJ1
 	
 
 	//!Objeto 2
-	arbolobjetos->nuevoNodoDecision(2,IGUAL,VISION,0,true); // 38 Vision
-	arbolobjetos->nuevoNodoDecision(2,IGUAL,VISION,0,false); // 39 !Vision
+	arbolobjetos->nuevoNodoDecision(2,38,IGUAL,VISION,0,true); // 38 Vision
+	arbolobjetos->nuevoNodoDecision(2,39,IGUAL,VISION,0,false); // 39 !Vision
 
 	//Vision 38
-	arbolobjetos->nuevoNodoDecision(38,IGUAL,CAJA,0,true); // 40 Caja
-	arbolobjetos->nuevoNodoDecision(38,IGUAL,TURBOO,0,true); // 41 Turbo
+	arbolobjetos->nuevoNodoDecision(38,40,IGUAL,CAJA,0,true); // 40 Caja
+	arbolobjetos->nuevoNodoDecision(38,41,IGUAL,TURBOO,0,true); // 41 Turbo
 	
 	//Caja 40
-	arbolobjetos->nuevoNodoDecision(40,IGUAL,DISTANCIACERCA,0,true); // 42 CERCA
-	arbolobjetos->nuevoNodoDecision(40,IGUAL,DISTANCIAMEDIA,0,true); // 43 MEDIO
-	arbolobjetos->nuevoNodoDecision(40,IGUAL,DISTANCIALEJOS,0,true); // 44 LEJOS
+	arbolobjetos->nuevoNodoDecision(40,42,IGUAL,DISTANCIACERCA,0,true); // 42 CERCA
+	arbolobjetos->nuevoNodoDecision(40,43,IGUAL,DISTANCIAMEDIA,0,true); // 43 MEDIO
+	arbolobjetos->nuevoNodoDecision(40,44,IGUAL,DISTANCIALEJOS,0,true); // 44 LEJOS
 
 	//CERCA 42
-	arbolobjetos->nuevoNodoAccion(42,9); // 45 Sigo caja a concretar
+	arbolobjetos->nuevoNodoAccion(42,45,9); // 45 Sigo caja a concretar
 
 	//MEDIO 43
-	arbolobjetos->nuevoNodoAccion(43,9); // 46 Sigo caja a concretar
+	arbolobjetos->nuevoNodoAccion(43,46,9); // 46 Sigo caja a concretar
 
 	//LEJOS 44
-	arbolobjetos->nuevoNodoAccion(44,12); // 47 Sigo WAYPOINT a concretar
+	arbolobjetos->nuevoNodoAccion(44,47,12); // 47 Sigo WAYPOINT a concretar
 
 	//Turbo 41	
-	arbolobjetos->nuevoNodoDecision(41,IGUAL,DISTANCIACERCA,0,true); // 48 CERCA
-	arbolobjetos->nuevoNodoDecision(41,IGUAL,DISTANCIAMEDIA,0,true); // 49 MEDIO
-	arbolobjetos->nuevoNodoDecision(41,IGUAL,DISTANCIALEJOS,0,true); // 50 LEJOS
+	arbolobjetos->nuevoNodoDecision(41,48,IGUAL,DISTANCIACERCA,0,true); // 48 CERCA
+	arbolobjetos->nuevoNodoDecision(41,49,IGUAL,DISTANCIAMEDIA,0,true); // 49 MEDIO
+	arbolobjetos->nuevoNodoDecision(41,50,IGUAL,DISTANCIALEJOS,0,true); // 50 LEJOS
 
 	//CERCA 48
-	arbolobjetos->nuevoNodoAccion(48,11); // 51 Sigo TURBO a concretar
+	arbolobjetos->nuevoNodoAccion(48,51,11); // 51 Sigo TURBO a concretar
 
 	//MEDIO 49
-	arbolobjetos->nuevoNodoAccion(49,11); // 52 Sigo TURBO a concretar
+	arbolobjetos->nuevoNodoAccion(49,52,11); // 52 Sigo TURBO a concretar
 
 	//LEJOS 50
-	arbolobjetos->nuevoNodoAccion(50,12); // 53 Sigo WAYPOINT a concretar
+	arbolobjetos->nuevoNodoAccion(50,53,12); // 53 Sigo WAYPOINT a concretar
 
 	//!VISION 39
-	arbolobjetos->nuevoNodoAccion(39,12); // 54 Sigo WAYPOINT a concretar
+	arbolobjetos->nuevoNodoAccion(39,54,12); // 54 Sigo WAYPOINT a concretar
 
 
-	arbolobjetos->nuevoNodoDecision(4,IGUAL,OBJNUMERO,6,true); // 55 OBJ6
-	arbolobjetos->nuevoNodoAccion(4,13); // 56 Lanzo el objeto accion a concretar
+	arbolobjetos->nuevoNodoDecision(4,55,IGUAL,OBJNUMERO,6,true); // 55 OBJ6
+	arbolobjetos->nuevoNodoAccion(4,56,13); // 56 Lanzo el objeto accion a concretar
 
 
-	arbolobjetos->nuevoNodoAccion(37,12);
-	arbolobjetos->nuevoNodoAccion(55,12);
+	arbolobjetos->nuevoNodoAccion(37,57,12); //57
+	arbolobjetos->nuevoNodoAccion(55,58,12); //58
 
 }
 
@@ -223,21 +255,16 @@ void CorredorIA::movimiento()
 	logicaDifusa();
 	
 
-	bool arraybooleanos[16] = { 
+	bool arraybooleanos[18] = { 
 	distanciaCerca,distanciaMedia,distanciaLejos, // del 0 al 2 distancias
 	velocidadBaja,velocidadMedia,velocidadAlta, // del 3 al 5 velocidades
 	noGiro,giroFlojoDerecha,giroFlojoIzquierda,giroFuerteDerecha,giroFuerteIzquierda, // del 6 al 10 conduccion
-	caja,turbo,enemigo,Vision,Objeto}; // del 11 al 15 vision 
+	caja,turbo,enemigo,Vision,Objeto,enemigolados,habilidad}; // del 11 al 15 vision 
 	
 
 
-		if(limite>=100 && enemigolados){
-
-			lanzarHabilidad();
-
-		}
-
-		switch(arbolobjetos->recorrerArbol(arraybooleanos,tipoObj)){ //lo que devuelva el arbol conduccion
+	
+		switch(arbolobjetos->recorrerArbol(arraybooleanos,tipoObj,tipojugador)){ //lo que devuelva el arbol conduccion
 
         case NADA1:
         break;
@@ -268,13 +295,18 @@ void CorredorIA::movimiento()
         
 		break;
 
+		case USARHABILIDAD: //14
+		lanzarHabilidad();
+		break;
+
 		case ACELERAR: //1
 		acelerar();
         break;
 
     }
 
-		switch(arbolconduccion->recorrerArbol(arraybooleanos,tipoObj)){ //lo que devuelva el arbol conduccion
+	
+		switch(arbolconduccion->recorrerArbol(arraybooleanos,tipoObj,tipojugador)){ //lo que devuelva el arbol conduccion
 
         case NADA1:
         break;
@@ -409,16 +441,19 @@ void CorredorIA::logicaDifusa() {
 	
 
 	if(tipoObj!=0){
-
 		Objeto=true;
 	}else{
 		Objeto=false;
 	}
 
-
+	if(limite>=100){
+		habilidad=true;
+	}else{
+		habilidad=false;
+	}
 
 	//GIRO
-	pertenenciaNoGiro= FuncionTriangular(anguloGiro,-30,0,30);
+	pertenenciaNoGiro= FuncionTriangular(anguloGiro,-25,0,25);
 	pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,3,20,35);
 	pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-3,-20,-35);
 	pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,30,80,180);
@@ -429,7 +464,7 @@ void CorredorIA::logicaDifusa() {
 	pertenenciaVelocidadMedia=FuncionTrapezoidal(vehiculo->getCurrentSpeedKmHour(), 100, 150, 200, 250);
 	pertenenciaVelocidadAlta=FuncionTrapezoidal(vehiculo->getCurrentSpeedKmHour(), 200, 250, 300, 450);
 
-		//DISTANCIA
+	//DISTANCIA
 	pertenenciaCerca = FuncionTrapezoidal(distanciaObjetivo, 0, 0, 1000, 3000);
 	pertenenciaMedia = FuncionTrapezoidal(distanciaObjetivo, 2000, 4000, 5000, 6000);
 	pertenenciaLejos = FuncionTrapezoidal(distanciaObjetivo, 5000, 8000, 9000, 100000);

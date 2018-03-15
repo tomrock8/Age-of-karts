@@ -279,7 +279,7 @@ int main()
             float timediff_sec = ((float)timediff) / 100000;
             if (timediff_sec >= 0.01) {
                 //cout<<"REFRESCO\n";
-                //server->refreshServer();
+                server->refreshServer();
                 tiempoRefrescoServer = clock();
             }
             

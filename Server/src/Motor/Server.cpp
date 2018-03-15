@@ -520,7 +520,7 @@ void Server::ReceivePackets()
 				parambool = true;
 			}
 			std::cout << "Posicion Z: " << paramFloat << "\n";
-			/*paramFloat = players.at(id)->getNodo()->getRotation().X - clientes.at(id).prediccion.rotacion[0];
+			paramFloat = players.at(id)->getNodo()->getRotation().X - clientes.at(id).prediccion.rotacion[0];
 			if(paramFloat > diff || paramFloat < -diff){
 				std::cout << "Rotacion X\n";
 				parambool = true;
@@ -534,7 +534,7 @@ void Server::ReceivePackets()
 			if(paramFloat > diff || paramFloat < -diff){
 				std::cout << "Rotacion Z\n";
 				parambool = true;
-			}*/
+			}
 			if(parambool){
 				std::cout << "Envio correccion\n";
 				prediccionAux.posicion[0] = players.at(id)->getRigidBody()->getCenterOfMassPosition().getX();
@@ -705,33 +705,28 @@ void Server::refreshServer()
     
     GestorJugadores *jugadores = GestorJugadores::getInstancia();
     players = jugadores->getJugadores();
+	EstadosJugador *estados;
+		
     typeID = ID_REFRESH_SERVER;
     RakNet::BitStream bsOut;
     
     bsOut.Write(typeID);
     
     for(int i = 0; i<players.size(); i++){
-        btVector3 position = players.at(i)->getRigidBody()->getCenterOfMassPosition();
-        
-        pos[0] = position.getX();
-        pos[1] = position.getY();
-        pos[2] = position.getZ();
-        
-        
-        ori[0] = players.at(i)->getNodo()->getRotation().X;
-        ori[1] = players.at(i)->getNodo()->getRotation().Y;
-        ori[2] = players.at(i)->getNodo()->getRotation().Z;
-        
-        tipoObj = players.at(i)->getTipoObj();
-        
-        bsOut.Write(pos[0]);
-        bsOut.Write(pos[1]);
-        bsOut.Write(pos[2]);
-        bsOut.Write(ori[0]);
-        bsOut.Write(ori[1]);
-        bsOut.Write(ori[2]);
-        bsOut.Write(tipoObj);
         bsOut.Write(i);
+		estados = players.at(i)->getEstados();
+		
+		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getX());
+		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getY());
+		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getZ());
+		bsOut.Write(players.at(i)->getNodo()->getRotation().X);
+		bsOut.Write(players.at(i)->getNodo()->getRotation().Y);
+		bsOut.Write(players.at(i)->getNodo()->getRotation().Z);
+		bsOut.Write(estados->getEstadoMovimiento());
+		bsOut.Write(estados->getDireccionMovimiento());
+		bsOut.Write(estados->getEstadoObjeto());
+		bsOut.Write(estados->getEstadoCoche());
+		bsOut.Write(estados->getEstadoCarrera());
     }
     //std::cout << "Control: " << controlPlayer << std::endl;
     

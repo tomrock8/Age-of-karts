@@ -587,21 +587,34 @@ int Client::ReceivePackets()
 					float *ori = new float[3];
 					for(int i=0; i<players.size(); i++){
 
-						bsIn.Read(pos[0]);
-						bsIn.Read(pos[1]);
-						bsIn.Read(pos[2]);
-						bsIn.Read(ori[0]);
-						bsIn.Read(ori[1]);
-						bsIn.Read(ori[2]);
-						bsIn.Read(param);
-						bsIn.Read(id);
+						bsIn.Read(id);			//CONTROLPLAYER
+						bsIn.Read(pos[0]); //POSICION ACTUAL
+						bsIn.Read(pos[1]);	//
+						bsIn.Read(pos[2]);	//
+						bsIn.Read(ori[0]);	//ROTACION
+						bsIn.Read(ori[1]);	//
+						bsIn.Read(ori[2]);	//
 						
-						players.at(id)->setPosicion(pos, ori);
-						if(param!=players.at(id)->getTipoObj())
-							players.at(id)->setTipoObj(param);
+						bsIn.Read(param);		//ESTADOS
+						if(id == controlPlayer)
+							players.at(id)->getEstados()->setEstadoMovimiento(param);
+						bsIn.Read(param);		//
+						if(id == controlPlayer)
+							players.at(id)->getEstados()->setDireccionMovimiento(param);
+						bsIn.Read(param);		//
+						if(id == controlPlayer)
+							players.at(id)->getEstados()->setEstadoObjeto(param);
+						bsIn.Read(param);		//
+						if(id == controlPlayer)
+							players.at(id)->getEstados()->setEstadoCoche(param);
+						bsIn.Read(param);		//
+						if(id == controlPlayer)
+							players.at(id)->getEstados()->setEstadoCarrera(param);
+						
+						if(id == controlPlayer)
+							players.at(id)->setPosicion(pos, ori);
 					}
 				}
-				//PlayerMovement();
 
 				break;
 

@@ -55,6 +55,9 @@ public:
 
 	//METODOS SET
 	void setNetloaded(bool b);
+	void setArrayClients(std::string ip,int tipo,bool rdy,int nuevo);
+	void BorrarClientes();
+	void BorrarCliente(int i);
 	
 private:
 	Client(int maxPlay);

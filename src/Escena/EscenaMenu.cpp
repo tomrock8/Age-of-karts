@@ -12,7 +12,7 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	texto += "        SocketWar 2017";
 
 	pressed = true;
-
+	ipConexion="";
 	u16 xPos = Motor3d::instancia().getAnchoPantalla() / 3;
 	u16 yPos = Motor3d::instancia().getAltoPantalla() / 4;
 
@@ -68,11 +68,12 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			return Escena::tipo_escena::SALIR; // Devuelve el estado de las escenas para que salga
 		}
 	}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
-		cout << "SINGLE PLAYER\n"; 
-		return Escena::tipo_escena::CARRERA;
+		cout << "SINGLE PLAYER\n";
+		ipConexion="offline";
+		return Escena::tipo_escena::LOBBY;
 	}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
-
 		cout << "MULTI PLAYER\n";
+		ipConexion="";
 		return Escena::tipo_escena::LOBBY;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
@@ -83,4 +84,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 	}else pressed = false;
 
 	return Escena::tipo_escena::MENU;
+}
+std::string EscenaMenu::getIpConexion(){
+	return ipConexion;
 }

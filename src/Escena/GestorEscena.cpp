@@ -48,6 +48,10 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 			ipConexion = static_cast<EscenaJuego*>(anterior)->getIpConexion();
 			cout << ipConexion << "\n";
 		}
+		if (anterior->getTipoEscena() == Escena::tipo_escena::MENU && tipo == Escena::tipo_escena::LOBBY) {
+			ipConexion = static_cast<EscenaMenu*>(anterior)->getIpConexion();
+			cout <<"De menu a lobby: "<< ipConexion << "\n";
+		}
 
 
 		escenaActiva->limpiar();

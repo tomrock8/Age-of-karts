@@ -17,6 +17,7 @@ public:
 	virtual void dibujar() override;
 	virtual void limpiar() override;
 	virtual void update() override;
+	void mostrarInfoLobby(int indice);
 	Escena::tipo_escena comprobarInputs();
 	void mostrarTipoPersonaje(int i);
 
@@ -46,6 +47,8 @@ private:
 	stringw texto2;
 	IGUIStaticText *textoUI; // Nodo de irrlicht
 	ITexture* logoAOK; // Textura del logo del juego
+	bool selection;
+	bool offline;
 };
 
 #endif /* ESCENALOBBY_H */

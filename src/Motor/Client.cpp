@@ -596,23 +596,17 @@ int Client::ReceivePackets()
 						bsIn.Read(ori[2]);	//
 						
 						bsIn.Read(param);		//ESTADOS
-						if(id == controlPlayer)
-							players.at(id)->getEstados()->setEstadoMovimiento(param);
+						players.at(id)->getEstados()->setEstadoMovimiento(param);
 						bsIn.Read(param);		//
-						if(id == controlPlayer)
-							players.at(id)->getEstados()->setDireccionMovimiento(param);
+						players.at(id)->getEstados()->setDireccionMovimiento(param);
 						bsIn.Read(param);		//
-						if(id == controlPlayer)
-							players.at(id)->getEstados()->setEstadoObjeto(param);
+						players.at(id)->getEstados()->setEstadoObjeto(param);
 						bsIn.Read(param);		//
-						if(id == controlPlayer)
-							players.at(id)->getEstados()->setEstadoCoche(param);
+						players.at(id)->getEstados()->setEstadoCoche(param);
 						bsIn.Read(param);		//
-						if(id == controlPlayer)
-							players.at(id)->getEstados()->setEstadoCarrera(param);
+						players.at(id)->getEstados()->setEstadoCarrera(param);
 						
-						if(id == controlPlayer)
-							players.at(id)->setPosicion(pos, ori);
+						players.at(id)->setPosicion(pos, ori);
 					}
 				}
 

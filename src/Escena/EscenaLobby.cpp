@@ -21,7 +21,7 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	}else if (ipConexion.compare("offline")==0){
 		offline=true;
 		client = Client::getInstancia();
-
+		count=0;
 		if (client->getClientes().size()==0)
 		client->setArrayClients("",3,false,-1);
     }else{
@@ -34,7 +34,7 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	lanzado = false;
 	conectado = false;
 	
-
+	
 	u16 xPos = Motor3d::instancia().getAnchoPantalla() / 3;
 	u16 yPos = Motor3d::instancia().getAltoPantalla() / 4;
 
@@ -175,7 +175,11 @@ void EscenaLobby::mostrarInfoLobby(int indice){
 			texto += to_string(clientes.size()).c_str(); 
 			texto += " / 6" ;
 		}
-		texto += "\nJugador ";
+		if (count!=indice){
+			texto += "\nJugador ";
+		}else{
+			texto += "\n**Jugador ";
+		}
 	}else{
 		texto += "\nJugadores conectados: ";
 	
@@ -320,7 +324,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				return Escena::tipo_escena::CARRERA;
 			}else if (offline){
 				vector<structClientes> clientes=client->getClientes();
-				int k=0;
+				int k=count;
 				if (clientes.at(k).ready==false){
 					client->setArrayClients(clientes.at(k).ip,clientes.at(k).tipoCorredor,true,k);
 					//clientes.at(k).ready=true;
@@ -340,7 +344,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 			if (offline){
 				vector<structClientes> clientes=client->getClientes();
-				int k=0;
+				int k=count;
 				if (clientes.at(k).tipoCorredor==0){
 					client->setArrayClients(clientes.at(k).ip,3,clientes.at(k).ready,k);
 				}else{
@@ -359,7 +363,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 			if (offline){
 				vector<structClientes> clientes=client->getClientes();
-				int k=0;
+				int k=count;
 				if (clientes.at(k).tipoCorredor==3){
 					client->setArrayClients(clientes.at(k).ip,0,clientes.at(k).ready,k);
 				}else{
@@ -473,6 +477,24 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if(!pressed){
 			texto += ".";
 			ipConexion += ".";
+			pressed=true;
+		}
+	}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !selection && offline){
+		if(!pressed){
+			if (client->getClientes().size()-1>count){
+				count++;
+			}else{
+				count=0;
+			}
+			pressed=true;
+		}
+	}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !selection && offline){
+		if(!pressed){
+			if (count>0){
+				count--;
+			}else{
+				count=client->getClientes().size()-1;
+			}
 			pressed=true;
 		}
 	}else pressed = false;

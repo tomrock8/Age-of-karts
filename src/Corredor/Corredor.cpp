@@ -1257,14 +1257,16 @@ void Corredor::lanzarHabilidad(){
 		break;
 
 		case GLADIADOR:
-		habilidadJugador = new Habilidad(3,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
+		escala = btVector3(20,2,20);
+		tiempoDestruccion=5;
+		habilidadJugador = new Habilidad(3,cuboNodo,posicion,escala,masa,tiempoDestruccion,CILINDRO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);
 		break;
 
 		case CHINO:
 		posicion = btVector3(cuboNodo->getPosition().X , cuboNodo->getPosition().Y, cuboNodo->getPosition().Z );
-		tamanyoNodo = btVector3(2,2,2);
+		tamanyoNodo = btVector3(5,5,5);
 		escala = btVector3(5,7,10);
 		masa=100;	
 		alt=2;

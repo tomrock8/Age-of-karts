@@ -1,6 +1,9 @@
 #include "EscenaMenu.hpp"
 
 EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
+	
+	
+	
 	texto = L"1 - INCIAR JUEGO SINGLEPLAYER\n\n";
 	texto += "2 - INCIAR JUEGO MULTIPLAYER\n\n";
 	texto += "3  - OPCIONES (IN DEVELOPMENT)\n\n";

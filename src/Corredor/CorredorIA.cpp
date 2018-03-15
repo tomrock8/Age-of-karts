@@ -20,6 +20,8 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 	noGiro=false;
 	giroFuerteIzquierda=false;
 	giroFlojoIzquierda=false;
+	enemigoatras=false;
+	enemigolados=false;
 	distanciaCaja = 0;
 	distanciaEnemigo = 0;
 	distanciaTurbo = 0;
@@ -217,7 +219,7 @@ void CorredorIA::movimiento()
 {
 	//LLmamos a la logica difusa para que nos de los valores de entrada
 	//seguirWaypoint();
-	ActualizarRaytest();
+	//ActualizarRaytest();
 	logicaDifusa();
 	
 
@@ -227,6 +229,13 @@ void CorredorIA::movimiento()
 	noGiro,giroFlojoDerecha,giroFlojoIzquierda,giroFuerteDerecha,giroFuerteIzquierda, // del 6 al 10 conduccion
 	caja,turbo,enemigo,Vision,Objeto}; // del 11 al 15 vision 
 	
+
+
+		if(limite>=100 && enemigolados){
+
+			lanzarHabilidad();
+
+		}
 
 		switch(arbolobjetos->recorrerArbol(arraybooleanos,tipoObj)){ //lo que devuelva el arbol conduccion
 
@@ -319,115 +328,6 @@ void CorredorIA::movimiento()
 
 
 	
-/*
-	if(Objeto){
-
-		if(Vision){
-
-			if(enemigo){
-				
-				if(distanciaCerca){
-
-					if(tipoObj == 1 || tipoObj == 6){
-						calculoAnguloGiro(posicionEnemigo);
-						if(noGiro)
-						usarObjetos();
-					}
-
-				}else if(distanciaMedia){
-
-					if(tipoObj == 1 || tipoObj == 6){
-						calculoAnguloGiro(posicionEnemigo);
-						if(noGiro)
-						usarObjetos();
-					}
-
-
-				}else if(distanciaLejos){
-
-					seguirWaypoint();
-				}
-
-			}else if(turbo){
-
-				
-					if(distanciaCerca){
-
-					calculoAnguloGiro(posicionTurbo);
-				}else if(distanciaMedia){
-
-					calculoAnguloGiro(posicionTurbo);
-
-				}else if(distanciaLejos){
-
-					seguirWaypoint();
-				}
-
-			}
-
-		}else{
-
-			if(tipoObj==3 || tipoObj ==8){
-
-				//poner condicion de las rectas para usar turbos
-				tipoObj=0;
-				
-			}else if (tipoObj==1 || tipoObj ==6){
-
-				seguirWaypoint();
-			}else{
-
-				usarObjetos();
-			}
-
-		}
-
-
-	}else{
-
-		if(Vision){
-
-			if(caja){
-				
-				if(distanciaCerca){
-
-					calculoAnguloGiro(posicionCaja);
-					
-
-				}else if(distanciaMedia){
-
-					calculoAnguloGiro(posicionCaja);
-
-				}else if(distanciaLejos){
-
-					seguirWaypoint();
-				}
-
-			}else if(turbo){
-
-				
-					if(distanciaCerca){
-
-					calculoAnguloGiro(posicionTurbo);
-				}else if(distanciaMedia){
-
-					calculoAnguloGiro(posicionTurbo);
-
-				}else if(distanciaLejos){
-
-					seguirWaypoint();
-				}
-
-			}
-
-
-	}else{
-		seguirWaypoint();
-	}
-
-	}
-
-*/	
 	reposicionar();
 	
 }
@@ -701,9 +601,16 @@ void CorredorIA::ActualizarRaytest() {
 
 	//cout<< orientacion.X << "   "<< orientacion.Z<<endl;
 	float distanciaRaycast = 150; // longitud del rayo
+	float distanciaRaycastLados=50;
+	float distanciaRaycastTraseros= 50;
 	float distanciaCoche = 2; // distancia entre el rayo y el coche, donde empieza
 	float Raycast23 = 10; // distancia entre raycast 2 y 3
 	float Raycast45 = 20; // distancia entre raycast 4 y 5
+	float Raycastlados = 10;
+	float Raycastatras = 10;
+	float RaycastladosY=3;
+	btVector3 fingirado(0,0,0);
+
 
 	// Raycast central1
 	btVector3 inicio(cuboNodo->getPosition().X + orientacion.getX()*distanciaCoche, cuboNodo->getPosition().Y -1, cuboNodo->getPosition().Z+ orientacion.getZ()*distanciaCoche);
@@ -758,6 +665,63 @@ void CorredorIA::ActualizarRaytest() {
 	RayCast5.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast5);
 
+	// Raycast izquierda1
+	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycastlados + cuboNodo->getPosition().Z + orientacion.getZ()*RaycastladosY );
+	fingirado = orientacion.rotate(btVector3(0, 1, 0),90*PI/180);
+	fingirado.setX(fingirado.getX()*-distanciaRaycastLados + cuboNodo->getPosition().X + orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().Z+ orientacion.getZ() * RaycastladosY);
+	fingirado.setY(inicio.getY());
+	
+	mundo->getDebugDrawer()->drawLine(inicio, fingirado, btVector4(0, 0, 1, 1));
+	btCollisionWorld::AllHitsRayResultCallback RayCast6(inicio, fingirado);
+	RayCast6.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	RayCast6.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
+	mundo->rayTest(inicio, fingirado, RayCast6);
+
+
+	// Raycast izquierda2 
+	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().X - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycastlados + cuboNodo->getPosition().Z - orientacion.getZ() * RaycastladosY);
+	fingirado = orientacion.rotate(btVector3(0, 1, 0),90*PI/180);
+	fingirado.setX(fingirado.getX()*-distanciaRaycastLados + cuboNodo->getPosition().X -orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().Z -orientacion.getZ() * RaycastladosY);
+	fingirado.setY(inicio.getY());
+
+	mundo->getDebugDrawer()->drawLine(inicio, fingirado, btVector4(0, 0, 1, 1));
+	btCollisionWorld::AllHitsRayResultCallback RayCast7(inicio, fingirado);
+	RayCast7.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	RayCast7.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
+	mundo->rayTest(inicio, fingirado, RayCast7);
+
+	// Raycast derecha1 
+	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycastlados + cuboNodo->getPosition().Z + orientacion.getZ() * RaycastladosY);
+	fingirado = orientacion.rotate(btVector3(0, 1, 0),90*PI/180);
+	fingirado.setX(fingirado.getX()*distanciaRaycastLados + cuboNodo->getPosition().X +orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().Z +orientacion.getZ() * RaycastladosY);
+	fingirado.setY(inicio.getY());
+
+	mundo->getDebugDrawer()->drawLine(inicio, fingirado, btVector4(0, 0, 1, 1));
+	btCollisionWorld::AllHitsRayResultCallback RayCast8(inicio, fingirado);
+	RayCast8.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	RayCast8.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
+	mundo->rayTest(inicio, fingirado, RayCast8);
+
+	// Raycast derecha2 
+	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().X - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycastlados + cuboNodo->getPosition().Z - orientacion.getZ() * RaycastladosY);
+	fingirado = orientacion.rotate(btVector3(0, 1, 0),90*PI/180);
+	fingirado.setX(fingirado.getX()*distanciaRaycastLados + cuboNodo->getPosition().X -orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().Z -orientacion.getZ() * RaycastladosY);
+	fingirado.setY(inicio.getY());
+
+	mundo->getDebugDrawer()->drawLine(inicio, fingirado, btVector4(0, 0, 1, 1));
+	btCollisionWorld::AllHitsRayResultCallback RayCast9(inicio, fingirado);
+	RayCast9.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	RayCast9.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
+	mundo->rayTest(inicio, fingirado, RayCast9);
+
+
+
+
+
 	caja=false;	
 	distanciaCaja=0;
 	turbo=false;	
@@ -765,6 +729,7 @@ void CorredorIA::ActualizarRaytest() {
 	enemigo=false;
 	distanciaEnemigo=0;
 	Vision=false;
+	enemigolados=false;
 
 	
 
@@ -866,6 +831,84 @@ void CorredorIA::ActualizarRaytest() {
 		}
 			}
 	}
+
+	if (RayCast6.hasHit())
+	{
+
+		for (int i=0;i<RayCast6.m_hitFractions.size();i++)
+			{
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast6.m_collisionObjects[i]->getUserPointer());
+		if (Node) {
+
+			if(strcmp(Node->getName(),"Jugador") ==0
+			|| strcmp(Node->getName(),"JugadorIA")==0){
+
+			enemigolados=true;
+			
+			}
+		}
+			}
+
+	}
+
+	if (RayCast7.hasHit())
+	{
+
+		for (int i=0;i<RayCast7.m_hitFractions.size();i++)
+			{
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast7.m_collisionObjects[i]->getUserPointer());
+		if (Node) {
+
+			if(strcmp(Node->getName(),"Jugador") ==0
+			|| strcmp(Node->getName(),"JugadorIA")==0){
+
+			enemigolados=true;
+			
+			}
+		}
+			}
+
+	}
+
+	if (RayCast8.hasHit())
+	{
+
+		for (int i=0;i<RayCast8.m_hitFractions.size();i++)
+			{
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast8.m_collisionObjects[i]->getUserPointer());
+		if (Node) {
+
+			if(strcmp(Node->getName(),"Jugador") ==0
+			|| strcmp(Node->getName(),"JugadorIA")==0){
+
+			enemigolados=true;
+			
+			}
+		}
+			}
+
+	}
+
+	if (RayCast9.hasHit())
+	{
+
+		for (int i=0;i<RayCast9.m_hitFractions.size();i++)
+			{
+		ISceneNode *Node = static_cast<ISceneNode *>(RayCast9.m_collisionObjects[i]->getUserPointer());
+		if (Node) {
+
+			if(strcmp(Node->getName(),"Jugador") == 0
+			|| strcmp(Node->getName(),"JugadorIA")==0){
+
+			enemigolados=true;
+			
+			}
+		}
+			}
+
+	}
+
+
 
 
 

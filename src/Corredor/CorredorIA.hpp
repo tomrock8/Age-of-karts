@@ -48,6 +48,8 @@ class CorredorIA : public Corredor
 	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
 	bool caja,turbo,enemigo,Vision,Objeto;
 	bool Waypoint;
+	bool enemigoatras;
+	bool enemigolados;
 
 	btScalar distanciaCaja,distanciaTurbo,distanciaEnemigo;
 

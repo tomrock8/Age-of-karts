@@ -79,7 +79,7 @@ void EscenaJuego::init() {
 	Corredor* jugador;
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		
-		jugador = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::CHINO);
+		jugador = new CorredorJugador("assets/coche.obj", btVector3(-10, 0, 310),Corredor::tipo_jugador::GLADIADOR);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
 
@@ -191,34 +191,34 @@ void EscenaJuego::dibujar() {
 	Motor3d::instancia().getScene()->drawAll();
 
 	//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
-	/*
+	
 	SMaterial materialDriver;
 	materialDriver.Lighting = false;
 	Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
 	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		
-		//CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
-		/*
+		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
+	/*	
 				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj.at(2));
 				CorredorIA *COMENARDOSAUXILIAR3 = static_cast<CorredorIA *>(pj.at(3));
 				CorredorIA *COMENARDOSAUXILIAR4 = static_cast<CorredorIA *>(pj.at(4));
 				CorredorIA *COMENARDOSAUXILIAR5 = static_cast<CorredorIA *>(pj.at(5));
-		
+	*/	
 
 		//COMENARDOSAUXILIAR->update();
-		 */
-		//		COMENARDOSAUXILIAR1->ActualizarRaytest();
+		 
+				COMENARDOSAUXILIAR1->ActualizarRaytest();
 			/*
 				COMENARDOSAUXILIAR2->ActualizarRaytest();
 				COMENARDOSAUXILIAR3->ActualizarRaytest();
 				COMENARDOSAUXILIAR4->ActualizarRaytest();
 				COMENARDOSAUXILIAR5->ActualizarRaytest();
-	
+	*/
 
 		//Para poder dibujar putas lineas de mierda
 	}
-	*/	
+	
 	//Para poder dibujar putas lineas de mierda
 	if (debug) {
 		SMaterial debugMat;
@@ -308,7 +308,7 @@ void EscenaJuego::update() {
 		pj.at(controlPlayer)->update();
 				
 				pj.at(1)->update();
-/*
+		/*
 				pj.at(2)->update();
 				pj.at(3)->update();
 				pj.at(4)->update();

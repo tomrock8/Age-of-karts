@@ -14,6 +14,7 @@
 #include "GestorJugadores.hpp"
 #include <iostream>
 #include <vector>
+#include <time.h>
 #include "Timer.hpp"
 using namespace std;
 
@@ -32,6 +33,7 @@ public:
   bool Escudoitems();
   bool HabilidadesItems();
   bool HabilidadesJugadores();
+  void IniciarTimer();
 
   //bool JugadorItemTeledirigido();
 
@@ -42,6 +44,7 @@ private:
   ISceneNode *nodoB;
   clock_t tiempoLanzado;
   bool control;
+  clock_t tiempoInicio;
 };
 
 #endif

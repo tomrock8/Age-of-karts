@@ -2,12 +2,17 @@
 
 EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tipo) {
 	nElementos = 0;
-	count = 50;
+	nElementos2 = 0;
+	count = 3;
 	ipConexion = ipC;
     cout<<ipConexion<<endl;
+	time= Timer::getInstancia();
+	texto2="";
 	if (ipConexion==""){	
 		texto = L"ESC - SALIR\n\n";
-		texto = "Introduce IP para iniciar partida online: ";
+		//texto = "Introduce IP para iniciar partida online: ";
+		texto += "1. Crear Sala\n 2. Unirse\n";
+		selection=true;
         iniciar = false;
 		iniciado = false;
 		firstInit = true;
@@ -67,7 +72,15 @@ void EscenaLobby::limpiar() {
 }
 
 void EscenaLobby::update() {
+	bool show=false;
+	
+	
 	if (iniciar && !iniciado) {
+		show=true;
+		count=0;
+		texto2="";
+		nElementos2=time->getTimer();
+		nElementos=time->getTimer();
 		if (firstInit){
 			client = Client::getInstancia();
 			client->CreateClientInterface();
@@ -75,16 +88,51 @@ void EscenaLobby::update() {
 			client->ClientStartup();
 			
 		}else{
-			client = Client::getInstancia();
-			cout<<"started: "<<client->getStarted()<<endl;
-			cout<<"control player: "<<client->getControlPlayer()<<endl;			
+			client = Client::getInstancia();	
 			client->setNetloaded(false);
 		}
 		iniciado = true;
 	}
 	if (iniciado) {
-		client->ReceivePackets();
-
+		
+		if (show){
+			texto += "\nConectando";
+			show=false;
+		}
+		//cout<<"timer: "<<time->getTimer()-nElementos2<<endl;
+		if (time->getTimer()-nElementos2==1){
+			if (count<=6){
+				texto2 +=".";
+				count++;
+				
+			}else{
+				texto2="";
+				texto = "\nConectando";
+				count=0;
+			
+			}
+			nElementos2=time->getTimer();
+			//time->restartTimer();
+		}
+		
+		texto += texto2;
+		texto2="";
+		if (client->ReceivePackets()==3){
+			cout<<"voy a entrar\n";
+			client->ActualizarClienteConectado();
+		}
+		if (client->ReceivePackets()==1 || time->getTimer()-nElementos>8){
+			cout<<"BORRANDO VOY++++++\n";
+			texto = "Conexion fallida! \nVuelve a introducir IP para iniciar partida online: ";
+        	iniciar = false;
+			iniciado = false;
+			ipConexion="";
+			texto2="";
+			client->ShutDownClient();
+			nElementos=time->getTimer();
+		}
+		
+		
 		bool checkReady=true;
 		bool checkReadyMe=true;
 		bool bc=false;
@@ -94,6 +142,7 @@ void EscenaLobby::update() {
 
 
 		if (client->getConnected()) {
+			nElementos=time->getTimer();
 			conectado = true;
 			texto = L"Conexion establecida!\n";
 			 
@@ -197,7 +246,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !selection) {
 		if (!pressed) {
 			pressed = true;
 			if (conectado) {
@@ -206,7 +255,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 			}
 		}
-	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !selection){
 		if (!pressed) {
 			pressed = true;
 			if (conectado) {
@@ -216,7 +265,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 		}
 
-	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !selection){
 		if (!pressed) {
 			pressed = true;
 			if (conectado) {
@@ -225,82 +274,93 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 			}
 		}
-	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !selection){
 		if(!pressed){
 			iniciar = true;					//Conectar con el servidor de la IP
 			pressed = true;
 		}
 	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
 		if (!pressed) {
+			if (!selection){
 			texto += "1";
 			ipConexion += "1";
+			}else{
+				selection=false;
+				iniciar = true;
+				ipConexion="127.0.0.1";
+			}
 			pressed = true;
 		}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
 		if (!pressed) {
+			if (!selection){
 			texto += "2";
 			ipConexion += "2";
+			}else{
+				selection=false;
+				texto = "Introduce IP para iniciar partida online: ";
+			}
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && !selection){
 		if (!pressed) {
 			texto += "3";
 			ipConexion += "3";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && !selection){
 		if (!pressed) {
 			texto += "4";
 			ipConexion += "4";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5) && !selection){
 		if (!pressed) {
 			texto += "5";
 			ipConexion += "5";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6) && !selection){
 		if (!pressed) {
 			texto += "6";
 			ipConexion += "6";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7) && !selection){
 		if (!pressed) {
 			texto += "7";
 			ipConexion += "7";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8) && !selection){
 		if (!pressed) {
 			texto += "8";
 			ipConexion += "8";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9) && !selection){
 		if (!pressed) {
 			texto += "9";
 			ipConexion += "9";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)){
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && !selection){
 		if (!pressed) {
 			texto += "0";
 			ipConexion += "0";
 			pressed = true;
 		}
 	}
-	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Period)){
+	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Period) && !selection){
 		if(!pressed){
 			texto += ".";
 			ipConexion += ".";

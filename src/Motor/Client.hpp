@@ -42,6 +42,7 @@ public:
 	int ReceivePackets();
 	void SpawnPlayer();
 	void FinalizarCarrera();
+	void ActualizarClienteConectado();
 	
 	//METODOS GET
 	int getControlPlayer();
@@ -64,8 +65,10 @@ private:
 	int numIPs;
 	int maxPlayers;
 	int numClients;
+	int aux;
 	bool netLoaded;
 	bool connected;
+	bool disconnection;
 	unsigned char packetIdentifier;
 
 	RakNet::SocketDescriptor socketDescriptor;

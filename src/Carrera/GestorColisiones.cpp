@@ -2,9 +2,11 @@
 
 #define TAMANYOCAJAS 10
 //#define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
-
+void GestorColisiones::IniciarTimer(){
+	tiempoInicio = clock();
+}
 void GestorColisiones::ComprobarColisiones()
-{
+{	
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	jugadores = GestorJugadores::getInstancia();
 	Pista *pista = Pista::getInstancia();
@@ -72,7 +74,17 @@ bool GestorColisiones::JugadorWaypoint(){
 			for(int i = 0; i< jugadores->getNumJugadores(); i++){
 				//if(pj1.at(i)!=NULL)
 					if(nodoA->getID() == pj1.at(i)->getNodo()->getID()){
-						
+						if (nodoB->getID()-6==0 && pj1.at(i)->getWaypointSiguiente()->getWaypoint()->getID()-6==0){
+							clock_t timediff = clock() - tiempoInicio;
+							float timediff_sec = ((float)timediff) / CLOCKS_PER_SEC;
+							
+							///cout<<"timediff_sec: "<<timediff_sec<<endl;
+							if (pj1.at(i)->getMaxVuetas()>=pj1.at(i)->getVueltas()){
+								pj1.at(i)->setTiempoVuelta(timediff_sec-pj1.at(i)->getTiempoVueltaTotal());
+							}
+							
+							
+						}
 						pj1.at(i)->setWaypointActual(nodoB);
 						
 						return true;	

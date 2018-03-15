@@ -6,7 +6,7 @@
 #include "Motor3d.hpp"
 #include "Timer.hpp"
 #include "Graphics.hpp"
-
+#include "Timer.hpp"
 
 class EscenaLobby : public Escena {
 public:
@@ -30,20 +30,23 @@ private:
 	bool lanzarServer;
 
 	int nElementos; // Numeros para la IP (los ultimos 3)
+	int nElementos2;
 	std::string ipConexion;
 	Client *client;
 	bool iniciar;
 	bool iniciado;
 	bool conectado;
 	bool lanzado;
-	int count;
+	float count;
 	bool pressed;
 	bool firstInit;
 	IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
-
+	Timer *time;
 	stringw texto; // Texto a mostrar en pantalla
+	stringw texto2;
 	IGUIStaticText *textoUI; // Nodo de irrlicht
 	ITexture* logoAOK; // Textura del logo del juego
+	bool selection;
 };
 
 #endif /* ESCENALOBBY_H */

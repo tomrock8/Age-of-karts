@@ -152,7 +152,7 @@ void Server::ReceivePackets()
 		int param;
 		int param2;
 		float paramFloat;
-		float diff = 2.1;
+		float diff = 0.0;
 		bool reset = false;
 		bool lanzar = false;
 		bool parambool = false;
@@ -459,23 +459,24 @@ void Server::ReceivePackets()
 			players.at(id)->getEstados()->setEstadoCarrera(param);
 			
 			parambool = false;
-			std::cout << "Posicion Y: " << players.at(id)->getNodo()->getRotation().Y << " - " << clientes.at(id).prediccion.rotacion[1] << std::endl;
-			std::cout << "Posicion Z: " << players.at(id)->getNodo()->getRotation().Z << " - " << clientes.at(id).prediccion.rotacion[2] << std::endl;
-			paramFloat = players.at(id)->getNodo()->getPosition().X - clientes.at(id).prediccion.posicion[0];
+			//std::cout << "Posicion Y: " << players.at(id)->getNodo()->getRotation().Y << " - " << clientes.at(id).prediccion.rotacion[1] << std::endl;
+			//std::cout << "Posicion Z: " << players.at(id)->getNodo()->getRotation().Z << " - " << clientes.at(id).prediccion.rotacion[2] << std::endl;
+			paramFloat = players.at(id)->getRigidBody()->getCenterOfMassPosition().getX() - clientes.at(id).prediccion.posicion[0];
 			if(paramFloat > diff || paramFloat < -diff){
-				std::cout << "Posicion X\n";
 				parambool = true;
 			}
-			paramFloat = players.at(id)->getNodo()->getPosition().Y - clientes.at(id).prediccion.posicion[1];
-			if(paramFloat > diff || paramFloat < -diff)
-				std::cout << "Posicion Y\n";
-				parambool = true;
-			paramFloat = players.at(id)->getNodo()->getPosition().Z - clientes.at(id).prediccion.posicion[2];
+			std::cout << "Posicion X: " << paramFloat << "\n";
+			paramFloat = players.at(id)->getRigidBody()->getCenterOfMassPosition().getY() - clientes.at(id).prediccion.posicion[1];
 			if(paramFloat > diff || paramFloat < -diff){
-				std::cout << "Posicion Z\n";
 				parambool = true;
 			}
-			paramFloat = players.at(id)->getNodo()->getRotation().X - clientes.at(id).prediccion.rotacion[0];
+			std::cout << "Posicion Y: " << paramFloat << "\n";
+			paramFloat = players.at(id)->getRigidBody()->getCenterOfMassPosition().getZ() - clientes.at(id).prediccion.posicion[2];
+			if(paramFloat > diff || paramFloat < -diff){
+				parambool = true;
+			}
+			std::cout << "Posicion Z: " << paramFloat << "\n";
+			/*paramFloat = players.at(id)->getNodo()->getRotation().X - clientes.at(id).prediccion.rotacion[0];
 			if(paramFloat > diff || paramFloat < -diff){
 				std::cout << "Rotacion X\n";
 				parambool = true;
@@ -489,21 +490,21 @@ void Server::ReceivePackets()
 			if(paramFloat > diff || paramFloat < -diff){
 				std::cout << "Rotacion Z\n";
 				parambool = true;
-			}
+			}*/
 			if(parambool){
 				std::cout << "Envio correccion\n";
-				prediccionAux.posicion[0] = players.at(id)->getNodo()->getPosition().X;
-				prediccionAux.posicion[1] = players.at(id)->getNodo()->getPosition().Y;
-				prediccionAux.posicion[2] = players.at(id)->getNodo()->getPosition().Z;
+				prediccionAux.posicion[0] = players.at(id)->getRigidBody()->getCenterOfMassPosition().getX();
+				prediccionAux.posicion[1] = players.at(id)->getRigidBody()->getCenterOfMassPosition().getY();
+				prediccionAux.posicion[2] = players.at(id)->getRigidBody()->getCenterOfMassPosition().getZ();
 				prediccionAux.rotacion[0] = players.at(id)->getNodo()->getRotation().X;
 				prediccionAux.rotacion[1] = players.at(id)->getNodo()->getRotation().Y;
 				prediccionAux.rotacion[2] = players.at(id)->getNodo()->getRotation().Z;
 
 				typeID = ID_PLAYER_REFRESH;
 				bsOut.Write(typeID);
-				bsOut.Write(players.at(id)->getNodo()->getPosition().X);
-				bsOut.Write(players.at(id)->getNodo()->getPosition().Y);
-				bsOut.Write(players.at(id)->getNodo()->getPosition().Z);
+				bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getX());
+				bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getY());
+				bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getZ());
 				bsOut.Write(players.at(id)->getNodo()->getRotation().X);
 				bsOut.Write(players.at(id)->getNodo()->getRotation().Y);
 				bsOut.Write(players.at(id)->getNodo()->getRotation().Z);

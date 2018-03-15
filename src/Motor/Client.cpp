@@ -652,9 +652,9 @@ void Client::PlayerMovement(){
 		bsOut.Write(timeStamp);
 		timeStamp ++;
 		bsOut.Write(controlPlayer);
-		bsOut.Write(players.at(controlPlayer)->getNodo()->getPosition().X);
-		bsOut.Write(players.at(controlPlayer)->getNodo()->getPosition().Y);
-		bsOut.Write(players.at(controlPlayer)->getNodo()->getPosition().Z);
+		bsOut.Write(players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition().getX());
+		bsOut.Write(players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition().getY());
+		bsOut.Write(players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition().getZ());
 		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().X);
 		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().Y);
 		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().Z);

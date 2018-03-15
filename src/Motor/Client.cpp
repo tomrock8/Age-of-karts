@@ -23,6 +23,7 @@ Client::Client(int maxPlay)
 	disconnection=false;
 	aux=0;
 	timeStamp = 1;		//Variable para controlar la prediccion de movimiento por parte del cliente
+	controlPlayer=0;
 }
 
 //==================================================================================
@@ -761,12 +762,35 @@ void Client::setNetloaded(bool b){
 	netLoaded = b;
 }
 
+void Client::setArrayClients(std::string ip,int tipo,bool rdy,int nuevo){
+	controlPlayer=clientes.size();
+	structClientes clientAux;
+	clientAux.ip = ip;
+	clientAux.tipoCorredor = tipo;
+	clientAux.ready = rdy;
+	if (nuevo!=-1){
+		clientes.at(nuevo)=clientAux;
+	}else{
+		clientes.push_back(clientAux);
+	}
+	
+}
+
 void Client::ActualizarClienteConectado(){
 	cout<<"voy a actualizar el cliente conectado\n";
 	RakNet::BitStream bsOut;
 	typeID = ID_CHECK_ALREADY_CONNECTED;
     bsOut.Write(typeID);
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+void Client::BorrarClientes(){
+	cout<<"borro clientes\n";
+	clientes.clear();
+	clientes.resize(0);
+}
+void Client::BorrarCliente(int i){
+	cout<<"borro cliente "<<i<<endl;
+	clientes.erase(clientes.begin()+i);
 }
 //===========================================================================
 //

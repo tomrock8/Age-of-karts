@@ -173,7 +173,7 @@ void EscenaJuego::dibujar() {
 	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		
-		CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
+		//CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
 	/*	
 				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj.at(2));
 				CorredorIA *COMENARDOSAUXILIAR3 = static_cast<CorredorIA *>(pj.at(3));
@@ -183,7 +183,7 @@ void EscenaJuego::dibujar() {
 
 		//COMENARDOSAUXILIAR->update();
 		 
-				COMENARDOSAUXILIAR1->ActualizarRaytest();
+		//		COMENARDOSAUXILIAR1->ActualizarRaytest();
 			/*
 				COMENARDOSAUXILIAR2->ActualizarRaytest();
 				COMENARDOSAUXILIAR3->ActualizarRaytest();

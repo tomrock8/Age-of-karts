@@ -628,7 +628,8 @@ int Client::ReceivePackets()
 					controlPlayer--;				//controlPlayer para no cambiar de jugador con la reordenacion del array
 
 				clientes.erase(clientes.begin() + playerDisconnect);
-				ShutDownClient();
+				//ShutDownClient();
+				//return 0;
 				break;
 
 			default:

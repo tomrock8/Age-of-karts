@@ -762,12 +762,13 @@ void Client::setNetloaded(bool b){
 	netLoaded = b;
 }
 
-void Client::setArrayClients(std::string ip,int tipo,bool rdy,int nuevo){
+void Client::setArrayClients(std::string ip,int tipo,bool rdy,bool corredorJ,int nuevo){
 	controlPlayer=clientes.size();
 	structClientes clientAux;
 	clientAux.ip = ip;
 	clientAux.tipoCorredor = tipo;
 	clientAux.ready = rdy;
+	clientAux.corredorJugador = corredorJ;
 	if (nuevo!=-1){
 		clientes.at(nuevo)=clientAux;
 	}else{

@@ -116,7 +116,12 @@ void EscenaJuego::init() {
 			if (i==0){
 				jugador = new CorredorJugador("assets/coche.obj", pos2[i], tj);
 			}else{
-				jugador = new CorredorIA("assets/coche.obj", pos2[i], tj);
+				if (client->getClientes().at(i).corredorJugador==true){
+					jugador = new CorredorJugador("assets/coche.obj", pos2[i], tj);
+				}else{
+					jugador = new CorredorIA("assets/coche.obj", pos2[i], tj);
+				}
+				
 			}
 		}else{
 			jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);

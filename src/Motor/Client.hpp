@@ -15,6 +15,7 @@ struct structClientes{
     std::string ip;
     int tipoCorredor;
     bool ready;
+	bool corredorJugador;
 };
 
 
@@ -55,7 +56,7 @@ public:
 
 	//METODOS SET
 	void setNetloaded(bool b);
-	void setArrayClients(std::string ip,int tipo,bool rdy,int nuevo);
+	void setArrayClients(std::string ip,int tipo,bool rdy,bool corredorJ,int nuevo);
 	void BorrarClientes();
 	void BorrarCliente(int i);
 	

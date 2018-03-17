@@ -78,7 +78,7 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 	arbolconduccion->nuevoNodoAccion(17,20,8); //20
 
 
-//numero de nodos 60
+//numero de nodos 80
 	arbolobjetos = new ArbolDecision();
 	arbolobjetos->nuevoNodoDecision(0,0,NADA2,NADA3,0,false); // 0 NODO PADRE
 

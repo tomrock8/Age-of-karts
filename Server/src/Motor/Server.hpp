@@ -11,15 +11,15 @@
 
 struct structPrediccion{
 	int timeStamp;
-	float posicion[];
-	float rotacion[];
+	float posicion[3];
+	float rotacion[3];
 };
 
 struct structClientes{
     std::string ip;
     int tipoCorredor;
     bool ready;
-    vector<structPrediccion> prediccion;
+    structPrediccion prediccion;
 };
 
 

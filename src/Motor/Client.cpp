@@ -114,7 +114,7 @@ void Client::UpdateNetworkKeyboard()
 		typeID = ID_SEND_KEY_PRESS;		//id para el paquete
 		RakNet::BitStream bsOut;
 		bsOut.Write(typeID);
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) { // Acelera
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) { // Acelera
 				pressed = true;
 				estadoMovimiento = 1;
 		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){ //Frena
@@ -133,7 +133,7 @@ void Client::UpdateNetworkKeyboard()
 		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){ //Giro dcha
 				pressed = true;
 				direccionMovimiento = 2;
-		}
+		}*/
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)){ //ResetWaypoint
 			reset = true;
@@ -142,13 +142,14 @@ void Client::UpdateNetworkKeyboard()
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){ //Lanzar Item
 			lanzar = true;
 		}
-
-		bsOut.Write(controlPlayer);
-		bsOut.Write(estadoMovimiento);
-		bsOut.Write(direccionMovimiento);
-		bsOut.Write(reset);
-		bsOut.Write(lanzar);
-		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+		if (lanzar || reset) {
+			bsOut.Write(controlPlayer);
+			//bsOut.Write(estadoMovimiento);
+			//bsOut.Write(direccionMovimiento);
+			bsOut.Write(reset);
+			bsOut.Write(lanzar);
+			client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+		}
 
 	}
 }
@@ -207,6 +208,7 @@ int Client::ReceivePackets()
 		RakNet::BitStream bsOut;						   //|mensaje de salida
 
 		btVector3 posicion;
+		btVector3 rotacion;
 		//Posiciones de salida en la parrilla
 		btVector3 pos2[6];
 		pos2[0].setX(-10);
@@ -547,18 +549,21 @@ int Client::ReceivePackets()
 
 				break;
 
-			// Actualiza el objeto que le ha tocado a un cliente en una caja
-			case ID_PLAYER_SET_OBJECT:
-				if (netLoaded)
+			// Corregir posicion por orden del server
+			case ID_PLAYER_REFRESH:
+				if (started)
 				{
-					int t, id;
-
+					float *pos = new float[3];
+					float *ori = new float[3];
 					bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-					bsIn.Read(t);
-					bsIn.Read(id);
-					cout <<" asignando al jugador *** "<< id <<" *** ";
-					players.at(id)->setTipoObj(t);
+					bsIn.Read(pos[0]);
+					bsIn.Read(pos[1]);
+					bsIn.Read(pos[2]);
+					bsIn.Read(ori[0]);
+					bsIn.Read(ori[1]);
+					bsIn.Read(ori[2]);
 
+					players.at(controlPlayer)->setPosicion(pos, ori);
 				}
 
 				break;
@@ -584,21 +589,28 @@ int Client::ReceivePackets()
 					float *ori = new float[3];
 					for(int i=0; i<players.size(); i++){
 
-						bsIn.Read(pos[0]);
-						bsIn.Read(pos[1]);
-						bsIn.Read(pos[2]);
-						bsIn.Read(ori[0]);
-						bsIn.Read(ori[1]);
-						bsIn.Read(ori[2]);
-						bsIn.Read(param);
-						bsIn.Read(id);
+						bsIn.Read(id);			//CONTROLPLAYER
+						bsIn.Read(pos[0]); //POSICION ACTUAL
+						bsIn.Read(pos[1]);	//
+						bsIn.Read(pos[2]);	//
+						bsIn.Read(ori[0]);	//ROTACION
+						bsIn.Read(ori[1]);	//
+						bsIn.Read(ori[2]);	//
+						
+						bsIn.Read(param);		//ESTADOS
+						players.at(id)->getEstados()->setEstadoMovimiento(param);
+						bsIn.Read(param);		//
+						players.at(id)->getEstados()->setDireccionMovimiento(param);
+						bsIn.Read(param);		//
+						players.at(id)->getEstados()->setEstadoObjeto(param);
+						bsIn.Read(param);		//
+						players.at(id)->getEstados()->setEstadoCoche(param);
+						bsIn.Read(param);		//
+						players.at(id)->getEstados()->setEstadoCarrera(param);
 						
 						players.at(id)->setPosicion(pos, ori);
-						if(param!=players.at(id)->getTipoObj())
-							players.at(id)->setTipoObj(param);
 					}
 				}
-				//PlayerMovement();
 
 				break;
 
@@ -618,7 +630,8 @@ int Client::ReceivePackets()
 					controlPlayer--;				//controlPlayer para no cambiar de jugador con la reordenacion del array
 
 				clientes.erase(clientes.begin() + playerDisconnect);
-				ShutDownClient();
+				//ShutDownClient();
+				//return 0;
 				break;
 
 			default:
@@ -670,9 +683,9 @@ void Client::PlayerMovement(){
 		bsOut.Write(timeStamp);
 		timeStamp ++;
 		bsOut.Write(controlPlayer);
-		bsOut.Write(players.at(controlPlayer)->getNodo()->getPosition().X);
-		bsOut.Write(players.at(controlPlayer)->getNodo()->getPosition().Y);
-		bsOut.Write(players.at(controlPlayer)->getNodo()->getPosition().Z);
+		bsOut.Write(players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition().getX());
+		bsOut.Write(players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition().getY());
+		bsOut.Write(players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition().getZ());
 		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().X);
 		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().Y);
 		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().Z);
@@ -859,7 +872,7 @@ void Client::PlayerAction(){
 //	METODO DESACTUALIZADO: Al romper una caja, se le manda al servidor el item recogido
 //===========================================================================
 void Client::PlayerSetObject(int tipo){
-	typeID = ID_PLAYER_SET_OBJECT;
+	//typeID = ID_PLAYER_SET_OBJECT;
 	RakNet::BitStream bsOut;
 	cout <<"He cogido el objeto ---"<< tipo <<" --- y lo comparto con los demas"<< endl;
 	bsOut.Write(typeID);

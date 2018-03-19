@@ -6,6 +6,8 @@ NodoDecision::NodoDecision(){
 
 Decision=false;
 Accion=false;
+Salto = false;
+idNodoSalto=0;
 valor=0;
 valorBoleano=false;
 idNodo=0;
@@ -13,6 +15,10 @@ NodoPadre=nullptr;
 parametro = NADA3;  
 condiciones = NADA2;
 tipoaccion=0;  
+
+}
+
+NodoDecision::~NodoDecision(){
 
 }
 
@@ -62,6 +68,25 @@ void NodoDecision::accion(vector<NodoDecision*> &arrayNodos,int nodopadre,int id
 
 }
 
+void NodoDecision::salto(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,int idNodoSalto){
+
+    Salto=true;
+    if(arrayNodos.size()==0){
+    NodoPadre=nullptr;
+    }else{
+            for(int i =0; i< arrayNodos.size();i++){
+            if(arrayNodos.at(i)->getid() == nodopadre){ 
+            NodoPadre = arrayNodos.at(i);
+            NodoPadre->setHijo(this);
+            i=arrayNodos.size();
+            }
+        }
+    }
+    
+    idNodo = idnodo;
+    this->idNodoSalto=idNodoSalto;
+    arrayNodos.push_back(this);
+}
 
 bool NodoDecision::getConsulta(bool arrayboleanos[], int obj,int jugador){
     
@@ -261,4 +286,13 @@ bool NodoDecision::getAccionB() {
 
 int NodoDecision::getid(){
     return idNodo;
+}
+
+int NodoDecision::getidNodoSalto(){
+
+    return idNodoSalto;
+}
+
+bool NodoDecision::getSalto() {
+	return Salto;
 }

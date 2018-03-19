@@ -8,7 +8,9 @@ ArbolDecision::ArbolDecision(){
 
 }
 
+ArbolDecision::~ArbolDecision(){
 
+}
 
  void ArbolDecision::nuevoNodoDecision(int nodopadre,int idnodo,tipo_nodo tipodecision,tipo_parametro parametro,int valor,bool booleano){
 
@@ -36,6 +38,19 @@ void ArbolDecision::nuevoNodoAccion(int nodopadre,int idnodo,int tipoaccion){
 
  }
 
+void ArbolDecision::nuevoNodoSalto(int nodopadre,int idnodo,int idNodoSalto){
+
+    if(!NodoRuta){
+    NodoDecision *nodo = new NodoDecision();
+    nodo->salto(arrayNodos,nodopadre,idnodo,idNodoSalto);
+    NodoRuta = nodo;
+    }else{
+    NodoDecision *nodo = new NodoDecision();
+    nodo->salto(arrayNodos,nodopadre,idnodo,idNodoSalto);   
+    }
+
+}
+
 int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj,int jugador){
 
   
@@ -45,8 +60,20 @@ int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj,int jugador){
     int cont = 0;   // variable para incrementar el array de hijos 
    
     while(!check && cont!=NodoRuta->getHijos().size()){
-        //cout<<"HOLA"<<endl;
-		if (!NodoRuta->getHijos().at(cont)->getAccionB()){
+        
+        if(NodoRuta->getHijos().at(cont)->getSalto()){
+            cout<<"COMEPOLLAS1"<<endl;
+            for(int i=0 ; i < arrayNodos.size() ; i++){
+            if(arrayNodos.at(i)->getid() == NodoRuta->getHijos().at(cont)->getidNodoSalto()){
+                NodoRuta=arrayNodos.at(i);
+                cout<<"COMEPOLLAS"<<endl;
+                return 0;
+            }
+            
+            }    
+        }
+
+		if (!NodoRuta->getHijos().at(cont)->getAccionB() && !NodoRuta->getHijos().at(cont)->getSalto()){
 			check = NodoRuta->getHijos().at(cont)->getConsulta(arrayboleanos, obj,jugador);
             
         }else{
@@ -80,3 +107,11 @@ int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj,int jugador){
 }
 
 
+void ArbolDecision::deleteNodosArbol(){
+
+    for(int i=0 ; i< arrayNodos.size();i++){
+
+        delete arrayNodos.at(i);
+
+    }
+}

@@ -140,3 +140,9 @@ void Habilidad::movimiento(){
 
 
 }
+
+
+void Habilidad::deleteHijos(){
+	
+	delete objetoHabilidad;
+}

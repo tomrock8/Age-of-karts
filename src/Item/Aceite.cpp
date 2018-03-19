@@ -27,3 +27,7 @@ void Aceite::lanzarItem(int direccion,btVector3 orientacion){
 void Aceite::updateHijos(){
 	
 }
+
+void Aceite::deleteHijos(){
+	
+}

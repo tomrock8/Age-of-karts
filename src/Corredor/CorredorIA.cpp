@@ -78,7 +78,7 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 	arbolconduccion->nuevoNodoAccion(17,20,8); //20
 
 
-//numero de nodos 80
+	//numero de nodos 80
 	arbolobjetos = new ArbolDecision();
 	arbolobjetos->nuevoNodoDecision(0,0,NADA2,NADA3,0,false); // 0 NODO PADRE
 
@@ -99,17 +99,17 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 	arbolobjetos->nuevoNodoDecision(66,68,IGUAL,NOGIRO,0,false);
 	arbolobjetos->nuevoNodoAccion(67,69,14);
 	arbolobjetos->nuevoNodoAccion(68,70,10);
-	arbolobjetos->nuevoNodoAccion(72,73,12);
+	arbolobjetos->nuevoNodoSalto(72,73,60);
 
 	arbolobjetos->nuevoNodoDecision(61,71,IGUAL,ENEMIGOLADO,0,true);
 	arbolobjetos->nuevoNodoDecision(61,74,IGUAL,ENEMIGOLADO,0,false);
 	arbolobjetos->nuevoNodoAccion(71,75,14);
-	arbolobjetos->nuevoNodoAccion(74,76,12);
+	arbolobjetos->nuevoNodoSalto(74,76,60);
 
 	arbolobjetos->nuevoNodoDecision(63,77,IGUAL,ENEMIGOLADO,0,true);
 	arbolobjetos->nuevoNodoDecision(63,78,IGUAL,ENEMIGOLADO,0,false);
 	arbolobjetos->nuevoNodoAccion(77,79,14);
-	arbolobjetos->nuevoNodoAccion(78,80,12);
+	arbolobjetos->nuevoNodoSalto(78,80,60);
 
 
 
@@ -249,10 +249,7 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 //-----------------------\*
 void CorredorIA::movimiento()
 {
-	//LLmamos a la logica difusa para que nos de los valores de entrada
-	//seguirWaypoint();
-	ActualizarRaytest();
-	logicaDifusa();
+	
 	
 
 	bool arraybooleanos[18] = { 
@@ -297,6 +294,7 @@ void CorredorIA::movimiento()
 
 		case USARHABILIDAD: //14
 		lanzarHabilidad();
+		limite=0;
 		break;
 
 		case ACELERAR: //1
@@ -440,17 +438,7 @@ void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 void CorredorIA::logicaDifusa() {
 	
 
-	if(tipoObj!=0){
-		Objeto=true;
-	}else{
-		Objeto=false;
-	}
-
-	if(limite>=100){
-		habilidad=true;
-	}else{
-		habilidad=false;
-	}
+	
 
 	//GIRO
 	pertenenciaNoGiro= FuncionTriangular(anguloGiro,-25,0,25);
@@ -1092,10 +1080,38 @@ void CorredorIA::comprobarDireccion(ISceneNode *nodo){
 
 
 void CorredorIA::updateHijos(){
+	
+	ActualizarRaytest();
+	
+	if(tipoObj!=0){
+		Objeto=true;
+	}else{
+		Objeto=false;
+	}
+
+	if(limite>=100){
+		habilidad=true;
+	}else{
+		habilidad=false;
+	}
+
+	logicaDifusa();
 
 }
 
+void CorredorIA::deleteArbol(){
+
+	arbolconduccion->deleteNodosArbol();
+	delete arbolconduccion;
+	arbolobjetos->deleteNodosArbol();
+	delete arbolobjetos;
+
+}
 
 void CorredorIA::actualizarItem(){
 	
+}
+
+CorredorIA::~CorredorIA(){
+
 }

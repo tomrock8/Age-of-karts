@@ -42,3 +42,7 @@ void Proyectil::lanzarItem(int direccion,btVector3 orientacion) {
 void Proyectil::updateHijos(){
 
 }
+
+void Proyectil::deleteHijos(){
+	
+}

@@ -14,6 +14,7 @@ public:
   ~Escudo();
   virtual void lanzarItem(int direccion,btVector3 orientacion) override;
   virtual void updateHijos() override;
+  virtual void deleteHijos() override;
   void movimiento();
 
 private:

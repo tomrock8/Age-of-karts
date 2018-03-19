@@ -26,6 +26,7 @@ public:
   void inicializarFisicas();
   virtual void lanzarItem(int direccion,btVector3 orientacion)=0;
   virtual void updateHijos()=0;
+  virtual void deleteHijos()=0;
   bool update();
   void Delete();
 

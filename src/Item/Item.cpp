@@ -96,6 +96,7 @@ bool Item::comprobarDestructor(){
 bool Item::update(){
 			
 	if(comprobarDestructor()){
+	//deleteHijos();
 	Delete();
 	return true;
 	}else{
@@ -107,6 +108,7 @@ bool Item::update(){
 
 void Item::Delete()
 {
+	
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	vector<btRigidBody *> objetos = bullet->getObjetos();

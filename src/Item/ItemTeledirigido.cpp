@@ -235,3 +235,8 @@ void ItemTeledirigido::movimiento(){
 	
 
 }
+
+
+void ItemTeledirigido::deleteHijos(){
+	
+}

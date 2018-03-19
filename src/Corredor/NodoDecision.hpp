@@ -24,6 +24,7 @@ class NodoDecision
    
   void decision(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,tipo_nodo tipoNodo,tipo_parametro parametro,int valor,bool valorb);
   void accion(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,int accionIA);
+  void salto(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,int idNodoSalto);
   void setHijo(NodoDecision * nodo);
   vector<NodoDecision*> getHijos();
   bool getDecision();
@@ -31,7 +32,10 @@ class NodoDecision
   bool getConsulta(bool arrayboleanos[], int obj,int jugador);   
   bool getAccionB();
   int getid();
+  int getidNodoSalto();
+  bool getSalto();
 
+  
   private:
     
     int idNodo;
@@ -46,7 +50,8 @@ class NodoDecision
     bool valorBoleano;  // VALOR BOOLEANO PARA COMPROBACIONES
     bool Decision;
     bool Accion;
-
+    bool Salto;
+    int idNodoSalto;
 };
 
 #endif /* NODODECISION_H */

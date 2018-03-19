@@ -28,3 +28,7 @@ void CajaFalsa::lanzarItem(int direccion,btVector3 orientacion){
 void CajaFalsa::updateHijos(){
 	
 }
+
+void CajaFalsa::deleteHijos(){
+	
+}

@@ -20,7 +20,8 @@ class ArbolDecision
 
   void nuevoNodoDecision(int nodopadre,int idnodo,tipo_nodo tipodecision,tipo_parametro parametro,int valor,bool booleano);
   void nuevoNodoAccion(int nodopadre,int idnodo,int tipoaccion);
-
+  void nuevoNodoSalto(int nodopadre,int idnodo,int idNodoSalto);
+  void deleteNodosArbol();  
   int recorrerArbol(bool arrayboleanos[] , int obj,int jugador);  
 
   private:

@@ -1108,8 +1108,6 @@ void Corredor::update()
 
 	comprobarTurbo();
 
-	if(strcmp("Jugador", cuboNodo->getName()) == 0)
-	cout<<"Velocidad:::"<< vehiculo->getCurrentSpeedKmHour() << endl;
 
 	if (estado->getEstadoCarrera()!=PARRILLA){
 		movimiento();

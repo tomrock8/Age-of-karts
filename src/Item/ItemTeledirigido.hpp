@@ -14,6 +14,7 @@ class ItemTeledirigido : public Item
     
     virtual void lanzarItem(int direccion,btVector3 orientacion) override;
     virtual void updateHijos() override;
+    virtual void deleteHijos() override;
     void setWaypoint(Waypoint *waypoint);
     void ActualizarRaytest();
     void movimiento();

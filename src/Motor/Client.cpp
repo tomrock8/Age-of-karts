@@ -113,7 +113,7 @@ void Client::UpdateNetworkKeyboard()
 		typeID = ID_SEND_KEY_PRESS;		//id para el paquete
 		RakNet::BitStream bsOut;
 		bsOut.Write(typeID);
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) { // Acelera
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) { // Acelera
 				pressed = true;
 				estadoMovimiento = 1;
 		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){ //Frena
@@ -132,7 +132,7 @@ void Client::UpdateNetworkKeyboard()
 		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){ //Giro dcha
 				pressed = true;
 				direccionMovimiento = 2;
-		}
+		}*/
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)){ //ResetWaypoint
 			reset = true;
@@ -141,13 +141,14 @@ void Client::UpdateNetworkKeyboard()
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){ //Lanzar Item
 			lanzar = true;
 		}
-
-		bsOut.Write(controlPlayer);
-		bsOut.Write(estadoMovimiento);
-		bsOut.Write(direccionMovimiento);
-		bsOut.Write(reset);
-		bsOut.Write(lanzar);
-		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+		if (lanzar || reset) {
+			bsOut.Write(controlPlayer);
+			//bsOut.Write(estadoMovimiento);
+			//bsOut.Write(direccionMovimiento);
+			bsOut.Write(reset);
+			bsOut.Write(lanzar);
+			client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+		}
 
 	}
 }

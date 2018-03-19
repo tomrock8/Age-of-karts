@@ -346,7 +346,7 @@ void EscenaJuego::update() {
 				tiempoRefresco = clock();
 			//}
 			//client->PlayerAction();
-			//client->UpdateNetworkKeyboard();
+			client->UpdateNetworkKeyboard();
 		}
 	}
 

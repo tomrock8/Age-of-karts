@@ -54,7 +54,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void setTipoObj(int i);
 	void SetFuerzaVelocidad(int turbo);
 	void setFriccion(btScalar valor);
-	void setTurbo(bool activo, bool objeto,int valor);
+	void setTurbo(bool activo, bool objeto,int valor,int tiempo);
 	void setWaypointActual(ISceneNode *nodo);
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
@@ -84,6 +84,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void updateEstado();
 	void updateText();
 	void comprobarSueloRuedas();
+	void comprobarTurbo();
 	virtual void actualizarItem()=0;
 
 
@@ -156,6 +157,7 @@ protected:
 	bool objetivoFijado; //para el item teledirigido
 	bool aceiteActivado; //para el item teledirigido
 	int timerTurbo;
+	int tiempoTurbo;
 	int timerTeledirigido;
 	int timerAceite;
 	
@@ -175,7 +177,7 @@ protected:
 	//estados de lanzamiento de objeto
 	bool checkItem;
 
-	
+	int velocidadMedia;
 	int velocidadMaxima;
 	int velocidadMaximaTurbo;
 	int velocidadMaximaAtras;

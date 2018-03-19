@@ -431,7 +431,7 @@ bool GestorColisiones::JugadorTurbo()
 		{
 			for( int i = 0; i< jugadores->getNumJugadores(); i++)
 				if(nodoA->getID() == pj1.at(i)->getNodo()->getID())
-					pj1.at(i)->setTurbo(true, false,26000);
+					pj1.at(i)->setTurbo(true, false,10000,5);
 					
 			//cout << "Jugador - Turbo\n";
 			return true;

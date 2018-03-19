@@ -30,6 +30,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	tiempoHabilidad=0;
 	habilidadLanzada=false;
 	tipojugador=tipo;
+	tiempoTurbo=0;
 	estado->setEstadoCarrera(PARRILLA);
 
 	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
@@ -121,8 +122,9 @@ void Corredor::setParametros(){
 			FuerzaMaxima = btScalar(3800);
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
-			velocidadMaxima=360;
+			velocidadMedia=360;
 			velocidadMaximaTurbo=410;
+			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
 			indiceGiroBajo=btScalar(0.085);
@@ -138,8 +140,9 @@ void Corredor::setParametros(){
 			FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
-			velocidadMaxima=370;
+			velocidadMedia=370;
 			velocidadMaximaTurbo=415;
+			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
 			indiceGiroBajo=btScalar(0.085);
@@ -155,8 +158,9 @@ void Corredor::setParametros(){
 			FuerzaMaxima = btScalar(3600); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
-			velocidadMaxima=360;
+			velocidadMedia=360;
 			velocidadMaximaTurbo=410;
+			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
 			indiceGiroBajo=btScalar(0.1);
@@ -172,11 +176,12 @@ void Corredor::setParametros(){
 			FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
-			velocidadMaxima=385;
+			velocidadMedia=385;
 			velocidadMaximaTurbo=425;
+			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
-			indiceGiroBajo=btScalar(0.07);
+			indiceGiroBajo=btScalar(0.1);
 			velocidadLimiteGiro=110;
 			//------PESO------
 			Masa = btScalar(1200);
@@ -612,11 +617,13 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	//cout<< "NODO ACTUAL:"<< actual->getWaypoint()->getID() <<endl;
 	//cout<< "NODO SIGUIENTE:"<< siguiente->getWaypoint()->getID() <<endl;
 }
-void Corredor::setTurbo(bool activo, bool objeto, int valor) {
+
+void Corredor::setTurbo(bool activo, bool objeto, int valor,int tiempo) {
 	turboActivado = activo;
-	if (activo) {
+	tiempoTurbo= tiempo;
+	if (turboActivado) {
 		SetFuerzaVelocidad(valor);
-		acelerar();
+		velocidadMaxima=velocidadMaximaTurbo;
 		Timer *time = Timer::getInstancia();
 		timerTurbo = time->getTimer();
 		if (objeto) {
@@ -628,12 +635,32 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 	}
 	else {
 		SetFuerzaVelocidad(FuerzaMaxima);
+		velocidadMaxima=velocidadMedia;
 	}
 }
+
+void Corredor::comprobarTurbo(){
+
+	Timer *time = Timer::getInstancia();
+	if (turboActivado) {
+		acelerar();
+		if (time->getTimer() - timerTurbo >= tiempoTurbo) {
+			
+			setTurbo(false, false, 0,0);
+			
+		}
+	}
+
+}
+
+
 void Corredor::SetFuerzaVelocidad(int turbo)
 {
 	Fuerza = btScalar(turbo);
 }
+
+
+
 void Corredor::setFriccion(btScalar valor) {
 	for (int i = 0; i < vehiculo->getNumWheels(); i++) {
 		vehiculo->getWheelInfo(i).m_frictionSlip = btScalar(valor);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover	
@@ -746,8 +773,6 @@ void Corredor::usarObjetos() {
 		pro->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro->setLanzado(true);
 		items.push_back(pro);
-
-		
 		soltarItem();
 		
 	}
@@ -764,7 +789,7 @@ void Corredor::usarObjetos() {
 	}
 	else if (getTipoObj() == 3)	//TURBO
 	{
-		setTurbo(true, true, 26000);
+		setTurbo(true, true, FuerzaMaxima*2,5);
 	}
 	else if (getTipoObj() == 4)	//ACEITE
 	{	
@@ -844,7 +869,8 @@ void Corredor::usarObjetos() {
 	}
 	else if(tipoObj == 8)	//TURBO TRIPLE
 	{
-		setTurbo(true, true, 26000);
+		setTurbo(true, true, FuerzaMaxima*2,5);
+		
 	}
 	std::cout << "Tipo obj: " << getTipoObj() << " / " << items.size() << std::endl;
 	
@@ -1071,7 +1097,7 @@ std::string Corredor::toString()
 //---------------------------------------//
 void Corredor::update()
 {
-	if((vehiculo->getCurrentSpeedKmHour()>velocidadMaxima && !turboActivado) || (turboActivado && vehiculo->getCurrentSpeedKmHour()>velocidadMaximaTurbo)){
+	if(vehiculo->getCurrentSpeedKmHour()>velocidadMaxima){
 		limitadorVelocidad();
 	}
 	for (unsigned int i = 0; i< sf::Joystick::Count; ++i)
@@ -1079,14 +1105,12 @@ void Corredor::update()
 		if (sf::Joystick::isConnected(i))
 			std::cout << "Joystick " << i << " is connected!" << std::endl;
 	}
-	Timer *time = Timer::getInstancia();
-	if (turboActivado) {
-		if (time->getTimer() - timerTurbo >= 1) {
-			//cout << "Se acaba el turbo\n";
-			desacelerar();
-			setTurbo(false, false, 0);
-		}
-	}
+
+	comprobarTurbo();
+
+	if(strcmp("Jugador", cuboNodo->getName()) == 0)
+	cout<<"Velocidad:::"<< vehiculo->getCurrentSpeedKmHour() << endl;
+
 	if (estado->getEstadoCarrera()!=PARRILLA){
 		movimiento();
 		updateEstado();
@@ -1295,10 +1319,8 @@ void Corredor::lanzarHabilidad(){
 		habilidadJugador = new Habilidad(4,cuboNodo,posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);	
-		setTurbo(true, true, 40000);
-		tiempoHabilidad=tiempoDestruccion;
-		habilidadLanzada=true;
-
+		setTurbo(true, true, FuerzaMaxima*2,tiempoDestruccion/3.5);
+		
 		break;
 
 			

@@ -263,6 +263,7 @@ int main()
             }
             
            
+            /*
             if (jugadores->getNumJugadores() != 0) {
                 clock_t tiempoActual = clock();
                 clock_t timediff = tiempoActual - tiempoRefresco;
@@ -271,9 +272,8 @@ int main()
                     //client->PlayerMovement();
                     tiempoRefresco = clock();
                 }
-                //client->PlayerAction();
-                //client->UpdateNetworkKeyboard();
-            }     
+            }
+            */     
             clock_t tiempoActual = clock();
             clock_t timediff = tiempoActual - tiempoRefrescoServer;
             float timediff_sec = ((float)timediff) / 100000;

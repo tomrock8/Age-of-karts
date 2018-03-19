@@ -158,6 +158,8 @@ void Server::ReceivePackets()
 		int id;
 		int param;
 		int param2;
+		float paramFloat;
+		float diff = 0.0;
 		bool reset = false;
 		bool lanzar = false;
 		bool parambool = false;
@@ -259,7 +261,7 @@ void Server::ReceivePackets()
                 /*
                  typeID = ID_LOAD_CURRENT_PLAYERS;
                  bsOut.Write(typeID);
-                 bsOut.Write(numPlayers);
+                 bsOut.Woniririte(numPlayers);
                  
                  std::cout << "Numero de jugadores actuales: " << numPlayers << std::endl;
                  
@@ -404,6 +406,7 @@ void Server::ReceivePackets()
 						}else if (clientes.at(i).tipoCorredor == 3){
 							tj=Corredor::tipo_jugador::CHINO;
 						}
+						std::cout << "Creo jugador \n";
 						jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
 						jugador->setID(i);
 						players.push_back(jugador);
@@ -414,9 +417,11 @@ void Server::ReceivePackets()
 						prediccionAux.rotacion[0] = pos2[i].getX();
 						prediccionAux.rotacion[1] = pos2[i].getY();
 						prediccionAux.rotacion[2] = pos2[i].getZ();
-						clientes.at(i).prediccion.push_back(prediccionAux);
+						clientes.at(i).prediccion = prediccionAux;
 						jugadores->aumentarJugadores();
+						std::cout << "Meto jugador\n";
 					}
+					std::cout << "Salgo de crear jugadores\n";
 					started=true;
 					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 				}
@@ -425,180 +430,235 @@ void Server::ReceivePackets()
 			break;	
 		case ID_RETURN_LOBBY:
 		std::cout << "ID_RETURN_LOBBY\n";
-                started=false;
                 deleteEntities();
-                bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-                typeID = ID_RETURN_LOBBY;
-                bsOut.Write(typeID);
-                server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-                break;	
-            case ID_SEND_KEY_PRESS:
-                //std::cout << "ID_SEND_KEY_PRESS\n";
-                bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-                bsIn.Read(id);
-                bsIn.Read(param);
-                bsIn.Read(param2);
-                bsIn.Read(reset);
-                bsIn.Read(lanzar);
-                if (id!=-1 && id<players.size()){
-                    players.at(id)->getEstados()->setEstadoMovimiento(param);
-                    players.at(id)->getEstados()->setDireccionMovimiento(param2);
-                    
-                    if(reset){
-                        players.at(id)->recolocarWaypoint();
-                    }
-                    if(lanzar){
-                        players.at(id)->usarObjetos();
-                    }
-                }
-                //player[id]->setAccion(param);
-                server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-                break;
-                
-            case ID_SPAWN_PLAYER:
-                std::cout << "SPAWN DE UN JUGADOR\n";
-                /*bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-                 bsIn.Read(posicion[0]);
-                 bsIn.Read(posicion[1]);
-                 bsIn.Read(posicion[2]);
-                 bsIn.Read(playerNetworkID);
-                 std::cout <<posicion[0] <<", "<<posicion[1] << ", " <<posicion[2] << std::endl;
-                 players[numPlayers] = new CorredorRed("assets/coche.obj", pos2[0], Corredor::tipo_jugador::CHINO);
-                 //player[numPlayers]->setPosition(posicion);
-                 player[numPlayers]->SetNetworkIDManager(&networkIDManager);
-                 player[numPlayers]->SetNetworkID(playerNetworkID);
-                 
-                 typeID = ID_SPAWN_PLAYER;
-                 bsOut.Write(typeID);
-                 bsOut.Write(posicion[0]);
-                 bsOut.Write(posicion[1]);
-                 bsOut.Write(posicion[2]);
-                 bsOut.Write(numPlayers);
-                 bsOut.Write(playerNetworkID);
-                 server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
-                 numPlayers++;
-                 
-                 std::cout << "Jugador creado, en total: " << numPlayers << std::endl;
-                 */
-                break;
-                
-            case ID_PLAYER_MOVE:
-                bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-                bsIn.Read(posicion[0]);
-                bsIn.Read(posicion[1]);
-                bsIn.Read(posicion[2]);
-                bsIn.Read(rotacion[0]);
-                bsIn.Read(rotacion[1]);
-                bsIn.Read(rotacion[2]);
-                bsIn.Read(id);
-                //if(id == numPlayers) id--;  //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
-                //player[id]->setPositionRotation(posicion, rotacion);
-                //*posicion = *networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->getPosition();
-                //networkIDManager.GET_OBJECT_FROM_ID<PlayerServer *>(playerNetworkID)->setPosition(posicion);
-                typeID = ID_PLAYER_MOVE;
-                bsOut.Write(typeID);
-                bsOut.Write(posicion[0]);
-                bsOut.Write(posicion[1]);
-                bsOut.Write(posicion[2]);
-                bsOut.Write(rotacion[0]);
-                bsOut.Write(rotacion[1]);
-                bsOut.Write(rotacion[2]);
-                bsOut.Write(id);
-                
-                server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
-                
-                break;
-                
-            case ID_PLAYER_STATE:
-                int estado1, estado2, estado3, estado4;
-                bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-                bsIn.Read(estado1);
-                bsIn.Read(estado2);
-                bsIn.Read(estado3);
-                bsIn.Read(estado4);
-                bsIn.Read(id);
-                if(id == numPlayers) id--;  //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
-                //player[id]->setEstados(estado1, estado2, estado3, estado4);
-                
-                typeID = ID_PLAYER_STATE;
-                bsOut.Write(typeID);
-                bsOut.Write(estado1);
-                bsOut.Write(estado2);
-                bsOut.Write(estado3);
-                bsOut.Write(estado4);
-                bsOut.Write(id);
-                
-                server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
-                break;
-                
-            case ID_PLAYER_SET_OBJECT:
-                /*
-                 int t;
-                 
-                 bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-                 bsIn.Read(t);
-                 bsIn.Read(id);
-                 if(id == numPlayers) id--;  //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
-                 std::cout << "He cogido un objeto: " << id << std::endl;
-                 
-                 //player[id]->setObj(t);
-                 
-                 typeID = ID_PLAYER_SET_OBJECT;
-                 bsOut.Write(typeID);
-                 bsOut.Write(t);
-                 bsOut.Write(id);
-                 
-                 server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
-                 */
-                break;	
-                
-            case ID_PLAYER_THROW_OBJECT:
-                /*
-                 bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-                 bsIn.Read(id);
-                 if(id == numPlayers) id--; //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
-                 
-                 //player[id]->setObj(0);
-                 
-                 typeID = ID_PLAYER_THROW_OBJECT;
-                 bsOut.Write(typeID);
-                 bsOut.Write(id);
-                 
-                 server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
-                 */
-                break;
-                
-            case ID_PLAYER_DISCONNECT:
-                std::cout << "Borrando player\n";
-                int playerDisconnect;
-                bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-                bsIn.Read(playerDisconnect);
-                std::cout << "Jugador eliminado: " << playerDisconnect << " / " <<numPlayers << std::endl;
-                clientes.erase(clientes.begin()+playerDisconnect);
-                //playerDisconnection(playerDisconnect);
-                if(started){
-                    //Borrar players tambien
-                    
-                }
-                typeID = ID_LOAD_CURRENT_CLIENTS;
-                numConnections=10;
-                server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
-                param=numConnections;
-                std::cout << "Numero de conexiones actuales: " << param << std::endl;
-                typeID = ID_LOAD_CURRENT_CLIENTS;
-                bsOut.Write(typeID);
-                bsOut.Write(param);
-                for(int i = 0; i<clientes.size(); i++){
-                    paramRakString = clientes.at(i).ip.c_str();
-                    bsOut.Write(paramRakString);
-                    bsOut.Write(clientes.at(i).tipoCorredor);
-                    bsOut.Write(clientes.at(i).ready);
-                }
-                server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-                
-                std::cout << "Jugador Borrado\n";
-                
-                break;
+			started=false;
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			typeID = ID_RETURN_LOBBY;
+			bsOut.Write(typeID);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			break;	
+		case ID_SEND_KEY_PRESS:
+			//std::cout << "ID_SEND_KEY_PRESS\n";
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			//bsIn.Read(param);
+			//bsIn.Read(param2);
+			bsIn.Read(reset);
+			bsIn.Read(lanzar);
+			
+			//players.at(id)->getEstados()->setEstadoMovimiento(param);
+			//players.at(id)->getEstados()->setDireccionMovimiento(param2);
+			if(reset){
+				players.at(id)->recolocarWaypoint();
+			}
+			if(lanzar){
+				players.at(id)->usarObjetos();
+			}
+			//player[id]->setAccion(param);
+			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			break;
+
+		case ID_SPAWN_PLAYER:
+			std::cout << "SPAWN DE UN JUGADOR\n";
+			/*bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(posicion[0]);
+			bsIn.Read(posicion[1]);
+			bsIn.Read(posicion[2]);
+			bsIn.Read(playerNetworkID);
+			std::cout <<posicion[0] <<", "<<posicion[1] << ", " <<posicion[2] << std::endl;
+			players[numPlayers] = new CorredorRed("assets/coche.obj", pos2[0], Corredor::tipo_jugador::CHINO);
+			//player[numPlayers]->setPosition(posicion);
+			player[numPlayers]->SetNetworkIDManager(&networkIDManager);
+			player[numPlayers]->SetNetworkID(playerNetworkID);
+
+			typeID = ID_SPAWN_PLAYER;
+			bsOut.Write(typeID);
+			bsOut.Write(posicion[0]);
+			bsOut.Write(posicion[1]);
+			bsOut.Write(posicion[2]);
+			bsOut.Write(numPlayers);
+			bsOut.Write(playerNetworkID);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+			numPlayers++;
+
+			std::cout << "Jugador creado, en total: " << numPlayers << std::endl;
+*/
+			break;
+
+		case ID_PLAYER_MOVE:
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			std::cout << "Entro a playerMove\n";
+			bsIn.Read(param2);		//TIMESTAMP
+			bsIn.Read(id);			//CONTROLPLAYER
+			bsIn.Read(prediccionAux.posicion[0]); //POSICION ACTUAL
+			bsIn.Read(prediccionAux.posicion[1]);	//
+			bsIn.Read(prediccionAux.posicion[2]);	//
+			bsIn.Read(prediccionAux.rotacion[0]);	//ROTACION
+			bsIn.Read(prediccionAux.rotacion[1]);	//
+			bsIn.Read(prediccionAux.rotacion[2]);	//
+			prediccionAux.timeStamp = param2;
+			if(id < players.size()){
+				bsIn.Read(param);		//ESTADOS
+				players.at(id)->getEstados()->setEstadoMovimiento(param);
+				bsIn.Read(param);		//
+				players.at(id)->getEstados()->setDireccionMovimiento(param);
+				bsIn.Read(param);		//
+				players.at(id)->getEstados()->setEstadoObjeto(param);
+				bsIn.Read(param);		//
+				players.at(id)->getEstados()->setEstadoCoche(param);
+				bsIn.Read(param);		//
+				players.at(id)->getEstados()->setEstadoCarrera(param);
+				
+				parambool = false;
+				//std::cout << "Posicion Y: " << players.at(id)->getNodo()->getRotation().Y << " - " << clientes.at(id).prediccion.rotacion[1] << std::endl;
+				//std::cout << "Posicion Z: " << players.at(id)->getNodo()->getRotation().Z << " - " << clientes.at(id).prediccion.rotacion[2] << std::endl;
+				paramFloat = players.at(id)->getRigidBody()->getCenterOfMassPosition().getX() - clientes.at(id).prediccion.posicion[0];
+				if(paramFloat > diff || paramFloat < -diff){
+					parambool = true;
+				}
+				std::cout << "Posicion X: " << paramFloat << "\n";
+				paramFloat = players.at(id)->getRigidBody()->getCenterOfMassPosition().getY() - clientes.at(id).prediccion.posicion[1];
+				if(paramFloat > diff || paramFloat < -diff){
+					parambool = true;
+				}
+				std::cout << "Posicion Y: " << paramFloat << "\n";
+				paramFloat = players.at(id)->getRigidBody()->getCenterOfMassPosition().getZ() - clientes.at(id).prediccion.posicion[2];
+				if(paramFloat > diff || paramFloat < -diff){
+					parambool = true;
+				}
+				std::cout << "Posicion Z: " << paramFloat << "\n";
+				paramFloat = players.at(id)->getNodo()->getRotation().X - clientes.at(id).prediccion.rotacion[0];
+				if(paramFloat > diff || paramFloat < -diff){
+					std::cout << "Rotacion X\n";
+					parambool = true;
+				}
+				paramFloat = players.at(id)->getNodo()->getRotation().Y - clientes.at(id).prediccion.rotacion[1];
+				if(paramFloat > diff || paramFloat < -diff){
+					std::cout << "Rotacion Y\n";
+					parambool = true;
+				}
+				paramFloat = players.at(id)->getNodo()->getRotation().Z - clientes.at(id).prediccion.rotacion[2];
+				if(paramFloat > diff || paramFloat < -diff){
+					std::cout << "Rotacion Z\n";
+					parambool = true;
+				}
+				if(parambool){
+					std::cout << "Envio correccion\n";
+					prediccionAux.posicion[0] = players.at(id)->getRigidBody()->getCenterOfMassPosition().getX();
+					prediccionAux.posicion[1] = players.at(id)->getRigidBody()->getCenterOfMassPosition().getY();
+					prediccionAux.posicion[2] = players.at(id)->getRigidBody()->getCenterOfMassPosition().getZ();
+					prediccionAux.rotacion[0] = players.at(id)->getNodo()->getRotation().X;
+					prediccionAux.rotacion[1] = players.at(id)->getNodo()->getRotation().Y;
+					prediccionAux.rotacion[2] = players.at(id)->getNodo()->getRotation().Z;
+
+					typeID = ID_PLAYER_REFRESH;
+					bsOut.Write(typeID);
+					bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getX());
+					bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getY());
+					bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getZ());
+					bsOut.Write(players.at(id)->getNodo()->getRotation().X);
+					bsOut.Write(players.at(id)->getNodo()->getRotation().Y);
+					bsOut.Write(players.at(id)->getNodo()->getRotation().Z);
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+				}
+
+				clientes.at(id).prediccion = prediccionAux;
+				
+			}
+			//server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+
+			break;
+
+		case ID_PLAYER_STATE:
+			int estado1, estado2, estado3, estado4;
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(estado1);
+			bsIn.Read(estado2);
+			bsIn.Read(estado3);
+			bsIn.Read(estado4);
+			bsIn.Read(id);
+			if(id == numPlayers) id--;  //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
+			//player[id]->setEstados(estado1, estado2, estado3, estado4);
+
+			typeID = ID_PLAYER_STATE;
+			bsOut.Write(typeID);
+			bsOut.Write(estado1);
+			bsOut.Write(estado2);
+			bsOut.Write(estado3);
+			bsOut.Write(estado4);
+			bsOut.Write(id);
+			
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+			break;
+
+		case ID_PLAYER_REFRESH:
+/*
+			int t;
+
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(t);
+			bsIn.Read(id);
+			if(id == numPlayers) id--;  //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
+			std::cout << "He cogido un objeto: " << id << std::endl;
+
+			//player[id]->setObj(t);
+
+			typeID = ID_PLAYER_SET_OBJECT;
+			bsOut.Write(typeID);
+			bsOut.Write(t);
+			bsOut.Write(id);
+
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+			*/
+			break;	
+
+		case ID_PLAYER_THROW_OBJECT:
+/*
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);
+			if(id == numPlayers) id--; //Este caso solo se da si se ha eliminado un jugador en este conjunto de paquetes;
+
+			//player[id]->setObj(0);
+
+			typeID = ID_PLAYER_THROW_OBJECT;
+			bsOut.Write(typeID);
+			bsOut.Write(id);
+
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+			*/
+			break;
+	
+		case ID_PLAYER_DISCONNECT:
+			std::cout << "Borrando player\n";
+			int playerDisconnect;
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(playerDisconnect);
+			std::cout << "Jugador eliminado: " << playerDisconnect << " / " <<numPlayers << std::endl;
+			clientes.erase(clientes.begin()+playerDisconnect);
+			//playerDisconnection(playerDisconnect);
+			if(started){
+				//Borrar players tambien
+
+			}
+			typeID = ID_LOAD_CURRENT_CLIENTS;
+			numConnections=10;
+			server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+			param=numConnections;
+			std::cout << "Numero de conexiones actuales: " << param << std::endl;
+			typeID = ID_LOAD_CURRENT_CLIENTS;
+			bsOut.Write(typeID);
+			bsOut.Write(param);
+			for(int i = 0; i<clientes.size(); i++){
+				paramRakString = clientes.at(i).ip.c_str();
+				bsOut.Write(paramRakString);
+				bsOut.Write(clientes.at(i).tipoCorredor);
+				bsOut.Write(clientes.at(i).ready);
+			}
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			
+			std::cout << "Jugador Borrado\n";
+
+			break;
 		
             default:
                 
@@ -652,33 +712,28 @@ void Server::refreshServer()
     
     GestorJugadores *jugadores = GestorJugadores::getInstancia();
     players = jugadores->getJugadores();
+	EstadosJugador *estados;
+		
     typeID = ID_REFRESH_SERVER;
     RakNet::BitStream bsOut;
     
     bsOut.Write(typeID);
     
     for(int i = 0; i<players.size(); i++){
-        btVector3 position = players.at(i)->getRigidBody()->getCenterOfMassPosition();
-        
-        pos[0] = position.getX();
-        pos[1] = position.getY();
-        pos[2] = position.getZ();
-        
-        
-        ori[0] = players.at(i)->getNodo()->getRotation().X;
-        ori[1] = players.at(i)->getNodo()->getRotation().Y;
-        ori[2] = players.at(i)->getNodo()->getRotation().Z;
-        
-        tipoObj = players.at(i)->getTipoObj();
-        
-        bsOut.Write(pos[0]);
-        bsOut.Write(pos[1]);
-        bsOut.Write(pos[2]);
-        bsOut.Write(ori[0]);
-        bsOut.Write(ori[1]);
-        bsOut.Write(ori[2]);
-        bsOut.Write(tipoObj);
         bsOut.Write(i);
+		estados = players.at(i)->getEstados();
+		
+		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getX());
+		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getY());
+		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getZ());
+		bsOut.Write(players.at(i)->getNodo()->getRotation().X);
+		bsOut.Write(players.at(i)->getNodo()->getRotation().Y);
+		bsOut.Write(players.at(i)->getNodo()->getRotation().Z);
+		bsOut.Write(estados->getEstadoMovimiento());
+		bsOut.Write(estados->getDireccionMovimiento());
+		bsOut.Write(estados->getEstadoObjeto());
+		bsOut.Write(estados->getEstadoCoche());
+		bsOut.Write(estados->getEstadoCarrera());
     }
     //std::cout << "Control: " << controlPlayer << std::endl;
     

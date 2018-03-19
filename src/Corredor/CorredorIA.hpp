@@ -11,7 +11,7 @@
 using namespace std;
 typedef enum {NADA1,ACELERAR,FRENAR,ACELERARGIRARDERECHA,ACELERARGIRARIZQUIERDA,ACELERARGIRARFUERTEDERECHA,ACELERARGIRARFUERTEIZQUIERDA,
 FRENARGIRARFUERTEDERECHA,FRENARGIRARFUERTEIZQUIERDA,
-DISTANCIAOBJETIVOCAJA,DISTANCIAOBJETIVOENEMIGO,DISTANCIAOBJETIVOTURBO,SEGUIRWAYPOINT,USAROBJETO} acciones_IA;
+DISTANCIAOBJETIVOCAJA,DISTANCIAOBJETIVOENEMIGO,DISTANCIAOBJETIVOTURBO,SEGUIRWAYPOINT,USAROBJETO,USARHABILIDAD} acciones_IA;
 
 
 class CorredorIA : public Corredor
@@ -48,6 +48,9 @@ class CorredorIA : public Corredor
 	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
 	bool caja,turbo,enemigo,Vision,Objeto;
 	bool Waypoint;
+	bool enemigoatras;
+	bool enemigolados;
+	bool habilidad;
 
 	btScalar distanciaCaja,distanciaTurbo,distanciaEnemigo;
 

@@ -18,6 +18,7 @@ public:
 
 private:
 
+  int cont2;
   int cont;
 	int tipoHabilidad;
   bool habilidadActiva;

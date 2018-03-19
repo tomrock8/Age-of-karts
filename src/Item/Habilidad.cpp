@@ -6,7 +6,7 @@ float alturaLanzamiento,int idNodo) : Item(posicion,escala,masa,tiempoDesctrucci
 	tipoHabilidad = tipo;
 	NodoVehiculo = n;
 	cont=0;
-
+	cont2=10;
 	switch(tipoHabilidad){
 
 		case 1:
@@ -20,7 +20,7 @@ float alturaLanzamiento,int idNodo) : Item(posicion,escala,masa,tiempoDesctrucci
 		break;
 
 		case 3:
-		objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadGladiador.obj");
+		objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/onda.obj");
 		nombre = "HabilidadGladiador";
 		break;
 
@@ -112,7 +112,18 @@ void Habilidad::movimiento(){
 
 		case 3: // GLADIADOR
 
+		nodo->setPosition(vector3df(NodoVehiculo->getPosition().X,NodoVehiculo->getPosition().Y+2,NodoVehiculo->getPosition().Z));
 		
+		if(nodo->getScale().X<=10)
+		nodo->setScale(vector3df(nodo->getScale().X +1,nodo->getScale().Y,nodo->getScale().Z +1));
+		
+		trans.setOrigin(btVector3(NodoVehiculo->getPosition().X ,NodoVehiculo->getPosition().Y-cont2+2,NodoVehiculo->getPosition().Z ));
+		quaternion.setEulerZYX(NodoVehiculo->getRotation().X * PI/180,NodoVehiculo->getRotation().Y * PI/180,NodoVehiculo->getRotation().Z * PI/180);
+		trans.setRotation(quaternion);
+		rigidBody->setCenterOfMassTransform(trans);
+		
+		if(cont2!=0)
+		cont2--;
 		
 		break;
 

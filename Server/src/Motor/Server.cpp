@@ -92,6 +92,9 @@ void Server::DebugServerInfo()
     for (unsigned int i = 0; i < sockets.Size(); i++)
     {
         std::cout << i + 1 << ". " << sockets[i]->GetBoundAddress().ToString(true) << std::endl;
+        cout<<"iPV4: "<<server->GetInternalID(RakNet::UNASSIGNED_SYSTEM_ADDRESS,0).ToString(true)<<endl;
+        cout<<"iPV42: "<<server->GetInternalID(sockets[i]->GetBoundAddress(),0).ToString(true)<<endl;
+        cout<<"iPV62: "<<server->GetExternalID(sockets[i]->GetBoundAddress()).ToString(true)<<endl;
         numSockets++;
     }
     
@@ -101,6 +104,7 @@ void Server::DebugServerInfo()
     for (unsigned int i = 0; i < server->GetNumberOfAddresses(); i++)
     {
         std::cout << i + 1 << ". " << server->GetLocalIP(i);
+        
         numIPs++;
     }
     
@@ -116,6 +120,9 @@ void Server::ReceivePackets()
 {
 
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+    DebugServerInfo();
+
+    
 	//bucle donde se reciben los distintos paquetes, se tratan y se deasignan
 	for (p = server->Receive(); p; server->DeallocatePacket(p), p = server->Receive())
 	{

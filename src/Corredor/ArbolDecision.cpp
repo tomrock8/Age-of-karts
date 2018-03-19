@@ -10,33 +10,33 @@ ArbolDecision::ArbolDecision(){
 
 
 
- void ArbolDecision::nuevoNodoDecision(int nodopadre,tipo_nodo tipodecision,tipo_parametro parametro,int valor,bool booleano){
+ void ArbolDecision::nuevoNodoDecision(int nodopadre,int idnodo,tipo_nodo tipodecision,tipo_parametro parametro,int valor,bool booleano){
 
     if(!NodoRuta){
     NodoDecision *nodo = new NodoDecision();
-    nodo->decision(arrayNodos,nodopadre,tipodecision,parametro,valor,booleano);
+    nodo->decision(arrayNodos,nodopadre,idnodo,tipodecision,parametro,valor,booleano);
     NodoRuta = nodo;
     }else{
     NodoDecision *nodo = new NodoDecision();
-    nodo->decision(arrayNodos,nodopadre,tipodecision,parametro,valor,booleano);   
+    nodo->decision(arrayNodos,nodopadre,idnodo,tipodecision,parametro,valor,booleano);   
     }
 
  }
 
-void ArbolDecision::nuevoNodoAccion(int nodopadre,int tipoaccion){
+void ArbolDecision::nuevoNodoAccion(int nodopadre,int idnodo,int tipoaccion){
 
     if(!NodoRuta){
     NodoDecision *nodo = new NodoDecision();
-    nodo->accion(arrayNodos,nodopadre,tipoaccion);
+    nodo->accion(arrayNodos,nodopadre,idnodo,tipoaccion);
     NodoRuta = nodo;
     }else{
     NodoDecision *nodo = new NodoDecision();
-    nodo->accion(arrayNodos,nodopadre,tipoaccion);   
+    nodo->accion(arrayNodos,nodopadre,idnodo,tipoaccion);   
     }
 
  }
 
-int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj){
+int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj,int jugador){
 
   
 
@@ -47,7 +47,7 @@ int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj){
     while(!check && cont!=NodoRuta->getHijos().size()){
         //cout<<"HOLA"<<endl;
 		if (!NodoRuta->getHijos().at(cont)->getAccionB()){
-			check = NodoRuta->getHijos().at(cont)->getConsulta(arrayboleanos, obj);
+			check = NodoRuta->getHijos().at(cont)->getConsulta(arrayboleanos, obj,jugador);
             
         }else{
             check = true;
@@ -66,7 +66,7 @@ int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj){
 
     NodoRuta = NodoRuta->getHijos().at(cont);
     //llamamos al arbol recursivamente para que vaya navegando entre sus nodos 
-    recorrerArbol(arrayboleanos,obj);   
+    recorrerArbol(arrayboleanos,obj,jugador);   
 
     }else{
 

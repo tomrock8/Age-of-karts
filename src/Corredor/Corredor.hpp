@@ -159,7 +159,8 @@ protected:
 	int timerTeledirigido;
 	int timerAceite;
 	
-	
+	bool habilidadLanzada;
+	float tiempoHabilidad;
 	float tiempoVuelta;
 	float tiempoVueltaTotal;
 	//objetos estaticos y dinamicos

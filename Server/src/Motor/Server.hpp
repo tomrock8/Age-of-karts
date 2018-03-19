@@ -3,6 +3,8 @@
 #include "GestorJugadores.hpp"
 #include <ctime>
 #include <vector>
+#include <fstream>
+#include <string>
 
 #define MAX_CLIENTS 4
 #define MAX_PLAYERS 6

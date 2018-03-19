@@ -123,13 +123,13 @@ void EscenaJuego::init() {
 				}
 				
 			}
-			if(i == controlPlayer){
+		}
+		else {
+			if (i == controlPlayer) {
 				jugador = new CorredorJugador("assets/coche.obj", pos2[i], tj);
-			}else
+			}
+			else
 				jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
-			jugador->setID(i);
-			pj.push_back(jugador);
-			jugadores->aumentarJugadores();
 		}
 		jugador->setID(i);
 		pj.push_back(jugador);

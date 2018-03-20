@@ -28,6 +28,9 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	tiempoVuelta=0.f;
 	tiempoVueltaTotal=0.f;
 	tiempoHabilidad=0;
+	inmunidad=false;
+	tiempoInmunidad=5; // 5 segundos inmunidad
+	timerInmunidad=0;
 	habilidadLanzada=false;
 	tipojugador=tipo;
 	tiempoTurbo=0;
@@ -373,6 +376,10 @@ float Corredor::getMaxVuetas(){
 	return maxvueltas;
 }
 
+bool Corredor::getInmunidad(){
+	return inmunidad;
+}
+
 //-----------------------------//
 //---------METODOS SET---------//
 //-----------------------------//
@@ -641,8 +648,9 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor,int tiempo) {
 
 void Corredor::comprobarTurbo(){
 
-	Timer *time = Timer::getInstancia();
+	
 	if (turboActivado) {
+		Timer *time = Timer::getInstancia();
 		acelerar();
 		if (time->getTimer() - timerTurbo >= tiempoTurbo) {
 			
@@ -653,6 +661,42 @@ void Corredor::comprobarTurbo(){
 
 }
 
+
+void Corredor::setInmunidad(bool activo){
+
+	inmunidad=activo;
+
+	if(inmunidad){
+		Timer *time = Timer::getInstancia();
+		timerInmunidad = time->getTimer();
+	}
+
+}
+
+void Corredor::comprobarInmunidad(){
+
+	
+	if(inmunidad){
+		estado->setEstadoInmunidad(INMUNIDAD);
+		Timer *time = Timer::getInstancia();
+		if (time->getTimer() - timerInmunidad >= tiempoInmunidad) {
+			
+			inmunidad=false;
+			estado->setEstadoInmunidad(NORMAL);
+		}
+	}
+
+}
+
+void Corredor::setHabilidad(bool activo){
+
+	habilidadLanzada=activo;
+	if(habilidadLanzada)
+	estado->setEstadoHabilidad(CONHABILIDAD);
+	else
+	estado->setEstadoHabilidad(SINHABILIDAD);
+
+}
 
 void Corredor::SetFuerzaVelocidad(int turbo)
 {
@@ -1107,7 +1151,7 @@ void Corredor::update()
 	}
 
 	comprobarTurbo();
-
+	comprobarInmunidad();
 
 	if (estado->getEstadoCarrera()!=PARRILLA){
 		movimiento();
@@ -1295,7 +1339,8 @@ void Corredor::lanzarHabilidad(){
 		posicion.setY(posicion.getY()+alt);
 		habilidadJugador = new Habilidad(2,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
-		habilidadJugador->setLanzado(true);	
+		habilidadJugador->setLanzado(true);
+		
 		break;
 
 		case GLADIADOR:
@@ -1304,6 +1349,7 @@ void Corredor::lanzarHabilidad(){
 		habilidadJugador = new Habilidad(3,cuboNodo,posicion,escala,masa,tiempoDestruccion,CILINDRO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);
+		
 		break;
 
 		case CHINO:
@@ -1317,7 +1363,8 @@ void Corredor::lanzarHabilidad(){
 		habilidadJugador = new Habilidad(4,cuboNodo,posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);	
-		setTurbo(true, true, FuerzaMaxima*2,tiempoDestruccion/3.5);
+		setTurbo(true, true, FuerzaMaxima*2,tiempoDestruccion/3.6);
+		
 		
 		break;
 
@@ -1325,6 +1372,7 @@ void Corredor::lanzarHabilidad(){
 
 
 		}
+		setHabilidad(true);
 		items.push_back(habilidadJugador);
 
 		pista->setItems(items);

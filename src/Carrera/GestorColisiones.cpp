@@ -44,8 +44,6 @@ void GestorColisiones::ComprobarColisiones()
 			
 			if (JugadorWaypoint())continue;
 			
-			if (objetoDestruible())continue;
-			
 			if (HabilidadesJugadores())continue;
 
 			if(Escudoitems())break;
@@ -309,7 +307,15 @@ bool GestorColisiones::HabilidadesJugadores(){
 			if(idPadreUlti==idA)
 			return false;
 			else{
+				if(!pj1.at(idA)->getInmunidad()){
 				pj1.at(idA)->resetFuerzas();
+				pj1.at(idA)->setInmunidad(true);
+				}
+				else{
+
+				}
+
+
 				return true;
 			}
 
@@ -336,7 +342,13 @@ bool GestorColisiones::HabilidadesJugadores(){
 			if(idPadreUlti==idB)
 			return false;
 			else{
+				if(!pj1.at(idB)->getInmunidad()){
 				pj1.at(idB)->resetFuerzas();
+				pj1.at(idB)->setInmunidad(true);
+				}
+				else{
+					
+				}
 				return true;
 			}
 
@@ -598,9 +610,7 @@ bool GestorColisiones::JugadorEstatico()
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
 				if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
 					if (nodoA->getID()==pj1.at(j)->getID()){ 
-						if (pj1.at(j)->getProteccion()==true) {
-							cout << "estoy protegido" << endl;
-							pj1.at(j)->setProteccion(false);
+						if (pj1.at(j)->getInmunidad()) {
 							protegido = true;
 						}
 					}
@@ -611,27 +621,29 @@ bool GestorColisiones::JugadorEstatico()
 			//t->setFrenadaActivo(pj1Col, true);
 			int idB = nodoB->getID();
 			for (int i=0;i<items.size();i++){
-					cout << "ENTRO 1\n";
+				
 				if (items.at(i)->getID() == idB)
 				{
 					if(!protegido)
 					{
-					cout << "ENTRO2\n";
+				
 						if (strcmp("Aceite", items.at(i)->getNombre()) == 0){	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
 							aceite = true;
 						}
 						for(int j = 0; j< jugadores->getNumJugadores(); j++){
-								//if(pj1.at(j)!=NULL)
+						
 							if (nodoA->getID()== pj1.at(j)->getID()){
 								if(aceite)
 								{
 									pj1.at(j)->setAceite();
+									
 								}
 								else
 								{
-									cout << "Caja Falsa\n";
+									
 									pj1.at(j)->resetFuerzas();
 								}
+								pj1.at(j)->setInmunidad(true);
 							}
 						}
 					}
@@ -639,12 +651,7 @@ bool GestorColisiones::JugadorEstatico()
 					items.at(i)->Delete();
 					items.erase(items.begin()+i);
 					pista->setItems(items);
-					cout << "ENTRO\n";
-					//}
-					//else { 
-					//	item->setColision(true);
-					//}
-
+				
 					return true;
 				}
 			}
@@ -708,9 +715,7 @@ bool GestorColisiones::JugadorProyectil()
 			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
 				if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
 					if (nodoA->getID()==pj1.at(j)->getID()){ 
-						if (pj1.at(j)->getProteccion()==true) {
-							cout << "estoy protegido " << endl;
-							pj1.at(j)->setProteccion(false);
+						if (pj1.at(j)->getInmunidad()) {
 							protegido = true;
 							break;
 						}
@@ -723,13 +728,14 @@ bool GestorColisiones::JugadorProyectil()
 			{
 				if (items.at(i)->getID() == idB)
 				{
-					cout << "Colisiono\n";
+				
 					if(!protegido)
 					{
 						for(int j = 0; j< jugadores->getNumJugadores(); j++){
 							//if(pj1.at(j)!=NULL)
 							if (nodoA->getID()== pj1.at(j)->getID()){
 								pj1.at(j)->resetFuerzas();
+								pj1.at(j)->setInmunidad(true);
 							}
 						}
 					}
@@ -789,39 +795,4 @@ bool GestorColisiones::JugadorCaja(vector<Caja*> cajas)
 	return colision;
 }
 
-//
-// Comprobar colisiones entre proyectil y objeto destruible
-//
-bool GestorColisiones::objetoDestruible()
-{
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	Pista *pista = Pista::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
-	vector<Item *> items = pista->getItems();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
-	bool colision = false;
 
-	if (strcmp("Destruible", nodoA->getName()) == 0)
-	{
-		if (strcmp("Proyectil", nodoB->getName()) == 0)
-		{
-			colision = true;
-			//cout << "Destruible - Item\n";
-			int idB = nodoB->getID();
-			for (int i=0;i<items.size();i++)
-			{
-				//cout << "NodoB: " << idB << " == NodoItem: " << item->getNodo()->getID() << endl;
-				if (items.at(i)->getID() == idB)
-				{
-					//cout << "Entro\n";
-					items.at(i)->Delete();
-					items.erase(items.begin()+i);
-					pista->setItems(items);	
-
-					return true;
-				}
-			}
-		}
-	}
-	return colision;
-}

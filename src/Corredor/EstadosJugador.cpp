@@ -5,6 +5,8 @@ EstadosJugador::EstadosJugador(){
     direccion=RECTO;
     objeto=NADA;
     estadoCoche=POR_DEFECTO;
+	Inmunidad=NORMAL;
+	habilidad=SINHABILIDAD;
 }
 void EstadosJugador::update(){
    /*
@@ -226,4 +228,51 @@ void EstadosJugador::setEstadoCarrera(int carrera){
 }
 estado_carrera EstadosJugador::getEstadoCarrera(){
 	return estadoCarrera;
+}
+
+
+void EstadosJugador::setEstadoInmunidad(estado_inmunidad inmunidad){
+	Inmunidad=inmunidad;
+}
+
+void EstadosJugador::setEstadoInmunidad(int inmunidad){
+
+	switch (inmunidad){
+
+        case 0:
+        Inmunidad = NORMAL;
+		break;
+		case 1:
+        Inmunidad = INMUNIDAD;
+		break;
+		
+
+	}
+}
+
+estado_inmunidad EstadosJugador::getEstadoInmunidad(){
+	return Inmunidad;
+}
+
+
+
+void EstadosJugador::setEstadoHabilidad(estado_habilidad Habilidad){
+	habilidad=Habilidad;
+}
+void EstadosJugador::setEstadoHabilidad(int Habilidad){
+
+	switch (Habilidad){
+
+        case 0:
+        habilidad = SINHABILIDAD;
+		break;
+		case 1:
+        habilidad = CONHABILIDAD;
+		break;
+		
+
+	}
+}
+estado_habilidad EstadosJugador::getEstadoHabilidad(){
+	return habilidad;
 }

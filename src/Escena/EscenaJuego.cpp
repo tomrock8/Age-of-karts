@@ -249,6 +249,16 @@ void EscenaJuego::update() {
 		if(items.at(i)->getLanzado()){
 
 			if(items.at(i)->update()){
+			if(strcmp("HabilidadPirata", items.at(i)->getNombre()) == 0
+			|| strcmp("HabilidadVikingo", items.at(i)->getNombre()) == 0
+			|| strcmp("HabilidadGladiador", items.at(i)->getNombre()) == 0
+			|| strcmp("HabilidadChino", items.at(i)->getNombre()) == 0){
+
+				for(int i=0;i< pj.size();i++){
+					if(pj.at(i)->getID() == items.at(i)->getIDPadre())
+						pj.at(i)->setHabilidad(false);
+				}
+			}	
 			items.erase(items.begin()+i);
 			break;
 			

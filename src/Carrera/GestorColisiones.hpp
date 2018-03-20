@@ -25,7 +25,6 @@ public:
   void ComprobarColisiones();
   bool JugadorCaja(vector<Caja*> cajas);
   bool JugadorTurbo();
-  bool objetoDestruible();
   bool JugadorEstatico();
   bool JugadorWaypoint();
   bool JugadorProyectil();

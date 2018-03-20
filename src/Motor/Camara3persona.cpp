@@ -65,6 +65,15 @@ btRigidBody *Camara3persona::inicializarFisicas()
 void Camara3persona::moveCamera(Corredor * pj1){
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
 	vector3df RelativeToCar;
+
+	btTransform transform = pj1->getRigidBody()->getCenterOfMassTransform();
+	btVector3 posicion = transform.getOrigin();
+	btQuaternion rotacion = transform.getRotation();
+	btVector3 orientacion = pj1->getVectorDireccion();
+	float altura = 8;
+	float distanciaX=20;
+	float distanciaZ=20;
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && XCamera3 >= 0) {
 		if (XCamera3 < 30) {
 			XCamera3++;
@@ -85,12 +94,11 @@ void Camara3persona::moveCamera(Corredor * pj1){
 		XCamera3--;
 		ZCamera3 -= 0.5;
 	}
-	RelativeToCar.X = XCamera3;
-	RelativeToCar.Y = 5;
-	RelativeToCar.Z = ZCamera3;
-	(XCamera3, 5, ZCamera3);
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::L))
-		RelativeToCar.Z=-ZCamera3;
+	//posicion.setX(XCamera3+posicion.getX());
+	//posicion.setY(5+posicion.getY());
+	//posicion.setZ(ZCamera3+ posicion.getZ());
+	
+
 
 	float incremento = 0.05;
 
@@ -109,8 +117,24 @@ void Camara3persona::moveCamera(Corredor * pj1){
 			auxX=0;
 		}
 	}
-	RelativeToCar.X += auxX;
+/*
+	if(orientacion.getZ()>=0 && orientacion.getX()>=0){
+	distanciaX += auxX;
+	distanciaZ -= auxX;
+	}else if(orientacion.getZ()>=0 && orientacion.getX()<=0){
+	distanciaX -= auxX;
+	distanciaZ += auxX;
+	}else if(orientacion.getZ()<=0 && orientacion.getX()>=0){
+	distanciaX -= auxX;
+	distanciaZ += auxX;
+	}else if(orientacion.getZ()<=0 && orientacion.getX()<=0){
+	distanciaX -= auxX;
+	distanciaZ += auxX;
+	}
 
+	cout<<"EJEX::::::::"<< orientacion.getX()<<"    " <<"EJEZ:::::::"<< orientacion.getZ()<< endl;
+
+*/
 	vector3df RelativeToCarTarget(0,1,0);
 		
 	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCar);
@@ -118,8 +142,14 @@ void Camara3persona::moveCamera(Corredor * pj1){
 	RelativeToCar.Y = 5;
 	RelativeToCarTarget.Y = 1;
 	if (!pj1->getAceiteActivado()){
- 		camera->setPosition(RelativeToCar); 
-		camera->setTarget(RelativeToCarTarget);
+ 		
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::L)){
+		camera->setPosition(vector3df(posicion.getX() + orientacion.getX()*distanciaX, posicion.getY()+altura,posicion.getZ() + orientacion.getZ()*distanciaZ)); 	
+		}else{
+	 
+		camera->setPosition(vector3df(posicion.getX() - orientacion.getX()*distanciaX, posicion.getY()+altura,posicion.getZ() - orientacion.getZ()*distanciaZ)); 
+		}
+		camera->setTarget(vector3df(posicion.getX(),posicion.getY(),posicion.getZ()));
 	}else{
 		camera->setPosition(camera->getPosition());
 		camera->setTarget(camera->getTarget());

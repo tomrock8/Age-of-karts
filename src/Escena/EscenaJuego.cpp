@@ -279,11 +279,11 @@ void EscenaJuego::update() {
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 	pj = jugadores->getJugadores();
 	switch(tipoCamara){
-		case 0:		//Camara 3a persona libre
-			camara->moveCameraControl(pj.at(controlPlayer)); 
-		break;
-		case 1:		//Camara 3a persona fija
+		case 0:		//Camara 3a persona fija
 			camara->moveCamera(pj.at(controlPlayer));
+		break;
+		case 1:		//Camara 3a persona libre 
+			camara->moveCameraControl(pj.at(controlPlayer)); 
 		break;
 		case 2:		//Camara 1a persona
 			camara->movefpsCamera(pj.at(controlPlayer));
@@ -437,7 +437,7 @@ void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	vector<btRigidBody *> objetos = bullet->getObjetos();
-	mundo->stepSimulation(TDeltaTime * 0.01f, 1);
+	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
 	int c = 0;
 	for (int i=0;i<objetos.size();i++){
 		c++;

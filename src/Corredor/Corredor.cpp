@@ -29,7 +29,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	tiempoVueltaTotal=0.f;
 	tiempoHabilidad=0;
 	inmunidad=false;
-	tiempoInmunidad=5; // 5 segundos inmunidad
+	tiempoInmunidad=2; // 5 segundos inmunidad
 	timerInmunidad=0;
 	habilidadLanzada=false;
 	tipojugador=tipo;
@@ -678,6 +678,7 @@ void Corredor::comprobarInmunidad(){
 	
 	if(inmunidad){
 		estado->setEstadoInmunidad(INMUNIDAD);
+		resetFuerzas();
 		Timer *time = Timer::getInstancia();
 		if (time->getTimer() - timerInmunidad >= tiempoInmunidad) {
 			

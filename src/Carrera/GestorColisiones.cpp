@@ -56,6 +56,7 @@ void GestorColisiones::ComprobarColisiones()
 			
 			if (JugadorEstatico())break;
 			
+			if(habilidadVShabilidad())continue;
 			//if (JugadorItemTeledirigido())continue;
 
 		}
@@ -149,6 +150,142 @@ if (strcmp("Estatico", nodoB->getName()) == 0){
 	return false;
 }
 
+
+
+bool GestorColisiones::habilidadVShabilidad(){
+
+
+	Pista *pista = Pista::getInstancia();
+	vector<Item *> items = pista->getItems();
+	
+	
+	if(strcmp("HabilidadPirata", nodoA->getName()) == 0 ){
+	if (strcmp("HabilidadVikingo", nodoB->getName()) == 0 
+	|| strcmp("HabilidadGladiador", nodoB->getName()) == 0 
+	|| strcmp("HabilidadChino", nodoB->getName()) == 0){
+
+		int idA = nodoA->getID();
+		int idB = nodoB->getID();
+		
+			for (int j=0;j<items.size();j++){
+				if(items.at(j)->getID() == idA){
+				items.at(j)->Delete();
+				items.erase(items.begin()+j);
+				}
+			}
+				
+				for (int i=0;i<items.size();i++){
+					if(items.at(i)->getID() == idB){
+					items.at(i)->Delete();
+					items.erase(items.begin()+i);
+				
+				}
+				}
+				
+				pista->setItems(items);
+				return true;	
+			
+
+			}
+	}
+
+	if(strcmp("HabilidadVikingo", nodoA->getName()) == 0 ){
+	if (strcmp("HabilidadPirata", nodoB->getName()) == 0 
+	|| strcmp("HabilidadGladiador", nodoB->getName()) == 0 
+	|| strcmp("HabilidadChino", nodoB->getName()) == 0){
+
+		int idA = nodoA->getID();
+		int idB = nodoB->getID();
+		
+			for (int j=0;j<items.size();j++){
+				if(items.at(j)->getID() == idA){
+				items.at(j)->Delete();
+				items.erase(items.begin()+j);
+				}
+			}
+				
+				for (int i=0;i<items.size();i++){
+					if(items.at(i)->getID() == idB){
+					items.at(i)->Delete();
+					items.erase(items.begin()+i);
+				
+				}
+				}
+				
+				pista->setItems(items);
+				return true;	
+			
+
+			}
+	}
+
+	if(strcmp("HabilidadGladiador", nodoA->getName()) == 0 ){
+	if (strcmp("HabilidadPirata", nodoB->getName()) == 0 
+	|| strcmp("HabilidadVikingo", nodoB->getName()) == 0 
+	|| strcmp("HabilidadChino", nodoB->getName()) == 0){
+
+		int idA = nodoA->getID();
+		int idB = nodoB->getID();
+		
+			for (int j=0;j<items.size();j++){
+				if(items.at(j)->getID() == idA){
+				items.at(j)->Delete();
+				items.erase(items.begin()+j);
+				}
+			}
+				
+				for (int i=0;i<items.size();i++){
+					if(items.at(i)->getID() == idB){
+					items.at(i)->Delete();
+					items.erase(items.begin()+i);
+				
+				}
+				}
+				
+				pista->setItems(items);
+				return true;	
+			
+
+			}		
+	}
+	
+	if(strcmp("HabilidadChino", nodoA->getName()) == 0 ){
+	if (strcmp("HabilidadPirata", nodoB->getName()) == 0 
+	|| strcmp("HabilidadVikingo", nodoB->getName()) == 0 
+	|| strcmp("HabilidadGladiador", nodoB->getName()) == 0){
+
+			
+		int idA = nodoA->getID();
+		int idB = nodoB->getID();
+
+			for (int j=0;j<items.size();j++){
+				if(items.at(j)->getID() == idA){
+				items.at(j)->Delete();
+				items.erase(items.begin()+j);
+				}
+			}
+				
+				for (int i=0;i<items.size();i++){
+					if(items.at(i)->getID() == idB){
+					items.at(i)->Delete();
+					items.erase(items.begin()+i);
+				
+				}
+				}
+				
+				pista->setItems(items);
+				return true;	
+			
+
+			}			
+
+}
+	
+	
+	
+}
+
+
 bool GestorColisiones::HabilidadesJugadores(){
 	Pista *pista = Pista::getInstancia();
 	vector<Item *> items = pista->getItems();
@@ -207,9 +344,6 @@ bool GestorColisiones::HabilidadesJugadores(){
 
 	}
 	
-
-
-
 	return false;
 }
 
@@ -257,12 +391,13 @@ bool GestorColisiones::Escudoitems(){
 				items.at(idEscudo)->Delete();
 				items.erase(items.begin()+idEscudo);
 				
-
+				if(strcmp("Estatico", nodoB->getName()) == 0 || strcmp("Proyectil", nodoB->getName()) == 0){
 				for (int i=0;i<items.size();i++){
 					if(items.at(i)->getID() == idB){
 					items.at(i)->Delete();
 					items.erase(items.begin()+i);
 				
+				}
 				}
 				}
 				pista->setItems(items);
@@ -304,12 +439,13 @@ if (strcmp("Escudo", nodoB->getName()) == 0){
 				
 				items.at(idEscudo)->Delete();
 				items.erase(items.begin()+idEscudo);
-				
+				if(strcmp("Estatico", nodoA->getName()) == 0 || strcmp("Proyectil", nodoA->getName()) == 0){
 				for (int i=0;i<items.size();i++){
 					if(items.at(i)->getID() == idA){
 					items.at(i)->Delete();
 					items.erase(items.begin()+i);
 					
+				}
 				}
 				}
 				pista->setItems(items);

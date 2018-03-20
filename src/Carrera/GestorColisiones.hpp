@@ -33,6 +33,7 @@ public:
   bool Escudoitems();
   bool HabilidadesItems();
   bool HabilidadesJugadores();
+  bool habilidadVShabilidad();
   void IniciarTimer();
 
   //bool JugadorItemTeledirigido();

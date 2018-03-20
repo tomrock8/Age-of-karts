@@ -420,18 +420,19 @@ int Client::ReceivePackets()
 				bsIn.Read(param2);
 				bsIn.Read(reset);
 				bsIn.Read(lanzar);
-                               // cout<<"id: "<<id<<"---"<<"players.size(): "<<players.size()<<endl;
-                                if (players.size()>id && id!=-1){
-                                    players.at(id)->getEstados()->setEstadoMovimiento(param);
-                                    players.at(id)->getEstados()->setDireccionMovimiento(param2);
-                                    if(reset){
-                                            players.at(id)->recolocarWaypoint();
-                                    }
-                                    if(lanzar){
-                                            if(players.at(id)->getTipoObj() != 0)
-                                                    players.at(id)->usarObjetos();
-                                    }
-                                }
+				// cout<<"id: "<<id<<"---"<<"players.size(): "<<players.size()<<endl;
+				//if(id != controlPlayer)
+					if (players.size()>id && id!=-1){
+						players.at(id)->getEstados()->setEstadoMovimiento(param);
+						players.at(id)->getEstados()->setDireccionMovimiento(param2);
+						if(reset){
+								players.at(id)->recolocarWaypoint();
+						}
+						if(lanzar){
+								if(players.at(id)->getTipoObj() != 0)
+										players.at(id)->usarObjetos();
+						}
+					}
 				break;
 			
 			//Caso desactualizado: Spawn de un jugador estando la partida empezada

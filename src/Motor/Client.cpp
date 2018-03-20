@@ -508,7 +508,7 @@ int Client::ReceivePackets()
 
 			//Actualiza la posicion de los jugadores para evitar la desincronizacion con el servidor
 			case ID_PLAYER_MOVE:
-				if (netLoaded)
+				if (started)
 				{
 					float *pos = new float[3];
 					float *ori = new float[3];
@@ -583,7 +583,7 @@ int Client::ReceivePackets()
 			// El servidor manda la posicion de cada uno de los clientes para evitar la desincronizacion
 			case ID_REFRESH_SERVER:
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-				if(netLoaded){
+				if(started){
 					float *pos = new float[3];
 					float *ori = new float[3];
 					for(int i=0; i<players.size(); i++){

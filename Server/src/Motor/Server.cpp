@@ -438,7 +438,7 @@ void Server::ReceivePackets()
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;	
 		case ID_SEND_KEY_PRESS:
-			//std::cout << "ID_SEND_KEY_PRESS\n";
+			std::cout << "ID_SEND_KEY_PRESS\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			//bsIn.Read(param);
@@ -487,7 +487,7 @@ void Server::ReceivePackets()
 
 		case ID_PLAYER_MOVE:
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-			std::cout << "Entro a playerMove\n";
+			//std::cout << "Entro a playerMove\n";
 			bsIn.Read(param2);		//TIMESTAMP
 			bsIn.Read(id);			//CONTROLPLAYER
 			bsIn.Read(prediccionAux.posicion[0]); //POSICION ACTUAL
@@ -516,34 +516,34 @@ void Server::ReceivePackets()
 				if(paramFloat > diff || paramFloat < -diff){
 					parambool = true;
 				}
-				std::cout << "Posicion X: " << paramFloat << "\n";
+				//std::cout << "Posicion X: " << paramFloat << "\n";
 				paramFloat = players.at(id)->getRigidBody()->getCenterOfMassPosition().getY() - clientes.at(id).prediccion.posicion[1];
 				if(paramFloat > diff || paramFloat < -diff){
 					parambool = true;
 				}
-				std::cout << "Posicion Y: " << paramFloat << "\n";
+				//std::cout << "Posicion Y: " << paramFloat << "\n";
 				paramFloat = players.at(id)->getRigidBody()->getCenterOfMassPosition().getZ() - clientes.at(id).prediccion.posicion[2];
 				if(paramFloat > diff || paramFloat < -diff){
 					parambool = true;
 				}
-				std::cout << "Posicion Z: " << paramFloat << "\n";
+				//std::cout << "Posicion Z: " << paramFloat << "\n";
 				paramFloat = players.at(id)->getNodo()->getRotation().X - clientes.at(id).prediccion.rotacion[0];
 				if(paramFloat > diff || paramFloat < -diff){
-					std::cout << "Rotacion X\n";
+					//std::cout << "Rotacion X\n";
 					parambool = true;
 				}
 				paramFloat = players.at(id)->getNodo()->getRotation().Y - clientes.at(id).prediccion.rotacion[1];
 				if(paramFloat > diff || paramFloat < -diff){
-					std::cout << "Rotacion Y\n";
+					//std::cout << "Rotacion Y\n";
 					parambool = true;
 				}
 				paramFloat = players.at(id)->getNodo()->getRotation().Z - clientes.at(id).prediccion.rotacion[2];
 				if(paramFloat > diff || paramFloat < -diff){
-					std::cout << "Rotacion Z\n";
+					//std::cout << "Rotacion Z\n";
 					parambool = true;
 				}
 				if(parambool){
-					std::cout << "Envio correccion\n";
+					//std::cout << "Envio correccion\n";
 					prediccionAux.posicion[0] = players.at(id)->getRigidBody()->getCenterOfMassPosition().getX();
 					prediccionAux.posicion[1] = players.at(id)->getRigidBody()->getCenterOfMassPosition().getY();
 					prediccionAux.posicion[2] = players.at(id)->getRigidBody()->getCenterOfMassPosition().getZ();

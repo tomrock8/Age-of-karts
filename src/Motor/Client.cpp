@@ -104,8 +104,7 @@ el servidor tambien le manda dicha funcion al resto de clientes
 ========================================================================*/
 void Client::UpdateNetworkKeyboard()
 {
-
-	if (netLoaded)
+	if (started)
 	{
 		int estadoMovimiento = 0; 		//1 = Acelerar; 2 = frenar; 4 = Freno de mano; 5 = desacelerar
 		int direccionMovimiento = 0; 	// 1 = Girar izq; 2 = Girar dcha; 0 = recto

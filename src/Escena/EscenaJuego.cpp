@@ -330,8 +330,8 @@ void EscenaJuego::update() {
 			clock_t timediff = tiempoActual - tiempoRefresco;
 			float timediff_sec = ((float)timediff) / 100000;
 			//if (timediff_sec >= 0.01) {
-				client->PlayerMovement();
-				tiempoRefresco = clock();
+			client->PlayerMovement();
+			tiempoRefresco = clock();
 			//}
 			//client->PlayerAction();
 			client->UpdateNetworkKeyboard();

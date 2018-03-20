@@ -13,7 +13,7 @@ void CorredorRed::updateHijos(){
 }
 
 void CorredorRed::movimiento(){
-	std::cout << "Movimiento naranja \n";
+	//std::cout << "Movimiento naranja \n";
     //std::cout << "Entro\n";
     EstadosJugador *estados = this->getEstados();
 	int estadoMovimiento = estados->getEstadoMovimiento();

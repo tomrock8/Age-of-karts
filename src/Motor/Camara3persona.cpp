@@ -100,13 +100,13 @@ void Camara3persona::moveCamera(Corredor * pj1){
 	
 
 
-	float incremento = 0.05;
+	float incremento = 0.1;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-		if(auxX < 2)
+		if(auxX < 4)
 			auxX += incremento;
 	}else  if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-		if(auxX > -2)
+		if(auxX > -4)
 			auxX-= incremento;
 	}else{
 		if(auxX < -0.25){

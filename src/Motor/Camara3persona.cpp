@@ -11,13 +11,55 @@ Camara3persona::Camara3persona() {
 	YCamera1 = 10;
 	ZCamera1 = 20;
 	auxX=0;
-	auxZ=0;
+	rigidBody=inicializarFisicas();
+	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 }
 
 Camara3persona::~Camara3persona() {
 	cout << "\nENTRO AL DESTRUCTOR DE CAMARA\n";
 	//delete camera;
 	cout << "\nSALGO DEL DESTRUCTOR DE CAMARA\n";
+}
+
+btRigidBody *Camara3persona::inicializarFisicas()
+{
+	btVector3 escala(5,5,5);
+	btVector3 posicion(-10, 10, 31);
+	btScalar masa=btScalar(10);
+	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	btDynamicsWorld *mundo = bullet->getMundo();
+	//vector<btRigidBody *> objetos = bullet->getObjetos();
+	// Set the initial position of the object
+	btTransform Transform;
+	Transform.setIdentity();
+	
+	Transform.setOrigin(posicion);
+	MotionState = new btDefaultMotionState(Transform);
+
+	// Create the shape
+	btVector3 HalfExtents(escala.getX() , escala.getY(), escala.getZ());
+	Shape = new btBoxShape(HalfExtents);
+
+	// Add mass
+	btVector3 LocalInertia;
+
+	
+	Shape->calculateLocalInertia(masa, LocalInertia);
+
+	// Create the rigid body object
+	rigidBody = new btRigidBody(masa, MotionState, Shape, LocalInertia);
+	btTransform t;
+	rigidBody->getMotionState()->getWorldTransform(t);
+	// Store a pointer to the irrlicht node so we can update it later
+	rigidBody->setUserPointer((void *)(camera));
+
+		rigidBody->setActivationState(DISABLE_DEACTIVATION);
+	// Add it to the world
+	mundo->addRigidBody(rigidBody);
+	//objetos.push_back(rigidBody);
+	//bullet->setObjetos(objetos);
+	rigidBody->setGravity(btVector3(0, 0, 0));
+	return rigidBody;
 }
 
 void Camara3persona::moveCamera(Corredor * pj1){
@@ -59,10 +101,12 @@ void Camara3persona::moveCamera(Corredor * pj1){
 		if(auxX > -2)
 			auxX-= incremento;
 	}else{
-		if(auxX < 0){
+		if(auxX < -0.25){
 			auxX+=incremento;
-		}else if(auxX > 0){
+		}else if(auxX > 0.25){
 			auxX-=incremento;
+		}else{
+			auxX=0;
 		}
 	}
 	RelativeToCar.X += auxX;
@@ -74,7 +118,7 @@ void Camara3persona::moveCamera(Corredor * pj1){
 	RelativeToCar.Y = 5;
 	RelativeToCarTarget.Y = 1;
 	if (!pj1->getAceiteActivado()){
-		camera->setPosition(RelativeToCar);
+ 		camera->setPosition(RelativeToCar); 
 		camera->setTarget(RelativeToCarTarget);
 	}else{
 		camera->setPosition(camera->getPosition());
@@ -110,11 +154,6 @@ void Camara3persona::movefpsCamera(Corredor * pj1){
 		ZCamera1 += 0.5;
 	}
 
-	
-	
-		
-
-
 	RelativeToCarTarget.X = XCamera1;
 	RelativeToCarTarget.Y = 5;
 	RelativeToCarTarget.Z = ZCamera1;
@@ -124,7 +163,7 @@ void Camara3persona::movefpsCamera(Corredor * pj1){
 	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCarTarget);
 	RelativeToCarTarget.Y = 10;
 	//RelativeToCar.Y = 1;
-	camera->setPosition(RelativeToCar);
+ 	camera->setPosition(RelativeToCar); 
 	camera->setTarget(RelativeToCarTarget);
 	/*
 	if(!fpsActiva){
@@ -173,7 +212,8 @@ void Camara3persona::moveCameraControl(Corredor *pj1) {
 	float yf = playerPos.Y - sin(zdirection * PI / 180.0f) * 64.0f;
 	float zf = playerPos.Z + sin(direction * PI / 180.0f) * 64.0f;
 
-	camera->setPosition(core::vector3df(xf, yf, zf));
+	btVector3 btPos(xf, yf, zf);
+  camera->setPosition(core::vector3df(xf, yf, zf)); 
 	camera->setTarget(core::vector3df(playerPos.X, playerPos.Y + 25.0f, playerPos.Z));
 	//pj1->getNodo()->setRotation( core::vector3df( 0, direction, 0 ) );
 	fpsActiva = false;
@@ -202,7 +242,8 @@ void Camara3persona::moveCameraControlPointer(Corredor *pj1) {
 	float yf = playerPos.Y - sin(zdirection * PI / 180.0f) * 64.0f;
 	float zf = playerPos.Z + sin(direction * PI / 180.0f) * 64.0f;
 
-	camera->setPosition(core::vector3df(xf, yf, zf));
+  camera->setPosition(core::vector3df(xf, yf, zf)); 
+
 	camera->setTarget(core::vector3df(playerPos.X, playerPos.Y + 25.0f, playerPos.Z));
 	//pj1->getNodo()->setRotation( core::vector3df( 0, direction, 0 ) );
 	fpsActiva = false;

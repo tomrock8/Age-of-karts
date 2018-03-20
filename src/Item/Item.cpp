@@ -96,11 +96,10 @@ bool Item::comprobarDestructor(){
 bool Item::update(){
 			
 	if(comprobarDestructor()){
-	//deleteHijos();
-	Delete();
+	
 	return true;
 	}else{
-	updateHijos();
+	
 	return false;
 	}
 }

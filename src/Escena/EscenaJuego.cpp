@@ -249,23 +249,29 @@ void EscenaJuego::update() {
 		if(items.at(i)->getLanzado()){
 
 			if(items.at(i)->update()){
+			
 			if(strcmp("HabilidadPirata", items.at(i)->getNombre()) == 0
 			|| strcmp("HabilidadVikingo", items.at(i)->getNombre()) == 0
 			|| strcmp("HabilidadGladiador", items.at(i)->getNombre()) == 0
 			|| strcmp("HabilidadChino", items.at(i)->getNombre()) == 0){
 
-				for(int i=0;i< pj.size();i++){
-					if(pj.at(i)->getID() == items.at(i)->getIDPadre())
-						pj.at(i)->setHabilidad(false);
-				}
-			}	
+				
+				pj.at(items.at(i)->getIDPadre())->setHabilidad(false);
+				
+			}
+			
+			items.at(i)->Delete();	
 			items.erase(items.begin()+i);
+			pistaca->setItems(items);
 			break;
 			
+			}else{
+			items.at(i)->updateHijos();	
+
 			}
 		}
 	}
-	pistaca->setItems(items);
+	
 
 	if (fin_carrera){
 		textoDebug->agregar("CARRERA FINALIZADA, PULSA F.");

@@ -305,7 +305,7 @@ int main()
             lastFPS = fps;
         }
 
-        server->Update();
+        //server->Update();
         
         //========================================================
         //ACABA UPDATE

@@ -205,7 +205,7 @@ void Server::ReceivePackets()
                         bsOut.Write(clientes.at(i).tipoCorredor);
                         bsOut.Write(clientes.at(i).ready);
                     } 
-                    AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+                    server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
                 }else{
                     playerDisconnection(p->systemAddress.ToString(true));                    
                 }
@@ -226,7 +226,7 @@ void Server::ReceivePackets()
                         bsOut.Write(clientes.at(i).tipoCorredor);
                         bsOut.Write(clientes.at(i).ready);
                     } 
-                    AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+                    server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
                 }else{
                     playerDisconnection(p->systemAddress.ToString(true));                    
                 }
@@ -254,7 +254,7 @@ void Server::ReceivePackets()
                         bsOut.Write(clientes.at(i).tipoCorredor);
                         bsOut.Write(clientes.at(i).ready);
                     }
-                    AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+                    server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
                 }else{
                     playerDisconnection(p->systemAddress.ToString(true));               
                 }
@@ -350,7 +350,7 @@ void Server::ReceivePackets()
 			bsOut.Read(typeID);
 			bsOut.Read(id);
 			bsOut.Read(param);
-			AddSend(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			parambool=false;
 			break;
 		case ID_RACE_START:
@@ -366,7 +366,7 @@ void Server::ReceivePackets()
 				typeID = ID_READY_CLIENT;
 				bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
 				bsOut.Write(id);
-				AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			}else if(id==0){		//si eres host
 				for (int n=1;n<clientes.size();n++){		//comprobamos si todos los corredores menos el host estan listos
 					if (!clientes.at(n).ready){
@@ -379,14 +379,14 @@ void Server::ReceivePackets()
 					typeID = ID_READY_CLIENT;
 					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
 					bsOut.Write(id);
-					AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 					break;
 				}else if (clientes.size()>1 && clientes.at(id).ready && parambool==true){ //Si no estas solo y estas listo, pero algun cliente no
 					clientes.at(id).ready = false;
 					typeID = ID_READY_CLIENT;
 					bsOut.Write(typeID);		//enviamos la informacion de ready para actualizar en el cliente
 					bsOut.Write(id);
-					AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 					break;
 				}
 				if (parambool==false && clientes.size()>0){		//si todos estan listos y ha recorrido el bucle empieza la carrera
@@ -423,7 +423,7 @@ void Server::ReceivePackets()
 					}
 					std::cout << "Salgo de crear jugadores\n";
 					started=true;
-					AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 				}
 			}
 			parambool=false;
@@ -435,7 +435,7 @@ void Server::ReceivePackets()
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			typeID = ID_RETURN_LOBBY;
 			bsOut.Write(typeID);
-			AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;	
 		case ID_SEND_KEY_PRESS:
 			std::cout << "ID_SEND_KEY_PRESS\n";
@@ -455,7 +455,7 @@ void Server::ReceivePackets()
 				players.at(id)->usarObjetos();
 			}
 			//player[id]->setAccion(param);
-			AddSend(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;
 
 		case ID_SPAWN_PLAYER:
@@ -559,7 +559,7 @@ void Server::ReceivePackets()
 					bsOut.Write(players.at(id)->getNodo()->getRotation().X);
 					bsOut.Write(players.at(id)->getNodo()->getRotation().Y);
 					bsOut.Write(players.at(id)->getNodo()->getRotation().Z);
-					AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 				}
 
 				clientes.at(id).prediccion = prediccionAux;
@@ -588,7 +588,7 @@ void Server::ReceivePackets()
 			bsOut.Write(estado4);
 			bsOut.Write(id);
 			
-			AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
 			break;
 
 		case ID_PLAYER_REFRESH:
@@ -654,7 +654,7 @@ void Server::ReceivePackets()
 				bsOut.Write(clientes.at(i).tipoCorredor);
 				bsOut.Write(clientes.at(i).ready);
 			}
-			AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			
 			std::cout << "Jugador Borrado\n";
 
@@ -682,7 +682,7 @@ void Server::Update(){
 		RakNet::AddressOrGUID receptor = paquetes.at(i).receptor;
 		bool envio = paquetes.at(i).envio;
 		std::cout << "Variables almacenadas\n";
-		server->Send(bitstreamStruct, priority, reliability, desconocido, receptor, envio);
+		//server->Send(bitstreamStruct, priority, reliability, desconocido, receptor, envio);
 		std::cout << "Enviado\n";
 	}
 }
@@ -774,7 +774,7 @@ void Server::refreshServer()
     //std::cout << "Control: " << controlPlayer << std::endl;
     
     //se envia el mensaje de salida
-    AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+    server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 }
 
 int Server::getCommands(){
@@ -873,7 +873,7 @@ void Server::playerDisconnection(std::string str_param){
     typeID = ID_PLAYER_DISCONNECT;
     bsOut.Write(typeID);
     bsOut.Write(param);
-   AddSend(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+   server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
     
     jugadores->setJugadores(players);
     

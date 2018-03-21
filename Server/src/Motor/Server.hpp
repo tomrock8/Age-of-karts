@@ -19,7 +19,16 @@ struct structClientes{
     std::string ip;
     int tipoCorredor;
     bool ready;
-    structPrediccion prediccion;
+    vector<structPrediccion> prediccion;
+};
+
+struct structPaquetes{
+    RakNet::BitStream *bitstreamStruct;
+    PacketPriority priority;
+    PacketReliability reliability;
+    char desconocido;
+    RakNet::AddressOrGUID receptor;
+    bool envio;
 };
 
 
@@ -43,10 +52,13 @@ class Server
         int numPlayers;
         bool spawned;
 
+        int timeStamp;
+
         bool started;
         vector<int> arrayReady;
         vector<int> arrayTipoCorredor;
         vector<structClientes> clientes;
+        vector<structPaquetes> paquetes;
 
         unsigned char GetPacketIdentifier(RakNet::Packet *p);
         void DebugServerInfo();
@@ -64,7 +76,10 @@ class Server
         void setStarted(bool b);
         bool getStarted();
         void deleteEntities();
-        
+        void AddSend(RakNet::BitStream *bitstreamStruct, PacketPriority priority, PacketReliability reliability, int desconocido, RakNet::AddressOrGUID receptor, bool envio);
+        void Update();
+        void aumentarTimestamp();
+
         RakNet::RakPeerInterface *server;
 
         std::string serverPort;

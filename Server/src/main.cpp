@@ -257,6 +257,7 @@ int main()
             colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
             //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
             if (jugadores->getNumJugadores() != 0){
+                server->aumentarTimestamp();
                 for (int i = 0; i < jugadores->getNumJugadores(); i++) {
                     pj.at(i)->update();
                 }
@@ -304,6 +305,8 @@ int main()
             Motor3d::instancia().getDevice()->setWindowCaption(tmp.c_str());
             lastFPS = fps;
         }
+
+        //server->Update();
         
         //========================================================
         //ACABA UPDATE

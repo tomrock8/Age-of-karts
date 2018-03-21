@@ -681,7 +681,6 @@ void Client::PlayerMovement(){
 		typeID = ID_PLAYER_MOVE;
 		bsOut.Write(typeID);
 		bsOut.Write(timeStamp);
-		timeStamp ++;
 		bsOut.Write(controlPlayer);
 		bsOut.Write(players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition().getX());
 		bsOut.Write(players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition().getY());
@@ -806,6 +805,11 @@ void Client::BorrarCliente(int i){
 	cout<<"borro cliente "<<i<<endl;
 	clientes.erase(clientes.begin()+i);
 }
+
+void Client::aumentarTimestamp(){
+	timeStamp++;
+}
+
 //===========================================================================
 //
 //	METODOS DESACTUALIZADOS

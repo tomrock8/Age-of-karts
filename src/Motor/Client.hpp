@@ -44,6 +44,7 @@ public:
 	void SpawnPlayer();
 	void FinalizarCarrera();
 	void ActualizarClienteConectado();
+	void aumentarTimestamp();
 	
 	//METODOS GET
 	int getControlPlayer();

@@ -175,43 +175,48 @@ void EscenaJuego::dibujar() {
 	Motor3d::instancia().iniciarDibujado();
 	Motor3d::instancia().getScene()->drawAll();
 
-	//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
+
 	
+	if (debug) {
+
+	//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
 	SMaterial materialDriver;
 	materialDriver.Lighting = false;
 	Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
 	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
-	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		
-		//CorredorIA *COMENARDOSAUXILIAR1 = static_cast<CorredorIA *>(pj[1]);
-	/*	
-				CorredorIA *COMENARDOSAUXILIAR2 = static_cast<CorredorIA *>(pj.at(2));
-				CorredorIA *COMENARDOSAUXILIAR3 = static_cast<CorredorIA *>(pj.at(3));
-				CorredorIA *COMENARDOSAUXILIAR4 = static_cast<CorredorIA *>(pj.at(4));
-				CorredorIA *COMENARDOSAUXILIAR5 = static_cast<CorredorIA *>(pj.at(5));
-	*/	
 
-		//COMENARDOSAUXILIAR->update();
-		 
-		//		COMENARDOSAUXILIAR1->ActualizarRaytest();
-			/*
-				COMENARDOSAUXILIAR2->ActualizarRaytest();
-				COMENARDOSAUXILIAR3->ActualizarRaytest();
-				COMENARDOSAUXILIAR4->ActualizarRaytest();
-				COMENARDOSAUXILIAR5->ActualizarRaytest();
-	*/
+	for(int i=0;i<pj.size();i++){
 
-		//Para poder dibujar putas lineas de mierda
-	}
-	
-	//Para poder dibujar putas lineas de mierda
-	if (debug) {
+			if(strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0){
+			CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+			AUXILIAR->setDebugFisicas(true);
+			AUXILIAR->ActualizarRaytest();
+			}
+		}
+
 		SMaterial debugMat;
 		debugMat.Lighting = true;
 		Motor3d::instancia().getDriver()->setMaterial(debugMat);
 		Motor3d::instancia().getDriver()->setTransform(ETS_WORLD, IdentityMatrix);
 		MotorFisicas::getInstancia()->getMundo()->debugDrawWorld();
-	}
+	}else{
+
+	
+		for(int i=0;i<pj.size();i++){
+			if(strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0){
+
+			CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+			if(!AUXILIAR->getDebugFisicas()){	
+			i=pj.size();
+			}else{	
+			AUXILIAR->setDebugFisicas(false);
+			AUXILIAR->ActualizarRaytest();
+			}
+			}
+		}
+		
+		}
+	
 
 	Motor3d::instancia().getGUI()->drawAll();
 	Motor3d::instancia().terminarDibujado();
@@ -426,7 +431,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	}
 	else {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)){
-			debug = 1;
+		debug = 1;
 		}
 	}
 

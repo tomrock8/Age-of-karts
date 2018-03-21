@@ -23,6 +23,7 @@ CorredorIA::CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tip
 	enemigoatras=false;
 	enemigolados=false;
 	habilidad=false;
+	debugFisicas=false;
 	distanciaCaja = 0;
 	distanciaEnemigo = 0;
 	distanciaTurbo = 0;
@@ -251,7 +252,7 @@ void CorredorIA::movimiento()
 {
 	
 	
-
+	int accion = 0;
 	bool arraybooleanos[18] = { 
 	distanciaCerca,distanciaMedia,distanciaLejos, // del 0 al 2 distancias
 	velocidadBaja,velocidadMedia,velocidadAlta, // del 3 al 5 velocidades
@@ -260,8 +261,9 @@ void CorredorIA::movimiento()
 	
 
 
-	
-		switch(arbolobjetos->recorrerArbol(arraybooleanos,tipoObj,tipojugador)){ //lo que devuelva el arbol conduccion
+		accion=arbolobjetos->recorrerArbol(arraybooleanos,tipoObj,tipojugador);
+		accionActualObjetos=accion;
+		switch(accion){ //lo que devuelva el arbol conduccion
 
         case NADA1:
         break;
@@ -303,9 +305,10 @@ void CorredorIA::movimiento()
 
     }
 
-	
-		switch(arbolconduccion->recorrerArbol(arraybooleanos,tipoObj,tipojugador)){ //lo que devuelva el arbol conduccion
-
+	accion = arbolconduccion->recorrerArbol(arraybooleanos,tipoObj,tipojugador);
+	accionActualConduccion = accion;
+		switch(accion){ //lo que devuelva el arbol conduccion
+		
         case NADA1:
         break;
 
@@ -544,31 +547,7 @@ void CorredorIA::logicaDifusa() {
 			giroFlojoIzquierda=false;
 		}	
 
-		TextoPantalla * texto = TextoPantalla::getInstancia(); 
-		//texto->agregar("ACCION 1: "); 
-		std::string agrega; 
-		if(distanciaLejos)
-   			agrega = "ACELERA A TOPE"; 	
-		if(distanciaMedia)    
-			agrega = "Reduce velocidad"; 
-		if(distanciaCerca)
-    		agrega = "Echa el freno fiera"; 
 		
-		//texto->agregar(agrega+"\n"); 
-		
-		//texto->agregar("ACCION 2: "); 
-		if(noGiro)
-		agrega = "No GIRO";
-		if(giroFlojoDerecha)
-		agrega = "Giro POCO D";
-		if(giroFuerteDerecha)
-		agrega = "Giro a tope D";
-		if(giroFlojoIzquierda)
-		agrega = "Giro POCO I";
-		if(giroFuerteIzquierda)
-		agrega = "Giro a tope I";
-
-		//texto->agregar(agrega+"\n"); 
 
 }
 
@@ -635,12 +614,14 @@ void CorredorIA::ActualizarRaytest() {
 	btVector3 fingirado(0,0,0);
 
 
+
 	// Raycast central1
 	btVector3 inicio(cuboNodo->getPosition().X + orientacion.getX()*distanciaCoche, cuboNodo->getPosition().Y -1, cuboNodo->getPosition().Z+ orientacion.getZ()*distanciaCoche);
 	btVector3 fin(cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y -1, cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
-
-	//mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	if(debugFisicas)
+	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	
 	btCollisionWorld::AllHitsRayResultCallback RayCast1(inicio, fin);
 	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast1.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -650,7 +631,9 @@ void CorredorIA::ActualizarRaytest() {
 	inicio = btVector3(Raycast23*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() );
 	fin = btVector3(Raycast23*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
-	//mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	if(debugFisicas)
+	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+
 	btCollisionWorld::AllHitsRayResultCallback RayCast2(inicio, fin);
 	RayCast2.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast2.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -661,7 +644,9 @@ void CorredorIA::ActualizarRaytest() {
 	inicio = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() );
 	fin = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
-	//mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	if(debugFisicas)
+	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+
 	btCollisionWorld::AllHitsRayResultCallback RayCast3(inicio, fin);
 	RayCast3.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast3.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -672,7 +657,9 @@ void CorredorIA::ActualizarRaytest() {
 	inicio = btVector3(Raycast45*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ() );
 	fin = btVector3(Raycast45*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
-	//mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	if(debugFisicas)
+	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+
 	btCollisionWorld::AllHitsRayResultCallback RayCast4(inicio, fin);
 	RayCast4.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast4.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -682,7 +669,9 @@ void CorredorIA::ActualizarRaytest() {
 	inicio = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ());
 	fin = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
 
-	//mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	if(debugFisicas)
+	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+
 	btCollisionWorld::AllHitsRayResultCallback RayCast5(inicio, fin);
 	RayCast5.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast5.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -695,7 +684,9 @@ void CorredorIA::ActualizarRaytest() {
 	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().Z+ orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 	
+	if(debugFisicas)
 	mundo->getDebugDrawer()->drawLine(inicio, fingirado, btVector4(0, 0, 1, 1));
+
 	btCollisionWorld::AllHitsRayResultCallback RayCast6(inicio, fingirado);
 	RayCast6.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast6.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -709,7 +700,9 @@ void CorredorIA::ActualizarRaytest() {
 	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().Z -orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 
+	if(debugFisicas)
 	mundo->getDebugDrawer()->drawLine(inicio, fingirado, btVector4(0, 0, 1, 1));
+
 	btCollisionWorld::AllHitsRayResultCallback RayCast7(inicio, fingirado);
 	RayCast7.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast7.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -722,7 +715,9 @@ void CorredorIA::ActualizarRaytest() {
 	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().Z +orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 
+	if(debugFisicas)
 	mundo->getDebugDrawer()->drawLine(inicio, fingirado, btVector4(0, 0, 1, 1));
+	
 	btCollisionWorld::AllHitsRayResultCallback RayCast8(inicio, fingirado);
 	RayCast8.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast8.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -735,7 +730,9 @@ void CorredorIA::ActualizarRaytest() {
 	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().Z -orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 
+	if(debugFisicas)
 	mundo->getDebugDrawer()->drawLine(inicio, fingirado, btVector4(0, 0, 1, 1));
+
 	btCollisionWorld::AllHitsRayResultCallback RayCast9(inicio, fingirado);
 	RayCast9.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast9.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
@@ -1081,6 +1078,9 @@ void CorredorIA::comprobarDireccion(ISceneNode *nodo){
 
 void CorredorIA::updateHijos(){
 	
+	debugIA();
+
+	if(!debugFisicas)
 	ActualizarRaytest();
 	
 	if(tipoObj!=0){
@@ -1114,4 +1114,147 @@ void CorredorIA::actualizarItem(){
 
 CorredorIA::~CorredorIA(){
 
+}
+
+
+void CorredorIA::setDebugFisicas(bool activo){
+	debugFisicas=activo;
+}
+
+bool CorredorIA::getDebugFisicas(){
+	return debugFisicas;
+}
+
+
+void CorredorIA::debugIA(){
+
+		TextoPantalla * texto = TextoPantalla::getInstancia(); 
+		std::string agrega;
+		
+		texto->agregar("WAYPOINT ACTUAL: " + to_string(actual->getID() - 6)); 
+   		texto->agregar("\n"); 
+		texto->agregar("WAYPOINT SIGUIENTE: " + to_string(siguiente->getID() - 6));	 	
+		texto->agregar("\n");
+
+	if(noGiro)
+	agrega = "NO GIRO // ";
+	else if(giroFlojoDerecha)
+	agrega = "GIRO DERECHA // ";
+	else if(giroFlojoIzquierda)
+	agrega = "GIRO IZQUIERDA // ";
+	else if(giroFuerteDerecha)
+	agrega = "GIRO FUERTE DERECHA //";
+	else if(giroFuerteIzquierda)
+	agrega = "GIRO FUERTE IZQUIERDA //";
+
+	switch(accionActualConduccion){
+
+		case NADA1:
+        break;
+
+        case ACELERAR: //1
+		agrega += "ACELERAR";
+        break;
+
+        case FRENAR: //2
+        agrega += "FRENAR";
+        break;
+
+        case ACELERARGIRARDERECHA://3
+		agrega += "ACELERAR";
+        break;
+
+        case ACELERARGIRARIZQUIERDA://4
+		agrega += "ACELERAR";
+        break;
+
+        case ACELERARGIRARFUERTEDERECHA://5
+		agrega += "ACELERAR";
+        break;
+
+        case ACELERARGIRARFUERTEIZQUIERDA://6
+		agrega += "ACELERAR";
+        break;
+
+		case FRENARGIRARFUERTEDERECHA://7
+		agrega += "FRENAR";
+        break;
+
+		case FRENARGIRARFUERTEIZQUIERDA://8
+		agrega += "FRENAR";
+        break;
+	
+		
+	}
+
+	texto->agregar("ACCION CONDUCCION: " + agrega);
+	texto->agregar("\n");
+
+	switch(accionActualObjetos){
+		
+		case NADA1:
+        break;
+
+        case DISTANCIAOBJETIVOCAJA: //9
+		agrega= "VEO CAJA";
+		break;
+
+        case DISTANCIAOBJETIVOENEMIGO: //10
+       	agrega= "VEO ENEMIGO";
+        break;
+
+        case DISTANCIAOBJETIVOTURBO://11
+		agrega= "VEO TURBO";
+        break;
+
+        case SEGUIRWAYPOINT://12
+      	agrega= "SIGO WAYPOINT";
+        break;
+
+        case USAROBJETO://13
+
+			switch(tipoObj){
+				case 0:
+				
+				break;
+				case 1:
+				agrega= "USAR OBJETO // FLECHA";
+				break;
+				case 2:
+				agrega= "USAR OBJETO // CAJA FALSA";
+				break;
+				case 3:
+				agrega= "USAR OBJETO // TURBO";
+				break;
+				case 4:
+				agrega= "USAR OBJETO // ACEITE";
+				break;
+				case 5:
+				agrega= "USAR OBJETO // ESCUDO";
+				break;
+				case 6:
+				agrega= "USAR OBJETO // FLECHA TRIPLE";
+				break;
+				case 7:
+				agrega= "USAR OBJETO // FLECHA TELEDIRIGIDA";
+				break;
+				case 8:
+				agrega= "USAR OBJETO // TURBO TRIPLE";
+				break;
+				
+			}
+
+		break;
+
+		case USARHABILIDAD: //14
+		agrega= "USAR HABILIDAD ";
+		break;
+
+		
+	
+	}
+	texto->agregar("ACCION DECISION ACTUAL: " + agrega);
+	texto->agregar("\n");
+
+	
 }

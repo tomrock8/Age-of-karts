@@ -444,11 +444,11 @@ void CorredorIA::logicaDifusa() {
 	
 
 	//GIRO
-	pertenenciaNoGiro= FuncionTriangular(anguloGiro,-25,0,25);
-	pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,3,20,35);
-	pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-3,-20,-35);
-	pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,30,80,180);
-	pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-30,-80,-180);
+	pertenenciaNoGiro= FuncionTriangular(anguloGiro,-15,0,15);
+	pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,5,35,55);
+	pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-5,-35,-45);
+	pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,40,80,180);
+	pertenenciaGiroFuerteIzquierda=FuncionTriangular(anguloGiro,-40,-80,-180);
 
 	//VELOCIDAD
 	pertenenciaVelocidadBaja= FuncionTrapezoidal(vehiculo->getCurrentSpeedKmHour(), 0, 0, 50, 150);
@@ -606,8 +606,8 @@ void CorredorIA::ActualizarRaytest() {
 	float distanciaRaycastLados=50;
 	float distanciaRaycastTraseros= 50;
 	float distanciaCoche = 2; // distancia entre el rayo y el coche, donde empieza
-	float Raycast23 = 10; // distancia entre raycast 2 y 3
-	float Raycast45 = 20; // distancia entre raycast 4 y 5
+	float Raycast23 = 5; // distancia entre raycast 2 y 3
+	float Raycast45 = 10; // distancia entre raycast 4 y 5
 	float Raycastlados = 10;
 	float Raycastatras = 10;
 	float RaycastladosY=3;

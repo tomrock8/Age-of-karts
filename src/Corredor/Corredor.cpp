@@ -184,7 +184,7 @@ void Corredor::setParametros(){
 			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
-			indiceGiroBajo=btScalar(0.1);
+			indiceGiroBajo=btScalar(0.08);
 			velocidadLimiteGiro=110;
 			//------PESO------
 			Masa = btScalar(1200);
@@ -1066,10 +1066,10 @@ void Corredor::desacelerar()
 	vehiculo->setSteeringValue(0, 0);
 	vehiculo->setSteeringValue(0, 1);
 
-	vehiculo->setBrake(60, 0);
-	vehiculo->setBrake(60, 1);
-	vehiculo->setBrake(60, 2);
-	vehiculo->setBrake(60, 3);
+	vehiculo->setBrake(160, 0);
+	vehiculo->setBrake(160, 1);
+	vehiculo->setBrake(160, 2);
+	vehiculo->setBrake(160, 3);
 }
 void Corredor::limitadorVelocidad(){
 	vehiculo->applyEngineForce(0, 0);

@@ -19,7 +19,7 @@ struct structClientes{
     std::string ip;
     int tipoCorredor;
     bool ready;
-    structPrediccion prediccion;
+    vector<structPrediccion> prediccion;
 };
 
 struct structPaquetes{
@@ -52,6 +52,8 @@ class Server
         int numPlayers;
         bool spawned;
 
+        int timeStamp;
+
         bool started;
         vector<int> arrayReady;
         vector<int> arrayTipoCorredor;
@@ -76,6 +78,7 @@ class Server
         void deleteEntities();
         void AddSend(RakNet::BitStream *bitstreamStruct, PacketPriority priority, PacketReliability reliability, int desconocido, RakNet::AddressOrGUID receptor, bool envio);
         void Update();
+        void aumentarTimestamp();
 
         RakNet::RakPeerInterface *server;
 

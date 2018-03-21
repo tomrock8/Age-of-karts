@@ -14,7 +14,7 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	if (ipConexion.compare("")==0){	
 		//Online sin ip (a introducir)
 		texto = L"ESC - SALIR\n\n";
-		texto += "1. Crear Sala\n 2. Unirse\n";
+		texto += "1. Conectar con 127.0.0.1 \n2. Introducir ip manualmente\n";
 		selection=true;		//si este boolean es true, solo funcionaran teclas 1 ,2 y escape, para seleccion de opcion en online
         iniciar = false;
 		iniciado = false;

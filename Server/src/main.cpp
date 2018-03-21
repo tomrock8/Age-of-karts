@@ -304,6 +304,8 @@ int main()
             Motor3d::instancia().getDevice()->setWindowCaption(tmp.c_str());
             lastFPS = fps;
         }
+
+        server->Update();
         
         //========================================================
         //ACABA UPDATE

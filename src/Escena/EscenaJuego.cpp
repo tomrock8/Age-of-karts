@@ -285,16 +285,16 @@ void EscenaJuego::update() {
 	pj = jugadores->getJugadores();
 	switch(tipoCamara){
 		case 0:		//Camara 3a persona fija
-			camara->moveCamera(pj.at(1));
+			camara->moveCamera(pj.at(controlPlayer));
 		break;
 		case 1:		//Camara 3a persona libre 
-			camara->moveCameraControl(pj.at(1)); 
+			camara->moveCameraControl(pj.at(controlPlayer)); 
 		break;
 		case 2:		//Camara 1a persona
-			camara->movefpsCamera(pj.at(1));
+			camara->movefpsCamera(pj.at(controlPlayer));
 		break;
 		case 3:
-			camara->moveCameraControlPointer(pj.at(1));
+			camara->moveCameraControlPointer(pj.at(controlPlayer));
 
 	}
 

@@ -320,11 +320,19 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-		if(conectado)
+		//if(conectado)
+			
+		if (offline){
+			client->BorrarClientes();
+		}else if (iniciar){
+			nElementos=time->getTimer();
 			client->ShutDownClient();
+		}
 		
-		if (offline)
-				client->BorrarClientes();
+		iniciar = false;
+		iniciado = false;
+		ipConexion="";
+		texto2="";
 		
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}

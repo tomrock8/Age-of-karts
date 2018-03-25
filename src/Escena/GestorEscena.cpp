@@ -15,25 +15,25 @@ GestorEscena::GestorEscena() {
 Escena::tipo_escena GestorEscena::update() {
 	clock_t tiempoActual = clock();
 	clock_t timediff = tiempoActual - tiempoRefresco;
-	float timediff_sec = ((float)timediff) / 10000;
-	Timer *t2 = Timer::getInstancia();
-	float tiempo= t2->getTimer();
-
-	if (timediff_sec >= 0.15f) {
+	float timediff_sec = ((float)timediff) / 100000;
+	//Timer *t2 = Timer::getInstancia();
+	//float tiempo= t2->getTimer();
+	//cout<<timediff_sec << endl;
+	if (timediff_sec >= 0.06f) {
 		tiempoRefresco = clock();
 		cambioEscena = escenaActiva->comprobarInputs();
 		escenaActiva->update();
 		cont++;
 	}
 
-
+/*
 if(tiempo-tiempoAnterior ==1){
 		cout<<cont<<endl;
 		cont=0;
 	}
 
 	tiempoAnterior=tiempo;
-
+*/
 
 	if (cambioEscena == escenaActiva->getTipoEscena()) {
 		

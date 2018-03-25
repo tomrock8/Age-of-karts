@@ -10,8 +10,8 @@ GestorEscena::GestorEscena() {
 		escenas[i] = nullptr;
 	}
 	
-	retardo=0.033f;
-
+	retardo= 0.033f;
+	tiempoRefresco=0;
 }
 
 Escena::tipo_escena GestorEscena::update() {
@@ -20,12 +20,20 @@ Escena::tipo_escena GestorEscena::update() {
 	float timediff_sec = ((float)timediff) / 100000;
 	Timer *t2 = Timer::getInstancia();
 	float tiempo= t2->getTimer();
-	float retardo1=retardo;
-	
-	if(escenaActiva->getTipoEscena() == Escena::tipo_escena::CARRERA || escenaActiva->getTipoEscena() == Escena::tipo_escena::ONLINE)
-	retardo1 = retardo*2;
+	float retardo1;
 
+	
+	
+	if(escenaActiva->getTipoEscena() == Escena::tipo_escena::CARRERA || escenaActiva->getTipoEscena() == Escena::tipo_escena::ONLINE){
+	retardo1 = retardo*1.8;
+	}else{
+	retardo1 = retardo/2;
+	}
+	
+
+	
 	if (timediff_sec >= retardo1) {
+		//cout<<timediff_sec <<endl;
 		tiempoRefresco = clock();
 		cambioEscena = escenaActiva->comprobarInputs();
 		escenaActiva->update();

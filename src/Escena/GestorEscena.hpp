@@ -39,7 +39,9 @@ private:
 
 	clock_t tiempoRefresco; // Reloj para limitar el refresco
 	float tiempoAnterior;
+	clock_t tiempoActual ;
 	int cont;
+	float retardo;
 	// METODOS
 	GestorEscena(); // Constructor privado para el constructor
 	bool comprobarInputs(); // Comprueba los inputs

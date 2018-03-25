@@ -34,28 +34,13 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	habilidadLanzada=false;
 	tipojugador=tipo;
 	tiempoTurbo=0;
+	proteccion=false;
 	estado->setEstadoCarrera(PARRILLA);
 
-	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
-	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
+	
 	//cuboNodo = smgr->addCubeSceneNode(1.5f);
-	if (cuboNodo) {
-		cuboNodo->setName("Jugador");
-		
-		cuboNodo->setScale(vector3df(1, 1, 1.5));
-		// Desactivar la iluminacion del cubo
-		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-		cuboNodo->setPosition(vector3df(pos.getX(), pos.getY(), pos.getZ()));
-		cuboNodo->setRotation(vector3df(0.0f, 90.0f, 0.0f));
-	}
+	
 
-	posicion.setX(pos.getX());
-	posicion.setY(pos.getY());
-	posicion.setZ(pos.getZ());
-
-	//escudo
-	//escudo = new Escudo(pos, getNodo());
-	setProteccion(false);
 
 	
 	//-------------bullet----------------
@@ -108,11 +93,28 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	velocidadLimiteGiro=150;
 	velocidadMaximaAtras=-100;
 	
+	setParametros();
+
 	
+	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
+	
+	if (cuboNodo) {
+		cuboNodo->setName("Jugador");
+		
+		cuboNodo->setScale(vector3df(1, 1, 1.5));
+		// Desactivar la iluminacion del cubo
+		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
+		cuboNodo->setPosition(vector3df(pos.getX(), pos.getY(), pos.getZ()));
+		cuboNodo->setRotation(vector3df(0.0f, 90.0f, 0.0f));
+	}
+
+	posicion.setX(pos.getX());
+	posicion.setY(pos.getY());
+	posicion.setZ(pos.getZ());
 
 	if (cuboNodo) InicializarFisicas();
 
-	setParametros();
+	
 
 }
 void Corredor::setParametros(){
@@ -122,7 +124,9 @@ void Corredor::setParametros(){
 	switch (tipojugador){
 		case GLADIADOR:
 			//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
-			cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
+			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartGladiator.obj");
+			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
+			
 			//----ACELERACION-----
 			FuerzaMaxima = btScalar(3800);
 			Fuerza = FuerzaMaxima;
@@ -135,12 +139,13 @@ void Corredor::setParametros(){
 			indiceGiroBajo=btScalar(0.085);
 			velocidadLimiteGiro=150;
 			//------PESO------
-			Masa = btScalar(400);
+			//Masa = btScalar(400);
 			//-----HABILIDAD-----
 			num=1;
 			break;
 		case PIRATA:
-			cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/green.png"));
+			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/green.png"));
+			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartPirata.obj");
 			//----ACELERACION-----
 			FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
@@ -153,12 +158,13 @@ void Corredor::setParametros(){
 			indiceGiroBajo=btScalar(0.085);
 			velocidadLimiteGiro=130;
 			//------PESO------
-			Masa = btScalar(400);
+			//Masa = btScalar(400);
 			//-----HABILIDAD-----
 			num=2;
 			break;
 		case VIKINGO:
-			cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/blue.png"));
+			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/blue.png"));
+			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartVikingo.obj");
 			//----ACELERACION-----
 			FuerzaMaxima = btScalar(3600); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
@@ -171,12 +177,13 @@ void Corredor::setParametros(){
 			indiceGiroBajo=btScalar(0.1);
 			velocidadLimiteGiro=180;
 			//------PESO------
-			Masa = btScalar(400);
+			//Masa = btScalar(400);
 			//-----HABILIDAD-----
 			num=3;
 			break;
 		case CHINO:
-			cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/yellow.png"));
+			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/yellow.png"));
+			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartChino.obj");
 			//----ACELERACION-----
 			FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
@@ -189,7 +196,7 @@ void Corredor::setParametros(){
 			indiceGiroBajo=btScalar(0.08);
 			velocidadLimiteGiro=110;
 			//------PESO------
-			Masa = btScalar(1200);
+			//Masa = btScalar(1200);
 			//-----HABILIDAD-----
 			num=4;
 			break;
@@ -1313,7 +1320,7 @@ void Corredor::lanzarHabilidad(){
 		btVector3 posicion(cuboNodo->getPosition().X + orientacion.getX() * 20, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 20);
 		btVector3 escala(5,5,5);
 		btScalar masa=100;
-		float tiempoDestruccion=40;
+		float tiempoDestruccion=10;
 		btVector3 tamanyoNodo(3,3,3);
 		btScalar radio=12;
 		float alt=10;
@@ -1350,7 +1357,7 @@ void Corredor::lanzarHabilidad(){
 
 		case GLADIADOR:
 		escala = btVector3(20,2,20);
-		tiempoDestruccion=5;
+		tiempoDestruccion=3;
 		habilidadJugador = new Habilidad(3,cuboNodo,posicion,escala,masa,tiempoDestruccion,CILINDRO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);

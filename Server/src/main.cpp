@@ -236,11 +236,29 @@ int main()
             //std::cout << "Items: " << items.size() << endl;
             for (int i=0;i<items.size();i++)
             {
-                if(items.at(i)->getLanzado()){
-                    if(items.at(i)->comprobarDestructor()){
-                        items.at(i)->Delete();
+               if(items.at(i)->getLanzado()){
+                    if(items.at(i)->update()){
+                        if(strcmp("Escudo", items.at(i)->getNombre()) == 0){
+                            pj.at(items.at(i)->getIDPadre())->setProteccion(false);
+                        }	
+
+                        if(strcmp("HabilidadPirata", items.at(i)->getNombre()) == 0
+                        || strcmp("HabilidadVikingo", items.at(i)->getNombre()) == 0
+                        || strcmp("HabilidadGladiador", items.at(i)->getNombre()) == 0
+                        || strcmp("HabilidadChino", items.at(i)->getNombre()) == 0){
+
+                            
+                            pj.at(items.at(i)->getIDPadre())->setHabilidad(false);
+                            
+                        }
+                        
+                        items.at(i)->Delete();	
                         items.erase(items.begin()+i);
+                        pistaca->setItems(items);
                         break;
+                    }else{
+                        items.at(i)->updateHijos();	
+
                     }
                 }
             }

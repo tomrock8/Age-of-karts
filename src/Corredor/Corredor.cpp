@@ -128,7 +128,7 @@ void Corredor::setParametros(){
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
 			velocidadMedia=360;
-			velocidadMaximaTurbo=410;
+			velocidadMaximaTurbo=490;
 			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
@@ -146,7 +146,7 @@ void Corredor::setParametros(){
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
 			velocidadMedia=370;
-			velocidadMaximaTurbo=415;
+			velocidadMaximaTurbo=495;
 			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
@@ -164,7 +164,7 @@ void Corredor::setParametros(){
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
 			velocidadMedia=360;
-			velocidadMaximaTurbo=410;
+			velocidadMaximaTurbo=490;
 			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
@@ -836,7 +836,7 @@ void Corredor::usarObjetos() {
 	}
 	else if (getTipoObj() == 3)	//TURBO
 	{
-		setTurbo(true, true, FuerzaMaxima*5,3);
+		setTurbo(true, true, FuerzaMaxima*4,2);
 	}
 	else if (getTipoObj() == 4)	//ACEITE
 	{	

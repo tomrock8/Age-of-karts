@@ -255,6 +255,10 @@ void EscenaJuego::update() {
 
 			if(items.at(i)->update()){
 			
+			if(strcmp("Escudo", items.at(i)->getNombre()) == 0){
+				pj.at(items.at(i)->getIDPadre())->setProteccion(false);
+			}	
+
 			if(strcmp("HabilidadPirata", items.at(i)->getNombre()) == 0
 			|| strcmp("HabilidadVikingo", items.at(i)->getNombre()) == 0
 			|| strcmp("HabilidadGladiador", items.at(i)->getNombre()) == 0

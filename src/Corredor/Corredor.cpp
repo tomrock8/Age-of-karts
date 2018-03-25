@@ -108,6 +108,8 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	velocidadLimiteGiro=150;
 	velocidadMaximaAtras=-100;
 	
+	
+
 	if (cuboNodo) InicializarFisicas();
 
 	setParametros();
@@ -180,7 +182,7 @@ void Corredor::setParametros(){
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
 			velocidadMedia=385;
-			velocidadMaximaTurbo=425;
+			velocidadMaximaTurbo=500;
 			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
@@ -834,7 +836,7 @@ void Corredor::usarObjetos() {
 	}
 	else if (getTipoObj() == 3)	//TURBO
 	{
-		setTurbo(true, true, FuerzaMaxima*2,5);
+		setTurbo(true, true, FuerzaMaxima*5,3);
 	}
 	else if (getTipoObj() == 4)	//ACEITE
 	{	
@@ -851,18 +853,21 @@ void Corredor::usarObjetos() {
 	{
 		//if (getProteccion() == false) setProteccion(true);
 		//decCargador();
-		alt=2;
-		masa=50;
-		radio=8;
-		escala = btVector3(10,10,10);
-		tamanyoNodo= btVector3(9,9,9);
-		tiempoDestruccion=50;
-		posicion= btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
-		posicion.setY(posicion.getY()+alt);
-		Escudo *escudo = new Escudo(cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
-		escudo->setLanzado(true);
-		items.push_back(escudo);
-		soltarItem();
+		if (!proteccion){
+			alt=2;
+			masa=50;
+			radio=8;
+			escala = btVector3(10,10,10);
+			tamanyoNodo= btVector3(9,9,9);
+			tiempoDestruccion=50;
+			posicion= btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+			posicion.setY(posicion.getY()+alt);
+			Escudo *escudo = new Escudo(cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
+			escudo->setLanzado(true);
+			items.push_back(escudo);
+			soltarItem();
+			proteccion=true;
+		}
 	}
 	else if (getTipoObj() == 6)	//FLECHA TRIPLE
 	{

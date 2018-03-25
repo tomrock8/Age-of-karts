@@ -10,7 +10,7 @@ float alturaLanzamiento,int idNodo) : Item(posicion,escala,masa,tiempoDesctrucci
 	switch(tipoHabilidad){
 
 		case 1:
-		objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/onda.obj");
+		objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadGladiador.obj");
 		nombre = "HabilidadPirata";
 		break;
 

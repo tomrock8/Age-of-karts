@@ -9,21 +9,34 @@ GestorEscena::GestorEscena() {
 	for (int i = 0; i < Escena::nTipos; i++) {
 		escenas[i] = nullptr;
 	}
+	cont = 0;
 }
 
 Escena::tipo_escena GestorEscena::update() {
 	clock_t tiempoActual = clock();
 	clock_t timediff = tiempoActual - tiempoRefresco;
-	float timediff_sec = ((float)timediff) / 1000;
+	float timediff_sec = ((float)timediff) / 10000;
+	Timer *t2 = Timer::getInstancia();
+	float tiempo= t2->getTimer();
 
-
-	if (timediff_sec >= 0.04f) {
+	if (timediff_sec >= 0.15f) {
 		tiempoRefresco = clock();
 		cambioEscena = escenaActiva->comprobarInputs();
+		escenaActiva->update();
+		cont++;
 	}
 
+
+if(tiempo-tiempoAnterior ==1){
+		cout<<cont<<endl;
+		cont=0;
+	}
+
+	tiempoAnterior=tiempo;
+
+
 	if (cambioEscena == escenaActiva->getTipoEscena()) {
-		escenaActiva->update();
+		
 		escenaActiva->dibujar();
 	}
 	else {
@@ -31,6 +44,7 @@ Escena::tipo_escena GestorEscena::update() {
 			cambiaEscena(cambioEscena);
 	}
 
+	
 	return cambioEscena; // Por si hay que salir, devolver la escena salir. En cualquier otro caso obviar.
 }
 
@@ -38,7 +52,7 @@ Escena::tipo_escena GestorEscena::update() {
 bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 	Escena *anterior = escenaActiva; // Guardar escena anterior para tratar con ella si es necesario
 	std::string ipConexion = "";
-
+	
 	if (anterior) { // Hay una escena activa actualmente
 		if (anterior->getTipoEscena() == Escena::tipo_escena::LOBBY && tipo == Escena::tipo_escena::ONLINE) {
 			ipConexion = static_cast<EscenaLobby*>(anterior)->getIpConexion();

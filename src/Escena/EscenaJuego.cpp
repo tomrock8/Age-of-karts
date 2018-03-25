@@ -286,21 +286,7 @@ void EscenaJuego::update() {
 		textoDebug->agregar("CARRERA FINALIZADA, PULSA F.");
 	}
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
-	pj = jugadores->getJugadores();
-	switch(tipoCamara){
-		case 0:		//Camara 3a persona fija
-			camara->moveCamera(pj.at(controlPlayer));
-		break;
-		case 1:		//Camara 3a persona libre 
-			camara->moveCameraControl(pj.at(controlPlayer)); 
-		break;
-		case 2:		//Camara 1a persona
-			camara->movefpsCamera(pj.at(controlPlayer));
-		break;
-		case 3:
-			camara->moveCameraControlPointer(pj.at(controlPlayer));
-
-	}
+	
 
 	
 	if (t->getTimer()<=3 && t->getTimer()>=1){
@@ -371,6 +357,26 @@ void EscenaJuego::update() {
 		Motor3d::instancia().getDevice()->setWindowCaption(tmp.c_str());
 		lastFPS = fps;
 	}
+
+
+
+	pj = jugadores->getJugadores();
+	switch(tipoCamara){
+		case 0:		//Camara 3a persona fija
+			camara->moveCamera(pj.at(controlPlayer));
+		break;
+		case 1:		//Camara 3a persona libre 
+			camara->moveCameraControl(pj.at(controlPlayer)); 
+		break;
+		case 2:		//Camara 1a persona
+			camara->movefpsCamera(pj.at(controlPlayer));
+		break;
+		case 3:
+			camara->moveCameraControlPointer(pj.at(controlPlayer));
+
+	}
+
+
 }
 
 Escena::tipo_escena EscenaJuego::comprobarInputs() {

@@ -38,7 +38,8 @@ private:
 	Escena::tipo_escena cambioEscena;	// Indicador para saber si hay que cambiar de escena
 
 	clock_t tiempoRefresco; // Reloj para limitar el refresco
-
+	float tiempoAnterior;
+	int cont;
 	// METODOS
 	GestorEscena(); // Constructor privado para el constructor
 	bool comprobarInputs(); // Comprueba los inputs

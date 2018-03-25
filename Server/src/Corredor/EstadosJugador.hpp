@@ -14,7 +14,8 @@ typedef enum {RECTO,IZQUIERDA, DERECHA} direccion_movimiento;
 typedef enum {NADA, FLECHA, CAJA_FALSA, TURBO, ACEITE, ESCUDO, FLECHA_TRIPLE,ITEM_TELEDIRIGIDO,HABILIDAD} estado_objeto;
 typedef enum {POR_DEFECTO, CON_TURBO, CON_ESCUDO} estado_coche;
 typedef enum {PARRILLA, CARRERA, FIN} estado_carrera;
-
+typedef enum {NORMAL,INMUNIDAD} estado_inmunidad;
+typedef enum {SINHABILIDAD,CONHABILIDAD} estado_habilidad;
 
 
 class EstadosJugador
@@ -25,7 +26,9 @@ class EstadosJugador
   estado_objeto objeto;
   estado_coche estadoCoche;
   estado_carrera estadoCarrera;
-
+  estado_inmunidad Inmunidad;
+  estado_habilidad habilidad;
+ 
   public:
   EstadosJugador();
   void update();
@@ -44,6 +47,14 @@ class EstadosJugador
   void setEstadoCarrera(estado_carrera carrera);
   void setEstadoCarrera(int carrera);
   estado_carrera getEstadoCarrera();
+  void setEstadoInmunidad(estado_inmunidad inmunidad);
+  void setEstadoInmunidad(int inmunidad);
+  estado_inmunidad getEstadoInmunidad();
+  void setEstadoHabilidad(estado_habilidad Habilidad);
+  void setEstadoHabilidad(int Habilidad);
+  estado_habilidad getEstadoHabilidad();  
+
+
 };
 
 #endif 

@@ -14,6 +14,8 @@
 #include "GestorJugadores.hpp"
 #include <iostream>
 #include <vector>
+#include <time.h>
+#include "Timer.hpp"
 using namespace std;
 
 class GestorColisiones
@@ -23,11 +25,16 @@ public:
   void ComprobarColisiones();
   bool JugadorCaja(vector<Caja*> cajas);
   bool JugadorTurbo();
-  bool objetoDestruible();
   bool JugadorEstatico();
   bool JugadorWaypoint();
   bool JugadorProyectil();
-  bool ItemTeledirigidoWaypoint(vector<Item*> items);
+  bool ItemTeledirigidoWaypoint();
+  bool Escudoitems();
+  bool HabilidadesItems();
+  bool HabilidadesJugadores();
+  bool habilidadVShabilidad();
+  void IniciarTimer();
+
   //bool JugadorItemTeledirigido();
 
 private:
@@ -35,6 +42,9 @@ private:
   GestorJugadores *jugadores;
   ISceneNode *nodoA;
   ISceneNode *nodoB;
+  clock_t tiempoLanzado;
+  bool control;
+  clock_t tiempoInicio;
 };
 
 #endif

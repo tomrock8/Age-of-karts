@@ -11,13 +11,15 @@
 using namespace std;
 typedef enum {NADA1,ACELERAR,FRENAR,ACELERARGIRARDERECHA,ACELERARGIRARIZQUIERDA,ACELERARGIRARFUERTEDERECHA,ACELERARGIRARFUERTEIZQUIERDA,
 FRENARGIRARFUERTEDERECHA,FRENARGIRARFUERTEIZQUIERDA,
-DISTANCIAOBJETIVOCAJA,DISTANCIAOBJETIVOENEMIGO,DISTANCIAOBJETIVOTURBO,SEGUIRWAYPOINT,USAROBJETO} acciones_IA;
+DISTANCIAOBJETIVOCAJA,DISTANCIAOBJETIVOENEMIGO,DISTANCIAOBJETIVOTURBO,SEGUIRWAYPOINT,USAROBJETO,USARHABILIDAD} acciones_IA;
 
 
 class CorredorIA : public Corredor
 {
   public:
 	CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo);
+	~CorredorIA();
+	void deleteArbol();
 
 	virtual void movimiento() override;
 	virtual void updateHijos() override;
@@ -32,8 +34,9 @@ class CorredorIA : public Corredor
 	double FuncionTriangular(double valor, double a, double b, double c);
 	void vision(btScalar distancia,ISceneNode *nodo);
 	void seguirWaypoint();
-	
-
+	void setDebugFisicas(bool activo);
+	bool getDebugFisicas();
+	void debugIA();
 
   private:
 
@@ -48,13 +51,18 @@ class CorredorIA : public Corredor
 	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
 	bool caja,turbo,enemigo,Vision,Objeto;
 	bool Waypoint;
+	bool enemigoatras;
+	bool enemigolados;
+	bool habilidad;
+	bool debugFisicas;
 
 	btScalar distanciaCaja,distanciaTurbo,distanciaEnemigo;
 
 	ArbolDecision *arbolconduccion;
 	ArbolDecision *arbolobjetos;		
 	
-
+	int accionActualConduccion;
+	int accionActualObjetos;
 	btVector3 posicionCaja;
 	btVector3 posicionTurbo;
 	btVector3 posicionEnemigo;

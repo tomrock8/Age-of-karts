@@ -21,6 +21,7 @@ GestorJugadores::~GestorJugadores() {
 			else {
 				if (strcmp(pj.at(i)->getNombre(), "JugadorIA") == 0) {
 					CorredorIA *cia = static_cast<CorredorIA *>(pj.at(i));
+					cia->deleteArbol();
 					delete cia;
 				}
 				else {

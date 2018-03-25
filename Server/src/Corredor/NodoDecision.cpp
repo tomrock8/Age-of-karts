@@ -6,6 +6,8 @@ NodoDecision::NodoDecision(){
 
 Decision=false;
 Accion=false;
+Salto = false;
+idNodoSalto=0;
 valor=0;
 valorBoleano=false;
 idNodo=0;
@@ -16,17 +18,27 @@ tipoaccion=0;
 
 }
 
-void NodoDecision::decision(vector<NodoDecision*> &arrayNodos,int nodopadre,tipo_nodo tipodecision,tipo_parametro parametro,int valor,bool valorb){
+NodoDecision::~NodoDecision(){
+
+}
+
+void NodoDecision::decision(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,tipo_nodo tipodecision,tipo_parametro parametro,int valor,bool valorb){
 
     Decision=true;
     if(arrayNodos.size()==0){
     NodoPadre=nullptr;
     }else{
-    NodoPadre = arrayNodos.at(nodopadre);
-    NodoPadre->setHijo(this);
+        for(int i =0; i< arrayNodos.size();i++){
+            if(arrayNodos.at(i)->getid() == nodopadre){ 
+            NodoPadre = arrayNodos.at(i);
+            NodoPadre->setHijo(this);
+            i=arrayNodos.size();
+            }
+        }
+    
     }
 
-    idNodo = arrayNodos.size();
+    idNodo = idnodo;
     condiciones=tipodecision;
     this->parametro = parametro;
     this->valor=valor;
@@ -35,28 +47,52 @@ void NodoDecision::decision(vector<NodoDecision*> &arrayNodos,int nodopadre,tipo
 
 }
 
-void NodoDecision::accion(vector<NodoDecision*> &arrayNodos,int nodopadre,int accionIA){
+void NodoDecision::accion(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,int accionIA){
 
     Accion=true;
     if(arrayNodos.size()==0){
     NodoPadre=nullptr;
     }else{
-    NodoPadre = arrayNodos.at(nodopadre);
-    NodoPadre->setHijo(this);
+            for(int i =0; i< arrayNodos.size();i++){
+            if(arrayNodos.at(i)->getid() == nodopadre){ 
+            NodoPadre = arrayNodos.at(i);
+            NodoPadre->setHijo(this);
+            i=arrayNodos.size();
+            }
+        }
     }
     
-    idNodo = arrayNodos.size();
+    idNodo = idnodo;
     tipoaccion=accionIA;
     arrayNodos.push_back(this);
 
 }
 
+void NodoDecision::salto(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,int idNodoSalto){
 
-bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
+    Salto=true;
+    if(arrayNodos.size()==0){
+    NodoPadre=nullptr;
+    }else{
+            for(int i =0; i< arrayNodos.size();i++){
+            if(arrayNodos.at(i)->getid() == nodopadre){ 
+            NodoPadre = arrayNodos.at(i);
+            NodoPadre->setHijo(this);
+            i=arrayNodos.size();
+            }
+        }
+    }
+    
+    idNodo = idnodo;
+    this->idNodoSalto=idNodoSalto;
+    arrayNodos.push_back(this);
+}
+
+bool NodoDecision::getConsulta(bool arrayboleanos[], int obj,int jugador){
     
     bool parametroaux = false;              
     bool resultado = false;
-
+    int numero = 0;
 
     switch(parametro){
 
@@ -64,6 +100,11 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
         break;
 
         case OBJNUMERO:
+        numero=obj;
+        break;
+
+        case JUGADOR:
+        numero=jugador;
         break;
 
         case OBJBOOLEANO:
@@ -130,6 +171,14 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
         parametroaux= arrayboleanos[14];
         break;
 
+        case ENEMIGOLADO:
+        parametroaux=arrayboleanos[16];
+        break;
+
+        case HABILIDADD:
+        parametroaux=arrayboleanos[17];
+        break;
+
     }
 
     
@@ -140,14 +189,14 @@ bool NodoDecision::getConsulta(bool arrayboleanos[], int obj){
 
         case IGUAL:
             
-            if(parametro != OBJNUMERO){
+            if(parametro != OBJNUMERO && parametro != JUGADOR){
                 
                 if(parametroaux==valorBoleano)
                     resultado = true;
                      
             }else{
 
-                if(obj == valor)
+                if(numero == valor)
                     resultado = true;
                 
             }
@@ -233,4 +282,17 @@ int NodoDecision::getAccion(){
 
 bool NodoDecision::getAccionB() {
 	return Accion;
+}
+
+int NodoDecision::getid(){
+    return idNodo;
+}
+
+int NodoDecision::getidNodoSalto(){
+
+    return idNodoSalto;
+}
+
+bool NodoDecision::getSalto() {
+	return Salto;
 }

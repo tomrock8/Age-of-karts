@@ -25,8 +25,15 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	vueltas = 1;
 	maxvueltas=4;
 	tipojugador=tipo;
-	
+	tiempoVuelta=0.f;
+	tiempoVueltaTotal=0.f;
+	tiempoHabilidad=0;
+	inmunidad=false;
+	tiempoInmunidad=2; // 5 segundos inmunidad
+	timerInmunidad=0;
+	habilidadLanzada=false;
 	tipojugador=tipo;
+	tiempoTurbo=0;
 	estado->setEstadoCarrera(PARRILLA);
 
 	coche = Motor3d::instancia().getScene()->getMesh(rutaObj);
@@ -101,6 +108,8 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	velocidadLimiteGiro=150;
 	velocidadMaximaAtras=-100;
 	
+	
+
 	if (cuboNodo) InicializarFisicas();
 
 	setParametros();
@@ -118,8 +127,9 @@ void Corredor::setParametros(){
 			FuerzaMaxima = btScalar(3800);
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
-			velocidadMaxima=360;
-			velocidadMaximaTurbo=410;
+			velocidadMedia=360;
+			velocidadMaximaTurbo=490;
+			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
 			indiceGiroBajo=btScalar(0.085);
@@ -135,8 +145,9 @@ void Corredor::setParametros(){
 			FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
-			velocidadMaxima=370;
-			velocidadMaximaTurbo=415;
+			velocidadMedia=370;
+			velocidadMaximaTurbo=495;
+			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
 			indiceGiroBajo=btScalar(0.085);
@@ -152,8 +163,9 @@ void Corredor::setParametros(){
 			FuerzaMaxima = btScalar(3600); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
-			velocidadMaxima=360;
-			velocidadMaximaTurbo=410;
+			velocidadMedia=360;
+			velocidadMaximaTurbo=490;
+			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
 			indiceGiroBajo=btScalar(0.1);
@@ -169,11 +181,12 @@ void Corredor::setParametros(){
 			FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
 			//----VELOCIDAD-------
-			velocidadMaxima=385;
-			velocidadMaximaTurbo=425;
+			velocidadMedia=385;
+			velocidadMaximaTurbo=500;
+			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
-			indiceGiroBajo=btScalar(0.07);
+			indiceGiroBajo=btScalar(0.08);
 			velocidadLimiteGiro=110;
 			//------PESO------
 			Masa = btScalar(1200);
@@ -337,6 +350,9 @@ btScalar Corredor::getdistanciaWaypointActual() {
 int Corredor::getVueltas() {
 	return vueltas;
 }
+void Corredor::setVueltas(int j) {
+	vueltas=j;
+}
 int Corredor::getLimite() {
 	return limite;
 }
@@ -354,6 +370,16 @@ int Corredor::getID(){
 }
 Corredor::tipo_jugador Corredor::getTipoJugador(){
 	return tipojugador;
+}
+bool Corredor::getAceiteActivado(){
+	return aceiteActivado;
+}
+float Corredor::getMaxVuetas(){
+	return maxvueltas;
+}
+
+bool Corredor::getInmunidad(){
+	return inmunidad;
 }
 
 //-----------------------------//
@@ -571,6 +597,9 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 
 		if (siguiente_aux->getID() - 6 == 0) {
 			//cout<<"HAS DADO UNA VUELTA"<<endl;
+			if (getMaxVuetas()>=getVueltas()){
+				cout<<"VUELTA: "<<tiempoVuelta<<endl;	
+			}
 			vueltas++;
 			actual = siguiente_aux;
 			siguiente = actual->getNextWaypoint();
@@ -597,11 +626,13 @@ void Corredor::setWaypointActual(ISceneNode *nodo)
 	//cout<< "NODO ACTUAL:"<< actual->getWaypoint()->getID() <<endl;
 	//cout<< "NODO SIGUIENTE:"<< siguiente->getWaypoint()->getID() <<endl;
 }
-void Corredor::setTurbo(bool activo, bool objeto, int valor) {
+
+void Corredor::setTurbo(bool activo, bool objeto, int valor,int tiempo) {
 	turboActivado = activo;
-	if (activo) {
+	tiempoTurbo= tiempo;
+	if (turboActivado) {
 		SetFuerzaVelocidad(valor);
-		acelerar();
+		velocidadMaxima=velocidadMaximaTurbo;
 		Timer *time = Timer::getInstancia();
 		timerTurbo = time->getTimer();
 		if (objeto) {
@@ -613,12 +644,70 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor) {
 	}
 	else {
 		SetFuerzaVelocidad(FuerzaMaxima);
+		velocidadMaxima=velocidadMedia;
 	}
 }
+
+void Corredor::comprobarTurbo(){
+
+	
+	if (turboActivado) {
+		Timer *time = Timer::getInstancia();
+		acelerar();
+		if (time->getTimer() - timerTurbo >= tiempoTurbo) {
+			
+			setTurbo(false, false, 0,0);
+			
+		}
+	}
+
+}
+
+
+void Corredor::setInmunidad(bool activo){
+
+	inmunidad=activo;
+
+	if(inmunidad){
+		Timer *time = Timer::getInstancia();
+		timerInmunidad = time->getTimer();
+	}
+
+}
+
+void Corredor::comprobarInmunidad(){
+
+	
+	if(inmunidad){
+		estado->setEstadoInmunidad(INMUNIDAD);
+		resetFuerzas();
+		Timer *time = Timer::getInstancia();
+		if (time->getTimer() - timerInmunidad >= tiempoInmunidad) {
+			
+			inmunidad=false;
+			estado->setEstadoInmunidad(NORMAL);
+		}
+	}
+
+}
+
+void Corredor::setHabilidad(bool activo){
+
+	habilidadLanzada=activo;
+	if(habilidadLanzada)
+	estado->setEstadoHabilidad(CONHABILIDAD);
+	else
+	estado->setEstadoHabilidad(SINHABILIDAD);
+
+}
+
 void Corredor::SetFuerzaVelocidad(int turbo)
 {
 	Fuerza = btScalar(turbo);
 }
+
+
+
 void Corredor::setFriccion(btScalar valor) {
 	for (int i = 0; i < vehiculo->getNumWheels(); i++) {
 		vehiculo->getWheelInfo(i).m_frictionSlip = btScalar(valor);  //100;	//conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover	
@@ -654,8 +743,13 @@ void Corredor::setTipoJugador(int tj){
 		break;
 	}
 }
-void Corredor::setVueltas(int j) {
-	vueltas=j;
+
+void Corredor::setTiempoVuelta(float t){
+	tiempoVueltaTotal+=t;
+	tiempoVuelta=t;
+}
+float Corredor::getTiempoVueltaTotal(){
+	return tiempoVueltaTotal;	
 }
 //-------------------------------------//
 //-------TRATAMIENTOS OBJETOS----------//
@@ -715,19 +809,17 @@ void Corredor::usarObjetos() {
 		btVector3 escala(2,2,2);
 		btScalar masa=50;
 		float tiempoDestruccion=15;
-		float tamanyoNodo=3;
+		btVector3 tamanyoNodo(3,3,3);
 		btScalar radio=8;
 		float alt=1;
 
 	if (getTipoObj() == 1)		// PROYECTIL
 	{
 	
-		Proyectil *pro = new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		Proyectil *pro = new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		pro->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro->setLanzado(true);
 		items.push_back(pro);
-
-		
 		soltarItem();
 		
 	}
@@ -737,14 +829,14 @@ void Corredor::usarObjetos() {
 		masa=0;
 		posicion.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
 		posicion.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
-		CajaFalsa *est = new CajaFalsa(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		CajaFalsa *est = new CajaFalsa(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		items.push_back(est);
 		
 		soltarItem();
 	}
 	else if (getTipoObj() == 3)	//TURBO
 	{
-		setTurbo(true, true, 26000);
+		setTurbo(true, true, FuerzaMaxima*4,2);
 	}
 	else if (getTipoObj() == 4)	//ACEITE
 	{	
@@ -752,7 +844,7 @@ void Corredor::usarObjetos() {
 		masa=0;
 		posicion.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
 		posicion.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
-		Aceite *est2 = new Aceite(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		Aceite *est2 = new Aceite(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		items.push_back(est2);
 	
 		soltarItem();
@@ -761,17 +853,21 @@ void Corredor::usarObjetos() {
 	{
 		//if (getProteccion() == false) setProteccion(true);
 		//decCargador();
-		alt=2;
-		masa=50;
-		radio=8;
-		escala = btVector3(10,10,10);
-		tiempoDestruccion=50;
-		posicion= btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
-		posicion.setY(posicion.getY()+alt);
-		Escudo *escudo = new Escudo(cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt);
-		escudo->setLanzado(true);
-		items.push_back(escudo);
-		soltarItem();
+		if (!proteccion){
+			alt=2;
+			masa=50;
+			radio=8;
+			escala = btVector3(10,10,10);
+			tamanyoNodo= btVector3(9,9,9);
+			tiempoDestruccion=50;
+			posicion= btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+			posicion.setY(posicion.getY()+alt);
+			Escudo *escudo = new Escudo(cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
+			escudo->setLanzado(true);
+			items.push_back(escudo);
+			soltarItem();
+			proteccion=true;
+		}
 	}
 	else if (getTipoObj() == 6)	//FLECHA TRIPLE
 	{
@@ -784,21 +880,21 @@ void Corredor::usarObjetos() {
 		btVector3 d(cuboNodo->getPosition().X + orientacionderecha.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 10);
 		
 				posicion=iz;
-				Proyectil *pro1= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+				Proyectil *pro1= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 				//pro1->inicializarFisicas();
 				pro1->lanzarItem(1,orientacionizquierda);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 				pro1->setLanzado(true);
 				items.push_back(pro1);
 
 				posicion=centro;
-				Proyectil *pro2= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+				Proyectil *pro2= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 				//pro2->inicializarFisicas();
 				pro2->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 				pro2->setLanzado(true);
 				items.push_back(pro2);
 			
 				posicion=d;
-				Proyectil *pro3= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+				Proyectil *pro3= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 				//pro3->inicializarFisicas();
 				pro3->lanzarItem(1,orientacionderecha);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 				pro3->setLanzado(true);
@@ -813,7 +909,7 @@ void Corredor::usarObjetos() {
 		//cout << "Teledirigido de Jugador " << this->getID() << " - posicion: " << posicionCarrera << endl;
 		alt=1;
 		posicion.setY(posicion.getY()+alt);
-		ItemTeledirigido *pt = new ItemTeledirigido(posicion,escala,masa,50,CUBO,tamanyoNodo,radio,alt);
+		ItemTeledirigido *pt = new ItemTeledirigido(posicion,escala,masa,50,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		pt->setWaypoint(actual);
 		pt->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pt->setLanzado(true);
@@ -823,7 +919,8 @@ void Corredor::usarObjetos() {
 	}
 	else if(tipoObj == 8)	//TURBO TRIPLE
 	{
-		setTurbo(true, true, 26000);
+		setTurbo(true, true, FuerzaMaxima*2,5);
+		
 	}
 	std::cout << "Tipo obj: " << getTipoObj() << " / " << items.size() << std::endl;
 	
@@ -974,10 +1071,10 @@ void Corredor::desacelerar()
 	vehiculo->setSteeringValue(0, 0);
 	vehiculo->setSteeringValue(0, 1);
 
-	vehiculo->setBrake(60, 0);
-	vehiculo->setBrake(60, 1);
-	vehiculo->setBrake(60, 2);
-	vehiculo->setBrake(60, 3);
+	vehiculo->setBrake(160, 0);
+	vehiculo->setBrake(160, 1);
+	vehiculo->setBrake(160, 2);
+	vehiculo->setBrake(160, 3);
 }
 void Corredor::limitadorVelocidad(){
 	vehiculo->applyEngineForce(0, 0);
@@ -1050,7 +1147,7 @@ std::string Corredor::toString()
 //---------------------------------------//
 void Corredor::update()
 {
-	if((vehiculo->getCurrentSpeedKmHour()>velocidadMaxima && !turboActivado) || (turboActivado && vehiculo->getCurrentSpeedKmHour()>velocidadMaximaTurbo)){
+	if(vehiculo->getCurrentSpeedKmHour()>velocidadMaxima){
 		limitadorVelocidad();
 	}
 	for (unsigned int i = 0; i< sf::Joystick::Count; ++i)
@@ -1058,14 +1155,10 @@ void Corredor::update()
 		if (sf::Joystick::isConnected(i))
 			std::cout << "Joystick " << i << " is connected!" << std::endl;
 	}
-	Timer *time = Timer::getInstancia();
-	if (turboActivado) {
-		if (time->getTimer() - timerTurbo >= 1) {
-			//cout << "Se acaba el turbo\n";
-			desacelerar();
-			setTurbo(false, false, 0);
-		}
-	}
+
+	comprobarTurbo();
+	comprobarInmunidad();
+
 	if (estado->getEstadoCarrera()!=PARRILLA){
 		movimiento();
 		updateEstado();
@@ -1098,8 +1191,7 @@ void Corredor::updateText(){
 		texto->agregar("\nVAS EN DIRECCION CONTRARIA, JUGADOR: ");
 		texto->agregar(to_string(this->getID())+"\n");
 	}
-        texto->agregar(" SIGUIENTE WAY: ");
-        texto->agregar(to_string(siguiente->getID()-6)+"\n");
+       
 	texto->agregar(" - POSICION: ");
 	texto->agregar(to_string(posicionCarrera));
 	texto->agregar(" - VUELTA: ");
@@ -1108,6 +1200,10 @@ void Corredor::updateText(){
 		texto->agregar(to_string(posicionCarrera)+"!\n");
 	}else{
 		texto->agregar(to_string(vueltas));
+	}
+	if (tiempoVuelta!=0){
+	texto->agregar("\nTIEMPO DE VUELTA: ");
+	texto->agregar(to_string(tiempoVuelta));
 	}
 	texto->agregar("\nOBJETO: ");
 	switch (tipoObj) {
@@ -1218,11 +1314,11 @@ void Corredor::lanzarHabilidad(){
 		btVector3 escala(5,5,5);
 		btScalar masa=100;
 		float tiempoDestruccion=40;
-		float tamanyoNodo=3;
+		btVector3 tamanyoNodo(3,3,3);
 		btScalar radio=12;
 		float alt=10;
 
-		Habilidad * habilidadJugador;
+		Habilidad * habilidadJugador = NULL;
 
 		switch(tipojugador){
 
@@ -1233,44 +1329,55 @@ void Corredor::lanzarHabilidad(){
 		alt=10;
 
 		posicion.setY(posicion.getY()+alt);
-		habilidadJugador = new Habilidad(1,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt);
+		habilidadJugador = new Habilidad(1,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);
 		
 		break;
 
 		case VIKINGO:
-		escala = btVector3(2,2,2);	
+		escala = btVector3(3,3,3);	
 		masa=0;
-		radio=0;
+		radio=8;
 		alt=2;	
+
 		posicion.setY(posicion.getY()+alt);
-		habilidadJugador = new Habilidad(2,cuboNodo,posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		habilidadJugador = new Habilidad(2,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
-		habilidadJugador->setLanzado(true);	
+		habilidadJugador->setLanzado(true);
+		
 		break;
 
 		case GLADIADOR:
-		habilidadJugador = new Habilidad(3,cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt);
+		escala = btVector3(20,2,20);
+		tiempoDestruccion=5;
+		habilidadJugador = new Habilidad(3,cuboNodo,posicion,escala,masa,tiempoDestruccion,CILINDRO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);
+		
 		break;
 
 		case CHINO:
 		posicion = btVector3(cuboNodo->getPosition().X , cuboNodo->getPosition().Y, cuboNodo->getPosition().Z );
-		escala = btVector3(3,3,3);
+		tamanyoNodo = btVector3(5,5,5);
+		escala = btVector3(5,7,10);
 		masa=100;	
 		alt=2;
+
 		posicion.setY(posicion.getY()+alt);
-		habilidadJugador = new Habilidad(4,cuboNodo,posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt);
+		habilidadJugador = new Habilidad(4,cuboNodo,posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		habilidadJugador->lanzarItem(1,orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		habilidadJugador->setLanzado(true);	
+		setTurbo(true, true, FuerzaMaxima*2,tiempoDestruccion/3.6);
+		
+		
 		break;
 
 			
 
 
 		}
+		setHabilidad(true);
 		items.push_back(habilidadJugador);
 
 		pista->setItems(items);
@@ -1347,12 +1454,6 @@ void Corredor::updateVectorDireccion()
 //---------------------------------------//
 Corredor::~Corredor() {
 	cout << "\nENTRO DESTRUCTOR CORREDOR. ";
-	rueda1->remove();
-	rueda2->remove();
-	rueda3->remove();
-	rueda4->remove();
-	cuboNodo->remove();
-
 	delete vehiculo;
 	cout << "SALGO DESTRUCTOR CORREDOR\n";
 }

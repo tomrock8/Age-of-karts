@@ -12,7 +12,6 @@
 #include "btBulletCollisionCommon.h"
 #include "MotorFisicas.hpp"
 #include "ItemTeledirigido.hpp"
-#include "Estatico.hpp"
 #include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 #include "RaknetIncludes.hpp"
@@ -55,13 +54,16 @@ class Corredor: public RakNet::NetworkIDObject
 	void setTipoObj(int i);
 	void SetFuerzaVelocidad(int turbo);
 	void setFriccion(btScalar valor);
-	void setTurbo(bool activo, bool objeto,int valor);
+	void setTurbo(bool activo, bool objeto,int valor,int tiempo);
+	void setInmunidad(bool activo);
+	void setHabilidad(bool activo);
 	void setWaypointActual(ISceneNode *nodo);
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
 	void setLimite(int s);
 	void setTipoJugador(int tj);
 	void setVueltas(int j);
+	void setTiempoVuelta(float t);
 
 	
 	std::string toString();
@@ -75,6 +77,8 @@ class Corredor: public RakNet::NetworkIDObject
 	btScalar getdistanciaWaypoint();
 	btScalar getdistanciaWaypointActual();
 	int getVueltas();
+	float getMaxVuetas();
+	float getTiempoVueltaTotal();
 	
 	// Update
 	void update();
@@ -82,6 +86,8 @@ class Corredor: public RakNet::NetworkIDObject
 	void updateEstado();
 	void updateText();
 	void comprobarSueloRuedas();
+	void comprobarTurbo();
+	void comprobarInmunidad();
 	virtual void actualizarItem()=0;
 
 
@@ -101,8 +107,9 @@ class Corredor: public RakNet::NetworkIDObject
 	bool getProteccion();
 	EstadosJugador *getEstados();
 	int getLimite();
+	bool getAceiteActivado();
 	tipo_jugador getTipoJugador();
-
+	bool getInmunidad();
 
 	//estado de los objetos a usar
 	void setCheckItem(bool s);
@@ -153,11 +160,17 @@ protected:
 	bool objetivoFijado; //para el item teledirigido
 	bool aceiteActivado; //para el item teledirigido
 	int timerTurbo;
+	int tiempoTurbo;
 	int timerTeledirigido;
 	int timerAceite;
-	
-	
+	int timerInmunidad;
+	int tiempoInmunidad;
 
+	bool inmunidad;
+	bool habilidadLanzada;
+	float tiempoHabilidad;
+	float tiempoVuelta;
+	float tiempoVueltaTotal;
 	//objetos estaticos y dinamicos
 	
 	EstadosJugador *estado;
@@ -170,7 +183,7 @@ protected:
 	//estados de lanzamiento de objeto
 	bool checkItem;
 
-	
+	int velocidadMedia;
 	int velocidadMaxima;
 	int velocidadMaximaTurbo;
 	int velocidadMaximaAtras;

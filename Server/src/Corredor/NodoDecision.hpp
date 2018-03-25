@@ -13,7 +13,7 @@ typedef enum {NADA2,IGUAL,DISTINTO,MAYOR,MAYOROIGUAL,MENOR,MENOROIGUAL} tipo_nod
 typedef enum {NADA3,OBJNUMERO,OBJBOOLEANO,DISTANCIACERCA,DISTANCIAMEDIA,DISTANCIALEJOS,
               VELOCIDADBAJA,VELOCIDADMEDIA,VELOCIDADALTA,
               NOGIRO,GIROMEDIODERECHA,GIROMEDIOIZQUIERDA,GIROFUERTEDERECHA,GIROFUERTEIZQUIERDA,
-              CAJA,TURBOO,ENEMIGO,VISION} tipo_parametro;
+              CAJA,TURBOO,ENEMIGO,VISION,ENEMIGOLADO,HABILIDADD,JUGADOR} tipo_parametro;
 
 class NodoDecision
 {
@@ -22,15 +22,20 @@ class NodoDecision
     NodoDecision();
     ~NodoDecision();
    
-  void decision(vector<NodoDecision*> &arrayNodos,int nodopadre,tipo_nodo tipoNodo,tipo_parametro parametro,int valor,bool valorb);
-  void accion(vector<NodoDecision*> &arrayNodos,int nodopadre,int accionIA);
+  void decision(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,tipo_nodo tipoNodo,tipo_parametro parametro,int valor,bool valorb);
+  void accion(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,int accionIA);
+  void salto(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,int idNodoSalto);
   void setHijo(NodoDecision * nodo);
   vector<NodoDecision*> getHijos();
   bool getDecision();
   int getAccion();
-  bool getConsulta(bool arrayboleanos[], int obj);   
+  bool getConsulta(bool arrayboleanos[], int obj,int jugador);   
   bool getAccionB();
+  int getid();
+  int getidNodoSalto();
+  bool getSalto();
 
+  
   private:
     
     int idNodo;
@@ -45,7 +50,8 @@ class NodoDecision
     bool valorBoleano;  // VALOR BOOLEANO PARA COMPROBACIONES
     bool Decision;
     bool Accion;
-
+    bool Salto;
+    int idNodoSalto;
 };
 
 #endif /* NODODECISION_H */

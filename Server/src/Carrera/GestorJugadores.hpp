@@ -5,9 +5,9 @@
 #include <iostream>
 #include <string>
 #include "Corredor.hpp"
+#include "CorredorRed.hpp"
 #include "CorredorJugador.hpp"
 #include "CorredorIA.hpp"
-#include "CorredorRed.hpp"
 #include <vector>
 
 using namespace std;

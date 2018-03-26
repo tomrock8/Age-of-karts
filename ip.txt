@@ -1,4 +1,4 @@
     inet 127.0.0.1
     inet6 ::1
-    inet 192.168.1.45
-    inet6 fe80::c6f1:7ef0:3b35:c929
+    inet 192.168.43.233
+    inet6 fe80::d3b0:44ae:554c:78d4

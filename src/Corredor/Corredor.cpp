@@ -582,7 +582,7 @@ void Corredor::setTipoObj(int i)
 		cargador = 3;
 	else if(tipoObj == 3)
 		cargador = 1;
-	cout << "el objeto --- " << i << " ---" << endl;
+	//cout << "el objeto --- " << i << " ---" << endl;
 	//cout << "Random ------>" << tipoObj << endl;
 }
 
@@ -650,7 +650,7 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor,int tiempo) {
 			if(cargador==1) 
 				tipoObj = 0;
 			cargador--;
-			cout << "Turbos restantes: " << cargador << endl;
+			//cout << "Turbos restantes: " << cargador << endl;
 		}
 	}
 	else {
@@ -933,7 +933,7 @@ void Corredor::usarObjetos() {
 		setTurbo(true, true, FuerzaMaxima*2,5);
 		
 	}
-	std::cout << "Tipo obj: " << getTipoObj() << " / " << items.size() << std::endl;
+	//std::cout << "Tipo obj: " << getTipoObj() << " / " << items.size() << std::endl;
 	
 	pista->setItems(items);
 

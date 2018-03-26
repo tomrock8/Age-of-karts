@@ -62,11 +62,11 @@ int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj,int jugador){
     while(!check && cont!=NodoRuta->getHijos().size()){
         
         if(NodoRuta->getHijos().at(cont)->getSalto()){
-            cout<<"COMEPOLLAS1"<<endl;
+            
             for(int i=0 ; i < arrayNodos.size() ; i++){
             if(arrayNodos.at(i)->getid() == NodoRuta->getHijos().at(cont)->getidNodoSalto()){
                 NodoRuta=arrayNodos.at(i);
-                cout<<"COMEPOLLAS"<<endl;
+                
                 return 0;
             }
             

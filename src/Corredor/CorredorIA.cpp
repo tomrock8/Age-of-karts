@@ -266,6 +266,7 @@ void CorredorIA::movimiento()
 		switch(accion){ //lo que devuelva el arbol conduccion
 
         case NADA1:
+		usarObjetos();
         break;
 
         case DISTANCIAOBJETIVOCAJA: //9
@@ -291,7 +292,9 @@ void CorredorIA::movimiento()
         case USAROBJETO://13
 		
 		usarObjetos();
-        
+		if(proteccion)
+		seguirWaypoint();
+			
 		break;
 
 		case USARHABILIDAD: //14
@@ -310,6 +313,7 @@ void CorredorIA::movimiento()
 		switch(accion){ //lo que devuelva el arbol conduccion
 		
         case NADA1:
+		acelerar();
         break;
 
         case ACELERAR: //1
@@ -444,7 +448,7 @@ void CorredorIA::logicaDifusa() {
 	
 
 	//GIRO
-	pertenenciaNoGiro= FuncionTriangular(anguloGiro,-15,0,15);
+	pertenenciaNoGiro= FuncionTriangular(anguloGiro,-10,0,10);
 	pertenenciaGiroFlojoDerecha=FuncionTriangular(anguloGiro,5,35,55);
 	pertenenciaGiroFlojoIzquierda=FuncionTriangular(anguloGiro,-5,-35,-45);
 	pertenenciaGiroFuerteDerecha=FuncionTriangular(anguloGiro,40,80,180);

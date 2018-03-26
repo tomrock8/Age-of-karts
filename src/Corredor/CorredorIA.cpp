@@ -294,7 +294,7 @@ void CorredorIA::movimiento()
 		usarObjetos();
 		if(proteccion)
 		seguirWaypoint();
-			
+
 		break;
 
 		case USARHABILIDAD: //14
@@ -1082,7 +1082,7 @@ void CorredorIA::comprobarDireccion(ISceneNode *nodo){
 
 void CorredorIA::updateHijos(){
 	
-	debugIA();
+	//debugIA();
 
 	if(!debugFisicas)
 	ActualizarRaytest();

@@ -304,6 +304,7 @@ void EscenaLobby::mostrarInfoLobby(int indice){
 
 	if (!offline && iphost.compare("")==0){
 		if (id_player==0){		//leemos ipserver
+			system("ip addr show $dev | awk '/inet/ {print $2}' | cut -d/ -f1 > ip.txt");
 			std::string line;
 			std::ifstream myfile;
 			myfile.open("./ip.txt");
@@ -313,18 +314,7 @@ void EscenaLobby::mostrarInfoLobby(int indice){
 				while (getline(myfile,line)){
 					cont_line++;
 					if (cont_line==3){
-						std::stringstream iss(line);
-						std::string s;
-						cont_line=0;
-						while (getline(iss,s, ' ')){
-							cont_line++;
-							if (cont_line==6){
-								iphost=s;
-								break;
-							}
-					
-
-						}
+						iphost=line;
 						texto+=iphost.c_str();
 						break;
 					}

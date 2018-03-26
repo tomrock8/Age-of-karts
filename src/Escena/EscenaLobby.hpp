@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <sstream>
+#include <stdio.h>
 
 #include "Escena.hpp"
 #include "Motor3d.hpp"

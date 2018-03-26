@@ -28,7 +28,7 @@ Escena::tipo_escena GestorEscena::update() {
 	
 
 	if(escenaActiva->getTipoEscena() == Escena::tipo_escena::CARRERA || escenaActiva->getTipoEscena() == Escena::tipo_escena::ONLINE){
-	retardo1 = retardo*2;
+	retardo1 = retardo*2.5;
 	}else{
 	retardo1 = retardo/2;
 	}
@@ -36,24 +36,24 @@ Escena::tipo_escena GestorEscena::update() {
 
 	
 	if (timediff_sec >= retardo1) {
-		//cout<<timediff_sec <<endl;
+	//	cout<<timediff_sec <<endl;
 		tiempoRefresco = clock();
-		
+		cambioEscena = escenaActiva->comprobarInputs();
+		escenaActiva->update();
 		//cont++;
 	}
 
 /*
 if(tiempo-tiempoAnterior ==1){
-		//cout<<cont<<endl;
-		//cont=0;
+		cout<<cont<<endl;
+		cont=0;
 	}
-
-	tiempoAnterior=tiempo;
 */
+	//tiempoAnterior=tiempo;
+
 
 	if (cambioEscena == escenaActiva->getTipoEscena()) {
-		cambioEscena = escenaActiva->comprobarInputs();
-		escenaActiva->update();
+		
 		escenaActiva->dibujar();
 	}
 	else {

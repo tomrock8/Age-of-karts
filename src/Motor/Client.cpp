@@ -610,6 +610,10 @@ int Client::ReceivePackets()
 						players.at(id)->getEstados()->setEstadoCoche(param);
 						bsIn.Read(param);		//
 						players.at(id)->getEstados()->setEstadoCarrera(param);
+						bsIn.Read(param);		//
+						players.at(id)->getEstados()->setEstadoInmunidad(param);
+						bsIn.Read(param);		//
+						players.at(id)->getEstados()->setEstadoHabilidad(param);
 						
 						players.at(id)->setPosicion(pos, ori);
 					}
@@ -696,6 +700,8 @@ void Client::PlayerMovement(){
 		bsOut.Write(estados->getEstadoObjeto());
 		bsOut.Write(estados->getEstadoCoche());
 		bsOut.Write(estados->getEstadoCarrera());
+		bsOut.Write(estados->getEstadoInmunidad());
+		bsOut.Write(estados->getEstadoHabilidad());
 
 
 		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);

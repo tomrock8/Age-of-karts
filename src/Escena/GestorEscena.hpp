@@ -8,6 +8,7 @@
 #include "EscenaLobby.hpp"
 #include "EscenaCreditos.hpp"
 #include "EscenaOpciones.hpp"
+#include <iostream>
 
 class GestorEscena {
 public:
@@ -39,7 +40,7 @@ private:
 
 	clock_t tiempoRefresco; // Reloj para limitar el refresco
 	float tiempoAnterior;
-	clock_t tiempoActual ;
+	time_t tiempoActual;
 	int cont;
 	float retardo;
 	// METODOS

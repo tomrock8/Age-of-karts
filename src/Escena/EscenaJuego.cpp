@@ -85,16 +85,16 @@ void EscenaJuego::init() {
 	pos2[1].setX(-10);
 	pos2[1].setY(0);
 	pos2[1].setZ(290);
-	pos2[2].setX(-20);
+	pos2[2].setX(-50);
 	pos2[2].setY(0);
 	pos2[2].setZ(310);
-	pos2[3].setX(-20);
+	pos2[3].setX(-50);
 	pos2[3].setY(0);
 	pos2[3].setZ(290);
-	pos2[4].setX(-30);
+	pos2[4].setX(-80);
 	pos2[4].setY(0);
 	pos2[4].setZ(310);
-	pos2[5].setX(-30);
+	pos2[5].setX(-80);
 	pos2[5].setY(0);
 	pos2[5].setZ(290);
 

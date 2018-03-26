@@ -91,6 +91,7 @@ void Caja::romper(Corredor *pj1Col) {
 			if (pj1Col->getTipoObj() == 0 && strcmp(pj1Col->getNodo()->getName(), "JugadorRed") != 0) {
 				std::cout<< "Entro al objeto\n";
 				pj1Col->setTipoObj();
+				
 			}
 
 			break;

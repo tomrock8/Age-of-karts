@@ -510,6 +510,10 @@ void Server::ReceivePackets()
 				players.at(id)->getEstados()->setEstadoCoche(param);
 				bsIn.Read(param);		//
 				players.at(id)->getEstados()->setEstadoCarrera(param);
+				bsIn.Read(param);		//
+				players.at(id)->getEstados()->setEstadoInmunidad(param);
+				bsIn.Read(param);		//
+				players.at(id)->getEstados()->setEstadoHabilidad(param);
 				
 				parambool = false;
 				//std::cout << "Posicion Y: " << players.at(id)->getNodo()->getRotation().Y << " - " << clientes.at(id).prediccion.rotacion[1] << std::endl;
@@ -775,6 +779,9 @@ void Server::refreshServer()
 		bsOut.Write(estados->getEstadoObjeto());
 		bsOut.Write(estados->getEstadoCoche());
 		bsOut.Write(estados->getEstadoCarrera());
+		bsOut.Write(estados->getEstadoInmunidad());
+		bsOut.Write(estados->getEstadoHabilidad());
+
     }
     //std::cout << "Control: " << controlPlayer << std::endl;
     

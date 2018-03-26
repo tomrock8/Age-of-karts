@@ -1,8 +1,11 @@
 #ifndef ESCENALOBBY_H
 #define ESCENALOBBY_H
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 #include "Escena.hpp"
-
 #include "Motor3d.hpp"
 #include "Timer.hpp"
 #include "Graphics.hpp"
@@ -49,6 +52,7 @@ private:
 	ITexture* logoAOK; // Textura del logo del juego
 	bool selection;
 	bool offline;
+	std::string iphost;
 };
 
 #endif /* ESCENALOBBY_H */

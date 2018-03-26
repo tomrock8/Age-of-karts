@@ -64,6 +64,7 @@ objdir:
 	@mkdir -p obj/Escena
 	@mkdir -p obj/Item
 	@mkdir -p obj/Motor
+	@ip addr show $(dev) | awk '/inet/ {print $2}' | cut -d/ -f1 > ip.txt
 	@echo "Creando carpeta de compilados."
 
 info:
@@ -73,6 +74,7 @@ info:
 clean:
 	@rm -f -r obj/
 	@rm -f exec
+	@rm -f ip.txt
 	@rm -f exec2
 	@echo "Limpiando resultado de compilacion."
 

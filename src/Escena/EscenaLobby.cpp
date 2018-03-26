@@ -4,6 +4,7 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	nElementos = 0;
 	nElementos2 = 0;
 	count = 3;
+	iphost="";
 	ipConexion = ipC;
     cout<<"EscenaLobby: "<<ipConexion<<endl;
 	time= Timer::getInstancia();
@@ -272,7 +273,7 @@ void EscenaLobby::mostrarInfoLobby(int indice){
 	if (id_player==0 && !offline || offline && indice==clientes.size()-1 ){	//host
 		if (checkReady){
 			if (offline)
-			iniciar = true;		//si todos estan ready se puede iniciar partida offline
+				iniciar = true;		//si todos estan ready se puede iniciar partida offline
 
 			texto += "\n\n Todos listos. Pulse espacio para iniciar la partida\n";
 		}else{
@@ -292,7 +293,7 @@ void EscenaLobby::mostrarInfoLobby(int indice){
 			}
 		}
 		
-	}else if (!offline){	//no host
+	}else if (!offline){	//online
 		if (checkReadyMe){
 			texto += "\n\n Esperando a los demas jugadores (Pulsa espacio para cancelar)\n";
 		}else{
@@ -300,7 +301,43 @@ void EscenaLobby::mostrarInfoLobby(int indice){
 		}
 		
 	}
-	
+
+	if (!offline && iphost.compare("")==0){
+		if (id_player==0){		//leemos ipserver
+			std::string line;
+			std::ifstream myfile;
+			myfile.open("./ip.txt");
+			int cont_line=0;
+			if (myfile.is_open()){
+				texto+="\n\nIP conexion: ";
+				while (getline(myfile,line)){
+					cont_line++;
+					if (cont_line==3){
+						std::stringstream iss(line);
+						std::string s;
+						cont_line=0;
+						while (getline(iss,s, ' ')){
+							cont_line++;
+							if (cont_line==6){
+								iphost=s;
+								break;
+							}
+					
+
+						}
+						texto+=iphost.c_str();
+						break;
+					}
+				}
+				myfile.close();
+			}else{
+				iphost="IP no encontrada\n";
+			}
+		}
+	}else if (!offline){
+		texto+="\n\nIP conexion: ";
+		texto+=iphost.c_str();
+	}
 }
 
 

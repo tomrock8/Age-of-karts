@@ -89,7 +89,7 @@ void Caja::romper(Corredor *pj1Col) {
 			Node->setVisible(false);
 			timer = time->getTimer();
 			if (pj1Col->getTipoObj() == 0 && strcmp(pj1Col->getNodo()->getName(), "JugadorRed") != 0) {
-				std::cout<< "Entro al objeto\n";
+				//std::cout<< "Entro al objeto\n";
 				pj1Col->setTipoObj();
 				
 			}
@@ -134,12 +134,12 @@ void Caja::Delete()
 }
 
 Caja::~Caja() {
-	cout << "DESTRUCTOR CAJA: ENTRO ";
+	//cout << "DESTRUCTOR CAJA: ENTRO ";
 
 	// Los rigid body se borran desde el motor de fisicas
 	// delete rigidBody;
 	
-	cout << " SALGO.\n";
+	//cout << " SALGO.\n";
 }
 int Caja::getID(){
 	return id;

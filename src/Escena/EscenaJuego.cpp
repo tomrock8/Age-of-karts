@@ -14,23 +14,23 @@ EscenaJuego::~EscenaJuego() {
 	//----------------------------------//
 	//-----------DESTRUCTORES-----------//
 	//----------------------------------//
-	cout << "\n-------------- A BORRAR LA ESCENA DE JUEGO! -------------- \n";
-	cout << "Vamos a limpiar primero la escena!...";
+	//cout << "\n-------------- A BORRAR LA ESCENA DE JUEGO! -------------- \n";
+	//cout << "Vamos a limpiar primero la escena!...";
 	limpiar();
-	cout << "Bien!\n";
-	
+	//cout << "Bien!\n";
+	//
 
-	cout << "Voy a entrar en el destructor de bullet. Deseadme suerte...\n";
+	//cout << "Voy a entrar en el destructor de bullet. Deseadme suerte...\n";
 	delete MotorFisicas::getInstancia();
-	cout << "Bien!\n";
+	//cout << "Bien!\n";
 
-	cout << "Voy a entrar en el destructor de jugadores. Deseadme suerte...\n";
+	//cout << "Voy a entrar en el destructor de jugadores. Deseadme suerte...\n";
 	delete GestorJugadores::getInstancia();
-	cout << "Bien!\n";
+	//cout << "Bien!\n";
 
-	cout << "Voy a entrar en el destructor de pista. Deseadme suerte...\n";
+	//cout << "Voy a entrar en el destructor de pista. Deseadme suerte...\n";
 	delete Pista::getInstancia();
-	cout << "No ha ido mal.\n";
+	//cout << "No ha ido mal.\n";
 
 	delete TextoPantalla::getInstancia();
 

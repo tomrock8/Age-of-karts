@@ -16,14 +16,14 @@ GestorEscena::GestorEscena() {
 Escena::tipo_escena GestorEscena::update() {
 	
 
-	
+/*	
 	tiempoActual = clock();
 	clock_t timediff = tiempoActual - tiempoRefresco;
 	float timediff_sec = ((float)timediff) / 100000;
-	/*
+	
 	Timer *t2 = Timer::getInstancia();
 	float tiempo= t2->getTimer();
-	*/
+	
 	float retardo1;
 	
 
@@ -43,17 +43,18 @@ Escena::tipo_escena GestorEscena::update() {
 		//cont++;
 	}
 
-/*
+
 if(tiempo-tiempoAnterior ==1){
 		cout<<cont<<endl;
 		cont=0;
 	}
-*/
-	//tiempoAnterior=tiempo;
 
+	//tiempoAnterior=tiempo;
+*/
 
 	if (cambioEscena == escenaActiva->getTipoEscena()) {
-		
+		cambioEscena = escenaActiva->comprobarInputs();
+		escenaActiva->update();
 		escenaActiva->dibujar();
 	}
 	else {

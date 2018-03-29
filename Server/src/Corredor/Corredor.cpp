@@ -1045,7 +1045,7 @@ void Corredor::frenodemano(bool activo, bool objeto)
 {
 	int friccion = 1.f;
 	if (activo) {
-		if(estado->getEstadoMovimiento() != 0 && estado->getEstadoMovimiento() != 4 && (estado->getDireccionMovimiento()==1 || estado->getDireccionMovimiento()==2) && !objeto){
+		if(!aceiteActivado && estado->getEstadoMovimiento() != 0 && estado->getEstadoMovimiento() != 4 && (estado->getDireccionMovimiento()==1 || estado->getDireccionMovimiento()==2) && !objeto){
 			limite+=10;
 		}
 

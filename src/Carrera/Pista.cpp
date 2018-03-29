@@ -46,10 +46,12 @@ Pista *Pista::getInstancia()
 
 
 void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
-	Mapa = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh(mapa));
+	//Mapa = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh(mapa));
+	Mapa = TMotor::instancia().newMeshNode("Turbo","assets/Mapa01/palmeras.obj","escena_raiz");
+	
 	if (Mapa) {
 		Mapa->setName("Mapa");
-		Mapa->setMaterialFlag(EMF_LIGHTING, false);
+		//Mapa->setMaterialFlag(EMF_LIGHTING, false);
 	}
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();

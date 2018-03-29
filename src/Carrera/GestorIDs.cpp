@@ -5,7 +5,7 @@ GestorIDs::GestorIDs(){
     id = 6;
 }
 
-void GestorIDs::setIdentifier(ISceneNode *nodo, const char *nombre){
+void GestorIDs::setIdentifier(obj3D *nodo, const char *nombre){
     nodo->setID(id);
     id++;
     nodo->setName(nombre);

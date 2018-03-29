@@ -60,3 +60,40 @@ void obj3D::setID(GLuint id){
 
 	this->id=id;
 }
+
+void setName(const char *nombre){
+	name=nombre;
+	mesh->setName(nombre);
+}
+
+void obj3D::setRotation(glm::vec3 axis, GLfloat angle) {
+	
+	if (axis.x == 1)
+		rotation.x = angle;
+	if (axis.y == 1)
+		rotation.y = angle;
+	if (axis.z == 1)
+		rotation.z = angle;
+
+	
+
+	static_cast<TTransform*>(mesh->getPadre()->getPadre()->getEntidad())->setRotation(axis.x, axis.y, axis.z, angle);
+
+}
+
+void obj3D::setRotation(float X,float Y,float Z){
+
+	setRotation(glm::vec3(1,0,0),X);
+
+	setRotation(glm::vec3(0,1,0),Y);
+
+	setRotation(glm::vec3(0,0,1),Z);
+
+}
+
+
+void obj3D::setPosition(float X,float Y,float Z) {
+	static_cast<TTransform*>(mesh->getPadre()->getEntidad())->setPosition(X, Y, Z);
+	position = getPosition();
+	
+}

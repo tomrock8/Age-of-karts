@@ -1,11 +1,12 @@
 #include "Waypoint.hpp"
 
 Waypoint::Waypoint() {
-	waypoint = Motor3d::instancia().getScene()->addCubeSceneNode(0.1f);
-	waypoint->setMaterialFlag(EMF_LIGHTING, false); //Desactivar iluminacion
-	Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(waypoint->getMesh(), SColor(255, 200, 100, 100));
-	waypoint->setVisible(false);
-	waypoint->setScale(vector3df(1500, 150, 05));
+	//waypoint = Motor3d::instancia().getScene()->addCubeSceneNode(0.1f);
+	waypoint = TMotor::instancia().newMeshNode("Waypoint","assets/wall/wall.obj","escena_raiz");
+	//waypoint->setMaterialFlag(EMF_LIGHTING, false); //Desactivar iluminacion
+	//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(waypoint->getMesh(), SColor(255, 200, 100, 100));
+	//waypoint->setVisible(false);
+	//waypoint->setScale(vector3df(1500, 150, 05));
 	waypoint->setName("Waypoint");
 	siguiente = NULL; // Referenciar despues con la funcion
 }
@@ -27,7 +28,7 @@ void Waypoint::inicializarFisicas() {
 
 	// Create the shape
 
-	Shape = new btBoxShape(btVector3(waypoint->getScale().X*0.05f, waypoint->getScale().Y*0.05f, waypoint->getScale().Z*0.05f));
+	Shape = new btBoxShape(btVector3(1500*0.05f, 150*0.05f, 5*0.05f));
 
 	// sin masa
 	btVector3 localInertia;
@@ -74,7 +75,7 @@ Waypoint *Waypoint::getNextWaypoint() {
 	return siguiente;
 }
 
-IMeshSceneNode *Waypoint::getWaypoint() {
+obj3D *Waypoint::getWaypoint() {
 	return waypoint;
 }
 int Waypoint::getID(){

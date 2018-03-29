@@ -20,6 +20,8 @@
 #include "EstadosJugador.hpp"
 #include "Habilidad.hpp"
 #include "ItemTeledirigido.hpp"
+#include "TMotor.hpp"
+
 
 
 using namespace std;
@@ -89,10 +91,10 @@ class Corredor: public RakNet::NetworkIDObject
 	void comprobarTurbo();
 	void comprobarInmunidad();
 	virtual void actualizarItem()=0;
-
+	void actualizarPosicion();
 
 	// Metodos GET
-	IMeshSceneNode *getNodo();
+	obj3D *getNodo();
 	btRaycastVehicle *getVehiculo();
 	btRigidBody *getRigidBody();
 	btVector3 getVectorDireccion();
@@ -124,12 +126,11 @@ class Corredor: public RakNet::NetworkIDObject
 protected:
 
 	//Irrlicht
-	IMesh * coche;
-	IMeshSceneNode *cuboNodo;
-	IMeshSceneNode *rueda1;
-	IMeshSceneNode *rueda2;
-	IMeshSceneNode *rueda3;
-	IMeshSceneNode *rueda4;
+	obj3D *cuboNodo;
+	obj3D *rueda1;
+	obj3D *rueda2;
+	obj3D *rueda3;
+	obj3D *rueda4;
 
 	//WAYPOINTS
 	Waypoint *anterior; // Punto Actual

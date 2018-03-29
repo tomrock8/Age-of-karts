@@ -33,7 +33,8 @@ void Item::inicializarFisicas()
 	Transform.setIdentity();
 	Transform.setOrigin(posicion);
 	MotionState = new btDefaultMotionState(Transform);
-	btVector3 HalfExtents(escala.getX() , escala.getY(), escala.getZ());
+	//btVector3 HalfExtents(escala.getX() , escala.getY(), escala.getZ());
+	btVector3 HalfExtents(1 , 1, 1);
 	// Create the shape
 	switch(fcolision){
 
@@ -146,7 +147,7 @@ btRigidBody *Item::getRigidBody()
 {
 	return rigidBody;
 }
-IMeshSceneNode *Item::getNodo()
+obj3D *Item::getNodo()
 {
 	return nodo;
 	

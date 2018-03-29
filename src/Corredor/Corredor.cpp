@@ -44,15 +44,16 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 
 	
 	//-------------bullet----------------
-	rueda1 = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/rueda.obj"));
-    rueda2 = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/rueda.obj"));
-    rueda3 = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/rueda.obj"));
-    rueda4 = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/rueda.obj"));
+	rueda1 = TMotor::instancia().newMeshNode(" ","assets/Objetos/rueda.obj","escena_raiz");
+	rueda2 = TMotor::instancia().newMeshNode(" ","assets/Objetos/rueda.obj","escena_raiz");
+	rueda3 = TMotor::instancia().newMeshNode(" ","assets/Objetos/rueda.obj","escena_raiz");
+	rueda4 = TMotor::instancia().newMeshNode(" ","assets/Objetos/rueda.obj","escena_raiz");
 
-	rueda1->setScale(vector3df(2,1,1));//alante derecha
-	rueda2->setScale(vector3df(2,1,1));//delante izquierda
-	rueda3->setScale(vector3df(2,1,1));//atras derecha
-	rueda4->setScale(vector3df(2,1,1));//atras izquierda
+
+	//rueda1->setScale(vector3df(2,1,1));//alante derecha
+	//rueda2->setScale(vector3df(2,1,1));//delante izquierda
+	//rueda3->setScale(vector3df(2,1,1));//atras derecha
+	//rueda4->setScale(vector3df(2,1,1));//atras izquierda
 
 
 	//establecemos el primer waypoint del mapa
@@ -61,13 +62,6 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	actual = mapa->getArrayWaypoints()[0];
 	siguiente = actual->getNextWaypoint();
 	siguiente_aux = siguiente;
-
-	//smgr->getMeshManipulator()->setVertexColors(rueda1->getMesh(),SColor(255, 255, 0, 0));
-	rueda1->setMaterialFlag(EMF_LIGHTING, false);
-	rueda2->setMaterialFlag(EMF_LIGHTING, false);
-	rueda3->setMaterialFlag(EMF_LIGHTING, false);
-	rueda4->setMaterialFlag(EMF_LIGHTING, false);
-
 
 	
 	
@@ -95,19 +89,14 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	setParametros();
 
-	
-	cuboNodo = Motor3d::instancia().getScene()->addMeshSceneNode(coche, 0);
-	
-	if (cuboNodo) {
-		cuboNodo->setName("Jugador");
 		
-		cuboNodo->setScale(vector3df(1, 1, 1.5));
-		// Desactivar la iluminacion del cubo
-		cuboNodo->setMaterialFlag(EMF_LIGHTING, false); // Desactivar iluminacion
-		cuboNodo->setPosition(vector3df(pos.getX(), pos.getY(), pos.getZ()));
-		cuboNodo->setRotation(vector3df(0.0f, 90.0f, 0.0f));
-	}
+	if (cuboNodo) {
+		
+		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
+		cuboNodo->setRotation(0.0f, 90.0f, 0.0f);
 
+	}
+	
 	posicion.setX(pos.getX());
 	posicion.setY(pos.getY());
 	posicion.setZ(pos.getZ());
@@ -124,7 +113,7 @@ void Corredor::setParametros(){
 	switch (tipojugador){
 		case GLADIADOR:
 			//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
-			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartGladiator.obj");
+			cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/Karts/KartGladiator.obj","escena_raiz");
 			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
 			
 			//----ACELERACION-----
@@ -145,7 +134,7 @@ void Corredor::setParametros(){
 			break;
 		case PIRATA:
 			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/green.png"));
-			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartPirata.obj");
+			cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/Karts/KartPirata.obj","escena_raiz");
 			//----ACELERACION-----
 			FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
@@ -164,7 +153,7 @@ void Corredor::setParametros(){
 			break;
 		case VIKINGO:
 			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/blue.png"));
-			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartVikingo.obj");
+			cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/Karts/KartVikingo.obj","escena_raiz");
 			//----ACELERACION-----
 			FuerzaMaxima = btScalar(3600); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
@@ -183,7 +172,7 @@ void Corredor::setParametros(){
 			break;
 		case CHINO:
 			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/yellow.png"));
-			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartChino.obj");
+			cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/Karts/KartChino.obj","escena_raiz");
 			//----ACELERACION-----
 			FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 			Fuerza = FuerzaMaxima;
@@ -232,7 +221,8 @@ void Corredor::InicializarFisicas()
 	CentroGravedad = new btCompoundShape();
 
 	//Forma Colision
-	btVector3 TamanyoFormaColision(cuboNodo->getScale().X, cuboNodo->getScale().Y, cuboNodo->getScale().Z * 2);
+	//btVector3 TamanyoFormaColision(cuboNodo->getScale().X, cuboNodo->getScale().Y, cuboNodo->getScale().Z * 2);
+	btVector3 TamanyoFormaColision(1, 1, 2);
 	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
 	FormaColision = new btBoxShape(TamanyoFormaColision);
 	//masa coche
@@ -1177,14 +1167,12 @@ void Corredor::update()
 		movimiento();
 		updateEstado();
 	}
+
 	updateTimerObstaculos();
 	updateEstado();
-	//if (habilidadJugador->getHabilidadActiva())updateHabilidad();
-	
+
 	comprobarSueloRuedas();
-	posicion.setX(cuboNodo->getPosition().X);
-	posicion.setY(cuboNodo->getPosition().Y);
-	posicion.setZ(cuboNodo->getPosition().Z);
+	actualizarPosicion();
 	actualizarRuedas();
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
@@ -1193,6 +1181,13 @@ void Corredor::update()
 	updateHijos();
 	
 }
+
+void Corredor::actualizarPosicion(){
+	posicion.setX(cuboNodo->getPosition().X);
+	posicion.setY(cuboNodo->getPosition().Y);
+	posicion.setZ(cuboNodo->getPosition().Z);
+}
+
 
 void Corredor::updateText(){
 	TextoPantalla *texto =TextoPantalla::getInstancia();
@@ -1269,7 +1264,7 @@ void Corredor::updateTimerObstaculos() {
 void Corredor::actualizarRuedas()
 {
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
-	vector3df Euler;
+	btVector3 Euler;
 	btQuaternion TQuat = ruedas.getRotation();
 	quaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
 	q.toEuler(Euler);
@@ -1281,9 +1276,9 @@ void Corredor::actualizarRuedas()
 	
 
 	//rueda1
-	rueda1->setPosition(vector3df(distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
-	orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
-	rueda1->setRotation(vector3df(Euler.X, Euler.Y , Euler.Z));
+	rueda1->setPosition(distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
+	orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ());
+	rueda1->setRotation(Euler.getX(),Euler.getY(),Euler.getZ());
 	
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
@@ -1291,9 +1286,11 @@ void Corredor::actualizarRuedas()
 	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
 	q.toEuler(Euler);
 	Euler *= RADTODEG;
-	rueda2->setPosition(vector3df(-distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
-	orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
-	rueda2->setRotation(vector3df(Euler.X, Euler.Y +180 , Euler.Z));
+	rueda2->setPosition(-distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
+	orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ());
+	
+	
+	rueda2->setRotation(Euler.getX(),Euler.getY()+180,Euler.getZ());
 	
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
@@ -1301,9 +1298,9 @@ void Corredor::actualizarRuedas()
 	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
 	q.toEuler(Euler);
 	Euler *= RADTODEG;
-	rueda3->setPosition(vector3df(distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
-	orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
-	rueda3->setRotation(vector3df(Euler.X, Euler.Y , Euler.Z));
+	rueda3->setPosition(distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
+	orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ());
+	rueda3->setRotation(Euler.getX(),Euler.getY(),Euler.getZ());
 	
 	
 	//rueda4
@@ -1312,9 +1309,10 @@ void Corredor::actualizarRuedas()
 	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
 	q.toEuler(Euler);
 	Euler *= RADTODEG;
-	rueda4->setPosition(vector3df(-distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
-	orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
-	rueda4->setRotation(vector3df(Euler.X, Euler.Y +180, Euler.Z));
+	rueda4->setPosition(-distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
+	orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ());
+
+	rueda4->setRotation(Euler.getX(),Euler.getY()+180,Euler.getZ());
 
 
 }

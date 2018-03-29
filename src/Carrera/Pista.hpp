@@ -14,6 +14,7 @@
 #include "Turbo.hpp"
 #include "Caja.hpp"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
+#include "TMotor.hpp"
 
 using namespace std;
 
@@ -60,7 +61,7 @@ private:
 	int tamCajas;
 	vector<Caja*> arrayCajas;
 	
-	ISceneNode *Mapa;
+	obj3D *Mapa;
 
 	vector<Item *> Items;
 

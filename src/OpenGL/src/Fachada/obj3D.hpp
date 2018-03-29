@@ -25,6 +25,10 @@ public:
 
 	//METODOS SET
 	void setID(GLuint);
+	void setRotation(glm::vec3 axis, GLfloat angle);
+	void setPosition(float X,float Y,float Z);
+	void setRotation(float X,float Y,float Z);
+	void setName(const char *nombre);
 
 private:
 	GLuint id;

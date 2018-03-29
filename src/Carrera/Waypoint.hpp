@@ -7,6 +7,7 @@
 #include "MotorFisicas.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
+#include "TMotor.hpp"
 
 using namespace std;
 
@@ -32,7 +33,8 @@ public:
   void setVector2(btVector3 p2);
   void setID(int i);
   //metodos GET
-  IMeshSceneNode *getWaypoint();
+
+  obj3D *getWaypoint();
   btVector3 getPosicion();
   Waypoint *getNextWaypoint();
   btVector3 getVector1();
@@ -40,7 +42,7 @@ public:
   btVector3 getRotation();
   int getID();
 private:
-	IMeshSceneNode * waypoint;
+	obj3D * waypoint;
 	Waypoint *siguiente; // Siguiente punto
 
   //fisicas

@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include "TMotor.hpp"
 
 using namespace std;
 
@@ -31,7 +32,7 @@ public:
   void Delete();
 
     
-  IMeshSceneNode *getNodo();
+  obj3D *getNodo();
   btRigidBody *getRigidBody();
   int getID();
   int getIDPadre();
@@ -51,7 +52,7 @@ public:
 protected:
 
   //NODO
-  IMeshSceneNode *nodo;
+  obj3D *nodo;
 
   //Propiedades rigidbody
   btRigidBody *rigidBody;

@@ -1,0 +1,54 @@
+# Blender MTL File: 'untitled.blend'
+# Material Count: 4
+
+newmtl MaterialDelCopon
+Ns 92.156863
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.177419 0.177419 0.177419
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd wall\wall_diffuse.png
+map_Bump mono\\mar.jpg
+map_Ks mono\\marBump.jpg
+
+newmtl MaterialDelCopon.001
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.177419 0.177419 0.177419
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd wall\wall_diffuse.png
+map_Bump wall\\wall_normal.png
+map_Ks wall\\wall_specular.png
+
+newmtl Material_de_lava
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump mono\\mono_Normal.jpg
+map_Kd mono\\mono_difusa.jpg
+map_Ks mono\\mono_specular.jpg
+
+newmtl materialTesteo.003
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.000000 0.006682
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd mono\mar.jpg
+map_Bump mono\\mar.jpg
+map_Ks mono\\marBump.jpg

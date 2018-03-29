@@ -1,0 +1,56 @@
+# Blender MTL File: 'mapa3.0.blend'
+# Material Count: 4
+
+newmtl Carretera
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas\\MapaPirataCarretera_normal.png
+map_Kd texturas\\MapaPirataCarretera_diffusa.png
+map_Ks texturas\\MapaPirataCarretera_specular.png
+
+newmtl MountainMat
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd montana.png
+map_Bump texturas\\terrain_normal.png
+map_Ks texturas\\montana_specular.png
+map_Ns texturas\\montana_specular.png
+
+newmtl MountainMat_NONE
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas\\terrain_normal.png
+map_Kd texturas\\montana_diffuse.png
+map_Ks texturas\\montana_specular.png
+map_Ns texturas\\montana_specular.png
+
+newmtl Terrain
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.585841 0.640000 0.156271
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texturas\terrain_difusse.png
+map_Bump texturas\\terrain_normal.png
+map_Ks texturas\\terrain_specular.png

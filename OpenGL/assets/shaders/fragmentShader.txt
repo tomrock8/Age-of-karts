@@ -14,12 +14,13 @@ struct Light {
     vec3 specular;
 };
 
-uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse;
+uniform sampler2D texture_specular;
+
 uniform Light light_1;
 uniform vec3 colorRandom;
 uniform vec3 posCamara;
 
-//vec3  colorRandom(0.3, 0.8, 0.2);
 
 
 void main()
@@ -30,7 +31,7 @@ void main()
 
     // ---- AMBIENTE ----
     //Se multiplica por el color de la luz que incide sobre el objeto
-    vec3 ambient = light_1.ambient * colorRandom;
+    vec3 ambient = light_1.ambient * vec3(texture(texture_diffuse, TexCoords));
 
     // ---- DIFUSA ----
     //Calcular la direccion entre la fuente de luz y la posicion en el mundo
@@ -42,7 +43,7 @@ void main()
     //max = no queremos el valor negativo del resultado
     float diff = max(dot(norm, lightDir), 0.0);
     //lo multiplicamos por el color de la luz
-    vec3 diffuse = light_1.diffuse * diff * colorRandom;
+    vec3 diffuse = light_1.diffuse * diff * vec3(texture(texture_diffuse, TexCoords));
 
     
     // ---- ESPECULAR ----
@@ -52,7 +53,7 @@ void main()
 
     //Calcular el componente especular
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0f); //32 = valor de brillo, cuanto mas alto mas brillante
-    vec3 specular = light_1.specular * spec * colorRandom;
+    vec3 specular = light_1.specular * spec * vec3(texture(texture_specular, TexCoords));
     
 
     //Luz resultante: ambient+diffuse+specular
@@ -61,4 +62,6 @@ void main()
 
     //Se asigna el color resultante a la variable de salida
     FragColor = vec4(result, 1.0);
+
+    //FragColor = texture(texture_diffuse, TexCoords);
 }

@@ -14,6 +14,7 @@ obj/
 *.vcxproj*
 *.VC*
 .vs/
+.vscode/
 Debug/
 
 

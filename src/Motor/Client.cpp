@@ -627,19 +627,29 @@ int Client::ReceivePackets()
 						bsIn.Read(ori[2]);	//
 						
 						bsIn.Read(param);		//ESTADOS
-						players.at(id)->getEstados()->setEstadoMovimiento(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setEstadoMovimiento(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setDireccionMovimiento(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setDireccionMovimiento(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setEstadoObjeto(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setEstadoObjeto(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setEstadoCoche(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setEstadoCoche(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setEstadoCarrera(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setEstadoCarrera(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setEstadoInmunidad(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setEstadoInmunidad(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setEstadoHabilidad(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setEstadoHabilidad(param);
+						bsIn.Read(param);		//Limite
+						if(i!=controlPlayer)
+							players.at(id)->setLimite(param);
 						
 						players.at(id)->setPosicion(pos, ori);
 					}
@@ -702,6 +712,7 @@ unsigned char Client::GetPacketIdentifier(RakNet::Packet *p)
 //		- Position[3]
 //		- Rotation[3]
 //		- EstadosJugador[5]
+//		- Limite
 //
 //===========================================================================
 void Client::PlayerMovement(){
@@ -728,6 +739,7 @@ void Client::PlayerMovement(){
 		bsOut.Write(estados->getEstadoCarrera());
 		bsOut.Write(estados->getEstadoInmunidad());
 		bsOut.Write(estados->getEstadoHabilidad());
+		bsOut.Write(players.at(controlPlayer)->getLimite());
 
 
 		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);

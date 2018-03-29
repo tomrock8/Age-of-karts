@@ -520,6 +520,8 @@ void Server::ReceivePackets()
 				players.at(id)->getEstados()->setEstadoInmunidad(param);
 				bsIn.Read(param);		//
 				players.at(id)->getEstados()->setEstadoHabilidad(param);
+				bsIn.Read(param);
+				players.at(id)->setLimite(param);
 				
 				parambool = false;
 				//std::cout << "Posicion Y: " << players.at(id)->getNodo()->getRotation().Y << " - " << clientes.at(id).prediccion.rotacion[1] << std::endl;

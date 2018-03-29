@@ -23,6 +23,9 @@ public:
 	glm::vec3 getPosition();
 	glm::vec3 getRotation();
 
+	//METODOS SET
+	void setID(GLuint);
+
 private:
 	GLuint id;
 	glm::vec3 position;

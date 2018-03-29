@@ -55,3 +55,8 @@ glm::vec3 obj3D::getRotation() {
 	*/
 	return rotation;
 }
+
+void obj3D::setID(GLuint id){
+
+	this->id=id;
+}

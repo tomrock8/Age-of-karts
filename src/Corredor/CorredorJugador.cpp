@@ -39,6 +39,8 @@ void CorredorJugador::movimiento() {
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
 		girarIzquierda();
 		comprobadorMovimiento = true;
+	}else{
+		estado->setDireccionMovimiento(RECTO);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
 			recolocarWaypoint();

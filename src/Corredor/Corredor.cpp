@@ -981,7 +981,9 @@ void Corredor::acelerar()
 		vehiculo->setSteeringValue(btScalar(0), 1);
 	
 	estado->setEstadoMovimiento(AVANZA);
-	estado->setDireccionMovimiento(RECTO);
+	if (!turboActivado){
+		estado->setDireccionMovimiento(RECTO);
+	}
 }
 void Corredor::frenar()
 {
@@ -1010,7 +1012,8 @@ void Corredor::frenar()
 	}else{
 		estado->setEstadoMovimiento(FRENA);
 	}
-	
+	if (!turboActivado)
+	estado->setDireccionMovimiento(RECTO);
 	
 }
 void Corredor::girarDerecha()

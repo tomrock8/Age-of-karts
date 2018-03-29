@@ -1213,6 +1213,7 @@ void Corredor::updateText(){
 	texto->agregar(to_string(posicionCarrera));
 	texto->agregar(" - VUELTA: ");
 	if (vueltas>maxvueltas){
+		estado->setEstadoCarrera(FIN);
 		texto->agregar("HA LLEGADO ");
 		texto->agregar(to_string(posicionCarrera)+"!\n");
 	}else{

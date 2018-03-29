@@ -36,13 +36,13 @@
                 "/usr/include",
                 "${workspaceRoot}",
                 "/usr/local/include/bullet",
+                "/usr/include/c++/5",
+                "/usr/include/x86_64-linux-gnu/c++/5",
+                "/usr/include/c++/5/tr1",
+                "/usr/include/c++/7.2.1/tr1",
                 "/usr/include/c++/7.2.1",
                 "/usr/include/c++/7.2.1/x86_64-pc-linux-gnu",
-                "/usr/include/c++/7.2.1/tr1",
-                "/usr/include/c++/v1",
-                "/usr/include/c++/v1",
-                "/usr/include/linux",
-                "${workspaceRoot}/src/Corredor"
+                "/usr/include/linux"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
@@ -61,7 +61,10 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         },
         {
             "name": "Win32",

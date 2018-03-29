@@ -18,10 +18,10 @@ public:
 	~GestorJugadores(void);
 
 	static GestorJugadores *getInstancia();
-	vector<Corredor*> getJugadores();
+	std::vector<Corredor*> getJugadores();
 	int getNumJugadores();
 
-	void setJugadores(vector<Corredor*> pj1);
+	void setJugadores(std::vector<Corredor*> pj1);
 
 	void aumentarJugadores();
 	void decrementarJugadores();
@@ -29,7 +29,7 @@ public:
 private:
 	GestorJugadores(void);
 	static GestorJugadores *instancia;
-	vector<Corredor*> pj;
+	std::vector<Corredor*> pj;
 	int numJugadores;
 
 

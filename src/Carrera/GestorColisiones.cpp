@@ -10,8 +10,8 @@ void GestorColisiones::ComprobarColisiones()
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	jugadores = GestorJugadores::getInstancia();
 	Pista *pista = Pista::getInstancia();
-	vector<Caja*> cajas = pista->getArrayCaja();
-	vector<Item*> items = pista->getItems();
+	std::vector<Caja*> cajas = pista->getArrayCaja();
+	std::vector<Item*> items = pista->getItems();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	pj1 = jugadores->getJugadores();
 	int numManifolds = mundo->getDispatcher()->getNumManifolds();
@@ -21,8 +21,8 @@ void GestorColisiones::ComprobarColisiones()
 		const btCollisionObject *obA = contactManifold->getBody0();
 		const btCollisionObject *obB = contactManifold->getBody1();
 
-		nodoA = static_cast<ISceneNode *>(obA->getUserPointer());
-		nodoB = static_cast<ISceneNode *>(obB->getUserPointer());
+		nodoA = static_cast<obj3D *>(obA->getUserPointer());
+		nodoB = static_cast<obj3D *>(obB->getUserPointer());
 
 		if (nodoA != 0 && nodoB != 0)
 		{
@@ -101,7 +101,7 @@ bool GestorColisiones::JugadorWaypoint(){
 bool GestorColisiones::ItemTeledirigidoWaypoint(){
 
 	Pista *pista = Pista::getInstancia();
-	vector<Item *> items = pista->getItems();
+	std::vector<Item *> items = pista->getItems();
 
 	if (strcmp("Estatico", nodoA->getName()) == 0){
 			 if (strcmp("Waypoint", nodoB->getName()) == 0)
@@ -154,7 +154,7 @@ bool GestorColisiones::habilidadVShabilidad(){
 
 
 	Pista *pista = Pista::getInstancia();
-	vector<Item *> items = pista->getItems();
+	std::vector<Item *> items = pista->getItems();
 	
 	
 	if(strcmp("HabilidadPirata", nodoA->getName()) == 0 ){
@@ -286,7 +286,7 @@ bool GestorColisiones::habilidadVShabilidad(){
 
 bool GestorColisiones::HabilidadesJugadores(){
 	Pista *pista = Pista::getInstancia();
-	vector<Item *> items = pista->getItems();
+	std::vector<Item *> items = pista->getItems();
 	int idPadreUlti=0;
 	
 	if(strcmp("Jugador", nodoA->getName()) == 0 || strcmp("JugadorIA", nodoA->getName()) == 0 || strcmp("JugadorRed", nodoA->getName()) == 0){
@@ -363,7 +363,7 @@ bool GestorColisiones::Escudoitems(){
 
 
 	Pista *pista = Pista::getInstancia();
-	vector<Item *> items = pista->getItems();
+	std::vector<Item *> items = pista->getItems();
 	
 	int idEscudo=0;
 	int idObjeto=0;
@@ -473,7 +473,7 @@ if (strcmp("Escudo", nodoB->getName()) == 0){
 bool GestorColisiones::HabilidadesItems(){
 
 	Pista *pista = Pista::getInstancia();
-	vector<Item *> items = pista->getItems();
+	std::vector<Item *> items = pista->getItems();
 	int idUlti=0;
 	int idObjeto=0;
 	int idPadreUlti=0;
@@ -596,8 +596,8 @@ bool GestorColisiones::JugadorEstatico()
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	Pista *pista = Pista::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	vector<Item *> items = pista->getItems();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<Item *> items = pista->getItems();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 	Pista *mapa = Pista::getInstancia();
 	bool protegido=false;
 	bool aceite = false;
@@ -702,8 +702,8 @@ bool GestorColisiones::JugadorProyectil()
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	Pista *pista = Pista::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	vector<Item *> items = pista->getItems();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<Item *> items = pista->getItems();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 	Pista *mapa = Pista::getInstancia();
 	bool protegido=false;
 
@@ -757,7 +757,7 @@ bool GestorColisiones::JugadorProyectil()
 //
 // Comprobar colisiones entre Jugador y Caja
 //
-bool GestorColisiones::JugadorCaja(vector<Caja*> cajas)
+bool GestorColisiones::JugadorCaja(std::vector<Caja*> cajas)
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();

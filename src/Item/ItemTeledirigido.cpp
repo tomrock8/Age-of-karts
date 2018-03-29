@@ -214,14 +214,14 @@ void ItemTeledirigido::movimiento(){
 
 	if(anguloGiro>0){
 	orientacion = orientacion.rotate(btVector3(0, 1, 0),giro*PI/180);
-	nodo->setRotation(vector3df(nodo->getRotation().x,nodo->getRotation().y+5,nodo->getRotation().z));
+	nodo->setRotation(nodo->getRotation().x,nodo->getRotation().y+5,nodo->getRotation().z);
 	quaternion.setEulerZYX(0,nodo->getRotation().y * PI/180,0);
 	//cout<< "derecha" << endl;
 	}
 
 	else{
 	orientacion= orientacion.rotate(btVector3(0, 1, 0),(-giro)*PI/180);
-	nodo->setRotation(vector3df(nodo->getRotation().x,nodo->getRotation().y-5,nodo->getRotation().z));
+	nodo->setRotation(nodo->getRotation().x,nodo->getRotation().y-5,nodo->getRotation().z);
 	quaternion.setEulerZYX(0,nodo->getRotation().y * PI/180,0);
 	
 	//cout<< "izquierda" << endl;

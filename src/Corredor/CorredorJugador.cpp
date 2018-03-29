@@ -63,8 +63,8 @@ void CorredorJugador::updateHijos(){
 void CorredorJugador::actualizarItem() {
 
 	int direccionItem = 1;
-	setPosDisparo(btVector3(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10));
-	btVector3 posDisparo2(cuboNodo->getPosition().X, cuboNodo->getPosition().Y - 1, cuboNodo->getPosition().Z);
+	setPosDisparo(btVector3(cuboNodo->getPosition().x + orientacion.getX() * 10, cuboNodo->getPosition().y, cuboNodo->getPosition().z + orientacion.getZ() * 10));
+	btVector3 posDisparo2(cuboNodo->getPosition().x, cuboNodo->getPosition().y - 1, cuboNodo->getPosition().z);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) setTipoObj(1);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) setTipoObj(2);

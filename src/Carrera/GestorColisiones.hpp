@@ -16,6 +16,7 @@
 #include <vector>
 #include <time.h>
 #include "Timer.hpp"
+#include "TMotor.hpp"
 using namespace std;
 
 class GestorColisiones
@@ -23,7 +24,7 @@ class GestorColisiones
 public:
   GestorColisiones(){};
   void ComprobarColisiones();
-  bool JugadorCaja(vector<Caja*> cajas);
+  bool JugadorCaja(std::vector<Caja*> cajas);
   bool JugadorTurbo();
   bool JugadorEstatico();
   bool JugadorWaypoint();
@@ -38,10 +39,10 @@ public:
   //bool JugadorItemTeledirigido();
 
 private:
-  vector<Corredor*> pj1;
+  std::vector<Corredor*> pj1;
   GestorJugadores *jugadores;
-  ISceneNode *nodoA;
-  ISceneNode *nodoB;
+  obj3D *nodoA;
+  obj3D *nodoB;
   clock_t tiempoLanzado;
   bool control;
   clock_t tiempoInicio;

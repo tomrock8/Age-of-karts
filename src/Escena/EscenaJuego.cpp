@@ -75,7 +75,7 @@ void EscenaJuego::init() {
 	//Posicion del nodo y el bloque de colisiones centralizado:
 
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	vector<Corredor*> pj = jugadores->getJugadores();
+	std::vector<Corredor*> pj = jugadores->getJugadores();
 	Corredor* jugador;
 	
 	btVector3 pos2[6];
@@ -169,7 +169,7 @@ void EscenaJuego::init() {
 void EscenaJuego::dibujar() {
 
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	vector<Corredor*> pj = jugadores->getJugadores();
+	std::vector<Corredor*> pj = jugadores->getJugadores();
 
 	//------- RENDER ----------
 	Motor3d::instancia().iniciarDibujado();
@@ -230,9 +230,9 @@ void EscenaJuego::limpiar() {
 void EscenaJuego::update() {
 	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
-	vector<Item *> items = pistaca->getItems();
+	std::vector<Item *> items = pistaca->getItems();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	vector<Corredor*> pj = jugadores->getJugadores();
+	std::vector<Corredor*> pj = jugadores->getJugadores();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client->ReceivePackets();
@@ -381,7 +381,7 @@ void EscenaJuego::update() {
 
 Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	vector<Corredor*> pj = jugadores->getJugadores();
+	std::vector<Corredor*> pj = jugadores->getJugadores();
 	vector3df pos(-10, 0, 310);
 	int i = 0;
 	if (tipoEscena == Escena::tipo_escena::ONLINE)
@@ -420,9 +420,9 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		resetPos[2] = pos.Z;
 
 		float *resetOri = new float[3];
-		resetOri[0] = pj.at(0)->getNodo()->getRotation().Z;
-		resetOri[1] = pj.at(0)->getNodo()->getRotation().Y;
-		resetOri[2] = pj.at(0)->getNodo()->getRotation().X;
+		resetOri[0] = pj.at(0)->getNodo()->getRotation().z;
+		resetOri[1] = pj.at(0)->getNodo()->getRotation().y;
+		resetOri[2] = pj.at(0)->getNodo()->getRotation().x;
 
 		pj.at(0)->setPosicion(resetPos, resetOri);
 	}
@@ -452,7 +452,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
 	int c = 0;
 	for (int i=0;i<objetos.size();i++){

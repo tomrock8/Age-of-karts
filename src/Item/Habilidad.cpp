@@ -95,11 +95,11 @@ void Habilidad::movimiento(){
 		case 2: // VIKINGO
 
 		giro=15;
-		trans.setOrigin(btVector3(NodoVehiculo->getPosition().X + orientacion.getX() *15,NodoVehiculo->getPosition().Y,NodoVehiculo->getPosition().Z + orientacion.getZ() *15));
+		trans.setOrigin(btVector3(NodoVehiculo->getPosition().x + orientacion.getX() *15,NodoVehiculo->getPosition().y,NodoVehiculo->getPosition().z + orientacion.getZ() *15));
 
 		orientacion = orientacion.rotate(btVector3(0, 1, 0),giro*PI/180);
-		nodo->setRotation(nodo->getRotation().X,cont,nodo->getRotation().Z);
-		quaternion.setEulerZYX(0,nodo->getRotation().Y * PI/180,0);
+		nodo->setRotation(nodo->getRotation().x,cont,nodo->getRotation().x);
+		quaternion.setEulerZYX(0,nodo->getRotation().y * PI/180,0);
 
 		trans.setRotation(quaternion);
 
@@ -116,13 +116,13 @@ void Habilidad::movimiento(){
 
 		case 3: // GLADIADOR
 
-		//nodo->setPosition(NodoVehiculo->getPosition().X,NodoVehiculo->getPosition().Y+2,NodoVehiculo->getPosition().Z);
+		//nodo->setPosition(NodoVehiculo->getPosition().x,NodoVehiculo->getPosition().y+2,NodoVehiculo->getPosition().z);
 		
 		//if(nodo->getScale().X<=10)
 		//nodo->setScale(nodo->getScale().X +1,nodo->getScale().Y,nodo->getScale().Z +1);
 		
-		trans.setOrigin(btVector3(NodoVehiculo->getPosition().X ,NodoVehiculo->getPosition().Y-cont2+2,NodoVehiculo->getPosition().Z ));
-		quaternion.setEulerZYX(NodoVehiculo->getRotation().X * PI/180,NodoVehiculo->getRotation().Y * PI/180,NodoVehiculo->getRotation().Z * PI/180);
+		trans.setOrigin(btVector3(NodoVehiculo->getPosition().x ,NodoVehiculo->getPosition().y-cont2+2,NodoVehiculo->getPosition().z ));
+		quaternion.setEulerZYX(NodoVehiculo->getRotation().x * PI/180,NodoVehiculo->getRotation().y * PI/180,NodoVehiculo->getRotation().z * PI/180);
 		trans.setRotation(quaternion);
 		rigidBody->setCenterOfMassTransform(trans);
 		
@@ -132,8 +132,8 @@ void Habilidad::movimiento(){
 		break;
 
 		case 4: //CHINICO
-		trans.setOrigin(btVector3(NodoVehiculo->getPosition().X ,NodoVehiculo->getPosition().Y+2,NodoVehiculo->getPosition().Z ));
-		quaternion.setEulerZYX(NodoVehiculo->getRotation().X * PI/180,NodoVehiculo->getRotation().Y * PI/180,NodoVehiculo->getRotation().Z * PI/180);
+		trans.setOrigin(btVector3(NodoVehiculo->getPosition().x ,NodoVehiculo->getPosition().y+2,NodoVehiculo->getPosition().z ));
+		quaternion.setEulerZYX(NodoVehiculo->getRotation().x * PI/180,NodoVehiculo->getRotation().y * PI/180,NodoVehiculo->getRotation().z * PI/180);
 		trans.setRotation(quaternion);
 		rigidBody->setCenterOfMassTransform(trans);
 		

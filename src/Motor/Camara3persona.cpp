@@ -28,7 +28,7 @@ btRigidBody *Camara3persona::inicializarFisicas()
 	btScalar masa=btScalar(10);
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	//vector<btRigidBody *> objetos = bullet->getObjetos();
+	//std::vector<btRigidBody *> objetos = bullet->getObjetos();
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
@@ -137,8 +137,8 @@ void Camara3persona::moveCamera(Corredor * pj1){
 */
 	vector3df RelativeToCarTarget(0,1,0);
 		
-	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCar);
-	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCarTarget);
+	//pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCar);
+	//pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCarTarget);
 	RelativeToCar.Y = 5;
 	RelativeToCarTarget.Y = 1;
 	if (!pj1->getAceiteActivado()){
@@ -189,8 +189,8 @@ void Camara3persona::movefpsCamera(Corredor * pj1){
 	RelativeToCarTarget.Z = ZCamera1;
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 		RelativeToCarTarget.Z=-ZCamera1;
-	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCar);
-	pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCarTarget);
+	//pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCar);
+	//pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCarTarget);
 	RelativeToCarTarget.Y = 10;
 	//RelativeToCar.Y = 1;
  	camera->setPosition(RelativeToCar); 
@@ -203,6 +203,7 @@ void Camara3persona::movefpsCamera(Corredor * pj1){
 }
 
 void Camara3persona::moveCameraControl(Corredor *pj1) {
+	/*
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
 	core::vector3df cameraPos = camera->getAbsolutePosition();
 
@@ -247,9 +248,11 @@ void Camara3persona::moveCameraControl(Corredor *pj1) {
 	camera->setTarget(core::vector3df(playerPos.X, playerPos.Y + 25.0f, playerPos.Z));
 	//pj1->getNodo()->setRotation( core::vector3df( 0, direction, 0 ) );
 	fpsActiva = false;
+*/
 }
 
 void Camara3persona::moveCameraControlPointer(Corredor *pj1) {
+	/*
 	core::position2d<f32> cursorPos = Motor3d::instancia().getDevice()->getCursorControl()->getRelativePosition();
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
 	core::vector3df cameraPos = camera->getAbsolutePosition();
@@ -277,4 +280,5 @@ void Camara3persona::moveCameraControlPointer(Corredor *pj1) {
 	camera->setTarget(core::vector3df(playerPos.X, playerPos.Y + 25.0f, playerPos.Z));
 	//pj1->getNodo()->setRotation( core::vector3df( 0, direction, 0 ) );
 	fpsActiva = false;
+*/
 }

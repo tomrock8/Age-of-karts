@@ -17,8 +17,8 @@ public:
 	int getVueltas();
 	void comprobarItemTeledirigido(int num);
 private:
-	vector<Corredor*> pj1;
-	vector<Corredor*> pj2;
+	std::vector<Corredor*> pj1;
+	std::vector<Corredor*> pj2;
 	Corredor *pj_aux;
 	GestorJugadores *jugadores;
 	int vueltas;

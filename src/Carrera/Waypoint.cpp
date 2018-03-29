@@ -14,14 +14,14 @@ Waypoint::Waypoint() {
 void Waypoint::inicializarFisicas() {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	//posicion origem 
 	btTransform transform;
 	transform.setIdentity();
-	transform.setOrigin(btVector3(waypoint->getPosition().X, waypoint->getPosition().Y, waypoint->getPosition().Z));
+	transform.setOrigin(btVector3(waypoint->getPosition().x, waypoint->getPosition().y, waypoint->getPosition().z));
 	btQuaternion quaternion;
-	quaternion.setEulerZYX(waypoint->getRotation().Z* PI / 180, waypoint->getRotation().Y * PI / 180, waypoint->getRotation().X* PI / 180);
+	quaternion.setEulerZYX(waypoint->getRotation().z* PI / 180, waypoint->getRotation().y * PI / 180, waypoint->getRotation().x* PI / 180);
 	transform.setRotation(quaternion);
 
 	MotionState = new btDefaultMotionState(transform);
@@ -53,7 +53,7 @@ void Waypoint::inicializarFisicas() {
 
 // MEtodos SET
 void Waypoint::setPosicion(float x, float y, float z) {
-	waypoint->setPosition(vector3df(x, y, z));
+	waypoint->setPosition(x, y, z);
 }
 
 void Waypoint::setSiguiente(Waypoint *siguiente) {
@@ -61,15 +61,15 @@ void Waypoint::setSiguiente(Waypoint *siguiente) {
 }
 
 void Waypoint::setOrientacion(float grado) {
-	waypoint->setRotation(vector3df(0.0f, grado, 0.0f));
+	waypoint->setRotation(0.0f, grado, 0.0f);
 }
 
 // Metodos GET
 btVector3 Waypoint::getPosicion() {
-	return btVector3(waypoint->getPosition().X, waypoint->getPosition().Y, waypoint->getPosition().Z);
+	return btVector3(waypoint->getPosition().x, waypoint->getPosition().y, waypoint->getPosition().z);
 }
 btVector3 Waypoint::getRotation() {
-	return btVector3(waypoint->getRotation().X, waypoint->getRotation().Y, waypoint->getRotation().Z);
+	return btVector3(waypoint->getRotation().x, waypoint->getRotation().y, waypoint->getRotation().z);
 }
 Waypoint *Waypoint::getNextWaypoint() {
 	return siguiente;

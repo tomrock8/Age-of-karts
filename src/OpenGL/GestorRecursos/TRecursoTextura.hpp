@@ -38,7 +38,7 @@ public:
 
 
 private:
-	map<string, GLuint> textures;
+	std::map<std::string, GLuint> textures;
 
 	std::string dir;
 	std::string dirTexture;

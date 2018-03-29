@@ -154,7 +154,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 				arrayWaypoints.at(arrayWaypoints.size()-1)->setPosicion(stof(pX), stof(pY), stof(pZ));
 				arrayWaypoints.at(arrayWaypoints.size()-1)->setOrientacion(orientacion);//orientacion del waypoint
 				arrayWaypoints.at(arrayWaypoints.size()-1)->inicializarFisicas();
-				IMeshSceneNode *im = arrayWaypoints.at(arrayWaypoints.size()-1)->getWaypoint();
+				obj3D *im = arrayWaypoints.at(arrayWaypoints.size()-1)->getWaypoint();
 				GestorIDs::instancia().setIdentifier(im, im->getName());
 								arrayWaypoints.at(arrayWaypoints.size()-1)->setID(GestorIDs::instancia().getIDLibre() - 1);
 
@@ -187,28 +187,28 @@ void Pista::BorrarFisicas() {
 	// a implementar
 }
 
-vector<Item *> Pista::getItems() {
+std::vector<Item *> Pista::getItems() {
 	return Items;
 }
 
-void Pista::setItems(vector<Item *> itemMetodo) {
+void Pista::setItems(std::vector<Item *> itemMetodo) {
 	Items = itemMetodo;
 }
-vector<Waypoint*> Pista::getArrayWaypoints() {
+std::vector<Waypoint*> Pista::getArrayWaypoints() {
 	return arrayWaypoints;
 }
-vector<Caja*> Pista::getArrayCaja() {
+std::vector<Caja*> Pista::getArrayCaja() {
 	return arrayCajas;
 }
 int Pista::getTamCajas() {
 	return tamCajas;
 }
 
-void Pista::setArrayCaja(vector<Caja*> cajas) {
+void Pista::setArrayCaja(std::vector<Caja*> cajas) {
 	arrayCajas = cajas;
 }
 
-vector<Turbo*>Pista::getArrayTurbo() {
+std::vector<Turbo*>Pista::getArrayTurbo() {
 	return arrayTurbos;
 }
 

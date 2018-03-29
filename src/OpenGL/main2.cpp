@@ -13,7 +13,8 @@
 #include <iostream>
 #include <math.h>
 
-int main(void) {
+int pene(void) {
+	/*
 	TMotor::instancia();
 
 	// TIMER
@@ -98,4 +99,5 @@ int main(void) {
 	TMotor::instancia().close();
 
 	return 0;
+	*/
 }

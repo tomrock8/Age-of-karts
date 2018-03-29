@@ -27,7 +27,7 @@ void Item::inicializarFisicas()
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
@@ -111,7 +111,7 @@ void Item::Delete()
 	
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	for (int i=0;i<objetos.size();i++)
 	{

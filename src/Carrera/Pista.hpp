@@ -31,14 +31,14 @@ public:
 	
 	// METODOS SET
 	void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
-	void setItems(vector<Item *> itemMetodo);
+	void setItems(std::vector<Item *> itemMetodo);
 	// METODOS GET
-	vector<Item *> getItems();
-	vector<Turbo*> getArrayTurbo();
-	vector<Caja*> getArrayCaja();
-	void setArrayCaja(vector<Caja*> caja);
+	std::vector<Item *> getItems();
+	std::vector<Turbo*> getArrayTurbo();
+	std::vector<Caja*> getArrayCaja();
+	void setArrayCaja(std::vector<Caja*> caja);
 	int getTamCajas();
-	vector<Waypoint*> getArrayWaypoints();
+	std::vector<Waypoint*> getArrayWaypoints();
 	Turbo* getTurbo();
 	Turbo* getTurbo(int id);
 	int getTamArrayWaypoints();
@@ -53,17 +53,17 @@ private:
 	btDefaultMotionState *MotionState; // posicion del cuerpo de colision
 	
 	int tamWaypoints;
-	vector<Waypoint*> arrayWaypoints;
+	std::vector<Waypoint*> arrayWaypoints;
 
 	int tamTurbos;
-	vector<Turbo*> arrayTurbos;
+	std::vector<Turbo*> arrayTurbos;
 	
 	int tamCajas;
-	vector<Caja*> arrayCajas;
+	std::vector<Caja*> arrayCajas;
 	
 	obj3D *Mapa;
 
-	vector<Item *> Items;
+	std::vector<Item *> Items;
 
 
 	//fisicas del mapa

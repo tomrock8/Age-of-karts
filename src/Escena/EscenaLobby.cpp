@@ -86,7 +86,7 @@ void EscenaLobby::limpiar() {
 void EscenaLobby::update() {
 	if (offline){
 		//si es offline solo cargamos y dibujamos toda la informacion (modificable con inputs)
-		vector<structClientes> clientes=client->getClientes();
+		std::vector<structClientes> clientes=client->getClientes();
 		texto="";
 		for (int i=0;i<clientes.size();i++){
 			mostrarInfoLobby(i);
@@ -164,7 +164,7 @@ void EscenaLobby::update() {
 }
 void EscenaLobby::mostrarInfoLobby(int indice){
 	//Inicializacion variables cliente
-	vector<structClientes> clientes=client->getClientes();
+	std::vector<structClientes> clientes=client->getClientes();
 	int size=clientes.size();
 	int id_player;		
 	if (offline){
@@ -376,7 +376,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			if (offline && iniciar){
 				return Escena::tipo_escena::CARRERA;		//Iniciar la partida offline
 			}else if (offline){								
-				vector<structClientes> clientes=client->getClientes();
+				std::vector<structClientes> clientes=client->getClientes();
 				int k=count;
 				if (clientes.at(k).ready==false){
 					client->setArrayClients(clientes.at(k).ip,clientes.at(k).tipoCorredor,true,clientes.at(k).corredorJugador,k);
@@ -395,7 +395,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 			}
 			if (offline){
-				vector<structClientes> clientes=client->getClientes();
+				std::vector<structClientes> clientes=client->getClientes();
 				int k=count;
 				if (clientes.at(k).tipoCorredor==0){
 					client->setArrayClients(clientes.at(k).ip,3,clientes.at(k).ready,clientes.at(k).corredorJugador,k);
@@ -415,7 +415,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 			}
 			if (offline){
-				vector<structClientes> clientes=client->getClientes();
+				std::vector<structClientes> clientes=client->getClientes();
 				int k=count;
 				if (clientes.at(k).tipoCorredor==3){
 					client->setArrayClients(clientes.at(k).ip,0,clientes.at(k).ready,clientes.at(k).corredorJugador,k);
@@ -483,7 +483,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				ipConexion += "3";
 				
 			}else{
-				vector<structClientes> clientes=client->getClientes();
+				std::vector<structClientes> clientes=client->getClientes();
 				int k=count;
 				if (k!=0){
 					if (clientes.at(k).corredorJugador){

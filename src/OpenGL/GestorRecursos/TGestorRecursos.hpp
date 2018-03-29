@@ -50,7 +50,7 @@ private:
 	std::string *TextureName;
 	//const char * fichName;
 	std::string *dir;
-	map<string, GLuint> textures;
+	std::map<std::string, GLuint> textures;
 	const char *matName;
 	const char *meshName;
 

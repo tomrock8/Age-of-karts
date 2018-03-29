@@ -96,7 +96,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 		cuboNodo->setRotation(0.0f, 90.0f, 0.0f);
 
 	}
-	
+
 	posicion.setX(pos.getX());
 	posicion.setY(pos.getY());
 	posicion.setZ(pos.getZ());
@@ -200,15 +200,15 @@ void Corredor::InicializarFisicas()
 {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	//posicion inicial
 	btTransform transCoche;
 	transCoche.setIdentity();
-	btVector3 posTransCoche = btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+	btVector3 posTransCoche = btVector3(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 	transCoche.setOrigin(posTransCoche);
 	btQuaternion quaternion;
-	quaternion.setEulerZYX(cuboNodo->getRotation().Z* PI / 180, cuboNodo->getRotation().Y * PI / 180, cuboNodo->getRotation().X* PI / 180);
+	quaternion.setEulerZYX(cuboNodo->getRotation().z* PI / 180, cuboNodo->getRotation().y * PI / 180, cuboNodo->getRotation().x* PI / 180);
 	transCoche.setRotation(quaternion);
 
 	//Motionstate
@@ -265,7 +265,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 {
 
 	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
-	btVector3 puntoConexionChasis(cuboNodo->getScale().X - radioRueda, alturaConexionChasis, cuboNodo->getScale().Z - anchoRueda);
+	btVector3 puntoConexionChasis(1 - radioRueda, alturaConexionChasis, 2 - anchoRueda);
 
 	vehiculo->setCoordinateSystem(0, 1, 2); // 0, 1, 2
 
@@ -318,7 +318,7 @@ btRigidBody *Corredor::getRigidBody()
 {
 	return CuerpoColisionChasis;
 }
-IMeshSceneNode *Corredor::getNodo() {
+obj3D *Corredor::getNodo() {
 	return cuboNodo;
 }
 btVector3 Corredor::getVectorDireccion()
@@ -576,7 +576,7 @@ void Corredor::setTipoObj(int i)
 	//cout << "Random ------>" << tipoObj << endl;
 }
 
-void Corredor::setWaypointActual(ISceneNode *nodo)
+void Corredor::setWaypointActual(obj3D *nodo)
 {
 	//de momento lo pongo así, no da la segunda vuelta pero habria que mirar cuales se han visitado y cuales no
 	//mas adelante se ve, Las IDS no funcionan bien tengo que preguntarle a santi a si que de momento lo comento para que
@@ -804,9 +804,9 @@ Tipos de objeto:
 
 void Corredor::usarObjetos() {
 	Pista *pista = Pista::getInstancia();
-	vector<Item *> items = pista->getItems();
+	std::vector<Item *> items = pista->getItems();
 		
-		btVector3 posicion(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10);
+		btVector3 posicion(cuboNodo->getPosition().x + orientacion.getX() * 10, cuboNodo->getPosition().y, cuboNodo->getPosition().z + orientacion.getZ() * 10);
 		btVector3 escala(2,2,2);
 		btScalar masa=50;
 		float tiempoDestruccion=15;
@@ -828,8 +828,8 @@ void Corredor::usarObjetos() {
 	{
 		alt=-1;
 		masa=0;
-		posicion.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
-		posicion.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
+		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * 10);
+		posicion.setZ(cuboNodo->getPosition().z - orientacion.getZ() * 10);
 		CajaFalsa *est = new CajaFalsa(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		items.push_back(est);
 		
@@ -843,8 +843,8 @@ void Corredor::usarObjetos() {
 	{	
 		alt=-1;
 		masa=0;
-		posicion.setX(cuboNodo->getPosition().X - orientacion.getX() * 10);
-		posicion.setZ(cuboNodo->getPosition().Z - orientacion.getZ() * 10);
+		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * 10);
+		posicion.setZ(cuboNodo->getPosition().z - orientacion.getZ() * 10);
 		Aceite *est2 = new Aceite(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
 		items.push_back(est2);
 	
@@ -861,7 +861,7 @@ void Corredor::usarObjetos() {
 			escala = btVector3(10,10,10);
 			tamanyoNodo= btVector3(9,9,9);
 			tiempoDestruccion=50;
-			posicion= btVector3(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+			posicion= btVector3(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 			posicion.setY(posicion.getY()+alt);
 			Escudo *escudo = new Escudo(cuboNodo,posicion,escala,masa,tiempoDestruccion,ESFERA,tamanyoNodo,radio,alt,cuboNodo->getID());
 			escudo->setLanzado(true);
@@ -874,11 +874,11 @@ void Corredor::usarObjetos() {
 	{
 		
 		btVector3 orientacioncentral(orientacion.getX(), orientacion.getY(), orientacion.getZ());
-		btVector3 centro(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10);
+		btVector3 centro(cuboNodo->getPosition().x + orientacion.getX() * 10, cuboNodo->getPosition().y, cuboNodo->getPosition().z + orientacion.getZ() * 10);
 		btVector3 orientacionderecha = orientacioncentral.rotate(btVector3(0, 1, 0), 10 * PI / 180);
 		btVector3 orientacionizquierda = orientacioncentral.rotate(btVector3(0, 1, 0), -10 * PI / 180);
-		btVector3 iz(cuboNodo->getPosition().X + orientacionizquierda.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionizquierda.getZ() * 10);
-		btVector3 d(cuboNodo->getPosition().X + orientacionderecha.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacionderecha.getZ() * 10);
+		btVector3 iz(cuboNodo->getPosition().x + orientacionizquierda.getX() * 10, cuboNodo->getPosition().y, cuboNodo->getPosition().z + orientacionizquierda.getZ() * 10);
+		btVector3 d(cuboNodo->getPosition().x + orientacionderecha.getX() * 10, cuboNodo->getPosition().y, cuboNodo->getPosition().z + orientacionderecha.getZ() * 10);
 		
 				posicion=iz;
 				Proyectil *pro1= new Proyectil(posicion,escala,masa,tiempoDestruccion,CUBO,tamanyoNodo,radio,alt,cuboNodo->getID());
@@ -946,7 +946,7 @@ void Corredor::decCargador() { cargador--; };
 //----------------------------------------//
 btScalar Corredor::getDistanciaPunto(btVector3 vector) {
 
-	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+	btVector3 posCoche(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 	btVector3 posWaypoint(vector.getX(), vector.getY(), vector.getZ());
 
 	return posCoche.distance2(posWaypoint);
@@ -1127,11 +1127,11 @@ std::string Corredor::toString()
 	std::string text = " -- CORREDOR -- ";
 	//Mostrar la Posicion y Velocidad actuales.
 	text += "\n Posicion [";
-	text += to_string(getNodo()->getPosition().X);
+	text += to_string(getNodo()->getPosition().x);
 	text += ", ";
-	text += to_string(getNodo()->getPosition().Y);
+	text += to_string(getNodo()->getPosition().y);
 	text += ", ";
-	text += to_string(getNodo()->getPosition().Z);
+	text += to_string(getNodo()->getPosition().z);
 	text += "]\n";
 
 	text += "\n Vector direccion(Orientacion) X[ " + to_string(orientacion.getX()) +
@@ -1183,9 +1183,9 @@ void Corredor::update()
 }
 
 void Corredor::actualizarPosicion(){
-	posicion.setX(cuboNodo->getPosition().X);
-	posicion.setY(cuboNodo->getPosition().Y);
-	posicion.setZ(cuboNodo->getPosition().Z);
+	posicion.setX(cuboNodo->getPosition().x);
+	posicion.setY(cuboNodo->getPosition().y);
+	posicion.setZ(cuboNodo->getPosition().z);
 }
 
 
@@ -1266,8 +1266,8 @@ void Corredor::actualizarRuedas()
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
 	btVector3 Euler;
 	btQuaternion TQuat = ruedas.getRotation();
-	quaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q.toEuler(Euler);
+	//btQuaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	//q.toEuler(Euler);
 	Euler *= RADTODEG;
 	
 	float distanciAancho=1.5;
@@ -1283,8 +1283,8 @@ void Corredor::actualizarRuedas()
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
 	TQuat = ruedas.getRotation();
-	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q.toEuler(Euler);
+	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	//q.toEuler(Euler);
 	Euler *= RADTODEG;
 	rueda2->setPosition(-distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
 	orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ());
@@ -1295,8 +1295,8 @@ void Corredor::actualizarRuedas()
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
 	TQuat = ruedas.getRotation();
-	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q.toEuler(Euler);
+	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	//q.toEuler(Euler);
 	Euler *= RADTODEG;
 	rueda3->setPosition(distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
 	orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ());
@@ -1306,8 +1306,8 @@ void Corredor::actualizarRuedas()
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
 	TQuat = ruedas.getRotation();
-	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q.toEuler(Euler);
+	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	//q.toEuler(Euler);
 	Euler *= RADTODEG;
 	rueda4->setPosition(-distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
 	orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ());
@@ -1320,9 +1320,9 @@ void Corredor::actualizarRuedas()
 void Corredor::lanzarHabilidad(){
 	if (getLimite() >= 100) {//puedo lanzar la habilidad
 		Pista *pista = Pista::getInstancia();
-		vector<Item *> items = pista->getItems();
+		std::vector<Item *> items = pista->getItems();
 		
-		btVector3 posicion(cuboNodo->getPosition().X + orientacion.getX() * 20, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 20);
+		btVector3 posicion(cuboNodo->getPosition().x + orientacion.getX() * 20, cuboNodo->getPosition().y, cuboNodo->getPosition().z + orientacion.getZ() * 20);
 		btVector3 escala(5,5,5);
 		btScalar masa=100;
 		float tiempoDestruccion=25;
@@ -1370,7 +1370,7 @@ void Corredor::lanzarHabilidad(){
 		break;
 
 		case CHINO:
-		posicion = btVector3(cuboNodo->getPosition().X , cuboNodo->getPosition().Y, cuboNodo->getPosition().Z );
+		posicion = btVector3(cuboNodo->getPosition().x , cuboNodo->getPosition().y, cuboNodo->getPosition().z );
 		tamanyoNodo = btVector3(5,5,5);
 		escala = btVector3(5,7,10);
 		masa=100;	
@@ -1453,7 +1453,7 @@ void Corredor::updateVectorDireccion()
 	/* Actualiza el vector direccion del corredor. */
 	btQuaternion quaternion = CuerpoColisionChasis->getOrientation();
 	float anguloZ = quaternion.getAngle();
-	float anguloX = cuboNodo->getRotation().Y * PI / 180;
+	float anguloX = cuboNodo->getRotation().y * PI / 180;
 
 	//cout<< "Rotacion en Y=="<< anguloZ  * 180/PI << endl;
 	orientacion = btVector3(sin(anguloX), 0, cos(anguloZ));

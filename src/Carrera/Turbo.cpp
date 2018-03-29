@@ -5,7 +5,7 @@ Turbo::Turbo(btVector3 pos, bool estado) {
 	turboTocado = estado;
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 	//turbo = Motor3d::instancia().getScene()->addCubeSceneNode(5.0f);
 	turbo = TMotor::instancia().newMeshNode("Turbo","assets/wall/wall.obj","escena_raiz");
 	escala = btVector3(2.5f, 0.2f, 1.25f);

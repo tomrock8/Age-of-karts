@@ -692,9 +692,9 @@ void Client::PlayerMovement(){
 		bsOut.Write(players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition().getX());
 		bsOut.Write(players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition().getY());
 		bsOut.Write(players.at(controlPlayer)->getRigidBody()->getCenterOfMassPosition().getZ());
-		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().X);
-		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().Y);
-		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().Z);
+		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().x);
+		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().y);
+		bsOut.Write(players.at(controlPlayer)->getNodo()->getRotation().z);
 		bsOut.Write(estados->getEstadoMovimiento());
 		bsOut.Write(estados->getDireccionMovimiento());
 		bsOut.Write(estados->getEstadoObjeto());
@@ -769,7 +769,7 @@ int Client::getMaxPlayers() {
 }
 
 
-vector<structClientes> Client::getClientes(){
+std::vector<structClientes> Client::getClientes(){
 	return clientes;
 }
 

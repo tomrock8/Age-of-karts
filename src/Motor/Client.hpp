@@ -52,7 +52,7 @@ public:
 	int getNumPlayers();
 	int getNumClients();
 	int getMaxPlayers();
-	vector<structClientes> getClientes();
+	std::vector<structClientes> getClientes();
 	bool getStarted();
 
 	//METODOS SET
@@ -87,14 +87,14 @@ private:
 	std::string clientPort;
 	std::string serverIP;
 
-	vector<Corredor*> players;
+	std::vector<Corredor*> players;
 	int controlPlayer;
 	int numPlayers;
 	int timeStamp;
 	bool spawned;
 	bool started;
 	bool pressed;
-	vector<structClientes> clientes;
+	std::vector<structClientes> clientes;
 	
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 

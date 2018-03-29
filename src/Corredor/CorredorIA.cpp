@@ -379,7 +379,7 @@ void CorredorIA::seguirWaypoint(){
 	btScalar distanciaLado1=btScalar(0);
 	btScalar distanciaLado2=btScalar(0);
 
-	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
+	btVector3 posCoche(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 	distanciaCentro = getDistanciaPunto(siguiente->getPosicion());
 	distanciaLado1 = getDistanciaPunto(siguiente->getVector1());
 	distanciaLado2 = getDistanciaPunto(siguiente->getVector2());
@@ -424,9 +424,9 @@ void CorredorIA::reposicionar(){
 void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 
 	btVector3 orientacionCoche(orientacion.getX(),orientacion.getY(),orientacion.getZ());
-	btVector3 direccion = btVector3(posicion.getX()-cuboNodo->getPosition().X,
-	posicion.getY()-cuboNodo->getPosition().Y,
-	posicion.getZ()-cuboNodo->getPosition().Z);
+	btVector3 direccion = btVector3(posicion.getX()-cuboNodo->getPosition().x,
+	posicion.getY()-cuboNodo->getPosition().y,
+	posicion.getZ()-cuboNodo->getPosition().z);
 	
 	//direccion.normalize();
 	anguloGiro = orientacionCoche.angle(direccion) *180/PI;
@@ -620,8 +620,8 @@ void CorredorIA::ActualizarRaytest() {
 
 
 	// Raycast central1
-	btVector3 inicio(cuboNodo->getPosition().X + orientacion.getX()*distanciaCoche, cuboNodo->getPosition().Y -1, cuboNodo->getPosition().Z+ orientacion.getZ()*distanciaCoche);
-	btVector3 fin(cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y -1, cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
+	btVector3 inicio(cuboNodo->getPosition().x + orientacion.getX()*distanciaCoche, cuboNodo->getPosition().y -1, cuboNodo->getPosition().z+ orientacion.getZ()*distanciaCoche);
+	btVector3 fin(cuboNodo->getPosition().x + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().y -1, cuboNodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
 
 	if(debugFisicas)
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -631,9 +631,9 @@ void CorredorIA::ActualizarRaytest() {
 	RayCast1.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast1);
 	// Raycast central2 derecha
-	//inicio = btVector3(3*orientacion.Z+cuboNodo->getPosition().X,cuboNodo->getPosition().Y+1,orientacion.X*-3+cuboNodo->getPosition().Z);
-	inicio = btVector3(Raycast23*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() );
-	fin = btVector3(Raycast23*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
+	//inicio = btVector3(3*orientacion.Z+cuboNodo->getPosition().x,cuboNodo->getPosition().y+1,orientacion.X*-3+cuboNodo->getPosition().z);
+	inicio = btVector3(Raycast23*orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycast23 + cuboNodo->getPosition().z + orientacion.getZ() );
+	fin = btVector3(Raycast23*orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycast23 + cuboNodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
 
 	if(debugFisicas)
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -645,8 +645,8 @@ void CorredorIA::ActualizarRaytest() {
 
 
 	// Raycast central3 izquierda
-	inicio = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() );
-	fin = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast23 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
+	inicio = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX()*Raycast23 + cuboNodo->getPosition().z + orientacion.getZ() );
+	fin = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX()*Raycast23 + cuboNodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
 
 	if(debugFisicas)
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -658,8 +658,8 @@ void CorredorIA::ActualizarRaytest() {
 
 
 	// Raycast central4 derecha
-	inicio = btVector3(Raycast45*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ() );
-	fin = btVector3(Raycast45*orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
+	inicio = btVector3(Raycast45*orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycast45 + cuboNodo->getPosition().z + orientacion.getZ() );
+	fin = btVector3(Raycast45*orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycast45 + cuboNodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
 
 	if(debugFisicas)
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -670,8 +670,8 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->rayTest(inicio, fin, RayCast4);
 
 	// Raycast central5 izquierda
-	inicio = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX(), cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ());
-	fin = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycast45 + cuboNodo->getPosition().Z + orientacion.getZ() *distanciaRaycast);
+	inicio = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX()*Raycast45 + cuboNodo->getPosition().z + orientacion.getZ());
+	fin = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX()*Raycast45 + cuboNodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
 
 	if(debugFisicas)
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -682,10 +682,10 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->rayTest(inicio, fin, RayCast5);
 
 	// Raycast izquierda1
-	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycastlados + cuboNodo->getPosition().Z + orientacion.getZ()*RaycastladosY );
+	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*Raycastlados + cuboNodo->getPosition().z + orientacion.getZ()*RaycastladosY );
 	fingirado = orientacion.rotate(btVector3(0, 1, 0),90*PI/180);
-	fingirado.setX(fingirado.getX()*-distanciaRaycastLados + cuboNodo->getPosition().X + orientacion.getX() * RaycastladosY);
-	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().Z+ orientacion.getZ() * RaycastladosY);
+	fingirado.setX(fingirado.getX()*-distanciaRaycastLados + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().z+ orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 	
 	if(debugFisicas)
@@ -698,10 +698,10 @@ void CorredorIA::ActualizarRaytest() {
 
 
 	// Raycast izquierda2 
-	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().X - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().Y - 1, orientacion.getX()*Raycastlados + cuboNodo->getPosition().Z - orientacion.getZ() * RaycastladosY);
+	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*Raycastlados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
 	fingirado = orientacion.rotate(btVector3(0, 1, 0),90*PI/180);
-	fingirado.setX(fingirado.getX()*-distanciaRaycastLados + cuboNodo->getPosition().X -orientacion.getX() * RaycastladosY);
-	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().Z -orientacion.getZ() * RaycastladosY);
+	fingirado.setX(fingirado.getX()*-distanciaRaycastLados + cuboNodo->getPosition().x -orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().z -orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 
 	if(debugFisicas)
@@ -713,10 +713,10 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->rayTest(inicio, fingirado, RayCast7);
 
 	// Raycast derecha1 
-	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().X + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycastlados + cuboNodo->getPosition().Z + orientacion.getZ() * RaycastladosY);
+	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycastlados + cuboNodo->getPosition().z + orientacion.getZ() * RaycastladosY);
 	fingirado = orientacion.rotate(btVector3(0, 1, 0),90*PI/180);
-	fingirado.setX(fingirado.getX()*distanciaRaycastLados + cuboNodo->getPosition().X +orientacion.getX() * RaycastladosY);
-	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().Z +orientacion.getZ() * RaycastladosY);
+	fingirado.setX(fingirado.getX()*distanciaRaycastLados + cuboNodo->getPosition().x +orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().z +orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 
 	if(debugFisicas)
@@ -728,10 +728,10 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->rayTest(inicio, fingirado, RayCast8);
 
 	// Raycast derecha2 
-	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().X - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().Y - 1, orientacion.getX()*-Raycastlados + cuboNodo->getPosition().Z - orientacion.getZ() * RaycastladosY);
+	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycastlados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
 	fingirado = orientacion.rotate(btVector3(0, 1, 0),90*PI/180);
-	fingirado.setX(fingirado.getX()*distanciaRaycastLados + cuboNodo->getPosition().X -orientacion.getX() * RaycastladosY);
-	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().Z -orientacion.getZ() * RaycastladosY);
+	fingirado.setX(fingirado.getX()*distanciaRaycastLados + cuboNodo->getPosition().x -orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().z -orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 
 	if(debugFisicas)

@@ -94,6 +94,7 @@ private:
 	bool spawned;
 	bool started;
 	bool pressed;
+	bool pressed2;
 	vector<structClientes> clientes;
 	
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);

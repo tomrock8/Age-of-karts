@@ -20,6 +20,7 @@ Client::Client(int maxPlay)
 	connected = false; // true == si esta conectado con el servidor
 	started = false;	//True == si ha recibido el paquete con ID_RACE_START
 	pressed = true;		//true ==  si esta pulsando alguna tecla, para evitar la saturacion de mensajes iguales
+	pressed2 = true;
 	disconnection=false;
 	aux=0;
 	timeStamp = 1;		//Variable para controlar la prediccion de movimiento por parte del cliente
@@ -139,9 +140,14 @@ void Client::UpdateNetworkKeyboard()
 		}
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){ //Lanzar Item
-			lanzar = true;
+			if(!pressed2){
+				lanzar = true;
+				pressed2 = true;
+			}
+		}else{
+			pressed2 = false;
 		}
-		if (lanzar || reset) {
+		if (lanzar || reset && !pressed2) {
 			bsOut.Write(controlPlayer);
 			//bsOut.Write(estadoMovimiento);
 			//bsOut.Write(direccionMovimiento);

@@ -3,13 +3,23 @@
 TMalla::TMalla(std::vector <mesh *> m) {
 	//los vertices e indices son punteros a Trecurso malla 7
 	malla = m;
+	visible = true;
+}
+
+bool TMalla::isVisible(){
+	return visible;
+}
+
+void TMalla::setVisible(bool visible){
+	this->visible = visible;
 }
 
 void TMalla::beginDraw(Shader *shader) {// Depende del tipo de entidad
 	/* Llamar al metodo de dibujado del recurso que se encarga del dibujado 
 	en OpenGL de los poligonos a partir de los vertices, las normales y 
 	las coordenadas de textura(Gestor) */
-	draw(shader);
+	if(visible)
+		draw(shader);
 }
 
 void TMalla::draw(Shader *shader) {

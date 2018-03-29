@@ -35,7 +35,7 @@ private:
     const char* name; //Nombre del quad 
     const char* path; //Ruta de la imagen
 
-    array<float, 20> data; //Array con las posiciones y coordenadas de textura de cada vertice del quad
+    std::array<float, 20> data; //Array con las posiciones y coordenadas de textura de cada vertice del quad
     GLuint indices[6] = { //Indices para crear los triangulos que forman el cuadrado
 		0, 1, 3,
 		1, 2, 3

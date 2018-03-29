@@ -39,10 +39,10 @@ glm::vec3 obj3D::getPosition() {
 
 glm::vec3 obj3D::getRotation() {
 	/*
-	Note: Care must be taken if the angle around the y-axis is exactly +/-90. 
-	In that case all elements in the first column and last row, except the one in the lower corner, 
-	which is either 1 or -1, will be 0 (cos(1)=0). 
-	One solution would be to fix the rotation around the x-axis at 180 and 
+	Note: Care must be taken if the angle around the y-axis is exactly +/-90.
+	In that case all elements in the first column and last row, except the one in the lower corner,
+	which is either 1 or -1, will be 0 (cos(1)=0).
+	One solution would be to fix the rotation around the x-axis at 180 and
 	compute the angle around the z-axis from: atan2(r_12, -r_22).
 	*/
 
@@ -56,18 +56,28 @@ glm::vec3 obj3D::getRotation() {
 	return rotation;
 }
 
-void obj3D::setID(GLuint id){
-
-	this->id=id;
+bool obj3D::isVisible() {
+	return static_cast<TMalla*>(mesh->getEntidad())->isVisible();
 }
 
-void setName(const char *nombre){
-	name=nombre;
+
+
+
+void obj3D::setID(GLuint id) {
+	this->id = id;
+}
+
+void obj3D::setName(const char *nombre) {
+	name = nombre;
 	mesh->setName(nombre);
 }
 
+void obj3D::setVisible(bool visible){
+	static_cast<TMalla*>(mesh->getEntidad())->setVisible(visible);
+}
+
 void obj3D::setRotation(glm::vec3 axis, GLfloat angle) {
-	
+
 	if (axis.x == 1)
 		rotation.x = angle;
 	if (axis.y == 1)
@@ -75,25 +85,22 @@ void obj3D::setRotation(glm::vec3 axis, GLfloat angle) {
 	if (axis.z == 1)
 		rotation.z = angle;
 
-	
-
 	static_cast<TTransform*>(mesh->getPadre()->getPadre()->getEntidad())->setRotation(axis.x, axis.y, axis.z, angle);
+}
+
+void obj3D::setRotation(float X, float Y, float Z) {
+
+	setRotation(glm::vec3(1, 0, 0), X);
+
+	setRotation(glm::vec3(0, 1, 0), Y);
+
+	setRotation(glm::vec3(0, 0, 1), Z);
 
 }
 
-void obj3D::setRotation(float X,float Y,float Z){
 
-	setRotation(glm::vec3(1,0,0),X);
-
-	setRotation(glm::vec3(0,1,0),Y);
-
-	setRotation(glm::vec3(0,0,1),Z);
-
-}
-
-
-void obj3D::setPosition(float X,float Y,float Z) {
+void obj3D::setPosition(float X, float Y, float Z) {
 	static_cast<TTransform*>(mesh->getPadre()->getEntidad())->setPosition(X, Y, Z);
 	position = getPosition();
-	
+
 }

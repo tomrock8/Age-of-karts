@@ -22,6 +22,7 @@ public:
 	const char * getName();
 	glm::vec3 getPosition();
 	glm::vec3 getRotation();
+	bool isVisible();
 
 	//METODOS SET
 	void setID(GLuint);
@@ -29,6 +30,7 @@ public:
 	void setPosition(float X,float Y,float Z);
 	void setRotation(float X,float Y,float Z);
 	void setName(const char *nombre);
+	void setVisible(bool visible);
 
 private:
 	GLuint id;

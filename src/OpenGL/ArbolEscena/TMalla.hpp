@@ -19,6 +19,8 @@ public:
 //	TRecursoMalla *getMalla();
 //	TRecursoMaterial *getMaterial();
 //	TRecursoTextura *getTextures();
+	bool isVisible();
+	void setVisible(bool visible);
 
 	// DIBUJADO
 	virtual void beginDraw(Shader *shader) override;
@@ -27,5 +29,6 @@ public:
 
 private:
 	std::vector<mesh *> malla;
+	bool visible;
 };
 #endif

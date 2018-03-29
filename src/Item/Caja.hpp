@@ -10,15 +10,14 @@
 #include "Timer.hpp"
 #include "GestorIDs.hpp"
 #include <iostream>
-
-using namespace std;
+#include "TMotor.hpp"
 
 class Caja
 {
 public:
   Caja(btVector3 posicionCaja);
   btRigidBody *inicializarFisicas();
-  IMeshSceneNode *getNodo();
+  obj3D *getNodo();
   btRigidBody *getRigidBody();
   const char *getNombre();
   int getID();
@@ -29,7 +28,7 @@ public:
 
 private:
 
-  IMeshSceneNode *nodo;
+  obj3D *nodo;
   btRigidBody *rigidBody;
   btScalar masa;
   btVector3 escala;

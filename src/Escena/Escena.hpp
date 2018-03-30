@@ -2,7 +2,7 @@
 #define ESCENA_H
 
 #include "Client.hpp"
-
+#include "TMotor.hpp"
 class Escena {
 public:
 	typedef enum { MENU, CARRERA, ONLINE, CARGA, LOBBY, OPCIONES, CREDITOS, SALIR } tipo_escena; // Definicion de los diferentes tipos de escenas

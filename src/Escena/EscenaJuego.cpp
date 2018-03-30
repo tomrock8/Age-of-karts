@@ -463,7 +463,7 @@ void EscenaJuego::UpdatePhysics(u32 TDeltaTime) {
 
 // Passes bullet's orientation to irrlicht
 void EscenaJuego::UpdateRender(btRigidBody *TObject) {
-	IMeshSceneNode *Node = static_cast<IMeshSceneNode *>(TObject->getUserPointer());
+	obj3D *Node = static_cast<obj3D *>(TObject->getUserPointer());
 	// Set position
 	btVector3 Point = TObject->getCenterOfMassPosition();
 
@@ -472,17 +472,17 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
 	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
-		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
+		Node->setPosition((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]);
 	}
 	else
-		Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));
+		Node->setPosition((f32)Point[0], (f32)Point[1], (f32)Point[2]);
 	// Set rotation
 	vector3df Euler;
 	const btQuaternion& TQuat = TObject->getOrientation();
 	quaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
 	q.toEuler(Euler);
 	Euler *= RADTODEG;
-	Node->setRotation(Euler);
+	//Node->setRotation(Euler);
 
 }
 std::string EscenaJuego::getIpConexion(){

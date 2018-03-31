@@ -24,13 +24,6 @@ void CorredorJugador::movimiento() {
 		acelerar();
 		comprobadorMovimiento = true;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-		frenodemano(true, false);
-		comprobadorMovimiento = true;
-	}
-	else {
-		frenodemano(false, false);
-	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
 		girarDerecha();
 
@@ -39,6 +32,15 @@ void CorredorJugador::movimiento() {
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
 		girarIzquierda();
 		comprobadorMovimiento = true;
+	}else{
+		estado->setDireccionMovimiento(RECTO);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+		frenodemano(true, false);
+		comprobadorMovimiento = true;
+	}
+	else {
+		frenodemano(false, false);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
 			recolocarWaypoint();

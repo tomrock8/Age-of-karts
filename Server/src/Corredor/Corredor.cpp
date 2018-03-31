@@ -136,7 +136,7 @@ void Corredor::setParametros(){
 			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
-			indiceGiroBajo=btScalar(0.085);
+			indiceGiroBajo=btScalar(0.075);
 			velocidadLimiteGiro=150;
 			//------PESO------
 			//Masa = btScalar(400);
@@ -155,7 +155,7 @@ void Corredor::setParametros(){
 			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
-			indiceGiroBajo=btScalar(0.085);
+			indiceGiroBajo=btScalar(0.08);
 			velocidadLimiteGiro=130;
 			//------PESO------
 			//Masa = btScalar(400);
@@ -174,7 +174,7 @@ void Corredor::setParametros(){
 			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
-			indiceGiroBajo=btScalar(0.1);
+			indiceGiroBajo=btScalar(0.085);
 			velocidadLimiteGiro=180;
 			//------PESO------
 			//Masa = btScalar(400);
@@ -193,7 +193,7 @@ void Corredor::setParametros(){
 			velocidadMaxima=velocidadMedia;
 			//----GIRO/MANEJO-----
 			indiceGiroAlto=btScalar(0.4);
-			indiceGiroBajo=btScalar(0.08);
+			indiceGiroBajo=btScalar(0.07);
 			velocidadLimiteGiro=110;
 			//------PESO------
 			//Masa = btScalar(1200);
@@ -424,7 +424,7 @@ void Corredor::setTipoObj()
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	int totalJugadores = jugadores->getNumJugadores();
 	int SimPosCarrera;
-
+	
 	/*
 		En caso de no ser el total de jugadores, adaptamos la posicion
 		a otra para que cambien las probabilidades de los objetos
@@ -454,6 +454,7 @@ void Corredor::setTipoObj()
 			SimPosCarrera = 4;
 		}
 	}
+	/* AQUI ESTA EL ERROR MALDITO JIORGIO NO ENTIENDO UN CIRUELO, TE LO DEJO A TI TETE
 	else if(totalJugadores == 4)
 	{
 		if(posicionCarrera == 1)
@@ -473,6 +474,7 @@ void Corredor::setTipoObj()
 			SimPosCarrera == 5;
 		}
 	}
+	*/
 	else 
 	{
 		SimPosCarrera = posicionCarrera;
@@ -566,6 +568,8 @@ void Corredor::setTipoObj()
 	else if(tipoObj == 3)
 		cargador = 1;
 	
+
+
 	Client *c = Client::getInstancia();
 	if (c->getConnected())
 		c->PlayerSetObject(tipoObj);
@@ -578,7 +582,7 @@ void Corredor::setTipoObj(int i)
 		cargador = 3;
 	else if(tipoObj == 3)
 		cargador = 1;
-	cout << "el objeto --- " << i << " ---" << endl;
+	//cout << "el objeto --- " << i << " ---" << endl;
 	//cout << "Random ------>" << tipoObj << endl;
 }
 
@@ -646,7 +650,7 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor,int tiempo) {
 			if(cargador==1) 
 				tipoObj = 0;
 			cargador--;
-			cout << "Turbos restantes: " << cargador << endl;
+			//cout << "Turbos restantes: " << cargador << endl;
 		}
 	}
 	else {
@@ -929,7 +933,7 @@ void Corredor::usarObjetos() {
 		setTurbo(true, true, FuerzaMaxima*2,5);
 		
 	}
-	std::cout << "Tipo obj: " << getTipoObj() << " / " << items.size() << std::endl;
+	//std::cout << "Tipo obj: " << getTipoObj() << " / " << items.size() << std::endl;
 	
 	pista->setItems(items);
 
@@ -977,7 +981,9 @@ void Corredor::acelerar()
 		vehiculo->setSteeringValue(btScalar(0), 1);
 	
 	estado->setEstadoMovimiento(AVANZA);
-	estado->setDireccionMovimiento(RECTO);
+	if (!turboActivado){
+		estado->setDireccionMovimiento(RECTO);
+	}
 }
 void Corredor::frenar()
 {
@@ -1006,7 +1012,8 @@ void Corredor::frenar()
 	}else{
 		estado->setEstadoMovimiento(FRENA);
 	}
-	
+	if (!turboActivado)
+	estado->setDireccionMovimiento(RECTO);
 	
 }
 void Corredor::girarDerecha()
@@ -1038,8 +1045,12 @@ void Corredor::frenodemano(bool activo, bool objeto)
 {
 	int friccion = 1.f;
 	if (activo) {
-		if(estado->getEstadoMovimiento() != 0 && estado->getEstadoMovimiento() != 4 && (estado->getDireccionMovimiento()==1 || estado->getDireccionMovimiento()==2) && !objeto){
-			limite+=10;
+		if (!aceiteActivado && !turboActivado){
+			if(vehiculo->getCurrentSpeedKmHour()>300 && (estado->getDireccionMovimiento()==IZQUIERDA || estado->getDireccionMovimiento()==DERECHA)){
+				int i=vehiculo->getCurrentSpeedKmHour();
+				if (i%3==0)
+				limite+=1;
+			}
 		}
 
 		estado->setEstadoMovimiento(DERRAPA);
@@ -1073,7 +1084,10 @@ void Corredor::frenodemano(bool activo, bool objeto)
 void Corredor::desacelerar()
 {
 	estado->setEstadoMovimiento(DESACELERA);
-	limitadorVelocidad();
+	vehiculo->applyEngineForce(0, 0);
+	vehiculo->applyEngineForce(0, 1);
+	vehiculo->applyEngineForce(0, 2);
+	vehiculo->applyEngineForce(0, 3);
 
 	vehiculo->setSteeringValue(0, 0);
 	vehiculo->setSteeringValue(0, 1);
@@ -1084,10 +1098,10 @@ void Corredor::desacelerar()
 	vehiculo->setBrake(160, 3);
 }
 void Corredor::limitadorVelocidad(){
-	vehiculo->applyEngineForce(0, 0);
-	vehiculo->applyEngineForce(0, 1);
-	vehiculo->applyEngineForce(0, 2);
-	vehiculo->applyEngineForce(0, 3);
+	vehiculo->applyEngineForce(0.0001, 0);
+	vehiculo->applyEngineForce(0.0001, 1);
+	vehiculo->applyEngineForce(0.0001, 2);
+	vehiculo->applyEngineForce(0.0001, 3);
 }
 void Corredor::comprobarSueloRuedas()
 {
@@ -1203,6 +1217,7 @@ void Corredor::updateText(){
 	texto->agregar(to_string(posicionCarrera));
 	texto->agregar(" - VUELTA: ");
 	if (vueltas>maxvueltas){
+		estado->setEstadoCarrera(FIN);
 		texto->agregar("HA LLEGADO ");
 		texto->agregar(to_string(posicionCarrera)+"!\n");
 	}else{
@@ -1320,7 +1335,7 @@ void Corredor::lanzarHabilidad(){
 		btVector3 posicion(cuboNodo->getPosition().X + orientacion.getX() * 20, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 20);
 		btVector3 escala(5,5,5);
 		btScalar masa=100;
-		float tiempoDestruccion=10;
+		float tiempoDestruccion=25;
 		btVector3 tamanyoNodo(3,3,3);
 		btScalar radio=12;
 		float alt=10;

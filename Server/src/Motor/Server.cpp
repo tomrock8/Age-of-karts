@@ -163,6 +163,7 @@ void Server::ReceivePackets()
 		float diff = 0.0;
 		bool reset = false;
 		bool lanzar = false;
+		bool ulti = false;
 		bool parambool = false;
 		structPrediccion prediccionAux;
 
@@ -439,13 +440,14 @@ void Server::ReceivePackets()
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;	
 		case ID_SEND_KEY_PRESS:
-			std::cout << "ID_SEND_KEY_PRESS\n";
+			//std::cout << "ID_SEND_KEY_PRESS\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			//bsIn.Read(param);
 			//bsIn.Read(param2);
 			bsIn.Read(reset);
 			bsIn.Read(lanzar);
+			bsIn.Read(ulti);
 			
 			//players.at(id)->getEstados()->setEstadoMovimiento(param);
 			//players.at(id)->getEstados()->setDireccionMovimiento(param2);
@@ -454,6 +456,10 @@ void Server::ReceivePackets()
 			}
 			if(lanzar){
 				players.at(id)->usarObjetos();
+			}
+			if(ulti){
+				std::cout << "Ulti lanzada\n";
+				players.at(id)->lanzarHabilidad();
 			}
 			//player[id]->setAccion(param);
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
@@ -514,6 +520,8 @@ void Server::ReceivePackets()
 				players.at(id)->getEstados()->setEstadoInmunidad(param);
 				bsIn.Read(param);		//
 				players.at(id)->getEstados()->setEstadoHabilidad(param);
+				bsIn.Read(param);
+				players.at(id)->setLimite(param);
 				
 				parambool = false;
 				//std::cout << "Posicion Y: " << players.at(id)->getNodo()->getRotation().Y << " - " << clientes.at(id).prediccion.rotacion[1] << std::endl;

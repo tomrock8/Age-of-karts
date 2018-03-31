@@ -20,6 +20,8 @@ Client::Client(int maxPlay)
 	connected = false; // true == si esta conectado con el servidor
 	started = false;	//True == si ha recibido el paquete con ID_RACE_START
 	pressed = true;		//true ==  si esta pulsando alguna tecla, para evitar la saturacion de mensajes iguales
+	pressed2 = true;
+	pressed3 = true; 
 	disconnection=false;
 	aux=0;
 	timeStamp = 1;		//Variable para controlar la prediccion de movimiento por parte del cliente
@@ -110,6 +112,7 @@ void Client::UpdateNetworkKeyboard()
 		int direccionMovimiento = 0; 	// 1 = Girar izq; 2 = Girar dcha; 0 = recto
 		bool reset = false; 			// true == resetear al corredor en el ultimo waypoint visitado
 		bool lanzar = false;			// true == lanzar objeto en caso de tener alguno
+		bool ulti = false;        //true == Lanzar ulti en caso de tener el limite correcto 
 		typeID = ID_SEND_KEY_PRESS;		//id para el paquete
 		RakNet::BitStream bsOut;
 		bsOut.Write(typeID);
@@ -139,14 +142,32 @@ void Client::UpdateNetworkKeyboard()
 		}
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){ //Lanzar Item
-			lanzar = true;
+			if(!pressed2){ 
+				lanzar = true; 
+				pressed2 = true; 
+			} 
+		}else{ 
+			pressed2 = false; 
 		}
-		if (lanzar || reset) {
+
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::O)){ 
+			if(!pressed3){ 
+				if(GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getLimite() > 99){ 
+					std::cout << "Ulti lanzada\n"; 
+					ulti = true; 
+					pressed3 = true;           
+				} 
+			} 
+		}else{ 
+			pressed3 = false; 
+		} 
+    	if (lanzar || reset || ulti) { 
 			bsOut.Write(controlPlayer);
 			//bsOut.Write(estadoMovimiento);
 			//bsOut.Write(direccionMovimiento);
 			bsOut.Write(reset);
 			bsOut.Write(lanzar);
+			bsOut.Write(ulti); 
 			client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 		}
 
@@ -237,6 +258,7 @@ int Client::ReceivePackets()
 		int param2;
 		bool reset = false;
 		bool lanzar = false;
+		bool ulti = false; 
 		bool parambool;
 
 		RakNet::RakString paramRakString;
@@ -423,6 +445,7 @@ int Client::ReceivePackets()
 				bsIn.Read(param2);
 				bsIn.Read(reset);
 				bsIn.Read(lanzar);
+				bsIn.Read(ulti); 
 				// cout<<"id: "<<id<<"---"<<"players.size(): "<<players.size()<<endl;
 				//if(id != controlPlayer)
 					if (players.size()>id && id!=-1){
@@ -435,6 +458,9 @@ int Client::ReceivePackets()
 								if(players.at(id)->getTipoObj() != 0)
 										players.at(id)->usarObjetos();
 						}
+						if(ulti){ 
+							players.at(id)->lanzarHabilidad(); 
+						} 
 					}
 				break;
 			
@@ -601,19 +627,29 @@ int Client::ReceivePackets()
 						bsIn.Read(ori[2]);	//
 						
 						bsIn.Read(param);		//ESTADOS
-						players.at(id)->getEstados()->setEstadoMovimiento(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setEstadoMovimiento(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setDireccionMovimiento(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setDireccionMovimiento(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setEstadoObjeto(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setEstadoObjeto(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setEstadoCoche(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setEstadoCoche(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setEstadoCarrera(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setEstadoCarrera(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setEstadoInmunidad(param);
+						if(i!=controlPlayer)
+							players.at(id)->getEstados()->setEstadoInmunidad(param);
 						bsIn.Read(param);		//
-						players.at(id)->getEstados()->setEstadoHabilidad(param);
+						if(i!=controlPlayer) 
+							players.at(id)->getEstados()->setEstadoHabilidad(param); 
+						bsIn.Read(param);    //Limite 
+						if(i!=controlPlayer) 
+							players.at(id)->setLimite(param); 
 						
 						players.at(id)->setPosicion(pos, ori);
 					}
@@ -676,6 +712,7 @@ unsigned char Client::GetPacketIdentifier(RakNet::Packet *p)
 //		- Position[3]
 //		- Rotation[3]
 //		- EstadosJugador[5]
+//    	- Limite 
 //
 //===========================================================================
 void Client::PlayerMovement(){
@@ -702,6 +739,7 @@ void Client::PlayerMovement(){
 		bsOut.Write(estados->getEstadoCarrera());
 		bsOut.Write(estados->getEstadoInmunidad());
 		bsOut.Write(estados->getEstadoHabilidad());
+	    bsOut.Write(players.at(controlPlayer)->getLimite()); 
 
 
 		client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);

@@ -971,7 +971,9 @@ void Corredor::acelerar()
 		vehiculo->setSteeringValue(btScalar(0), 1);
 	
 	estado->setEstadoMovimiento(AVANZA);
-	estado->setDireccionMovimiento(RECTO);
+	if (!turboActivado)
+    	estado->setDireccionMovimiento(RECTO); 
+  	
 }
 void Corredor::frenar()
 {
@@ -1000,7 +1002,8 @@ void Corredor::frenar()
 	}else{
 		estado->setEstadoMovimiento(FRENA);
 	}
-	
+	if (!turboActivado) 
+  	estado->setDireccionMovimiento(RECTO); 
 	
 }
 void Corredor::girarDerecha()
@@ -1032,9 +1035,13 @@ void Corredor::frenodemano(bool activo, bool objeto)
 {
 	int friccion = 1.f;
 	if (activo) {
-		if(estado->getEstadoMovimiento() != 0 && estado->getEstadoMovimiento() != 4 && (estado->getDireccionMovimiento()==1 || estado->getDireccionMovimiento()==2) && !objeto){
-			limite+=10;
-		}
+		if (!aceiteActivado && !turboActivado){ 
+			if(vehiculo->getCurrentSpeedKmHour()>300 && (estado->getDireccionMovimiento()==IZQUIERDA || estado->getDireccionMovimiento()==DERECHA)){ 
+				int i=vehiculo->getCurrentSpeedKmHour(); 
+				if (i%3==0) 
+				limite+=1; 
+			} 
+		} 
 
 		estado->setEstadoMovimiento(DERRAPA);
 		FuerzaGiro = btScalar(0.45);
@@ -1205,6 +1212,7 @@ void Corredor::updateText(){
 	texto->agregar(to_string(posicionCarrera));
 	texto->agregar(" - VUELTA: ");
 	if (vueltas>maxvueltas){
+		estado->setEstadoCarrera(FIN); 
 		texto->agregar("HA LLEGADO ");
 		texto->agregar(to_string(posicionCarrera)+"!\n");
 	}else{

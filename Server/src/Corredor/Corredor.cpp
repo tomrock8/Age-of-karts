@@ -1045,8 +1045,12 @@ void Corredor::frenodemano(bool activo, bool objeto)
 {
 	int friccion = 1.f;
 	if (activo) {
-		if(!aceiteActivado && !turboActivado && estado->getEstadoMovimiento() != 0 && estado->getEstadoMovimiento() != 4 && (estado->getDireccionMovimiento()==1 || estado->getDireccionMovimiento()==2) && !objeto){
-			limite+=5;
+		if (!aceiteActivado && !turboActivado){
+			if(vehiculo->getCurrentSpeedKmHour()>300 && (estado->getDireccionMovimiento()==IZQUIERDA || estado->getDireccionMovimiento()==DERECHA)){
+				int i=vehiculo->getCurrentSpeedKmHour();
+				if (i%3==0)
+				limite+=1;
+			}
 		}
 
 		estado->setEstadoMovimiento(DERRAPA);

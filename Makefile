@@ -1,4 +1,4 @@
-FUENTE := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
+FUENTE := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
 
 LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lRakNetLibStatic  -lpthread -lsfml-graphics -lsfml-window -lsfml-system -lglfw -lGLEW -lassimp
@@ -64,6 +64,7 @@ objdir:
 	@mkdir -p obj/Escena
 	@mkdir -p obj/Item
 	@mkdir -p obj/Motor
+	@mkdir -p obj/OpenGL
 	@mkdir -p obj/OpenGL/ArbolEscena
 	@mkdir -p obj/OpenGL/Fachada
 	@mkdir -p obj/OpenGL/Shader

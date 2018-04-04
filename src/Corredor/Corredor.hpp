@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include "IrrlichtLib.hpp"
-#include "Motor3d.hpp"
 #include "Waypoint.hpp"
 #include "Proyectil.hpp"
 #include "btBulletDynamicsCommon.h"

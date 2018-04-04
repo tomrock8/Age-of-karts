@@ -4,7 +4,6 @@
 #include <iostream>
 #include "IrrlichtLib.hpp"
 #include "btBulletDynamicsCommon.h"
-#include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
 #include "Item.hpp"
 #include <string>

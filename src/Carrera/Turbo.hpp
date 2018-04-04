@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "IrrlichtLib.hpp"
-#include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"

@@ -1,4 +1,4 @@
-#include "Motor3d.hpp"
+#include "TMotor.hpp"
 #include "GestorEscena.hpp"
 #include "EscenaJuego.hpp"
 
@@ -10,7 +10,7 @@
 
 int main(int argc, char* argv[]) {
 	
-	Motor3d m = Motor3d::instancia();
+	TMotor::instancia();
 	//GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
 	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
 
@@ -18,13 +18,16 @@ int main(int argc, char* argv[]) {
 	//	GAME LOOP
 	// -----------------------------//
 	Escena::tipo_escena tipoActual = GestorEscena::instancia().getEscenaActiva().getTipoEscena();
-	while (m.getDevice()->run() && tipoActual != Escena::tipo_escena::SALIR) {
+	int tipo=0;
+	while (tipoActual != Escena::tipo_escena::SALIR) {
+		tipo=GestorEscena::instancia().getEscenaActiva().getTipoEscena();
+		TMotor::instancia().draw(tipo);
 		tipoActual = GestorEscena::instancia().update();
 
 	}
 	
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
-	Motor3d::instancia().cerrar();
+	TMotor::instancia().close();
 
 
 	return 0;

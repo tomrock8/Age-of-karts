@@ -13,7 +13,7 @@
 #include <iostream>
 #include <math.h>
 
-int pene(void) {
+int hola(void) {
 	/*
 	TMotor::instancia();
 

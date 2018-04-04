@@ -38,6 +38,24 @@ EscenaJuego::~EscenaJuego() {
 }
 
 void EscenaJuego::init() {
+
+	// CAMARA
+	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
+	cam->translate(glm::vec3(6.0f, 0.0f, 3.0f));
+	obj3D * luzInfinita = TMotor::instancia().newLightNode("light_3", glm::vec4(0.0f, 0.f, -1.0f, 1.0f), 0.25f, glm::cos(glm::radians(30.0f)), "escena_raiz");
+	luzInfinita->translate(glm::vec3(0.0f, 30.0f, 0.0f));
+	// LUCES
+	/*TMotor::instancia().newLightNode(glm::vec3(0.0f, 30.0f, 0.0f), "light_0", glm::vec4(0.0f, 0.f, -1.0f, 1.0f), 0.25f, glm::cos(glm::radians(30.0f)), "escena_raiz");
+	obj3D *luz0 = TMotor::instancia().newLightNode("light_0", glm::vec4(.0f, 0.f, 0.f, 0.0f), 0.01f, 0.0f, "escena_raiz");
+	luz0->translate(glm::vec3(-290.0f, 100.0f, 30.61f));
+	TMotor::instancia().newLightNode(glm::vec3(0.0f, 15.0f, 0.0f), "light_1", glm::vec4(.0f, 0.f, 0.f, 0.0f), 0.01f, 0.0f, "escena_raiz");
+	*/
+
+	obj3D *caja2 = TMotor::instancia().newMeshNode( "escudo2", "assets/wall/wall.obj", "escena_raiz");
+	TNodo *aux = TMotor::instancia().getNode("rotacion_escudo2");
+	caja2->translate(glm::vec3(0.0f, 0.0f, -6.61f));
+
+
 	//ARGUMENTOS MAIN
 	debug = 0;
 	fin_carrera=false;
@@ -58,22 +76,25 @@ void EscenaJuego::init() {
 	//----------------------------
 	//	Debug Bullet
 	//----------------------------
-	debugDraw = new DebugDraw(Motor3d::instancia().getDevice());
-	debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-	MotorFisicas::getInstancia()->getMundo()->setDebugDrawer(debugDraw);
+	//debugDraw = new DebugDraw(Motor3d::instancia().getDevice());
+	//debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+	//MotorFisicas::getInstancia()->getMundo()->setDebugDrawer(debugDraw);
 
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	Pista *pistaca = Pista::getInstancia();
+
+	
+	/*Pista *pistaca = Pista::getInstancia();
 	pistaca->setMapa("assets/Mapa01/mapaIsla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
-	pistaca->getArrayWaypoints();
+	pistaca->getArrayWaypoints();*/
+
 
 	//-----------------------------
 	//	JUGADORES
 	//-----------------------------
 	//Posicion del nodo y el bloque de colisiones centralizado:
-
+/*
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	std::vector<Corredor*> pj = jugadores->getJugadores();
 	Corredor* jugador;
@@ -150,20 +171,21 @@ void EscenaJuego::init() {
 	camara = new Camara3persona();
 	tipoCamara = 0;
 	cambioCamara = false;
-
+*/
 	//-----------------------------
 	//	GESTOR COLISIONES
 	//-----------------------------
 	colisiones = new GestorColisiones();
-	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
+	//TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 
 	//-----------------------------
 	//	TIME
 	//-----------------------------
 	lastFPS = -1;
-	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
+	//TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
 	DeltaTime = 0;
 	tiempoRefresco = clock();
+
 }
 
 void EscenaJuego::dibujar() {
@@ -172,18 +194,18 @@ void EscenaJuego::dibujar() {
 	std::vector<Corredor*> pj = jugadores->getJugadores();
 
 	//------- RENDER ----------
-	Motor3d::instancia().iniciarDibujado();
-	Motor3d::instancia().getScene()->drawAll();
+	//Motor3d::instancia().iniciarDibujado();
+	//Motor3d::instancia().getScene()->drawAll();
 
 
 	
 	if (debug) {
 
 	//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
-	SMaterial materialDriver;
+	/*SMaterial materialDriver;
 	materialDriver.Lighting = false;
 	Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
-	Motor3d::instancia().getDriver()->setMaterial(materialDriver);
+	Motor3d::instancia().getDriver()->setMaterial(materialDriver);*/
 
 	for(int i=0;i<pj.size();i++){
 
@@ -194,10 +216,10 @@ void EscenaJuego::dibujar() {
 			}
 		}
 
-		SMaterial debugMat;
+		/*SMaterial debugMat;
 		debugMat.Lighting = true;
 		Motor3d::instancia().getDriver()->setMaterial(debugMat);
-		Motor3d::instancia().getDriver()->setTransform(ETS_WORLD, IdentityMatrix);
+		Motor3d::instancia().getDriver()->setTransform(ETS_WORLD, IdentityMatrix);*/
 		MotorFisicas::getInstancia()->getMundo()->debugDrawWorld();
 	}else{
 
@@ -218,13 +240,13 @@ void EscenaJuego::dibujar() {
 		}
 	
 
-	Motor3d::instancia().getGUI()->drawAll();
-	Motor3d::instancia().terminarDibujado();
+	//Motor3d::instancia().getGUI()->drawAll();
+	//Motor3d::instancia().terminarDibujado();
 }
 
 void EscenaJuego::limpiar() {
-	Motor3d::instancia().getScene()->clear();
-	Motor3d::instancia().getGUI()->clear();
+	//Motor3d::instancia().getScene()->clear();
+	//Motor3d::instancia().getGUI()->clear();
 }
 
 void EscenaJuego::update() {
@@ -241,9 +263,9 @@ void EscenaJuego::update() {
 	//cout << irrTimer->getTime() << endl;
 	textoDebug->limpiar();
 
-	DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
+	/*DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
 	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
-	UpdatePhysics(DeltaTime);
+	UpdatePhysics(DeltaTime);*/
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
 		pistaca->getArrayCaja()[i]->comprobarRespawn(); // TODO: MOVER AL UPDATE DE PISTACA

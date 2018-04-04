@@ -52,7 +52,7 @@ public:
 
 	// DIBUJADO
 	void clean();
-	void draw();
+	void draw(int tipo);
 	void drawCamera();
 	void drawLight();
 

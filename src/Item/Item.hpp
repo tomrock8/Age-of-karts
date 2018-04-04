@@ -4,7 +4,7 @@
 #include "IrrlichtLib.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
-#include "Motor3d.hpp"
+//#include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
 #include "GestorIDs.hpp"
 #include "Timer.hpp"

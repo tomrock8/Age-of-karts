@@ -223,26 +223,28 @@ void TMotor::clean() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);				//Limpia el buffer del color
 }
 
-void TMotor::draw() {
+void TMotor::draw(int tipo) {
 	//Se llama a la funcion para limpiar los buffers de OpenGL
 	clean();
+	if (tipo==1 || tipo==2){
+		//Se activa el shader para el renderizado 3D
+		shader->use();
 
-	//Se activa el shader para el renderizado 3D
-	shader->use();
+		//Se llama al dibujado de los distintos nodos del arbol
+		drawCamera();
+		drawLight();
+		scene->draw(shader);
+	/*
+		//Se activa el shader para el dibujado del HUD
+		shaderHUD->use();
 
-	//Se llama al dibujado de los distintos nodos del arbol
-	drawCamera();
-	drawLight();
-	scene->draw(shader);
-
-	//Se activa el shader para el dibujado del HUD
-	shaderHUD->use();
-
-	//Dibujamos el hud activo
-	activeHud->drawHud(shaderHUD);
- 
+		//Dibujamos el hud activo
+		activeHud->drawHud(shaderHUD);
+	*/
+	}
 	//swap los bufers de pantalla (trasero y delantero)
 	glfwSwapBuffers(TMotor::instancia().getVentana());
+
 }
 
 

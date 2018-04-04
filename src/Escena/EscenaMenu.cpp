@@ -3,7 +3,7 @@
 EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	
 	
-	
+/*	
 	texto = L"1 - INCIAR JUEGO SINGLEPLAYER\n\n";
 	texto += "2 - INCIAR JUEGO MULTIPLAYER\n\n";
 	texto += "3  - OPCIONES (IN DEVELOPMENT)\n\n";
@@ -28,7 +28,7 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	textoUI->setOverrideFont(fuente);
 	
 	logoAOK = Motor3d::instancia().getDriver()->getTexture("assets/logoAOK.png");
-	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));
+	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));*/
 }
 
 EscenaMenu::~EscenaMenu() {
@@ -43,19 +43,19 @@ void EscenaMenu::init() {
 }
 
 void EscenaMenu::dibujar() {
-	Motor3d::instancia().iniciarDibujado();
+	/*Motor3d::instancia().iniciarDibujado();
 
 	Motor3d::instancia().getDriver()->draw2DImage(logoAOK, position2d<s32>(Motor3d::instancia().getAnchoPantalla() / 4, 0),
 		core::rect<s32>(0, 0, logoAOK->getSize().Width, logoAOK->getSize().Height), 0,
 		video::SColor(255, 255, 255, 255), true);
 
 	Motor3d::instancia().dibujar();
-	Motor3d::instancia().terminarDibujado();
+	Motor3d::instancia().terminarDibujado();*/
 }
 
 void EscenaMenu::limpiar() {
-	Motor3d::instancia().getScene()->clear();
-	Motor3d::instancia().getGUI()->clear();
+	/*Motor3d::instancia().getScene()->clear();
+	Motor3d::instancia().getGUI()->clear();*/
 }
 
 void EscenaMenu::update() {

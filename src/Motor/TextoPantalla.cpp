@@ -3,7 +3,7 @@
 TextoPantalla *TextoPantalla::instancia = NULL;
 
 TextoPantalla::TextoPantalla() {
-	
+/*	
 	Motor3d m = Motor3d::instancia();
 	// -----------------------------//
 	// -----------INTERFAZ----------//
@@ -19,7 +19,7 @@ TextoPantalla::TextoPantalla() {
 		0,							 // Id del elemento
 		true);						 // Rellenado (o transparente)
 	textoUI->setOverrideFont(fuente);
-	
+	*/
 }
 
 TextoPantalla *TextoPantalla::getInstancia() {

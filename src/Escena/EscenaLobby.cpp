@@ -34,12 +34,12 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 		iniciado = false;
 		firstInit = false;
 	}
-        	
+    cout<<"holamundo1"<<endl;    	
 	pressed = true;
 	lanzado = false;
 	conectado = false;
 	
-	
+	/*
 	u16 xPos = Motor3d::instancia().getAnchoPantalla() / 3;
 	u16 yPos = Motor3d::instancia().getAltoPantalla() / 4;
 
@@ -55,7 +55,8 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	textoUI->setOverrideFont(fuente);
 
 	logoAOK = Motor3d::instancia().getDriver()->getTexture("assets/logoAOK.png");
-	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));
+	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));*/
+	cout<<"holamundo2"<<endl; 
 }
 EscenaLobby::~EscenaLobby() {
 	cout << "Destructor ESCENA LOBBY. Entro.";
@@ -67,7 +68,7 @@ void EscenaLobby::init() {
 }
 
 void EscenaLobby::dibujar() {
-	Motor3d::instancia().iniciarDibujado();
+	/*Motor3d::instancia().iniciarDibujado();
 
 	//Motor3d::instancia().getDriver()->draw2DImage(logoAOK, rect<s32>(0, 0, 100, 100), 0, SColor(255, 255, 255, 255), true);
 	Motor3d::instancia().getDriver()->draw2DImage(logoAOK, position2d<s32>(Motor3d::instancia().getAnchoPantalla() / 4, 0),
@@ -75,22 +76,22 @@ void EscenaLobby::dibujar() {
 		video::SColor(255, 255, 255, 255), true);
 
 	Motor3d::instancia().dibujar();
-	Motor3d::instancia().terminarDibujado();
+	Motor3d::instancia().terminarDibujado();*/
 }
 
 void EscenaLobby::limpiar() {
-	Motor3d::instancia().getScene()->clear();
-	Motor3d::instancia().getGUI()->clear();
+	/*Motor3d::instancia().getScene()->clear();
+	Motor3d::instancia().getGUI()->clear();*/
 }
 
 void EscenaLobby::update() {
 	if (offline){
 		//si es offline solo cargamos y dibujamos toda la informacion (modificable con inputs)
 		std::vector<structClientes> clientes=client->getClientes();
-		texto="";
+		/*texto="";
 		for (int i=0;i<clientes.size();i++){
 			mostrarInfoLobby(i);
-		}
+		}*/
 	}else{
 		bool show=false;
 
@@ -571,7 +572,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			pressed=true;
 		}
 	}else pressed = false;
-		textoUI->setText(this->texto.c_str());
+		//textoUI->setText(this->texto.c_str());
 
 	if(iniciado)
 		if(client->getStarted())

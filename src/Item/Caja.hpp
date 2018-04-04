@@ -5,7 +5,7 @@
 #include "Corredor.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
-#include "Motor3d.hpp"
+//#include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
 #include "Timer.hpp"
 #include "GestorIDs.hpp"

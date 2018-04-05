@@ -216,7 +216,7 @@ TNodo *TMotor::createLightNode(TNodo *padre, TLuz *luz, const char* name) {
 // D I B U J A D O
 //------------------------------
 void TMotor::clean() {
-	glClearColor(0.50f, 1.0f, 6.0f, 0.0f);
+	glClearColor(0.16f, 0.533f, 0.698f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);

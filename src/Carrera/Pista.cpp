@@ -78,7 +78,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 
 	// ------------------------------------------------------
 
-	
+	/*
 	//lectura de fichero
 	std::string line;
 	std::string tipo, pX, pY, pZ, orientacionWp, v1X, v1Y, v1Z, v2X, v2Y, v2Z;
@@ -177,7 +177,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 				arrayTurbos.push_back(tb);
 				tamTurbos++;
 			}
-			//cout << line << endl;*/
+			//cout << line << endl;
 		}
 
 		myfile.close();
@@ -185,7 +185,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 	}
 	else {
 		cout << "Error abriendo archivo";
-	}
+	}*/
 	
 }
 

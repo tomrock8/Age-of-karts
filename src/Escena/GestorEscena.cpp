@@ -59,6 +59,7 @@ if(tiempo-tiempoAnterior ==1){
 	}
 	else {
 		if (cambioEscena != Escena::tipo_escena::SALIR)
+			
 			cambiaEscena(cambioEscena);
 			//tiempoActual=0;
 			//tiempoRefresco=0;

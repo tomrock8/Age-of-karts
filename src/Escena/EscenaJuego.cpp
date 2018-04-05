@@ -94,7 +94,10 @@ void EscenaJuego::init() {
 	//	JUGADORES
 	//-----------------------------
 	//Posicion del nodo y el bloque de colisiones centralizado:
-/*
+
+
+
+
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	std::vector<Corredor*> pj = jugadores->getJugadores();
 	Corredor* jugador;
@@ -155,6 +158,7 @@ void EscenaJuego::init() {
 		jugador->setID(i);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
+		
 	}
 
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
@@ -164,7 +168,7 @@ void EscenaJuego::init() {
 	jugadores->setJugadores(pj);
 
 	gc = new GestorCarrera();
-
+/*
 	//-----------------------------
 	//	CAMARA
 	//-----------------------------
@@ -185,7 +189,7 @@ void EscenaJuego::init() {
 	TimeStamp = glfwGetTime();
 	DeltaTime = 0;
 	tiempoRefresco = glfwGetTime();
-
+	
 }
 
 void EscenaJuego::dibujar() {
@@ -221,6 +225,7 @@ void EscenaJuego::dibujar() {
 		Motor3d::instancia().getDriver()->setMaterial(debugMat);
 		Motor3d::instancia().getDriver()->setTransform(ETS_WORLD, IdentityMatrix);*/
 		MotorFisicas::getInstancia()->getMundo()->debugDrawWorld();
+		
 	}else{
 
 	
@@ -239,7 +244,7 @@ void EscenaJuego::dibujar() {
 		
 		}
 	
-
+		
 	//Motor3d::instancia().getGUI()->drawAll();
 	//Motor3d::instancia().terminarDibujado();
 }

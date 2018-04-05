@@ -12,6 +12,7 @@
 
 Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 {
+	
 	cargador = 0;
 	tipoObj = 0;
 	turboActivado = false;
@@ -42,7 +43,6 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 
 
-	
 	//-------------bullet----------------
 	rueda1 = TMotor::instancia().newMeshNode(" ","assets/Objetos/rueda.obj","escena_raiz");
 	rueda2 = TMotor::instancia().newMeshNode(" ","assets/Objetos/rueda.obj","escena_raiz");
@@ -57,13 +57,16 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 
 
 	//establecemos el primer waypoint del mapa
+	/*
 	Pista *mapa = Pista::getInstancia();
 	anterior = mapa->getArrayWaypoints()[mapa->getTamArrayWaypoints() - 1];
 	actual = mapa->getArrayWaypoints()[0];
 	siguiente = actual->getNextWaypoint();
 	siguiente_aux = siguiente;
-
-	
+*/
+	actual= NULL;
+	siguiente = NULL;
+	siguiente_aux = NULL;
 	
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
@@ -89,7 +92,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	setParametros();
 
-		
+	
 	if (cuboNodo) {
 		
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
@@ -102,7 +105,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	posicion.setZ(pos.getZ());
 
 	if (cuboNodo) InicializarFisicas();
-
+	
 	
 
 }
@@ -113,7 +116,9 @@ void Corredor::setParametros(){
 	switch (tipojugador){
 		case GLADIADOR:
 			//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
-			cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/Karts/KartGladiator.obj","escena_raiz");
+			
+			cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/coche.obj","escena_raiz");
+			
 			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
 			
 			//----ACELERACION-----

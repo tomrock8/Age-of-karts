@@ -45,9 +45,9 @@ private:
   GestorJugadores *jugadores;
   obj3D *nodoA;
   obj3D *nodoB;
-  clock_t tiempoLanzado;
+  float tiempoLanzado;
   bool control;
-  clock_t tiempoInicio;
+  float tiempoInicio;
 };
 
 #endif

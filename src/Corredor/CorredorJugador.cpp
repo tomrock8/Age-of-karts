@@ -15,34 +15,34 @@ void CorredorJugador::movimiento() {
 	bool comprobadorMovimiento = false;
 
 	//-------ENTRADA TECLADO ----------//
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_S) == GLFW_PRESS){
 		frenar();
 		//vehiculo-> set
 		comprobadorMovimiento = true;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS){
 		acelerar();
 		comprobadorMovimiento = true;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS){
 		girarDerecha();
 
 		comprobadorMovimiento = true;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS){
 		girarIzquierda();
 		comprobadorMovimiento = true;
 	}else{ 
     	estado->setDireccionMovimiento(RECTO);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS){
 		frenodemano(true, false);
 		comprobadorMovimiento = true;
 	}
 	else {
 		frenodemano(false, false);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_R) == GLFW_PRESS){
 			recolocarWaypoint();
 	}
 
@@ -68,23 +68,16 @@ void CorredorJugador::actualizarItem() {
 	setPosDisparo(btVector3(cuboNodo->getPosition().x + orientacion.getX() * 10, cuboNodo->getPosition().y, cuboNodo->getPosition().z + orientacion.getZ() * 10));
 	btVector3 posDisparo2(cuboNodo->getPosition().x, cuboNodo->getPosition().y - 1, cuboNodo->getPosition().z);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) setTipoObj(1);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) setTipoObj(2);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) setTipoObj(3);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) setTipoObj(4);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) setTipoObj(5);//escudo
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)) setTipoObj(6);//proytectil x3
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7)) setTipoObj(7);//FlechaTeledirigida
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8)) setTipoObj(8);//TurboTriple
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_1) == GLFW_PRESS) setTipoObj(1);
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_2) == GLFW_PRESS) setTipoObj(2);
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_3) == GLFW_PRESS) setTipoObj(3);
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_4) == GLFW_PRESS) setTipoObj(4);
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_5) == GLFW_PRESS) setTipoObj(5);//escudo
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_6) == GLFW_PRESS) setTipoObj(6);//proytectil x3
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_7) == GLFW_PRESS) setTipoObj(7);//FlechaTeledirigida
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_8) == GLFW_PRESS) setTipoObj(8);//TurboTriple
 
-	/*if (sf::Keyboard::isKeyReleased(sf::Keyboard::P))
-	{
-		// comprobacion del item
-		if (getCheckItem() == true) {
-			setCheckItem(false);
-		}
-	}
-	else*/ if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_P) == GLFW_PRESS)
 	{
 		if (getTipoObj() != 0 && !checkItem)
 		{
@@ -101,7 +94,7 @@ void CorredorJugador::actualizarItem() {
 			setCheckItem(false);
 		}
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS){
 		lanzarHabilidad();
 	}
 }

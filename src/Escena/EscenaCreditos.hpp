@@ -4,7 +4,6 @@
 #include "Escena.hpp"
 
 #include "Motor3d.hpp"
-#include "Graphics.hpp"
 
 class EscenaCreditos : public Escena {
 public:

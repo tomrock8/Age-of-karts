@@ -61,15 +61,15 @@ void EscenaCreditos::update() {
 
 Escena::tipo_escena EscenaCreditos::comprobarInputs() {
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS){
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
 	else {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_KP_1) == GLFW_PRESS){
 			cout << "SINGLE PLAYER\n";
 		}
 		else {
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
+			if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_KP_2) == GLFW_PRESS){
 				cout << "MULTI PLAYER\n";
 			}
 		}

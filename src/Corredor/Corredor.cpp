@@ -1161,11 +1161,13 @@ void Corredor::update()
 	if(vehiculo->getCurrentSpeedKmHour()>velocidadMaxima){
 		limitadorVelocidad();
 	}
+	/*
 	for (unsigned int i = 0; i< sf::Joystick::Count; ++i)
 	{
 		if (sf::Joystick::isConnected(i))
 			std::cout << "Joystick " << i << " is connected!" << std::endl;
 	}
+	*/
 
 	comprobarTurbo();
 	comprobarInmunidad();

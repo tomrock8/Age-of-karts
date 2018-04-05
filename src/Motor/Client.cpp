@@ -137,11 +137,11 @@ void Client::UpdateNetworkKeyboard()
 				direccionMovimiento = 2;
 		}*/
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)){ //ResetWaypoint
+		if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_R) == GLFW_PRESS){ //ResetWaypoint
 			reset = true;
 		}
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){ //Lanzar Item
+		if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_P) == GLFW_PRESS){ //Lanzar Item
 			if(!pressed2){ 
 				lanzar = true; 
 				pressed2 = true; 
@@ -150,7 +150,7 @@ void Client::UpdateNetworkKeyboard()
 			pressed2 = false; 
 		}
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::O)){ 
+		if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS){ 
 			if(!pressed3){ 
 				if(GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getLimite() > 99){ 
 					std::cout << "Ulti lanzada\n"; 

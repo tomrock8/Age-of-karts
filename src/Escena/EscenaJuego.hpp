@@ -16,7 +16,6 @@
 #include "GestorCarrera.hpp"
 #include "GestorColisiones.hpp"
 #include <vector>
-#include "Graphics.hpp"
 #include "Timer.hpp"
 
 

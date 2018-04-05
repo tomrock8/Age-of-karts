@@ -347,7 +347,7 @@ void EscenaLobby::mostrarTipoPersonaje(int i){		//traduce de int a texto (tipo d
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	
 	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS){
 		//if(conectado)
 			
 		if (offline){
@@ -365,7 +365,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !selection) {
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS && !selection) {
 		//Space==Control de ready/Iniciar partida
 		if (!pressed) {
 			pressed = true;
@@ -386,7 +386,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				}
 			}
 		}
-	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !selection){
+	} else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS && !selection){
 		//Left==change character (one side)
 		if (!pressed) {
 			pressed = true;
@@ -406,7 +406,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 		}
 
-	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !selection){
+	} else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_RIGHT) == GLFW_PRESS && !selection){
 		//Right==change character (other side)
 		if (!pressed) {
 			pressed = true;
@@ -425,12 +425,12 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				}
 			}
 		}
-	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !selection && !offline){
+	} else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS && !selection && !offline){
 		if(!pressed){
 			iniciar = true;					//Conectar con el servidor de la IP
 			pressed = true;
 		}
-	} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
+	} else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_1) == GLFW_PRESS){
 		//Online: Selccionar opcion/introducir texto | Anyadir clientes offline
 		if (!pressed) {
 			if (!offline){
@@ -452,7 +452,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_2) == GLFW_PRESS){
 		//Online: Selccionar opcion/introducir texto | Borrar clientes offline
 		if (!pressed) {
 			if (!offline){
@@ -476,7 +476,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && !selection){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_3) == GLFW_PRESS && !selection){
 		//Online: Introducir texto | Offline: Cambiar jugador/IA
 		if (!pressed) {
 			if (!offline){
@@ -497,62 +497,62 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && !selection && !offline){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_4) == GLFW_PRESS && !selection && !offline){
 		if (!pressed) {
 			texto += "4";
 			ipConexion += "4";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5) && !selection && !offline){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_5) == GLFW_PRESS && !selection && !offline){
 		if (!pressed) {
 			texto += "5";
 			ipConexion += "5";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6) && !selection && !offline){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_6) == GLFW_PRESS && !selection && !offline){
 		if (!pressed) {
 			texto += "6";
 			ipConexion += "6";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7) && !selection && !offline){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_7) == GLFW_PRESS && !selection && !offline){
 		if (!pressed) {
 			texto += "7";
 			ipConexion += "7";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8) && !selection && !offline){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_8) == GLFW_PRESS && !selection && !offline){
 		if (!pressed) {
 			texto += "8";
 			ipConexion += "8";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9) && !selection && !offline){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS && !selection && !offline){
 		if (!pressed) {
 			texto += "9";
 			ipConexion += "9";
 			pressed = true;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && !selection && !offline){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS && !selection && !offline){
 		if (!pressed) {
 			texto += "0";
 			ipConexion += "0";
 			pressed = true;
 		}
 	}
-	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Period) && !selection && !offline){
+	else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_PERIOD) == GLFW_PRESS && !selection && !offline){
 		if(!pressed){
 			texto += ".";
 			ipConexion += ".";
 			pressed=true;
 		}
-	}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !selection && offline){
+	}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS && !selection && offline){
 		if(!pressed){
 			if (client->getClientes().size()-1>count){
 				count++;
@@ -561,7 +561,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 			pressed=true;
 		}
-	}else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !selection && offline){
+	}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS && !selection && offline){
 		//Moverse entre jugadores para cambiar opciones de seleccion en cada uno
 		if(!pressed){
 			if (count>0){

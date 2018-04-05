@@ -63,22 +63,22 @@ void EscenaMenu::update() {
 
 Escena::tipo_escena EscenaMenu::comprobarInputs() {
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS){
 		if(!pressed){
 			return Escena::tipo_escena::SALIR; // Devuelve el estado de las escenas para que salga
 		}
-	}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
+	}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_1) == GLFW_PRESS){
 		cout << "SINGLE PLAYER\n";
 		ipConexion="offline";
 		return Escena::tipo_escena::LOBBY;
-	}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
+	}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_2) == GLFW_PRESS){
 		cout << "MULTI PLAYER\n";
 		ipConexion="";
 		return Escena::tipo_escena::LOBBY;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_3) == GLFW_PRESS){
 			cout << "OPCIONES\n";
-	}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)){
+	}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_4) == GLFW_PRESS){
 		cout << "CREDITOS\n";
 		return Escena::tipo_escena::CREDITOS;
 	}else pressed = false;

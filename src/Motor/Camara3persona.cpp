@@ -74,13 +74,13 @@ void Camara3persona::moveCamera(Corredor * pj1){
 	float distanciaX=20;
 	float distanciaZ=20;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && XCamera3 >= 0) {
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_E) == GLFW_PRESS && XCamera3 >= 0) {
 		if (XCamera3 < 30) {
 			XCamera3++;
 			ZCamera3 += 0.5;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && XCamera3 <= 0) {
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_Q) == GLFW_PRESS && XCamera3 <= 0) {
 		if (XCamera3 > -30) {
 			XCamera3--;
 			ZCamera3 += 0.5;
@@ -102,10 +102,10 @@ void Camara3persona::moveCamera(Corredor * pj1){
 
 	float incremento = 0.1;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS){
 		if(auxX < 4)
 			auxX += incremento;
-	}else  if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+	}else  if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS){
 		if(auxX > -4)
 			auxX-= incremento;
 	}else{
@@ -143,7 +143,7 @@ void Camara3persona::moveCamera(Corredor * pj1){
 	RelativeToCarTarget.Y = 1;
 	if (!pj1->getAceiteActivado()){
  		
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::L)){
+		if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L) == GLFW_PRESS){
 		camera->setPosition(vector3df(posicion.getX() + orientacion.getX()*distanciaX, posicion.getY()+altura,posicion.getZ() + orientacion.getZ()*distanciaZ)); 	
 		}else{
 	 
@@ -163,13 +163,13 @@ void Camara3persona::movefpsCamera(Corredor * pj1){
 	vector3df RelativeToCarTarget;
 
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && XCamera1 >= 0) {
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_E) == GLFW_PRESS && XCamera1 >= 0) {
 		if (XCamera1 < 30) {
 			XCamera1++;
 			ZCamera1 -= 0.5;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) && XCamera1 <= 0) {
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_Q) == GLFW_PRESS && XCamera1 <= 0) {
 		if (XCamera1 > -30) {
 			XCamera1--;
 			ZCamera1 -= 0.5;
@@ -187,7 +187,7 @@ void Camara3persona::movefpsCamera(Corredor * pj1){
 	RelativeToCarTarget.X = XCamera1;
 	RelativeToCarTarget.Y = 5;
 	RelativeToCarTarget.Z = ZCamera1;
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+	if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L) == GLFW_PRESS)
 		RelativeToCarTarget.Z=-ZCamera1;
 	//pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCar);
 	//pj1->getNodo()->getAbsoluteTransformation().transformVect(RelativeToCarTarget);

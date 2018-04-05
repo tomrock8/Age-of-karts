@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
 		TMotor::instancia().draw(tipo);
 		tipoActual = GestorEscena::instancia().update();
 
+		glfwPollEvents();
 	}
 	
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());

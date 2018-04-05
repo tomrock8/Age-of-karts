@@ -410,7 +410,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		i = client->getControlPlayer();
 
 	//------- ENTRADA TECLADO ----------
-	if (fin_carrera==true && sf::Keyboard::isKeyPressed(sf::Keyboard::F)){
+	if (fin_carrera==true && glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_F) == GLFW_PRESS){
 		if (tipoEscena == Escena::tipo_escena::ONLINE && controlPlayer==0){
 			for (int i=0;i<pj.size();i++){
 				pj.at(i)->setVueltas(1);
@@ -425,7 +425,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		
 		return Escena::tipo_escena::LOBBY;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_C) == GLFW_PRESS){
 		if(!cambioCamara){
 			tipoCamara++;
 			if(tipoCamara == 4) tipoCamara = 0;
@@ -435,7 +435,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		if(cambioCamara)
 			cambioCamara = false;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_T) == GLFW_PRESS){
 		float *resetPos = new float[3];
 		resetPos[0] = pos.X;
 		resetPos[1] = pos.Y + 40;
@@ -449,7 +449,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		pj.at(0)->setPosicion(resetPos, resetOri);
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS){
 		if (tipoEscena == Escena::tipo_escena::ONLINE){
 			client->ShutDownClient();
 		}else{
@@ -459,11 +459,11 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS){
 		debug = 0;
 	}
 	else {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)){
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS){
 		debug = 1;
 		}
 	}

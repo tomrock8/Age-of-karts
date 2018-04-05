@@ -8,8 +8,6 @@
 #include "Escena.hpp"
 #include "Motor3d.hpp"
 #include "Timer.hpp"
-#include "Graphics.hpp"
-#include "Timer.hpp"
 
 class EscenaLobby : public Escena {
 public:

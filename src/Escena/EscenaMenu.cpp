@@ -78,30 +78,7 @@ void EscenaMenu::limpiar() {
 
 void EscenaMenu::update() {
 
-	//Modificamos los botones para responder a las acciones del usuario
-	TMotor::instancia().getActiveHud()->changeTextureElement("local", "assets/HUD/MainMenu/btn_local_normal.png");
-	TMotor::instancia().getActiveHud()->changeTextureElement("online", "assets/HUD/MainMenu/btn_online_normal.png");
-	TMotor::instancia().getActiveHud()->changeTextureElement("opciones", "assets/HUD/MainMenu/btn_opciones_normal.png");
-	TMotor::instancia().getActiveHud()->changeTextureElement("salir", "assets/HUD/MainMenu/btn_salir_normal.png");
 
-	TMotor::instancia().getActiveHud()->scaleElement("local",1.0f,1.0f);
-	TMotor::instancia().getActiveHud()->scaleElement("online",1.0f,1.0f);
-	TMotor::instancia().getActiveHud()->scaleElement("opciones",1.0f,1.0f);
-	TMotor::instancia().getActiveHud()->scaleElement("salir",1.0f,1.0f);
-
-	if (optionMenu == 0){
-		TMotor::instancia().getActiveHud()->changeTextureElement("local", "assets/HUD/MainMenu/btn_local_pulsado.png");
-		TMotor::instancia().getActiveHud()->scaleElement("local",1.2f,1.2f);
-	}else if (optionMenu == 1){
-		TMotor::instancia().getActiveHud()->changeTextureElement("online", "assets/HUD/MainMenu/btn_online_pulsado.png");
-		TMotor::instancia().getActiveHud()->scaleElement("online",1.2f,1.2f);
-	}else if (optionMenu == 2){
-		TMotor::instancia().getActiveHud()->changeTextureElement("opciones", "assets/HUD/MainMenu/btn_opciones_pulsado.png");
-		TMotor::instancia().getActiveHud()->scaleElement("opciones",1.2f,1.2f);
-	}else{
-		TMotor::instancia().getActiveHud()->changeTextureElement("salir", "assets/HUD/MainMenu/btn_salir_pulsado.png");
-		TMotor::instancia().getActiveHud()->scaleElement("salir",1.2f,1.2f);
-	}
 }
 
 Escena::tipo_escena EscenaMenu::comprobarInputs() {
@@ -170,6 +147,31 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 	}else pressed = false;
 	*/
 
+	//Modificamos los botones para responder a las acciones del usuario
+	TMotor::instancia().getActiveHud()->changeTextureElement("local", "assets/HUD/MainMenu/btn_local_normal.png");
+	TMotor::instancia().getActiveHud()->changeTextureElement("online", "assets/HUD/MainMenu/btn_online_normal.png");
+	TMotor::instancia().getActiveHud()->changeTextureElement("opciones", "assets/HUD/MainMenu/btn_opciones_normal.png");
+	TMotor::instancia().getActiveHud()->changeTextureElement("salir", "assets/HUD/MainMenu/btn_salir_normal.png");
+
+	TMotor::instancia().getActiveHud()->scaleElement("local",1.0f,1.0f);
+	TMotor::instancia().getActiveHud()->scaleElement("online",1.0f,1.0f);
+	TMotor::instancia().getActiveHud()->scaleElement("opciones",1.0f,1.0f);
+	TMotor::instancia().getActiveHud()->scaleElement("salir",1.0f,1.0f);
+
+	if (optionMenu == 0){
+		TMotor::instancia().getActiveHud()->changeTextureElement("local", "assets/HUD/MainMenu/btn_local_pulsado.png");
+		TMotor::instancia().getActiveHud()->scaleElement("local",1.2f,1.2f);
+	}else if (optionMenu == 1){
+		TMotor::instancia().getActiveHud()->changeTextureElement("online", "assets/HUD/MainMenu/btn_online_pulsado.png");
+		TMotor::instancia().getActiveHud()->scaleElement("online",1.2f,1.2f);
+	}else if (optionMenu == 2){
+		TMotor::instancia().getActiveHud()->changeTextureElement("opciones", "assets/HUD/MainMenu/btn_opciones_pulsado.png");
+		TMotor::instancia().getActiveHud()->scaleElement("opciones",1.2f,1.2f);
+	}else{
+		TMotor::instancia().getActiveHud()->changeTextureElement("salir", "assets/HUD/MainMenu/btn_salir_pulsado.png");
+		TMotor::instancia().getActiveHud()->scaleElement("salir",1.2f,1.2f);
+	}
+	
 	//Se retorna la escena Menu (donde estamos) en caso de que no se haya cambiado de pantalla
 	return Escena::tipo_escena::MENU;
 }

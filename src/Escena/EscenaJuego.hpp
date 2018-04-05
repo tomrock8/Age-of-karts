@@ -54,13 +54,13 @@ private:
 	GestorColisiones *colisiones;
 
 	int lastFPS;
-	u32 TimeStamp;
-	u32 DeltaTime;
+	std::uint32_t TimeStamp;
+	std::uint32_t DeltaTime;
 
 	Client *client;
 	vector3df pos;
 
-	clock_t tiempoRefresco;
+	float tiempoRefresco;
 	GestorCarrera *gc;
 	bool fin_carrera;
 	Timer *t;

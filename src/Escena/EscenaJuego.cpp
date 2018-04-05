@@ -182,9 +182,9 @@ void EscenaJuego::init() {
 	//	TIME
 	//-----------------------------
 	lastFPS = -1;
-	//TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
+	TimeStamp = glfwGetTime();
 	DeltaTime = 0;
-	tiempoRefresco = clock();
+	tiempoRefresco = glfwGetTime();
 
 }
 
@@ -228,12 +228,12 @@ void EscenaJuego::dibujar() {
 			if(strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0){
 
 			CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
-			if(!AUXILIAR->getDebugFisicas()){	
-			i=pj.size();
-			}else{	
-			AUXILIAR->setDebugFisicas(false);
-			AUXILIAR->ActualizarRaytest();
-			}
+				if(!AUXILIAR->getDebugFisicas()){	
+				i=pj.size();
+				}else{	
+				AUXILIAR->setDebugFisicas(false);
+				AUXILIAR->ActualizarRaytest();
+				}
 			}
 		}
 		
@@ -263,9 +263,9 @@ void EscenaJuego::update() {
 	//cout << irrTimer->getTime() << endl;
 	textoDebug->limpiar();
 
-	/*DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
+	DeltaTime = (glfwGetTime()*1000) - (TimeStamp*1000);
 	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
-	UpdatePhysics(DeltaTime);*/
+	UpdatePhysics(DeltaTime);
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
 		pistaca->getArrayCaja()[i]->comprobarRespawn(); // TODO: MOVER AL UPDATE DE PISTACA
@@ -350,12 +350,12 @@ void EscenaJuego::update() {
 			textoDebug->agregar(pj.at(controlPlayer)->toString());
 
 		if (jugadores->getNumJugadores() != 0) {
-			clock_t tiempoActual = clock();
-			clock_t timediff = tiempoActual - tiempoRefresco;
-			float timediff_sec = ((float)timediff) / 100000;
+			float tiempoActual = glfwGetTime();
+			float timediff_sec = tiempoActual - tiempoRefresco;
+
 			//if (timediff_sec >= 0.01) {
 			client->PlayerMovement();
-			tiempoRefresco = clock();
+			tiempoRefresco = glfwGetTime();
 			//}
 			//client->PlayerAction();
 			client->UpdateNetworkKeyboard();

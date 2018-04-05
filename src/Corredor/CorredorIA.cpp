@@ -378,25 +378,41 @@ void CorredorIA::seguirWaypoint(){
 	btScalar distanciaCentro=btScalar(0);
 	btScalar distanciaLado1=btScalar(0);
 	btScalar distanciaLado2=btScalar(0);
+	btScalar distanciaLado3=btScalar(0);
+	btScalar distanciaLado4=btScalar(0);
+
 
 	btVector3 posCoche(cuboNodo->getPosition().X, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z);
 	distanciaCentro = getDistanciaPunto(siguiente->getPosicion());
 	distanciaLado1 = getDistanciaPunto(siguiente->getVector1());
 	distanciaLado2 = getDistanciaPunto(siguiente->getVector2());
+	distanciaLado3 = getDistanciaPunto(siguiente->getVector3());
+	distanciaLado4 = getDistanciaPunto(siguiente->getVector4());
 	
-	if(distanciaCentro<distanciaLado1 && distanciaCentro<distanciaLado2){
+	if(distanciaCentro<distanciaLado1 && distanciaCentro<distanciaLado2 && distanciaCentro<distanciaLado3 && distanciaCentro<distanciaLado4){
 	calculoAnguloGiro(siguiente->getPosicion());
 	
 	}
 	else{
- 	if(distanciaLado1<distanciaCentro && distanciaLado1<distanciaLado2){
+ 	if(distanciaLado1<distanciaCentro && distanciaLado1<distanciaLado2 && distanciaLado1<distanciaLado3 && distanciaLado1<distanciaLado4){
 	calculoAnguloGiro(siguiente->getVector1());
 	
 	}
-	if(distanciaLado2<distanciaCentro && distanciaLado2<distanciaLado1){
+	if(distanciaLado2<distanciaCentro && distanciaLado2<distanciaLado1 && distanciaLado2<distanciaLado3 && distanciaLado2<distanciaLado4){
 	calculoAnguloGiro(siguiente->getVector2());
 	
 	}
+
+	if(distanciaLado3<distanciaCentro && distanciaLado3<distanciaLado1 && distanciaLado3<distanciaLado2 && distanciaLado3<distanciaLado4){
+	calculoAnguloGiro(siguiente->getVector3());
+	
+	}
+
+	if(distanciaLado4<distanciaCentro && distanciaLado4<distanciaLado1 && distanciaLado4<distanciaLado3 && distanciaLado4<distanciaLado2){
+	calculoAnguloGiro(siguiente->getVector4());
+	
+	}
+
 	}
 
 }

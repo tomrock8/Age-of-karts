@@ -98,6 +98,13 @@ btVector3 Waypoint::getVector1() {
 btVector3 Waypoint::getVector2() {
 	return vector2;
 }
+btVector3 Waypoint::getVector3() {
+	return vector3;
+}
+btVector3 Waypoint::getVector4() {
+	return vector4;
+}
+
 void Waypoint::setID(int i){
 	id=i;
 }

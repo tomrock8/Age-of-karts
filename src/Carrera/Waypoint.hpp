@@ -37,6 +37,8 @@ public:
   Waypoint *getNextWaypoint();
   btVector3 getVector1();
   btVector3 getVector2();
+  btVector3 getVector3();
+  btVector3 getVector4();
   btVector3 getRotation();
   int getID();
 private:
@@ -51,6 +53,8 @@ private:
   //vectores
   btVector3 vector1;
   btVector3 vector2;
+  btVector3 vector3;
+  btVector3 vector4;
   int id;
 };
 

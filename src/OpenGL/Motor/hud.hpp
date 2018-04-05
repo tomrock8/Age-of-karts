@@ -16,8 +16,9 @@ public:
  
     const char* getName();
  
-    void addElement(float w, float h, const char* n, const char* p); //Añade un elemento al hud
- 
+    void addElement(float w, float h, const char* n, const char* p); //Añade un elemento con textura al hud
+    void addElement(float w, float h, const char* n, glm::vec4 c); //Añade un elemento con color al hud
+
     //Tratamiento de los elementosHud
     void rotateElement(const char* n, float angle);
     void traslateElement(const char* n, float x, float y);

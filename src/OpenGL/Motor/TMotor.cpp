@@ -234,14 +234,14 @@ void TMotor::draw(int tipo) {
 		drawCamera();
 		drawLight();
 		scene->draw(shader);
-	/*
-		//Se activa el shader para el dibujado del HUD
-		shaderHUD->use();
-
-		//Dibujamos el hud activo
-		activeHud->drawHud(shaderHUD);
-	*/
 	}
+
+	//Se activa el shader para el dibujado del HUD
+	shaderHUD->use();
+
+	//Dibujamos el hud activo
+	activeHud->drawHud(shaderHUD);
+	
 	//swap los bufers de pantalla (trasero y delantero)
 	glfwSwapBuffers(TMotor::instancia().getVentana());
 

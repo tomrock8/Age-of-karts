@@ -1,18 +1,34 @@
 #include "elementoHud.hpp"
 
-//Constructor que crea e inicializa el quad
+//Constructor que crea e inicializa el quad con una textura
 elementoHud::elementoHud(float w, float h, const char* n, const char* p){ 
     //Guardamos los datos 
     width = w; 
     height = h; 
     name = n; 
     path = p; 
+    color = glm::vec4(0.f, 0.f, 0.f, 0.f);
 
     //Inicializamos y creamos el elemento del hud
     setData();
     setBuffersOpenGL();
     loadImage();
 }
+
+//Constructor que crea e inicializa el quad con una color
+elementoHud::elementoHud(float w, float h, const char* n, glm::vec4 c){ 
+    //Guardamos los datos 
+    width = w; 
+    height = h; 
+    name = n; 
+    path = ""; 
+    color = c;
+
+    //Inicializamos y creamos el elemento del hud
+    setData();
+    setBuffersOpenGL();
+}
+
 
 //Funcion que asigna las posiciones de los vertices del quad a partir del ancho y alto definido
 //Tambien, establece las coordenadas de textura para cada punto
@@ -105,6 +121,7 @@ void elementoHud::draw(Shader *shader){
     //Pasamos los datos necesarios al shader HUD
     shader->setInt("ourTexture", 0);
     shader->setMat4("model", model);
+    shader->setVec4("ourColor", color);
 
     //Enlazamos el VAO que antes hemos rellenado
     glBindVertexArray(VAO);

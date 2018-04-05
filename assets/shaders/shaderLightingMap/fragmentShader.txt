@@ -81,7 +81,7 @@ void main()
     }
 
     //Se asigna el color resultante a la variable de salida
-    FragColor = vec4(finalColor, 1.0);
+    FragColor = vec4(vec3(texture(texture_diffuse, fs_in.textCoords)), 1.0);
 }
 
 //Funcion que calcula la influencia de una luz puntual sobre el vertice

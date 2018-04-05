@@ -77,6 +77,7 @@ TNodo *TNodo::getNode(const char* nombre) {
 //----------------------------
 void TNodo::draw(Shader *shader) {
 	string n = name;
+	//std::cout << "Nodo de nombre: " << n << endl;
 	if (entidad != NULL) {
 		if (n.find("escena") == std::string::npos)
 			getEntidad()->beginDraw(shader);

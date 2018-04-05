@@ -16,6 +16,7 @@ class elementoHud
 { 
 public: 
     elementoHud(float w, float h, const char* n, const char* p); 
+    elementoHud(float w, float h, const char* n, glm::vec4 c);
     ~elementoHud();
 
     const char* getName(); 
@@ -44,6 +45,8 @@ private:
     GLuint VAO, VBO, EBO; //Buffers de OpenGL
 
     GLuint idText; //Id de la textura al crearla con OpenGL
+
+    glm::vec4 color; //Color del elemento hud
 
     glm::mat4 tras; //Matriz de traslacion
     glm::mat4 rot; //Matriz de rotacion

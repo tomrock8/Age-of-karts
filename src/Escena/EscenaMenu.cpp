@@ -29,6 +29,11 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	
 	logoAOK = Motor3d::instancia().getDriver()->getTexture("assets/logoAOK.png");
 	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));*/
+
+	TMotor::instancia().newHud("MainMenuHUD");
+	TMotor::instancia().getActiveHud()->addElement(1.2f, 1.0f, "logo", "assets/HUD/MainMenu/logo.png");
+	TMotor::instancia().getHud("MainMenuHUD")->traslateElement("logo", 0.0f, 0.4f);
+
 }
 
 EscenaMenu::~EscenaMenu() {

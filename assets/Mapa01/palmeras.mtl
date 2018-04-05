@@ -1,5 +1,5 @@
 # Blender MTL File: 'isla.Blend'
-# Material Count: 27
+# Material Count: 26
 
 newmtl Barco
 Ns 96.078431
@@ -68,6 +68,17 @@ illum 2
 map_Kd Carretera.png
 
 newmtl Carretera_Carretera.png.029
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Carretera.png
+
+newmtl Carretera_Carretera.png.030
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -166,17 +177,6 @@ d 1.000000
 illum 2
 map_Kd Carretera.png
 
-newmtl Carretera_Carretera.png.048
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd Carretera.png
-
 newmtl Carretera_Carretera.png.049
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
@@ -187,17 +187,6 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd Carretera.png
-
-newmtl Cielo
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.009535 0.470259 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd cielo.png
 
 newmtl Meta
 Ns 96.078431

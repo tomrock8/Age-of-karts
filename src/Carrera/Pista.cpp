@@ -47,12 +47,15 @@ Pista *Pista::getInstancia()
 
 void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 	//Mapa = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh(mapa));
-	Mapa = TMotor::instancia().newMeshNode("Turbo","assets/Mapa01/palmeras.obj","escena_raiz");
+	Mapa = TMotor::instancia().newMeshNode("Mapa","assets/Mapa01/palmeras.obj","escena_raiz");
+	Mapa->setPosition(0.0f, -100.0f, 0.0f);
+	//Mapa->setRotation(glm::vec3(0,1,0), 90.0f);
 	
+	/*
 	if (Mapa) {
 		Mapa->setName("Mapa");
 		//Mapa->setMaterialFlag(EMF_LIGHTING, false);
-	}
+	}*/
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
@@ -75,6 +78,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 
 	// ------------------------------------------------------
 
+	
 	//lectura de fichero
 	std::string line;
 	std::string tipo, pX, pY, pZ, orientacionWp, v1X, v1Y, v1Z, v2X, v2Y, v2Z;
@@ -100,6 +104,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 		
 		
 		//arrayCajas.resize(stoi(tamanyoArrayCajas));
+
 
 		while (!myfile.eof()) {
 
@@ -160,6 +165,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 
 				tamWaypoints++;
 			}
+			/*
 			if (tipoObj == 1) {//CAJA
 				Caja *cj= new Caja(btVector3(stof(pX), stof(pY), stof(pZ)));
 				arrayCajas.push_back(cj);
@@ -171,7 +177,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 				arrayTurbos.push_back(tb);
 				tamTurbos++;
 			}
-			//cout << line << endl;
+			//cout << line << endl;*/
 		}
 
 		myfile.close();
@@ -180,6 +186,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 	else {
 		cout << "Error abriendo archivo";
 	}
+	
 }
 
 

@@ -40,9 +40,7 @@ EscenaJuego::~EscenaJuego() {
 void EscenaJuego::init() {
 
 	// CAMARA
-	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
-	cam->translate(glm::vec3(6.0f, 0.0f, 3.0f));
-	obj3D * luzInfinita = TMotor::instancia().newLightNode("light_3", glm::vec4(0.0f, 0.f, -1.0f, 1.0f), 0.25f, glm::cos(glm::radians(30.0f)), "escena_raiz");
+	obj3D * luzInfinita = TMotor::instancia().newLightNode("light_0", glm::vec4(0.0f, 0.f, -1.0f, 1.0f), 0.25f, glm::cos(glm::radians(30.0f)), "escena_raiz");
 	luzInfinita->translate(glm::vec3(0.0f, 30.0f, 0.0f));
 	// LUCES
 	/*TMotor::instancia().newLightNode(glm::vec3(0.0f, 30.0f, 0.0f), "light_0", glm::vec4(0.0f, 0.f, -1.0f, 1.0f), 0.25f, glm::cos(glm::radians(30.0f)), "escena_raiz");
@@ -51,9 +49,11 @@ void EscenaJuego::init() {
 	TMotor::instancia().newLightNode(glm::vec3(0.0f, 15.0f, 0.0f), "light_1", glm::vec4(.0f, 0.f, 0.f, 0.0f), 0.01f, 0.0f, "escena_raiz");
 	*/
 
+	/*
 	obj3D *caja2 = TMotor::instancia().newMeshNode( "escudo2", "assets/wall/wall.obj", "escena_raiz");
 	TNodo *aux = TMotor::instancia().getNode("rotacion_escudo2");
 	caja2->translate(glm::vec3(0.0f, 0.0f, -6.61f));
+	*/
 
 
 	//ARGUMENTOS MAIN
@@ -85,9 +85,9 @@ void EscenaJuego::init() {
 	//-----------------------------
 
 	
-	/*Pista *pistaca = Pista::getInstancia();
+	Pista *pistaca = Pista::getInstancia();
 	pistaca->setMapa("assets/Mapa01/mapaIsla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
-	pistaca->getArrayWaypoints();*/
+	pistaca->getArrayWaypoints();
 
 
 	//-----------------------------

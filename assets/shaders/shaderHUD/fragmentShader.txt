@@ -10,8 +10,15 @@ in vec2 textCoords;
 //Textura del elemento hud
 uniform sampler2D ourTexture;
 
+//Color del elemento hud
+uniform vec4 ourColor;
+
 void main()
 {
     //Se asigna la textura al vertice en funcion de las coordenadas de textura
-    FragColor = texture(ourTexture, textCoords);
+    if (ourColor.w < 0.1){
+        FragColor = texture(ourTexture, textCoords);
+    }else{
+        FragColor = ourColor;
+    }
 }

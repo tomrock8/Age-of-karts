@@ -13,6 +13,15 @@ void hud::addElement(float w, float h, const char* n, const char* p){
     //Lo añadimos al array de elementos
     elems.push_back(e);
 }
+
+//Funcion para añadir un elemento con color al hud - se le pasa el ancho, alto, nombre y color del elementoHud
+void hud::addElement(float w, float h, const char* n, glm::vec4 c){
+    //Creamos un elemento con las caracteristicas deseadas
+    elementoHud *e = new elementoHud(w,h,n,c);
+ 
+    //Lo añadimos al array de elementos
+    elems.push_back(e);
+}
  
 //Funcion para dibujar el hud
 void hud::drawHud(Shader *shader){

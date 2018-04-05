@@ -3,6 +3,7 @@
 Waypoint::Waypoint() {
 	//waypoint = Motor3d::instancia().getScene()->addCubeSceneNode(0.1f);
 	waypoint = TMotor::instancia().newMeshNode("Waypoint","assets/wall/wall.obj","escena_raiz");
+	//waypoint->setPosition(0.0f, -100.0f, -300.0f);
 	//waypoint->setMaterialFlag(EMF_LIGHTING, false); //Desactivar iluminacion
 	//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(waypoint->getMesh(), SColor(255, 200, 100, 100));
 	//waypoint->setVisible(false);
@@ -53,7 +54,8 @@ void Waypoint::inicializarFisicas() {
 
 // MEtodos SET
 void Waypoint::setPosicion(float x, float y, float z) {
-	waypoint->setPosition(x, y, z);
+	//waypoint->setPosition(x, y, z);
+	waypoint->setPosition(x,y,z);
 }
 
 void Waypoint::setSiguiente(Waypoint *siguiente) {

@@ -76,9 +76,9 @@ void EscenaJuego::init() {
 	//----------------------------
 	//	Debug Bullet
 	//----------------------------
-	//debugDraw = new DebugDraw(Motor3d::instancia().getDevice());
-	//debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-	//MotorFisicas::getInstancia()->getMundo()->setDebugDrawer(debugDraw);
+	debugDraw = new DebugDraw(TMotor::instancia().getVentana());
+	debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+	MotorFisicas::getInstancia()->getMundo()->setDebugDrawer(debugDraw);
 
 	//-----------------------------
 	//	ESCENARIO MAPA

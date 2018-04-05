@@ -7,6 +7,7 @@
 #include "btBulletCollisionCommon.h"
 #include <cstdlib>
 #include <iostream>
+#include "TMotor.hpp"
 
 using namespace std;
 
@@ -14,11 +15,10 @@ class DebugDraw : public btIDebugDraw
 {
   private:
     int mode;
-    IVideoDriver *const driver;
-    ILogger *logger;
+    
 
   public:
-    DebugDraw(IrrlichtDevice *const device) : mode(DBG_NoDebug), driver(device->getVideoDriver()), logger(device->getLogger()) {}
+    DebugDraw(GLFWwindow *const device) : mode(DBG_NoDebug) {}
 
     void drawLine(const btVector3 &from, const btVector3 &to, const btVector3 &color);
 

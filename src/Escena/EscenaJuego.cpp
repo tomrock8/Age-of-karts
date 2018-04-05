@@ -250,7 +250,7 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
-	TextoPantalla *textoDebug = TextoPantalla::getInstancia();
+	//TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
 	std::vector<Item *> items = pistaca->getItems();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
@@ -261,10 +261,10 @@ void EscenaJuego::update() {
 		controlPlayer = client->getControlPlayer();
 	}
 	//cout << irrTimer->getTime() << endl;
-	textoDebug->limpiar();
+	//textoDebug->limpiar();
 
 	DeltaTime = (glfwGetTime()*1000) - (TimeStamp*1000);
-	TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
+	TimeStamp = glfwGetTime();
 	UpdatePhysics(DeltaTime);
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
@@ -305,49 +305,51 @@ void EscenaJuego::update() {
 	
 
 	if (fin_carrera){
-		textoDebug->agregar("CARRERA FINALIZADA, PULSA F.");
+		//textoDebug->agregar("CARRERA FINALIZADA, PULSA F.");
 	}
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 	
 
-	
+
 	if (t->getTimer()<=3 && t->getTimer()>=1){
 		int desc=4-t->getTimer();
-		textoDebug->agregar(to_string(desc));
+		//textoDebug->agregar(to_string(desc));
 	}
+
 	if (t->getTimer()==4){
 		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
 		}
 		colisiones->IniciarTimer();
 	}
+
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		pj.at(controlPlayer)->actualizarItem();
+		//pj.at(controlPlayer)->actualizarItem();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		//pj.at(controlPlayer)->update();
 				
 		if (jugadores->getNumJugadores() != 0)
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-				pj.at(i)->update();
+				//pj.at(i)->update();
 			}
 		//textoDebug->agregar(pj.at(0)->toString());
 	}
 	else {
 		//cout << jugadores->getNumJugadores() << endl;
-		//if (jugadores->getNumJugadores() != 0)
-		//	pj.at(controlPlayer)->actualizarItem();
-		
+		if (jugadores->getNumJugadores() != 0)
+			pj.at(controlPlayer)->actualizarItem();
+
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 		if (jugadores->getNumJugadores() != 0)
 			client->aumentarTimestamp();
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-				pj.at(i)->update();
+			pj.at(i)->update();
 			}
 
-		textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
+		//textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 		if (jugadores->getNumJugadores() != 0)
-			textoDebug->agregar(pj.at(controlPlayer)->toString());
+			//textoDebug->agregar(pj.at(controlPlayer)->toString());
 
 		if (jugadores->getNumJugadores() != 0) {
 			float tiempoActual = glfwGetTime();
@@ -369,7 +371,7 @@ void EscenaJuego::update() {
 
 	jugadores->setJugadores(pj);
 
-	int fps = Motor3d::instancia().getDriver()->getFPS();
+	/*int fps = Motor3d::instancia().getDriver()->getFPS();
 	if (lastFPS != fps) {
 		core::stringw tmp(L"Age of karts [");
 		tmp += Motor3d::instancia().getDriver()->getName();
@@ -378,12 +380,12 @@ void EscenaJuego::update() {
 
 		Motor3d::instancia().getDevice()->setWindowCaption(tmp.c_str());
 		lastFPS = fps;
-	}
+	}*/
 
 
 
 	pj = jugadores->getJugadores();
-	switch(tipoCamara){
+	/*switch(tipoCamara){
 		case 0:		//Camara 3a persona fija
 			camara->moveCamera(pj.at(controlPlayer));
 		break;
@@ -396,7 +398,7 @@ void EscenaJuego::update() {
 		case 3:
 			camara->moveCameraControlPointer(pj.at(controlPlayer));
 
-	}
+	}*/
 
 
 }

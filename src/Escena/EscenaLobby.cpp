@@ -34,7 +34,6 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 		iniciado = false;
 		firstInit = false;
 	}
-    cout<<"holamundo1"<<endl;    	
 	pressed = true;
 	lanzado = false;
 	conectado = false;
@@ -56,7 +55,6 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 
 	logoAOK = Motor3d::instancia().getDriver()->getTexture("assets/logoAOK.png");
 	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));*/
-	cout<<"holamundo2"<<endl; 
 }
 EscenaLobby::~EscenaLobby() {
 	cout << "Destructor ESCENA LOBBY. Entro.";

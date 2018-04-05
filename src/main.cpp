@@ -10,6 +10,7 @@
 
 //Callback para el redimensionamiento de la pantalla
 void resize_callback(GLFWwindow* window, int width, int height);
+void character_callback( GLFWwindow *window, unsigned int codepoint);
 
 int main(int argc, char* argv[]) {
 	
@@ -29,6 +30,7 @@ int main(int argc, char* argv[]) {
 	Escena::tipo_escena tipoActual = GestorEscena::instancia().getEscenaActiva().getTipoEscena();
 	int tipo=0;
 	while (tipoActual != Escena::tipo_escena::SALIR ) {
+		glfwSetCharCallback(TMotor::instancia().getVentana(),character_callback);
 
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS) {
 			cam->translate(glm::vec3(0, 0, -.5f));
@@ -68,6 +70,12 @@ int main(int argc, char* argv[]) {
 
 
 	return 0;
+}
+void character_callback( GLFWwindow *window, unsigned int codepoint )	//metodo para obtener la tecla pulsada y mostrarla por pantalla 
+{																		//(usada para introducir datos como la ip)
+    if (codepoint>=48 && codepoint<=57){
+		std::cout << codepoint-48 << std::endl;
+	}
 }
 
 //Manejador para el evento de redimensionamiento de la pantalla

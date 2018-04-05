@@ -24,11 +24,13 @@ public:
 private:
 
 	IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
-	bool pressed;
+	bool pressed = false;
 	stringw texto; // Texto a mostrar en pantalla
 	IGUIStaticText *textoUI; // Nodo de irrlicht
 	ITexture* logoAOK; // Textura del logo del juego
 	std::string ipConexion;
+
+	int optionMenu;
 };
 
 #endif /* ESCENAMENU_H */

@@ -8,6 +8,9 @@
 #pragma comment(lib, "Irrlicht.lib")
 #endif
 
+//Callback para el redimensionamiento de la pantalla
+void resize_callback(GLFWwindow* window, int width, int height);
+
 int main(int argc, char* argv[]) {
 	
 	TMotor::instancia();
@@ -17,6 +20,8 @@ int main(int argc, char* argv[]) {
 	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
 	cam->translate(glm::vec3(0.0f, 0.0f, 10.0f));
 
+	//Evento de glfw para redimensionar la pantalla
+    glfwSetFramebufferSizeCallback(TMotor::instancia().getVentana(), resize_callback);
 
 	// -----------------------------//
 	//	GAME LOOP
@@ -63,4 +68,11 @@ int main(int argc, char* argv[]) {
 
 
 	return 0;
+}
+
+//Manejador para el evento de redimensionamiento de la pantalla
+void resize_callback(GLFWwindow* ventana, int ancho, int alto)
+{
+	//Se redimensiona el viewport de Opengl en funcion de las medidas de la ventana
+    glViewport(0, 0, ancho, alto);
 }

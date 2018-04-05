@@ -49,6 +49,18 @@ void hud::rotateElement(const char* n, float angle){
     //Rotamos el elemento
     getElement(n)->rotacion(angle);
 }
+
+//Funcion para cambiar la textura de un elemento a partir de su nombre y la ruta a la nueva imagen
+void hud::changeTextureElement(const char* n, const char* p){
+    //Cambiamos la textura del elemento
+    getElement(n)->cambiarTextura(p);
+}
+
+//Funcion para cambiar el color de un elemento a partir de su nombre y el nuevo color
+void hud::changeColorElement(const char* n, glm::vec4 c){
+    //Cambiamos el color del elemento
+    getElement(n)->cambiarColor(c);
+}
  
 //Funcion que devuelve un elemento a partir de su nombre
 elementoHud* hud::getElement(const char* n){

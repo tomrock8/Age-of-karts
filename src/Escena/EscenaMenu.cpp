@@ -31,8 +31,11 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));*/
 
 	TMotor::instancia().newHud("MainMenuHUD");
-	TMotor::instancia().getActiveHud()->addElement(1.2f, 1.0f, "logo", "assets/HUD/MainMenu/logo.png");
-	TMotor::instancia().getHud("MainMenuHUD")->traslateElement("logo", 0.0f, 0.4f);
+	TMotor::instancia().getActiveHud()->addElement(1.2f, 0.8f, "logo", "assets/HUD/MainMenu/logo.png");
+	TMotor::instancia().getHud("MainMenuHUD")->traslateElement("logo", 0.0f, 0.55f);
+	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "local", "assets/HUD/MainMenu/local.png");
+	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "online", "assets/HUD/MainMenu/online.png");
+	TMotor::instancia().getHud("MainMenuHUD")->traslateElement("online", -0.01f, -0.2f);
 
 }
 

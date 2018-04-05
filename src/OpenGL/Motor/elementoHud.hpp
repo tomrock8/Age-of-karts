@@ -28,6 +28,8 @@ public:
     void rotacion(float angle);
     void traslacion(float x, float y);
     void escalado(float x, float y);
+    void cambiarTextura(const char* p);
+    void cambiarColor(glm::vec4 c);
 
 private:
     //---- VARIABLES ----

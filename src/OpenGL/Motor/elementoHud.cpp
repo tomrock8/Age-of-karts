@@ -149,3 +149,17 @@ void elementoHud::escalado(float x, float y){
 const char* elementoHud::getName(){ 
     return name; 
 }
+
+//Funcion para cambiar la textura del elemento hud
+void elementoHud::cambiarTextura(const char* p){
+    //Asignar la nueva ruta
+    path = p;
+    //Cargar la nueva textura
+    loadImage();
+}
+
+//Funcion para cambiar el color del elemento hud
+void elementoHud::cambiarColor(glm::vec4 c){
+    //Asignar el nuevo color
+    color = c;
+}

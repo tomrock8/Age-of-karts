@@ -272,7 +272,7 @@ void EscenaLobby::mostrarInfoLobby(int indice){
 	if (id_player==0 && !offline || offline && indice==clientes.size()-1 ){	//host
 		if (checkReady){
 			if (offline)
-				iniciar = true;		//si todos estan ready se puede iniciar partida offline
+				//iniciar = true;		//si todos estan ready se puede iniciar partida offline
 
 			texto += "\n\n Todos listos. Pulse espacio para iniciar la partida\n";
 		}else{
@@ -372,7 +372,15 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				client->RaceStart();
 				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 			}
-			if (offline && iniciar){
+			if (offline){
+				iniciar = true;
+				std::vector<structClientes> clientes=client->getClientes();
+				for (int i=0;i<clientes.size();i++){
+					if (clientes.at(i).ready==false){
+						iniciar = false;
+					}
+				}
+				if (iniciar && clientes.size()>0 || clientes.size()==1)
 				return Escena::tipo_escena::CARRERA;		//Iniciar la partida offline
 			}else if (offline){								
 				std::vector<structClientes> clientes=client->getClientes();

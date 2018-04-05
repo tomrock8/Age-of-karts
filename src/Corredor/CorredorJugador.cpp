@@ -14,35 +14,51 @@ void CorredorJugador::movimiento() {
 
 	bool comprobadorMovimiento = false;
 
+	//Comprobador de de mando y recoleccion de inputs
+	bool mandoConectado = false;
+	const unsigned char *buttons;
+	const float *axes;
+	if ( 1 == glfwJoystickPresent( id + 1 ) )
+	{
+		mandoConectado = true;
+		int buttonCount;
+		buttons = glfwGetJoystickButtons( id + 1, &buttonCount );
+        int axesCount;
+		axes = glfwGetJoystickAxes(  id + 1, &axesCount );
+		//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
+	}
+
 	//-------ENTRADA TECLADO ----------//
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_S) == GLFW_PRESS){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_S) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[2] ) ){
 		frenar();
 		//vehiculo-> set
 		comprobadorMovimiento = true;
 	}
-	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[5] ) ){
 		acelerar();
 		comprobadorMovimiento = true;
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS){
+	//GIRAR DERECHA
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) ){
 		girarDerecha();
 
 		comprobadorMovimiento = true;
 	}
-	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS){
+	//GIRAR IZQUIERDA
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]) ) ){
 		girarIzquierda();
 		comprobadorMovimiento = true;
 	}else{ 
     	estado->setDireccionMovimiento(RECTO);
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[1] ) ){
 		frenodemano(true, false);
 		comprobadorMovimiento = true;
 	}
 	else {
 		frenodemano(false, false);
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_R) == GLFW_PRESS){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_R) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[5] ) ){
 			recolocarWaypoint();
 	}
 
@@ -77,7 +93,18 @@ void CorredorJugador::actualizarItem() {
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_7) == GLFW_PRESS) setTipoObj(7);//FlechaTeledirigida
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_8) == GLFW_PRESS) setTipoObj(8);//TurboTriple
 
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_P) == GLFW_PRESS)
+	//Comprobador de de mando y recoleccion de inputs
+	bool mandoConectado = false;
+	const unsigned char *buttons;
+	if ( 1 == glfwJoystickPresent( id + 1 ) )
+	{
+		mandoConectado = true;
+		int buttonCount;
+		buttons = glfwGetJoystickButtons( id + 1, &buttonCount );
+		//  || (mandoConectado && GLFW_PRESS == buttons[12]) 
+	}
+
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_P) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[0]) )
 	{
 		if (getTipoObj() != 0 && !checkItem)
 		{
@@ -94,7 +121,7 @@ void CorredorJugador::actualizarItem() {
 			setCheckItem(false);
 		}
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[2])){
 		lanzarHabilidad();
 	}
 }

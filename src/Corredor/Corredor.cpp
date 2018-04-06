@@ -37,23 +37,10 @@ Corredor::Corredor(const char* rutaObj, btVector3 pos, tipo_jugador tipo) {
 	estado->setEstadoCarrera(PARRILLA);
 
 
-	//cuboNodo = smgr->addCubeSceneNode(1.5f);
-
 
 
 	//-------------bullet----------------
-	// HAY QUE MODIFICAR DE QUE NODO PENDEN!!!
-	rueda1 = TMotor::instancia().newMeshNode("rueda1", "assets/Objetos/rueda.obj", "traslacion_jugador");
-	rueda2 = TMotor::instancia().newMeshNode("rueda2", "assets/Objetos/rueda.obj", "traslacion_jugador");
-	rueda3 = TMotor::instancia().newMeshNode("rueda3", "assets/Objetos/rueda.obj", "traslacion_jugador");
-	rueda4 = TMotor::instancia().newMeshNode("rueda4", "assets/Objetos/rueda.obj", "traslacion_jugador");
-
-
-	//rueda1->setScale(vector3df(2,1,1));//alante derecha
-	//rueda2->setScale(vector3df(2,1,1));//delante izquierda
-	//rueda3->setScale(vector3df(2,1,1));//atras derecha
-	//rueda4->setScale(vector3df(2,1,1));//atras izquierda
-
+	
 
 	//establecemos el primer waypoint del mapa
 	/*
@@ -91,6 +78,18 @@ Corredor::Corredor(const char* rutaObj, btVector3 pos, tipo_jugador tipo) {
 
 	setParametros();
 
+	// HAY QUE MODIFICAR DE QUE NODO PENDEN!!!
+	rueda1 = TMotor::instancia().newMeshNode("rueda1", "assets/wall/wall.obj", "traslacion_Jugador");
+	rueda2 = TMotor::instancia().newMeshNode("rueda2", "assets/wall/wall.obj", "traslacion_Jugador");
+	rueda3 = TMotor::instancia().newMeshNode("rueda3", "assets/wall/wall.obj", "traslacion_Jugador");
+	rueda4 = TMotor::instancia().newMeshNode("rueda4", "assets/wall/wall.obj", "traslacion_Jugador");
+
+
+	//rueda1->setScale(vector3df(2,1,1));//alante derecha
+	//rueda2->setScale(vector3df(2,1,1));//delante izquierda
+	//rueda3->setScale(vector3df(2,1,1));//atras derecha
+	//rueda4->setScale(vector3df(2,1,1));//atras izquierda
+
 
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
@@ -106,14 +105,14 @@ Corredor::Corredor(const char* rutaObj, btVector3 pos, tipo_jugador tipo) {
 
 }
 void Corredor::setParametros() {
-
+	const char* objeto = "assets/wall/wall.obj";
 	//cambiar parametros en funcion del tipo
 	int num = 0;
 	switch (tipojugador) {
 	case GLADIADOR:
 		//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
 
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/coche.obj", "escena_raiz");
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
 
 		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
 
@@ -135,7 +134,7 @@ void Corredor::setParametros() {
 		break;
 	case PIRATA:
 		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/green.png"));
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/KartPirata.obj", "escena_raiz");
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;
@@ -154,7 +153,7 @@ void Corredor::setParametros() {
 		break;
 	case VIKINGO:
 		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/blue.png"));
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/KartVikingo.obj", "escena_raiz");
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(3600); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;
@@ -173,7 +172,7 @@ void Corredor::setParametros() {
 		break;
 	case CHINO:
 		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/yellow.png"));
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/KartChino.obj", "escena_raiz");
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;

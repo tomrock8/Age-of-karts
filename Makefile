@@ -1,7 +1,7 @@
 FUENTE := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
 
-LIBRERIAS :=   -lGL -lSDL -lSDL_image -lGLU -lRakNetLibStatic -lglfw -lGLEW -lassimp
+LIBRERIAS :=   -lGL -lSDL -lSDL_image -lGLU -lRakNetLibStatic  -lpthread -lglfw -lGLEW -lassimp
 LIBRERIAS_BULLET := -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader 
 
 RUTAS2 := -I. -I/usr/local/include/bullet/ 

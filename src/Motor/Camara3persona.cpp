@@ -65,6 +65,7 @@ btRigidBody *Camara3persona::inicializarFisicas() {
 		rigidBody->setGravity(btVector3(0, 0, 0));
 		return rigidBody;
 		*/
+	return NULL;
 }
 
 void Camara3persona::moveCamera(Corredor * pj1) {

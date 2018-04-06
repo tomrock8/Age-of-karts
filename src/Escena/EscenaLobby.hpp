@@ -6,7 +6,6 @@
 #include <stdio.h>
 
 #include "Escena.hpp"
-#include "Motor3d.hpp"
 #include "Timer.hpp"
 
 class EscenaLobby : public Escena {
@@ -42,12 +41,12 @@ private:
 	float count;
 	bool pressed;
 	bool firstInit;
-	IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
 	Timer *time;
-	stringw texto; // Texto a mostrar en pantalla
-	stringw texto2;
-	IGUIStaticText *textoUI; // Nodo de irrlicht
-	ITexture* logoAOK; // Textura del logo del juego
+	//IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
+	//stringw texto; // Texto a mostrar en pantalla
+	//stringw texto2;
+	//IGUIStaticText *textoUI; // Nodo de irrlicht
+	//ITexture* logoAOK; // Textura del logo del juego
 	bool selection;
 	bool offline;
 	std::string iphost;

@@ -8,6 +8,9 @@ obj3D::obj3D(TNodo *m, const char *n, GLuint i) {
 	id = i;
 }
 
+obj3D::~obj3D() {
+}
+
 void obj3D::rotate(glm::vec3 axis, GLfloat angle) {
 	if (axis.x == 1)
 		rotation.x += angle;
@@ -72,7 +75,7 @@ void obj3D::setName(const char *nombre) {
 	mesh->setName(nombre);
 }
 
-void obj3D::setVisible(bool visible){
+void obj3D::setVisible(bool visible) {
 	static_cast<TMalla*>(mesh->getEntidad())->setVisible(visible);
 }
 

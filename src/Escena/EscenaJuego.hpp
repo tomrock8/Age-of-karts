@@ -7,7 +7,6 @@
 #include "GestorEscena.hpp"
 #include "Escena.hpp"
 
-#include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
 #include "DebugFisicas.hpp"
 #include "Camara3persona.hpp"
@@ -58,7 +57,7 @@ private:
 	std::uint32_t DeltaTime;
 
 	Client *client;
-	vector3df pos;
+	btVector3 pos;
 
 	float tiempoRefresco;
 	GestorCarrera *gc;

@@ -13,8 +13,8 @@
 
 #define WIDTH 800
 #define HEIGHT 600
-#define PI = 3.14159265358979323846  /* pi */
-#define RADTODEG = 180.0f / PI
+#define PI 3.14159265358979323846  /* pi */
+#define RADTODEG 180.0f / PI
 
 class TMotor {
 
@@ -35,6 +35,7 @@ public:
 	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode);
 
 	void newHud(const char* n);
+	double *toEuler(double pich, double yaw, double roll);
 
 	// METODOS GET
 	GLFWwindow *getVentana();

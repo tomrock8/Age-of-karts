@@ -32,7 +32,7 @@ EscenaJuego::~EscenaJuego() {
 	delete Pista::getInstancia();
 	//cout << "No ha ido mal.\n";
 
-	delete TextoPantalla::getInstancia();
+	//delete TextoPantalla::getInstancia();
 
 	delete camara;
 }
@@ -419,7 +419,7 @@ void EscenaJuego::update() {
 Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	std::vector<Corredor*> pj = jugadores->getJugadores();
-	vector3df pos(-10, 0, 310);
+	btVector3 pos(-10, 0, 310);
 	int i = 0;
 	if (tipoEscena == Escena::tipo_escena::ONLINE)
 		i = client->getControlPlayer();
@@ -454,9 +454,9 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_T) == GLFW_PRESS) {
 		float *resetPos = new float[3];
-		resetPos[0] = pos.X;
-		resetPos[1] = pos.Y + 40;
-		resetPos[2] = pos.Z;
+		resetPos[0] = pos.getX();
+		resetPos[1] = pos.getY() + 40;
+		resetPos[2] = pos.getZ();
 
 		float *resetOri = new float[3];
 		resetOri[0] = pj.at(0)->getNodo()->getRotation().z;
@@ -512,18 +512,19 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
 	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
-		Node->setPosition((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]);
+		Node->setPosition(Point.getX(), Point.getY() + 2, Point.getZ());
 	}
 	else
-		Node->setPosition((f32)Point[0], (f32)Point[1], (f32)Point[2]);
+		Node->setPosition(Point.getX(), Point.getY(), Point.getZ());
+	
+	/*
 	// Set rotation
-	vector3df Euler;
+	btVector3 Euler;
 	const btQuaternion& TQuat = TObject->getOrientation();
-	quaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
 	q.toEuler(Euler);
 	Euler *= RADTODEG;
 	//Node->setRotation(Euler);
-
+	*/
 }
 std::string EscenaJuego::getIpConexion() {
 	return ipConexion;

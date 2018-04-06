@@ -21,9 +21,9 @@ int main(int argc, char* argv[]) {
 	//Evento de glfw para redimensionar la pantalla
     glfwSetFramebufferSizeCallback(TMotor::instancia().getVentana(), resize_callback);
 
-	obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
+	
 	obj3D *mapa = TMotor::instancia().newMeshNode("mapa", "assets/Mapa01/isla.obj", "escena_raiz");
-
+	//obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
 
 	// -----------------------------//
 	//	GAME LOOP

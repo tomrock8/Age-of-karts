@@ -132,15 +132,6 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 				getline(myfile, v2Z, ' ');
 				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector2(btVector3(stof(v2X), stof(v2Y), stof(v2Z)));
 
-				getline(myfile, v3X, ' ');
-				getline(myfile, v3Y, ' ');
-				getline(myfile, v3Z, ' ');
-				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector3(btVector3(stof(v3X), stof(v3Y), stof(v3Z)));
-				//vector2
-				getline(myfile, v4X, ' ');
-				getline(myfile, v4Y, ' ');
-				getline(myfile, v4Z, ' ');
-				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector4(btVector3(stof(v4X), stof(v4Y), stof(v4Z)));
 				//=========================================//
 				//			rellenar los waypoints		   //
 				//=========================================//

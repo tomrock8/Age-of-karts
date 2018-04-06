@@ -55,7 +55,7 @@ if(tiempo-tiempoAnterior ==1){
 */
 
 	if (cambioEscena == escenaActiva->getTipoEscena()) {
-		//cambioEscena = escenaActiva->comprobarInputs();
+		cambioEscena = escenaActiva->comprobarInputs();
 		//escenaActiva->update();
 		escenaActiva->dibujar();
 	}

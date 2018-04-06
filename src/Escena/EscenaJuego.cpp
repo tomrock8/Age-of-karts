@@ -84,20 +84,11 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-
-
-	Pista *pistaca = Pista::getInstancia();
-	pistaca->setMapa("assets/Mapa01/isla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
-
-
+	Pista::getInstancia()->setMapa("assets/Mapa01/isla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 	//-----------------------------
 	//	JUGADORES
 	//-----------------------------
 	//Posicion del nodo y el bloque de colisiones centralizado:
-
-
-
-
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	std::vector<Corredor*> pj = jugadores->getJugadores();
 	Corredor* jugador;
@@ -141,24 +132,24 @@ void EscenaJuego::init() {
 		}
 		if (tipoEscena != Escena::tipo_escena::ONLINE) {
 			if (i == 0) {
-				jugador = new CorredorJugador("assets/coche.obj", pos2[i], tj);
+				jugador = new CorredorJugador(pos2[i], tj);
 			}
 			else {
 				if (client->getClientes().at(i).corredorJugador == true) {
-					jugador = new CorredorJugador("assets/coche.obj", pos2[i], tj);
+					jugador = new CorredorJugador(pos2[i], tj);
 				}
 				else {
-					jugador = new CorredorIA("assets/coche.obj", pos2[i], tj);
+					jugador = new CorredorIA(pos2[i], tj);
 				}
 
 			}
 		}
 		else {
 			if (i == controlPlayer) {
-				jugador = new CorredorJugador("assets/coche.obj", pos2[i], tj);
+				jugador = new CorredorJugador(pos2[i], tj);
 			}
 			else
-				jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
+				jugador = new CorredorRed(pos2[i], tj);
 		}
 		jugador->setID(i);
 		pj.push_back(jugador);
@@ -185,7 +176,6 @@ void EscenaJuego::init() {
 	//	GESTOR COLISIONES
 	//-----------------------------
 	colisiones = new GestorColisiones();
-	//TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 
 	//-----------------------------
 	//	TIME
@@ -203,11 +193,6 @@ void EscenaJuego::dibujar() {
 	std::vector<Corredor*> pj = jugadores->getJugadores();
 
 	//------- RENDER ----------
-	//Motor3d::instancia().iniciarDibujado();
-	//Motor3d::instancia().getScene()->drawAll();
-
-
-
 	if (debug) {
 
 		//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
@@ -233,8 +218,6 @@ void EscenaJuego::dibujar() {
 
 	}
 	else {
-
-
 		for (int i = 0; i < pj.size(); i++) {
 			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
 
@@ -250,10 +233,6 @@ void EscenaJuego::dibujar() {
 		}
 
 	}
-
-
-	//Motor3d::instancia().getGUI()->drawAll();
-	//Motor3d::instancia().terminarDibujado();
 }
 
 void EscenaJuego::limpiar() {
@@ -272,8 +251,6 @@ void EscenaJuego::update() {
 		client->ReceivePackets();
 		controlPlayer = client->getControlPlayer();
 	}
-	//cout << irrTimer->getTime() << endl;
-	//textoDebug->limpiar();
 
 	DeltaTime = (glfwGetTime() * 1000) - (TimeStamp * 1000);
 	TimeStamp = glfwGetTime();
@@ -318,7 +295,7 @@ void EscenaJuego::update() {
 
 
 	if (fin_carrera) {
-		//textoDebug->agregar("CARRERA FINALIZADA, PULSA F.");
+		cout << "CARRERA FINALIZADA, PULSA F.";
 	}
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 
@@ -383,18 +360,6 @@ void EscenaJuego::update() {
 
 
 	jugadores->setJugadores(pj);
-
-	/*int fps = Motor3d::instancia().getDriver()->getFPS();
-	if (lastFPS != fps) {
-		core::stringw tmp(L"Age of karts [");
-		tmp += Motor3d::instancia().getDriver()->getName();
-		tmp += L"] fps: ";
-		tmp += fps;
-
-		Motor3d::instancia().getDevice()->setWindowCaption(tmp.c_str());
-		lastFPS = fps;
-	}*/
-
 
 
 	pj = jugadores->getJugadores();
@@ -516,7 +481,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	}
 	else
 		Node->setPosition(Point.getX(), Point.getY(), Point.getZ());
-	
+
 	/*
 	// Set rotation
 	btVector3 Euler;

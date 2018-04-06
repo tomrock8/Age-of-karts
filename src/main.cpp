@@ -7,10 +7,10 @@
 
 //Callback para el redimensionamiento de la pantalla
 void resize_callback(GLFWwindow* window, int width, int height);
-void character_callback( GLFWwindow *window, unsigned int codepoint);
+void character_callback(GLFWwindow *window, unsigned int codepoint);
 
 int main(int argc, char* argv[]) {
-	
+
 	TMotor::instancia();
 	//GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
 	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
@@ -19,19 +19,27 @@ int main(int argc, char* argv[]) {
 	cam->translate(glm::vec3(0.0f, 0.0f, 10.0f));
 
 	//Evento de glfw para redimensionar la pantalla
-    glfwSetFramebufferSizeCallback(TMotor::instancia().getVentana(), resize_callback);
+	glfwSetFramebufferSizeCallback(TMotor::instancia().getVentana(), resize_callback);
 
-	
-	obj3D *mapa = TMotor::instancia().newMeshNode("mapa", "assets/Mapa01/isla.obj", "escena_raiz");
+
+
+
+	// OBJETOS CARGADOS
+	//obj3D *mapa = TMotor::instancia().newMeshNode("mapa", "assets/Mapa01/isla.obj", "escena_raiz");
 	//obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
+	//obj3D *coche = TMotor::instancia().newMeshNode("coche", "assets/coche.obj", "escena_raiz");
+
+
+
+
 
 	// -----------------------------//
 	//	GAME LOOP
 	// -----------------------------//
 	Escena::tipo_escena tipoActual = GestorEscena::instancia().getEscenaActiva().getTipoEscena();
-	int tipo=0;
-	while (tipoActual != Escena::tipo_escena::SALIR ) {
-		glfwSetCharCallback(TMotor::instancia().getVentana(),character_callback);
+	int tipo = 0;
+	while (tipoActual != Escena::tipo_escena::SALIR) {
+		glfwSetCharCallback(TMotor::instancia().getVentana(), character_callback);
 
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS) {
 			cam->translate(glm::vec3(0, 0, -.5f));
@@ -58,24 +66,24 @@ int main(int argc, char* argv[]) {
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS) {
 			cam->rotate(glm::vec3(0, 1, 0), 1);
 		}
-		tipo=GestorEscena::instancia().getEscenaActiva().getTipoEscena();
+		tipo = GestorEscena::instancia().getEscenaActiva().getTipoEscena();
 		TMotor::instancia().draw(tipo);
 		tipoActual = GestorEscena::instancia().update();
 
 		glfwPollEvents(); // Comprobacion de eventos (Teclado, raton, joystick)
 
 	}
-	
+
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
 	TMotor::instancia().close();
 
 	cout << "FIN DE JUEGO\n";
 	return 0;
 }
-void character_callback( GLFWwindow *window, unsigned int codepoint )	//metodo para obtener la tecla pulsada y mostrarla por pantalla 
+void character_callback(GLFWwindow *window, unsigned int codepoint)	//metodo para obtener la tecla pulsada y mostrarla por pantalla 
 {																		//(usada para introducir datos como la ip)
-    if (codepoint>=48 && codepoint<=57){
-		std::cout << codepoint-48 << std::endl;
+	if (codepoint >= 48 && codepoint <= 57) {
+		std::cout << codepoint - 48 << std::endl;
 	}
 }
 
@@ -83,5 +91,5 @@ void character_callback( GLFWwindow *window, unsigned int codepoint )	//metodo p
 void resize_callback(GLFWwindow* ventana, int ancho, int alto)
 {
 	//Se redimensiona el viewport de Opengl en funcion de las medidas de la ventana
-    glViewport(0, 0, ancho, alto);
+	glViewport(0, 0, ancho, alto);
 }

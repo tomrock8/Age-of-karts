@@ -11,7 +11,7 @@ using namespace std;
 
 class CorredorJugador : public Corredor {
 public:
-	CorredorJugador(const char* rutaObj, btVector3 pos, Corredor::tipo_jugador tipo);
+	CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo);
 	virtual void movimiento() override;
 	virtual void updateHijos() override;
 	virtual void actualizarItem() override;

@@ -1,25 +1,25 @@
 #include "CorredorRed.hpp"
 
 
-CorredorRed::CorredorRed(const char* rutaObj, btVector3 pos,Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos, tipo) {
-	nombre="JugadorRed";
+CorredorRed::CorredorRed(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(pos, tipo) {
+	nombre = "JugadorRed";
 	cuboNodo->setName(nombre);
 }
 
 
-void CorredorRed::updateHijos(){
-	
+void CorredorRed::updateHijos() {
+
 }
 
-void CorredorRed::movimiento(){
-    //std::cout << "Entro\n";
-    EstadosJugador *estados = this->getEstados();
+void CorredorRed::movimiento() {
+	//std::cout << "Entro\n";
+	EstadosJugador *estados = this->getEstados();
 	int estadoMovimiento = estados->getEstadoMovimiento();
 	int direccionMovimiento = estados->getDireccionMovimiento();
 	//cout <<"Estado del jugador: "<<estadoMovimiento<<endl;
 	//cout <<"Direccion del jugador: "<<direccionMovimiento<<endl;
-    frenodemano(false, false);
-    switch (estadoMovimiento){
+	frenodemano(false, false);
+	switch (estadoMovimiento) {
 		/*
 		Estado_movimiento
 			0. Quieto
@@ -29,44 +29,44 @@ void CorredorRed::movimiento(){
 			4. Derrapa
 			5. Desacelera
 		*/
-        case 0:
-        //std::cout << "Esta quieto\n";
+	case 0:
+		//std::cout << "Esta quieto\n";
 		break;
-		case 1:
-        acelerar();
+	case 1:
+		acelerar();
 		break;
-		case 2:
-        frenar();
+	case 2:
+		frenar();
 		break;
-		case 3:
-        frenar();
+	case 3:
+		frenar();
 		break;
-		case 4:
+	case 4:
 		frenodemano(true, true);
 		break;
-		case 5:
+	case 5:
 		desacelerar();
 		break;
-    }
+	}
 	/*
 	Direccion_Movimiento
 		0. Recto
 		1. Izquierda
 		2. Derecha
 	*/
-	
-    switch (direccionMovimiento){
 
-		case 0:
+	switch (direccionMovimiento) {
+
+	case 0:
 		break;
-		case 1:
-        girarIzquierda();
+	case 1:
+		girarIzquierda();
 		break;
-		case 2:
-        girarDerecha();   
+	case 2:
+		girarDerecha();
 		break;
-    }
-	
+	}
+
 	/*
 	Estado_Objeto
 		0. Nada
@@ -102,21 +102,21 @@ void CorredorRed::movimiento(){
 
 
 
-void CorredorRed::acelerarRed(){
+void CorredorRed::acelerarRed() {
 	acelerar();
 }
 
-void CorredorRed::frenarRed(){
-    frenar();
+void CorredorRed::frenarRed() {
+	frenar();
 }
-void CorredorRed::girarDRed(){
-    girarDerecha();
-}
-
-void CorredorRed::girarIRed(){
-    girarIzquierda();
+void CorredorRed::girarDRed() {
+	girarDerecha();
 }
 
-void CorredorRed::actualizarItem(){
-	
+void CorredorRed::girarIRed() {
+	girarIzquierda();
+}
+
+void CorredorRed::actualizarItem() {
+
 }

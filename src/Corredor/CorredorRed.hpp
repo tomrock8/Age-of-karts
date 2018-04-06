@@ -11,7 +11,7 @@ class CorredorRed : public Corredor
 private:
 
 public:
-	CorredorRed(const char* rutaObj, btVector3 pos, Corredor::tipo_jugador tipo);
+	CorredorRed(btVector3 pos, Corredor::tipo_jugador tipo);
 	//virtual void update() override;
 	virtual void updateHijos() override;
 	virtual void movimiento() override;

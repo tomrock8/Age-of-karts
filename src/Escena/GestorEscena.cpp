@@ -38,7 +38,9 @@ Escena::tipo_escena GestorEscena::update() {
 	if (timediff_sec >= retardo1) {
 	//	cout<<timediff_sec <<endl;
 		tiempoRefresco = clock();
+		*/
 		cambioEscena = escenaActiva->comprobarInputs();
+		/*
 		escenaActiva->update();
 		//cont++;
 	}

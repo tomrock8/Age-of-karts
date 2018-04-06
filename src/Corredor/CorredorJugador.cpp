@@ -1,7 +1,7 @@
 #include "CorredorJugador.hpp"
 #include "Client.hpp"
 
-CorredorJugador::CorredorJugador(const char* rutaObj, btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos, tipo) {
+CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(pos, tipo) {
 	checkItem = false;
 	nombre = "Jugador";
 }

@@ -484,7 +484,7 @@ int Client::ReceivePackets() {
 			pos.setX(x);
 			pos.setY(y);
 			pos.setZ(z);
-			playerAux = new CorredorRed("assets/coche.obj", pos, Corredor::tipo_jugador::GLADIADOR);
+			playerAux = new CorredorRed(pos, Corredor::tipo_jugador::GLADIADOR);
 			playerAux->getNodo()->setID(id);
 			players.push_back(playerAux);
 
@@ -508,7 +508,7 @@ int Client::ReceivePackets() {
 				bsIn.Read(posicion.getY());
 				bsIn.Read(posicion.getZ());
 				bsIn.Read(playerNetworkID);
-				playerAux = new CorredorRed("assets/coche.obj", posicion, Corredor::tipo_jugador::GLADIADOR);
+				playerAux = new CorredorRed(posicion, Corredor::tipo_jugador::GLADIADOR);
 				players.push_back(playerAux);
 				players.at(i)->getNodo()->setID(i);
 				//player[i]->setPosition(posicion);
@@ -517,7 +517,7 @@ int Client::ReceivePackets() {
 				jugadores->aumentarJugadores();
 			}
 			pos = pos2[i];
-			playerAux = new CorredorJugador("assets/coche.obj", pos, Corredor::tipo_jugador::GLADIADOR);
+			playerAux = new CorredorJugador(pos, Corredor::tipo_jugador::GLADIADOR);
 			players.push_back(playerAux);
 			players.at(i)->getNodo()->setID(i);
 			typeID = ID_SPAWN_PLAYER;

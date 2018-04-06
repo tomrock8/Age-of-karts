@@ -19,7 +19,7 @@ typedef enum {
 class CorredorIA : public Corredor
 {
 public:
-	CorredorIA(const char* rutaObj, btVector3 pos, Corredor::tipo_jugador tipo);
+	CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo);
 	~CorredorIA();
 	void deleteArbol();
 

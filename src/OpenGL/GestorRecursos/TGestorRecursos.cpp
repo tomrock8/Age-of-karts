@@ -226,14 +226,16 @@ TRecursoTextura *TGestorRecursos::getRecursoTextura(const char * nombre, aiMesh 
 		std::string nameExt = nombre;
 		nameExt = nameExt.substr(0, nameExt.find_first_of('_'));
 		for (GLuint i = 0; i < recursoTexturas.size(); i++) {
-			std::string nameRecText = recursoTexturas.at(i)->getNombre();
-			nameRecText = nameRecText.substr(0, nameRecText.find_first_of('_'));
-			//cout << "compruebo Textura : " << nameExt << "   VS   " << nameRecText << endl;
-			if (nameExt.compare(nameRecText) == 0) {
-				//cout << " He encontrado una textura igual , la devuelvo" << endl;
-				recTextura = (TRecursoTextura*)recursoTexturas.at(i);
-				encontrado = true;
-				return recTextura;
+			if (recursoTexturas.at(i) != NULL && recursoTexturas.at(i)->getNombre() != NULL) {
+				std::string nameRecText = recursoTexturas.at(i)->getNombre();
+				nameRecText = nameRecText.substr(0, nameRecText.find_first_of('_'));
+				//cout << "compruebo Textura : " << nameExt << "   VS   " << nameRecText << endl;
+				if (nameExt.compare(nameRecText) == 0) {
+					//cout << " He encontrado una textura igual , la devuelvo" << endl;
+					recTextura = (TRecursoTextura*)recursoTexturas.at(i);
+					encontrado = true;
+					return recTextura;
+				}
 			}
 		}
 	}

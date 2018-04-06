@@ -9,7 +9,7 @@
 //---CONSTRUCTOR CORREDOR--\*
 //-------------------------\*
 
-Corredor::Corredor(const char* rutaObj, btVector3 pos, tipo_jugador tipo) {
+Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	cargador = 0;
 	tipoObj = 0;
@@ -80,10 +80,13 @@ Corredor::Corredor(const char* rutaObj, btVector3 pos, tipo_jugador tipo) {
 
 	// HAY QUE MODIFICAR DE QUE NODO PENDEN!!!
 	rueda1 = TMotor::instancia().newMeshNode("rueda1", "assets/wall/wall.obj", "traslacion_Jugador");
+	rueda1->setPosition(-10, 0, 0);
 	rueda2 = TMotor::instancia().newMeshNode("rueda2", "assets/wall/wall.obj", "traslacion_Jugador");
+	rueda2->setPosition(10, 0, 0);
 	rueda3 = TMotor::instancia().newMeshNode("rueda3", "assets/wall/wall.obj", "traslacion_Jugador");
+	rueda3->setPosition(-10, 0, -10);
 	rueda4 = TMotor::instancia().newMeshNode("rueda4", "assets/wall/wall.obj", "traslacion_Jugador");
-
+	rueda4->setPosition(10, 0, -10);
 
 	//rueda1->setScale(vector3df(2,1,1));//alante derecha
 	//rueda2->setScale(vector3df(2,1,1));//delante izquierda
@@ -105,13 +108,11 @@ Corredor::Corredor(const char* rutaObj, btVector3 pos, tipo_jugador tipo) {
 
 }
 void Corredor::setParametros() {
-	const char* objeto = "assets/wall/wall.obj";
+	const char* objeto = "assets/coche.obj";
 	//cambiar parametros en funcion del tipo
 	int num = 0;
 	switch (tipojugador) {
 	case GLADIADOR:
-		//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
-
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
 
 		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
@@ -133,7 +134,6 @@ void Corredor::setParametros() {
 		num = 1;
 		break;
 	case PIRATA:
-		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/green.png"));
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
@@ -152,7 +152,6 @@ void Corredor::setParametros() {
 		num = 2;
 		break;
 	case VIKINGO:
-		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/blue.png"));
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(3600); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
@@ -171,7 +170,6 @@ void Corredor::setParametros() {
 		num = 3;
 		break;
 	case CHINO:
-		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/yellow.png"));
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
@@ -190,7 +188,6 @@ void Corredor::setParametros() {
 		num = 4;
 		break;
 	}
-
 }
 
 //-----------------------------//

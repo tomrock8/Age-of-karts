@@ -26,7 +26,7 @@ class Corredor : public RakNet::NetworkIDObject
 {
 public:
 	typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
-	Corredor(const char* rutaObj, btVector3 pos, tipo_jugador tipo);
+	Corredor(btVector3 pos, tipo_jugador tipo);
 	void InicializarFisicas();
 	void resetFuerzas();
 	void limitadorVelocidad();
@@ -120,8 +120,6 @@ public:
 
 
 protected:
-
-	//Irrlicht
 	obj3D * cuboNodo;
 	obj3D *rueda1;
 	obj3D *rueda2;

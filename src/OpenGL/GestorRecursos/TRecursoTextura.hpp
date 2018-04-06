@@ -40,8 +40,6 @@ public:
 private:
 	std::map<std::string, GLuint> textures;
 
-	std::string dir;
-	std::string dirTexture;
 	aiString name;
 	const char* text;
 	GLuint diffuseTexture = 0;

@@ -1,6 +1,6 @@
 #include "CorredorIA.hpp"
 
-CorredorIA::CorredorIA(const char* rutaObj, btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos, tipo)
+CorredorIA::CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(pos, tipo)
 {
 	nombre = "JugadorIA";
 	cuboNodo->setName(nombre);

@@ -14,14 +14,13 @@ class mesh
 public:
 	mesh();
 	~mesh();
+
 	void setMesh(TRecursoMalla *m);
 	void setMat(TRecursoMaterial *mat);
 	void setTex(TRecursoTextura *t);
 
 	TRecursoMalla * getMesh();
-
 	TRecursoMaterial * getMat();
-
 	TRecursoTextura * getText();
 	
 

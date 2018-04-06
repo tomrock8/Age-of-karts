@@ -4,17 +4,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "IrrlichtLib.hpp"
 #include "Waypoint.hpp"
 #include "Proyectil.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "MotorFisicas.hpp"
 #include "ItemTeledirigido.hpp"
-#include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 #include "RaknetIncludes.hpp"
-#include "TextoPantalla.hpp"
 #include "Escudo.hpp"
 #include "EstadosJugador.hpp"
 #include "Habilidad.hpp"
@@ -24,17 +21,18 @@
 
 using namespace std;
 
-class Corredor: public RakNet::NetworkIDObject 
+
+class Corredor : public RakNet::NetworkIDObject
 {
-  public:
-  typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
-	Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo);
+public:
+	typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
+	Corredor(const char* rutaObj, btVector3 pos, tipo_jugador tipo);
 	void InicializarFisicas();
 	void resetFuerzas();
 	void limitadorVelocidad();
 	// Destructor
 	~Corredor();
-	
+
 	void acelerar();
 	void recolocarWaypoint();
 
@@ -54,7 +52,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void setTipoObj(int i);
 	void SetFuerzaVelocidad(int turbo);
 	void setFriccion(btScalar valor);
-	void setTurbo(bool activo, bool objeto,int valor,int tiempo);
+	void setTurbo(bool activo, bool objeto, int valor, int tiempo);
 	void setInmunidad(bool activo);
 	void setHabilidad(bool activo);
 	void setWaypointActual(obj3D *nodo);
@@ -65,12 +63,12 @@ class Corredor: public RakNet::NetworkIDObject
 	void setVueltas(int j);
 	void setTiempoVuelta(float t);
 
-	
+
 	std::string toString();
-	
+
 
 	//waypoints
-	void setPosicionCarrera(int i,int j);
+	void setPosicionCarrera(int i, int j);
 	int getPosicionCarrera();
 	void setMaxVueltas(int i);
 	btScalar getDistanciaPunto(btVector3 vector);
@@ -79,7 +77,7 @@ class Corredor: public RakNet::NetworkIDObject
 	int getVueltas();
 	float getMaxVuetas();
 	float getTiempoVueltaTotal();
-	
+
 	// Update
 	void update();
 	void updateTimerObstaculos();
@@ -88,7 +86,7 @@ class Corredor: public RakNet::NetworkIDObject
 	void comprobarSueloRuedas();
 	void comprobarTurbo();
 	void comprobarInmunidad();
-	virtual void actualizarItem()=0;
+	virtual void actualizarItem() = 0;
 	void actualizarPosicion();
 
 	// Metodos GET
@@ -119,12 +117,12 @@ class Corredor: public RakNet::NetworkIDObject
 	void lanzarHabilidad();
 
 
-	
+
 
 protected:
 
 	//Irrlicht
-	obj3D *cuboNodo;
+	obj3D * cuboNodo;
 	obj3D *rueda1;
 	obj3D *rueda2;
 	obj3D *rueda3;
@@ -171,10 +169,10 @@ protected:
 	float tiempoVuelta;
 	float tiempoVueltaTotal;
 	//objetos estaticos y dinamicos
-	
+
 	EstadosJugador *estado;
 	btVector3 posDisparo;
-	
+
 	//tipo jugador
 	tipo_jugador tipojugador;
 
@@ -212,9 +210,9 @@ protected:
 	//raycast
 	btVehicleRaycaster *RayCastVehiculo;
 
-	
+
 	btVector3 orientacion;
-	
+
 	void CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning);
 	void BorrarFisicas();
 
@@ -227,7 +225,7 @@ protected:
 	void frenodemano(bool activo, bool objeto);
 
 	virtual void movimiento() = 0; // A implementar por derivadas
-	virtual void updateHijos() =0 ;
+	virtual void updateHijos() = 0;
 
 	// UPDATES
 	void actualizarRuedas();

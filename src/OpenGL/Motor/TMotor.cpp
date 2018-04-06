@@ -55,6 +55,7 @@ void TMotor::resizeScreen(int w, int h) {
 
 void TMotor::close() {
 	glfwTerminate();									//Terminar GLFW, limpiando todos los recursos alocados por GLFW
+	delete gestorRecursos;
 }
 
 // METODOS GET
@@ -314,6 +315,21 @@ void TMotor::newHud(const char* n){
   HUDs.push_back(h);
   //Lo activamos por defecto
   setActiveHud(n);
+}
+
+double *TMotor::toEuler(double pich, double yaw, double roll){
+	glm::quat q(.5, -.5, .5, .5);
+	glm::vec3 euler = glm::eulerAngles(q) * 3.14159f / 180.f;
+
+	glm::mat4 transformX = glm::eulerAngleX(euler.x);
+	glm::mat4 transformY = glm::eulerAngleY(euler.y);
+	glm::mat4 transformZ = glm::eulerAngleZ(euler.z);
+
+	glm::mat4 transform1 =
+		transformX * transformY * transformZ; // or some other order
+
+
+	return NULL;
 }
  
 //Funcion para activar un hud, que sera el que se utilice, solo puede haber un hud activo por iteracion

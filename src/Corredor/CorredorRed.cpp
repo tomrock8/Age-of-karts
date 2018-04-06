@@ -1,8 +1,7 @@
 #include "CorredorRed.hpp"
 
 
-CorredorRed::CorredorRed(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos, tipo)
-{
+CorredorRed::CorredorRed(const char* rutaObj, btVector3 pos,Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos, tipo) {
 	nombre="JugadorRed";
 	cuboNodo->setName(nombre);
 }

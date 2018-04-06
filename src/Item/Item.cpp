@@ -1,25 +1,19 @@
 #include "Item.hpp"
-
-
-
-Item::Item(btVector3 posicion,btVector3 escala,btScalar masa,float tiempoDesctruccion,forma_Colision fcolision,btVector3 tamanyoNodo,btScalar radio,
-float alturaLanzamiento,int idNodo)
+Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
+	float alturaLanzamiento, int idNodo)
 {
 
-	colision=false;
+	colision = false;
 	lanzado = false;
-	idNodoPadre=idNodo;
+	idNodoPadre = idNodo;
 	this->masa = masa;
 	this->posicion = posicion;
-	this->escala=escala;
-	this->tiempoDesctruccion=tiempoDesctruccion;
-	this->tamanyoNodo=tamanyoNodo;
-	this->radio=radio;
-	this->fcolision=fcolision;
-	this->alturaLanzamiento=alturaLanzamiento;
-	
-
-
+	this->escala = escala;
+	this->tiempoDesctruccion = tiempoDesctruccion;
+	this->tamanyoNodo = tamanyoNodo;
+	this->radio = radio;
+	this->fcolision = fcolision;
+	this->alturaLanzamiento = alturaLanzamiento;
 }
 
 void Item::inicializarFisicas()
@@ -34,19 +28,19 @@ void Item::inicializarFisicas()
 	Transform.setOrigin(posicion);
 	MotionState = new btDefaultMotionState(Transform);
 	//btVector3 HalfExtents(escala.getX() , escala.getY(), escala.getZ());
-	btVector3 HalfExtents(1 , 1, 1);
+	btVector3 HalfExtents(1, 1, 1);
 	// Create the shape
-	switch(fcolision){
+	switch (fcolision) {
 
-		case CUBO:
+	case CUBO:
 		Shape = new btBoxShape(HalfExtents);
 		break;
 
-		case ESFERA:
+	case ESFERA:
 		Shape = new btSphereShape(radio);
 		break;
 
-		case CILINDRO:
+	case CILINDRO:
 		Shape = new btCylinderShape(HalfExtents);
 		break;
 
@@ -58,20 +52,20 @@ void Item::inicializarFisicas()
 
 	// Create the rigid body object
 	rigidBody = new btRigidBody(masa, MotionState, Shape, LocalInertia);
-	
+
 	if (masa != 0)
-	rigidBody->setActivationState(DISABLE_DEACTIVATION);
+		rigidBody->setActivationState(DISABLE_DEACTIVATION);
 	else
-	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
-	
+		rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
 
 	rigidBody->setUserPointer((void *)(nodo));
-	
+
 	// Add it to the world
 	mundo->addRigidBody(rigidBody);
 	objetos.push_back(rigidBody);
 	bullet->setObjetos(objetos);
-	
+
 }
 
 void Item::setLanzado(bool b) {
@@ -84,7 +78,7 @@ bool Item::getLanzado()
 	return lanzado;
 }
 
-bool Item::comprobarDestructor(){
+bool Item::comprobarDestructor() {
 	clock_t timediff = clock() - tiempoLanzado;
 	float timediff_sec = ((float)timediff) / 100000;
 	if (timediff_sec >= tiempoDesctruccion) {
@@ -94,37 +88,34 @@ bool Item::comprobarDestructor(){
 }
 
 
-bool Item::update(){
-			
-	if(comprobarDestructor()){
-	
-	return true;
-	}else{
-	
-	return false;
+bool Item::update() {
+
+	if (comprobarDestructor()) {
+
+		return true;
+	}
+	else {
+
+		return false;
 	}
 }
 
 
-void Item::Delete()
-{
-	
+void Item::Delete() {
+	// NO VA A FUNCIONAR!!!!
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	for (int i=0;i<objetos.size();i++)
-	{
-		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
-		if (nodoActual->getID() == id)
-		{
-
+	for (int i = 0; i < objetos.size(); i++) {
+		obj3D *nodoActual = static_cast<obj3D *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
+		if (nodoActual->getID() == id) {
 			btRigidBody *Object = objetos.at(i);
 
-			// Delete irrlicht node
-			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
+			// Delete node
+			obj3D *Node = static_cast<obj3D *>(Object->getUserPointer());
 
-			Node->remove();
+			delete Node;
 
 			// Remove the object from the world
 			mundo->removeRigidBody(Object);
@@ -135,12 +126,11 @@ void Item::Delete()
 			delete Object->getMotionState();
 			delete Object;
 
-			objetos.erase(objetos.begin()+i);
+			objetos.erase(objetos.begin() + i);
 			bullet->setObjetos(objetos);
-			
+
 		}
 	}
-
 }
 
 btRigidBody *Item::getRigidBody()
@@ -150,33 +140,31 @@ btRigidBody *Item::getRigidBody()
 obj3D *Item::getNodo()
 {
 	return nodo;
-	
+
 }
-const char* Item::getNombre(){
+const char* Item::getNombre() {
 	return nombre;
 }
-int Item::getID(){
+int Item::getID() {
 	return id;
 }
 
-int Item::getIDPadre(){
+int Item::getIDPadre() {
 	return idNodoPadre;
 }
 
-void Item::setNombre(const char* nombre){
-	this->nombre=nombre;
+void Item::setNombre(const char* nombre) {
+	this->nombre = nombre;
 }
-void Item::setMasa(btScalar masa){
-	this->masa=masa;
-}
-
-void Item::setIDPadre(int id){
-	idNodoPadre=id;
+void Item::setMasa(btScalar masa) {
+	this->masa = masa;
 }
 
-void Item::setColision(int id){
+void Item::setIDPadre(int id) {
+	idNodoPadre = id;
+}
 
-	idwaypoint=id;
-	colision=true;
-
+void Item::setColision(int id) {
+	idwaypoint = id;
+	colision = true;
 }

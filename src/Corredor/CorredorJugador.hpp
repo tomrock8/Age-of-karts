@@ -2,17 +2,16 @@
 #define CORREDORJUGADOR_H
 
 #include <iostream>
-//#include "IrrlichtLib.hpp"
 #include "Pista.hpp"
 #include "Corredor.hpp"
 #include "Turbo.hpp"
 #include "Caja.hpp"
+
 using namespace std;
 
-class CorredorJugador : public Corredor
-{
-  public:
-	CorredorJugador(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo);
+class CorredorJugador : public Corredor {
+public:
+	CorredorJugador(const char* rutaObj, btVector3 pos, Corredor::tipo_jugador tipo);
 	virtual void movimiento() override;
 	virtual void updateHijos() override;
 	virtual void actualizarItem() override;
@@ -20,7 +19,7 @@ class CorredorJugador : public Corredor
 	bool setComprobadorMovimiento(bool s);
 	void update();
 
-  private:
+private:
 	//objetos estaticos y dinamicos
 	bool comprobadorMovimiento;
 	//Item *actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos);

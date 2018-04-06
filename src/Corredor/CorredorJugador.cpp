@@ -1,9 +1,9 @@
 #include "CorredorJugador.hpp"
 #include "Client.hpp"
 
-CorredorJugador::CorredorJugador(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos,tipo) {
+CorredorJugador::CorredorJugador(const char* rutaObj, btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos, tipo) {
 	checkItem = false;
-	nombre="Jugador";
+	nombre = "Jugador";
 }
 
 /**
@@ -16,50 +16,50 @@ void CorredorJugador::movimiento() {
 
 	//Comprobador de de mando y recoleccion de inputs
 	bool mandoConectado = false;
-	const unsigned char *buttons;
-	const float *axes;
-	if ( 1 == glfwJoystickPresent( id + 1 ) )
-	{
+	const unsigned char *buttons = nullptr;
+	const float *axes = nullptr;
+	if (1 == glfwJoystickPresent(id + 1)) {
 		mandoConectado = true;
 		int buttonCount;
-		buttons = glfwGetJoystickButtons( id + 1, &buttonCount );
-        int axesCount;
-		axes = glfwGetJoystickAxes(  id + 1, &axesCount );
+		buttons = glfwGetJoystickButtons(id + 1, &buttonCount);
+		int axesCount;
+		axes = glfwGetJoystickAxes(id + 1, &axesCount);
 		//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
 	}
 
 	//-------ENTRADA TECLADO ----------//
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_S) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[2] ) ){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_S) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[2])) {
 		frenar();
 		//vehiculo-> set
 		comprobadorMovimiento = true;
 	}
-	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[5] ) ){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[5])) {
 		acelerar();
 		comprobadorMovimiento = true;
 	}
 	//GIRAR DERECHA
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) ){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
 		girarDerecha();
 
 		comprobadorMovimiento = true;
 	}
 	//GIRAR IZQUIERDA
-	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]) ) ){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) {
 		girarIzquierda();
 		comprobadorMovimiento = true;
-	}else{ 
-    	estado->setDireccionMovimiento(RECTO);
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[1] ) ){
+	else {
+		estado->setDireccionMovimiento(RECTO);
+	}
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[1])) {
 		frenodemano(true, false);
 		comprobadorMovimiento = true;
 	}
 	else {
 		frenodemano(false, false);
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_R) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[5] ) ){
-			recolocarWaypoint();
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_R) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[5])) {
+		recolocarWaypoint();
 	}
 
 	if (!comprobadorMovimiento) {
@@ -72,7 +72,7 @@ void CorredorJugador::movimiento() {
 
 
 
-void CorredorJugador::updateHijos(){
+void CorredorJugador::updateHijos() {
 
 }
 
@@ -95,16 +95,16 @@ void CorredorJugador::actualizarItem() {
 
 	//Comprobador de de mando y recoleccion de inputs
 	bool mandoConectado = false;
-	const unsigned char *buttons;
-	if ( 1 == glfwJoystickPresent( id + 1 ) )
+	const unsigned char *buttons = nullptr;
+	if (1 == glfwJoystickPresent(id + 1))
 	{
 		mandoConectado = true;
 		int buttonCount;
-		buttons = glfwGetJoystickButtons( id + 1, &buttonCount );
+		buttons = glfwGetJoystickButtons(id + 1, &buttonCount);
 		//  || (mandoConectado && GLFW_PRESS == buttons[12]) 
 	}
 
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_P) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[0]) )
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_P) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[0]))
 	{
 		if (getTipoObj() != 0 && !checkItem)
 		{
@@ -116,12 +116,13 @@ void CorredorJugador::actualizarItem() {
 			//Llama a la funcion de la clase padre
 			usarObjetos();
 		}
-	}else{
+	}
+	else {
 		if (getCheckItem() == true) {
 			setCheckItem(false);
 		}
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[2])){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[2])) {
 		lanzarHabilidad();
 	}
 }

@@ -1,10 +1,4 @@
-
 #include "Pista.hpp"
-
-
-//------------------------------\*
-//---CONSTRUCTOR pista----------\*
-//------------------------------\*
 
 Pista *Pista::instancia = NULL;
 
@@ -19,6 +13,7 @@ Pista::~Pista() {
 	}
 	arrayWaypoints.clear();
 	//delete arrayWaypoints;
+	
 	//destroy cajas
 	for (int i = 0; i < tamCajas; i++) {
 		delete arrayCajas.at(i);
@@ -36,8 +31,7 @@ Pista::~Pista() {
 	cout << "Destructor de PISTA. Salgo.\n";
 }
 
-Pista *Pista::getInstancia()
-{
+Pista *Pista::getInstancia() {
 	if (instancia == NULL)
 		instancia = new Pista();
 
@@ -45,18 +39,12 @@ Pista *Pista::getInstancia()
 }
 
 
-void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
-	//Mapa = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh(mapa));
-	Mapa = TMotor::instancia().newMeshNode("Mapa","assets/Mapa01/palmeras.obj","escena_raiz");
-	Mapa->setPosition(0.0f, -100.0f, 0.0f);
+void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints) {
+	Mapa = TMotor::instancia().newMeshNode("mapa", mapa, "escena_raiz");
+	//Mapa->setPosition(0.0f, -100.0f, 0.0f);
 	//Mapa->setRotation(glm::vec3(0,1,0), 90.0f);
-	
-	/*
-	if (Mapa) {
-		Mapa->setName("Mapa");
-		//Mapa->setMaterialFlag(EMF_LIGHTING, false);
-	}*/
 
+	
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 
@@ -101,8 +89,8 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 		getline(myfile, tamanyoArrayTurbo, ' ');
 
 
-		
-		
+
+
 		//arrayCajas.resize(stoi(tamanyoArrayCajas));
 
 
@@ -125,7 +113,7 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 				orientacion = stoi(orientacionWp);
 				//cout <<"orientacion: "<<orientacion<<endl;
 				//=========================================//
-				//Vectores que complementan los waypoint   // 
+				//Vectores que complementan los waypoint   //
 				//=========================================//
 				//la distribucion sera vector1, wp, vector 2
 				//vector1
@@ -181,17 +169,12 @@ void Pista::setMapa(stringw mapa, const char *fisicas, const char *waypoints) {
 		}
 
 		myfile.close();
-		
+
 	}
 	else {
 		cout << "Error abriendo archivo";
 	}*/
-	
-}
 
-
-void Pista::BorrarFisicas() {
-	// a implementar
 }
 
 std::vector<Item *> Pista::getItems() {

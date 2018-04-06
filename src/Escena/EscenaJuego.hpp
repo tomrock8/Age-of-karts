@@ -2,11 +2,11 @@
 #define ESCENAJUEGO_H
 
 #include <ctime>
+#include <vector>
 
 #include "GestorEscena.hpp"
 #include "Escena.hpp"
 
-#include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
 #include "DebugFisicas.hpp"
 #include "Camara3persona.hpp"
@@ -15,7 +15,6 @@
 #include "GestorJugadores.hpp"
 #include "GestorCarrera.hpp"
 #include "GestorColisiones.hpp"
-#include <vector>
 #include "Timer.hpp"
 
 
@@ -37,10 +36,10 @@ public:
 	// METODOS SET
 
 private:
-	
+
 	std::string ipConexion;
 
-	void UpdatePhysics(u32 TDeltaTime);
+	void UpdatePhysics(unsigned int TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
 	int debug;
 
@@ -58,7 +57,7 @@ private:
 	std::uint32_t DeltaTime;
 
 	Client *client;
-	vector3df pos;
+	btVector3 pos;
 
 	float tiempoRefresco;
 	GestorCarrera *gc;

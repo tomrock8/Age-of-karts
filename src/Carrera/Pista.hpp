@@ -2,7 +2,6 @@
 #define PISTA_H
 
 #include <iostream>
-#include "IrrlichtLib.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "MotorFisicas.hpp"
 #include "Item.hpp"
@@ -24,13 +23,11 @@ class Pista
 public:
 	//Destructor
 	~Pista();
-	
+
 	static Pista *getInstancia();
-	void InicializarFisicas();
-	void BorrarFisicas();
-	
+
 	// METODOS SET
-	void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
+	void setMapa(const char* mapa, const char *fisicas, const char *waypoint);
 	void setItems(std::vector<Item *> itemMetodo);
 	// METODOS GET
 	std::vector<Item *> getItems();
@@ -46,21 +43,21 @@ public:
 private:
 	Pista(void);
 	static Pista *instancia;
-	
+
 	//MUNDO
 	btRigidBody *CuerpoColisionMapa;
 	btCollisionShape *FormaColision;
 	btDefaultMotionState *MotionState; // posicion del cuerpo de colision
-	
+
 	int tamWaypoints;
 	std::vector<Waypoint*> arrayWaypoints;
 
 	int tamTurbos;
 	std::vector<Turbo*> arrayTurbos;
-	
+
 	int tamCajas;
 	std::vector<Caja*> arrayCajas;
-	
+
 	obj3D *Mapa;
 
 	std::vector<Item *> Items;

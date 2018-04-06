@@ -41,23 +41,13 @@ public:
 
 
 private:
-	const aiScene *scene;
+	
 	std::vector<mesh *> objMeshes;
 	std::vector<TRecurso *> recursoMallas;
 	std::vector<TRecurso *> recursoMaterials;
 	std::vector<TRecurso *> recursoTexturas;
-	std::string *fichName;
-	std::string *TextureName;
-	//const char * fichName;
+
 	std::string *dir;
 	std::map<std::string, GLuint> textures;
-	const char *matName;
-	const char *meshName;
-
-	TRecursoMaterial *recMatAux;
-	TRecursoTextura *recTextAux;
-	
-	
-
 };
 #endif

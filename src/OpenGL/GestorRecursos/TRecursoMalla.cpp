@@ -46,8 +46,11 @@ TRecursoMalla::TRecursoMalla(aiMesh *mesh) {
 
 }
 TRecursoMalla::~TRecursoMalla() {
-	delete &VAO;
-	delete buffer;
+	//delete &VAO;
+	//delete buffer;
+	
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(6, buffer);
 }
 
 void TRecursoMalla::activeVAO() { glBindVertexArray(VAO); }

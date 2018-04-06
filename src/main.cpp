@@ -4,9 +4,6 @@
 
 #include "Corredor.hpp"
 
-#ifdef _MSC_VER
-#pragma comment(lib, "Irrlicht.lib")
-#endif
 
 //Callback para el redimensionamiento de la pantalla
 void resize_callback(GLFWwindow* window, int width, int height);
@@ -23,6 +20,10 @@ int main(int argc, char* argv[]) {
 
 	//Evento de glfw para redimensionar la pantalla
     glfwSetFramebufferSizeCallback(TMotor::instancia().getVentana(), resize_callback);
+
+	obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
+	obj3D *mapa = TMotor::instancia().newMeshNode("mapa", "assets/Mapa01/isla.obj", "escena_raiz");
+
 
 	// -----------------------------//
 	//	GAME LOOP
@@ -68,7 +69,7 @@ int main(int argc, char* argv[]) {
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
 	TMotor::instancia().close();
 
-
+	cout << "FIN DE JUEGO\n";
 	return 0;
 }
 void character_callback( GLFWwindow *window, unsigned int codepoint )	//metodo para obtener la tecla pulsada y mostrarla por pantalla 

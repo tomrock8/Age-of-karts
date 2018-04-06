@@ -6,6 +6,10 @@ mesh::mesh() {
 	mat = NULL;
 	text = NULL;
 }
+mesh::~mesh() {
+	delete meshe;
+}
+
 void mesh::setMesh(TRecursoMalla *m) {
 	meshe = m;
 	meshe->inicializar();

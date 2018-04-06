@@ -97,7 +97,7 @@ int hola(void) {
 	}
 
 	TMotor::instancia().close();
-
-	return 0;
 	*/
+	return 0;
+	
 }

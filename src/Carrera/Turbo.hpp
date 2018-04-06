@@ -2,7 +2,6 @@
 #define TURBO_H
 
 #include <iostream>
-#include "IrrlichtLib.hpp"
 #include "MotorFisicas.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"

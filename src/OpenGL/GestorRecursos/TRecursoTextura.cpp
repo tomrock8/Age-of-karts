@@ -7,7 +7,9 @@ TRecursoTextura::TRecursoTextura(const aiMaterial *mat) {
 	}
 }
 
-TRecursoTextura::~TRecursoTextura() { }
+TRecursoTextura::~TRecursoTextura() {
+	text = NULL;
+}
 
 void TRecursoTextura::activeTexture(Shader *shader) {
 

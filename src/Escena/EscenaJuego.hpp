@@ -2,6 +2,7 @@
 #define ESCENAJUEGO_H
 
 #include <ctime>
+#include <vector>
 
 #include "GestorEscena.hpp"
 #include "Escena.hpp"
@@ -15,7 +16,6 @@
 #include "GestorJugadores.hpp"
 #include "GestorCarrera.hpp"
 #include "GestorColisiones.hpp"
-#include <vector>
 #include "Timer.hpp"
 
 
@@ -37,10 +37,10 @@ public:
 	// METODOS SET
 
 private:
-	
+
 	std::string ipConexion;
 
-	void UpdatePhysics(u32 TDeltaTime);
+	void UpdatePhysics(unsigned int TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
 	int debug;
 

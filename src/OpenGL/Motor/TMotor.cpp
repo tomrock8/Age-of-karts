@@ -55,6 +55,7 @@ void TMotor::resizeScreen(int w, int h) {
 
 void TMotor::close() {
 	glfwTerminate();									//Terminar GLFW, limpiando todos los recursos alocados por GLFW
+	delete gestorRecursos;
 }
 
 // METODOS GET

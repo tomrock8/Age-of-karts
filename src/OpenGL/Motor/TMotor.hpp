@@ -13,6 +13,9 @@
 
 #define WIDTH 800
 #define HEIGHT 600
+#define PI = 3.14159265358979323846  /* pi */
+#define RADTODEG = 180.0f / PI
+
 class TMotor {
 
 private:
@@ -27,9 +30,9 @@ public:
 	//obj3D *newCameraNode(glm::vec3 traslation, const char * name, const char* parentNode);
 	//obj3D *newLightNode(glm::vec3 traslation, const char * name, glm::vec4 dir, float att, float corte, const char* parentNode);
 	//TNodo *newMeshNode(glm::vec3 traslation, const char * name, const char * path);
-	obj3D *newCameraNode( const char * name, const char* parentNode);
-	obj3D *newLightNode( const char * name, glm::vec4 dir, float att, float corte, const char* parentNode);
-	obj3D *newMeshNode( const char * name, const char * path, const char* parentNode);
+	obj3D *newCameraNode(const char * name, const char* parentNode);
+	obj3D *newLightNode(const char * name, glm::vec4 dir, float att, float corte, const char* parentNode);
+	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode);
 
 	void newHud(const char* n);
 
@@ -43,7 +46,7 @@ public:
 	hud *getActiveHud();
 	Shader *getShaderHUD();
 	std::vector <TNodo *> getActiveLights();
-	TNodo * getNode(const char * nombre);
+	TNodo *getNode(const char * nombre);
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);

@@ -2,7 +2,6 @@
 #define WAYPOINT_H
 
 #include <iostream>
-#include "IrrlichtLib.hpp"
 #include "MotorFisicas.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
@@ -25,34 +24,34 @@ public:
 	//Update
 
   //metodos SET
-  void setPosicion(float x, float y, float z);
-  void setSiguiente(Waypoint *siguiente);
-  void setOrientacion(float grados);
-  void setVector1(btVector3 p1);
-  void setVector2(btVector3 p2);
-  void setID(int i);
-  //metodos GET
+	void setPosicion(float x, float y, float z);
+	void setSiguiente(Waypoint *siguiente);
+	void setOrientacion(float grados);
+	void setVector1(btVector3 p1);
+	void setVector2(btVector3 p2);
+	void setID(int i);
+	//metodos GET
 
-  obj3D *getWaypoint();
-  btVector3 getPosicion();
-  Waypoint *getNextWaypoint();
-  btVector3 getVector1();
-  btVector3 getVector2();
-  btVector3 getRotation();
-  int getID();
+	obj3D *getWaypoint();
+	btVector3 getPosicion();
+	Waypoint *getNextWaypoint();
+	btVector3 getVector1();
+	btVector3 getVector2();
+	btVector3 getRotation();
+	int getID();
 private:
 	obj3D * waypoint;
 	Waypoint *siguiente; // Siguiente punto
 
   //fisicas
-  btDefaultMotionState *MotionState;
-  btCollisionShape *Shape;
-  btRigidBody * rigidBody;
+	btDefaultMotionState *MotionState;
+	btCollisionShape *Shape;
+	btRigidBody * rigidBody;
 
-  //vectores
-  btVector3 vector1;
-  btVector3 vector2;
-  int id;
+	//vectores
+	btVector3 vector1;
+	btVector3 vector2;
+	int id;
 };
 
 #endif /* WAYPOINT_H */

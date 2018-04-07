@@ -49,6 +49,11 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
     rueda3 = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/rueda.obj"));
     rueda4 = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/rueda.obj"));
 
+	rueda1->setVisible(false);
+	rueda2->setVisible(false);
+	rueda3->setVisible(false);
+	rueda4->setVisible(false);
+
 	rueda1->setScale(vector3df(2,1,1));//alante derecha
 	rueda2->setScale(vector3df(2,1,1));//delante izquierda
 	rueda3->setScale(vector3df(2,1,1));//atras derecha
@@ -73,7 +78,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.9); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(1.7); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -83,7 +88,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	//VALORES POR DEFECTO
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
-	Masa = btScalar(400);
+	Masa = btScalar(200);
 	FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	indiceGiroAlto=btScalar(0.4);
@@ -112,9 +117,9 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	posicion.setY(pos.getY());
 	posicion.setZ(pos.getZ());
 
-	if (cuboNodo) InicializarFisicas();
+	InicializarFisicas();
 
-	
+	InicializarFisicasRuedas();
 
 }
 void Corredor::setParametros(){
@@ -203,6 +208,122 @@ void Corredor::setParametros(){
 	}
 	
 }
+
+
+void Corredor::InicializarFisicasRuedas(){
+
+	//actualizarRuedas();
+
+	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	btDynamicsWorld *mundo = bullet->getMundo();
+	vector<btRigidBody *> objetos = bullet->getObjetos();
+
+	float masar =0.0000001f;
+	float radio=1.f;
+	btVector3 HalfExtents(1,1,1);
+	//posicion inicial
+	btTransform transRueda;
+	transRueda.setIdentity();
+	btVector3 posTransRueda = btVector3(rueda1->getPosition().X, rueda1->getPosition().Y, rueda1->getPosition().Z);
+	transRueda.setOrigin(posTransRueda);
+	btQuaternion quaternion;
+	quaternion.setEulerZYX(rueda1->getRotation().Z* PI / 180, rueda1->getRotation().Y * PI / 180, rueda1->getRotation().X* PI / 180);
+	transRueda.setRotation(quaternion);
+
+	//Motionstate
+	motionStateRueda1 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+
+	FormaColisionR1 = new btSphereShape(radio);
+		
+	// Add mass
+	btVector3 LocalInertia;
+	FormaColisionR1->calculateLocalInertia(masar, LocalInertia);
+
+
+	CuerpoColisionRueda1 = new btRigidBody(masar, motionStateRueda1, FormaColisionR1, LocalInertia);
+	CuerpoColisionRueda1->setUserPointer((void *)(rueda1));
+
+	CuerpoColisionRueda1->setActivationState(DISABLE_DEACTIVATION);
+
+	// Add it to the world
+	mundo->addRigidBody(CuerpoColisionRueda1);
+	objetos.push_back(CuerpoColisionRueda1);
+	bullet->setObjetos(objetos);
+
+
+
+	// rueda 2
+	
+	transRueda.setIdentity();
+	posTransRueda = btVector3(rueda2->getPosition().X, rueda2->getPosition().Y, rueda2->getPosition().Z);
+	transRueda.setOrigin(posTransRueda);
+	quaternion.setEulerZYX(rueda2->getRotation().Z* PI / 180, rueda2->getRotation().Y * PI / 180, rueda2->getRotation().X* PI / 180);
+	transRueda.setRotation(quaternion);
+
+	//Motionstate
+	motionStateRueda2 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+
+	FormaColisionR2 = new btSphereShape(radio);
+		
+	CuerpoColisionRueda2 = new btRigidBody(masar, motionStateRueda2, FormaColisionR2, LocalInertia);
+	CuerpoColisionRueda2->setUserPointer((void *)(rueda2));
+
+	CuerpoColisionRueda2->setActivationState(DISABLE_DEACTIVATION);
+
+	// Add it to the world
+	mundo->addRigidBody(CuerpoColisionRueda2);
+	objetos.push_back(CuerpoColisionRueda2);
+	bullet->setObjetos(objetos);
+
+
+	// rueda 3
+	
+	transRueda.setIdentity();
+	posTransRueda = btVector3(rueda3->getPosition().X, rueda3->getPosition().Y, rueda3->getPosition().Z);
+	transRueda.setOrigin(posTransRueda);
+	quaternion.setEulerZYX(rueda3->getRotation().Z* PI / 180, rueda3->getRotation().Y * PI / 180, rueda3->getRotation().X* PI / 180);
+	transRueda.setRotation(quaternion);
+
+	//Motionstate
+	motionStateRueda3= new btDefaultMotionState(transRueda); //motionState = interpolacion
+
+	FormaColisionR3 = new btSphereShape(radio);
+		
+	CuerpoColisionRueda3 = new btRigidBody(masar, motionStateRueda3, FormaColisionR3, LocalInertia);
+	CuerpoColisionRueda3->setUserPointer((void *)(rueda3));
+
+	CuerpoColisionRueda3->setActivationState(DISABLE_DEACTIVATION);
+
+	// Add it to the world
+	mundo->addRigidBody(CuerpoColisionRueda3);
+	objetos.push_back(CuerpoColisionRueda3);
+	bullet->setObjetos(objetos);
+
+	// rueda 4
+	
+	transRueda.setIdentity();
+	posTransRueda = btVector3(rueda4->getPosition().X, rueda4->getPosition().Y, rueda4->getPosition().Z);
+	transRueda.setOrigin(posTransRueda);
+	quaternion.setEulerZYX(rueda4->getRotation().Z* PI / 180, rueda4->getRotation().Y * PI / 180, rueda4->getRotation().X* PI / 180);
+	transRueda.setRotation(quaternion);
+
+	//Motionstate
+	motionStateRueda4 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+
+	FormaColisionR4 = new btSphereShape(radio);
+		
+	CuerpoColisionRueda4 = new btRigidBody(masar, motionStateRueda4, FormaColisionR4, LocalInertia);
+	CuerpoColisionRueda4->setUserPointer((void *)(rueda4));
+
+	CuerpoColisionRueda4->setActivationState(DISABLE_DEACTIVATION);
+
+	// Add it to the world
+	mundo->addRigidBody(CuerpoColisionRueda4);
+	objetos.push_back(CuerpoColisionRueda4);
+	bullet->setObjetos(objetos);
+}
+
+
 
 //-----------------------------//
 //----------FISICAS------------//
@@ -1277,52 +1398,25 @@ void Corredor::updateTimerObstaculos() {
 void Corredor::actualizarRuedas()
 {
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
-	vector3df Euler;
-	btQuaternion TQuat = ruedas.getRotation();
-	quaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q.toEuler(Euler);
-	Euler *= RADTODEG;
-	
-	float distanciAancho=1.5;
-	float ditanciaLargo=1;
-
-	
-
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.5,ruedas.getOrigin().getZ()));
 	//rueda1
-	rueda1->setPosition(vector3df(distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
-	orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
-	rueda1->setRotation(vector3df(Euler.X, Euler.Y , Euler.Z));
+	CuerpoColisionRueda1->setCenterOfMassTransform(ruedas);
 	
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
-	TQuat = ruedas.getRotation();
-	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q.toEuler(Euler);
-	Euler *= RADTODEG;
-	rueda2->setPosition(vector3df(-distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
-	orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
-	rueda2->setRotation(vector3df(Euler.X, Euler.Y +180 , Euler.Z));
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.5,ruedas.getOrigin().getZ()));
+	CuerpoColisionRueda2->setCenterOfMassTransform(ruedas);
 	
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
-	TQuat = ruedas.getRotation();
-	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q.toEuler(Euler);
-	Euler *= RADTODEG;
-	rueda3->setPosition(vector3df(distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
-	orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
-	rueda3->setRotation(vector3df(Euler.X, Euler.Y , Euler.Z));
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.5,ruedas.getOrigin().getZ()));
+	CuerpoColisionRueda3->setCenterOfMassTransform(ruedas);
 	
 	
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
-	TQuat = ruedas.getRotation();
-	q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q.toEuler(Euler);
-	Euler *= RADTODEG;
-	rueda4->setPosition(vector3df(-distanciAancho*orientacion.getZ() +ruedas.getOrigin().getX() + ditanciaLargo*orientacion.getX(), ruedas.getOrigin().getY()+0.5,
-	orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ()+ ditanciaLargo*orientacion.getZ()));
-	rueda4->setRotation(vector3df(Euler.X, Euler.Y +180, Euler.Z));
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.5,ruedas.getOrigin().getZ()));
+	CuerpoColisionRueda4->setCenterOfMassTransform(ruedas);
 
 
 }

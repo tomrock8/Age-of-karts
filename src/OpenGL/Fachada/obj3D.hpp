@@ -16,12 +16,14 @@ public:
 
 	void translate(glm::vec3);
 	void rotate(glm::vec3 axis, GLfloat angle);
+	void scale(float x, float y, float z);
 
 	// METODOS GET
 	GLuint getID();
 	const char * getName();
 	glm::vec3 getPosition();
 	glm::vec3 getRotation();
+	glm::vec3 getEscala();
 	bool isVisible();
 
 	//METODOS SET
@@ -29,6 +31,7 @@ public:
 	void setRotation(glm::vec3 axis, GLfloat angle);
 	void setPosition(float X,float Y,float Z);
 	void setRotation(float X,float Y,float Z);
+	void setScale(float X,float Y,float Z);
 	void setName(const char *nombre);
 	void setVisible(bool visible);
 
@@ -36,6 +39,7 @@ private:
 	GLuint id;
 	glm::vec3 position;
 	glm::vec3 rotation;
+	glm::vec3 escala;
 	const char *name;
 	TNodo *mesh;
 };

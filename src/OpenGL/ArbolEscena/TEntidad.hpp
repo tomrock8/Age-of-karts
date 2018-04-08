@@ -19,17 +19,17 @@ public:
 	glm::mat4 getModelViewMatrix();
 	glm::mat4 getProjectionMatrix();
 	glm::mat4 getModelViewProjectionMatrix();
-
+	glm::mat4 getViewMatrix();
 
 	// DIBUJADO
 	virtual void beginDraw(Shader *shader) = 0; //se ejecuta cuando se baja un nivel en el arbol de la escena
 	virtual void endDraw() = 0; //se ejecuta cuando se sube un nivel en el arbol de la escena
 
 	/*
-	-Normalmente sólo las transformaciones necesitan
-	   hacer algo en el método endDraw cuando se sube un
-	   nivel del árbol
-	-Las demás entidades, normalmente tendrán un método endDraw vacío
+	-Normalmente sï¿½lo las transformaciones necesitan
+	   hacer algo en el mï¿½todo endDraw cuando se sube un
+	   nivel del ï¿½rbol
+	-Las demï¿½s entidades, normalmente tendrï¿½n un mï¿½todo endDraw vacï¿½o
 	*/
 
 

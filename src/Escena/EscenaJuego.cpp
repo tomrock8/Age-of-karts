@@ -164,14 +164,14 @@ void EscenaJuego::init() {
 	jugadores->setJugadores(pj);
 
 	gc = new GestorCarrera();
-	/*
+	
 		//-----------------------------
 		//	CAMARA
 		//-----------------------------
 		camara = new Camara3persona();
 		tipoCamara = 0;
 		cambioCamara = false;
-	*/
+	
 	//-----------------------------
 	//	GESTOR COLISIONES
 	//-----------------------------

@@ -27,6 +27,11 @@ void obj3D::translate(glm::vec3 pos) {
 	position = getPosition();
 }
 
+void obj3D::scale(float x, float y, float z){
+	static_cast<TTransform*>(mesh->getPadre()->getPadre()->getPadre()->getEntidad())->escalar(x,y,z);
+	escala = glm::vec3(x,y,z);
+}
+
 GLuint obj3D::getID() {
 	return id;
 }
@@ -57,6 +62,10 @@ glm::vec3 obj3D::getRotation() {
 	rotation.z = atan2(m[1][0], m[0][0]);
 	*/
 	return rotation;
+}
+
+glm::vec3 obj3D::getEscala(){
+	return escala;
 }
 
 bool obj3D::isVisible() {
@@ -106,4 +115,9 @@ void obj3D::setPosition(float X, float Y, float Z) {
 	static_cast<TTransform*>(mesh->getPadre()->getEntidad())->setPosition(X, Y, Z);
 	position = getPosition();
 
+}
+
+void obj3D::setScale(float x,float y,float z){
+	static_cast<TTransform*>(mesh->getPadre()->getPadre()->getPadre()->getEntidad())->setScale(x,y,z);
+	escala = glm::vec3(x,y,z);
 }

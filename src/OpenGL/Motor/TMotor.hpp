@@ -46,6 +46,7 @@ public:
 	hud *getHud(const char* n);
 	hud *getActiveHud();
 	Shader *getShaderHUD();
+	Shader *getShaderDebug();
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
 
@@ -64,6 +65,7 @@ protected:
 	TNodo * scene; //Nodo raiz
 	Shader *shader; // Shader que se usa en el motor en la parte 3D
 	Shader *shaderHUD; //Shader que usa el motor para el dibujado del HUD
+	Shader *shaderDebug; //Shader que usa el motor para el modo debug
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)

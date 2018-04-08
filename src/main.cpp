@@ -26,7 +26,10 @@ int main(int argc, char* argv[]) {
 
 	// OBJETOS CARGADOS
 	//obj3D *mapa = TMotor::instancia().newMeshNode("mapa", "assets/Mapa01/isla.obj", "escena_raiz");
-	//obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
+	obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
+	cubnot->setScale(1.0f,3.0f,1.0f);
+	glm::vec3 escala = cubnot->getEscala();
+	std::cout << escala.x << " - " << escala.y << " - " << escala.z << endl;
 	//obj3D *coche = TMotor::instancia().newMeshNode("coche", "assets/coche.obj", "escena_raiz");
 
 
@@ -54,6 +57,7 @@ int main(int argc, char* argv[]) {
 			cam->translate(glm::vec3(.5f, 0, 0));
 		}
 
+		
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS) {
 			cam->rotate(glm::vec3(1, 0, 0), .5f);
 		}
@@ -71,6 +75,7 @@ int main(int argc, char* argv[]) {
 		tipoActual = GestorEscena::instancia().update();
 
 		glfwPollEvents(); // Comprobacion de eventos (Teclado, raton, joystick)
+		//cout << "A CHUPARLA &=========D" << endl;
 
 	}
 

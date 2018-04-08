@@ -21,7 +21,10 @@ public:
 	void trasladar(GLfloat x, GLfloat y, GLfloat z);
 	void rotar(GLfloat x, GLfloat y, GLfloat z, GLfloat grados);
 	void escalar(GLfloat x, GLfloat y, GLfloat z);
-	void setPosition(GLfloat x, GLfloat y, GLfloat z);	void setRotation(GLfloat x, GLfloat y, GLfloat z, GLfloat g);
+
+	void setPosition(GLfloat x, GLfloat y, GLfloat z);
+	void setRotation(GLfloat x, GLfloat y, GLfloat z, GLfloat g);
+	void setScale(GLfloat x, GLfloat y, GLfloat z);
 
 	// DIBUJADO
 	virtual void beginDraw(Shader *shader) override;

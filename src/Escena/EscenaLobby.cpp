@@ -39,7 +39,9 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	pressed = true;
 	lanzado = false;
 	conectado = false;
-
+	
+	
+	TMotor::instancia().newHud("LobbyHUD");
 	/*
 	u16 xPos = Motor3d::instancia().getAnchoPantalla() / 3;
 	u16 yPos = Motor3d::instancia().getAltoPantalla() / 4;

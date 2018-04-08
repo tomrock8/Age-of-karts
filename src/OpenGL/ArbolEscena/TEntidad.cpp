@@ -27,6 +27,10 @@ glm::mat4 TEntidad::getProjectionMatrix() {
 	return projectionMatrix;
 }
 
+glm::mat4 TEntidad::getViewMatrix() {
+	return viewMatrix;
+}
+
 glm::mat4 TEntidad::getModelViewProjectionMatrix() {
 	return projectionMatrix * viewMatrix * modelMatrix;
 }

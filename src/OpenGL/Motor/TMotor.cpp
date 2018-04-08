@@ -43,6 +43,7 @@ TMotor::TMotor() {
 
 	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt");
 	shaderHUD = new Shader("assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt");
+	shaderDebug= new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt");
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 }
 
@@ -67,6 +68,7 @@ TNodo *TMotor::getSceneNode() { return scene; }
 TNodo *TMotor::getActiveCamera() { return activeCamera; }
 std::vector <TNodo*> TMotor::getActiveLights() { return activeLights; }
 Shader *TMotor::getShaderHUD(){ return shaderHUD; }
+Shader *TMotor::getShaderDebug(){ return shaderDebug; }
 
 // METODOS SET
 void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; }
@@ -125,11 +127,17 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 }
 
 obj3D *TMotor::newMeshNode( const char *name, const char *path, const char* parentNode) {
+	// E S C A L A D O
+	string *nameEsc = new string("escalado_" + (string)name);
+	TTransform *scaleMesh = createTransformation();
+	//rotateMesh->rotar(0, 0, 1, -90);
+	TNodo *scaleNodeMesh = createTransformationNode(getNode(parentNode), scaleMesh, nameEsc->c_str());
+
 	// R O T A C I O N
 	string *nameRot = new string("rotacion_" + (string)name);
 	TTransform *rotateMesh = createTransformation();
 	//rotateMesh->rotar(0, 0, 1, -90);
-	TNodo *rotationNodeMesh = createTransformationNode(getNode(parentNode), rotateMesh, nameRot->c_str());
+	TNodo *rotationNodeMesh = createTransformationNode(scaleNodeMesh, rotateMesh, nameRot->c_str());
 
 	// T R A S L A C I O N
 	string *nameTras = new string("traslacion_" + (string)name);
@@ -225,6 +233,7 @@ void TMotor::clean() {
 }
 
 void TMotor::draw(int tipo) {
+	
 	//Se llama a la funcion para limpiar los buffers de OpenGL
 	clean();
 	if (tipo==1 || tipo==2){
@@ -237,11 +246,59 @@ void TMotor::draw(int tipo) {
 		scene->draw(shader);
 	}
 
-	//Se activa el shader para el dibujado del HUD
+	/*
+	unsigned int VBO,VAO;
+		GLfloat points[12];
+
+		points[0] = 100.5f;
+		points[1] = 100.5f;
+		points[2] = 100.0f;
+		points[3] = 0.8f;
+		points[4] = 0.5f;
+		points[5] = 0.3f;
+
+		points[6] = 200.0f;
+		points[7] = 200.0f;
+		points[8] = 200.0f;
+		points[9] = 0.8f;
+		points[10] = 0.5f;
+		points[11] = 0.3f;
+
+
+		glGenVertexArrays(1, &VAO);
+		glBindVertexArray(VAO);
+		glGenBuffers(1, &VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(points), &points, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+		glBindVertexArray(0);
+
+		TMotor::instancia().getShaderDebug()->use();
+
+		glm::mat4 proje = glm::ortho(
+		glm::radians(70.0f), 			// El campo de vision vertical:zoom 90 (extra ancho) y 30 (zoom aumentado)
+		800.0f / 600.0f,					// Proporcion.ventana 4/3 == 800/600
+		0.01f,					// Plano de corte cercano. Tan grande como sea posible o tendras problemas de precision.
+		1000.0f						// Plano de corte lejano. Tan enano como se pueda.
+	);
+		glm::mat4 view = TMotor::instancia().getActiveCamera()->getEntidad()->getViewMatrix();
+
+		TMotor::instancia().getShaderDebug()->setMat4("projection", proje);
+		TMotor::instancia().getShaderDebug()->setMat4("view", view);
+
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_LINES, 0, 2);
+		glBindVertexArray(0);
+	*/
+		//Se activa el shader para el dibujado del HUD
 	shaderHUD->use();
 
 	//Dibujamos el hud activo
 	activeHud->drawHud(shaderHUD);
+
 	
 	//swap los bufers de pantalla (trasero y delantero)
 	glfwSwapBuffers(TMotor::instancia().getVentana());

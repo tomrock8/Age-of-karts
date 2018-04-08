@@ -75,7 +75,11 @@ void TTransform::escalar(GLfloat x, GLfloat y, GLfloat z) {
 		|0	0	sZ	0|
 		|0	0	0	1|
 	*/
-	//matriz =  glm::scale(x, y, z) * matriz;
+	matriz =  glm::scale(matriz, glm::vec3(x, y, z));
+}
+
+void TTransform::setScale(GLfloat x, GLfloat y, GLfloat z){
+	matriz =  glm::scale(glm::mat4(), glm::vec3(x, y, z));
 }
 
 //----------------------------//

@@ -49,6 +49,9 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "salir", "assets/HUD/MainMenu/btn_salir_normal.png");
 	TMotor::instancia().getHud("MainMenuHUD")->traslateElement("salir", -0.01f, -0.7f);
 
+	//Se crea el hud del menu local
+	//TMotor::instancia().newHud("LocalMenuHUD");
+
 }
 
 EscenaMenu::~EscenaMenu() {

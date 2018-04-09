@@ -43,16 +43,14 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	
 
 	//establecemos el primer waypoint del mapa
-	/*
+
 	Pista *mapa = Pista::getInstancia();
 	anterior = mapa->getArrayWaypoints()[mapa->getTamArrayWaypoints() - 1];
 	actual = mapa->getArrayWaypoints()[0];
 	siguiente = actual->getNextWaypoint();
 	siguiente_aux = siguiente;
-*/
-	actual = NULL;
-	siguiente = NULL;
-	siguiente_aux = NULL;
+
+
 
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
@@ -1173,18 +1171,14 @@ void Corredor::update()
 			std::cout << "Joystick " << i << " is connected!" << std::endl;
 	}
 	*/
-
 	comprobarTurbo();
 	comprobarInmunidad();
-
 	if (estado->getEstadoCarrera() != PARRILLA) {
 		movimiento();
 		updateEstado();
 	}
-
 	updateTimerObstaculos();
 	updateEstado();
-
 	comprobarSueloRuedas();
 	actualizarPosicion();
 	actualizarRuedas();
@@ -1193,7 +1187,6 @@ void Corredor::update()
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 	updateText();
 	updateHijos();
-
 }
 
 void Corredor::actualizarPosicion() {
@@ -1282,9 +1275,15 @@ void Corredor::updateTimerObstaculos() {
 void Corredor::actualizarRuedas() {
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
 	btVector3 Euler;
+	btScalar yaw, pitch, roll;
 	btQuaternion TQuat = ruedas.getRotation();
-	//btQuaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	//q.toEuler(Euler);
+	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW()); 
+  	//q.toEuler(Euler); 
+	/*btQuaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	q.setEuler(yaw, pitch, roll);
+	Euler.setX(yaw);
+	Euler.setY(pitch);
+	Euler.setZ(roll);*/
 	Euler *= RADTODEG;
 
 	float distanciAancho = 1.5;
@@ -1300,8 +1299,13 @@ void Corredor::actualizarRuedas() {
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
 	TQuat = ruedas.getRotation();
-	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	//q.toEuler(Euler);
+	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW()); 
+  	//q.toEuler(Euler); 
+	/*btQuaternion q2(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	q2.setEuler(yaw, pitch, roll);
+	Euler.setX(yaw);
+	Euler.setY(pitch);
+	Euler.setZ(roll);*/
 	Euler *= RADTODEG;
 	rueda2->setPosition(-distanciAancho * orientacion.getZ() + ruedas.getOrigin().getX() + ditanciaLargo * orientacion.getX(), ruedas.getOrigin().getY() + 0.5,
 		orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ() + ditanciaLargo * orientacion.getZ());
@@ -1312,8 +1316,13 @@ void Corredor::actualizarRuedas() {
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
 	TQuat = ruedas.getRotation();
-	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	//q.toEuler(Euler);
+	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW()); 
+  	//q.toEuler(Euler); 
+	/*btQuaternion q3(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	q3.setEuler(yaw, pitch, roll);
+	Euler.setX(yaw);
+	Euler.setY(pitch);
+	Euler.setZ(roll);*/
 	Euler *= RADTODEG;
 	rueda3->setPosition(distanciAancho*orientacion.getZ() + ruedas.getOrigin().getX() + ditanciaLargo * orientacion.getX(), ruedas.getOrigin().getY() + 0.5,
 		orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ() + ditanciaLargo * orientacion.getZ());
@@ -1323,8 +1332,13 @@ void Corredor::actualizarRuedas() {
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
 	TQuat = ruedas.getRotation();
-	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	//q.toEuler(Euler);
+	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW()); 
+  	//q.toEuler(Euler); 
+	/*btQuaternion q4(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
+	q4.setEuler(yaw, pitch, roll);
+	Euler.setX(yaw);
+	Euler.setY(pitch);
+	Euler.setZ(roll);*/
 	Euler *= RADTODEG;
 	rueda4->setPosition(-distanciAancho * orientacion.getZ() + ruedas.getOrigin().getX() + ditanciaLargo * orientacion.getX(), ruedas.getOrigin().getY() + 0.5,
 		orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ() + ditanciaLargo * orientacion.getZ());

@@ -318,16 +318,18 @@ void EscenaJuego::update() {
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		//pj.at(controlPlayer)->update();
 
-		if (jugadores->getNumJugadores() != 0)
+		if (jugadores->getNumJugadores() > 0){
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-				//pj.at(i)->update();
+				pj.at(i)->update();
+
 			}
+		}
 		//textoDebug->agregar(pj.at(0)->toString());
 	}
 	else {
 		//cout << jugadores->getNumJugadores() << endl;
-		if (jugadores->getNumJugadores() != 0)
-			pj.at(controlPlayer)->actualizarItem();
+		//if (jugadores->getNumJugadores() != 0)
+		//	pj.at(controlPlayer)->actualizarItem();
 
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
@@ -338,7 +340,7 @@ void EscenaJuego::update() {
 		}
 
 		//textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-		if (jugadores->getNumJugadores() != 0)
+		//if (jugadores->getNumJugadores() != 0)
 			//textoDebug->agregar(pj.at(controlPlayer)->toString());
 
 			if (jugadores->getNumJugadores() != 0) {

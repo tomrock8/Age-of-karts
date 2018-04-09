@@ -33,6 +33,7 @@ public:
 	obj3D *newCameraNode(const char * name, const char* parentNode);
 	obj3D *newLightNode(const char * name, glm::vec4 dir, float att, float corte, const char* parentNode);
 	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode);
+	void precarga(const char * modelo);
 
 	void newHud(const char* n);
 	double *toEuler(double pich, double yaw, double roll);

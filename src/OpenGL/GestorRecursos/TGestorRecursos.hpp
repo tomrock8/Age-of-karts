@@ -39,6 +39,7 @@ public:
 	TRecursoMalla *getRecursoMalla(const char *nombre, aiMesh *mesh, const aiScene *scene);
 	TRecursoMaterial *getRecursoMaterial(const char *nombre);
 
+	std::vector<TRecurso *> getRecursoMallas();
 
 private:
 	

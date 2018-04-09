@@ -44,10 +44,10 @@ void TRecursoMaterial::activeMaterial(Shader *shader){
 //------HERENCIA DE TRECURSO------//
 //--------------------------------//
 const char *TRecursoMaterial::getNombre() {
-	return nombre;
+	return nombre->c_str();
 }
 void TRecursoMaterial::setNombre(const char *s) {
-	nombre = s;
+	nombre = new std::string(s);
 }
 
 // METODOS GET

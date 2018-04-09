@@ -147,6 +147,11 @@ obj3D *TMotor::newMeshNode( const char *name, const char *path, const char* pare
 
 
 	// N O D O
+	for (int i = 0; i < gestorRecursos->getRecursoMallas().size(); i++) {
+		cout << "MALLA MOTOR: " << gestorRecursos->getRecursoMallas().at(i)->getNombre() << "\n";
+	}
+
+
 	TMalla *malla = TMotor::instancia().createMesh(path);
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
 	contID++;
@@ -164,6 +169,11 @@ TMalla *TMotor::createMesh(const char *fich) {
 	//	return new TMalla(auxMesh, auxText);
 	return new TMalla(gestorRecursos->loadMesh(fich));
 	//return NULL;
+}
+
+
+void TMotor::precarga(const char* modelo) {
+	gestorRecursos->loadMesh(modelo);
 }
 
 TNodo  *TMotor::createMeshNode(TNodo *padre, TMalla *mesh, const char* name) {

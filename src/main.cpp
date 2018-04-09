@@ -25,11 +25,12 @@ int main(int argc, char* argv[]) {
 
 
 	// OBJETOS CARGADOS
+	TMotor::instancia().precarga("assets/Mapa01/isla.obj");
 	//obj3D *mapa = TMotor::instancia().newMeshNode("mapa", "assets/Mapa01/isla.obj", "escena_raiz");
-	obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
-	cubnot->setScale(1.0f,3.0f,1.0f);
-	glm::vec3 escala = cubnot->getEscala();
-	std::cout << escala.x << " - " << escala.y << " - " << escala.z << endl;
+	//obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
+	//cubnot->setScale(1.0f,3.0f,1.0f);
+	//glm::vec3 escala = cubnot->getEscala();
+	//std::cout << escala.x << " - " << escala.y << " - " << escala.z << endl;
 	//obj3D *coche = TMotor::instancia().newMeshNode("coche", "assets/coche.obj", "escena_raiz");
 
 
@@ -75,8 +76,6 @@ int main(int argc, char* argv[]) {
 		tipoActual = GestorEscena::instancia().update();
 
 		glfwPollEvents(); // Comprobacion de eventos (Teclado, raton, joystick)
-		//cout << "A CHUPARLA &=========D" << endl;
-
 	}
 
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
@@ -93,8 +92,7 @@ void character_callback(GLFWwindow *window, unsigned int codepoint)	//metodo par
 }
 
 //Manejador para el evento de redimensionamiento de la pantalla
-void resize_callback(GLFWwindow* ventana, int ancho, int alto)
-{
+void resize_callback(GLFWwindow* ventana, int ancho, int alto) {
 	//Se redimensiona el viewport de Opengl en funcion de las medidas de la ventana
 	glViewport(0, 0, ancho, alto);
 }

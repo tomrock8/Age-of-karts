@@ -57,10 +57,13 @@ void TRecursoMalla::activeVAO() { glBindVertexArray(VAO); }
 void TRecursoMalla::disableVAO() { glBindVertexArray(0); }
 
 // METODOS GET
-const char *TRecursoMalla::getNombre() { return nombre; }
+const char *TRecursoMalla::getNombre() { return nombre->c_str(); }
 
 // METODOS SET
-void TRecursoMalla::setNombre(const char *s) { nombre = s; }
+void TRecursoMalla::setNombre(const char *s) { 
+	nombre = new std::string(s);
+
+}
 
 void TRecursoMalla::draw() {
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, 0);

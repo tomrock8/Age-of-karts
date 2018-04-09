@@ -78,15 +78,14 @@ void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 		mesh *meshAcumulated = new mesh();
 		aiMesh *mesh = scene->mMeshes[i];		//se recoje la malla de la escena
 
-		const char *meshName = scene->mMeshes[i]->mName.C_Str();
 		//--------------------------------------------procesar la malla---------------------------------------------------------
 		////cout << "________________________________________________________________________________________" << endl;
 		//cout << "-------------------------PROCESANDO LA MALLA : " << meshName << "-----------------------" << endl;
 		////cout << "________________________________________________________________________________________" << endl;
 
-		if (meshName != NULL) {
+		if (scene->mRootNode->mChildren[i]->mName.C_Str() != NULL) {
 
-			meshAux = getRecursoMalla(meshName, mesh, scene);
+			meshAux = getRecursoMalla(scene->mRootNode->mChildren[i]->mName.C_Str(), mesh, scene);
 
 
 			//procesar el material
@@ -112,8 +111,6 @@ void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 		//for (GLuint i = 0; i < node->mNumChildren; i++) {
 		//	processNode(node->mChildren[i], scene);
 		//}
-
-		meshName = NULL;
 	}
 
 
@@ -124,6 +121,11 @@ void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 //-----------------------------------------------------------------------------------------------//
 
 TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mesh, const aiScene *scene) {
+	for (int i = 0; i < recursoMallas.size(); i++) {
+		cout << "MALLA GR: " << recursoMallas.at(i)->getNombre() << "\n";
+	}
+
+
 	bool encontrado = false;
 	TRecursoMalla *recMalla = NULL;
 
@@ -152,6 +154,9 @@ TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mes
 
 
 	return recMalla;
+}
+std::vector<TRecurso*> TGestorRecursos::getRecursoMallas(){
+	return recursoMallas;
 }
 TRecursoMalla *TGestorRecursos::processMesh(aiMesh *mesh, const aiScene *scene) {
 	return new TRecursoMalla(mesh);;

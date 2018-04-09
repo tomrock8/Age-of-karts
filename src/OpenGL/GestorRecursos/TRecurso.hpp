@@ -12,6 +12,6 @@ public:
 	//virtual void cargarFichero(char *n);
 
 protected:
-	const char *nombre;
+	std::string *nombre;
 };
 #endif

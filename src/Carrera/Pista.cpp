@@ -66,7 +66,7 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 
 	// ------------------------------------------------------
 
-	/*
+	
 	//lectura de fichero
 	std::string line;
 	std::string tipo, pX, pY, pZ, orientacionWp, v1X, v1Y, v1Z, v2X, v2Y, v2Z;
@@ -153,7 +153,7 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 
 				tamWaypoints++;
 			}
-			/*
+		
 			if (tipoObj == 1) {//CAJA
 				Caja *cj= new Caja(btVector3(stof(pX), stof(pY), stof(pZ)));
 				arrayCajas.push_back(cj);
@@ -173,7 +173,7 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 	}
 	else {
 		cout << "Error abriendo archivo";
-	}*/
+	}
 
 }
 

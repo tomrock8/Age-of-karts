@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
 
 	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
-	cam->translate(glm::vec3(0.0f, 0.0f, 10.0f));
+	cam->translate(glm::vec3(0.0f, 0.0f, 15.0f));
 
 	//Evento de glfw para redimensionar la pantalla
 	glfwSetFramebufferSizeCallback(TMotor::instancia().getVentana(), resize_callback);
@@ -26,9 +26,18 @@ int main(int argc, char* argv[]) {
 
 	// OBJETOS CARGADOS
 	//TMotor::instancia().precarga("assets/Mapa01/isla.obj");
-	//obj3D *mapa = TMotor::instancia().newMeshNode("mapa", "assets/Mapa01/isla.obj", "escena_raiz");
-	//obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
+	//obj3D *mapa = TMotor::instancia().newMeshNode("mapa", "assets/wall/wall.obj", "escena_raiz");
+	/*
+	obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
 	//cubnot->setScale(1.0f,3.0f,1.0f);
+	cubnot->setPosition(1.0f, 0.0f, 7.0f);
+	cubnot->setRotation(glm::vec3(0,0,1),33.0f);
+	obj3D *cubsuelo = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
+	//cubnot->setScale(1.0f,3.0f,1.0f);
+	cubsuelo->setScale(3.0f,1.0f,3.0f);
+	cubsuelo->setRotation(glm::vec3(0,0,1),15.0f);
+	cubsuelo->setPosition(0.0f, -2.0f, 7.0f);*/
+	
 	//glm::vec3 escala = cubnot->getEscala();
 	//std::cout << escala.x << " - " << escala.y << " - " << escala.z << endl;
 	//obj3D *coche = TMotor::instancia().newMeshNode("coche", "assets/coche.obj", "escena_raiz");

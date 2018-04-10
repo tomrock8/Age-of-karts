@@ -1,5 +1,6 @@
 #include "GestorEscena.hpp"
 
+
 GestorEscena::GestorEscena() {
 	cambioEscena = Escena::tipo_escena::MENU; // Indicador que tiene que cambiar de escena
 	escenas = new Escena*[Escena::nTipos]; // Array que contendra todas las escenas posibles

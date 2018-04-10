@@ -11,7 +11,7 @@ COMPONENTES DE LUZ:
 	Atenuacion: Variable de control de la atenuacion	
 				Cuanta mas bajo, mas distancia que engloba la luz, por lo tanto menos atenuacion
 				Valores recomendados entre 0.025 y 0.005
-	Corte: EN caso de tratarse de una luz dirigida, coseno del angulo que define el radio del circulo del foco
+	Corte: En caso de tratarse de una luz dirigida, coseno del angulo que define el radio del circulo del foco
 
 
 	Color final del objeto = Ambiente + Difusa + Especular
@@ -79,3 +79,31 @@ Los metodos beginDraw y endDraw de las camaras y las luces estan vacios.*/
 void TLuz::beginDraw(Shader *shader) { }
 void TLuz::endDraw() { }
 
+
+//CALCULO DE LAS SOMBRAS
+
+void TLuz::calcularDepthMap(){
+	//Creamos un framebuffer para renderizar el mapa de profundidad
+	glGenFramebuffers(1, &depthMap);
+
+	//Preparamos la textura que recogera el mapa de profundidad
+	glGenTextures(1, &depthTexture); //Una sola textura
+	glBindTexture(GL_TEXTURE_2D, depthTexture); //Se trata de una textura 2D
+	//Especificamos que la textura solo va a recoger valores de profundidad (GL_DEPTH_COMPONENT)
+	//y que va a tener el ancho y alto especificados en el header
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
+				DEPTH_WIDTH, DEPTH_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); 
+
+	//Finalmente, enlazamos la textura con el framebuffer creado al principio
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMap); //Activamos el framebuffer del mapa de profundidad
+	//Enlazamos textura y buffer especificando que se va a utilizar para recoger el componente de profundidad
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+	//Le decimos a OpenGL que no queremos informacion del color
+	glDrawBuffer(GL_NONE);  glReadBuffer(GL_NONE);
+	//Desactivamos el framebuffer hasta que volvamos a usarlo en el draw de la escena
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);  
+}

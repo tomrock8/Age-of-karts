@@ -120,7 +120,7 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 
 	// N O D O
 	//TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(.8f), dir, att, corte);
-	TLuz  *luz = new TLuz(glm::vec3(105.2f), glm::vec3(105.5f), glm::vec3(100.8f), dir, att, corte);
+	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(.8f), dir, att, corte);
 	TNodo *nodo = createLightNode(traslacionNodo, luz, name);
 	contID++;
 	return new obj3D(nodo, name, contID);
@@ -304,7 +304,8 @@ void TMotor::draw(int tipo) {
 		glDrawArrays(GL_LINES, 0, 2);
 		glBindVertexArray(0);
 	*/
-		//Se activa el shader para el dibujado del HUD
+
+	//Se activa el shader para el dibujado del HUD
 	shaderHUD->use();
 
 	//Dibujamos el hud activo

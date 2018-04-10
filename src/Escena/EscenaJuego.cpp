@@ -40,8 +40,8 @@ EscenaJuego::~EscenaJuego() {
 void EscenaJuego::init() {
 
 	// LUCES
-	obj3D * luzInfinita = TMotor::instancia().newLightNode("light_0", glm::vec4(0.0f, 0.f, -1.0f, 1.0f), 0.25f, glm::cos(glm::radians(30.0f)), "escena_raiz");
-	luzInfinita->translate(glm::vec3(0.0f, 30.0f, 0.0f));
+	obj3D * luzInfinita = TMotor::instancia().newLightNode("light_0", glm::vec4(0.0f, 0.f, -1.0f, 0.0f), 0.015f, glm::cos(glm::radians(30.0f)), "escena_raiz");
+	luzInfinita->translate(glm::vec3(2.0f, 1.0f, 7.0f));
 
 	/*TMotor::instancia().newLightNode(glm::vec3(0.0f, 30.0f, 0.0f), "light_0", glm::vec4(0.0f, 0.f, -1.0f, 1.0f), 0.25f, glm::cos(glm::radians(30.0f)), "escena_raiz");
 	obj3D *luz0 = TMotor::instancia().newLightNode("light_0", glm::vec4(.0f, 0.f, 0.f, 0.0f), 0.01f, 0.0f, "escena_raiz");

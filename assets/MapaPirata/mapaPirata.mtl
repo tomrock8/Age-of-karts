@@ -10,9 +10,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump texturas\\MapaPirataCarretera_normal.png
-map_Kd texturas\\MapaPirataCarretera_diffusa.png
-map_Ks texturas\\MapaPirataCarretera_specular.png
+map_Bump texturas/MapaPirataCarretera_normal.png
+map_Kd texturas/MapaPirataCarretera_diffusa.png
+map_Ks texturas/MapaPirataCarretera_specular.png
 
 newmtl montanaMAT
 Ns 96.078431
@@ -23,9 +23,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump texturas\\terrain_normal.png
-map_Kd texturas\\terrain_diffuse.png
-map_Ks texturas\\terrain_specular.png
+map_Bump texturas/terrain_normal.png
+map_Kd texturas/terrain_diffuse.png
+map_Ks texturas/terrain_specular.png
 
 newmtl montanaMAT_NONE
 Ns 96.078431
@@ -36,9 +36,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump texturas\\terrain_normal.png
-map_Kd texturas\\terrain_diffuse.png
-map_Ks texturas\\terrain_specular.png
+map_Bump texturas/terrain_normal.png
+map_Kd texturas/terrain_diffuse.png
+map_Ks texturas/terrain_specular.png
 
 newmtl montanaMAT_terrain_difusse.png.002
 Ns 96.078431
@@ -49,6 +49,6 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\terrain_difusse.png
-map_Bump texturas\\terrain_normal.png
-map_Ks texturas\\terrain_specular.png
+map_Kd texturas/terrain_difusse.png
+map_Bump texturas/terrain_normal.png
+map_Ks texturas/terrain_specular.png

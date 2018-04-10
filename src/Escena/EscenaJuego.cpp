@@ -2,11 +2,13 @@
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	ipConexion = "";
+	TMotor::instancia().newHud("OnGameHUD");
 	init();
 }
 
 EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo) {
 	this->ipConexion = ipConexion;
+	TMotor::instancia().newHud("OnGameHUD");
 	init();
 }
 

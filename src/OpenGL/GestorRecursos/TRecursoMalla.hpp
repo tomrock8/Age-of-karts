@@ -18,7 +18,7 @@ class TRecursoMalla :public TRecurso
 {
 
 public:
-	TRecursoMalla(aiMesh *mesh);
+	TRecursoMalla(aiMesh *mesh, const char* nombre);
 	~TRecursoMalla();
 	void activeVAO(); // Activar el buffer de vertices
 	void disableVAO(); // Desactivar el buffer de vertices

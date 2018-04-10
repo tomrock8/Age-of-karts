@@ -1,9 +1,9 @@
 #include "TRecursoMalla.hpp"
 
-TRecursoMalla::TRecursoMalla(aiMesh *mesh) {
+TRecursoMalla::TRecursoMalla(aiMesh *mesh, const char* nombre) {
 	//recorrer cada uno de los vertices de la malla
 	reserveVectorArrays(mesh->mNumVertices);
-	setNombre(mesh->mName.C_Str());
+	setNombre(nombre);
 	for (GLuint i = 0; i < mesh->mNumVertices; i++) {
 		//obtener la posicion de cada vertices
 		aiVector3D pos = mesh->mVertices[i];

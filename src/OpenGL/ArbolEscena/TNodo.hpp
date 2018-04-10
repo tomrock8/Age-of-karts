@@ -39,7 +39,7 @@ private:
 	std::vector<TNodo *> hijos; // Vector que contiene los hijos que tiene el nodo
 	TNodo *padre; // Nodo padre
 	//int id; // Identificador del nodo
-	const char *name; // Nombre del nodo
+	std::string *name; // Nombre del nodo
 
 };
 #endif

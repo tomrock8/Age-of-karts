@@ -24,7 +24,7 @@ public:
 	
 	
 	// ASSIMP:MALLA
-	TRecursoMalla *processMesh(aiMesh *mesh, const aiScene *scene);
+	TRecursoMalla *processMesh(aiMesh *mesh, const aiScene *scene, const char* nombre);
 	// ASSIMP:MATERIAL
 	TRecursoMaterial *getRecursoMaterial(const char *nombre, const aiMaterial * mat);
 	TRecursoMaterial *processMaterial(aiMesh *mesh, const aiScene *scene); 

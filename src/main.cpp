@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 
 
 	// OBJETOS CARGADOS
-	TMotor::instancia().precarga("assets/Mapa01/isla.obj");
+	//TMotor::instancia().precarga("assets/Mapa01/isla.obj");
 	//obj3D *mapa = TMotor::instancia().newMeshNode("mapa", "assets/Mapa01/isla.obj", "escena_raiz");
 	//obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
 	//cubnot->setScale(1.0f,3.0f,1.0f);

@@ -121,6 +121,7 @@ void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 //-----------------------------------------------------------------------------------------------//
 
 TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mesh, const aiScene *scene) {
+	cout << "\nContenido de mallas en Gestor de recursos\n";
 	for (int i = 0; i < recursoMallas.size(); i++) {
 		cout << "MALLA GR: " << recursoMallas.at(i)->getNombre() << "\n";
 	}
@@ -148,18 +149,18 @@ TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mes
 		////cout << "No se ha encontrado el material , se crea" << endl;
 
 
-		recMalla = processMesh(mesh, scene);
+		recMalla = processMesh(mesh, scene, nameExt.c_str());
 		recursoMallas.push_back(recMalla);
 	}
 
 
 	return recMalla;
 }
-std::vector<TRecurso*> TGestorRecursos::getRecursoMallas(){
+std::vector<TRecurso*> TGestorRecursos::getRecursoMallas() {
 	return recursoMallas;
 }
-TRecursoMalla *TGestorRecursos::processMesh(aiMesh *mesh, const aiScene *scene) {
-	return new TRecursoMalla(mesh);;
+TRecursoMalla *TGestorRecursos::processMesh(aiMesh *mesh, const aiScene *scene, const char *nombre) {
+	return new TRecursoMalla(mesh, nombre);;
 }
 
 //-----------------------------------------------------------------------------------------------//
@@ -226,8 +227,6 @@ TRecursoTextura *TGestorRecursos::getRecursoTextura(const char * nombre, aiMesh 
 	TRecursoTextura *recTextura = NULL;
 	//recoger textura solo si existe
 	if (nombre != NULL) {
-
-
 		std::string nameExt = nombre;
 		nameExt = nameExt.substr(0, nameExt.find_first_of('_'));
 		for (GLuint i = 0; i < recursoTexturas.size(); i++) {
@@ -303,7 +302,7 @@ TRecursoTextura *TGestorRecursos::processTextures(aiMesh *mesh, const aiScene *s
 void TGestorRecursos::loadTexture(const aiScene *scene, const aiMesh *mesh, aiTextureType textureType, GLuint &texture, TRecursoTextura *recText) {
 	if (mesh->mMaterialIndex >= 0) { //obtener el material correspondiente
 		const aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
-		////////cout << mat->GetTextureCount(textureType) << endl;
+		//cout << mat->GetTextureCount(textureType) << endl;
 		for (GLuint i = 0; i < mat->GetTextureCount(textureType); i++) {
 			aiString path;
 			if (mat->GetTexture(textureType, i, &path) == AI_SUCCESS) {
@@ -328,10 +327,7 @@ void TGestorRecursos::loadTexture(const aiScene *scene, const aiMesh *mesh, aiTe
 					typeText = "texture_normal";
 				}
 
-				////cout << " Estoy cargando la textura : " << dir->c_str() + texturePath << std::endl;
-				//asignar la textura
 				texture = textureFromFile(dir->c_str() + texturePath);
-				//////cout << texture << "*****" << endl;
 				recText->setTexture(typeText, texture);
 			}
 		}
@@ -344,12 +340,9 @@ GLuint TGestorRecursos::textureFromFile(const std::string& file) {
 	glGenTextures(1, &idTexture);
 
 	int width, height, comp;
-	////cout << file << std::endl;
+	//cout << file << std::endl;
 	unsigned char *imgTexture = stbi_load(file.c_str(), &width, &height, &comp, 3);
 
-	///*if (imgTexture) {
-	//	////cout << "he cargado la textura" << comp << endl;
-	//}
 	glBindTexture(GL_TEXTURE_2D, idTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imgTexture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

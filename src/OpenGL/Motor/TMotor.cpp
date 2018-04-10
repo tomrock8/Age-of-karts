@@ -147,6 +147,7 @@ obj3D *TMotor::newMeshNode( const char *name, const char *path, const char* pare
 
 
 	// N O D O
+	cout << "\nContenido de mallas en TMotor\n";
 	for (int i = 0; i < gestorRecursos->getRecursoMallas().size(); i++) {
 		cout << "MALLA MOTOR: " << gestorRecursos->getRecursoMallas().at(i)->getNombre() << "\n";
 	}

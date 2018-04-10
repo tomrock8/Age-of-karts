@@ -1,7 +1,7 @@
 #include "TNodo.hpp"
 
 TNodo::TNodo(const char* n) {
-	name = n;
+	name = new std::string(n);
 }
 
 TNodo::~TNodo() {
@@ -42,7 +42,7 @@ bool TNodo::setEntidad(TEntidad *n) {
 
 void TNodo::setPadre(TNodo *p) { padre = p; }
 //void TNodo::setID(int s) { id = s; }
-void TNodo::setName(const char*n) { name = n; }
+void TNodo::setName(const char*n) { name = new std::string(n); }
 
 //-----------------
 // METODOS GET
@@ -50,13 +50,13 @@ void TNodo::setName(const char*n) { name = n; }
 TEntidad *TNodo::getEntidad() { return entidad; }
 TNodo *TNodo::getPadre() { return padre; }
 //int TNodo::getID() { return id; }
-const char *TNodo::getName() { return name; }
+const char *TNodo::getName() { return name->c_str(); }
 
 TNodo *TNodo::getNode(const char* nombre) {
 	TNodo *aux = nullptr;
 
 	//Si su nombre es el que se busca, devolverse a si mismo
-	if (strcmp(name, nombre) == 0)
+	if (strcmp(name->c_str(), nombre) == 0)
 		return this;
 
 	//Sino buscar en los hijos
@@ -76,7 +76,7 @@ TNodo *TNodo::getNode(const char* nombre) {
 //	RECORRIDO EN PREORDEN
 //----------------------------
 void TNodo::draw(Shader *shader) {
-	string n = name;
+	string n = name->c_str();
 	//std::cout << "Nodo de nombre: " << n << endl;
 	if (entidad != NULL) {
 		if (n.find("escena") == std::string::npos)

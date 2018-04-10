@@ -1,7 +1,7 @@
 #include "obj3D.hpp"
 
 obj3D::obj3D(TNodo *m, const char *n, GLuint i) {
-	mesh = m;
+	node = m;
 	position = getPosition();
 	rotation = glm::vec3(0.0f);
 	name = n;
@@ -19,16 +19,16 @@ void obj3D::rotate(glm::vec3 axis, GLfloat angle) {
 	if (axis.z == 1)
 		rotation.z += angle;
 
-	static_cast<TTransform*>(mesh->getPadre()->getPadre()->getEntidad())->rotar(axis.x, axis.y, axis.z, angle);
+	static_cast<TTransform*>(node->getPadre()->getPadre()->getEntidad())->rotar(axis.x, axis.y, axis.z, angle);
 }
 
 void obj3D::translate(glm::vec3 pos) {
-	static_cast<TTransform*>(mesh->getPadre()->getEntidad())->trasladar(pos.x, pos.y, pos.z);
+	static_cast<TTransform*>(node->getPadre()->getEntidad())->trasladar(pos.x, pos.y, pos.z);
 	position = getPosition();
 }
 
 void obj3D::scale(float x, float y, float z){
-	static_cast<TTransform*>(mesh->getPadre()->getPadre()->getPadre()->getEntidad())->escalar(x,y,z);
+	static_cast<TTransform*>(node->getPadre()->getPadre()->getPadre()->getEntidad())->escalar(x,y,z);
 	escala = glm::vec3(x,y,z);
 }
 
@@ -41,7 +41,7 @@ const char *obj3D::getName() {
 }
 
 glm::vec3 obj3D::getPosition() {
-	glm::vec4 aux = (static_cast<TTransform*>(mesh->getPadre()->getEntidad())->getMatriz()) * glm::vec4(.0f, .0f, .0f, 1.0f);
+	glm::vec4 aux = (static_cast<TTransform*>(node->getPadre()->getEntidad())->getMatriz()) * glm::vec4(.0f, .0f, .0f, 1.0f);
 	return glm::vec3(aux.x, aux.y, aux.z);
 }
 
@@ -69,7 +69,7 @@ glm::vec3 obj3D::getEscala(){
 }
 
 bool obj3D::isVisible() {
-	return static_cast<TMalla*>(mesh->getEntidad())->isVisible();
+	return static_cast<TMalla*>(node->getEntidad())->isVisible();
 }
 
 
@@ -81,11 +81,11 @@ void obj3D::setID(GLuint id) {
 
 void obj3D::setName(const char *nombre) {
 	name = nombre;
-	mesh->setName(nombre);
+	node->setName(nombre);
 }
 
 void obj3D::setVisible(bool visible) {
-	static_cast<TMalla*>(mesh->getEntidad())->setVisible(visible);
+	static_cast<TMalla*>(node->getEntidad())->setVisible(visible);
 }
 
 void obj3D::setRotation(glm::vec3 axis, GLfloat angle) {
@@ -97,7 +97,7 @@ void obj3D::setRotation(glm::vec3 axis, GLfloat angle) {
 	if (axis.z == 1)
 		rotation.z = angle;
 
-	static_cast<TTransform*>(mesh->getPadre()->getPadre()->getEntidad())->setRotation(axis.x, axis.y, axis.z, angle);
+	static_cast<TTransform*>(node->getPadre()->getPadre()->getEntidad())->setRotation(axis.x, axis.y, axis.z, angle);
 }
 
 void obj3D::setRotation(float X, float Y, float Z) {
@@ -112,12 +112,12 @@ void obj3D::setRotation(float X, float Y, float Z) {
 
 
 void obj3D::setPosition(float X, float Y, float Z) {
-	static_cast<TTransform*>(mesh->getPadre()->getEntidad())->setPosition(X, Y, Z);
+	static_cast<TTransform*>(node->getPadre()->getEntidad())->setPosition(X, Y, Z);
 	position = getPosition();
 
 }
 
 void obj3D::setScale(float x,float y,float z){
-	static_cast<TTransform*>(mesh->getPadre()->getPadre()->getPadre()->getEntidad())->setScale(x,y,z);
+	static_cast<TTransform*>(node->getPadre()->getPadre()->getPadre()->getEntidad())->setScale(x,y,z);
 	escala = glm::vec3(x,y,z);
 }

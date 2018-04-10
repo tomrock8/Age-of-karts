@@ -186,6 +186,9 @@ void Corredor::setParametros() {
 		num = 4;
 		break;
 	}
+	//camara asignada al jugador
+	obj3D *cam = TMotor::instancia().newCameraNode("camara_jugador3apersona", "traslacion_Jugador");
+	cam->translate(glm::vec3(0.0f, 0.0f, 15.0f));
 }
 
 //-----------------------------//

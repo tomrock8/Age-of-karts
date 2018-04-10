@@ -41,6 +41,6 @@ private:
 	glm::vec3 rotation;
 	glm::vec3 escala;
 	const char *name;
-	TNodo *mesh;
+	TNodo *node;
 };
 #endif

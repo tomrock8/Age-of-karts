@@ -97,7 +97,7 @@ obj3D *TMotor::newCameraNode( const char *name, const char* parentNode) {
 
 
 	TCamara *camara = createCam();
-	camara->setPerspective(screenHEIGHT, screenWIDTH, 0.01f, 1000.0f, 70.0f);//OJO CON EL VALOR 1000 ES CLAVE PARA MOSTRAR PARTE DEL MAPA O TODO
+	camara->setPerspective(screenHEIGHT, screenWIDTH, 0.01f, 10000.0f, 70.0f);//OJO CON EL VALOR 1000 ES CLAVE PARA MOSTRAR PARTE DEL MAPA O TODO
 	TNodo *nodo = createCamNode(traslacionNodo, camara, name);
 	contID++;
 	return new obj3D(nodo, name, contID);

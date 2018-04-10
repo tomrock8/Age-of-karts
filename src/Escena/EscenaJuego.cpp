@@ -2,11 +2,13 @@
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	ipConexion = "";
+	TMotor::instancia().newHud("OnGameHUD");
 	init();
 }
 
 EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo) {
 	this->ipConexion = ipConexion;
+	TMotor::instancia().newHud("OnGameHUD");
 	init();
 }
 
@@ -84,7 +86,7 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	Pista::getInstancia()->setMapa("assets/Mapa Pirata/mapaPirata.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+	Pista::getInstancia()->setMapa("assets/MapaPirata/mapaPirata.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 	//-----------------------------
 	//	JUGADORES
 	//-----------------------------

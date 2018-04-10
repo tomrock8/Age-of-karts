@@ -14,6 +14,8 @@ public:
 	TLuz();
 	TLuz(glm::vec3 ambiente, glm::vec3 difusa, glm::vec3 especular, glm::vec4 dir, float at, float corte);
 
+	// SOMBRAS
+	void calcularDepthMap();
 
 	// METODOS GET
 	glm::vec4 getIntensidad();	// devuelve la intensidad que sera de tipo color
@@ -32,6 +34,7 @@ public:
 	virtual void endDraw() override;
 
 private:
+	//Atributos y caracteristicas de la luz
 	bool active;
 	glm::vec4 TColor;
 	
@@ -43,5 +46,10 @@ private:
 	glm::vec3 especular;
 	float attenuation;
 	float cut;
+
+	//Sombras
+	const int DEPTH_WIDTH = 1024, DEPTH_HEIGHT = 1024; //Alto y ancho del mapa de profundidad
+	unsigned int depthMap; //Mapa de profundidad = perspectiva de la escena desde el punto de luz
+	unsigned int depthTexture; //Textura que recoge el mapa de profundidad
 };
 #endif

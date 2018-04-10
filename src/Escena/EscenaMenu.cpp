@@ -35,12 +35,13 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 
 	//Se crea el hud del menu principal
 	TMotor::instancia().newHud("MainMenuHUD");
+
 	//Se añaden los distintos elementos del hud y se posicionan correctamente
-	TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "logo", "assets/HUD/MainMenu/aok_logo.png");
 	//--LOGO--
+	TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "logo", "assets/HUD/MainMenu/aok_logo.png");
 	TMotor::instancia().getHud("MainMenuHUD")->traslateElement("logo", 0.0f, 0.45f);
-	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "local", "assets/HUD/MainMenu/btn_local_normal.png");
 	//--BOTONES--
+	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "local", "assets/HUD/MainMenu/btn_local_normal.png");
 	TMotor::instancia().getHud("MainMenuHUD")->traslateElement("local", -0.01f, -0.1f);
 	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "online", "assets/HUD/MainMenu/btn_online_normal.png");
 	TMotor::instancia().getHud("MainMenuHUD")->traslateElement("online", -0.01f, -0.3f);
@@ -48,7 +49,7 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	TMotor::instancia().getHud("MainMenuHUD")->traslateElement("opciones", -0.01f, -0.5f);
 	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "salir", "assets/HUD/MainMenu/btn_salir_normal.png");
 	TMotor::instancia().getHud("MainMenuHUD")->traslateElement("salir", -0.01f, -0.7f);
-
+	
 	//Se crea el hud del menu local
 	//TMotor::instancia().newHud("LocalMenuHUD");
 

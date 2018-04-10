@@ -339,6 +339,8 @@ GLuint TGestorRecursos::textureFromFile(const std::string& file) {
 	GLuint idTexture;
 	glGenTextures(1, &idTexture);
 
+	stbi_set_flip_vertically_on_load(false); 
+
 	int width, height, comp;
 	//cout << file << std::endl;
 	unsigned char *imgTexture = stbi_load(file.c_str(), &width, &height, &comp, 3);

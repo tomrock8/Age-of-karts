@@ -82,23 +82,27 @@ void elementoHud::setBuffersOpenGL(){
 //Funcion para cargar la imagen del archivo y crear la textura en OpenGL
 void elementoHud::loadImage(){
 
+    
     //Enlazar la textura con OpenGl para obtener la id
     glGenTextures(1, &idText);
-
+    
     //Para que stb cargue la imagen correctamente
 	stbi_set_flip_vertically_on_load(true); 
-
+    
     //Cargar la imagen a partir de la libreria stb
 	int w, h, comp;
 	unsigned char *imgTexture = stbi_load(path, &w, &h, &comp, 4);
-
+    
     //Le decimos a OpenGL que es una textura 2D
 	glBindTexture(GL_TEXTURE_2D, idText);
     //Creamos la textura en OpenGL
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, imgTexture);
     //Parametros de la textura
+    /*
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    */
+   
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -107,6 +111,7 @@ void elementoHud::loadImage(){
 
     //Liberamos la memoria reservada por la libreria stb
 	stbi_image_free(imgTexture);
+    
 }
 
 //Funcion para dibujar el elemento hud
@@ -127,6 +132,9 @@ void elementoHud::draw(Shader *shader){
     glBindVertexArray(VAO);
     //Dibujamos el quad con OpenGL
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 //Funcion para rotar el elemento sobre si mismo

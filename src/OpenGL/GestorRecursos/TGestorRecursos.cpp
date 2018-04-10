@@ -71,7 +71,7 @@ std::vector<mesh*> TGestorRecursos::loadMesh(const char *path) {
 void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 	//procesar todas las mallas que se encuentren en el fichero
 
-	for (GLuint i = 0; i < scene->mNumMeshes; i++) {
+	for (GLuint i = 0; i < scene->mRootNode->mNumChildren; i++) {
 		TRecursoMalla *meshAux = NULL;
 		TRecursoMaterial *MatAux = NULL;
 		TRecursoTextura *TextAux = NULL;

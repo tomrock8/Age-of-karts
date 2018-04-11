@@ -10,6 +10,7 @@
 #include "hud.hpp"
 #include <iostream>
 #include <stack>
+#include <math.h>
 
 #define WIDTH 1600
 #define HEIGHT 900
@@ -61,6 +62,8 @@ public:
 	void draw(int tipo);
 	void drawCamera();
 	void drawLight();
+	
+	void toEulerAngle(float x,float y,float z, float w, double& roll, double& pitch, double& yaw);
 
 protected:
 	TNodo * scene; //Nodo raiz

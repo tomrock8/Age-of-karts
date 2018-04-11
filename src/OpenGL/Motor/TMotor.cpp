@@ -426,3 +426,23 @@ hud* TMotor::getHud(const char* n){
 hud* TMotor::getActiveHud(){
   return activeHud;
 }
+
+void TMotor::toEulerAngle(float x,float y,float z, float w, double& roll, double& pitch, double& yaw)
+{
+	// roll (x-axis rotation)
+	double sinr = +2.0 * (w * x + y * z);
+	double cosr = +1.0 - 2.0 * (x * x + y * y);
+	roll = atan2(sinr, cosr);
+
+	// pitch (y-axis rotation)
+	double sinp = +2.0 * (w * y - z * x);
+	if (fabs(sinp) >= 1)
+		pitch = copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+	else
+		pitch = asin(sinp);
+
+	// yaw (z-axis rotation)
+	double siny = +2.0 * (w * z + x * y);
+	double cosy = +1.0 - 2.0 * (y * y + z * z);  
+	yaw = atan2(siny, cosy);
+}

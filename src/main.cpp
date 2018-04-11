@@ -62,16 +62,16 @@ int main(int argc, char* argv[]) {
 		}
 		glfwSetCharCallback(TMotor::instancia().getVentana(), character_callback);
 		//activeCamera = TMotor::instancia().newCameraNode(TMotor::instancia().getActiveCamera()->getName(), TMotor::instancia().getActiveCamera()->getPadre()->getName());
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS) {
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_I) == GLFW_PRESS) {
 			activeCamera->translate(glm::vec3(0, 0, -.5f));
 		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_S) == GLFW_PRESS) {
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_K) == GLFW_PRESS) {
 			activeCamera->translate(glm::vec3(0, 0, .5f));
 		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS) {
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_J) == GLFW_PRESS) {
 			activeCamera->translate(glm::vec3(-.5f, 0, 0));
 		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS) {
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L) == GLFW_PRESS) {
 			activeCamera->translate(glm::vec3(.5f, 0, 0));
 		}
 

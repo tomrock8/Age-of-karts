@@ -74,7 +74,7 @@ void EscenaJuego::init() {
 	}
 
 	// Gravedad
-	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -50.f, 0.0));
+	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -100.f, 0.0));
 
 	//----------------------------
 	//	Debug Bullet
@@ -86,7 +86,7 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	Pista::getInstancia()->setMapa("assets/MapaPirata/mapaPirata.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+	Pista::getInstancia()->setMapa("assets/Mapa01/isla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 	//-----------------------------
 	//	JUGADORES
 	//-----------------------------
@@ -254,8 +254,10 @@ void EscenaJuego::update() {
 		controlPlayer = client->getControlPlayer();
 	}
 
-	DeltaTime = (glfwGetTime() * 1000) - (TimeStamp * 1000);
-	TimeStamp = glfwGetTime();
+	DeltaTime = glfwGetTime()*1000 - TimeStamp;
+	TimeStamp = glfwGetTime()*1000;
+	cout<<"delta: "<<DeltaTime<<endl;
+	cout<<"TimeStamp: "<<TimeStamp<<endl;
 	UpdatePhysics(DeltaTime);
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
@@ -481,19 +483,34 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
 	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
-		Node->setPosition(Point.getX(), Point.getY() + 2, Point.getZ());
+		Node->setPosition((float)Point[0], (float)Point[1] + 2, (float)Point[2]);
 	}
 	else
-		Node->setPosition(Point.getX(), Point.getY(), Point.getZ());
+		Node->setPosition((float)Point[0], (float)Point[1], (float)Point[2]);
 
-	/*
+	
+	
 	// Set rotation
 	btVector3 Euler;
+	double yaw, pitch, roll=0;
+	cout<<"antes: "<<roll<<","<<pitch<<","<<yaw<<endl;
+	
 	const btQuaternion& TQuat = TObject->getOrientation();
-	q.toEuler(Euler);
+	float x=TQuat.getX();
+	float y=TQuat.getY();
+	float z=TQuat.getZ();
+	float w=TQuat.getW();
+	TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
+	cout<<"despues: "<<roll<<","<<pitch<<","<<yaw<<endl;
+	Euler.setX(roll);
+	Euler.setY(pitch);
+	Euler.setZ(yaw);
 	Euler *= RADTODEG;
-	//Node->setRotation(Euler);
-	*/
+	cout<<"GRADOS: "<<Euler.getX()<<","<<Euler.getY()<<","<<Euler.getZ()<<endl;
+	
+	
+	Node->setRotation(Euler.getX(),Euler.getY(),Euler.getZ());
+	
 }
 std::string EscenaJuego::getIpConexion() {
 	return ipConexion;

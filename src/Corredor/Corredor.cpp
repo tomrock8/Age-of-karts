@@ -1278,8 +1278,17 @@ void Corredor::updateTimerObstaculos() {
 void Corredor::actualizarRuedas() {
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
 	btVector3 Euler;
-	btScalar yaw, pitch, roll;
+	double yaw, pitch, roll=0;
 	btQuaternion TQuat = ruedas.getRotation();
+	float x=TQuat.getX();
+	float y=TQuat.getY();
+	float z=TQuat.getZ();
+	float w=TQuat.getW();
+	TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
+	
+	Euler.setX(roll);
+	Euler.setY(pitch);
+	Euler.setZ(yaw);
 	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW()); 
   	//q.toEuler(Euler); 
 	/*btQuaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
@@ -1309,6 +1318,15 @@ void Corredor::actualizarRuedas() {
 	Euler.setX(yaw);
 	Euler.setY(pitch);
 	Euler.setZ(roll);*/
+	x=TQuat.getX();
+	y=TQuat.getY();
+	z=TQuat.getZ();
+	w=TQuat.getW();
+	TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
+	
+	Euler.setX(roll);
+	Euler.setY(pitch);
+	Euler.setZ(yaw);
 	Euler *= RADTODEG;
 	rueda2->setPosition(-distanciAancho * orientacion.getZ() + ruedas.getOrigin().getX() + ditanciaLargo * orientacion.getX(), ruedas.getOrigin().getY() + 0.5,
 		orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ() + ditanciaLargo * orientacion.getZ());
@@ -1326,6 +1344,15 @@ void Corredor::actualizarRuedas() {
 	Euler.setX(yaw);
 	Euler.setY(pitch);
 	Euler.setZ(roll);*/
+	x=TQuat.getX();
+	y=TQuat.getY();
+	z=TQuat.getZ();
+	w=TQuat.getW();
+	TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
+	
+	Euler.setX(roll);
+	Euler.setY(pitch);
+	Euler.setZ(yaw);
 	Euler *= RADTODEG;
 	rueda3->setPosition(distanciAancho*orientacion.getZ() + ruedas.getOrigin().getX() + ditanciaLargo * orientacion.getX(), ruedas.getOrigin().getY() + 0.5,
 		orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ() + ditanciaLargo * orientacion.getZ());
@@ -1342,6 +1369,15 @@ void Corredor::actualizarRuedas() {
 	Euler.setX(yaw);
 	Euler.setY(pitch);
 	Euler.setZ(roll);*/
+	x=TQuat.getX();
+	y=TQuat.getY();
+	z=TQuat.getZ();
+	w=TQuat.getW();
+	TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
+	
+	Euler.setX(roll);
+	Euler.setY(pitch);
+	Euler.setZ(yaw);
 	Euler *= RADTODEG;
 	rueda4->setPosition(-distanciAancho * orientacion.getZ() + ruedas.getOrigin().getX() + ditanciaLargo * orientacion.getX(), ruedas.getOrigin().getY() + 0.5,
 		orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ() + ditanciaLargo * orientacion.getZ());

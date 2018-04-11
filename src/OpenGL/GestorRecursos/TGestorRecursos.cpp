@@ -39,9 +39,6 @@ TGestorRecursos::~TGestorRecursos() {
 		objMeshes.erase(objMeshes.begin(), objMeshes.begin() + objMeshes.size());
 	}
 
-	delete dir;
-
-
 	cout << " SALGO \n";
 }
 

@@ -26,11 +26,14 @@ int main(int argc, char* argv[]) {
 
 	// OBJETOS CARGADOS
 	//TMotor::instancia().precarga("assets/Mapa01/isla.obj");
-	//obj3D *pirata = TMotor::instancia().newMeshNode("pirata", "assets/pirata/p2.obj", "escena_raiz");
+	
+	obj3D *pirata = TMotor::instancia().newMeshNode("pirata", "assets/Pirata/p2.obj", "escena_raiz");
 	obj3D *chino = TMotor::instancia().newMeshNode("chino", "assets/Chino/Chino.obj", "escena_raiz");
-	//obj3D *wall = TMotor::instancia().newMeshNode("wall", "assets/wall/wall.obj", "escena_raiz");
+	obj3D *wall = TMotor::instancia().newMeshNode("wall", "assets/wall/wall.obj", "escena_raiz");
 	chino->setPosition(5.5, 0, 0);
-	//pirata->setPosition(-5.5, 0, 0);
+	pirata->setPosition(-5.5, 0, 0);
+	wall->setPosition(5.5, 4, 0);
+	
 	/*
 	obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
 	//cubnot->setScale(1.0f,3.0f,1.0f);

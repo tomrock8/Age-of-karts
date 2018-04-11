@@ -29,6 +29,15 @@ elementoHud::elementoHud(float w, float h, const char* n, glm::vec4 c){
     setBuffersOpenGL();
 }
 
+//Destructor del elemento hud
+elementoHud::~elementoHud(){
+    //Eliminar los distintos buffers utilizados por OpenGL
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteBuffers(1, &VBO);
+
+}
+
 
 //Funcion que asigna las posiciones de los vertices del quad a partir del ancho y alto definido
 //Tambien, establece las coordenadas de textura para cada punto
@@ -98,11 +107,6 @@ void elementoHud::loadImage(){
     //Creamos la textura en OpenGL
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, imgTexture);
     //Parametros de la textura
-    /*
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    */
-   
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -121,6 +125,7 @@ void elementoHud::draw(Shader *shader){
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, idText);
 
+    //Calculamos la matriz model del elemento
     glm::mat4 model = tras * rot * esc;
 
     //Pasamos los datos necesarios al shader HUD
@@ -132,8 +137,9 @@ void elementoHud::draw(Shader *shader){
     glBindVertexArray(VAO);
     //Dibujamos el quad con OpenGL
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
 
+    //Vaciamos los datos utilizamos
+    glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

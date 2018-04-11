@@ -4,6 +4,14 @@
 hud::hud(const char* n){
     nombre = n;
 }
+
+//Destructor que elimina todos los elementos del hud
+hud::~hud(){
+    //Eliminamos el array de elementos hud
+    for (int i = 0; i < elems.size(); i++){
+        delete elems[i];
+    }
+}
  
 //Funcion para añadir un elemento al hud - se le pasa el ancho, alto, nombre y ruta de imagen del elementoHud
 void hud::addElement(float w, float h, const char* n, const char* p){

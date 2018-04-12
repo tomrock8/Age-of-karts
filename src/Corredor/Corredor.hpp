@@ -14,12 +14,18 @@
 #include "ItemTeledirigido.hpp"
 #include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+#include "BulletDynamics/ConstraintSolver/btFixedConstraint.h"
+#include "BulletDynamics/ConstraintSolver/btHingeConstraint.h"
+#include "BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
+#include "BulletDynamics/ConstraintSolver/btSliderConstraint.h"
 #include "RaknetIncludes.hpp"
 #include "TextoPantalla.hpp"
 #include "Escudo.hpp"
 #include "EstadosJugador.hpp"
 #include "Habilidad.hpp"
 #include "ItemTeledirigido.hpp"
+
+
 
 
 using namespace std;
@@ -168,6 +174,12 @@ protected:
 	btDefaultMotionState *motionStateRueda4; //interpolacion
 	btCollisionShape *FormaColisionR4;		//contornoB
 	btRigidBody *CuerpoColisionRueda4;
+
+	btHingeConstraint *restriccion1;
+	btHingeConstraint *restriccion2;
+	btHingeConstraint *restriccion3;
+	btHingeConstraint *restriccion4;
+
 
 
 

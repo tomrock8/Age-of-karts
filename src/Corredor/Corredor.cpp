@@ -321,6 +321,27 @@ void Corredor::InicializarFisicasRuedas(){
 	mundo->addRigidBody(CuerpoColisionRueda4);
 	objetos.push_back(CuerpoColisionRueda4);
 	bullet->setObjetos(objetos);
+
+
+	btVector3 axisA(1.f, 1.f, 1.f); 
+	btVector3 axisB(0.f, 0.f, 0.f); 
+	btVector3 pivotA(0.f, 7.f, 0.f);
+	btVector3 pivotB(0.f, 0.f, 0.f);
+
+	restriccion1 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda1,pivotA, pivotB,axisA,axisB,false);
+	restriccion2 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda2,pivotA, pivotB,axisA,axisB,false);
+	restriccion3 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda3,pivotA, pivotB,axisA,axisB,false);
+	restriccion4 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda4,pivotA, pivotB,axisA,axisB,false); 
+	restriccion1->enableAngularMotor(true, 1, 0);
+	restriccion2->enableAngularMotor(true, 1, 0);
+	restriccion3->enableAngularMotor(true, 1, 0);
+	restriccion4->enableAngularMotor(true, 1, 0);
+
+	mundo->addConstraint(restriccion1,true);
+	mundo->addConstraint(restriccion2,true);
+	mundo->addConstraint(restriccion3,true);
+	mundo->addConstraint(restriccion4,true);
+	
 }
 
 
@@ -1398,24 +1419,24 @@ void Corredor::updateTimerObstaculos() {
 void Corredor::actualizarRuedas()
 {
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
-	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.5,ruedas.getOrigin().getZ()));
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
 	//rueda1
 	CuerpoColisionRueda1->setCenterOfMassTransform(ruedas);
 	
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
-	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.5,ruedas.getOrigin().getZ()));
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
 	CuerpoColisionRueda2->setCenterOfMassTransform(ruedas);
 	
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
-	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.5,ruedas.getOrigin().getZ()));
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
 	CuerpoColisionRueda3->setCenterOfMassTransform(ruedas);
 	
 	
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
-	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.5,ruedas.getOrigin().getZ()));
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
 	CuerpoColisionRueda4->setCenterOfMassTransform(ruedas);
 
 

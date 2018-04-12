@@ -97,7 +97,7 @@ void EscenaJuego::init() {
 
 	btVector3 pos2[6];
 	pos2[0].setX(-10);
-	pos2[0].setY(20);
+	pos2[0].setY(0);
 	pos2[0].setZ(310);
 	pos2[1].setX(-10);
 	pos2[1].setY(0);
@@ -490,24 +490,12 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	
 	
 	// Set rotation
-	btVector3 Euler;
-	double yaw, pitch, roll=0;
-	
 	const btQuaternion& TQuat = TObject->getOrientation();
-	float x=TQuat.getX();
-	float y=TQuat.getY();
-	float z=TQuat.getZ();
-	float w=TQuat.getW();
-	TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
-	Euler.setX(roll);
-	Euler.setY(pitch);
-	Euler.setZ(yaw);
-	Euler *= RADTODEG;
 
-	cout<<"Euler: "<<Euler.getX()<<","<<Euler.getY()<<","<<Euler.getZ()<<endl;
-	
-	
-	Node->setRotation(Euler.getX(),Euler.getY(),Euler.getZ());
+	glm::vec3 axis(TQuat.getAxis().getX(), TQuat.getAxis().getY(), TQuat.getAxis().getZ());
+	float angle = TQuat.getAngle() * RADTODEG;
+
+	Node->setRotation(axis, angle);
 	
 }
 std::string EscenaJuego::getIpConexion() {

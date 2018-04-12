@@ -187,8 +187,7 @@ void Corredor::setParametros() {
 		break;
 	}
 	//camara asignada al jugador
-	obj3D *cam = TMotor::instancia().newCameraNode("camara_jugador3apersona", "escena_raiz");
-	cam->translate(glm::vec3(0.0f, 0.0f, 15.0f));
+	cameraThird = TMotor::instancia().newCameraNode("camara_jugador3apersona", "traslacion_Jugador");
 }
 
 //-----------------------------//
@@ -1020,8 +1019,8 @@ void Corredor::girarDerecha()
 		FuerzaGiro = indiceGiroBajo;
 	}
 
-	vehiculo->setSteeringValue(FuerzaGiro, 0);
-	vehiculo->setSteeringValue(FuerzaGiro, 1);
+	vehiculo->setSteeringValue(-FuerzaGiro, 0);
+	vehiculo->setSteeringValue(-FuerzaGiro, 1);
 
 }
 void Corredor::girarIzquierda()
@@ -1033,8 +1032,8 @@ void Corredor::girarIzquierda()
 	else {
 		FuerzaGiro = indiceGiroBajo;
 	}
-	vehiculo->setSteeringValue(-FuerzaGiro, 0);
-	vehiculo->setSteeringValue(-FuerzaGiro, 1);
+	vehiculo->setSteeringValue(FuerzaGiro, 0);
+	vehiculo->setSteeringValue(FuerzaGiro, 1);
 
 }
 void Corredor::frenodemano(bool activo, bool objeto)
@@ -1184,12 +1183,15 @@ void Corredor::update()
 	updateEstado();
 	comprobarSueloRuedas();
 	actualizarPosicion();
-	actualizarRuedas();
+	//actualizarRuedas();
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 	updateText();
 	updateHijos();
+
+	cameraThird->setPosition(0.0f, 0.0f, 15.0f);
+	//cout << "POSICION DEL JUGADOR: " << posicion.getX() << " , " << posicion.getY() << " , " << posicion.getZ() << endl;
 }
 
 void Corredor::actualizarPosicion() {
@@ -1197,7 +1199,6 @@ void Corredor::actualizarPosicion() {
 	posicion.setY(cuboNodo->getPosition().y);
 	posicion.setZ(cuboNodo->getPosition().z);
 
-	cout<<"rotacion: "<<cuboNodo->getRotation().x<<", "<<cuboNodo->getRotation().y<<", "<<cuboNodo->getRotation().z<<endl;
 }
 
 
@@ -1286,7 +1287,7 @@ void Corredor::actualizarRuedas() {
 	float y=TQuat.getY();
 	float z=TQuat.getZ();
 	float w=TQuat.getW();
-	TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
+	//TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
 	
 	Euler.setX(roll);
 	Euler.setY(pitch);
@@ -1324,7 +1325,7 @@ void Corredor::actualizarRuedas() {
 	y=TQuat.getY();
 	z=TQuat.getZ();
 	w=TQuat.getW();
-	TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
+	//TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
 	
 	Euler.setX(roll);
 	Euler.setY(pitch);
@@ -1350,7 +1351,7 @@ void Corredor::actualizarRuedas() {
 	y=TQuat.getY();
 	z=TQuat.getZ();
 	w=TQuat.getW();
-	TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
+	//TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
 	
 	Euler.setX(roll);
 	Euler.setY(pitch);
@@ -1375,7 +1376,7 @@ void Corredor::actualizarRuedas() {
 	y=TQuat.getY();
 	z=TQuat.getZ();
 	w=TQuat.getW();
-	TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
+	//TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
 	
 	Euler.setX(roll);
 	Euler.setY(pitch);

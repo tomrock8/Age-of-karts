@@ -88,7 +88,7 @@ obj3D *TMotor::newCameraNode( const char *name, const char* parentNode) {
 	// R O T A C I O N
 	string *nameRot = new string("rotacion_" + (string)name);
 	TTransform *rotacion = createTransformation();
-	rotacion->rotar(0, 0, 1, 1);
+	//rotacion->rotar(0, 0, 1, 1);
 	TNodo *rotacionNodo = createTransformationNode(getNode(parentNode), rotacion, nameRot->c_str());
 
 	// T R A S L A C I O N
@@ -97,7 +97,7 @@ obj3D *TMotor::newCameraNode( const char *name, const char* parentNode) {
 	TTransform *traslacion = createTransformation();
 	//traslacion->trasladar(traslation.x, traslation.y, traslation.z);
 	TNodo *traslacionNodo = createTransformationNode(rotacionNodo, traslacion, nameTras->c_str());
-
+	
 
 	TCamara *camara = createCam();
 	camara->setPerspective(screenHEIGHT, screenWIDTH, 0.01f, 10000.0f, 70.0f);//OJO CON EL VALOR 1000 ES CLAVE PARA MOSTRAR PARTE DEL MAPA O TODO
@@ -331,18 +331,32 @@ void TMotor::drawCamera() {
 	while (aux != scene) {
 		//recorrer y guardar en un vector de matrices las transformaciones
 		matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
+		cout << aux->getName() << endl;
+
 		aux = aux->getPadre();
 	}
 	glm::mat4 viewMatrix;
 	//recorrido a la inversa
 	for (int i = matrixAux.size() - 1; i >= 0; i--) {
-		viewMatrix = viewMatrix * matrixAux.at(i);
+		/*cout << matrixAux.at(i)[0][0] << " - " << matrixAux.at(i)[0][1] << " - " <<  matrixAux.at(i)[0][2] << " - " <<  matrixAux.at(i)[0][3] << endl;
+		cout << matrixAux.at(i)[1][0] << " - " << matrixAux.at(i)[1][1] << " - " <<  matrixAux.at(i)[1][2] << " - " <<  matrixAux.at(i)[1][3] << endl;
+		cout << matrixAux.at(i)[2][0] << " - " << matrixAux.at(i)[2][1] << " - " <<  matrixAux.at(i)[2][2] << " - " <<  matrixAux.at(i)[2][3] << endl;
+		cout << matrixAux.at(i)[3][0] << " - " << matrixAux.at(i)[3][1] << " - " <<  matrixAux.at(i)[3][2] << " - " <<  matrixAux.at(i)[3][3] << endl;
+		cout << "*********************" << endl;
+		cout << viewMatrix[0][0] << " - " << viewMatrix[0][1] << " - " <<  viewMatrix[0][2] << " - " <<  viewMatrix[0][3] << endl;
+		cout << viewMatrix[1][0] << " - " << viewMatrix[1][1] << " - " <<  viewMatrix[1][2] << " - " <<  viewMatrix[1][3] << endl;
+		cout << viewMatrix[2][0] << " - " << viewMatrix[2][1] << " - " <<  viewMatrix[2][2] << " - " <<  viewMatrix[2][3] << endl;
+		cout << viewMatrix[3][0] << " - " << viewMatrix[3][1] << " - " <<  viewMatrix[3][2] << " - " <<  viewMatrix[3][3] << endl;
+		cout << "=====================" << endl;*/
+		viewMatrix = matrixAux.at(i) * viewMatrix;
 	}
 
 	//calcular posicion de la camara y pasarsela al fragment shader
 	glm::vec4 posC = viewMatrix * defaultVector;
 	shader->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
-
+	cout << "POSICION DE LA CAMARA: " << posC[0] << " - " << posC[1] << " - " << posC[2]<< endl;
+	cout << "------------------" << endl;
+	
 	//por ultimo pasar al shader la view y la projection matrix
 	shader->setMat4("view", glm::inverse(viewMatrix));
 	shader->setMat4("projection", activeCamera->getEntidad()->getProjectionMatrix());
@@ -388,21 +402,6 @@ void TMotor::newHud(const char* n){
   //Lo activamos por defecto
   setActiveHud(n);
 }
-
-double *TMotor::toEuler(double pich, double yaw, double roll){
-	glm::quat q(.5, -.5, .5, .5);
-	glm::vec3 euler = glm::eulerAngles(q) * 3.14159f / 180.f;
-
-	glm::mat4 transformX = glm::eulerAngleX(euler.x);
-	glm::mat4 transformY = glm::eulerAngleY(euler.y);
-	glm::mat4 transformZ = glm::eulerAngleZ(euler.z);
-
-	glm::mat4 transform1 =
-		transformX * transformY * transformZ; // or some other order
-
-
-	return NULL;
-}
  
 //Funcion para activar un hud, que sera el que se utilice, solo puede haber un hud activo por iteracion
 void TMotor::setActiveHud(const char* n){
@@ -430,8 +429,9 @@ hud* TMotor::getActiveHud(){
   return activeHud;
 }
 
-void TMotor::toEulerAngle(float x,float y,float z, float w, double& roll, double& pitch, double& yaw)
+void TMotor::toEulerAngle(float x,float y,float z, float w, float& roll, float& pitch, float& yaw)
 {
+	
 	// roll (x-axis rotation)
 	double sinr = +2.0 * (w * x + y * z);
 	double cosr = +1.0 - 2.0 * (x * x + y * y);
@@ -444,8 +444,17 @@ void TMotor::toEulerAngle(float x,float y,float z, float w, double& roll, double
 	else
 		pitch = asin(sinp);
 
+	pitch = -pitch;
+
 	// yaw (z-axis rotation)
 	double siny = +2.0 * (w * z + x * y);
 	double cosy = +1.0 - 2.0 * (y * y + z * z);  
 	yaw = atan2(siny, cosy);
+	
+/*
+	glm::quat q(x,y,z,w);
+	glm::vec3 euler = glm::eulerAngles(q) * 3.14159f / 180.f;
+	roll = euler.x;
+	pitch = euler.y;
+	yaw = euler.z;*/
 }

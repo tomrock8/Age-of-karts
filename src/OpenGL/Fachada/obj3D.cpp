@@ -13,11 +13,11 @@ obj3D::~obj3D() {
 
 void obj3D::rotate(glm::vec3 axis, GLfloat angle) {
 	if (axis.x == 1)
-		rotation.x += angle;
+		rotation.x = angle;
 	if (axis.y == 1)
-		rotation.y += angle;
+		rotation.y = angle;
 	if (axis.z == 1)
-		rotation.z += angle;
+		rotation.z = angle;
 
 	static_cast<TTransform*>(node->getPadre()->getPadre()->getEntidad())->rotar(axis.x, axis.y, axis.z, angle);
 }

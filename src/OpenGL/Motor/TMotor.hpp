@@ -37,7 +37,7 @@ public:
 	void precarga(const char * modelo);
 
 	void newHud(const char* n);
-	double *toEuler(double pich, double yaw, double roll);
+	//float *toEuler(double pich, double yaw, double roll);
 
 	// METODOS GET
 	GLFWwindow *getVentana();
@@ -63,7 +63,7 @@ public:
 	void drawCamera();
 	void drawLight();
 	
-	void toEulerAngle(float x,float y,float z, float w, double& roll, double& pitch, double& yaw);
+	void toEulerAngle(float x,float y,float z, float w, float& roll, float& pitch, float& yaw);
 
 protected:
 	TNodo * scene; //Nodo raiz

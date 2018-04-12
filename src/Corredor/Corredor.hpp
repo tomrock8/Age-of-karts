@@ -63,10 +63,6 @@ public:
 	void setVueltas(int j);
 	void setTiempoVuelta(float t);
 
-
-	std::string toString();
-
-
 	//waypoints
 	void setPosicionCarrera(int i, int j);
 	int getPosicionCarrera();
@@ -87,7 +83,6 @@ public:
 	void comprobarTurbo();
 	void comprobarInmunidad();
 	virtual void actualizarItem() = 0;
-	void actualizarPosicion();
 
 	// Metodos GET
 	obj3D *getNodo();
@@ -190,7 +185,6 @@ protected:
 
 	btScalar indiceGiroAlto;
 	btScalar indiceGiroBajo;
-	btVector3 posicion;
 	btVector3 direccionRuedas;
 	btVector3 rotacionRuedas;
 	btScalar suspension;

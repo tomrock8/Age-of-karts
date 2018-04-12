@@ -359,19 +359,10 @@ void CorredorIA::movimiento()
 		vehiculo->setSteeringValue(-0.15, 0);
 		vehiculo->setSteeringValue(-0.15, 1);
 		break;
-
-
 	}
 
-
-
 	reposicionar();
-
 }
-
-
-
-
 
 void CorredorIA::seguirWaypoint() {
 
@@ -404,11 +395,11 @@ void CorredorIA::reposicionar() {
 	Timer *time = Timer::getInstancia();
 	//cout<<"TIEMPO: "<<time->getTimer()-timerRecolocar<<endl;
 	if (time->getTimer() - timerRecolocar == 1) {
-		posicion_aux = posicion;
+		posicion_aux = btVector3(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 
 	}
 	if (time->getTimer() - timerRecolocar > 4) {
-		if ((unsigned)((unsigned)(posicion_aux.getX()) - (unsigned)(posicion.getX())) < 2 && (unsigned)((unsigned)(posicion_aux.getZ()) - (unsigned)(posicion.getZ())) < 2) {
+		if ((unsigned)((unsigned)(posicion_aux.getX()) - (unsigned)(cuboNodo->getPosition().x)) < 2 && (unsigned)((unsigned)(posicion_aux.getZ()) - (unsigned)(cuboNodo->getPosition().z)) < 2) {
 			recolocarWaypoint();
 			timerRecolocar = time->getTimer();
 			//cout<<"recolocado"<<endl;

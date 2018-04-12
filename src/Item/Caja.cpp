@@ -7,7 +7,7 @@ Caja::Caja(btVector3 posicionCaja) {
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	//nodo = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/caja.obj"));
-	nodo = TMotor::instancia().newMeshNode("Caja", "assets/Objetos/caja.obj", "escena_raiz");
+	nodo = TMotor::instancia().newMeshNode("Caja", "assets/caja/caja.obj", "escena_raiz");
 	nombre = "Caja";
 	GestorIDs::instancia().setIdentifier(nodo, nombre);
 	id = GestorIDs::instancia().getIDLibre() - 1;
@@ -128,24 +128,8 @@ void Caja::Delete() {
 	}
 }
 
-Caja::~Caja() {
-	//cout << "DESTRUCTOR CAJA: ENTRO ";
-
-	// Los rigid body se borran desde el motor de fisicas
-	// delete rigidBody;
-
-	//cout << " SALGO.\n";
-}
-int Caja::getID() {
-	return id;
-}
-
-obj3D *Caja::getNodo() {
-	return nodo;
-}
-btRigidBody *Caja::getRigidBody() {
-	return rigidBody;
-}
-const char *Caja::getNombre() {
-	return nombre;
-}
+Caja::~Caja() {}
+int Caja::getID() { return id; }
+obj3D *Caja::getNodo() { return nodo; }
+btRigidBody *Caja::getRigidBody() { return rigidBody; }
+const char *Caja::getNombre() { return nombre; }

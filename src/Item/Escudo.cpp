@@ -9,17 +9,9 @@ Escudo::Escudo(obj3D* n, btVector3 posicion, btVector3 escala, btScalar masa, fl
 	NodoVehiculo = n;
 
 	//objetoHabilidad =  Motor3d::instancia().getScene()->getMesh("assets/Objetos/escudo.obj");
-	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/escudo.obj", "traslacion_jugador");
-	//nodo = TMotor::instancia().newMeshNode("Estatico","assets/wall/wall.obj","escena_raiz");
-	//nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
+	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/escudo.obj", "traslacion_Jugador");
+	cout << "(Escudo::Escudo) Hay que comprobar la posicion que sea respecto del corredor al crear";
 	nodo->setPosition(posicion.getX(), posicion.getY(), posicion.getZ());
-
-	//nodo->setScale(vector3df(tamanyoNodo.getX(), tamanyoNodo.getY(), tamanyoNodo.getZ()));
-
-
-	//nodo->setMaterialFlag(EMF_LIGHTING, false);
-	//nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	//nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL);
 
 	GestorIDs::instancia().setIdentifier(nodo, "Estatico");
 	id = nodo->getID();
@@ -35,16 +27,10 @@ Escudo::Escudo(obj3D* n, btVector3 posicion, btVector3 escala, btScalar masa, fl
 
 }
 
-
-void Escudo::lanzarItem(int direccion, btVector3 orientacion) {
-
-}
-
+void Escudo::lanzarItem(int direccion, btVector3 orientacion) {}
 void Escudo::updateHijos() {
 	movimiento();
 }
-
-
 
 void Escudo::movimiento() {
 	nodo->setPosition(NodoVehiculo->getPosition().x, NodoVehiculo->getPosition().y, NodoVehiculo->getPosition().z);

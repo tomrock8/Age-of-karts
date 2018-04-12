@@ -127,14 +127,6 @@ void CorredorJugador::actualizarItem() {
 	}
 }
 
-/*
-	Comprueba si el jugador pulsa P para crear un item y lanzarlo
-*/
-std::string CorredorJugador::toString() {
-	std::string text = Corredor::toString();
-	text += "\n -- CORREDOR JUGADOR -- ";
-	return text;
-}
 bool CorredorJugador::setComprobadorMovimiento(bool s) {
 	comprobadorMovimiento = s;
 	return comprobadorMovimiento;

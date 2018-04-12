@@ -92,7 +92,11 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	//rueda3->setScale(vector3df(2,1,1));//atras derecha
 	//rueda4->setScale(vector3df(2,1,1));//atras izquierda
 
-
+	rueda1->setRotation(0, 1, 0);
+	rueda2->setRotation(0, -1, 0);
+	rueda3->setRotation(1, 0, 0);
+	rueda4->setRotation(-1, 0, 0);
+	
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
 		cuboNodo->setRotation(0.0f, 0.0f, 0.0f);

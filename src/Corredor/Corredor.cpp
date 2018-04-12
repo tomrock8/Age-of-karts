@@ -1281,7 +1281,8 @@ void Corredor::updateTimerObstaculos() {
 void Corredor::actualizarRuedas() {
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
 	btVector3 Euler;
-	double yaw, pitch, roll=0;
+	double yaw, pitch, roll;
+	yaw= pitch= roll = 0;
 	btQuaternion TQuat = ruedas.getRotation();
 	float x=TQuat.getX();
 	float y=TQuat.getY();

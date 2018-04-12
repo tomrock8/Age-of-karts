@@ -53,7 +53,7 @@ void EscenaJuego::init() {
 	}
 
 	// Gravedad
-	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -80.f, 0.0));
+	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -100.f, 0.0));
 
 	//----------------------------
 	//	Debug Bullet

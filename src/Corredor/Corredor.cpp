@@ -78,7 +78,7 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.7); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(1.5); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -219,7 +219,8 @@ void Corredor::InicializarFisicasRuedas(){
 	vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	float masar =0.0000001f;
-	float radio=1.f;
+	float radio=1.3;
+	float ancho=1.2;
 	btVector3 HalfExtents(1,1,1);
 	//posicion inicial
 	btTransform transRueda;
@@ -233,6 +234,7 @@ void Corredor::InicializarFisicasRuedas(){
 	//Motionstate
 	motionStateRueda1 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
+	//FormaColisionR1 = new btCylinderShapeX(btVector3(ancho,radio,radio));
 	FormaColisionR1 = new btSphereShape(radio);
 		
 	// Add mass
@@ -263,6 +265,7 @@ void Corredor::InicializarFisicasRuedas(){
 	//Motionstate
 	motionStateRueda2 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
+	//FormaColisionR2 = new btCylinderShapeX(btVector3(ancho,radio,radio));
 	FormaColisionR2 = new btSphereShape(radio);
 		
 	CuerpoColisionRueda2 = new btRigidBody(masar, motionStateRueda2, FormaColisionR2, LocalInertia);
@@ -287,6 +290,7 @@ void Corredor::InicializarFisicasRuedas(){
 	//Motionstate
 	motionStateRueda3= new btDefaultMotionState(transRueda); //motionState = interpolacion
 
+	//FormaColisionR3 = new btCylinderShapeX(btVector3(ancho,radio,radio));
 	FormaColisionR3 = new btSphereShape(radio);
 		
 	CuerpoColisionRueda3 = new btRigidBody(masar, motionStateRueda3, FormaColisionR3, LocalInertia);
@@ -310,6 +314,7 @@ void Corredor::InicializarFisicasRuedas(){
 	//Motionstate
 	motionStateRueda4 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
+	//FormaColisionR4 = new btCylinderShapeX(btVector3(ancho,radio,radio));
 	FormaColisionR4 = new btSphereShape(radio);
 		
 	CuerpoColisionRueda4 = new btRigidBody(masar, motionStateRueda4, FormaColisionR4, LocalInertia);
@@ -325,12 +330,15 @@ void Corredor::InicializarFisicasRuedas(){
 
 	btVector3 axisA(1.f, 1.f, 1.f); 
 	btVector3 axisB(0.f, 0.f, 0.f); 
-	btVector3 pivotA(0.f, 7.f, 0.f);
+	btVector3 pivotA(3.f, 5.f, 3.f);
 	btVector3 pivotB(0.f, 0.f, 0.f);
 
 	restriccion1 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda1,pivotA, pivotB,axisA,axisB,false);
+	pivotA = btVector3(-3.f, 5.f, 3.f);
 	restriccion2 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda2,pivotA, pivotB,axisA,axisB,false);
+	pivotA = btVector3(-3.f, 5.f, -3.f);
 	restriccion3 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda3,pivotA, pivotB,axisA,axisB,false);
+	pivotA = btVector3(3.f, 5.f, -3.f);
 	restriccion4 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda4,pivotA, pivotB,axisA,axisB,false); 
 	restriccion1->enableAngularMotor(true, 1, 0);
 	restriccion2->enableAngularMotor(true, 1, 0);
@@ -370,7 +378,7 @@ void Corredor::InicializarFisicas()
 	//establecemos su centro de gravedad
 	btTransform localTransform;
 	localTransform.setIdentity();
-	localTransform.setOrigin(btVector3(0, 1.5, 0));
+	localTransform.setOrigin(btVector3(0, 1.2, 0));
 	CentroGravedad = new btCompoundShape();
 
 	//Forma Colision
@@ -434,7 +442,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = btScalar(20);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
+		wheel.m_suspensionStiffness = btScalar(100);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
 		wheel.m_wheelsDampingCompression = btScalar(2.3f);//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
 		wheel.m_wheelsDampingRelaxation =  btScalar(4.4f);//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
@@ -1422,22 +1430,22 @@ void Corredor::actualizarRuedas()
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
 	//rueda1
 	CuerpoColisionRueda1->setCenterOfMassTransform(ruedas);
-	
+
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
 	CuerpoColisionRueda2->setCenterOfMassTransform(ruedas);
-	
+		
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
-	CuerpoColisionRueda3->setCenterOfMassTransform(ruedas);
+	CuerpoColisionRueda4->setCenterOfMassTransform(ruedas);
 	
 	
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
-	CuerpoColisionRueda4->setCenterOfMassTransform(ruedas);
+	CuerpoColisionRueda3->setCenterOfMassTransform(ruedas);
 
 
 }

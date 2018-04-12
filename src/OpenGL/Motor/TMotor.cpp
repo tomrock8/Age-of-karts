@@ -327,17 +327,18 @@ void TMotor::drawCamera() {
 	std::vector<glm::mat4> matrixAux;
 	glm::vec4 defaultVector(0, 0, 0, 1);
 	TNodo *aux = activeCamera->getPadre();
-
+	int cont = 0;
 	while (aux != scene) {
 		//recorrer y guardar en un vector de matrices las transformaciones
+		if (cont < 3)
 		matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
-		cout << aux->getName() << endl;
-
+		cont++;
 		aux = aux->getPadre();
 	}
+	cout << cont << endl;
 	glm::mat4 viewMatrix;
 	//recorrido a la inversa
-	for (int i = matrixAux.size() - 1; i >= 0; i--) {
+	for (int i = matrixAux.size()-1 ; i >= 0; i--) {
 		/*cout << matrixAux.at(i)[0][0] << " - " << matrixAux.at(i)[0][1] << " - " <<  matrixAux.at(i)[0][2] << " - " <<  matrixAux.at(i)[0][3] << endl;
 		cout << matrixAux.at(i)[1][0] << " - " << matrixAux.at(i)[1][1] << " - " <<  matrixAux.at(i)[1][2] << " - " <<  matrixAux.at(i)[1][3] << endl;
 		cout << matrixAux.at(i)[2][0] << " - " << matrixAux.at(i)[2][1] << " - " <<  matrixAux.at(i)[2][2] << " - " <<  matrixAux.at(i)[2][3] << endl;
@@ -354,8 +355,8 @@ void TMotor::drawCamera() {
 	//calcular posicion de la camara y pasarsela al fragment shader
 	glm::vec4 posC = viewMatrix * defaultVector;
 	shader->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
-	cout << "POSICION DE LA CAMARA: " << posC[0] << " - " << posC[1] << " - " << posC[2]<< endl;
-	cout << "------------------" << endl;
+	//cout << "POSICION DE LA CAMARA: " << posC[0] << " - " << posC[1] << " - " << posC[2]<< endl;
+	//cout << "------------------" << endl;
 	
 	//por ultimo pasar al shader la view y la projection matrix
 	shader->setMat4("view", glm::inverse(viewMatrix));

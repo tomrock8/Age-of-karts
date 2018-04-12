@@ -1190,7 +1190,7 @@ void Corredor::update()
 	updateText();
 	updateHijos();
 
-	cameraThird->setPosition(0.0f, 0.0f, 15.0f);
+	cameraThird->setPosition(0.0f, 3.0f, 15.0f);
 	//cout << "POSICION DEL JUGADOR: " << posicion.getX() << " , " << posicion.getY() << " , " << posicion.getZ() << endl;
 }
 

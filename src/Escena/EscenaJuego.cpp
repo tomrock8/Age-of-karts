@@ -256,7 +256,7 @@ void EscenaJuego::update() {
 
 	DeltaTime = glfwGetTime()*1000 - TimeStamp;
 	TimeStamp = glfwGetTime()*1000;
-
+	cout<<"yeeeeeeeeeeeeeee****"<<endl;
 	UpdatePhysics(DeltaTime);
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
@@ -460,6 +460,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 }
 
 void EscenaJuego::UpdatePhysics(unsigned int TDeltaTime) {
+	//TDeltaTime= TDeltaTime*2;
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
@@ -478,10 +479,12 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	btVector3 Point = TObject->getCenterOfMassPosition();
 
 	Pista *mapa = Pista::getInstancia();
+
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
 	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
+		cout << "POSICION: " <<Point[0]<<","<< Point[1]<<","<< Point[2]<<endl; 
 		Node->setPosition((float)Point[0], (float)Point[1] + 2, (float)Point[2]);
 	}
 	else
@@ -494,7 +497,25 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 
 	glm::vec3 axis(TQuat.getAxis().getX(), TQuat.getAxis().getY(), TQuat.getAxis().getZ());
 	float angle = TQuat.getAngle() * RADTODEG;
-
+	/*if (strcmp(Node->getName(), "Jugador") == 0 ){
+		axis.x = abs(axis.x);
+		axis.y = abs(axis.y);
+		axis.z = abs(axis.z);
+		axis.x = round(axis.x);
+		axis.y = round(axis.y);
+		axis.z = round(axis.z);
+		if (angle < 5){
+			angle = 0;
+		}
+		angle = round(angle);*/
+		/*
+		axis.x = trunc(axis.x * 20 + 0.05) / 20;
+		axis.y = trunc(axis.y * 20 + 0.05) / 20;
+		axis.z = trunc(axis.z * 20 + 0.05) / 20;*/
+	/*cout<< "AXIS: "<<axis.x<<","<< axis.y<<","<< axis.z<<endl;
+	cout<<"ANGLE: "<<angle<<endl;
+	cout<<"---------------------"<<endl;
+	}*/
 	Node->setRotation(axis, angle);
 	
 }

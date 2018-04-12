@@ -78,13 +78,13 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	// HAY QUE MODIFICAR DE QUE NODO PENDEN!!!
 	rueda1 = TMotor::instancia().newMeshNode("rueda1", "assets/wall/wall.obj", "traslacion_Jugador");
-	rueda1->setPosition(-10, 0, 0);
+	//rueda1->setPosition(-10, 0, 310);
 	rueda2 = TMotor::instancia().newMeshNode("rueda2", "assets/wall/wall.obj", "traslacion_Jugador");
-	rueda2->setPosition(10, 0, 0);
+	//rueda2->setPosition(10, 0, 310);
 	rueda3 = TMotor::instancia().newMeshNode("rueda3", "assets/wall/wall.obj", "traslacion_Jugador");
-	rueda3->setPosition(-10, 0, -10);
+	//rueda3->setPosition(-10, 0, -310);
 	rueda4 = TMotor::instancia().newMeshNode("rueda4", "assets/wall/wall.obj", "traslacion_Jugador");
-	rueda4->setPosition(10, 0, -10);
+	//rueda4->setPosition(10, 0, -310);
 
 	//rueda1->setScale(vector3df(2,1,1));//alante derecha
 	//rueda2->setScale(vector3df(2,1,1));//delante izquierda
@@ -94,14 +94,14 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
-		cuboNodo->setRotation(0.0f, 90.0f, 0.0f);
+		cuboNodo->setRotation(0.0f, 0.0f, 0.0f);
 	}
 
 	posicion.setX(pos.getX());
 	posicion.setY(pos.getY());
 	posicion.setZ(pos.getZ());
 
-	if (cuboNodo)
+	
 		InicializarFisicas();
 
 }
@@ -187,7 +187,7 @@ void Corredor::setParametros() {
 		break;
 	}
 	//camara asignada al jugador
-	obj3D *cam = TMotor::instancia().newCameraNode("camara_jugador3apersona", "traslacion_Jugador");
+	obj3D *cam = TMotor::instancia().newCameraNode("camara_jugador3apersona", "escena_raiz");
 	cam->translate(glm::vec3(0.0f, 0.0f, 15.0f));
 }
 
@@ -1196,6 +1196,8 @@ void Corredor::actualizarPosicion() {
 	posicion.setX(cuboNodo->getPosition().x);
 	posicion.setY(cuboNodo->getPosition().y);
 	posicion.setZ(cuboNodo->getPosition().z);
+
+	cout<<"rotacion: "<<cuboNodo->getRotation().x<<", "<<cuboNodo->getRotation().y<<", "<<cuboNodo->getRotation().z<<endl;
 }
 
 

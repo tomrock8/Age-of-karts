@@ -104,9 +104,9 @@ void obj3D::setRotation(float X, float Y, float Z) {
 
 	setRotation(glm::vec3(1, 0, 0), X);
 
-	setRotation(glm::vec3(0, 1, 0), Y);
+	rotate(glm::vec3(0, 1, 0), Y);
 
-	setRotation(glm::vec3(0, 0, 1), Z);
+	rotate(glm::vec3(0, 0, 1), Z);
 
 }
 

@@ -97,7 +97,7 @@ void EscenaJuego::init() {
 
 	btVector3 pos2[6];
 	pos2[0].setX(-10);
-	pos2[0].setY(0);
+	pos2[0].setY(20);
 	pos2[0].setZ(310);
 	pos2[1].setX(-10);
 	pos2[1].setY(0);
@@ -256,8 +256,7 @@ void EscenaJuego::update() {
 
 	DeltaTime = glfwGetTime()*1000 - TimeStamp;
 	TimeStamp = glfwGetTime()*1000;
-	cout<<"delta: "<<DeltaTime<<endl;
-	cout<<"TimeStamp: "<<TimeStamp<<endl;
+
 	UpdatePhysics(DeltaTime);
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
@@ -493,7 +492,6 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	// Set rotation
 	btVector3 Euler;
 	double yaw, pitch, roll=0;
-	cout<<"antes: "<<roll<<","<<pitch<<","<<yaw<<endl;
 	
 	const btQuaternion& TQuat = TObject->getOrientation();
 	float x=TQuat.getX();
@@ -501,12 +499,12 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	float z=TQuat.getZ();
 	float w=TQuat.getW();
 	TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
-	cout<<"despues: "<<roll<<","<<pitch<<","<<yaw<<endl;
 	Euler.setX(roll);
 	Euler.setY(pitch);
 	Euler.setZ(yaw);
 	Euler *= RADTODEG;
-	cout<<"GRADOS: "<<Euler.getX()<<","<<Euler.getY()<<","<<Euler.getZ()<<endl;
+
+	cout<<"Euler: "<<Euler.getX()<<","<<Euler.getY()<<","<<Euler.getZ()<<endl;
 	
 	
 	Node->setRotation(Euler.getX(),Euler.getY(),Euler.getZ());

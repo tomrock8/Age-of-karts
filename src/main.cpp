@@ -32,6 +32,7 @@ int main(int argc, char* argv[]) {
 	obj3D *wall = TMotor::instancia().newMeshNode("wall", "assets/wall/wall.obj", "escena_raiz");
 	chino->setPosition(5.5, 0, 0);
 	pirata->setPosition(-5.5, 0, 0);
+	pirata->setRotation(90.0f,0,0);
 	wall->setPosition(5.5, 4, 0);
 	
 	/*

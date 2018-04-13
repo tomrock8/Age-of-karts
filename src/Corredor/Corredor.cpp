@@ -1364,10 +1364,10 @@ void Corredor::updateVectorDireccion()
 {
 	/* Actualiza el vector direccion del corredor. */
 	btQuaternion quaternion = CuerpoColisionChasis->getOrientation();
+	
 	float anguloZ = quaternion.getAngle();
 	float anguloX = cuboNodo->getRotation().y * PI / 180;
-
-	//cout<< "Rotacion en Y=="<< anguloZ  * 180/PI << endl;
+	
 	orientacion = btVector3(sin(anguloX), 0, cos(anguloZ));
 
 	orientacion.normalize();

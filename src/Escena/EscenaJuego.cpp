@@ -86,7 +86,8 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	Pista::getInstancia()->setMapa("assets/Mapa01/isla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+	
+	Pista::getInstancia()->setMapa("assets/mierdamapa/mierda.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 	//-----------------------------
 	//	JUGADORES
 	//-----------------------------
@@ -311,7 +312,7 @@ void EscenaJuego::update() {
 	}
 
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		//pj.at(controlPlayer)->actualizarItem();
+		pj.at(controlPlayer)->actualizarItem();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		//pj.at(controlPlayer)->update();
 
@@ -510,8 +511,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	cout<<"ANGLE: "<<angle<<endl;
 	cout<<"---------------------"<<endl;
 	}*/
-	Node->setRotation(axis, angle);
-	
+	Node->setRotation(axis, angle);	
 }
 std::string EscenaJuego::getIpConexion() {
 	return ipConexion;

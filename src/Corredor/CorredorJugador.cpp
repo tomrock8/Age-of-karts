@@ -28,7 +28,6 @@ void CorredorJugador::movimiento() {
 	}
 
 	int a = glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W);
-	cout << "VALOR DE glfwGetKey: " << a << "\n";
 
 	//-------ENTRADA TECLADO ----------//
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_S) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[2])) {

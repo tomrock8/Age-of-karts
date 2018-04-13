@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
 
 	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
-	cam->translate(glm::vec3(0.0f, 4.0f, 15.0f));
+	cam->translate(glm::vec3(0.0f, 12.0f, 15.0f));
 	
 	//Evento de glfw para redimensionar la pantalla
 	glfwSetFramebufferSizeCallback(TMotor::instancia().getVentana(), resize_callback);
@@ -30,10 +30,15 @@ int main(int argc, char* argv[]) {
 	obj3D *pirata = TMotor::instancia().newMeshNode("pirata", "assets/Pirata/p2.obj", "escena_raiz");
 	//obj3D *chino = TMotor::instancia().newMeshNode("chino", "assets/Chino/Chino.obj", "escena_raiz");
 	obj3D *wall = TMotor::instancia().newMeshNode("wall", "assets/wall/wall.obj", "escena_raiz");
+	obj3D *cube = TMotor::instancia().newMeshNode("cubo", "assets/wall/wall.obj", "escena_raiz");
+	obj3D *cube2 = TMotor::instancia().newMeshNode("cubo2", "assets/wall/wall.obj", "escena_raiz");
 	//chino->setPosition(5.5, 0, 0);
-	pirata->setPosition(-20, 0, 0);
+	pirata->setPosition(-20, 10, 0);
 	wall->setScale(5.0, 1.0, 5.0);
-	wall->setPosition(0, -2.0, 0);
+	wall->setPosition(0, 4.0, 0);
+	cube->setPosition(0, 10.0, 0);
+	cube2->setScale(0.5, 0.5, 0.5);
+	cube2->setPosition(-1.75, 8.0, 0);
 	
 	/*
 	obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");

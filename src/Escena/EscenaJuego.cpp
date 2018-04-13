@@ -45,7 +45,7 @@ void EscenaJuego::init() {
 
 	// LUCES
 	obj3D * luzInfinita = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 1.0f), 0.00001f, glm::cos(glm::radians(60.0f)), "escena_raiz");
-	luzInfinita->translate(glm::vec3(2.5f, 1.0f, 2.0f));
+	luzInfinita->translate(glm::vec3(2.5f, 12.0f, 2.0f));
 
 	obj3D * luzPuntual = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.00001f, glm::cos(glm::radians(60.0f)), "escena_raiz");
 	luzPuntual->translate(glm::vec3(-10.0f,20.0f, 310.0f));

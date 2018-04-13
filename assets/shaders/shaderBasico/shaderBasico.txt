@@ -2,5 +2,3 @@ Shader basico que recoge los colores del material para cada uno de los component
 de la luz, asi como su brillo, y calcula la posicion y el color final del pixel.
 No trata texturas.
 Permite definir un numero ilimitado de luces (preestablecido en 8), tanto de tipo puntual como dirigidas.
-Para que el motor funcione con estos shaders, es necesario sustituir los archivos hallados en la carpeta
-"Files" de este mismo directorio.

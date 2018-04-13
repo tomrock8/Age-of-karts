@@ -47,8 +47,10 @@ public:
 	TNodo *getActiveCamera();
 	hud *getHud(const char* n);
 	hud *getActiveHud();
+	Shader *getShader();
 	Shader *getShaderHUD();
 	Shader *getShaderDebug();
+	Shader *getShaderDepth();
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
 
@@ -67,9 +69,12 @@ public:
 
 protected:
 	TNodo * scene; //Nodo raiz
+
+	//Shaders
 	Shader *shader; // Shader que se usa en el motor en la parte 3D
 	Shader *shaderHUD; //Shader que usa el motor para el dibujado del HUD
 	Shader *shaderDebug; //Shader que usa el motor para el modo debug
+	Shader *shaderDepth; //Shader para el calculo de las sombras
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)
@@ -89,6 +94,7 @@ protected:
 	int screenWIDTH;
 
 	GLuint contID;
+
 	// ----------------------
 	//  METODOS PRIVADOS
 	// ----------------------

@@ -43,7 +43,8 @@ TMotor::TMotor() {
 
 	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt");
 	shaderHUD = new Shader("assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt");
-	shaderDebug= new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt");
+	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt");
+	shaderDepth = new Shader("assets/shaders/shaderDepth/vertexShader.txt", "assets/shaders/shaderDepth/fragmentShader.txt");
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 }
 
@@ -70,8 +71,10 @@ TNodo *TMotor::getNode(const char* nombre) { return scene->getNode(nombre); }
 TNodo *TMotor::getSceneNode() { return scene; }
 TNodo *TMotor::getActiveCamera() { return activeCamera; }
 std::vector <TNodo*> TMotor::getActiveLights() { return activeLights; }
+Shader *TMotor::getShader(){ return shader; }
 Shader *TMotor::getShaderHUD(){ return shaderHUD; }
 Shader *TMotor::getShaderDebug(){ return shaderDebug; }
+Shader *TMotor::getShaderDepth(){ return shaderDepth; }
 
 // METODOS SET
 void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; }
@@ -150,10 +153,10 @@ obj3D *TMotor::newMeshNode( const char *name, const char *path, const char* pare
 
 
 	// N O D O
-	cout << "\nContenido de mallas en TMotor\n";
+	/*cout << "\nContenido de mallas en TMotor\n";
 	for (int i = 0; i < gestorRecursos->getRecursoMallas().size(); i++) {
 		cout << "MALLA MOTOR: " << gestorRecursos->getRecursoMallas().at(i)->getNombre() << "\n";
-	}
+	}*/
 
 
 	TMalla *malla = TMotor::instancia().createMesh(path);
@@ -239,7 +242,8 @@ TNodo *TMotor::createLightNode(TNodo *padre, TLuz *luz, const char* name) {
 // D I B U J A D O
 //------------------------------
 void TMotor::clean() {
-	glClearColor(0.16f, 0.533f, 0.698f, 0.0f);
+
+    glViewport(0, 0, screenWIDTH, screenHEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -247,7 +251,22 @@ void TMotor::clean() {
 }
 
 void TMotor::draw(int tipo) {
-	
+
+	//Establecer el nuevo color de fondo
+	glClearColor(0.16f, 0.533f, 0.698f, 0.0f);
+
+	//Llamamos al render de las luces para calcular las sombras
+	if (lights.size() > 0){
+		static_cast<TLuz *>(lights[0]->getEntidad())->renderDepthMap();
+		glEnable(GL_CULL_FACE);
+		//Para evitar el efecto del peter panning. Debido a la utilizacion de un bias (rango), se pueden producir fallos 
+		//en las sombras al quedar en algunos casos separadas de los objetos que las producen
+		glCullFace(GL_FRONT);
+		scene->draw(shaderDepth);
+		glDisable(GL_CULL_FACE);
+		static_cast<TLuz *>(lights[0]->getEntidad())->unbindDepthBuffer();
+	}
+
 	//Se llama a la funcion para limpiar los buffers de OpenGL
 	clean();
 	if (tipo==1 || tipo==2){
@@ -257,6 +276,9 @@ void TMotor::draw(int tipo) {
 		//Se llama al dibujado de los distintos nodos del arbol
 		drawCamera();
 		drawLight();
+		if (lights.size() > 0){
+			static_cast<TLuz *>(lights[0]->getEntidad())->configureShadow();
+		}
 		scene->draw(shader);
 	}
 
@@ -308,11 +330,46 @@ void TMotor::draw(int tipo) {
 		glBindVertexArray(0);
 	*/
 
+	//if(tipo != 1 && tipo != 2){
 	//Se activa el shader para el dibujado del HUD
 	shaderHUD->use();
 
 	//Dibujamos el hud activo
-	activeHud->drawHud(shaderHUD);
+	activeHud->drawHud(shaderHUD);//}
+
+
+	/*shaderDebug->use();
+
+	if (lights.size()> 0){
+		static_cast<TLuz *>(lights[0]->getEntidad())->configureShadow();
+	}
+
+	unsigned int quadVAO = 0;
+	unsigned int quadVBO;
+
+	if (quadVAO == 0)
+    {
+        float quadVertices[] = {
+            // positions        // texture Coords
+            -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+             1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+             1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        };
+        // setup plane VAO
+        glGenVertexArrays(1, &quadVAO);
+        glGenBuffers(1, &quadVBO);
+        glBindVertexArray(quadVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    }
+    glBindVertexArray(quadVAO);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glBindVertexArray(0);*/
 
 	
 	//swap los bufers de pantalla (trasero y delantero)

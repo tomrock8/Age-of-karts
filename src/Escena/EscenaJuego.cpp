@@ -3,6 +3,8 @@
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	ipConexion = "";
 	TMotor::instancia().newHud("OnGameHUD");
+	//TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "aok", "assets/HUD/MainMenu/aok_logo.png");
+	//TMotor::instancia().getActiveHud()->traslateElement("aok", 0.0f, 0.45f);
 	init();
 }
 
@@ -42,8 +44,11 @@ EscenaJuego::~EscenaJuego() {
 void EscenaJuego::init() {
 
 	// LUCES
-	obj3D * luzInfinita = TMotor::instancia().newLightNode("light_0", glm::vec4(0.0f, 0.f, -1.0f, 0.0f), 0.015f, glm::cos(glm::radians(30.0f)), "escena_raiz");
-	luzInfinita->translate(glm::vec3(2.0f, 1.0f, 7.0f));
+	obj3D * luzInfinita = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 1.0f), 0.00001f, glm::cos(glm::radians(60.0f)), "escena_raiz");
+	luzInfinita->translate(glm::vec3(2.5f, 1.0f, 2.0f));
+
+	obj3D * luzPuntual = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.00001f, glm::cos(glm::radians(60.0f)), "escena_raiz");
+	luzPuntual->translate(glm::vec3(-10.0f,20.0f, 310.0f));
 
 	/*TMotor::instancia().newLightNode(glm::vec3(0.0f, 30.0f, 0.0f), "light_0", glm::vec4(0.0f, 0.f, -1.0f, 1.0f), 0.25f, glm::cos(glm::radians(30.0f)), "escena_raiz");
 	obj3D *luz0 = TMotor::instancia().newLightNode("light_0", glm::vec4(.0f, 0.f, 0.f, 0.0f), 0.01f, 0.0f, "escena_raiz");

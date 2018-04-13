@@ -8,6 +8,8 @@ out vec4 FragColor; //Color final del pixel
 in data{
     vec2 textCoords; //Coordenadas de textura
     vec3 worldPos; // Vertice en coordenadas del mundo 
+    vec3 worldNormal; //Normal del vertice en coordenadas del mundo
+    vec4 worldLightPos; //Vertice en coordenadas de la luz
     mat3 tbnMatrix; //Inversa de la matriz TBN
 } fs_in;
 
@@ -42,10 +44,12 @@ uniform vec3 posCamera; //Posicion de la camara
 uniform sampler2D texture_diffuse; //Textura difusa de la malla
 uniform sampler2D texture_specular; //Textura especular de la malla
 uniform sampler2D texture_normal; //Textura de normales de la malla
+uniform sampler2D shadowMap; //Textura con el mapa de profundidad para el calculo de las sombras
 
 //Declaracion de funciones
 vec3 calculatePointLight(int i, vec3 N);
 vec3 calculateSpotlight(int i, vec3 N);
+float calculateShadows(vec4 Lpos, int luz, vec3 N);
 
 void main()
 {    
@@ -81,7 +85,8 @@ void main()
     }
 
     //Se asigna el color resultante a la variable de salida
-    FragColor = vec4(vec3(texture(texture_diffuse, fs_in.textCoords)), 1.0);
+    //FragColor = vec4(vec3(texture(texture_diffuse, fs_in.textCoords)), 1.0);
+    FragColor = vec4(finalColor, 1.0);
 }
 
 //Funcion que calcula la influencia de una luz puntual sobre el vertice
@@ -184,6 +189,14 @@ vec3 calculateSpotlight(int i, vec3 N){
             vec3 specular = light[i].specular * S * vec3(texture(texture_specular, fs_in.textCoords));
             specular *= attenuation;
 
+            // ---- SOMBRAS ----
+            //Calculamos el valor de sombra
+            float shadow = calculateShadows(fs_in.worldLightPos, i, N);
+            //Lo multiplicamos por las componentes difusa y especular
+            diffuse = (1.0 - shadow) * diffuse;
+            specular = (1.0 - shadow) * specular;
+            
+            //Color final del fragmento = suma de las tres componentes
             r = ambient + diffuse + specular;
         }else{
             //Si no esta dentro del foco, se calcula solo la ambiente para que no este totalmente a oscuras el objeto
@@ -194,4 +207,47 @@ vec3 calculateSpotlight(int i, vec3 N){
 
         return r;
 
+}
+
+//Funcion para el calculo de las sombras. Devuelve un float (grado de penumbra) que se multiplica por las 
+//componentes difusa y especular de la luz 
+float calculateShadows(vec4 Lpos, int luz, vec3 N){
+    //Normalizar las coordenadas del vertice en el espacio de la luz -> dividir las coordenadas x,y,z por w
+    vec3 normCoords = Lpos.xyz/Lpos.w;
+    //Transformar las coordenadas normalizadas del rango [-1,1] al rango [0,1]
+    normCoords = normCoords * 0.5 + 0.5; 
+    //Obtener la profundidad actual de fragmento
+    float aDepth = normCoords.z;
+    //BIAS = Variable que sirve como rango para evitar el problema del acne en el dibujado de las sombras
+    //Sin ella, se dibujan finas lineas negras por toda la escena iluminada, produciendo un efecto parecido a una teselacion
+    //Se calcula a partir del angulo de cada superficie respecto al vector direccion de la luz
+    vec3 lightDirection = normalize(light[luz].position - fs_in.worldPos);
+    //Segun el angulo, se concede un valor de 0.001 (max) o 0.0001 
+    float bias = max(0.001 * (1.0 - dot(N, lightDirection)), 0.0001);
+    //Se aplica la tecnica del PCF, para difuminar los bordes de las sombras, ya que estos (especialmente los diagonales)
+    //se ven escalonados
+    float shadow = 0.0;
+    //Recogemos el tamaño del mapa de profundidad
+    //Al dividir 1.0 entre este, hacemos que ninguna de las muestras que trataremos despues tenga la misma profundidad
+    vec2 sampleSize = 1.0 / textureSize(shadowMap, 0);
+    //Bucle para tratar todas las muestras,en este caso 9
+    for(int i = -1; i <= 1; i++)
+    {
+        for(int j = -1; j <= 1; j++)
+        {
+            //Obtenemos la profundidad mas cercana de cada una de las muestras
+            float pcfDepth = texture(shadowMap, normCoords.xy + vec2(i, j) * sampleSize).r; 
+            //Sumamos iteradamente al valor de sombra resultante
+            //Si la profundidad del fragmento es mayor que la profundidad mas cercana desde la perspectiva de la luz,
+            //entonces el fragmento se encuentro en penumbra
+            shadow += aDepth - bias > pcfDepth ? 1.0 : 0.0;        
+        }    
+    }
+    //Dividimos el valor de sombra entre el numero de muestras tratadas para hacer la media
+    shadow /= 9.0;
+    //Si la profundidad de las coordenadas del fragmente superan el 1.0 (maximo en coordenadas normalizadas) entonces no hay ninguna sombra posible
+    if(normCoords.z > 1.0)
+        shadow = 0.0;
+
+    return shadow;
 }

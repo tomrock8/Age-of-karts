@@ -118,10 +118,10 @@ void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 //-----------------------------------------------------------------------------------------------//
 
 TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mesh, const aiScene *scene) {
-	cout << "\nContenido de mallas en Gestor de recursos\n";
+	/*cout << "\nContenido de mallas en Gestor de recursos\n";
 	for (int i = 0; i < recursoMallas.size(); i++) {
 		cout << "MALLA GR: " << recursoMallas.at(i)->getNombre() << "\n";
-	}
+	}*/
 
 
 	bool encontrado = false;

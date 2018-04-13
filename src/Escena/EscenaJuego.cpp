@@ -62,7 +62,7 @@ void EscenaJuego::init() {
 	debug = 0;
 	fin_carrera = false;
 	t = Timer::getInstancia();
-	t->restartTimer();
+	
 	GestorIDs::instancia().restartID();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
@@ -74,7 +74,7 @@ void EscenaJuego::init() {
 	}
 
 	// Gravedad
-	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -100.f, 0.0));
+	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -10.f, 0.0));
 
 	//----------------------------
 	//	Debug Bullet
@@ -186,7 +186,7 @@ void EscenaJuego::init() {
 	TimeStamp = glfwGetTime();
 	DeltaTime = 0;
 	tiempoRefresco = glfwGetTime();
-
+	t->restartTimer();
 }
 
 void EscenaJuego::dibujar() {
@@ -212,12 +212,7 @@ void EscenaJuego::dibujar() {
 			}
 		}
 
-		/*SMaterial debugMat;
-		debugMat.Lighting = true;
-		Motor3d::instancia().getDriver()->setMaterial(debugMat);
-		Motor3d::instancia().getDriver()->setTransform(ETS_WORLD, IdentityMatrix);*/
 		MotorFisicas::getInstancia()->getMundo()->debugDrawWorld();
-
 	}
 	else {
 		for (int i = 0; i < pj.size(); i++) {
@@ -256,7 +251,6 @@ void EscenaJuego::update() {
 
 	DeltaTime = glfwGetTime()*1000 - TimeStamp;
 	TimeStamp = glfwGetTime()*1000;
-	cout<<"yeeeeeeeeeeeeeee****"<<endl;
 	UpdatePhysics(DeltaTime);
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
@@ -309,7 +303,7 @@ void EscenaJuego::update() {
 		//textoDebug->agregar(to_string(desc));
 	}
 
-	if (t->getTimer() == 4) {
+	if (t->getTimer() >= 4) {
 		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
 		}
@@ -484,7 +478,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	//TObject->getMotionState()->getWorldTransform(t);	
 	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
 	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
-		cout << "POSICION: " <<Point[0]<<","<< Point[1]<<","<< Point[2]<<endl; 
+		//cout << "POSICION: " <<Point[0]<<","<< Point[1]<<","<< Point[2]<<endl; 
 		Node->setPosition((float)Point[0], (float)Point[1] + 2, (float)Point[2]);
 	}
 	else

@@ -335,7 +335,7 @@ void TMotor::drawCamera() {
 		cont++;
 		aux = aux->getPadre();
 	}
-	cout << cont << endl;
+	//cout << cont << endl;
 	glm::mat4 viewMatrix;
 	//recorrido a la inversa
 	for (int i = matrixAux.size()-1 ; i >= 0; i--) {

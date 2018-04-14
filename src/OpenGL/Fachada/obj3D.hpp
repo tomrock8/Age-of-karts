@@ -17,6 +17,7 @@ public:
 	void translate(glm::vec3);
 	void rotate(glm::vec3 axis, GLfloat angle);
 	void scale(float x, float y, float z);
+	void rotateFromParent();
 
 	// METODOS GET
 	GLuint getID();

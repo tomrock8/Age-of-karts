@@ -93,6 +93,8 @@ void EscenaJuego::init() {
 	//-----------------------------
 	
 	Pista::getInstancia()->setMapa("assets/mierdamapa/mierda.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+
 	//-----------------------------
 	//	JUGADORES
 	//-----------------------------

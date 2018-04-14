@@ -11,6 +11,17 @@ obj3D::obj3D(TNodo *m, const char *n, GLuint i) {
 obj3D::~obj3D() {
 }
 
+void obj3D::rotateFromParent() {
+	//rotacion del jugador
+
+//	const char * ww = node->getPadre()->getPadre()->getPadre()->getPadre()->getName();
+//
+//	glm::mat4 p  =static_cast<TTransform*>(node->getPadre()->getPadre()->getPadre()->getPadre()->getEntidad())->getMatriz();
+//	glm::vec4 sw = p * glm::vec4(0, 0, 0, 1);
+//	cout << "----------CONTENIDO DE  MATRIZ "<<ww<<"-------------------" << endl;
+//	cout << "-----------------------obj3D.cpp(22)--------------------------------" << endl;
+//	cout << "(" << sw.x << "," << sw.y << "," << sw.z << ")" << endl;
+}
 void obj3D::rotate(glm::vec3 axis, GLfloat angle) {
 	rotation.x += angle*axis.x;	
 	rotation.y += angle*axis.y;

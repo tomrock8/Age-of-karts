@@ -1047,6 +1047,14 @@ void Corredor::update()
 	updateHijos();
 
 	cameraThird->setPosition(0.0f, 3.0f, 15.0f);
+	//cameraThird->rotateFromParent();
+	//btVector3  holi = getVectorDireccion();
+	//holi *= RADTODEG;
+	//cout << "------------corredor(1052)--------------" << endl;
+	//cout << "(" << holi.getX() << "," << holi.getY() << "," << holi.getZ() <<")"<< endl;
+	
+
+	
 	//cout << "POSICION DEL JUGADOR: " << posicion.getX() << " , " << posicion.getY() << " , " << posicion.getZ() << endl;
 }
 

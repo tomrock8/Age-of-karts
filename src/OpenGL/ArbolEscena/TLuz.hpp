@@ -15,11 +15,15 @@ public:
 	TLuz(glm::vec3 ambiente, glm::vec3 difusa, glm::vec3 especular, glm::vec4 dir, float at, float corte);
 
 	// SOMBRAS
+	// --- LUZ DIRIGIDA ---
 	void calculateDepthMap();
 	void calculateLightMatrix();
 	void renderDepthMap();
 	void unbindDepthBuffer();
 	void configureShadow();
+	// --- LUZ PUNTUAL ---
+	void calculateCubeDepthMap();
+	void calculateLightMatrixes();
 
 	// METODOS GET
 	glm::vec4 getIntensidad();	// devuelve la intensidad que sera de tipo color
@@ -51,10 +55,14 @@ private:
 	float attenuation;
 	float cut;
 
-	//Sombras
+	//SOMBRAS
 	const int DEPTH_WIDTH = 1024, DEPTH_HEIGHT = 1024; //Alto y ancho del mapa de profundidad
-	unsigned int depthMap; //Mapa de profundidad = perspectiva de la escena desde el punto de luz
+	unsigned int depthMap; //Mapa de profundidad o cubo de profundidad = perspectiva de la escena desde el punto de luz
+	// --- LUZ DIRIGIDA ---
 	unsigned int depthTexture; //Textura que recoge el mapa de profundidad
 	glm::mat4 lightMatrix; //Matriz para transformar objetos al punto de vista de la luz
+	// --- LUZ PUNTUAL ---
+	unsigned int depthCubeTexture; //Textura que recoge el cubo de profundidad
+	std::vector<glm::mat4> lightMatrixes; //Vector que guarda la matriz de luz para cada cara del cubo de profundidad
 };
 #endif

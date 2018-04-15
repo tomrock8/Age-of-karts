@@ -41,10 +41,12 @@ TMotor::TMotor() {
 	gestorRecursos = new TGestorRecursos(); // Inicializacion del gestor de recursos
 	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena) 
 
-	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt");
-	shaderHUD = new Shader("assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt");
-	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt");
-	shaderDepth = new Shader("assets/shaders/shaderDepth/vertexShader.txt", "assets/shaders/shaderDepth/fragmentShader.txt");
+	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
+	shaderHUD = new Shader("assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt", nullptr);
+	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
+	shaderDirectionalDepth = new Shader("assets/shaders/shaderDepth/shaderLuzDirigida/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzDirigida/fragmentShader.txt", nullptr);
+	shaderPointDepth = new Shader("assets/shaders/shaderDepth/shaderLuzPuntual/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzPuntual/fragmentShader.txt"
+	, "assets/shaders/shaderDepth/shaderLuzPuntual/geometryShader.txt" );
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 }
 
@@ -74,7 +76,8 @@ std::vector <TNodo*> TMotor::getActiveLights() { return activeLights; }
 Shader *TMotor::getShader(){ return shader; }
 Shader *TMotor::getShaderHUD(){ return shaderHUD; }
 Shader *TMotor::getShaderDebug(){ return shaderDebug; }
-Shader *TMotor::getShaderDepth(){ return shaderDepth; }
+Shader *TMotor::getShaderDirectionalDepth(){ return shaderDirectionalDepth; }
+Shader *TMotor::getShaderPointDepth(){ return shaderPointDepth; }
 
 // METODOS SET
 void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; }
@@ -126,7 +129,7 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 
 	// N O D O
 	//TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(.8f), dir, att, corte);
-	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(.8f), dir, att, corte);
+	TLuz  *luz = new TLuz(glm::vec3(.15f), glm::vec3(.6f), glm::vec3(.9f), dir, att, corte);
 	TNodo *nodo = createLightNode(traslacionNodo, luz, name);
 	contID++;
 	return new obj3D(nodo, name, contID);
@@ -262,7 +265,7 @@ void TMotor::draw(int tipo) {
 		//Para evitar el efecto del peter panning. Debido a la utilizacion de un bias (rango), se pueden producir fallos 
 		//en las sombras al quedar en algunos casos separadas de los objetos que las producen
 		glCullFace(GL_FRONT);
-		scene->draw(shaderDepth);
+		scene->draw(shaderDirectionalDepth);
 		glDisable(GL_CULL_FACE);
 		static_cast<TLuz *>(lights[0]->getEntidad())->unbindDepthBuffer();
 	}

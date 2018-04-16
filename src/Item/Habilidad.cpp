@@ -11,29 +11,34 @@ Habilidad::Habilidad(int tipo, obj3D* n, btVector3 posicion, btVector3 escala, b
 
 	case 1:
 		//objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadGladiador.obj");
-		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/habilidadGladiador.obj", "translacion_jugador");
+
+		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/habilidadGladiador.obj", "escena_raiz");
 		nombre = "HabilidadPirata";
 		break;
 
 	case 2:
 		//objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadVikingo.obj");
-		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/habilidadVikingo.obj", "translacion_jugador");
+
+		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/habilidadVikingo.obj", "escena_raiz");
 		nombre = "HabilidadVikingo";
 		break;
 
 	case 3:
 		//objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/onda.obj");
-		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/onda.obj", "translacion_jugador");
+
+		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/onda.obj", "escena_raiz");
 		nombre = "HabilidadGladiador";
 		break;
 
 	case 4:
 		//objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadChino.obj");
-		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/habilidadChino.obj", "translacion_jugador");
+
+		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/habilidadChino.obj", "escena_raiz");
 		nombre = "HabilidadChino";
 		break;
 
 	}
+
 	//nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
 	nodo->setPosition(posicion.getX(), posicion.getY(), posicion.getZ());
 	//nodo->setScale(tamanyoNodo.getX(), tamanyoNodo.getY(), tamanyoNodo.getZ());

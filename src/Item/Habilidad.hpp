@@ -24,9 +24,9 @@ private:
 	int tipoHabilidad;
   bool habilidadActiva;
 	//objetos
-	
-	obj3D* NodoVehiculo;
-  btVector3 orientacion;
+  
+  obj3D* NodoVehiculo;
+	btVector3 orientacion;
 	
 };
 

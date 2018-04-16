@@ -16,6 +16,8 @@ public:
 	void cargar(glm::mat4 mat);	//recoge una matriz y la carga
 	glm::mat4 getMatriz();
 
+	void setMatriz(glm::mat4 p);
+
 	// TRANSFORMACIONES
 	void identidad();	//carga la identidad de la matriz
 	void trasladar(GLfloat x, GLfloat y, GLfloat z);

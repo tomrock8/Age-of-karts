@@ -79,30 +79,31 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	// HAY QUE MODIFICAR DE QUE NODO PENDEN!!!
 	const char* strRueda = "assets/rueda/rueda.obj";
 	rueda1 = TMotor::instancia().newMeshNode("rueda1", strRueda, "traslacion_Jugador");
-	//rueda1->setPosition(-10, 0, 310);
+	rueda1->setPosition(-2, 0, 3);
 	rueda2 = TMotor::instancia().newMeshNode("rueda2", strRueda, "traslacion_Jugador");
-	//rueda2->setPosition(10, 0, 310);
+	rueda2->setPosition(2, 0, 3);
 	rueda3 = TMotor::instancia().newMeshNode("rueda3", strRueda, "traslacion_Jugador");
-	//rueda3->setPosition(-10, 0, -310);
+	rueda3->setPosition(-2, 0, -3);
 	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "traslacion_Jugador");
-	//rueda4->setPosition(10, 0, -310);
+    rueda4->setPosition(2, 0, -3);
 
 	//rueda1->setScale(vector3df(2,1,1));//alante derecha
 	//rueda2->setScale(vector3df(2,1,1));//delante izquierda
 	//rueda3->setScale(vector3df(2,1,1));//atras derecha
 	//rueda4->setScale(vector3df(2,1,1));//atras izquierda
 
-	rueda1->setRotation(0, 1, 0);
-	rueda2->setRotation(0, -1, 0);
-	rueda3->setRotation(1, 0, 0);
-	rueda4->setRotation(-1, 0, 0);
+	rueda1->setRotation(0, 45, 0);
+	rueda2->setRotation(0, -45, 0);
+	rueda3->setRotation(45, 0, 0);
+	rueda4->setRotation(-45, 0, 0);
 	
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
 		cuboNodo->setRotation(0.0f, 0.0f, 0.0f);
 	}
 
-
+	cameraThird = TMotor::instancia().newCameraNode("camara_jugador3apersona", "traslacion_Jugador");
+	
 	InicializarFisicas();
 
 }
@@ -188,7 +189,7 @@ void Corredor::setParametros() {
 		break;
 	}
 	//camara asignada al jugador
-	cameraThird = TMotor::instancia().newCameraNode("camara_jugador3apersona", "traslacion_Jugador");
+	
 }
 
 //-----------------------------//
@@ -205,7 +206,7 @@ void Corredor::InicializarFisicas() {
 	btVector3 posTransCoche = btVector3(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 	transCoche.setOrigin(posTransCoche);
 	btQuaternion quaternion;
-	quaternion.setEulerZYX(cuboNodo->getRotation().z* PI / 180, cuboNodo->getRotation().y * PI / 180, cuboNodo->getRotation().x* PI / 180);
+	quaternion.setEulerZYX(cuboNodo->getRotation().x* PI / 180, cuboNodo->getRotation().y * PI / 180, cuboNodo->getRotation().z* PI / 180);
 	transCoche.setRotation(quaternion);
 
 	//Motionstate
@@ -244,9 +245,7 @@ void Corredor::InicializarFisicas() {
 	mundo->addVehicle(vehiculo);
 	//vehiculo->setActivationState(DISABLE_DEACTIVATION);
 	//almacenar el puntero al nodo irrlicht  para poder actualizar sus valores
-
 	objetos.push_back(CuerpoColisionChasis);
-
 	CrearRuedas(vehiculo, tuning);
 	mundo->addRigidBody(CuerpoColisionChasis);
 	bullet->setObjetos(objetos);
@@ -682,7 +681,6 @@ void Corredor::resetFuerzas() {
 	CuerpoColisionChasis->setLinearVelocity(zeroVector);
 	CuerpoColisionChasis->setAngularVelocity(zeroVector);
 }
-
 void Corredor::soltarItem() {
 	setTipoObj(0);
 	setLimite(getLimite() + 10);
@@ -906,6 +904,7 @@ void Corredor::girarDerecha() {
 	else
 		FuerzaGiro = indiceGiroBajo;
 
+
 	vehiculo->setSteeringValue(-FuerzaGiro, 0);
 	vehiculo->setSteeringValue(-FuerzaGiro, 1);
 
@@ -917,6 +916,7 @@ void Corredor::girarIzquierda() {
 	}
 	else
 		FuerzaGiro = indiceGiroBajo;
+	
 
 	vehiculo->setSteeringValue(FuerzaGiro, 0);
 	vehiculo->setSteeringValue(FuerzaGiro, 1);
@@ -976,7 +976,6 @@ void Corredor::desacelerar() {
 	vehiculo->setBrake(160, 2);
 	vehiculo->setBrake(160, 3);
 }
-
 void Corredor::limitadorVelocidad() {
 	vehiculo->applyEngineForce(0.0001, 0);
 	vehiculo->applyEngineForce(0.0001, 1);
@@ -1000,7 +999,6 @@ void Corredor::comprobarSueloRuedas() {
 		}
 	*/
 }
-
 void Corredor::recolocarWaypoint() {
 	btVector3 btPos = actual->getPosicion();
 
@@ -1033,7 +1031,7 @@ void Corredor::update()
 	comprobarTurbo();
 	comprobarInmunidad();
 	if (estado->getEstadoCarrera() != PARRILLA) {
-		movimiento();
+		movimiento();// Esto ni existe
 		updateEstado();
 	}
 	updateTimerObstaculos();
@@ -1044,18 +1042,15 @@ void Corredor::update()
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 	updateText();
-	updateHijos();
-
-	cameraThird->setPosition(0.0f, 3.0f, 15.0f);
-	//cameraThird->rotateFromParent();
-	//btVector3  holi = getVectorDireccion();
-	//holi *= RADTODEG;
-	//cout << "------------corredor(1052)--------------" << endl;
-	//cout << "(" << holi.getX() << "," << holi.getY() << "," << holi.getZ() <<")"<< endl;
+	//updateHijos();
+	//linea clave
+//	cameraThird->setPosition(0, 2, 7);
+	//	cameraThird->setRotation(cameraThird->getPosition().x * orientacion.getX(),
+	//	1,
+	//	cameraThird->getPosition().z* orientacion.getZ());
 	
-
+	//cuboNodo->setPosition()
 	
-	//cout << "POSICION DEL JUGADOR: " << posicion.getX() << " , " << posicion.getY() << " , " << posicion.getZ() << endl;
 }
 
 void Corredor::updateText() {
@@ -1372,10 +1367,14 @@ void Corredor::updateVectorDireccion()
 {
 	/* Actualiza el vector direccion del corredor. */
 	btQuaternion quaternion = CuerpoColisionChasis->getOrientation();
-	
+	//cameraThird->setRotation(quaternion.getX(), quaternion.getY(), quaternion.getZ());
 	float anguloZ = quaternion.getAngle();
 	float anguloX = cuboNodo->getRotation().y * PI / 180;
-	
+	cout << " Orientacion Corredor(1378)" << endl;
+	cout << "Angulo X: " << cuboNodo->getRotation().x << endl;
+	cout << "Angulo Y: " << cuboNodo->getRotation().y << endl;
+	cout << "Angulo Y: " << cuboNodo->getRotation().z << endl;
+	cout << "--------------------------------------------------" << endl;
 	orientacion = btVector3(sin(anguloX), 0, cos(anguloZ));
 
 	orientacion.normalize();

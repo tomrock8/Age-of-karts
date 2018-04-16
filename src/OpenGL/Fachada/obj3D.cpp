@@ -1,4 +1,5 @@
 #include "obj3D.hpp"
+#include "..\Motor\TMotor.hpp"
 
 obj3D::obj3D(TNodo *m, const char *n, GLuint i) {
 	node = m;
@@ -11,24 +12,13 @@ obj3D::obj3D(TNodo *m, const char *n, GLuint i) {
 obj3D::~obj3D() {
 }
 
-void obj3D::rotateFromParent() {
-	//rotacion del jugador
-
-//	const char * ww = node->getPadre()->getPadre()->getPadre()->getPadre()->getName();
-//
-//	glm::mat4 p  =static_cast<TTransform*>(node->getPadre()->getPadre()->getPadre()->getPadre()->getEntidad())->getMatriz();
-//	glm::vec4 sw = p * glm::vec4(0, 0, 0, 1);
-//	cout << "----------CONTENIDO DE  MATRIZ "<<ww<<"-------------------" << endl;
-//	cout << "-----------------------obj3D.cpp(22)--------------------------------" << endl;
-//	cout << "(" << sw.x << "," << sw.y << "," << sw.z << ")" << endl;
-}
 void obj3D::rotate(glm::vec3 axis, GLfloat angle) {
 	rotation.x += angle*axis.x;	
 	rotation.y += angle*axis.y;
 	rotation.z += angle*axis.z;
-
 	static_cast<TTransform*>(node->getPadre()->getPadre()->getEntidad())->rotar(axis.x, axis.y, axis.z, angle);
 }
+
 
 void obj3D::translate(glm::vec3 pos) {
 	static_cast<TTransform*>(node->getPadre()->getEntidad())->trasladar(pos.x, pos.y, pos.z);
@@ -125,4 +115,8 @@ void obj3D::setPosition(float X, float Y, float Z) {
 void obj3D::setScale(float x,float y,float z){
 	static_cast<TTransform*>(node->getPadre()->getPadre()->getPadre()->getEntidad())->setScale(x,y,z);
 	escala = glm::vec3(x,y,z);
+}
+
+void obj3D::setId(GLuint i) {
+	id = i;
 }

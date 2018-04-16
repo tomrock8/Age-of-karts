@@ -104,9 +104,9 @@ void EscenaJuego::init() {
 	Corredor* jugador;
 
 	btVector3 pos2[6];
-	pos2[0].setX(-10);
+	pos2[0].setX(20);
 	pos2[0].setY(0);
-	pos2[0].setZ(310);
+	pos2[0].setZ(20);
 	pos2[1].setX(-10);
 	pos2[1].setY(0);
 	pos2[1].setZ(290);

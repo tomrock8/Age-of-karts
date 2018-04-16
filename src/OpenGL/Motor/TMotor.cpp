@@ -12,8 +12,8 @@ TMotor::TMotor() {
 	}
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // Version maxima de opengl
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); // Version minima de opengl
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// CREACION OBJETO VENTANA PARA USAR LAS FUNCIONES DE GLFW
 	ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", NULL, NULL);
@@ -91,20 +91,22 @@ obj3D *TMotor::newCameraNode( const char *name, const char* parentNode) {
 	// R O T A C I O N
 	string *nameRot = new string("rotacion_" + (string)name);
 	TTransform *rotacion = createTransformation();
-	//rotacion->rotar(0, 0, 1, 1);
+	if (strcmp(parentNode, "escena_raiz") != 0)	rotacion->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getPadre()->getEntidad())->getMatriz());
 	TNodo *rotacionNodo = createTransformationNode(getNode(parentNode), rotacion, nameRot->c_str());
 
 	// T R A S L A C I O N
 
 	string *nameTras = new string("traslacion_" + (string)name);
 	TTransform *traslacion = createTransformation();
+	if (strcmp(parentNode, "escena_raiz") != 0)	traslacion->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getEntidad())->getMatriz());
 	//traslacion->trasladar(traslation.x, traslation.y, traslation.z);
 	TNodo *traslacionNodo = createTransformationNode(rotacionNodo, traslacion, nameTras->c_str());
-	
+
 
 	TCamara *camara = createCam();
 	camara->setPerspective(screenHEIGHT, screenWIDTH, 0.01f, 10000.0f, 70.0f);//OJO CON EL VALOR 1000 ES CLAVE PARA MOSTRAR PARTE DEL MAPA O TODO
 	TNodo *nodo = createCamNode(traslacionNodo, camara, name);
+	
 	contID++;
 	return new obj3D(nodo, name, contID);
 }
@@ -136,19 +138,18 @@ obj3D *TMotor::newMeshNode( const char *name, const char *path, const char* pare
 	// E S C A L A D O
 	string *nameEsc = new string("escalado_" + (string)name);
 	TTransform *scaleMesh = createTransformation();
-	//rotateMesh->rotar(0, 0, 1, -90);
 	TNodo *scaleNodeMesh = createTransformationNode(getNode(parentNode), scaleMesh, nameEsc->c_str());
 
 	// R O T A C I O N
 	string *nameRot = new string("rotacion_" + (string)name);
 	TTransform *rotateMesh = createTransformation();
-	//rotateMesh->rotar(0, 0, 1, -90);
+	if (strcmp(parentNode, "escena_raiz") !=0)	rotateMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getPadre()->getEntidad())->getMatriz());
 	TNodo *rotationNodeMesh = createTransformationNode(scaleNodeMesh, rotateMesh, nameRot->c_str());
 
 	// T R A S L A C I O N
 	string *nameTras = new string("traslacion_" + (string)name);
 	TTransform *traslationMesh = createTransformation();
-	//traslationMesh->trasladar(0, 0, 0);
+	if(strcmp(parentNode, "escena_raiz")!=0)	traslationMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getEntidad())->getMatriz());
 	TNodo *traslationNodeMesh = createTransformationNode(rotationNodeMesh, traslationMesh, nameTras->c_str());
 
 
@@ -387,7 +388,7 @@ void TMotor::drawCamera() {
 	int cont = 0;
 	while (aux != scene) {
 		//recorrer y guardar en un vector de matrices las transformaciones
-		if (cont < 3)
+		//if (cont < 3)
 		matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
 		cont++;
 		aux = aux->getPadre();
@@ -486,7 +487,14 @@ hud* TMotor::getHud(const char* n){
 hud* TMotor::getActiveHud(){
   return activeHud;
 }
+obj3D* TMotor::getObjActiveCamera(){
+	if (cameras.size() > 0) {
+		return new obj3D(activeCamera, activeCamera->getName(), 99);
 
+	}
+	else return NULL;
+	
+}
 void TMotor::toEulerAngle(float x,float y,float z, float w, float& roll, float& pitch, float& yaw)
 {
 	

@@ -19,6 +19,8 @@ public:
 	void scale(float x, float y, float z);
 	void rotateFromParent();
 
+	void traslateToParent();
+
 	// METODOS GET
 	GLuint getID();
 	const char * getName();
@@ -33,6 +35,7 @@ public:
 	void setPosition(float X,float Y,float Z);
 	void setRotation(float X,float Y,float Z);
 	void setScale(float X,float Y,float Z);
+	void setId(GLuint i);
 	void setName(const char *nombre);
 	void setVisible(bool visible);
 

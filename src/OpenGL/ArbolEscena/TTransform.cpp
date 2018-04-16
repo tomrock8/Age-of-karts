@@ -7,7 +7,9 @@ TTransform::TTransform() {//la inicializacion sera la de identidad
 // GESTIONAR LA MATRIZ
 void TTransform::cargar(glm::mat4 mat) { matriz = mat; }
 glm::mat4 TTransform::getMatriz() { return matriz; }
-
+void TTransform::setMatriz(glm::mat4 p) {
+	matriz = p;
+}
 // TRANSFORMACIONES
 /* vector transformacion = vectorTraslacion * vectorRotacion * vectorEscalado * Vector Original; */
 void TTransform::identidad() {
@@ -65,7 +67,7 @@ void TTransform::rotar(GLfloat x, GLfloat y, GLfloat z, GLfloat g) {
 
 void TTransform::setRotation(GLfloat x, GLfloat y, GLfloat z, GLfloat g) {
 	glm::vec3 myRotationAxis(x, y, z);
-	matriz = glm::rotate(glm::radians(g), myRotationAxis);
+	matriz = glm::rotate(glm::mat4(),glm::radians(g), myRotationAxis);
 }
 
 void TTransform::escalar(GLfloat x, GLfloat y, GLfloat z) {

@@ -27,18 +27,18 @@ int main(int argc, char* argv[]) {
 	// OBJETOS CARGADOS
 	//TMotor::instancia().precarga("assets/Mapa01/isla.obj");
 	
-	obj3D *pirata = TMotor::instancia().newMeshNode("pirata", "assets/Pirata/p2.obj", "escena_raiz");
+//	obj3D *pirata = TMotor::instancia().newMeshNode("pirata", "assets/Pirata/p2.obj", "escena_raiz");
 	//obj3D *chino = TMotor::instancia().newMeshNode("chino", "assets/Chino/Chino.obj", "escena_raiz");
-	obj3D *wall = TMotor::instancia().newMeshNode("wall", "assets/wall/wall.obj", "escena_raiz");
-	obj3D *cube = TMotor::instancia().newMeshNode("cubo", "assets/wall/wall.obj", "escena_raiz");
-	obj3D *cube2 = TMotor::instancia().newMeshNode("cubo2", "assets/wall/wall.obj", "escena_raiz");
-	//chino->setPosition(5.5, 0, 0);
-	pirata->setPosition(-20, 10, 0);
-	wall->setScale(5.0, 1.0, 5.0);
-	wall->setPosition(0, 4.0, 0);
-	cube->setPosition(0, 10.0, 0);
-	cube2->setScale(0.5, 0.5, 0.5);
-	cube2->setPosition(-1.75, 8.0, 0);
+	//obj3D *wall = TMotor::instancia().newMeshNode("wall", "assets/wall/wall.obj", "escena_raiz");
+	//obj3D *cube = TMotor::instancia().newMeshNode("cubo", "assets/wall/wall.obj", "escena_raiz");
+	//obj3D *cube2 = TMotor::instancia().newMeshNode("cubo2", "assets/wall/wall.obj", "escena_raiz");
+	////chino->setPosition(5.5, 0, 0);
+	////pirata->setPosition(-20, 10, 0);
+	//wall->setScale(5.0, 1.0, 5.0);
+	//wall->setPosition(0, 4.0, 0);
+	//cube->setPosition(0, 10.0, 0);
+	//cube2->setScale(0.5, 0.5, 0.5);
+	//cube2->setPosition(-1.75, 8.0, 0);
 	
 	/*
 	obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");
@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 
 
 	TMotor::instancia().setActiveCamera(TMotor::instancia().getNode("camara_libre"));
-	obj3D *activeCamera = new obj3D(TMotor::instancia().getActiveCamera(), TMotor::instancia().getActiveCamera()->getName(),99);
+	obj3D *activeCamera = TMotor::instancia().getObjActiveCamera();
 
 	//obj3D *activeCamera = NULL;
 	//activeCamera = TMotor::instancia().newCameraNode(TMotor::instancia().getActiveCamera()->getName(), TMotor::instancia().getActiveCamera()->getPadre()->getName());
@@ -74,37 +74,38 @@ int main(int argc, char* argv[]) {
 	int tipo = 0;
 	while (tipoActual != Escena::tipo_escena::SALIR) {
 		if (strcmp(activeCamera->getName() , TMotor::instancia().getActiveCamera()->getName())) {
-			activeCamera = new obj3D(TMotor::instancia().getActiveCamera(), TMotor::instancia().getActiveCamera()->getName(), 99);
+			if (activeCamera->getName() == "camara_libre") activeCamera = TMotor::instancia().getObjActiveCamera();
 		}
 		glfwSetCharCallback(TMotor::instancia().getVentana(), character_callback);
 		//activeCamera = TMotor::instancia().newCameraNode(TMotor::instancia().getActiveCamera()->getName(), TMotor::instancia().getActiveCamera()->getPadre()->getName());
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_I) == GLFW_PRESS) {
-			activeCamera->translate(glm::vec3(0, 0, -.5f));
+			if(activeCamera->getName()=="camara_libre") activeCamera->translate(glm::vec3(0, 0, -.4f));
 		}
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_K) == GLFW_PRESS) {
-			activeCamera->translate(glm::vec3(0, 0, .5f));
+			if (activeCamera->getName() == "camara_libre")activeCamera->translate(glm::vec3(0, 0, .4f));
 		}
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_J) == GLFW_PRESS) {
-			activeCamera->translate(glm::vec3(-.5f, 0, 0));
+			if (activeCamera->getName() == "camara_libre")activeCamera->translate(glm::vec3(-.4f, 0, 0));
 		}
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L) == GLFW_PRESS) {
-			activeCamera->translate(glm::vec3(.5f, 0, 0));
+			if (activeCamera->getName() == "camara_libre")activeCamera->translate(glm::vec3(.4f, 0, 0));
 		}
 
 		
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS) {
-			activeCamera->rotate(glm::vec3(1, 0, 0), .5f);
+			if (activeCamera->getName() == "camara_libre") activeCamera->rotate(glm::vec3(1, 0, 0), .5f);
 		}
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS) {
-			activeCamera->rotate(glm::vec3(1, 0, 0), -.5f);
+			if (activeCamera->getName() == "camara_libre") activeCamera->rotate(glm::vec3(1, 0, 0), -.5f);
 		}
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
-			activeCamera->rotate(glm::vec3(0, 1, 0), -1);
+			if (activeCamera->getName() == "camara_libre")activeCamera->rotate(glm::vec3(0, 1, 0), -1);
+			cout << "estoy rotando bien la camara : " << activeCamera->getName() << endl;
 		}
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS) {
-			activeCamera->rotate(glm::vec3(0, 1, 0), 1);
+			if (activeCamera->getName() == "camara_libre") activeCamera->rotate(glm::vec3(0, 1, 0), 1);
 		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_C) == GLFW_PRESS) {
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_C) == GLFW_PRESS) {
 			TMotor::instancia().setActiveCamera(TMotor::instancia().getNode("camara_libre"));
 		}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_X) == GLFW_PRESS) {
 			TMotor::instancia().setActiveCamera(TMotor::instancia().getNode("camara_jugador3apersona"));

@@ -45,6 +45,7 @@ public:
 	GLfloat getHeight();
 	TNodo *getSceneNode();
 	TNodo *getActiveCamera();
+	obj3D *getObjActiveCamera();
 	hud *getHud(const char* n);
 	hud *getActiveHud();
 	Shader *getShader();

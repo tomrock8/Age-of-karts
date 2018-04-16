@@ -7,13 +7,15 @@
 MotorFisicas *MotorFisicas::instancia = NULL;
 
 MotorFisicas::MotorFisicas() {
+
 	broadPhase = new btAxisSweep3(btVector3(-1000, -1000, -1000), btVector3(1000, 1000, 1000)); //limites del mundo
 	confColision = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(confColision);
 	solver = new btSequentialImpulseConstraintSolver();
 	mundo = new btDiscreteDynamicsWorld(dispatcher, broadPhase, solver, confColision); //creacion del mundo
-//	fisicasMapa = new btBulletWorldImporter(mundo);
-//	fisicasMapa->loadFile("assets/Mapa01/FisicasMapaIsla.bullet"); //no recoge bien el const char con la ruta del fichero si se le pasas por parametro
+	//fisicasMapa = new btBulletWorldImporter(mundo);
+	//fisicasMapa->loadFile("assets/Mapa01/FisicasMapaIsla.bullet"); //no recoge bien el const char con la ruta del fichero si se le pasas por parametro
+
 }
 
 MotorFisicas::~MotorFisicas() {
@@ -30,6 +32,7 @@ MotorFisicas::~MotorFisicas() {
 		cout << " borro collision shape";
 		delete shape;
 		cout << "\n";
+
 	}
 	cout << "Objetos del mundo destruidos.\n";
 

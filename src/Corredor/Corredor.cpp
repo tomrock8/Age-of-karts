@@ -12,6 +12,7 @@
 
 Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 {
+
 	cargador = 0;
 	tipoObj = 0;
 	turboActivado = false;
@@ -36,12 +37,8 @@ Corredor::Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo)
 	tiempoTurbo=0;
 	proteccion=false;
 	estado->setEstadoCarrera(PARRILLA);
-
-	
 	//cuboNodo = smgr->addCubeSceneNode(1.5f);
 	
-
-
 	
 	//-------------bullet----------------
 	rueda1 = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/rueda.obj"));
@@ -131,7 +128,6 @@ void Corredor::setParametros(){
 			//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(cuboNodo->getMesh(), SColor(255, 255, 0, 0));
 			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartGladiator.obj");
 			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
-			
 			//----ACELERACION-----
 			FuerzaMaxima = btScalar(3800);
 			Fuerza = FuerzaMaxima;
@@ -148,6 +144,7 @@ void Corredor::setParametros(){
 			//-----HABILIDAD-----
 			num=1;
 			break;
+
 		case PIRATA:
 			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/green.png"));
 			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartPirata.obj");
@@ -167,6 +164,7 @@ void Corredor::setParametros(){
 			//-----HABILIDAD-----
 			num=2;
 			break;
+
 		case VIKINGO:
 			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/blue.png"));
 			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartVikingo.obj");
@@ -186,6 +184,7 @@ void Corredor::setParametros(){
 			//-----HABILIDAD-----
 			num=3;
 			break;
+
 		case CHINO:
 			//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/yellow.png"));
 			coche = Motor3d::instancia().getScene()->getMesh("assets/Karts/KartChino.obj");
@@ -219,7 +218,7 @@ void Corredor::InicializarFisicasRuedas(){
 	vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	float masar =0.0000001f;
-	float radio=1.3;
+	float radio=1.5;
 	float ancho=1.2;
 	btVector3 HalfExtents(1,1,1);
 	//posicion inicial
@@ -442,9 +441,9 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	for (int i = 0; i < vehiculo->getNumWheels(); i++)
 	{
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = btScalar(100);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
+		wheel.m_suspensionStiffness = btScalar(150);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
 		wheel.m_wheelsDampingCompression = btScalar(2.3f);//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-		wheel.m_wheelsDampingRelaxation =  btScalar(4.4f);//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_wheelsDampingRelaxation =  btScalar(3.4f);//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = btScalar(0);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 		wheel.m_maxSuspensionForce = 30000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 

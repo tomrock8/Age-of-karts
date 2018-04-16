@@ -14,7 +14,7 @@ class Shader
 public:
 	unsigned int ID; // ID del programa shader
 
-	Shader(const char* vertexPath, const char* fragmentPath);
+	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath);
 
 	void use();	// Usar/Activar shader
 	GLuint getProgram();

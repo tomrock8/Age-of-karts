@@ -4,7 +4,7 @@
 //CONSTRUCTOR DEL SHADER: RECOGE DE FICHERO Y COMPILA VERTEX Y FRAGMENT
 //SHADER PARA CREAR EL PROGRAMA SHADER QUE SE VA A USAR
 
-Shader::Shader(const char* vertexPath, const char* fragmentPath)
+Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 {
 	//crear el program object
 	program = glCreateProgram();
@@ -15,6 +15,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	//**********************************************************************************
 	std::string vertexCode;
 	std::string fragmentCode;
+	std::string geometryCode;
 	std::ifstream vShaderFile(vertexPath);
 	std::ifstream fShaderFile(fragmentPath);
 
@@ -24,17 +25,24 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
 	try
 	{
-		// abrir los archivos
-		std::stringstream vShaderStream, fShaderStream;
-		// leer el contenido del buffer de los archivos en los streams
+		//abrir los archivos
+		std::stringstream vShaderStream, fShaderStream, gShaderStream;
+		//leer el contenido del buffer de los archivos en los streams
 		vShaderStream << vShaderFile.rdbuf();
 		fShaderStream << fShaderFile.rdbuf();
-		// cerrar los manejadores de los archivos
+		//cerrar los manejadores de los archivos
 		vShaderFile.close();
 		fShaderFile.close();
-		// convertir stream a string
+		//convertir stream a string
 		vertexCode = vShaderStream.str();
 		fragmentCode = fShaderStream.str();
+		//Si tiene geometry shader, lo utilizamos
+		if (geometryPath != nullptr){
+			std::ifstream gShaderFile(geometryPath);
+			gShaderStream << gShaderFile.rdbuf();
+			gShaderFile.close();
+			geometryCode = gShaderStream.str();
+		}
 	}
 	catch (std::ifstream::failure e)
 	{
@@ -76,7 +84,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	//======================================================================================================
 
 	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); //diferencia con el vertex shader
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); //se trata de un fragment shader
 	glShaderSource(fragmentShader, 1, &fShaderCode, NULL);
 	glCompileShader(fragmentShader);
 
@@ -89,6 +97,28 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	}
 
 	//======================================================================================================
+	//Compilar el GEOMETRY SHADER recogido antes mediante un objeto shader (si hay geometru shader)
+	//======================================================================================================
+
+	unsigned int geometryShader;
+
+	if (geometryPath != nullptr){
+		const char* gShaderCode = geometryCode.c_str();
+
+		geometryShader = glCreateShader(GL_GEOMETRY_SHADER); //se trata de un geometry shader
+		glShaderSource(geometryShader, 1, &gShaderCode, NULL);
+		glCompileShader(geometryShader);
+
+		//comprobacion de errores a la hora del compilado
+		glGetShaderiv(geometryShader, GL_COMPILE_STATUS, &success);
+		if (!success)
+		{
+			glGetShaderInfoLog(geometryShader, 512, NULL, infoLog);
+			std::cout << "(Shader::Shader) ERROR::SHADER::GEOMETRY::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+	}
+
+	//======================================================================================================
 	//Creamos un SHADER PROGRAM linkeando los dos shader anteriores (tras compilarlos) y que usaremos para 
 	//el renderizado
 	//======================================================================================================
@@ -96,6 +126,9 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	ID = glCreateProgram(); // creamos el shader program
 	glAttachShader(ID, vertexShader);    //|adjuntamos ambos shaders
 	glAttachShader(ID, fragmentShader);  //|
+	if (geometryPath != nullptr){		 // Si hay geometry shader, lo adjuntamos tambien
+		glAttachShader(ID, geometryShader); 
+	}
 	glLinkProgram(ID); //y los linkeamos
 
 	//comprobacion de errores a la hora del linkeado
@@ -107,7 +140,9 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
 	glDeleteShader(vertexShader);   //|eliminamos los shader objects
 	glDeleteShader(fragmentShader); //|ya no los necesitamos tras linkearlos
-
+	if (geometryPath != nullptr){	// Si hay geometry shader, lo eliminamos tambien
+		glDeleteShader(geometryShader); 
+	}
 }
 
 //USAR EL PROGRAMA SHADER CREADO EN EL CONSTRUCTOR

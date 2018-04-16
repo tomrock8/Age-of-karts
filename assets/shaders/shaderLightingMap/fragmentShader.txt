@@ -2,14 +2,14 @@
 #version 330 core
 
 // Variable de salida del Fragment
-out vec4 FragColor; //Color final del pixel
+out vec4 FragColor; //Color final del fragmento
 
 // Variables de entrada desde el VertexShader
 in data{
     vec2 textCoords; //Coordenadas de textura
-    vec3 worldPos; // Vertice en coordenadas del mundo 
-    vec3 worldNormal; //Normal del vertice en coordenadas del mundo
-    vec4 worldLightPos; //Vertice en coordenadas de la luz
+    vec3 worldPos; // Fragmento en coordenadas del mundo 
+    vec3 worldNormal; //Normal del Fragmento en coordenadas del mundo
+    vec4 worldLightPos; //Fragmento en coordenadas de la luz
     mat3 tbnMatrix; //Inversa de la matriz TBN
 } fs_in;
 
@@ -36,20 +36,24 @@ struct Material{
     float brightness;
 };
 
-const int num_lights = 8; //Numero de luces posibles de la escena
-uniform Light light[num_lights]; //Vector de luces
+const int num_lights = 1; //Numero de luces posibles de la escena
+uniform Light point_lights[num_lights]; //Vector de luces puntuales
+uniform Light spot_lights[num_lights]; //Vector de luces dirigidas
 
 uniform Material material; //Material de la malla para cada vertice
 uniform vec3 posCamera; //Posicion de la camara
 uniform sampler2D texture_diffuse; //Textura difusa de la malla
 uniform sampler2D texture_specular; //Textura especular de la malla
 uniform sampler2D texture_normal; //Textura de normales de la malla
-uniform sampler2D shadowMap; //Textura con el mapa de profundidad para el calculo de las sombras
+uniform sampler2D shadowMap; //Textura con el mapa de profundidad para el calculo de las sombras en luces dirigidas
+uniform samplerCube shadowCube; //Cubo de profundidad para el calculo de las sombras en luces puntuales
+uniform float planoLejano; //Plano lejano de la matriz de proyeccion perspectiva usada para renderizar el cubo de profundidad
 
 //Declaracion de funciones
 vec3 calculatePointLight(int i, vec3 N);
 vec3 calculateSpotlight(int i, vec3 N);
-float calculateShadows(vec4 Lpos, int luz, vec3 N);
+float calculateDirectionalShadows(vec4 Lpos,int luz, vec3 N);
+float calculatePointShadows(vec3 Wpos, int luz, vec3 N);
 
 void main()
 {    
@@ -67,7 +71,7 @@ void main()
     // CALCULO DE LA LUZ: MODELO DE PHONG
     //======================================================
 
-    //Bucle para recorrer todas las luces de la escena y calcularla la influencia de cada una en el color del pixel
+    /*//Bucle para recorrer todas las luces de la escena y calcularla la influencia de cada una en el color del pixel
     for (int i = 0; i < num_lights; i++){
 
         vec3 result;
@@ -82,7 +86,19 @@ void main()
         //Luz resultante: ambient+diffuse+specular (se va acumulando)
         finalColor = finalColor + result;
 
+    }*/
+
+    vec3 result;
+    for (int i = 0; i < num_lights; i++){
+        result = calculatePointLight(i, N);
+        finalColor = finalColor + result;
     }
+
+    /*for (int i = 0; i < num_lights; i++){
+        result = calculateSpotlight(i, N);
+        finalColor = finalColor + result;
+    }*/
+
 
     //Se asigna el color resultante a la variable de salida
     //FragColor = vec4(vec3(texture(texture_diffuse, fs_in.textCoords)), 1.0);
@@ -95,19 +111,19 @@ vec3 calculatePointLight(int i, vec3 N){
         // *** ATENUACION ***
         // a = 1/(1+kd²), donde d es la distancia entre la luz y el vertice y k es una constante predefinida por nosotros para controlar la atenuacion
         // Tras calcularla, la atenuacion debe multiplicarse por la componente ambiente, difusa y especular de la luz
-        float d = length(light[i].position - fs_in.worldPos);
-        float attenuation = 1.0 / (1.0 + (light[i].k * pow(d,2))); 
+        float d = length(point_lights[i].position - fs_in.worldPos);
+        float attenuation = 1.0 / (1.0 + (point_lights[i].k * pow(d,2))); 
 
         // ---- AMBIENTE ----
         //Se multiplica la componente ambiente de la luz por el color ambiente del material del pixel para calcular la incidencia de la luz difusa
         //Solo se multiplica por la componente ambiente de la primera luz, sino la escena se satura demasiado
-        vec3 ambient = light[i].ambient * vec3(texture(texture_diffuse, fs_in.textCoords));
+        vec3 ambient = point_lights[i].ambient * vec3(texture(texture_diffuse, fs_in.textCoords));
         ambient *= attenuation;
         
         // ----- DIFUSA -----
         //Calcular la direccion entre la fuente de luz y la posicion en el mundo del vertice
         //Despues, la multiplicamos por la inversa de la TBN para pasarla a espacio tangente
-        vec3 lightDirection = fs_in.tbnMatrix * normalize(light[i].position - fs_in.worldPos);
+        vec3 lightDirection = fs_in.tbnMatrix * normalize(point_lights[i].position - fs_in.worldPos);
 
         //Calcular productor escalar entre la direccion de la luz y el vector normal normalizado
         //para obtener la influencia de la luz difusa sobre cada superficie
@@ -115,7 +131,7 @@ vec3 calculatePointLight(int i, vec3 N){
         float scalar = max(dot(N, lightDirection), 0.0);
 
         //Lo multiplicamos por la textura difusa
-        vec3 diffuse = light[i].diffuse * scalar * vec3(texture(texture_diffuse, fs_in.textCoords));
+        vec3 diffuse = point_lights[i].diffuse * scalar * vec3(texture(texture_diffuse, fs_in.textCoords));
         diffuse *= attenuation;
         
         // ---- ESPECULAR ----
@@ -127,11 +143,21 @@ vec3 calculatePointLight(int i, vec3 N){
 
         //Calcular el componente especular
         float S = pow(max(dot(cameraDirection, directionReflect), 0.0), material.brightness);
-        vec3 specular = light[i].specular * S * vec3(texture(texture_specular, fs_in.textCoords));
+        vec3 specular = point_lights[i].specular * S * vec3(texture(texture_specular, fs_in.textCoords));
         specular *= attenuation;
 
+        
+        // ---- SOMBRAS ----
+        //Calculamos el valor de la sombra
+        //if (light[i].direction.w < 0.1){
+            float shadow = calculatePointShadows(fs_in.worldPos, i, N);
+            //Lo multiplicamos por las componentes difusa y especular
+            diffuse = (1.0 - shadow) * diffuse;
+            specular = (1.0 - shadow) * specular;
+        //}
+        
         //Resultado del calculo de la luz
-        vec3 r = ambient + diffuse + specular;
+        vec3 r = ambient + diffuse + specular;  
 
         return r;
 }
@@ -145,26 +171,26 @@ vec3 calculateSpotlight(int i, vec3 N){
         // *** ATENUACION ***
         // a = 1/(1+kd²), donde d es la distancia entre la luz y el vertice y k es una constante predefinida por nosotros para controlar la atenuacion
         // Tras calcularla, la atenuacion debe multiplicarse por la componente ambiente, difusa y especular de la luz
-        float d = length(light[i].position - fs_in.worldPos);
-        float attenuation = 1.0 / (1.0 + (light[i].k * pow(d,2))); 
+        float d = length(spot_lights[i].position - fs_in.worldPos);
+        float attenuation = 1.0 / (1.0 + (spot_lights[i].k * pow(d,2))); 
 
         //Calcular la direccion entre la fuente de luz y la posicion en el mundo del vertice
-        vec3 lightDirection =normalize(light[i].position - fs_in.worldPos);
+        vec3 lightDirection =normalize(spot_lights[i].position - fs_in.worldPos);
 
         //Comprobar si el vertice esta dentro del foco mediante el producto escalar entre el vector direccion de la luz y el vector entre la luz y el vertice
-        float inside = dot(lightDirection, normalize(vec3(-light[i].direction))); 
+        float inside = dot(lightDirection, normalize(vec3(-spot_lights[i].direction))); 
 
         //La multiplicamos por la inversa de la TBN para pasarla a espacio tangente despues de comprobar si el vertice esta dentro del foco
         //En caso contrario, la comprobacion no se realiza correctamente
         lightDirection = fs_in.tbnMatrix * lightDirection;
 
         //Si el vertice esta dentro del foco, se realizan los calculos normales
-        if ( inside > light[i].cut ){
+        if ( inside > spot_lights[i].cut ){
 
             // ---- AMBIENTE ----
             //Se multiplica la componente ambiente de la luz por el color del ambiente del pixel para calcular la incidencia de la luz difusa
             //Solo se multiplica por la componente ambiente de la primera luz, sino la escena se satura demasiado
-            vec3 ambient = light[i].ambient * vec3(texture(texture_diffuse, fs_in.textCoords));
+            vec3 ambient = spot_lights[i].ambient * vec3(texture(texture_diffuse, fs_in.textCoords));
             ambient *= attenuation;
             
             // ----- DIFUSA -----
@@ -174,7 +200,7 @@ vec3 calculateSpotlight(int i, vec3 N){
             float scalar = max(dot(N, lightDirection), 0.0);
 
             //Lo multiplicamos por la textura difusa
-            vec3 diffuse = light[i].diffuse * scalar * vec3(texture(texture_diffuse, fs_in.textCoords));
+            vec3 diffuse = spot_lights[i].diffuse * scalar * vec3(texture(texture_diffuse, fs_in.textCoords));
             diffuse *= attenuation;
             
             // ---- ESPECULAR ----
@@ -186,12 +212,12 @@ vec3 calculateSpotlight(int i, vec3 N){
 
             //Calcular el componente especular
             float S = pow(max(dot(cameraDirection, directionReflect), 0.0), material.brightness);
-            vec3 specular = light[i].specular * S * vec3(texture(texture_specular, fs_in.textCoords));
+            vec3 specular = spot_lights[i].specular * S * vec3(texture(texture_specular, fs_in.textCoords));
             specular *= attenuation;
 
             // ---- SOMBRAS ----
-            //Calculamos el valor de sombra
-            float shadow = calculateShadows(fs_in.worldLightPos, i, N);
+            //Calculamos el valor de la sombra
+            float shadow = calculateDirectionalShadows(fs_in.worldLightPos, i, N);
             //Lo multiplicamos por las componentes difusa y especular
             diffuse = (1.0 - shadow) * diffuse;
             specular = (1.0 - shadow) * specular;
@@ -200,7 +226,7 @@ vec3 calculateSpotlight(int i, vec3 N){
             r = ambient + diffuse + specular;
         }else{
             //Si no esta dentro del foco, se calcula solo la ambiente para que no este totalmente a oscuras el objeto
-            vec3 ambient = light[i].ambient * vec3(texture(texture_diffuse, fs_in.textCoords));
+            vec3 ambient = spot_lights[i].ambient * vec3(texture(texture_diffuse, fs_in.textCoords));
             ambient *= attenuation;
             r = ambient;
         }
@@ -209,9 +235,9 @@ vec3 calculateSpotlight(int i, vec3 N){
 
 }
 
-//Funcion para el calculo de las sombras. Devuelve un float (grado de penumbra) que se multiplica por las 
+//Funcion para el calculo de las sombras de una luz dirigida. Devuelve un float (grado de penumbra) que se multiplica por las 
 //componentes difusa y especular de la luz 
-float calculateShadows(vec4 Lpos, int luz, vec3 N){
+float calculateDirectionalShadows(vec4 Lpos, int luz, vec3 N){
     //Normalizar las coordenadas del vertice en el espacio de la luz -> dividir las coordenadas x,y,z por w
     vec3 normCoords = Lpos.xyz/Lpos.w;
     //Transformar las coordenadas normalizadas del rango [-1,1] al rango [0,1]
@@ -221,8 +247,8 @@ float calculateShadows(vec4 Lpos, int luz, vec3 N){
     //BIAS = Variable que sirve como rango para evitar el problema del acne en el dibujado de las sombras
     //Sin ella, se dibujan finas lineas negras por toda la escena iluminada, produciendo un efecto parecido a una teselacion
     //Se calcula a partir del angulo de cada superficie respecto al vector direccion de la luz
-    vec3 lightDirection = normalize(light[luz].position - fs_in.worldPos);
-    //Segun el angulo, se concede un valor de 0.001 (max) o 0.0001 
+    vec3 lightDirection = normalize(spot_lights[0].position - fs_in.worldPos);
+    //Segun el angulo, se concede un valor de 0.001 (max) o 0.0001 (min)
     float bias = max(0.001 * (1.0 - dot(N, lightDirection)), 0.0001);
     //Se aplica la tecnica del PCF, para difuminar los bordes de las sombras, ya que estos (especialmente los diagonales)
     //se ven escalonados
@@ -248,6 +274,29 @@ float calculateShadows(vec4 Lpos, int luz, vec3 N){
     //Si la profundidad de las coordenadas del fragmente superan el 1.0 (maximo en coordenadas normalizadas) entonces no hay ninguna sombra posible
     if(normCoords.z > 1.0)
         shadow = 0.0;
+
+    return shadow;
+}
+
+//Funcion para el calculo de las sombras de una luz dirigida. Devuelve un float (grado de penumbra) que se multiplica por las 
+//componentes difusa y especular de la luz 
+float calculatePointShadows(vec3 Wpos, int luz, vec3 N){
+    //Primero, obtenemos la profundidad del cubo a partir del vector entre la posicion del fragmento y de la luz
+    vec3 fragToLight = Wpos - point_lights[0].position; //No hace falta normalizar el vector al trabajar con un cubo
+    float cubeDepth = texture(shadowCube, fragToLight).r; //Nos devuelve la profundidad en el rango [0,1]
+    cubeDepth *= planoLejano; //La multiplicamos por el plano lejano para obtenerla en el rango [0, planoLejano]
+    //Despues, obtenemos la profundidad del fragmento actual (longitud del vector anterior)
+    float aDepth = length(fragToLight);
+    //BIAS = Variable que sirve como rango para evitar el problema del acne en el dibujado de las sombras
+    //Sin ella, se dibujan finas lineas negras por toda la escena iluminada, produciendo un efecto parecido a una teselacion
+    //Se calcula a partir del angulo de cada superficie respecto al vector direccion de la luz
+    //vec3 lightDirection = normalize(light[luz].position - fs_in.worldPos);
+    //Segun el angulo, se concede un valor de 0.001 (max) o 0.0001 (min)
+    //float bias = max(0.001 * (1.0 - dot(N, lightDirection)), 0.0001);
+    float bias = 0.05;
+    //Si la profundidad del fragmento es mayor que la profundidad mas cercana desde la perspectiva de la luz,
+    //entonces el fragmento se encuentro en penumbra
+    float shadow = aDepth - bias > cubeDepth ? 1.0 : 0.0; 
 
     return shadow;
 }

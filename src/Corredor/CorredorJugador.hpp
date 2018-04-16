@@ -22,6 +22,7 @@ public:
 private:
 	//objetos estaticos y dinamicos
 	bool comprobadorMovimiento;
+	bool pressed;
 	//Item *actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos);
 };
 

@@ -54,7 +54,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.9); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(1.5f); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -64,7 +64,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	//VALORES POR DEFECTO
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
-	Masa = btScalar(800);
+	Masa = btScalar(200);
 	FuerzaMaxima = btScalar(400); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	indiceGiroAlto = btScalar(0.4);
@@ -78,33 +78,34 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	// HAY QUE MODIFICAR DE QUE NODO PENDEN!!!
 	const char* strRueda = "assets/rueda/rueda.obj";
-	rueda1 = TMotor::instancia().newMeshNode("rueda1", strRueda, "traslacion_Jugador");
+	rueda1 = TMotor::instancia().newMeshNode("rueda1", strRueda, "escena_raiz");
 	rueda1->setPosition(-2, 0, 3);
-	rueda2 = TMotor::instancia().newMeshNode("rueda2", strRueda, "traslacion_Jugador");
+	rueda2 = TMotor::instancia().newMeshNode("rueda2", strRueda, "escena_raiz");
 	rueda2->setPosition(2, 0, 3);
-	rueda3 = TMotor::instancia().newMeshNode("rueda3", strRueda, "traslacion_Jugador");
+	rueda3 = TMotor::instancia().newMeshNode("rueda3", strRueda, "escena_raiz");
 	rueda3->setPosition(-2, 0, -3);
-	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "traslacion_Jugador");
+	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "escena_raiz");
     rueda4->setPosition(2, 0, -3);
 
 	//rueda1->setScale(vector3df(2,1,1));//alante derecha
 	//rueda2->setScale(vector3df(2,1,1));//delante izquierda
 	//rueda3->setScale(vector3df(2,1,1));//atras derecha
 	//rueda4->setScale(vector3df(2,1,1));//atras izquierda
-
+/*
 	rueda1->setRotation(0, 45, 0);
 	rueda2->setRotation(0, -45, 0);
 	rueda3->setRotation(45, 0, 0);
 	rueda4->setRotation(-45, 0, 0);
-	
+	*/
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
 		cuboNodo->setRotation(0.0f, 0.0f, 0.0f);
 	}
 
-	cameraThird = TMotor::instancia().newCameraNode("camara_jugador3apersona", "traslacion_Jugador");
+	cameraThird = TMotor::instancia().newCameraNode("camara_jugador3apersona", "escena_raiz");
 	
 	InicializarFisicas();
+	InicializarFisicasRuedas();
 
 }
 void Corredor::setParametros() {
@@ -192,6 +193,150 @@ void Corredor::setParametros() {
 	
 }
 
+
+void Corredor::InicializarFisicasRuedas(){
+
+	//actualizarRuedas();
+
+	MotorFisicas *bullet = MotorFisicas::getInstancia(); 
+	btDynamicsWorld *mundo = bullet->getMundo();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
+
+	float masar =0.0000000001f;
+	float radio=1.2;
+	float ancho=1.2;
+	btVector3 HalfExtents(1,1,1);
+	
+	//posicion inicial
+	btTransform transRueda;
+	transRueda.setIdentity();
+	btVector3 posTransRueda = btVector3(rueda1->getPosition().x, rueda1->getPosition().y, rueda1->getPosition().z);
+	transRueda.setOrigin(posTransRueda);
+	btQuaternion quaternion;
+	quaternion.setEulerZYX(rueda1->getRotation().z* PI / 180, rueda1->getRotation().y * PI / 180, rueda1->getRotation().x* PI / 180);
+	transRueda.setRotation(quaternion);
+
+	//Motionstate
+	motionStateRueda1 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+
+	//FormaColisionR1 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	FormaColisionR1 = new btSphereShape(radio);
+		
+	// Add mass
+	btVector3 LocalInertia;
+	FormaColisionR1->calculateLocalInertia(masar, LocalInertia);
+
+
+	CuerpoColisionRueda1 = new btRigidBody(masar, motionStateRueda1, FormaColisionR1, LocalInertia);
+	CuerpoColisionRueda1->setUserPointer((void *)(rueda1));
+
+	CuerpoColisionRueda1->setActivationState(DISABLE_DEACTIVATION);
+
+	// Add it to the world
+	mundo->addRigidBody(CuerpoColisionRueda1);
+	objetos.push_back(CuerpoColisionRueda1);
+	bullet->setObjetos(objetos);
+
+
+
+	// rueda 2
+	
+	transRueda.setIdentity();
+	posTransRueda = btVector3(rueda2->getPosition().x, rueda2->getPosition().y, rueda2->getPosition().z);
+	transRueda.setOrigin(posTransRueda);
+	quaternion.setEulerZYX(rueda2->getRotation().z* PI / 180, rueda2->getRotation().y * PI / 180, rueda2->getRotation().x* PI / 180);
+	transRueda.setRotation(quaternion);
+
+	//Motionstate
+	motionStateRueda2 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+
+	//FormaColisionR2 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	FormaColisionR2 = new btSphereShape(radio);
+		
+	CuerpoColisionRueda2 = new btRigidBody(masar, motionStateRueda2, FormaColisionR2, LocalInertia);
+	CuerpoColisionRueda2->setUserPointer((void *)(rueda2));
+
+	CuerpoColisionRueda2->setActivationState(DISABLE_DEACTIVATION);
+
+	// Add it to the world
+	mundo->addRigidBody(CuerpoColisionRueda2);
+	objetos.push_back(CuerpoColisionRueda2);
+	bullet->setObjetos(objetos);
+
+
+	// rueda 3
+	
+	transRueda.setIdentity();
+	posTransRueda = btVector3(rueda3->getPosition().x, rueda3->getPosition().y, rueda3->getPosition().z);
+	transRueda.setOrigin(posTransRueda);
+	quaternion.setEulerZYX(rueda3->getRotation().z* PI / 180, rueda3->getRotation().y * PI / 180, rueda3->getRotation().x* PI / 180);
+	transRueda.setRotation(quaternion);
+
+	//Motionstate
+	motionStateRueda3= new btDefaultMotionState(transRueda); //motionState = interpolacion
+
+	//FormaColisionR3 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	FormaColisionR3 = new btSphereShape(radio);
+		
+	CuerpoColisionRueda3 = new btRigidBody(masar, motionStateRueda3, FormaColisionR3, LocalInertia);
+	CuerpoColisionRueda3->setUserPointer((void *)(rueda3));
+
+	CuerpoColisionRueda3->setActivationState(DISABLE_DEACTIVATION);
+
+	// Add it to the world
+	mundo->addRigidBody(CuerpoColisionRueda3);
+	objetos.push_back(CuerpoColisionRueda3);
+	bullet->setObjetos(objetos);
+
+	// rueda 4
+	
+	transRueda.setIdentity();
+	posTransRueda = btVector3(rueda4->getPosition().x, rueda4->getPosition().y, rueda4->getPosition().z);
+	transRueda.setOrigin(posTransRueda);
+	quaternion.setEulerZYX(rueda4->getRotation().z* PI / 180, rueda4->getRotation().y * PI / 180, rueda4->getRotation().x* PI / 180);
+	transRueda.setRotation(quaternion);
+
+	//Motionstate
+	motionStateRueda4 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+
+	//FormaColisionR4 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	FormaColisionR4 = new btSphereShape(radio);
+		
+	CuerpoColisionRueda4 = new btRigidBody(masar, motionStateRueda4, FormaColisionR4, LocalInertia);
+	CuerpoColisionRueda4->setUserPointer((void *)(rueda4));
+
+	CuerpoColisionRueda4->setActivationState(DISABLE_DEACTIVATION);
+
+	// Add it to the world
+	mundo->addRigidBody(CuerpoColisionRueda4);
+	objetos.push_back(CuerpoColisionRueda4);
+	bullet->setObjetos(objetos);
+
+
+	btVector3 axisA(1.f, 1.f, 1.f); 
+	btVector3 axisB(0.f, 0.f, 0.f); 
+	btVector3 pivotA(3.f, 5.f, 3.f);
+	btVector3 pivotB(0.f, 0.f, 0.f);
+
+	restriccion1 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda1,pivotA, pivotB,axisA,axisB,false);
+	pivotA = btVector3(-3.f, 5.f, 3.f);
+	restriccion2 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda2,pivotA, pivotB,axisA,axisB,false);
+	pivotA = btVector3(-3.f, 5.f, -3.f);
+	restriccion3 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda3,pivotA, pivotB,axisA,axisB,false);
+	pivotA = btVector3(3.f, 5.f, -3.f);
+	restriccion4 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda4,pivotA, pivotB,axisA,axisB,false); 
+	restriccion1->enableAngularMotor(true, 1, 0);
+	restriccion2->enableAngularMotor(true, 1, 0);
+	restriccion3->enableAngularMotor(true, 1, 0);
+	restriccion4->enableAngularMotor(true, 1, 0);
+
+	mundo->addConstraint(restriccion1,true);
+	mundo->addConstraint(restriccion2,true);
+	mundo->addConstraint(restriccion3,true);
+	mundo->addConstraint(restriccion4,true);
+	
+}
+
 //-----------------------------//
 //----------FISICAS------------//
 //-----------------------------//
@@ -275,13 +420,13 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	
 	for (int i = 0; i < vehiculo->getNumWheels(); i++) {
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
-		wheel.m_suspensionStiffness = btScalar(20);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
-		wheel.m_wheelsDampingCompression = btScalar(2.3f);//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-		wheel.m_wheelsDampingRelaxation = btScalar(4.4f);//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_suspensionStiffness = btScalar(100);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
+		wheel.m_wheelsDampingCompression = btScalar(0.f);//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
+		wheel.m_wheelsDampingRelaxation =  btScalar(5.f);//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = btScalar(0);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
-		wheel.m_maxSuspensionForce = 30000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
-		//wheel.m_maxSuspensionTravelCm = 10; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 										   
+		wheel.m_maxSuspensionForce = 50000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
+		wheel.m_maxSuspensionTravelCm = 10000.f; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 										   
 	}
 	
 }
@@ -850,86 +995,90 @@ btScalar Corredor::getDistanciaPunto(btVector3 vector) {
 //----------------------------------------//
 //------------MOVIMIENTO------------------//
 //----------------------------------------//
-void Corredor::acelerar() {
-	if ((vehiculo->getCurrentSpeedKmHour() > velocidadMaxima && !turboActivado) || (turboActivado && vehiculo->getCurrentSpeedKmHour() > velocidadMaximaTurbo)) {
+void Corredor::acelerar()
+{
+	if((vehiculo->getCurrentSpeedKmHour()>velocidadMaxima && !turboActivado) || (turboActivado && vehiculo->getCurrentSpeedKmHour()>velocidadMaximaTurbo)){
 		limitadorVelocidad();
-	}
-	else {
+
+	}else{
 		vehiculo->applyEngineForce(Fuerza, 0);
 		vehiculo->applyEngineForce(Fuerza, 1);
 		vehiculo->applyEngineForce(Fuerza, 2);
 		vehiculo->applyEngineForce(Fuerza, 3);
-	}
-	vehiculo->setSteeringValue(btScalar(0), 0);
-	vehiculo->setSteeringValue(btScalar(0), 1);
-
+		}
+		vehiculo->setSteeringValue(btScalar(0), 0);
+		vehiculo->setSteeringValue(btScalar(0), 1);
+	
 	estado->setEstadoMovimiento(AVANZA);
-	if (!turboActivado)
+	if (!turboActivado){
 		estado->setDireccionMovimiento(RECTO);
-
-}
-
-void Corredor::frenar() {
-	if (vehiculo->getCurrentSpeedKmHour() < velocidadMaximaAtras) {
-		vehiculo->applyEngineForce(0, 0);
-		vehiculo->applyEngineForce(0, 1);
-		vehiculo->applyEngineForce(0, 2);
-		vehiculo->applyEngineForce(0, 3);
 	}
-	else {
-		vehiculo->applyEngineForce(FuerzaFrenado, 0);
-		vehiculo->applyEngineForce(FuerzaFrenado, 1);
-		vehiculo->applyEngineForce(FuerzaFrenado, 2);
-		vehiculo->applyEngineForce(FuerzaFrenado, 3);
+}
+void Corredor::frenar()
+{
+	
+
+	if(vehiculo->getCurrentSpeedKmHour() < velocidadMaximaAtras){
+
+	vehiculo->applyEngineForce(0, 0);
+	vehiculo->applyEngineForce(0, 1);
+	vehiculo->applyEngineForce(0, 2);
+	vehiculo->applyEngineForce(0, 3);
+	
+	}else{
+	vehiculo->applyEngineForce(FuerzaFrenado, 0);
+	vehiculo->applyEngineForce(FuerzaFrenado, 1);
+	vehiculo->applyEngineForce(FuerzaFrenado, 2);
+	vehiculo->applyEngineForce(FuerzaFrenado, 3);
+	
 	}
 
 	vehiculo->setSteeringValue(btScalar(0), 0);
 	vehiculo->setSteeringValue(btScalar(0), 1);
 
-	if (vehiculo->getCurrentSpeedKmHour() < 0) {
+	if(vehiculo->getCurrentSpeedKmHour() < 0){
 		estado->setEstadoMovimiento(MARCHA_ATRAS);
-	}
-	else
+	}else{
 		estado->setEstadoMovimiento(FRENA);
-
-	if (!turboActivado)
-		estado->setDireccionMovimiento(RECTO);
-
-}
-void Corredor::girarDerecha() {
-	estado->setDireccionMovimiento(DERECHA);
-	if (vehiculo->getCurrentSpeedKmHour() < velocidadLimiteGiro) {
-		FuerzaGiro = indiceGiroAlto;
 	}
-	else
-		FuerzaGiro = indiceGiroBajo;
-
+	if (!turboActivado)
+	estado->setDireccionMovimiento(RECTO);
+	
+}
+void Corredor::girarDerecha()
+{
+	estado->setDireccionMovimiento(DERECHA);
+	if(vehiculo->getCurrentSpeedKmHour()<velocidadLimiteGiro){
+		FuerzaGiro =indiceGiroAlto;
+	}else{
+		FuerzaGiro =indiceGiroBajo;
+	}
 
 	vehiculo->setSteeringValue(-FuerzaGiro, 0);
 	vehiculo->setSteeringValue(-FuerzaGiro, 1);
 
 }
-void Corredor::girarIzquierda() {
+void Corredor::girarIzquierda()
+{
 	estado->setDireccionMovimiento(IZQUIERDA);
-	if (vehiculo->getCurrentSpeedKmHour() < velocidadLimiteGiro) {
+	if(vehiculo->getCurrentSpeedKmHour()<velocidadLimiteGiro){
 		FuerzaGiro = indiceGiroAlto;
-	}
-	else
+	}else{
 		FuerzaGiro = indiceGiroBajo;
-	
-
+	}
 	vehiculo->setSteeringValue(FuerzaGiro, 0);
 	vehiculo->setSteeringValue(FuerzaGiro, 1);
-
+	
 }
-void Corredor::frenodemano(bool activo, bool objeto) {
+void Corredor::frenodemano(bool activo, bool objeto)
+{
 	int friccion = 1.f;
 	if (activo) {
-		if (!aceiteActivado && !turboActivado) {
-			if (vehiculo->getCurrentSpeedKmHour() > 300 && (estado->getDireccionMovimiento() == IZQUIERDA || estado->getDireccionMovimiento() == DERECHA)) {
-				int i = vehiculo->getCurrentSpeedKmHour();
-				if (i % 3 == 0)
-					limite += 1;
+		if (!aceiteActivado && !turboActivado){
+			if(vehiculo->getCurrentSpeedKmHour()>300 && (estado->getDireccionMovimiento()==IZQUIERDA || estado->getDireccionMovimiento()==DERECHA)){
+				int i=vehiculo->getCurrentSpeedKmHour();
+				if (i%3==0)
+				limite+=1;
 			}
 		}
 
@@ -946,11 +1095,11 @@ void Corredor::frenodemano(bool activo, bool objeto) {
 
 		vehiculo->getWheelInfo(2).m_frictionSlip = btScalar(friccion);
 		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(friccion);
-
-
+		
+		
 	}
 	else {
-
+		
 		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(10000);
 		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(10000);
 
@@ -958,10 +1107,11 @@ void Corredor::frenodemano(bool activo, bool objeto) {
 		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(10000);
 
 		FuerzaGiro = btScalar(0.1);
-
+		
 	}
 }
-void Corredor::desacelerar() {
+void Corredor::desacelerar()
+{
 	estado->setEstadoMovimiento(DESACELERA);
 	vehiculo->applyEngineForce(0, 0);
 	vehiculo->applyEngineForce(0, 1);
@@ -976,12 +1126,13 @@ void Corredor::desacelerar() {
 	vehiculo->setBrake(160, 2);
 	vehiculo->setBrake(160, 3);
 }
-void Corredor::limitadorVelocidad() {
+void Corredor::limitadorVelocidad(){
 	vehiculo->applyEngineForce(0.0001, 0);
 	vehiculo->applyEngineForce(0.0001, 1);
 	vehiculo->applyEngineForce(0.0001, 2);
 	vehiculo->applyEngineForce(0.0001, 3);
 }
+
 void Corredor::comprobarSueloRuedas() {
 	/*
 		int cont=0;
@@ -1037,11 +1188,16 @@ void Corredor::update()
 	updateTimerObstaculos();
 	updateEstado();
 	comprobarSueloRuedas();
-	//actualizarRuedas();
+	actualizarRuedas();
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 	updateText();
+
+	float distanciaX=20;
+	cameraThird->setPosition(cuboNodo->getPosition().x - orientacion.getX()*distanciaX,7,cuboNodo->getPosition().z - orientacion.getZ()*distanciaX);
+	cameraThird->setRotation(0,cuboNodo->getRotation().y + 180,0);
+
 	//updateHijos();
 	//linea clave
 //	cameraThird->setPosition(0, 2, 7);
@@ -1130,114 +1286,27 @@ void Corredor::updateTimerObstaculos() {
 }
 
 void Corredor::actualizarRuedas() {
-	btTransform ruedas = vehiculo->getWheelTransformWS(0);
-	btVector3 Euler;
-	double yaw, pitch, roll;
-	yaw = pitch = roll = 0;
-	btQuaternion TQuat = ruedas.getRotation();
-	float x = TQuat.getX();
-	float y = TQuat.getY();
-	float z = TQuat.getZ();
-	float w = TQuat.getW();
-	//TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
-
-	Euler.setX(roll);
-	Euler.setY(pitch);
-	Euler.setZ(yaw);
-	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW()); 
-	//q.toEuler(Euler); 
-	/*btQuaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q.setEuler(yaw, pitch, roll);
-	Euler.setX(yaw);
-	Euler.setY(pitch);
-	Euler.setZ(roll);*/
-	Euler *= RADTODEG;
-
-	float distanciAancho = 1.5;
-	float ditanciaLargo = 1;
-
-
-
+		btTransform ruedas = vehiculo->getWheelTransformWS(0);
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
 	//rueda1
-	rueda1->setPosition(distanciAancho*orientacion.getZ() + ruedas.getOrigin().getX() + ditanciaLargo * orientacion.getX(), ruedas.getOrigin().getY() + 0.5,
-		orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ() + ditanciaLargo * orientacion.getZ());
-	rueda1->setRotation(Euler.getX(), Euler.getY(), Euler.getZ());
+	CuerpoColisionRueda1->setCenterOfMassTransform(ruedas);
 
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
-	TQuat = ruedas.getRotation();
-	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW()); 
-	//q.toEuler(Euler); 
-	/*btQuaternion q2(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q2.setEuler(yaw, pitch, roll);
-	Euler.setX(yaw);
-	Euler.setY(pitch);
-	Euler.setZ(roll);*/
-	x = TQuat.getX();
-	y = TQuat.getY();
-	z = TQuat.getZ();
-	w = TQuat.getW();
-	//TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
-
-	Euler.setX(roll);
-	Euler.setY(pitch);
-	Euler.setZ(yaw);
-	Euler *= RADTODEG;
-	rueda2->setPosition(-distanciAancho * orientacion.getZ() + ruedas.getOrigin().getX() + ditanciaLargo * orientacion.getX(), ruedas.getOrigin().getY() + 0.5,
-		orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ() + ditanciaLargo * orientacion.getZ());
-
-
-	rueda2->setRotation(Euler.getX(), Euler.getY() + 180, Euler.getZ());
-
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
+	CuerpoColisionRueda2->setCenterOfMassTransform(ruedas);
+		
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
-	TQuat = ruedas.getRotation();
-	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW()); 
-	//q.toEuler(Euler); 
-	/*btQuaternion q3(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q3.setEuler(yaw, pitch, roll);
-	Euler.setX(yaw);
-	Euler.setY(pitch);
-	Euler.setZ(roll);*/
-	x = TQuat.getX();
-	y = TQuat.getY();
-	z = TQuat.getZ();
-	w = TQuat.getW();
-	//TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
-
-	Euler.setX(roll);
-	Euler.setY(pitch);
-	Euler.setZ(yaw);
-	Euler *= RADTODEG;
-	rueda3->setPosition(distanciAancho*orientacion.getZ() + ruedas.getOrigin().getX() + ditanciaLargo * orientacion.getX(), ruedas.getOrigin().getY() + 0.5,
-		orientacion.getX()*-distanciAancho + ruedas.getOrigin().getZ() + ditanciaLargo * orientacion.getZ());
-	rueda3->setRotation(Euler.getX(), Euler.getY(), Euler.getZ());
-
-
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
+	CuerpoColisionRueda4->setCenterOfMassTransform(ruedas);
+	
+	
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
-	TQuat = ruedas.getRotation();
-	//q = quaternion(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW()); 
-	//q.toEuler(Euler); 
-	/*btQuaternion q4(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-	q4.setEuler(yaw, pitch, roll);
-	Euler.setX(yaw);
-	Euler.setY(pitch);
-	Euler.setZ(roll);*/
-	x = TQuat.getX();
-	y = TQuat.getY();
-	z = TQuat.getZ();
-	w = TQuat.getW();
-	//TMotor::instancia().toEulerAngle(x,y,z,w,roll,pitch,yaw);
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
+	CuerpoColisionRueda3->setCenterOfMassTransform(ruedas);
 
-	Euler.setX(roll);
-	Euler.setY(pitch);
-	Euler.setZ(yaw);
-	Euler *= RADTODEG;
-	rueda4->setPosition(-distanciAancho * orientacion.getZ() + ruedas.getOrigin().getX() + ditanciaLargo * orientacion.getX(), ruedas.getOrigin().getY() + 0.5,
-		orientacion.getX()*distanciAancho + ruedas.getOrigin().getZ() + ditanciaLargo * orientacion.getZ());
-
-	rueda4->setRotation(Euler.getX(), Euler.getY() + 180, Euler.getZ());
 
 
 }

@@ -1,5 +1,5 @@
 #include "obj3D.hpp"
-#include "..\Motor\TMotor.hpp"
+#include "TMotor.hpp"
 
 obj3D::obj3D(TNodo *m, const char *n, GLuint i) {
 	node = m;

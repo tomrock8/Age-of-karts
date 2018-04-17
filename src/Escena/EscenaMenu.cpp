@@ -82,6 +82,9 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	//Activamos el hud del menu principal, para que se muestre primero
 	TMotor::instancia().setActiveHud("MainMenuHUD");
 
+
+	GestorSonido::getInstacia()->setListenerData();
+	fuenteOpcion = new AlSource();
 }
 
 EscenaMenu::~EscenaMenu() {
@@ -129,6 +132,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 		//Segun se toque arriba o abajo, el usuario se va moviendo entre los distintos botones del menu
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS){
 			if (!pressed){
+				fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 				if (optionMenu == 3){
 					optionMenu = 0;
 				}else{
@@ -138,6 +142,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			}
 		}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS){
 			if (!pressed){
+				fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 				if (optionMenu == 0){
 					optionMenu = 3;
 				}else{
@@ -147,6 +152,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			}
 		//Si se pulsa intro se comprueba en que opcion del menu se encuentra el usuario y se cambia a la escena correspondiente
 		}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS){
+			fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 			if (optionMenu == 0){
 				cout << "LOCAL\n";
 				TMotor::instancia().setActiveHud("LocalMenuHUD");

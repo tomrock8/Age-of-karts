@@ -29,6 +29,9 @@ private:
 	std::string ipConexion;
 
 	int optionMenu;
+
+	int sonidoOpcion;
+	AlSource *fuenteOpcion;
 };
 
 #endif /* ESCENAMENU_H */

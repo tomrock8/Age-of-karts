@@ -15,6 +15,9 @@ int main(int argc, char* argv[]) {
 	//GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
 	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
 
+	//CREAMOS GESTOR DE SONIDO SINGLETON
+	GestorSonido::getInstacia();
+
 	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
 	cam->translate(glm::vec3(0.0f, 12.0f, 15.0f));
 	
@@ -116,7 +119,7 @@ int main(int argc, char* argv[]) {
 //		activeCamera = TMotor::instancia().newCameraNode(TMotor::instancia().getActiveCamera()->getName(), TMotor::instancia().getActiveCamera()->getPadre()->getName());
 		glfwPollEvents(); // Comprobacion de eventos (Teclado, raton, joystick)
 	}
-
+	delete GestorSonido::getInstacia();
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
 	TMotor::instancia().close();
 

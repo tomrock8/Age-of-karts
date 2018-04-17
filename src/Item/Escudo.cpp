@@ -9,7 +9,7 @@ Escudo::Escudo(obj3D* n, btVector3 posicion, btVector3 escala, btScalar masa, fl
 	NodoVehiculo = n;
 
 	//objetoHabilidad =  Motor3d::instancia().getScene()->getMesh("assets/Objetos/escudo.obj");
-	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/escudo.obj", "traslacion_Jugador");
+	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/escudo.obj", "escena_raiz");
 	cout << "(Escudo::Escudo) Hay que comprobar la posicion que sea respecto del corredor al crear";
 	nodo->setPosition(posicion.getX(), posicion.getY(), posicion.getZ());
 

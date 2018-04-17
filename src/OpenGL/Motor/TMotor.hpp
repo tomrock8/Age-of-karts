@@ -11,6 +11,8 @@
 #include <iostream>
 #include <stack>
 #include <math.h>
+#include "imgui.h"
+#include "imgui_impl_glfw_gl3.h"
 
 #define WIDTH 1600
 #define HEIGHT 900
@@ -114,4 +116,5 @@ protected:
 	// Luz
 	TLuz    *createLight();
 	TNodo   *createLightNode(TNodo * padre, TLuz * luz, const char* name);
+	
 };

@@ -41,6 +41,18 @@ TMotor::TMotor() {
 	gestorRecursos = new TGestorRecursos(); // Inicializacion del gestor de recursos
 	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena) 
 
+
+	//----------Declaracion IMGUI---------
+
+	ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+    ImGui_ImplGlfwGL3_Init(ventana, true);
+
+    // Setup style
+    ImGui::StyleColorsDark();
+
 	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
 	shaderHUD = new Shader("assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt", nullptr);
 	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
@@ -58,6 +70,13 @@ void TMotor::resizeScreen(int w, int h) {
 }
 
 void TMotor::close() {
+	
+
+	ImGui_ImplGlfwGL3_Shutdown();
+    ImGui::DestroyContext();
+
+    //glfwDestroyWindow(TMotor::instancia().getVentana());
+
 	glfwTerminate();									//Terminar GLFW, limpiando todos los recursos alocados por GLFW
 	delete gestorRecursos;
 	for (int i = 0; i < HUDs.size(); i++){
@@ -255,7 +274,10 @@ void TMotor::clean() {
 }
 
 void TMotor::draw(int tipo) {
-
+	bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	
 	//Establecer el nuevo color de fondo
 	glClearColor(0.16f, 0.533f, 0.698f, 0.0f);
 
@@ -383,7 +405,48 @@ void TMotor::draw(int tipo) {
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);*/
 
-	
+		//------------------IMGUI: MOSTRAR VENTANAS---------------- 
+
+	ImGui_ImplGlfwGL3_NewFrame();
+
+	static float f = 0.0f;
+	static int counter = 0;
+	ImGui::Text("Hello, world!");                           // Display some text (you can use a format string too)
+	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our windows open/close state
+	ImGui::Checkbox("Another Window", &show_another_window);
+
+	if (ImGui::Button("Button"))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+		counter++;
+	ImGui::SameLine();
+	ImGui::Text("counter = %d", counter);
+
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+	if (show_another_window)
+	{
+		ImGui::Begin("Another Window", &show_another_window);
+		ImGui::Text("Hello from another window!");
+		if (ImGui::Button("Close Me"))
+			show_another_window = false;
+		ImGui::End();
+	}
+
+	// 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
+	if (show_demo_window)
+	{
+		ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+		ImGui::ShowDemoWindow(&show_demo_window);
+	}
+
+	int display_w, display_h;
+	glfwGetFramebufferSize(TMotor::instancia().getVentana(), &display_w, &display_h);
+	glViewport(0, 0, display_w, display_h);
+	ImGui::Render();
+	ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+
 	//swap los bufers de pantalla (trasero y delantero)
 	glfwSwapBuffers(TMotor::instancia().getVentana());
 

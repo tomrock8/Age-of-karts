@@ -6,7 +6,7 @@ LIBRERIAS_BULLET := -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoft
 
 RUTAS2 := -I. -I/usr/local/include/bullet/ 
 RUTAS :=  -I./include/raknet -I./include/bullet -I./include -I./include/assimp -I./include/GL -I./include/GLFW -I./include/glm -I./include/sdl -I./include/stb -I./include/openal -L./lib
-RUTAS_INTERNAS := -I./src -I./src/Carrera -I./src/Corredor -I./src/Escena -I./src/Item -I./src/Motor -I./src/OpenGL/Motor -I./src/OpenGL/ArbolEscena -I./src/OpenGL/Fachada -I./src/OpenGL/Shader -I./src/OpenGL/GestorRecursos -I./src/OpenGL
+RUTAS_INTERNAS := -I./src -I./src/Carrera -I./src/Corredor -I./src/Escena -I./src/Item -I./src/Motor -I./src/imgui -I./src/OpenGL/Motor -I./src/OpenGL/ArbolEscena -I./src/OpenGL/Fachada -I./src/OpenGL/Shader -I./src/OpenGL/GestorRecursos -I./src/OpenGL
 
 CFLAGS := -ggdb -std=c++11 
 .PHONY: objdir info all 
@@ -70,6 +70,7 @@ objdir:
 	@mkdir -p obj/OpenGL/Shader
 	@mkdir -p obj/OpenGL/GestorRecursos
 	@mkdir -p obj/OpenGL/Motor
+	@mkdir -p obj/imgui
 	@echo "Creando carpeta de compilados."
 
 info:

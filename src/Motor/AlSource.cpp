@@ -18,6 +18,21 @@ void AlSource::stop(int buffer){
     alSourceStop(sourceId);
 }
 
+void AlSource::volume(float vol){
+    alSourcef(sourceId, AL_GAIN, vol);;
+}
+
+bool AlSource::isPlaying()
+{
+    ALenum state;
+    alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
+    return (state == AL_PLAYING);
+}
+
+int AlSource::getSourceId(){
+    return sourceId;
+}
+
 AlSource::~AlSource(){
     alDeleteSources(1, &sourceAux);
 }

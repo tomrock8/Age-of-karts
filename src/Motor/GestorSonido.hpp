@@ -14,6 +14,8 @@ class GestorSonido{
         static GestorSonido *getInstacia();
         GestorSonido();
         int cargarSonido(std::string file);
+        //int cargarFuente();
+        //std::vector<*AlSource> getFuentes();
         void setListenerData();
         bool getSonidoCargado();
         ~GestorSonido();
@@ -24,6 +26,8 @@ class GestorSonido{
         ALCcontext *context;
         ALCdevice *device;
         std::vector<int> buffers;
+        std::vector<AlSource> sources;
+        AlSource *sourceAux;
         unsigned int bufferAux;
         ALvoid*     alBuffer;             //data for the buffer
         ALenum      alFormatBuffer;    //buffer format

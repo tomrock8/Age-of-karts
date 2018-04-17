@@ -29,11 +29,11 @@ GestorSonido::GestorSonido(){
     int i;
     i = cargarSonido("assets/bounce.wav");
     i = cargarSonido("assets/sound.wav");
+    i = cargarSonido("assets/menu.wav");
 }
 
 int GestorSonido::cargarSonido(std::string file){
     const char * c = file.c_str();
-    cargado = true;
     //cargamos el archivo de audio
     alutLoadWAVFile((ALbyte*)c,&alFormatBuffer, &alBuffer,&alBufferLen, &alFreqBuffer, &alLoop);
     alGenBuffers(1, &bufferAux);
@@ -51,6 +51,17 @@ int GestorSonido::cargarSonido(std::string file){
     
     return buffer;
 }
+/*
+int GestorSonido::cargarFuente(){
+	sourceAux = new AlSource();
+    sources.push_back(sourceAux);
+
+    return (int)sourceAux;
+}
+
+std::vector<*AlSource> GestorSonidogetFuentes(){
+    return sources;
+}*/
 
 void GestorSonido::setListenerData(){
     alListener3f(AL_POSITION, 0,0,0);

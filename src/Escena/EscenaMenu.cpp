@@ -82,8 +82,22 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	//Activamos el hud del menu principal, para que se muestre primero
 	TMotor::instancia().setActiveHud("MainMenuHUD");
 
-
+/*
 	GestorSonido::getInstacia()->setListenerData();
+	fuenteMenu = GestorSonido::cargarFuente();
+	if(!GestorSonido::getInstacia()->getFuentes().at(fuenteMenu-1)->isPlaying()){
+		GestorSonido::getInstacia()->getFuentes().at(fuenteMenu-1)->volume(0.1f);
+		GestorSonido::getInstacia()->getFuentes().at(fuenteMenu-1)->play(SOUND_MENU);
+	}
+	fuenteOpcion = GestorSonido::cargarFuente();
+*/
+	
+	GestorSonido::getInstacia()->setListenerData();
+	fuenteMenu = new AlSource();
+	fuenteMenu->volume(0.1f);
+	if(fuenteMenu->isPlaying());
+		fuenteMenu->play(SOUND_MENU);
+	fuenteOpcion->volume(1.0f);
 	fuenteOpcion = new AlSource();
 }
 
@@ -122,6 +136,8 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 	//Si se pulsa ESCAPE se sale directamente del juego - para poder salir de todos los sitios, despues se quitara
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS){
 		if(!pressed){
+			delete fuenteMenu;
+			delete fuenteOpcion;
 			return Escena::tipo_escena::SALIR; // Devuelve el estado de las escenas para que salga
 		}
 	}
@@ -160,11 +176,17 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			}else if (optionMenu == 1){
 				cout << "MULTIPLAYER\n";
 				ipConexion="";
+					
+				delete fuenteMenu;
+				delete fuenteOpcion;
 				return Escena::tipo_escena::LOBBY;
 			}else if (optionMenu == 2){
 				cout << "OPCIONES\n";
 			}else{
 				cout << "SALIR\n";
+					
+				delete fuenteMenu;
+				delete fuenteOpcion;
 				return Escena::tipo_escena::SALIR; 
 			}
 		}else pressed = false;

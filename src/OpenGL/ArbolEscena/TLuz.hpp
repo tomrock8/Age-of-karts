@@ -12,7 +12,7 @@ class TLuz : public TEntidad
 {
 public:
 	TLuz();
-	TLuz(glm::vec3 ambiente, glm::vec3 difusa, glm::vec3 especular, glm::vec4 dir, float at, float corte);
+	TLuz(glm::vec3 ambiente, glm::vec3 difusa, glm::vec3 especular, glm::vec4 dir, float at, float corte, bool shadow);
 
 	// SOMBRAS
 	void renderMap();
@@ -51,6 +51,7 @@ private:
 	bool active;
 	glm::vec4 TColor;
 	
+	char numLight; //Numero de luz
 	glm::vec3 lightPosition;
 	glm::vec4 lightDirection; //Para la luz dirigida -> si la luz es puntual es todo 0.0f
 
@@ -59,6 +60,8 @@ private:
 	glm::vec3 especular;
 	float attenuation;
 	float cut;
+
+	bool sombras; //Booleano para activar o desactivar las sombras
 
 	//SOMBRAS
 	const int DEPTH_WIDTH = 1024, DEPTH_HEIGHT = 1024; //Alto y ancho del mapa de profundidad

@@ -16,32 +16,32 @@ void TRecursoTextura::activeTexture(Shader *shader) {
 		//Recuperamos el id de la textura difusa
 		GLuint id = textures.at("texture_diffuse");
 		//Activamos la textura difusa -> siempre es la primera == GL_TEXTURE0
-		glActiveTexture(GL_TEXTURE1);
+		glActiveTexture(GL_TEXTURE0);
 		//Enlazamos la textura difusa a partir de su id recuperado
 		glBindTexture(GL_TEXTURE_2D, id);
 		//Le pasamos al shader la textura difusa a utilizar
-		glUniform1i(glGetUniformLocation(shader->ID, "texture_diffuse"), 1);
+		glUniform1i(glGetUniformLocation(shader->ID, "texture_diffuse"), 0);
 
 		if (textures.size() > 1) {
 			//Recuperamos el id de la textura especular
 			id = textures.at("texture_specular");
 			//Activamos la textura especular -> siempre es la segunda == GL_TEXTURE1
-			glActiveTexture(GL_TEXTURE2);
+			glActiveTexture(GL_TEXTURE1);
 			//Enlazamos la textura especular a partir de su id recuperado
 			glBindTexture(GL_TEXTURE_2D, id);
 			//Le pasamos al shader la textura especular a utilizar
-			glUniform1i(glGetUniformLocation(shader->ID, "texture_specular"), 2);
+			glUniform1i(glGetUniformLocation(shader->ID, "texture_specular"), 1);
 		}
 
 		if (textures.size() > 2) {
 			//Recuperamos el id de la textura especular
 			id = textures.at("texture_normal");
 			//Activamos la textura especular -> siempre es la segunda == GL_TEXTURE1
-			glActiveTexture(GL_TEXTURE3);
+			glActiveTexture(GL_TEXTURE2);
 			//Enlazamos la textura especular a partir de su id recuperado
 			glBindTexture(GL_TEXTURE_2D, id);
 			//Le pasamos al shader la textura especular a utilizar
-			glUniform1i(glGetUniformLocation(shader->ID, "texture_normal"), 3);
+			glUniform1i(glGetUniformLocation(shader->ID, "texture_normal"), 2);
 		}
 	}
 
@@ -49,7 +49,7 @@ void TRecursoTextura::activeTexture(Shader *shader) {
 
 
 void TRecursoTextura::disableTexture() {
-	for (size_t i = 1; i < 8; i++) {
+	for (size_t i = 0; i < 3; i++) {
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}

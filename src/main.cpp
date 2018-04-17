@@ -30,18 +30,22 @@ int main(int argc, char* argv[]) {
 	// OBJETOS CARGADOS
 	//TMotor::instancia().precarga("assets/Mapa01/isla.obj");
 	
-//	obj3D *pirata = TMotor::instancia().newMeshNode("pirata", "assets/Pirata/p2.obj", "escena_raiz");
+    obj3D *pirata = TMotor::instancia().newMeshNode("pirata", "assets/Pirata/p2.obj", "escena_raiz");
 	//obj3D *chino = TMotor::instancia().newMeshNode("chino", "assets/Chino/Chino.obj", "escena_raiz");
-	//obj3D *wall = TMotor::instancia().newMeshNode("wall", "assets/wall/wall.obj", "escena_raiz");
-	//obj3D *cube = TMotor::instancia().newMeshNode("cubo", "assets/wall/wall.obj", "escena_raiz");
-	//obj3D *cube2 = TMotor::instancia().newMeshNode("cubo2", "assets/wall/wall.obj", "escena_raiz");
-	////chino->setPosition(5.5, 0, 0);
-	////pirata->setPosition(-20, 10, 0);
-	//wall->setScale(5.0, 1.0, 5.0);
-	//wall->setPosition(0, 4.0, 0);
-	//cube->setPosition(0, 10.0, 0);
-	//cube2->setScale(0.5, 0.5, 0.5);
-	//cube2->setPosition(-1.75, 8.0, 0);
+	obj3D *wall = TMotor::instancia().newMeshNode("wall", "assets/wall/wall.obj", "escena_raiz");
+	obj3D *cube = TMotor::instancia().newMeshNode("cubo", "assets/wall/wall.obj", "escena_raiz");
+	obj3D *cube2 = TMotor::instancia().newMeshNode("cubo2", "assets/wall/wall.obj", "escena_raiz");
+	obj3D *cube3 = TMotor::instancia().newMeshNode("cubo3", "assets/wall/wall.obj", "escena_raiz");
+	obj3D *cube4 = TMotor::instancia().newMeshNode("cubo4", "assets/wall/wall.obj", "escena_raiz");
+	//chino->setPosition(5.5, 0, 0);
+	pirata->setPosition(-20, 10, 0);
+	wall->setScale(5.0, 1.0, 5.0);
+	wall->setPosition(0, 4.0, 0);
+	cube->setPosition(0, 10.0, 0);
+	cube2->setScale(0.5, 0.5, 0.5);
+	cube2->setPosition(-1.75, 8.0, 0);
+	cube3->setPosition(0, 2.0, 60);
+	cube4->setPosition(0, 0.5, 100);
 	
 	/*
 	obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");

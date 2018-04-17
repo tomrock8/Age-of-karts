@@ -11,6 +11,7 @@
 #include "MotorFisicas.hpp"
 #include "ItemTeledirigido.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+#include "BulletDynamics/ConstraintSolver/btHingeConstraint.h"
 #include "RaknetIncludes.hpp"
 #include "Escudo.hpp"
 #include "EstadosJugador.hpp"
@@ -28,6 +29,7 @@ public:
 	typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
 	Corredor(btVector3 pos, tipo_jugador tipo);
 	void InicializarFisicas();
+	void InicializarFisicasRuedas();
 	void resetFuerzas();
 	void limitadorVelocidad();
 	// Destructor
@@ -143,6 +145,28 @@ protected:
 	btCollisionShape *FormaColision;		//contornoB
 	btRigidBody *CuerpoColisionChasis;
 	btCompoundShape *CentroGravedad;
+
+	//RUEDAS
+	btDefaultMotionState *motionStateRueda1; //interpolacion
+	btCollisionShape *FormaColisionR1;		//contornoB
+	btRigidBody *CuerpoColisionRueda1;
+
+	btDefaultMotionState *motionStateRueda2; //interpolacion
+	btCollisionShape *FormaColisionR2;		//contornoB
+	btRigidBody *CuerpoColisionRueda2;
+
+	btDefaultMotionState *motionStateRueda3; //interpolacion
+	btCollisionShape *FormaColisionR3;		//contornoB
+	btRigidBody *CuerpoColisionRueda3;
+
+	btDefaultMotionState *motionStateRueda4; //interpolacion
+	btCollisionShape *FormaColisionR4;		//contornoB
+	btRigidBody *CuerpoColisionRueda4;
+
+	btHingeConstraint *restriccion1;
+	btHingeConstraint *restriccion2;
+	btHingeConstraint *restriccion3;
+	btHingeConstraint *restriccion4;
 
 	const char* nombre;
 	int id;

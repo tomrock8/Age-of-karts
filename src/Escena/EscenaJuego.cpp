@@ -186,17 +186,13 @@ void EscenaJuego::init() {
 		//-----------------------------
 		//	CAMARA
 		//-----------------------------
-		camara = new Camara3persona();
-		tipoCamara = 0;
-		cambioCamara = false;
+	camera = TMotor::instancia().newCamera3ThPerson("camara_jugador3apersona", "escena_raiz");
+	camera->setParentNode(pj.at(controlPlayer)->getNodo()->getNode());
+//		camara = new Camara3persona();
+//		tipoCamara = 0;
+//		cambioCamara = false;
 	
-	//-----------------------------
-	//	CAMARA
-	//-----------------------------
-	camara = new Camara3persona();
-	tipoCamara = 0;
-	cambioCamara = false;
-
+	
 	//-----------------------------
 	//	GESTOR COLISIONES
 	//-----------------------------
@@ -429,6 +425,14 @@ void EscenaJuego::update() {
 
 
 	pj = jugadores->getJugadores();
+
+
+	float distanciaX = -20;
+	float posX = pj.at(controlPlayer)->getVectorDireccion().getX()*distanciaX;
+	float posZ = pj.at(controlPlayer)->getVectorDireccion().getZ()*distanciaX;
+
+	camera->setPosition(posX, 7, posZ);
+	camera->setRotation(glm::vec3(0, 1, 0), 180);
 	/*switch(tipoCamara){
 		case 0:		//Camara 3a persona fija
 			camara->moveCamera(pj.at(controlPlayer));

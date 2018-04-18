@@ -88,8 +88,8 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 		cuboNodo->setRotation(0.0f, 0.0f, 0.0f);
 	}
 
-	cameraThird = TMotor::instancia().newCamera3ThPerson("camara_jugador3apersona", "escena_raiz");
-	cameraThird->setParentNode(this->cuboNodo->getNode());
+	//cameraThird = TMotor::instancia().newCamera3ThPerson("camara_jugador3apersona", "escena_raiz");
+	//cameraThird->setParentNode(this->cuboNodo->getNode());
 
 
 	
@@ -1160,9 +1160,9 @@ void Corredor::update() {
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 	updateText();
 
-	float distanciaX=20;
-	cameraThird->setPosition(- orientacion.getX()*distanciaX,7, - orientacion.getZ()*distanciaX);
-	cameraThird->setRotation(glm::vec3(0,1,0),180);
+	//float distanciaX=20;
+	//cameraThird->setPosition(- orientacion.getX()*distanciaX,7,- orientacion.getZ()*distanciaX);
+	//cameraThird->setRotation(glm::vec3(0,1,0),180);
 
 	//updateHijos();
 	//linea clave

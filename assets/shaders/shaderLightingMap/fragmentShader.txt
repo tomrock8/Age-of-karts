@@ -26,6 +26,7 @@ struct Light {
     float cut; //Coseno del angulo que define el radio del foco de la luz dirigida
 
     bool sombra; //true == sombra activada, false == luz sin sombra
+    bool activa; //true == luz activada, false == luz apagada
 };
 
 //Estructura con los datos del material
@@ -59,8 +60,8 @@ uniform int numSpotLights; //Numero de luces dirigidas en la escena
 //Declaracion de funciones
 vec3 calculatePointLight(int i, vec3 N);
 vec3 calculateSpotlight(int i, vec3 N);
+float calculatePointShadows(samplerCube c, int luz, vec3 N);
 float calculateDirectionalShadows(vec4 Lpos,int luz, vec3 N);
-float calculatePointShadows(vec3 Wpos, samplerCube c, int luz, vec3 N);
 
 void main()
 {    
@@ -81,7 +82,11 @@ void main()
 
     //Bucle que recorre las luces puntuales
     for (int i = 0; i < numPointLights; i++){
-        result = calculatePointLight(i, N);
+        result = vec3(0.0, 0.0, 0.0);
+        //Si la luz esta activa, se calcula su influencia sobre el fragmento
+        if ( point_lights[i].activa == true){
+            result = calculatePointLight(i, N);
+        }
         //Luz resultante: ambient+diffuse+specular (se va acumulando)
         finalColor = finalColor + result;
     }
@@ -99,6 +104,7 @@ void main()
 
 //Funcion que calcula la influencia de una luz puntual sobre el fragmento
 vec3 calculatePointLight(int i, vec3 N){
+
         // *** ATENUACION ***
         // a = 1/(1+kd²), donde d es la distancia entre la luz y el fragmento y k es una constante predefinida por nosotros para controlar la atenuacion
         // Tras calcularla, la atenuacion debe multiplicarse por la componente ambiente, difusa y especular de la luz
@@ -140,15 +146,19 @@ vec3 calculatePointLight(int i, vec3 N){
         // ---- SOMBRAS ----
         //Calculamos el valor de la sombra
         float shadow = 0.0;
+        //Segun la luz que estemos tratando, se usa el cubo de profundidad correspondiente, siempre que se requiera que la luz tenga sombras
         if ( i == 0 ){
             if ( point_lights[i].sombra == true )
-            shadow = calculatePointShadows(fs_in.worldPos, shadowCube_0, i, N);
+            shadow = calculatePointShadows(shadowCube_0, i, N);
         } else if ( i == 1 ){
             if ( point_lights[i].sombra == true )
-            shadow = calculatePointShadows(fs_in.worldPos, shadowCube_1, i, N);
+            shadow = calculatePointShadows(shadowCube_1, i, N);
         } else if ( i == 2 ){
             if ( point_lights[i].sombra == true )
-            shadow = calculatePointShadows(fs_in.worldPos, shadowCube_2, i, N);
+            shadow = calculatePointShadows(shadowCube_2, i, N);
+        } else if ( i == 3 ){
+            if ( point_lights[i].sombra == true )
+            shadow = calculatePointShadows(shadowCube_3, i, N);
         }
         //Lo multiplicamos por las componentes difusa y especular
         diffuse = (1.0 - shadow) * diffuse;
@@ -234,19 +244,37 @@ vec3 calculateSpotlight(int i, vec3 N){
 
 //Funcion para el calculo de las sombras de una luz dirigida. Devuelve un float (grado de penumbra) que se multiplica por las 
 //componentes difusa y especular de la luz 
-float calculatePointShadows(vec3 Wpos, samplerCube c, int luz, vec3 N){
-    //Primero, obtenemos la profundidad del cubo a partir del vector entre la posicion del fragmento y de la luz
-    vec3 fragToLight = Wpos - point_lights[luz].position; //No hace falta normalizar el vector al trabajar con un cubo
-    float cubeDepth = texture(c, fragToLight).r; //Nos devuelve la profundidad en el rango [0,1]
-    cubeDepth *= planoLejano; //La multiplicamos por el plano lejano para obtenerla en el rango [0, planoLejano]
+float calculatePointShadows(samplerCube c, int luz, vec3 N){
+    //Vector direccion entre el fragmento y la luz
+    vec3 fragToLight = fs_in.worldPos - point_lights[luz].position; 
     //Despues, obtenemos la profundidad del fragmento actual (longitud del vector anterior)
     float aDepth = length(fragToLight);
     //BIAS = Variable que sirve como rango para evitar el problema del acne en el dibujado de las sombras
     //Sin ella, se dibujan finas lineas negras por toda la escena iluminada, produciendo un efecto parecido a una teselacion
     float bias = 0.005;
-    //Si la profundidad del fragmento es mayor que la profundidad mas cercana desde la perspectiva de la luz,
-    //entonces el fragmento se encuentro en penumbra
-    float shadow = aDepth - bias > cubeDepth ? 1.0 : 0.0; 
+    //Supermuestreo para definir los bordes de las sombras (PCF con un numero determinado de muestras)
+    int nMuestras  = 20; //Numero de muestra 
+    //array de vec3 con las direcciones de muestra
+    vec3 direccionesMuestra[20] = vec3[](vec3( 1,  1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1,  1,  1), 
+    vec3( 1,  1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1,  1, -1), vec3( 1,  1,  0), vec3( 1, -1,  0), 
+    vec3(-1, -1,  0), vec3(-1,  1,  0), vec3( 1,  0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1,  0, -1),
+    vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1));
+    float shadow = 0.0;
+    float d = length(posCamera - fs_in.worldPos); //Distancia entre la camara y el fragmento
+    float radio = 0.1;  //Radio alrededor del vector entre la luz y el fragmento que se va a muestrear
+                        //Cuanto mas alto, sombras mas difuminadas
+    for(int i = 0; i < nMuestras; i++)
+    {
+        //Obtenemos la profundidad del cubo a partir del vector entre la posicion del fragmento y de la luz
+        float cubeDepth = texture(c, fragToLight + direccionesMuestra[i] * radio).r; //Nos devuelve la profundidad en el rango [0,1]
+        cubeDepth *= planoLejano; //La multiplicamos por el plano lejano para obtenerla en el rango [0, planoLejano]
+        //Si la profundidad del fragmento es mayor que la profundidad mas cercana desde la perspectiva de la luz,
+        //entonces el fragmento se encuentro en penumbra
+        if(aDepth - bias > cubeDepth)
+            shadow = shadow + 1.0;
+    }
+    //Dividimos el valor de sombra entre el numero de muestras tratadas para hacer la media
+    shadow = shadow/float(nMuestras);  
     //Puntos que estan fuera del circulo cumplen que: (x - center_x)^2 + (y - center_y)^2 < radius^2
     //Para evitar el sombreado de las zonas del mapa exteriores al plano lejano utilizado en la matriz proyeccion de la luz
     if ((pow(fragToLight.x,2) + pow(fragToLight.z,2)) > pow(planoLejano-1.0, 2)) shadow = 0.0;

@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
 
 	//CREAMOS GESTOR DE SONIDO SINGLETON
-	GestorSonido::getInstacia();
+	//GestorSonido::getInstacia();
 
 	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
 	cam->translate(glm::vec3(0.0f, 12.0f, 15.0f));

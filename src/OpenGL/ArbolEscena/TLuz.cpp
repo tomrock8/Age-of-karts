@@ -32,7 +32,7 @@ TLuz::TLuz() {
 	attenuation = 0.01f; 
 }
 
-TLuz::TLuz(glm::vec3 ambiente, glm::vec3 difusa, glm::vec3 especular, glm::vec4 dir, float at, float corte, bool shadow) {
+TLuz::TLuz(glm::vec3 ambiente, glm::vec3 difusa, glm::vec3 especular, glm::vec4 dir, float at, float corte, bool shadow, bool on) {
 	this->lightDirection = dir;
 	this->ambiente = ambiente;
 	this->difusa = difusa;
@@ -40,6 +40,7 @@ TLuz::TLuz(glm::vec3 ambiente, glm::vec3 difusa, glm::vec3 especular, glm::vec4 
 	this->attenuation = at;
 	this->cut = corte;
 	this->sombras = shadow;
+	this->active = on;
 	//Llamamos a la funcion para crear el mapa de profundidad diferenciando segun sea una luz puntual o dirigida
 	if (dir[3] < 0.1){
 		calculateCubeDepthMap();
@@ -84,6 +85,7 @@ void TLuz::setLuzPuntual(Shader *shader, const char *nombre) {
 	shader->setFloat( name + "k", attenuation);
 	shader->setFloat( name + "cut", cut);
 	shader->setBool( name + "sombra", sombras);
+	shader->setBool( name + "activa", active);
 }
 
 /*La posicion y orientacion de la camara y de las luces se maneja a traves de

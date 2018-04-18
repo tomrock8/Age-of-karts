@@ -91,14 +91,14 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	}
 	fuenteOpcion = GestorSonido::cargarFuente();
 */
-	
+	/*
 	GestorSonido::getInstacia()->setListenerData();
 	fuenteMenu = new AlSource();
 	fuenteMenu->volume(0.1f);
 	if(fuenteMenu->isPlaying());
 		fuenteMenu->play(SOUND_MENU);
 	fuenteOpcion->volume(1.0f);
-	fuenteOpcion = new AlSource();
+	fuenteOpcion = new AlSource();*/
 }
 
 EscenaMenu::~EscenaMenu() {
@@ -136,8 +136,8 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 	//Si se pulsa ESCAPE se sale directamente del juego - para poder salir de todos los sitios, despues se quitara
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS){
 		if(!pressed){
-			delete fuenteMenu;
-			delete fuenteOpcion;
+			//delete fuenteMenu;
+			//delete fuenteOpcion;
 			return Escena::tipo_escena::SALIR; // Devuelve el estado de las escenas para que salga
 		}
 	}
@@ -148,7 +148,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 		//Segun se toque arriba o abajo, el usuario se va moviendo entre los distintos botones del menu
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS){
 			if (!pressed){
-				fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
+				//fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 				if (optionMenu == 3){
 					optionMenu = 0;
 				}else{
@@ -158,7 +158,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			}
 		}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS){
 			if (!pressed){
-				fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
+				//fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 				if (optionMenu == 0){
 					optionMenu = 3;
 				}else{
@@ -168,7 +168,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			}
 		//Si se pulsa intro se comprueba en que opcion del menu se encuentra el usuario y se cambia a la escena correspondiente
 		}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS){
-			fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
+			//fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 			if (optionMenu == 0){
 				cout << "LOCAL\n";
 				TMotor::instancia().setActiveHud("LocalMenuHUD");
@@ -177,16 +177,16 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 				cout << "MULTIPLAYER\n";
 				ipConexion="";
 					
-				delete fuenteMenu;
-				delete fuenteOpcion;
+				//delete fuenteMenu;
+				//delete fuenteOpcion;
 				return Escena::tipo_escena::LOBBY;
 			}else if (optionMenu == 2){
 				cout << "OPCIONES\n";
 			}else{
 				cout << "SALIR\n";
 					
-				delete fuenteMenu;
-				delete fuenteOpcion;
+				//delete fuenteMenu;
+				//delete fuenteOpcion;
 				return Escena::tipo_escena::SALIR; 
 			}
 		}else pressed = false;

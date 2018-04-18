@@ -134,7 +134,7 @@ obj3D *TMotor::newCameraNode( const char *name, const char* parentNode) {
 }
 
 
-obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float corte, bool shadow, const char* parentNode) {
+obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode) {
 	// R O T A C I O N
 	string *nameRot = new string("rotacion_" + (string)name);
 	TTransform *rotacion = createTransformation();
@@ -150,7 +150,7 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 
 	// N O D O
 	//TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(.8f), dir, att, corte);
-	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(0.8f), dir, att, corte, shadow);
+	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(0.8f), dir, att, corte, shadow, active);
 	TNodo *nodo = createLightNode(traslacionNodo, luz, name);
 	if (static_cast<TLuz *>(nodo->getEntidad())->getLightType() < 0.1){
 		nPointLights++;

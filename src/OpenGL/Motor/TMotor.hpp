@@ -90,8 +90,6 @@ protected:
 	//Luces
 	std::vector <TNodo *> lights;
 	std::vector <TNodo *> activeLights;
-	int nPointLights = 0;
-	int nSpotLights = 0;
 
 	//Hud
 	std::vector <hud*> HUDs; //Vector que guarda los diferentes huds del juego

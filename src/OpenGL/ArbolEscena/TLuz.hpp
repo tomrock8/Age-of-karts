@@ -38,7 +38,7 @@ public:
 	void setIntensidad(glm::vec4 color);	// recoge la intensidad Tcolor y la almacena en la variable color
 	//void setPosition();	//pasarle una vector de 3 posiciones
 	// Luz puntual
-	void setLuzPuntual(Shader *shader, const char* nombre);
+	void setLuz(Shader *shader, const char* nombre);
 	void setActive(bool active);
 	void setLightPosition(glm::vec3 pos);
 

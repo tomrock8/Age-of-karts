@@ -62,7 +62,7 @@ float TLuz::getLightType() { return lightDirection[3]; }
 //------------------------------------------//
 //---------------SET DE LUCES---------------//
 //------------------------------------------//
-void TLuz::setLuzPuntual(Shader *shader, const char *nombre) {
+void TLuz::setLuz(Shader *shader, const char *nombre) {
 	string name;
 	if (lightDirection[3] < 0.1){
 		name = "point_lights[";
@@ -109,8 +109,6 @@ void TLuz::renderMap(){
 		
 	}else{
 		renderDepthMap();
-		//Calculamos la matriz de luz
-		calculateLightMatrix();
 	}
 }
 
@@ -170,10 +168,19 @@ void TLuz::calculateDepthMap(){
 //Funcion que calcular la matriz de luz necesaria para calcular el mapa de profundidad
 void TLuz::calculateLightMatrix(){
 	//Calculamos la matriz proyeccion = no necesitamos perspectiva ya que la luz es dirigida y los rayos son paralelos
-	glm::mat4 projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 50.0f);
-
+	glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float)DEPTH_WIDTH/(float)DEPTH_HEIGHT, 2.0f, 50.0f);
+	int nZeros = 0;
+	glm::vec3 lDir;
+	if (lightDirection.x == 0.0f) nZeros++;
+	if (lightDirection.y == 0.0f) nZeros++;
+	if (lightDirection.z == 0.0f) nZeros++;
+	if (nZeros == 2){
+		lDir = glm::vec3(lightDirection);
+	}else{
+		lDir = glm::vec3(lightPosition + glm::vec3(lightDirection));
+	}
 	//Matriz view de la luz a partir de la posicion y la direccion de la luz puntual
-	glm::mat4 view = glm::lookAt(lightPosition, glm::vec3(lightDirection), glm::vec3( 0.0f, 1.0f,  0.0f));  
+	glm::mat4 view = glm::lookAt(lightPosition, glm::vec3(lDir), glm::vec3( 0.0f, 1.0f,  0.0f));  
 
 	//Matriz de luz = multiplicacion de las dos anteriores
 	lightMatrix = projection * view;
@@ -182,6 +189,8 @@ void TLuz::calculateLightMatrix(){
 
 //Funcion para renderizar el mapa de profundidad de una luz dirigida
 void TLuz::renderDepthMap(){
+	//Calculamos la matriz de luz
+	calculateLightMatrix();
 	//Establecemos el viewport a las medidas del mapa de profundidad
 	glViewport(0, 0, DEPTH_WIDTH, DEPTH_HEIGHT);
 	//Activamos el buffer del mapa de profundidad
@@ -196,13 +205,19 @@ void TLuz::renderDepthMap(){
 //Funcion que configura los datos del shader para una luz dirigida
 void TLuz::configureDirectionalShadow(){
 	//Pasamos la matriz de luz al shader
-	TMotor::instancia().getShader()->setMat4("lightMatrix", lightMatrix);
+	int text = numLight - '0'; //Numero de luz dirigida (0-3)
+	string l = "spot_lights[";
+	l += numLight;
+	l += "].lightMatrix";
+	TMotor::instancia().getShader()->setMat4(l.c_str(), lightMatrix);
 	//Activamos la textura para el mapa de profundidad
-	glActiveTexture(GL_TEXTURE3);
+	glActiveTexture(GL_TEXTURE8 + text);
 	//Enlazamos la textura con el mapa de profundidad a partir de su id anteriormente creado
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
 	//Le pasamos al shader la textura con el mapa de profundidad
-	glUniform1i(glGetUniformLocation(TMotor::instancia().getShader()->ID, "shadowMap"), 3);
+	string n = "shadowMap_";
+	n+=numLight;
+	glUniform1i(glGetUniformLocation(TMotor::instancia().getShader()->ID, n.c_str()), 8 + text);
 }
 
 // ----- LUZ PUNTUAL -----
@@ -246,7 +261,7 @@ void TLuz::calculateCubeDepthMap(){
 //Funcion para calcular las matrices de luz del cubo de profundidad
 void TLuz::calculateLightMatrixes(){
 	//Calculamos la matriz proyeccion = esta vez se usa la perspectiva ya que al ser luz puntual la luz sale en todas las direcciones
-	glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float)DEPTH_WIDTH/(float)DEPTH_HEIGHT, 0.1f, 200.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float)DEPTH_WIDTH/(float)DEPTH_HEIGHT, 0.1f, 160.0f);
 
 	//Calculamos la matriz view a partir de la posicion de la luz (una para cada lado del cubo)
 	lightMatrixes.clear();
@@ -290,13 +305,13 @@ void TLuz::renderCubeDepthMap(){
 	TMotor::instancia().getShaderPointDepth()->setMat4("lightMatrix[4]", lightMatrixes.at(4));
 	TMotor::instancia().getShaderPointDepth()->setMat4("lightMatrix[5]", lightMatrixes.at(5));
 	TMotor::instancia().getShaderPointDepth()->setVec3("lightPosition", lightPosition);
-	TMotor::instancia().getShaderPointDepth()->setFloat("planoLejano", 200.0f);
+	TMotor::instancia().getShaderPointDepth()->setFloat("planoLejano", 160.0f);
 
 }
 
 //Funcion que configura los datos del shader para una luz puntual
 void TLuz::configurePointShadow(){
-	int text = numLight - '0';
+	int text = numLight - '0'; //Numero de luz puntual (0-3)
 	//Activamos la textura para el cubo de profundidad
 	glActiveTexture(GL_TEXTURE3 + text);
 	//Enlazamos la textura con el mapa de profundidad a partir de su id anteriormente creado
@@ -306,5 +321,5 @@ void TLuz::configurePointShadow(){
 	n+=numLight;
 	glUniform1i(glGetUniformLocation(TMotor::instancia().getShader()->ID, n.c_str()), 3 + text);
 	//Pasamo el plano lejano al shader
-	TMotor::instancia().getShader()->setFloat("planoLejano", 200.0f);
+	TMotor::instancia().getShader()->setFloat("planoLejano", 160.0f);
 }

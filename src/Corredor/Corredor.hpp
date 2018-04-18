@@ -124,7 +124,7 @@ protected:
 	obj3D *rueda3;
 	obj3D *rueda4;
 
-	cameraThird *cameraThird;
+	cameraThird *camara3Persona;
 
 	//WAYPOINTS
 	Waypoint *anterior; // Punto Actual

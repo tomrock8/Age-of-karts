@@ -9,7 +9,6 @@ in data{
     vec2 textCoords; //Coordenadas de textura
     vec3 worldPos; // Fragmento en coordenadas del mundo 
     vec3 worldNormal; //Normal del Fragmento en coordenadas del mundo
-    vec4 worldLightPos; //Fragmento en coordenadas de la luz
     mat3 tbnMatrix; //Inversa de la matriz TBN
 } fs_in;
 
@@ -27,6 +26,8 @@ struct Light {
 
     bool sombra; //true == sombra activada, false == luz sin sombra
     bool activa; //true == luz activada, false == luz apagada
+
+    mat4 lightMatrix; //Matriz de luz para cada luz dirigida
 };
 
 //Estructura con los datos del material
@@ -35,33 +36,34 @@ struct Material{
     vec4 color_ambient;
     vec4 color_diffuse;
     vec4 color_specular;
-    //Brillo del material -> para el calculo de la la componente especular de la luz
-    float brightness;
+    
+    float brightness; //Brillo del material -> para el calculo de la la componente especular de la luz
 };
 
-
-uniform Light point_lights[4]; //Vector de luces puntuales
+const int numLights = 4;
+uniform Light point_lights[numLights]; //Vector de luces puntuales
 uniform samplerCube shadowCube_0; //Cubo de profundidad para el calculo de las sombras de la luz puntual 0
 uniform samplerCube shadowCube_1; //Cubo de profundidad para el calculo de las sombras de la luz puntual 1
 uniform samplerCube shadowCube_2; //Cubo de profundidad para el calculo de las sombras de la luz puntual 2
 uniform samplerCube shadowCube_3; //Cubo de profundidad para el calculo de las sombras de la luz puntual 3
-uniform Light spot_lights[4]; //Vector de luces dirigidas
+uniform Light spot_lights[numLights]; //Vector de luces dirigidas
+uniform sampler2D shadowMap_0; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 0
+uniform sampler2D shadowMap_1; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 1
+uniform sampler2D shadowMap_2; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 2
+uniform sampler2D shadowMap_3; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 3
 
 uniform Material material; //Material de la malla para cada vertice
 uniform vec3 posCamera; //Posicion de la camara
 uniform sampler2D texture_diffuse; //Textura difusa de la malla
 uniform sampler2D texture_specular; //Textura especular de la malla
 uniform sampler2D texture_normal; //Textura de normales de la malla
-uniform sampler2D shadowMap; //Textura con el mapa de profundidad para el calculo de las sombras en luces dirigidas
 uniform float planoLejano; //Plano lejano de la matriz de proyeccion perspectiva usada para renderizar el cubo de profundidad
-uniform int numPointLights; //Numero de luces puntuales en la escena
-uniform int numSpotLights; //Numero de luces dirigidas en la escena
 
 //Declaracion de funciones
 vec3 calculatePointLight(int i, vec3 N);
 vec3 calculateSpotlight(int i, vec3 N);
 float calculatePointShadows(samplerCube c, int luz, vec3 N);
-float calculateDirectionalShadows(vec4 Lpos,int luz, vec3 N);
+float calculateDirectionalShadows(sampler2D c, int luz, vec3 N);
 
 void main()
 {    
@@ -81,7 +83,7 @@ void main()
     vec3 result = vec3(0.0, 0.0, 0.0);
 
     //Bucle que recorre las luces puntuales
-    for (int i = 0; i < numPointLights; i++){
+    for (int i = 0; i < numLights; i++){
         result = vec3(0.0, 0.0, 0.0);
         //Si la luz esta activa, se calcula su influencia sobre el fragmento
         if ( point_lights[i].activa == true){
@@ -91,12 +93,16 @@ void main()
         finalColor = finalColor + result;
     }
 
-    /*
-    for (int i = 0; i < num_lights; i++){
-        result = calculateSpotlight(i, N);
+    //Bucle que recorre las luces dirigidas
+    for (int i = 0; i < numLights; i++){
+        result = vec3(0.0, 0.0, 0.0);
+        //Si la luz esta activa, se calcula su influencia sobre el fragmento
+        if ( spot_lights[i].activa == true){
+            result = calculateSpotlight(i, N);
+        }
+        //Luz resultante: ambient+diffuse+specular (se va acumulando)
         finalColor = finalColor + result;
-       
-    }*/
+    }
 
     //Se asigna el color resultante a la variable de salida
     FragColor = vec4(finalColor, 1.0);
@@ -225,11 +231,25 @@ vec3 calculateSpotlight(int i, vec3 N){
 
             // ---- SOMBRAS ----
             //Calculamos el valor de la sombra
-            float shadow = calculateDirectionalShadows(fs_in.worldLightPos, i, N);
+            float shadow = 0.0;
+            //Segun la luz que estemos tratando, se usa el cubo de profundidad correspondiente, siempre que se requiera que la luz tenga sombras
+            if ( i == 0 ){
+                if ( spot_lights[i].sombra == true )
+                shadow = calculateDirectionalShadows(shadowMap_0, i, N);
+            } else if ( i == 1 ){
+                if ( spot_lights[i].sombra == true )
+                shadow = calculateDirectionalShadows(shadowMap_1, i, N);
+            } else if ( i == 2 ){
+                if ( spot_lights[i].sombra == true )
+                shadow = calculateDirectionalShadows(shadowMap_2, i, N);
+            } else if ( i == 3 ){
+                if ( spot_lights[i].sombra == true )
+                shadow = calculateDirectionalShadows(shadowMap_3, i, N);
+            }
             //Lo multiplicamos por las componentes difusa y especular
             diffuse = (1.0 - shadow) * diffuse;
             specular = (1.0 - shadow) * specular;
-            
+
             //Color final del fragmento = suma de las tres componentes
             r = ambient + diffuse + specular;
         }else{
@@ -284,7 +304,9 @@ float calculatePointShadows(samplerCube c, int luz, vec3 N){
 
 //Funcion para el calculo de las sombras de una luz dirigida. Devuelve un float (grado de penumbra) que se multiplica por las 
 //componentes difusa y especular de la luz 
-float calculateDirectionalShadows(vec4 Lpos, int luz, vec3 N){
+float calculateDirectionalShadows(sampler2D c, int luz, vec3 N){
+    //Calculamos la posicion del vertice respecto a la luz
+    vec4 Lpos = spot_lights[luz].lightMatrix * vec4(fs_in.worldPos, 1.0);
     //Normalizar las coordenadas del vertice en el espacio de la luz -> dividir las coordenadas x,y,z por w
     vec3 normCoords = Lpos.xyz/Lpos.w;
     //Transformar las coordenadas normalizadas del rango [-1,1] al rango [0,1]
@@ -293,23 +315,20 @@ float calculateDirectionalShadows(vec4 Lpos, int luz, vec3 N){
     float aDepth = normCoords.z;
     //BIAS = Variable que sirve como rango para evitar el problema del acne en el dibujado de las sombras
     //Sin ella, se dibujan finas lineas negras por toda la escena iluminada, produciendo un efecto parecido a una teselacion
-    //Se calcula a partir del angulo de cada superficie respecto al vector direccion de la luz
-    vec3 lightDirection = normalize(spot_lights[0].position - fs_in.worldPos);
-    //Segun el angulo, se concede un valor de 0.001 (max) o 0.0001 (min)
-    float bias = max(0.001 * (1.0 - dot(N, lightDirection)), 0.0001);
+    float bias = 0.001;
     //Se aplica la tecnica del PCF, para difuminar los bordes de las sombras, ya que estos (especialmente los diagonales)
     //se ven escalonados
     float shadow = 0.0;
     //Recogemos el tamaño del mapa de profundidad
     //Al dividir 1.0 entre este, hacemos que ninguna de las muestras que trataremos despues tenga la misma profundidad
-    vec2 sampleSize = 1.0 / textureSize(shadowMap, 0);
+    vec2 sampleSize = 1.0 / textureSize(c, 0);
     //Bucle para tratar todas las muestras,en este caso 9
     for(int i = -1; i <= 1; i++)
     {
         for(int j = -1; j <= 1; j++)
         {
             //Obtenemos la profundidad mas cercana de cada una de las muestras
-            float pcfDepth = texture(shadowMap, normCoords.xy + vec2(i, j) * sampleSize).r; 
+            float pcfDepth = texture(c, normCoords.xy + vec2(i, j) * sampleSize).r; 
             //Sumamos iteradamente al valor de sombra resultante
             //Si la profundidad del fragmento es mayor que la profundidad mas cercana desde la perspectiva de la luz,
             //entonces el fragmento se encuentro en penumbra

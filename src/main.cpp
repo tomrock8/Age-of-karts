@@ -45,8 +45,7 @@ int main(int argc, char* argv[]) {
 	cube2->setScale(0.5, 0.5, 0.5);
 	cube2->setPosition(-1.75, 8.0, 0);
 	cube3->setPosition(0, 2.0, 60);
-	cube4->setPosition(0, 0.5, 100);
-	*/
+	cube4->setPosition(4, 0.5, 300);
 	
 	/*
 	obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");

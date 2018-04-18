@@ -46,16 +46,16 @@ void EscenaJuego::init() {
 	// LUCES
 	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_0->translate(glm::vec3(2.5f, 12.0f, 2.0f));
-	
+
 	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_1->translate(glm::vec3(0.0f, 12.0f, 150.0f));
-	
+
 	obj3D * luzPuntual_2 = TMotor::instancia().newLightNode("light_2", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_2->translate(glm::vec3(0.0f, 12.0f, 300.0f));
 
 	obj3D * luzPuntual_3 = TMotor::instancia().newLightNode("light_3", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
 	luzPuntual_3->translate(glm::vec3(0.0f, 12.0f, 0.0f));
-	
+
 	/*
 	obj3D * luzPuntual = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.00001f, glm::cos(glm::radians(60.0f)), "escena_raiz");
 	luzPuntual->translate(glm::vec3(-10.0f,20.0f, 310.0f));
@@ -77,7 +77,7 @@ void EscenaJuego::init() {
 	debug = 0;
 	fin_carrera = false;
 	t = Timer::getInstancia();
-	
+
 	GestorIDs::instancia().restartID();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
@@ -101,7 +101,7 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	
+
 	Pista::getInstancia()->setMapa("assets/mierdamapa/mierda.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 
@@ -161,7 +161,6 @@ void EscenaJuego::init() {
 				else {
 					jugador = new CorredorIA(pos2[i], tj);
 				}
-
 			}
 		}
 		else {
@@ -174,7 +173,6 @@ void EscenaJuego::init() {
 		jugador->setID(i);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
-
 	}
 
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
@@ -184,14 +182,14 @@ void EscenaJuego::init() {
 	jugadores->setJugadores(pj);
 
 	gc = new GestorCarrera();
-	
-		//-----------------------------
-		//	CAMARA
-		//-----------------------------
-		camara = new Camara3persona();
-		tipoCamara = 0;
-		cambioCamara = false;
-	
+
+	//-----------------------------
+	//	CAMARA
+	//-----------------------------
+	camara = new Camara3persona();
+	tipoCamara = 0;
+	cambioCamara = false;
+
 	//-----------------------------
 	//	GESTOR COLISIONES
 	//-----------------------------
@@ -205,6 +203,15 @@ void EscenaJuego::init() {
 	DeltaTime = 0;
 	tiempoRefresco = glfwGetTime();
 	t->restartTimer();
+
+
+
+	// -----------------------
+	//	IMGUI
+	// -----------------------
+	show_demo_window = false;
+	show_another_window = false;
+	muestraDebug = true;
 }
 
 void EscenaJuego::dibujar() {
@@ -214,22 +221,13 @@ void EscenaJuego::dibujar() {
 
 	//------- RENDER ----------
 	if (debug) {
-
-		//Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
-		/*SMaterial materialDriver;
-		materialDriver.Lighting = false;
-		Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
-		Motor3d::instancia().getDriver()->setMaterial(materialDriver);*/
-
 		for (int i = 0; i < pj.size(); i++) {
-
 			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
 				CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
 				AUXILIAR->setDebugFisicas(true);
 				AUXILIAR->ActualizarRaytest();
 			}
 		}
-
 		MotorFisicas::getInstancia()->getMundo()->debugDrawWorld();
 	}
 	else {
@@ -246,13 +244,57 @@ void EscenaJuego::dibujar() {
 				}
 			}
 		}
-
 	}
+
+	if (muestraDebug)
+		renderDebug();
+}
+
+void EscenaJuego::renderDebug() {
+	
+	// ------------------------------
+	// -------- IMGUI ---------------
+	// ------------------------------
+	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+	// Mostrar ventanas
+
+	ImGui_ImplGlfwGL3_NewFrame();
+	ImGui::Begin("Debug Window", &muestraDebug);
+	static float f = 0.0f;
+	static int counter = 0;
+	ImGui::Text("Hello, world!");                           // Display some text (you can use a format string too)
+	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our windows open/close state
+	ImGui::Checkbox("Another Window", &show_another_window);
+
+	if (ImGui::Button("Button"))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+		counter++;
+	ImGui::SameLine();
+	ImGui::Text("counter = %d", counter);
+
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+	if (show_another_window) {
+		ImGui::Begin("Another Window", &show_another_window);
+		ImGui::Text("Hello from another window!");
+		if (ImGui::Button("Close Me"))
+			show_another_window = false;
+		ImGui::End();
+	}
+
+	// 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
+	if (show_demo_window) {
+		ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+		ImGui::ShowDemoWindow(&show_demo_window);
+	}
+	ImGui::End();
 }
 
 void EscenaJuego::limpiar() {
-	//Motor3d::instancia().getScene()->clear();
-	//Motor3d::instancia().getGUI()->clear();
+	muestraDebug = false;
 }
 
 void EscenaJuego::update() {
@@ -267,8 +309,8 @@ void EscenaJuego::update() {
 		controlPlayer = client->getControlPlayer();
 	}
 
-	DeltaTime = glfwGetTime()*1000 - TimeStamp;
-	TimeStamp = glfwGetTime()*1000;
+	DeltaTime = glfwGetTime() * 1000 - TimeStamp;
+	TimeStamp = glfwGetTime() * 1000;
 	UpdatePhysics(DeltaTime);
 
 	for (int i = 0; i < pistaca->getTamCajas(); i++) {
@@ -333,7 +375,7 @@ void EscenaJuego::update() {
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		//pj.at(controlPlayer)->update();
 
-		if (jugadores->getNumJugadores() > 0){
+		if (jugadores->getNumJugadores() > 0) {
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 				pj.at(i)->update();
 
@@ -358,17 +400,17 @@ void EscenaJuego::update() {
 		//if (jugadores->getNumJugadores() != 0)
 			//textoDebug->agregar(pj.at(controlPlayer)->toString());
 
-			if (jugadores->getNumJugadores() != 0) {
-				float tiempoActual = glfwGetTime();
-				float timediff_sec = tiempoActual - tiempoRefresco;
+		if (jugadores->getNumJugadores() != 0) {
+			float tiempoActual = glfwGetTime();
+			float timediff_sec = tiempoActual - tiempoRefresco;
 
-				//if (timediff_sec >= 0.01) {
-				client->PlayerMovement();
-				tiempoRefresco = glfwGetTime();
-				//}
-				//client->PlayerAction();
-				client->UpdateNetworkKeyboard();
-			}
+			//if (timediff_sec >= 0.01) {
+			client->PlayerMovement();
+			tiempoRefresco = glfwGetTime();
+			//}
+			//client->PlayerAction();
+			client->UpdateNetworkKeyboard();
+		}
 	}
 
 	if (jugadores->getNumJugadores() != 0)
@@ -420,7 +462,6 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		}
 	}
 	if (tipoEscena == Escena::tipo_escena::ONLINE && !client->getStarted()) {
-
 		return Escena::tipo_escena::LOBBY;
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_C) == GLFW_PRESS) {
@@ -460,11 +501,13 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	}
 
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS) {
-		debug = 0;
+		//debug = 0;
+		muestraDebug = false;
 	}
 	else {
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS) {
-			debug = 1;
+			//debug = 1;
+			muestraDebug = true;
 		}
 	}
 
@@ -502,8 +545,8 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	else
 		Node->setPosition((float)Point[0], (float)Point[1], (float)Point[2]);
 
-	
-	
+
+
 	// Set rotation
 	const btQuaternion& TQuat = TObject->getOrientation();
 
@@ -524,11 +567,11 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 		axis.x = trunc(axis.x * 20 + 0.05) / 20;
 		axis.y = trunc(axis.y * 20 + 0.05) / 20;
 		axis.z = trunc(axis.z * 20 + 0.05) / 20;*/
-	/*cout<< "AXIS: "<<axis.x<<","<< axis.y<<","<< axis.z<<endl;
-	cout<<"ANGLE: "<<angle<<endl;
-	cout<<"---------------------"<<endl;
-	}*/
-	Node->setRotation(axis, angle);	
+		/*cout<< "AXIS: "<<axis.x<<","<< axis.y<<","<< axis.z<<endl;
+		cout<<"ANGLE: "<<angle<<endl;
+		cout<<"---------------------"<<endl;
+		}*/
+	Node->setRotation(axis, angle);
 }
 std::string EscenaJuego::getIpConexion() {
 	return ipConexion;

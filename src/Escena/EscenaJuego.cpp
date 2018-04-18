@@ -38,7 +38,7 @@ EscenaJuego::~EscenaJuego() {
 
 	//delete TextoPantalla::getInstancia();
 
-	delete camara;
+	//delete camara;
 }
 
 void EscenaJuego::init() {
@@ -188,9 +188,9 @@ void EscenaJuego::init() {
 		//-----------------------------
 		//	CAMARA
 		//-----------------------------
-		camara = new Camara3persona();
-		tipoCamara = 0;
-		cambioCamara = false;
+		//camara = new Camara3persona();
+		//tipoCamara = 0;
+		//cambioCamara = false;
 	
 	//-----------------------------
 	//	GESTOR COLISIONES

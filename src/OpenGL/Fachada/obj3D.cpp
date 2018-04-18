@@ -18,6 +18,23 @@ void obj3D::rotate(glm::vec3 axis, GLfloat angle) {
 	rotation.z += angle*axis.z;
 	static_cast<TTransform*>(node->getPadre()->getPadre()->getEntidad())->rotar(axis.x, axis.y, axis.z, angle);
 }
+void obj3D::setRotation(glm::vec3 axis, GLfloat angle) {
+
+	rotation.x = angle * axis.x;
+	rotation.y = angle * axis.y;
+	rotation.z = angle * axis.z;
+
+	static_cast<TTransform*>(node->getPadre()->getPadre()->getEntidad())->setRotation(axis.x, axis.y, axis.z, angle);
+}
+void obj3D::setRotation(float X, float Y, float Z) {
+
+	setRotation(glm::vec3(1, 0, 0), X);
+
+	rotate(glm::vec3(0, 1, 0), Y);
+
+	rotate(glm::vec3(0, 0, 1), Z);
+
+}
 
 
 void obj3D::translate(glm::vec3 pos) {
@@ -86,24 +103,8 @@ void obj3D::setVisible(bool visible) {
 	static_cast<TMalla*>(node->getEntidad())->setVisible(visible);
 }
 
-void obj3D::setRotation(glm::vec3 axis, GLfloat angle) {
-	
-	rotation.x = angle*axis.x;	
-	rotation.y = angle*axis.y;
-	rotation.z = angle*axis.z;
-	
-	static_cast<TTransform*>(node->getPadre()->getPadre()->getEntidad())->setRotation(axis.x, axis.y, axis.z, angle);
-}
 
-void obj3D::setRotation(float X, float Y, float Z) {
 
-	setRotation(glm::vec3(1, 0, 0), X);
-
-	rotate(glm::vec3(0, 1, 0), Y);
-
-	rotate(glm::vec3(0, 0, 1), Z);
-
-}
 
 
 void obj3D::setPosition(float X, float Y, float Z) {

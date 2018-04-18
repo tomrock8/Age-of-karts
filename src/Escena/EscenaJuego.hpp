@@ -9,7 +9,7 @@
 
 #include "MotorFisicas.hpp"
 #include "DebugFisicas.hpp"
-#include "Camara3persona.hpp"
+#include "cameraThird.hpp"
 
 #include "Pista.hpp"
 #include "GestorJugadores.hpp"
@@ -47,7 +47,6 @@ private:
 
 	int controlPlayer;
 
-	Camara3persona *camara;
 	int tipoCamara;
 	bool cambioCamara;
 	GestorColisiones *colisiones;

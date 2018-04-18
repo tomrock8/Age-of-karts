@@ -26,6 +26,7 @@ public:
 	const char * getName();
 	glm::vec3 getPosition();
 	glm::vec3 getRotation();
+	TNodo * getNode();
 	glm::vec3 getEscala();
 	bool isVisible();
 

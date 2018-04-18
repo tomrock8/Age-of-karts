@@ -4,8 +4,6 @@
 cameraThird::cameraThird(TNodo *m, TNodo *parent, const char *n, GLuint i) {
 	node = m;
 	parentNode = parent;
-	position = getParentPosition(); //setear a la posicion del padre pero apartado
-	rotation = getParentRotation();
 	name = n;
 	id = i;
 	direction = 0;
@@ -263,13 +261,13 @@ const char *cameraThird::getName() {
 }
 
 glm::mat4 cameraThird::getParentPosition() {
-	glm::mat4 aux = (static_cast<TTransform*>(node->getPadre()->getEntidad())->getMatriz());
+	glm::mat4 aux = (static_cast<TTransform*>(parentNode->getPadre()->getEntidad())->getMatriz());
 	return aux;
 }
 
 glm::mat4 cameraThird::getParentRotation() {
 	
-	glm::mat4 aux = (static_cast<TTransform*>(node->getPadre()->getPadre()->getEntidad())->getMatriz());
+	glm::mat4 aux = (static_cast<TTransform*>(parentNode->getPadre()->getPadre()->getEntidad())->getMatriz());
 	return aux;
 }
 
@@ -305,5 +303,8 @@ void cameraThird::setPosition(GLfloat X, GLfloat Y, GLfloat Z) {
 
 }
 
+void cameraThird::setParentNode(TNodo* p) {
+	parentNode = p;
+}
 
 

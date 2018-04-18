@@ -134,6 +134,25 @@ obj3D *TMotor::newCameraNode( const char *name, const char* parentNode) {
 }
 
 
+cameraThird *TMotor::newCamera3ThPerson(const char *name, const char *parentName) {
+	//La camara no tendra escalado, no es necesario
+	//rotacion
+	string *nameRot = new string("rotacion_" + (string)name);
+	TTransform *rotacion = createTransformation();
+	//de primeras lo colocamos en el mismo sitio que su padre
+	TNodo *rotacionNodo = createTransformationNode(getNode("escena_raiz"), rotacion, nameRot->c_str());
+	// T R A S L A C I O N
+	string *nameTras = new string("traslacion_" + (string)name);
+	TTransform *traslacion = createTransformation();
+	TNodo *traslacionNodo = createTransformationNode(rotacionNodo, traslacion, nameTras->c_str());
+	TCamara *camara = createCam();
+	camara->setPerspective(screenHEIGHT, screenWIDTH, 0.01f, 10000.0f, 70.0f);//OJO CON EL VALOR 1000 ES CLAVE PARA MOSTRAR PARTE DEL MAPA O TODO
+	TNodo *node = createCamNode(traslacionNodo, camara, name);
+
+	contID++;
+	return new cameraThird(node, getNode(parentName), name, contID++);
+}
+
 obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode) {
 	// R O T A C I O N
 	string *nameRot = new string("rotacion_" + (string)name);

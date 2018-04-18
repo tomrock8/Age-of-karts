@@ -7,6 +7,7 @@
 #include "TGestorRecursos.hpp"
 #include "TNodo.hpp"
 #include "obj3D.hpp"
+#include "cameraThird.hpp"
 #include "hud.hpp"
 #include <iostream>
 #include <stack>
@@ -34,6 +35,7 @@ public:
 	//obj3D *newLightNode(glm::vec3 traslation, const char * name, glm::vec4 dir, float att, float corte, const char* parentNode);
 	//TNodo *newMeshNode(glm::vec3 traslation, const char * name, const char * path);
 	obj3D *newCameraNode(const char * name, const char* parentNode);
+	cameraThird * newCamera3ThPerson(const char * name, const char * parentName);
 	obj3D *newLightNode(const char * name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode);
 	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode);
 	void precarga(const char * modelo);

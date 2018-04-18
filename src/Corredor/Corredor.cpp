@@ -102,7 +102,10 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 		cuboNodo->setRotation(0.0f, 0.0f, 0.0f);
 	}
 
-	cameraThird = TMotor::instancia().newCameraNode("camara_jugador3apersona", "escena_raiz");
+	cameraThird = TMotor::instancia().newCamera3ThPerson("camara_jugador3apersona", "escena_raiz");
+	cameraThird->setParentNode(this->cuboNodo->getNode());
+
+
 	
 	InicializarFisicas();
 	InicializarFisicasRuedas();
@@ -1188,15 +1191,15 @@ void Corredor::update()
 	updateTimerObstaculos();
 	updateEstado();
 	comprobarSueloRuedas();
-	actualizarRuedas();
+	//actualizarRuedas();
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 	updateText();
 
 	float distanciaX=20;
-	cameraThird->setPosition(cuboNodo->getPosition().x - orientacion.getX()*distanciaX,7,cuboNodo->getPosition().z - orientacion.getZ()*distanciaX);
-	cameraThird->setRotation(0,cuboNodo->getRotation().y + 180,0);
+	cameraThird->setPosition(- orientacion.getX()*distanciaX,7, - orientacion.getZ()*distanciaX);
+	cameraThird->setRotation(glm::vec3(0,1,0),180);
 
 	//updateHijos();
 	//linea clave

@@ -18,6 +18,7 @@
 #include "Habilidad.hpp"
 #include "ItemTeledirigido.hpp"
 #include "TMotor.hpp"
+#include "cameraThird.hpp"
 
 
 using namespace std;
@@ -123,7 +124,7 @@ protected:
 	obj3D *rueda3;
 	obj3D *rueda4;
 
-	obj3D *cameraThird;
+	cameraThird *cameraThird;
 
 	//WAYPOINTS
 	Waypoint *anterior; // Punto Actual

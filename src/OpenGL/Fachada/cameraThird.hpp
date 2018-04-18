@@ -36,6 +36,8 @@ public:
 	void setName(const char *nombre);
 	void setRotation(glm::vec3 axis, GLfloat angle);
 	void setPosition(GLfloat X, GLfloat Y, GLfloat Z);
+
+	void setParentNode(TNodo * p);
 	
 
 private:

@@ -45,20 +45,21 @@ TMotor::TMotor() {
 	//----------Declaracion IMGUI---------
 
 	ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-    ImGui_ImplGlfwGL3_Init(ventana, true);
+	ImGuiIO& io = ImGui::GetIO(); 
+	//(void)io;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+	ImGui_ImplGlfwGL3_Init(ventana, true);
 
-    // Setup style
-    ImGui::StyleColorsDark();
+	// Setup style
+	ImGui::StyleColorsDark();
 
 	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
 	shaderHUD = new Shader("assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt", nullptr);
 	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
 	shaderDirectionalDepth = new Shader("assets/shaders/shaderDepth/shaderLuzDirigida/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzDirigida/fragmentShader.txt", nullptr);
 	shaderPointDepth = new Shader("assets/shaders/shaderDepth/shaderLuzPuntual/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzPuntual/fragmentShader.txt"
-	, "assets/shaders/shaderDepth/shaderLuzPuntual/geometryShader.txt" );
+		, "assets/shaders/shaderDepth/shaderLuzPuntual/geometryShader.txt");
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 }
 
@@ -70,16 +71,13 @@ void TMotor::resizeScreen(int w, int h) {
 }
 
 void TMotor::close() {
-	
-
 	ImGui_ImplGlfwGL3_Shutdown();
-    ImGui::DestroyContext();
-
-    //glfwDestroyWindow(TMotor::instancia().getVentana());
+	ImGui::DestroyContext();
 
 	glfwTerminate();									//Terminar GLFW, limpiando todos los recursos alocados por GLFW
+	glfwDestroyWindow(TMotor::instancia().getVentana());
 	delete gestorRecursos;
-	for (int i = 0; i < HUDs.size(); i++){
+	for (int i = 0; i < HUDs.size(); i++) {
 		delete HUDs[i];
 	}
 }
@@ -92,11 +90,11 @@ TNodo *TMotor::getNode(const char* nombre) { return scene->getNode(nombre); }
 TNodo *TMotor::getSceneNode() { return scene; }
 TNodo *TMotor::getActiveCamera() { return activeCamera; }
 std::vector <TNodo*> TMotor::getActiveLights() { return activeLights; }
-Shader *TMotor::getShader(){ return shader; }
-Shader *TMotor::getShaderHUD(){ return shaderHUD; }
-Shader *TMotor::getShaderDebug(){ return shaderDebug; }
-Shader *TMotor::getShaderDirectionalDepth(){ return shaderDirectionalDepth; }
-Shader *TMotor::getShaderPointDepth(){ return shaderPointDepth; }
+Shader *TMotor::getShader() { return shader; }
+Shader *TMotor::getShaderHUD() { return shaderHUD; }
+Shader *TMotor::getShaderDebug() { return shaderDebug; }
+Shader *TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
+Shader *TMotor::getShaderPointDepth() { return shaderPointDepth; }
 
 // METODOS SET
 void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; }
@@ -104,12 +102,9 @@ void TMotor::setActiveLight(TNodo *light) { activeLights.push_back(light); }
 
 
 // ----------------------------------
-//	CREACION DE NODOS PUBLICOS
-// ----------------------------------
-// ----------------------------------
 //  CREACION DE NODOS PUBLICOS
 // ----------------------------------
-obj3D *TMotor::newCameraNode( const char *name, const char* parentNode) {
+obj3D *TMotor::newCameraNode(const char *name, const char* parentNode) {
 	// R O T A C I O N
 	string *nameRot = new string("rotacion_" + (string)name);
 	TTransform *rotacion = createTransformation();
@@ -128,7 +123,7 @@ obj3D *TMotor::newCameraNode( const char *name, const char* parentNode) {
 	TCamara *camara = createCam();
 	camara->setPerspective(screenHEIGHT, screenWIDTH, 0.01f, 10000.0f, 70.0f);//OJO CON EL VALOR 1000 ES CLAVE PARA MOSTRAR PARTE DEL MAPA O TODO
 	TNodo *nodo = createCamNode(traslacionNodo, camara, name);
-	
+
 	contID++;
 	return new obj3D(nodo, name, contID);
 }
@@ -158,7 +153,7 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 	string *nameRot = new string("rotacion_" + (string)name);
 	TTransform *rotacion = createTransformation();
 	//rotateLight->rotar(0, 0, 1, 45);
-	
+
 	TNodo *rotacionNodo = createTransformationNode(getNode(parentNode), rotacion, nameRot->c_str());
 
 	// T R A S L A C I O N
@@ -171,16 +166,17 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 	//TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(.8f), dir, att, corte);
 	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(0.8f), dir, att, corte, shadow, active);
 	TNodo *nodo = createLightNode(traslacionNodo, luz, name);
-	if (static_cast<TLuz *>(nodo->getEntidad())->getLightType() < 0.1){
+	if (static_cast<TLuz *>(nodo->getEntidad())->getLightType() < 0.1) {
 		nPointLights++;
-	}else{
+	}
+	else {
 		nSpotLights++;
 	}
 	contID++;
 	return new obj3D(nodo, name, contID);
 }
 
-obj3D *TMotor::newMeshNode( const char *name, const char *path, const char* parentNode) {
+obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode) {
 	// E S C A L A D O
 	string *nameEsc = new string("escalado_" + (string)name);
 	TTransform *scaleMesh = createTransformation();
@@ -189,13 +185,13 @@ obj3D *TMotor::newMeshNode( const char *name, const char *path, const char* pare
 	// R O T A C I O N
 	string *nameRot = new string("rotacion_" + (string)name);
 	TTransform *rotateMesh = createTransformation();
-	if (strcmp(parentNode, "escena_raiz") !=0)	rotateMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getPadre()->getEntidad())->getMatriz());
+	if (strcmp(parentNode, "escena_raiz") != 0)	rotateMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getPadre()->getEntidad())->getMatriz());
 	TNodo *rotationNodeMesh = createTransformationNode(scaleNodeMesh, rotateMesh, nameRot->c_str());
 
 	// T R A S L A C I O N
 	string *nameTras = new string("traslacion_" + (string)name);
 	TTransform *traslationMesh = createTransformation();
-	if(strcmp(parentNode, "escena_raiz")!=0)	traslationMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getEntidad())->getMatriz());
+	if (strcmp(parentNode, "escena_raiz") != 0)	traslationMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getEntidad())->getMatriz());
 	TNodo *traslationNodeMesh = createTransformationNode(rotationNodeMesh, traslationMesh, nameTras->c_str());
 
 
@@ -210,7 +206,6 @@ obj3D *TMotor::newMeshNode( const char *name, const char *path, const char* pare
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
 	contID++;
 	return  new obj3D(nodo, name, contID);
-
 }
 
 
@@ -289,8 +284,7 @@ TNodo *TMotor::createLightNode(TNodo *padre, TLuz *luz, const char* name) {
 // D I B U J A D O
 //------------------------------
 void TMotor::clean() {
-
-    glViewport(0, 0, screenWIDTH, screenHEIGHT);
+	glViewport(0, 0, screenWIDTH, screenHEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -298,16 +292,12 @@ void TMotor::clean() {
 }
 
 void TMotor::draw(int tipo) {
-	bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	
 	//Establecer el nuevo color de fondo
 	glClearColor(0.16f, 0.533f, 0.698f, 0.0f);
 
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
-	if (lights.size() > 0){
-		for (int i = 0; i < lights.size(); i++){
+	if (lights.size() > 0) {
+		for (int i = 0; i < lights.size(); i++) {
 			static_cast<TLuz *>(lights[i]->getEntidad())->renderMap();
 			//Activamos el face culling
 			glEnable(GL_CULL_FACE);
@@ -315,9 +305,10 @@ void TMotor::draw(int tipo) {
 			//en las sombras al quedar en algunos casos separadas de los objetos que las producen
 			glCullFace(GL_FRONT);
 			//Segun el tipo de luz (puntual o dirigida), usamos un shader diferente para calcular el mapa de profundidad
-			if (static_cast<TLuz *>(lights[i]->getEntidad())->getLightType() < 0.1){
+			if (static_cast<TLuz *>(lights[i]->getEntidad())->getLightType() < 0.1) {
 				scene->draw(shaderPointDepth);
-			}else{
+			}
+			else {
 				scene->draw(shaderDirectionalDepth);
 			}
 			//Desactivamos el face culling
@@ -329,7 +320,7 @@ void TMotor::draw(int tipo) {
 
 	//Se llama a la funcion para limpiar los buffers de OpenGL
 	clean();
-	if (tipo==1 || tipo==2){
+	if (tipo == 1 || tipo == 2) {
 		//Se activa el shader para el renderizado 3D
 		shader->use();
 
@@ -339,8 +330,8 @@ void TMotor::draw(int tipo) {
 		//Se llama al dibujado de los distintos nodos del arbol
 		drawCamera();
 		drawLight();
-		if (lights.size() > 0){
-			for ( int i = 0; i < lights.size(); i++){
+		if (lights.size() > 0) {
+			for (int i = 0; i < lights.size(); i++) {
 				static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow();
 			}
 		}
@@ -413,74 +404,41 @@ void TMotor::draw(int tipo) {
 	unsigned int quadVBO;
 
 	if (quadVAO == 0)
-    {
-        float quadVertices[] = {
-            // positions        // texture Coords
-            -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-             1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
-             1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-        };
-        // setup plane VAO
-        glGenVertexArrays(1, &quadVAO);
-        glGenBuffers(1, &quadVBO);
-        glBindVertexArray(quadVAO);
-        glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    }
-    glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glBindVertexArray(0);*/
-
-		//------------------IMGUI: MOSTRAR VENTANAS---------------- 
-
-	ImGui_ImplGlfwGL3_NewFrame();
-
-	static float f = 0.0f;
-	static int counter = 0;
-	ImGui::Text("Hello, world!");                           // Display some text (you can use a format string too)
-	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our windows open/close state
-	ImGui::Checkbox("Another Window", &show_another_window);
-
-	if (ImGui::Button("Button"))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-		counter++;
-	ImGui::SameLine();
-	ImGui::Text("counter = %d", counter);
-
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
-	if (show_another_window)
 	{
-		ImGui::Begin("Another Window", &show_another_window);
-		ImGui::Text("Hello from another window!");
-		if (ImGui::Button("Close Me"))
-			show_another_window = false;
-		ImGui::End();
+		float quadVertices[] = {
+			// positions        // texture Coords
+			-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+			 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		};
+		// setup plane VAO
+		glGenVertexArrays(1, &quadVAO);
+		glGenBuffers(1, &quadVBO);
+		glBindVertexArray(quadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	}
+	glBindVertexArray(quadVAO);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);*/
 
-	// 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-	if (show_demo_window)
-	{
-		ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-		ImGui::ShowDemoWindow(&show_demo_window);
-	}
-
+	
 	int display_w, display_h;
 	glfwGetFramebufferSize(TMotor::instancia().getVentana(), &display_w, &display_h);
 	glViewport(0, 0, display_w, display_h);
-	ImGui::Render();
-	ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+	
+	if (ImGui::GetFrameCount() > 0) {
+		ImGui::Render();
+		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+	}
 
 	//swap los bufers de pantalla (trasero y delantero)
 	glfwSwapBuffers(TMotor::instancia().getVentana());
-
 }
 
 
@@ -501,7 +459,7 @@ void TMotor::drawCamera() {
 	//cout << cont << endl;
 	glm::mat4 viewMatrix;
 	//recorrido a la inversa
-	for (int i = matrixAux.size()-1 ; i >= 0; i--) {
+	for (int i = matrixAux.size() - 1; i >= 0; i--) {
 		/*cout << matrixAux.at(i)[0][0] << " - " << matrixAux.at(i)[0][1] << " - " <<  matrixAux.at(i)[0][2] << " - " <<  matrixAux.at(i)[0][3] << endl;
 		cout << matrixAux.at(i)[1][0] << " - " << matrixAux.at(i)[1][1] << " - " <<  matrixAux.at(i)[1][2] << " - " <<  matrixAux.at(i)[1][3] << endl;
 		cout << matrixAux.at(i)[2][0] << " - " << matrixAux.at(i)[2][1] << " - " <<  matrixAux.at(i)[2][2] << " - " <<  matrixAux.at(i)[2][3] << endl;
@@ -520,7 +478,7 @@ void TMotor::drawCamera() {
 	shader->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
 	//cout << "POSICION DE LA CAMARA: " << posC[0] << " - " << posC[1] << " - " << posC[2]<< endl;
 	//cout << "------------------" << endl;
-	
+
 	//por ultimo pasar al shader la view y la projection matrix
 	shader->setMat4("view", glm::inverse(viewMatrix));
 	shader->setMat4("projection", activeCamera->getEntidad()->getProjectionMatrix());
@@ -556,53 +514,53 @@ void TMotor::drawLight() {
 }
 
 //----- HUD -----
- 
+
 //Funcion para crear un nuevo hud dentro del motor
-void TMotor::newHud(const char* n){
-  //creamos el nuevo hud con su nombre
-  hud* h = new hud(n);
-  //Lo añadimos al array de hud
-  HUDs.push_back(h);
-  //Lo activamos por defecto
-  setActiveHud(n);
+void TMotor::newHud(const char* n) {
+	//creamos el nuevo hud con su nombre
+	hud* h = new hud(n);
+	//Lo añadimos al array de hud
+	HUDs.push_back(h);
+	//Lo activamos por defecto
+	setActiveHud(n);
 }
- 
+
 //Funcion para activar un hud, que sera el que se utilice, solo puede haber un hud activo por iteracion
-void TMotor::setActiveHud(const char* n){
-  //Obtenemos el hud a partir del nombre
-  hud* h = getHud(n);
-  //Lo activamos
-  activeHud = h;
+void TMotor::setActiveHud(const char* n) {
+	//Obtenemos el hud a partir del nombre
+	hud* h = getHud(n);
+	//Lo activamos
+	activeHud = h;
 }
- 
+
 //Funcion que devuelve un hud a partir del nombre
-hud* TMotor::getHud(const char* n){
-  hud* h = NULL;
-  //Recorremos el array de HUDs
-  for (int i = 0; i < HUDs.size(); i++){
-    //Comparamos los nombres y nos guardamos el correcto
-    if (strcmp(HUDs.at(i)->getName(),n) == 0){
-      h = HUDs.at(i);
-    }
-  }
-  return h;
+hud* TMotor::getHud(const char* n) {
+	hud* h = NULL;
+	//Recorremos el array de HUDs
+	for (int i = 0; i < HUDs.size(); i++) {
+		//Comparamos los nombres y nos guardamos el correcto
+		if (strcmp(HUDs.at(i)->getName(), n) == 0) {
+			h = HUDs.at(i);
+		}
+	}
+	return h;
 }
- 
+
 //Funcion para devolver el hud activo
-hud* TMotor::getActiveHud(){
-  return activeHud;
+hud* TMotor::getActiveHud() {
+	return activeHud;
 }
-obj3D* TMotor::getObjActiveCamera(){
+obj3D* TMotor::getObjActiveCamera() {
 	if (cameras.size() > 0) {
 		return new obj3D(activeCamera, activeCamera->getName(), 99);
 
 	}
 	else return NULL;
-	
+
 }
-void TMotor::toEulerAngle(float x,float y,float z, float w, float& roll, float& pitch, float& yaw)
+void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw)
 {
-	
+
 	// roll (x-axis rotation)
 	double sinr = +2.0 * (w * x + y * z);
 	double cosr = +1.0 - 2.0 * (x * x + y * y);
@@ -619,13 +577,13 @@ void TMotor::toEulerAngle(float x,float y,float z, float w, float& roll, float& 
 
 	// yaw (z-axis rotation)
 	double siny = +2.0 * (w * z + x * y);
-	double cosy = +1.0 - 2.0 * (y * y + z * z);  
+	double cosy = +1.0 - 2.0 * (y * y + z * z);
 	yaw = atan2(siny, cosy);
-	
-/*
-	glm::quat q(x,y,z,w);
-	glm::vec3 euler = glm::eulerAngles(q) * 3.14159f / 180.f;
-	roll = euler.x;
-	pitch = euler.y;
-	yaw = euler.z;*/
+
+	/*
+		glm::quat q(x,y,z,w);
+		glm::vec3 euler = glm::eulerAngles(q) * 3.14159f / 180.f;
+		roll = euler.x;
+		pitch = euler.y;
+		yaw = euler.z;*/
 }

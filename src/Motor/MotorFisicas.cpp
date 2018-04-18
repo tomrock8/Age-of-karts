@@ -20,7 +20,7 @@ MotorFisicas::~MotorFisicas() {
 	cout << "ENTRO DESTRUCTOR MOTOR DE FISICAS\n";
 
 	cout << "Destruyendo Objetos del mundo. Son " << mundo->getNumCollisionObjects() << "\n";
-	for (int i = mundo->getNumCollisionObjects() - 1; i >= 0; i--) {
+	for (int i = 0; i <  mundo->getNumCollisionObjects(); i++) {
 		cout << "EL " << i;
 		btCollisionObject* obj = mundo->getCollisionObjectArray()[i];
 		btCollisionShape* shape = obj->getCollisionShape();

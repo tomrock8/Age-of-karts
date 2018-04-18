@@ -26,6 +26,7 @@ public:
 
 	virtual void init() override;
 	virtual void dibujar() override;
+	
 	virtual void limpiar() override;
 	virtual void update() override;
 	Escena::tipo_escena comprobarInputs();
@@ -62,6 +63,13 @@ private:
 	GestorCarrera *gc;
 	bool fin_carrera;
 	Timer *t;
+
+	// IMGUI
+	bool muestraDebug;
+	bool show_demo_window;
+	bool show_another_window;
+	
+	void renderDebug();
 };
 
 #endif /* ESCENAJUEGO_H */

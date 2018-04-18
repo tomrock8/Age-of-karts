@@ -119,8 +119,10 @@ int main(int argc, char* argv[]) {
 			TMotor::instancia().setActiveCamera(TMotor::instancia().getNode("camara_jugador3apersona"));
 		}
 		tipo = GestorEscena::instancia().getEscenaActiva().getTipoEscena();
-		tipoActual = GestorEscena::instancia().update();
+		
 		TMotor::instancia().draw(tipo);
+		tipoActual = GestorEscena::instancia().update();
+		
 //		activeCamera = TMotor::instancia().newCameraNode(TMotor::instancia().getActiveCamera()->getName(), TMotor::instancia().getActiveCamera()->getPadre()->getName());
 		glfwPollEvents(); // Comprobacion de eventos (Teclado, raton, joystick)
 	}

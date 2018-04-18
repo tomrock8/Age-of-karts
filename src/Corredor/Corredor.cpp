@@ -79,24 +79,10 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	// HAY QUE MODIFICAR DE QUE NODO PENDEN!!!
 	const char* strRueda = "assets/rueda/rueda.obj";
 	rueda1 = TMotor::instancia().newMeshNode("rueda1", strRueda, "escena_raiz");
-	rueda1->setPosition(-2, 0, 3);
 	rueda2 = TMotor::instancia().newMeshNode("rueda2", strRueda, "escena_raiz");
-	rueda2->setPosition(2, 0, 3);
 	rueda3 = TMotor::instancia().newMeshNode("rueda3", strRueda, "escena_raiz");
-	rueda3->setPosition(-2, 0, -3);
 	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "escena_raiz");
-    rueda4->setPosition(2, 0, -3);
 
-	//rueda1->setScale(vector3df(2,1,1));//alante derecha
-	//rueda2->setScale(vector3df(2,1,1));//delante izquierda
-	//rueda3->setScale(vector3df(2,1,1));//atras derecha
-	//rueda4->setScale(vector3df(2,1,1));//atras izquierda
-/*
-	rueda1->setRotation(0, 45, 0);
-	rueda2->setRotation(0, -45, 0);
-	rueda3->setRotation(45, 0, 0);
-	rueda4->setRotation(-45, 0, 0);
-	*/
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
 		cuboNodo->setRotation(0.0f, 0.0f, 0.0f);
@@ -193,23 +179,20 @@ void Corredor::setParametros() {
 		break;
 	}
 	//camara asignada al jugador
-	
+
 }
 
 
-void Corredor::InicializarFisicasRuedas(){
-
-	//actualizarRuedas();
-
-	MotorFisicas *bullet = MotorFisicas::getInstancia(); 
+void Corredor::InicializarFisicasRuedas() {
+	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	float masar =0.0000000001f;
-	float radio=1.2;
-	float ancho=1.2;
-	btVector3 HalfExtents(1,1,1);
-	
+	float masar = 0.0000000001f;
+	float radio = 1.2;
+	float ancho = 1.2;
+	btVector3 HalfExtents(1, 1, 1);
+
 	//posicion inicial
 	btTransform transRueda;
 	transRueda.setIdentity();
@@ -224,7 +207,7 @@ void Corredor::InicializarFisicasRuedas(){
 
 	//FormaColisionR1 = new btCylinderShapeX(btVector3(ancho,radio,radio));
 	FormaColisionR1 = new btSphereShape(radio);
-		
+
 	// Add mass
 	btVector3 LocalInertia;
 	FormaColisionR1->calculateLocalInertia(masar, LocalInertia);
@@ -243,7 +226,7 @@ void Corredor::InicializarFisicasRuedas(){
 
 
 	// rueda 2
-	
+
 	transRueda.setIdentity();
 	posTransRueda = btVector3(rueda2->getPosition().x, rueda2->getPosition().y, rueda2->getPosition().z);
 	transRueda.setOrigin(posTransRueda);
@@ -255,7 +238,7 @@ void Corredor::InicializarFisicasRuedas(){
 
 	//FormaColisionR2 = new btCylinderShapeX(btVector3(ancho,radio,radio));
 	FormaColisionR2 = new btSphereShape(radio);
-		
+
 	CuerpoColisionRueda2 = new btRigidBody(masar, motionStateRueda2, FormaColisionR2, LocalInertia);
 	CuerpoColisionRueda2->setUserPointer((void *)(rueda2));
 
@@ -268,7 +251,7 @@ void Corredor::InicializarFisicasRuedas(){
 
 
 	// rueda 3
-	
+
 	transRueda.setIdentity();
 	posTransRueda = btVector3(rueda3->getPosition().x, rueda3->getPosition().y, rueda3->getPosition().z);
 	transRueda.setOrigin(posTransRueda);
@@ -276,11 +259,11 @@ void Corredor::InicializarFisicasRuedas(){
 	transRueda.setRotation(quaternion);
 
 	//Motionstate
-	motionStateRueda3= new btDefaultMotionState(transRueda); //motionState = interpolacion
+	motionStateRueda3 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
 	//FormaColisionR3 = new btCylinderShapeX(btVector3(ancho,radio,radio));
 	FormaColisionR3 = new btSphereShape(radio);
-		
+
 	CuerpoColisionRueda3 = new btRigidBody(masar, motionStateRueda3, FormaColisionR3, LocalInertia);
 	CuerpoColisionRueda3->setUserPointer((void *)(rueda3));
 
@@ -292,7 +275,7 @@ void Corredor::InicializarFisicasRuedas(){
 	bullet->setObjetos(objetos);
 
 	// rueda 4
-	
+
 	transRueda.setIdentity();
 	posTransRueda = btVector3(rueda4->getPosition().x, rueda4->getPosition().y, rueda4->getPosition().z);
 	transRueda.setOrigin(posTransRueda);
@@ -304,7 +287,7 @@ void Corredor::InicializarFisicasRuedas(){
 
 	//FormaColisionR4 = new btCylinderShapeX(btVector3(ancho,radio,radio));
 	FormaColisionR4 = new btSphereShape(radio);
-		
+
 	CuerpoColisionRueda4 = new btRigidBody(masar, motionStateRueda4, FormaColisionR4, LocalInertia);
 	CuerpoColisionRueda4->setUserPointer((void *)(rueda4));
 
@@ -316,28 +299,28 @@ void Corredor::InicializarFisicasRuedas(){
 	bullet->setObjetos(objetos);
 
 
-	btVector3 axisA(1.f, 1.f, 1.f); 
-	btVector3 axisB(0.f, 0.f, 0.f); 
+	btVector3 axisA(1.f, 1.f, 1.f);
+	btVector3 axisB(0.f, 0.f, 0.f);
 	btVector3 pivotA(3.f, 5.f, 3.f);
 	btVector3 pivotB(0.f, 0.f, 0.f);
 
-	restriccion1 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda1,pivotA, pivotB,axisA,axisB,false);
+	restriccion1 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda1, pivotA, pivotB, axisA, axisB, false);
 	pivotA = btVector3(-3.f, 5.f, 3.f);
-	restriccion2 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda2,pivotA, pivotB,axisA,axisB,false);
+	restriccion2 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda2, pivotA, pivotB, axisA, axisB, false);
 	pivotA = btVector3(-3.f, 5.f, -3.f);
-	restriccion3 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda3,pivotA, pivotB,axisA,axisB,false);
+	restriccion3 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda3, pivotA, pivotB, axisA, axisB, false);
 	pivotA = btVector3(3.f, 5.f, -3.f);
-	restriccion4 = new btHingeConstraint(*CuerpoColisionChasis,*CuerpoColisionRueda4,pivotA, pivotB,axisA,axisB,false); 
+	restriccion4 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda4, pivotA, pivotB, axisA, axisB, false);
 	restriccion1->enableAngularMotor(true, 1, 0);
 	restriccion2->enableAngularMotor(true, 1, 0);
 	restriccion3->enableAngularMotor(true, 1, 0);
 	restriccion4->enableAngularMotor(true, 1, 0);
 
-	mundo->addConstraint(restriccion1,true);
-	mundo->addConstraint(restriccion2,true);
-	mundo->addConstraint(restriccion3,true);
-	mundo->addConstraint(restriccion4,true);
-	
+	mundo->addConstraint(restriccion1, true);
+	mundo->addConstraint(restriccion2, true);
+	mundo->addConstraint(restriccion3, true);
+	mundo->addConstraint(restriccion4, true);
+
 }
 
 //-----------------------------//
@@ -381,7 +364,7 @@ void Corredor::InicializarFisicas() {
 	CuerpoColisionChasis = new btRigidBody(Masa, motionStateCoche, CentroGravedad, Inercia);
 	//CuerpoColisionChasis->setFriction(1110);
 	CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
-	
+
 	//RaycastDel Coche
 	RayCastVehiculo = new btDefaultVehicleRaycaster(mundo);
 	btRaycastVehicle::btVehicleTuning tuning;
@@ -420,18 +403,18 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	vehiculo->addWheel((puntoConexionChasis * btVector3(4, 1, -3)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, false);
 	vehiculo->addWheel((puntoConexionChasis * btVector3(-4, 1, -3)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, false);
 
-	
+
 	for (int i = 0; i < vehiculo->getNumWheels(); i++) {
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
 		wheel.m_suspensionStiffness = btScalar(100);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
 		wheel.m_wheelsDampingCompression = btScalar(0.f);//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-		wheel.m_wheelsDampingRelaxation =  btScalar(5.f);//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_wheelsDampingRelaxation = btScalar(5.f);//btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = btScalar(0);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 		wheel.m_maxSuspensionForce = 50000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
 		wheel.m_maxSuspensionTravelCm = 10000.f; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 										   
 	}
-	
+
 }
 
 void Corredor::BorrarFisicas() {}
@@ -528,27 +511,21 @@ void Corredor::setTipoObj() {
 			SimPosCarrera = 4;
 		}
 	}
-	/* AQUI ESTA EL ERROR MALDITO JIORGIO NO ENTIENDO UN CIRUELO, TE LO DEJO A TI TETE
-	else if(totalJugadores == 4)
-	{
-		if(posicionCarrera == 1)
-		{
-			SimPosCarrera == 2;
+	else if (totalJugadores == 4) {
+		if (posicionCarrera == 1) {
+			SimPosCarrera = 2;
 		}
-		else if(posicionCarrera == 2)
-		{
-			SimPosCarrera == 3;
+		else if (posicionCarrera == 2) {
+			SimPosCarrera = 3;
 		}
-		else if(posicionCarrera == 3)
-		{
-			SimPosCarrera == 4;
+		else if (posicionCarrera == 3) {
+			SimPosCarrera = 4;
 		}
-		else if(posicionCarrera == 4)
-		{
-			SimPosCarrera == 5;
+		else if (posicionCarrera == 4) {
+			SimPosCarrera = 5;
 		}
 	}
-	*/
+
 	else {
 		SimPosCarrera = posicionCarrera;
 	}
@@ -803,8 +780,7 @@ void Corredor::setTiempoVuelta(float t) {
 //-------TRATAMIENTOS OBJETOS----------//
 //-------------------------------------//
 
-void Corredor::lanzarItemTeledirigido()
-{
+void Corredor::lanzarItemTeledirigido() {
 	resetFuerzas();
 	aplicarAceite();
 	//tipoObj = 0;
@@ -859,18 +835,14 @@ void Corredor::usarObjetos() {
 	btScalar radio = 8;
 	float alt = 1;
 
-	if (getTipoObj() == 1)		// PROYECTIL
-	{
-
+	if (getTipoObj() == 1) {		// PROYECTIL
 		Proyectil *pro = new Proyectil(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
 		pro->lanzarItem(1, orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro->setLanzado(true);
 		items.push_back(pro);
 		soltarItem();
-
 	}
-	else if (getTipoObj() == 2)	//CAJA FALSA
-	{
+	else if (getTipoObj() == 2) {	//CAJA FALSA
 		alt = -1;
 		masa = 0;
 		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * 10);
@@ -880,12 +852,10 @@ void Corredor::usarObjetos() {
 
 		soltarItem();
 	}
-	else if (getTipoObj() == 3)	//TURBO
-	{
+	else if (getTipoObj() == 3) {	//TURBO
 		setTurbo(true, true, FuerzaMaxima * 4, 2);
 	}
-	else if (getTipoObj() == 4)	//ACEITE
-	{
+	else if (getTipoObj() == 4) {	//ACEITE
 		alt = -1;
 		masa = 0;
 		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * 10);
@@ -895,8 +865,7 @@ void Corredor::usarObjetos() {
 
 		soltarItem();
 	}
-	else if (getTipoObj() == 5)	//ESCUDO
-	{
+	else if (getTipoObj() == 5) {//ESCUDO
 		//if (getProteccion() == false) setProteccion(true);
 		//decCargador();
 		if (!proteccion) {
@@ -986,6 +955,7 @@ void Corredor::aplicarAceite() {
 }
 void Corredor::incCargador() { cargador++; };
 void Corredor::decCargador() { cargador--; };
+
 //----------------------------------------//
 //-------CALCULO DE DISTANCIA-------------//
 //----------------------------------------//
@@ -998,90 +968,86 @@ btScalar Corredor::getDistanciaPunto(btVector3 vector) {
 //----------------------------------------//
 //------------MOVIMIENTO------------------//
 //----------------------------------------//
-void Corredor::acelerar()
-{
-	if((vehiculo->getCurrentSpeedKmHour()>velocidadMaxima && !turboActivado) || (turboActivado && vehiculo->getCurrentSpeedKmHour()>velocidadMaximaTurbo)){
+void Corredor::acelerar() {
+	if ((vehiculo->getCurrentSpeedKmHour() > velocidadMaxima && !turboActivado) || (turboActivado && vehiculo->getCurrentSpeedKmHour() > velocidadMaximaTurbo)) {
 		limitadorVelocidad();
 
-	}else{
+	}
+	else {
 		vehiculo->applyEngineForce(Fuerza, 0);
 		vehiculo->applyEngineForce(Fuerza, 1);
 		vehiculo->applyEngineForce(Fuerza, 2);
 		vehiculo->applyEngineForce(Fuerza, 3);
-		}
-		vehiculo->setSteeringValue(btScalar(0), 0);
-		vehiculo->setSteeringValue(btScalar(0), 1);
-	
+	}
+	vehiculo->setSteeringValue(btScalar(0), 0);
+	vehiculo->setSteeringValue(btScalar(0), 1);
+
 	estado->setEstadoMovimiento(AVANZA);
-	if (!turboActivado){
+	if (!turboActivado) {
 		estado->setDireccionMovimiento(RECTO);
 	}
 }
-void Corredor::frenar()
-{
-	
-
-	if(vehiculo->getCurrentSpeedKmHour() < velocidadMaximaAtras){
-
-	vehiculo->applyEngineForce(0, 0);
-	vehiculo->applyEngineForce(0, 1);
-	vehiculo->applyEngineForce(0, 2);
-	vehiculo->applyEngineForce(0, 3);
-	
-	}else{
-	vehiculo->applyEngineForce(FuerzaFrenado, 0);
-	vehiculo->applyEngineForce(FuerzaFrenado, 1);
-	vehiculo->applyEngineForce(FuerzaFrenado, 2);
-	vehiculo->applyEngineForce(FuerzaFrenado, 3);
-	
+void Corredor::frenar() {
+	if (vehiculo->getCurrentSpeedKmHour() < velocidadMaximaAtras) {
+		vehiculo->applyEngineForce(0, 0);
+		vehiculo->applyEngineForce(0, 1);
+		vehiculo->applyEngineForce(0, 2);
+		vehiculo->applyEngineForce(0, 3);
+	}
+	else {
+		vehiculo->applyEngineForce(FuerzaFrenado, 0);
+		vehiculo->applyEngineForce(FuerzaFrenado, 1);
+		vehiculo->applyEngineForce(FuerzaFrenado, 2);
+		vehiculo->applyEngineForce(FuerzaFrenado, 3);
 	}
 
 	vehiculo->setSteeringValue(btScalar(0), 0);
 	vehiculo->setSteeringValue(btScalar(0), 1);
 
-	if(vehiculo->getCurrentSpeedKmHour() < 0){
+	if (vehiculo->getCurrentSpeedKmHour() < 0) {
 		estado->setEstadoMovimiento(MARCHA_ATRAS);
-	}else{
+	}
+	else {
 		estado->setEstadoMovimiento(FRENA);
 	}
 	if (!turboActivado)
-	estado->setDireccionMovimiento(RECTO);
-	
+		estado->setDireccionMovimiento(RECTO);
 }
-void Corredor::girarDerecha()
-{
+
+void Corredor::girarDerecha() {
 	estado->setDireccionMovimiento(DERECHA);
-	if(vehiculo->getCurrentSpeedKmHour()<velocidadLimiteGiro){
-		FuerzaGiro =indiceGiroAlto;
-	}else{
-		FuerzaGiro =indiceGiroBajo;
+	if (vehiculo->getCurrentSpeedKmHour() < velocidadLimiteGiro) {
+		FuerzaGiro = indiceGiroAlto;
+	}
+	else {
+		FuerzaGiro = indiceGiroBajo;
 	}
 
 	vehiculo->setSteeringValue(-FuerzaGiro, 0);
 	vehiculo->setSteeringValue(-FuerzaGiro, 1);
-
 }
-void Corredor::girarIzquierda()
-{
+
+void Corredor::girarIzquierda() {
 	estado->setDireccionMovimiento(IZQUIERDA);
-	if(vehiculo->getCurrentSpeedKmHour()<velocidadLimiteGiro){
+	if (vehiculo->getCurrentSpeedKmHour() < velocidadLimiteGiro) {
 		FuerzaGiro = indiceGiroAlto;
-	}else{
+	}
+	else {
 		FuerzaGiro = indiceGiroBajo;
 	}
 	vehiculo->setSteeringValue(FuerzaGiro, 0);
 	vehiculo->setSteeringValue(FuerzaGiro, 1);
-	
+
 }
-void Corredor::frenodemano(bool activo, bool objeto)
-{
+
+void Corredor::frenodemano(bool activo, bool objeto) {
 	int friccion = 1.f;
 	if (activo) {
-		if (!aceiteActivado && !turboActivado){
-			if(vehiculo->getCurrentSpeedKmHour()>300 && (estado->getDireccionMovimiento()==IZQUIERDA || estado->getDireccionMovimiento()==DERECHA)){
-				int i=vehiculo->getCurrentSpeedKmHour();
-				if (i%3==0)
-				limite+=1;
+		if (!aceiteActivado && !turboActivado) {
+			if (vehiculo->getCurrentSpeedKmHour() > 300 && (estado->getDireccionMovimiento() == IZQUIERDA || estado->getDireccionMovimiento() == DERECHA)) {
+				int i = vehiculo->getCurrentSpeedKmHour();
+				if (i % 3 == 0)
+					limite += 1;
 			}
 		}
 
@@ -1098,11 +1064,8 @@ void Corredor::frenodemano(bool activo, bool objeto)
 
 		vehiculo->getWheelInfo(2).m_frictionSlip = btScalar(friccion);
 		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(friccion);
-		
-		
 	}
 	else {
-		
 		vehiculo->getWheelInfo(0).m_frictionSlip = btScalar(10000);
 		vehiculo->getWheelInfo(1).m_frictionSlip = btScalar(10000);
 
@@ -1110,11 +1073,10 @@ void Corredor::frenodemano(bool activo, bool objeto)
 		vehiculo->getWheelInfo(3).m_frictionSlip = btScalar(10000);
 
 		FuerzaGiro = btScalar(0.1);
-		
 	}
 }
-void Corredor::desacelerar()
-{
+
+void Corredor::desacelerar() {
 	estado->setEstadoMovimiento(DESACELERA);
 	vehiculo->applyEngineForce(0, 0);
 	vehiculo->applyEngineForce(0, 1);
@@ -1129,7 +1091,8 @@ void Corredor::desacelerar()
 	vehiculo->setBrake(160, 2);
 	vehiculo->setBrake(160, 3);
 }
-void Corredor::limitadorVelocidad(){
+
+void Corredor::limitadorVelocidad() {
 	vehiculo->applyEngineForce(0.0001, 0);
 	vehiculo->applyEngineForce(0.0001, 1);
 	vehiculo->applyEngineForce(0.0001, 2);
@@ -1153,6 +1116,7 @@ void Corredor::comprobarSueloRuedas() {
 		}
 	*/
 }
+
 void Corredor::recolocarWaypoint() {
 	btVector3 btPos = actual->getPosicion();
 
@@ -1170,8 +1134,7 @@ void Corredor::recolocarWaypoint() {
 //---------------------------------------//
 //-----------METODOS UPDATE--------------//
 //---------------------------------------//
-void Corredor::update()
-{
+void Corredor::update() {
 	if (vehiculo->getCurrentSpeedKmHour() > velocidadMaxima) {
 		limitadorVelocidad();
 	}
@@ -1207,9 +1170,9 @@ void Corredor::update()
 	//	cameraThird->setRotation(cameraThird->getPosition().x * orientacion.getX(),
 	//	1,
 	//	cameraThird->getPosition().z* orientacion.getZ());
-	
+
 	//cuboNodo->setPosition()
-	
+
 }
 
 void Corredor::updateText() {
@@ -1289,7 +1252,7 @@ void Corredor::updateTimerObstaculos() {
 }
 
 void Corredor::actualizarRuedas() {
-		btTransform ruedas = vehiculo->getWheelTransformWS(0);
+	btTransform ruedas = vehiculo->getWheelTransformWS(0);
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
 	//rueda1
 	CuerpoColisionRueda1->setCenterOfMassTransform(ruedas);
@@ -1298,13 +1261,13 @@ void Corredor::actualizarRuedas() {
 	ruedas = vehiculo->getWheelTransformWS(1);
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
 	CuerpoColisionRueda2->setCenterOfMassTransform(ruedas);
-		
+
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
 	CuerpoColisionRueda4->setCenterOfMassTransform(ruedas);
-	
-	
+
+
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+0.7,ruedas.getOrigin().getZ()));
@@ -1442,11 +1405,11 @@ void Corredor::updateVectorDireccion()
 	//cameraThird->setRotation(quaternion.getX(), quaternion.getY(), quaternion.getZ());
 	float anguloZ = quaternion.getAngle();
 	float anguloX = cuboNodo->getRotation().y * PI / 180;
-	cout << " Orientacion Corredor(1378)" << endl;
-	cout << "Angulo X: " << cuboNodo->getRotation().x << endl;
-	cout << "Angulo Y: " << cuboNodo->getRotation().y << endl;
-	cout << "Angulo Y: " << cuboNodo->getRotation().z << endl;
-	cout << "--------------------------------------------------" << endl;
+	//cout << " Orientacion Corredor(1378)" << endl;
+	//cout << "Angulo X: " << cuboNodo->getRotation().x << endl;
+	//cout << "Angulo Y: " << cuboNodo->getRotation().y << endl;
+	//cout << "Angulo Y: " << cuboNodo->getRotation().z << endl;
+	//cout << "--------------------------------------------------" << endl;
 	orientacion = btVector3(sin(anguloX), 0, cos(anguloZ));
 
 	orientacion.normalize();
@@ -1458,5 +1421,6 @@ void Corredor::updateVectorDireccion()
 Corredor::~Corredor() {
 	cout << "\nENTRO DESTRUCTOR CORREDOR. ";
 	delete vehiculo;
+	delete cuboNodo;
 	cout << "SALGO DESTRUCTOR CORREDOR\n";
 }

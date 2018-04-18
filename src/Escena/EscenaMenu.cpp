@@ -95,7 +95,7 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	GestorSonido::getInstacia()->setListenerData();
 	fuenteMenu = new AlSource();
 	fuenteMenu->volume(0.1f);
-	if (fuenteMenu->isPlaying())
+	if (!fuenteMenu->isPlaying())
 		fuenteMenu->play(SOUND_MENU);
 
 	fuenteOpcion = new AlSource();

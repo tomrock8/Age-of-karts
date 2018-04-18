@@ -12,9 +12,9 @@ GestorSonido * GestorSonido::getInstacia() {
 GestorSonido::GestorSonido() {
 	//inicializamos alut y crea el contexto
 	device = alcOpenDevice(NULL);
-	if (device == NULL)
-	{
+	if (device == NULL)	{
 		// Handle Exception
+		cout << "DEVICE IS NULL\n";
 	}
 	//Create a context
 	context = alcCreateContext(device, NULL);

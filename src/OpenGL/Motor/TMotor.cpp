@@ -203,9 +203,11 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 
 
 	TMalla *malla = TMotor::instancia().createMesh(path);
-	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
+	TRecursoMalla *nameMalla = static_cast<TRecursoMalla*>(gestorRecursos->getRecursoMallas().at(gestorRecursos->getRecursoMallas().size()-1));
+	//cout << "El Nombre de la malla es: " << nameMalla->getNombre() << endl;
+	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, nameMalla->getNombre());
 	contID++;
-	return  new obj3D(nodo, name, contID);
+	return  new obj3D(nodo, nameMalla->getNombre(), contID);
 }
 
 
@@ -557,6 +559,10 @@ obj3D* TMotor::getObjActiveCamera() {
 	}
 	else return NULL;
 
+}
+
+TGestorRecursos *TMotor::getGR() {
+	return gestorRecursos;
 }
 void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw)
 {

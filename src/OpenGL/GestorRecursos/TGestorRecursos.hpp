@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "MotorFisicas.hpp"
 
 
 using namespace std;
@@ -35,6 +36,7 @@ public:
 	GLuint textureFromFile(const std::string & file);
 	
 	// METODOS GET
+	TRecursoMalla *getMalla(const char *name);
 	TRecursoTextura *getRecursoTextura(const char * nombre, aiMesh *mesh, const aiScene *scene);
 	TRecursoMalla *getRecursoMalla(const char *nombre, aiMesh *mesh, const aiScene *scene);
 	TRecursoMaterial *getRecursoMaterial(const char *nombre);

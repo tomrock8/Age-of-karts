@@ -59,7 +59,7 @@ public:
 	Shader *getShaderPointDepth();
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
-
+	TGestorRecursos *getGR();
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
 	void setActiveLight(TNodo *l);

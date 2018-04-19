@@ -7,6 +7,7 @@
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
+#include "obj3D.hpp"
 
 using namespace std;
 
@@ -20,7 +21,8 @@ public:
 	static MotorFisicas *getInstancia();
 	btDynamicsWorld *getMundo();
 	std::vector<btRigidBody *> getObjetos();
-
+	void initializePhysics(const char *name, btVector3 pos, obj3D *obj);
+	btCollisionShape  *CreateCollisionShape(const char *name);
 	// METODOS SET
 	void setObjetos(std::vector<btRigidBody *> objetos);
 

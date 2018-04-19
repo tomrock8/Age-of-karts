@@ -147,6 +147,8 @@ TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mes
 
 
 		recMalla = processMesh(mesh, scene, nameExt.c_str());
+	
+
 		recursoMallas.push_back(recMalla);
 	}
 
@@ -354,4 +356,14 @@ GLuint TGestorRecursos::textureFromFile(const std::string& file) {
 	stbi_image_free(imgTexture);
 
 	return idTexture;
+}
+
+TRecursoMalla *TGestorRecursos::getMalla(const char *name) {
+	
+	for (int i = 0; i < recursoMallas.size(); i++) {
+		if (strcmp(name, recursoMallas.at(i)->getNombre()) == 0) {
+			return static_cast<TRecursoMalla*>(recursoMallas.at(i));
+		}
+	}
+	return NULL;
 }

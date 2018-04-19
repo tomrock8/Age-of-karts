@@ -19,6 +19,7 @@ class TRecursoMalla :public TRecurso
 
 public:
 	TRecursoMalla(aiMesh *mesh, const char* nombre);
+	void setFaces(std::vector<unsigned short> indices);
 	~TRecursoMalla();
 	void activeVAO(); // Activar el buffer de vertices
 	void disableVAO(); // Desactivar el buffer de vertices
@@ -39,6 +40,9 @@ public:
 	//vector<vertex> *getVertices();
 	//vector<GLuint> *getIndices();
 	virtual const char *getNombre() override;
+	std::vector<glm::vec3> getVertex();
+	std::vector<glm::ivec3> getFaces();
+	std::vector<unsigned short> getIndices();
 
 
 
@@ -58,7 +62,7 @@ private:
 	std::vector<glm::vec3> tangents; //tangentes     | 
 	std::vector<glm::vec3> bitangents; //bitangentes |necesarios para los mapas de normales 
 	std::vector<unsigned short> indices;
-
+	std::vector<glm::ivec3> faces;
 	GLuint buffer[6];  // buffer para almacenar los datos de la malla y pasarselos a los shaders 
 	//variables de renderizado
 	GLuint VAO;// Vertex Array Object*/

@@ -5,6 +5,7 @@ TRecursoMalla::TRecursoMalla(aiMesh *mesh, const char* nombre) {
 	reserveVectorArrays(mesh->mNumVertices);
 	setNombre(nombre);
 	for (GLuint i = 0; i < mesh->mNumVertices; i++) {
+		
 		//obtener la posicion de cada vertices
 		aiVector3D pos = mesh->mVertices[i];
 		saveVectorPosition(glm::vec3(pos.x, pos.y, pos.z));
@@ -36,14 +37,28 @@ TRecursoMalla::TRecursoMalla(aiMesh *mesh, const char* nombre) {
 	}
 
 	//Obtener los indices
+	int j = 0;
 	for (GLuint i = 0; i < mesh->mNumFaces; i++) {// las caras estan compuestas por 3 vertices, forman un triangulo
-
 		saveVectorIndices(mesh->mFaces[i].mIndices[0]);
 		saveVectorIndices(mesh->mFaces[i].mIndices[1]);
 		saveVectorIndices(mesh->mFaces[i].mIndices[2]);
 	}
 
+	//cout << "TRecursoMalla (47) : Tengo " << faces.size() << " caras" << endl;
+	//for (GLuint i = 0; i < mesh->mNumFaces; i++) {// las caras estan compuestas por 3 vertices, forman un triangulo
+	//	faces.push_back(glm::ivec3(mesh->mFaces[i].mIndices[0], mesh->mFaces[i].mIndices[1], mesh->mFaces[i].mIndices[2]));
+	//}
+	//cout << "TRecursoMalla (52) : Tengo " << faces.size() << " caras" << endl;
 
+
+}
+void TRecursoMalla::setFaces(std::vector<unsigned short> indices) {
+	////std::vector<glm::ivec3> faces;
+	//int j = 0;
+	//for (GLuint i = 0; j < indices.size(); i++) {
+	//	
+	//	
+	//}
 }
 TRecursoMalla::~TRecursoMalla() {
 	//delete &VAO;
@@ -129,3 +144,13 @@ void TRecursoMalla::saveVectorPosition(glm::vec3 m) { vertex.push_back(m); }
 void TRecursoMalla::saveVectorUV(glm::vec2 m) { uv.push_back(m); }
 void TRecursoMalla::saveVectorNormal(glm::vec3 m) { normal.push_back(m); }
 void TRecursoMalla::saveVectorIndices(GLuint m) { indices.push_back(m); }
+std::vector<glm::ivec3> TRecursoMalla::getFaces() {
+	return faces;
+}
+std::vector<unsigned short> TRecursoMalla::getIndices()
+{
+	return indices;
+}
+std::vector<glm::vec3> TRecursoMalla::getVertex() {
+	return vertex;
+}

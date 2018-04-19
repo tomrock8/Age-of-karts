@@ -4,18 +4,20 @@
 #include "libGL.hpp" 
 #include "TMalla.hpp" 
 #include "TTransform.hpp" 
-#include "TNodo.hpp" 
+#include "obj3D.hpp" 
 #include "btBulletDynamicsCommon.h"
 #include "MotorFisicas.hpp"
+
 
 using namespace std;
 
 class cameraThird
 {
 public:
-	cameraThird(TNodo *mesh, TNodo *parentNode, const char *name, GLuint id);
+	cameraThird(const char *name, const char *parentName);
 	~cameraThird();
 
+	void update(glm::vec3 posicion,glm::vec3 rotacion,btVector3 direccion);
 
 	btRigidBody * initializePhysics();
 	void moveCamera(btRigidBody * pj1, btVector3 dir);
@@ -38,16 +40,16 @@ public:
 	void setPosition(GLfloat X, GLfloat Y, GLfloat Z);
 
 	void setParentNode(TNodo * p);
-	
+	void lookAt(glm::vec3 posicion);
 
 private:
+	
 	GLuint id;
 	glm::mat4 position;
 	glm::mat4 rotation;
-
 	const char *name;
-	TNodo *node;
-	TNodo *parentNode;
+	//Corredor* nodo;
+	obj3D* camara;
 
 	float direction;
 	float zdirection;
@@ -63,5 +65,10 @@ private:
 	btDefaultMotionState *MotionState;
 	btCollisionShape *Shape;
 	btRigidBody *rigidBody;
+
+	
+
+
+
 };
 #endif

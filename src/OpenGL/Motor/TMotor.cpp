@@ -128,7 +128,7 @@ obj3D *TMotor::newCameraNode(const char *name, const char* parentNode) {
 	return new obj3D(nodo, name, contID);
 }
 
-
+/*
 cameraThird *TMotor::newCamera3ThPerson(const char *name, const char *parentName) {
 	//La camara no tendra escalado, no es necesario
 	//rotacion
@@ -147,6 +147,7 @@ cameraThird *TMotor::newCamera3ThPerson(const char *name, const char *parentName
 	contID++;
 	return new cameraThird(node, getNode(parentName), name, contID++);
 }
+*/
 
 obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode) {
 	// R O T A C I O N

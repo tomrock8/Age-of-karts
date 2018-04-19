@@ -200,8 +200,8 @@ void EscenaJuego::init() {
 		//-----------------------------
 		//	CAMARA
 		//-----------------------------
-	camera = TMotor::instancia().newCamera3ThPerson("camara_jugador3apersona", "escena_raiz");
-	camera->setParentNode(pj.at(controlPlayer)->getNodo()->getNode());
+	camera = new cameraThird("camara_jugador3apersona", "escena_raiz");
+	//camera->setParentNode(pj.at(controlPlayer)->getNodo()->getNode());
 //		camara = new Camara3persona();
 //		tipoCamara = 0;
 //		cambioCamara = false;
@@ -441,13 +441,16 @@ void EscenaJuego::update() {
 	pj = jugadores->getJugadores();
 
 
+	camera->update(pj.at(controlPlayer)->getNodo()->getPosition(),pj.at(controlPlayer)->getNodo()->getRotation(),pj.at(controlPlayer)->getVectorDireccion());
+	camera->lookAt(pj.at(controlPlayer)->getNodo()->getPosition());
+/*
 	float distanciaX = -20;
 	float posX = pj.at(controlPlayer)->getVectorDireccion().getX()*distanciaX;
 	float posZ = pj.at(controlPlayer)->getVectorDireccion().getZ()*distanciaX;
 
-	camera->setPosition(posX, 7, posZ);
+	camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition().x - posX, 0, pj.at(controlPlayer)->getNodo()->getPosition().z - posZ);
 	camera->setRotation(glm::vec3(0, 1, 0), 180);
-	/*switch(tipoCamara){
+	switch(tipoCamara){
 		case 0:		//Camara 3a persona fija
 			camara->moveCamera(pj.at(controlPlayer));
 		break;

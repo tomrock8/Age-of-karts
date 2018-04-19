@@ -27,9 +27,10 @@ GestorSonido::GestorSonido() {
 
 	//Cargamos todos los sonidos al inicializar el gestor
 	int i;
-	i = cargarSonido("assets/bounce.wav");
-	i = cargarSonido("assets/sound.wav");
-	i = cargarSonido("assets/menu.wav");
+	i = cargarSonido("assets/Sounds/bounce.wav");
+	i = cargarSonido("assets/Sounds/sound.wav");
+	i = cargarSonido("assets/Sounds/menu.wav");
+	i = cargarSonido("assets/Sounds/car_engine.wav");
 }
 
 int GestorSonido::cargarSonido(std::string file) {

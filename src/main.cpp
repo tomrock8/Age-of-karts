@@ -1,6 +1,7 @@
 #include "TMotor.hpp"
 #include "GestorEscena.hpp"
 #include "EscenaJuego.hpp"
+#include "TGestorImagenes.hpp"
 
 #include "Corredor.hpp"
 
@@ -17,6 +18,9 @@ int main(int argc, char* argv[]) {
 
 	//CREAMOS GESTOR DE SONIDO SINGLETON
 	GestorSonido::getInstacia();
+
+	//Creamos el gestor de imagenes para el HUD
+	TGestorImagenes::getInstacia();
 
 	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
 	cam->translate(glm::vec3(0.0f, 12.0f, 15.0f));
@@ -45,8 +49,7 @@ int main(int argc, char* argv[]) {
 	cube2->setScale(0.5, 0.5, 0.5);
 	cube2->setPosition(-1.75, 8.0, 0);
 	cube3->setPosition(0, 2.0, 60);
-	cube4->setPosition(0, 0.5, 100);
-	*/
+	cube4->setPosition(4, 0.5, 300);
 	
 	/*
 	obj3D *cubnot = TMotor::instancia().newMeshNode("cubote", "assets/wall/wall.obj", "escena_raiz");

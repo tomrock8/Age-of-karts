@@ -12,8 +12,8 @@ TMotor::TMotor() {
 	}
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // Version maxima de opengl
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); // Version minima de opengl
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// CREACION OBJETO VENTANA PARA USAR LAS FUNCIONES DE GLFW
 	ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", NULL, NULL);
@@ -128,7 +128,7 @@ obj3D *TMotor::newCameraNode(const char *name, const char* parentNode) {
 	return new obj3D(nodo, name, contID);
 }
 
-
+/*
 cameraThird *TMotor::newCamera3ThPerson(const char *name, const char *parentName) {
 	//La camara no tendra escalado, no es necesario
 	//rotacion
@@ -147,6 +147,7 @@ cameraThird *TMotor::newCamera3ThPerson(const char *name, const char *parentName
 	contID++;
 	return new cameraThird(node, getNode(parentName), name, contID++);
 }
+*/
 
 obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode) {
 	// R O T A C I O N
@@ -166,12 +167,6 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 	//TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(.8f), dir, att, corte);
 	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(0.8f), dir, att, corte, shadow, active);
 	TNodo *nodo = createLightNode(traslacionNodo, luz, name);
-	if (static_cast<TLuz *>(nodo->getEntidad())->getLightType() < 0.1) {
-		nPointLights++;
-	}
-	else {
-		nSpotLights++;
-	}
 	contID++;
 	return new obj3D(nodo, name, contID);
 }
@@ -325,10 +320,6 @@ void TMotor::draw(int tipo) {
 	if (tipo == 1 || tipo == 2) {
 		//Se activa el shader para el renderizado 3D
 		shader->use();
-
-		//Mandamos el numero de luces de cada tipo al shader
-		shader->setInt("numPointLights", nPointLights);
-		shader->setInt("numSpotLights", nSpotLights);
 		//Se llama al dibujado de los distintos nodos del arbol
 		drawCamera();
 		drawLight();
@@ -510,7 +501,7 @@ void TMotor::drawLight() {
 		glm::vec4 lPos = lightMatrix * defaultVector;
 		glm::vec3 pos(lPos.x, lPos.y, lPos.z);
 		static_cast<TLuz *> (activeLights.at(i)->getEntidad())->setLightPosition(pos);
-		static_cast<TLuz *> (activeLights.at(i)->getEntidad())->setLuzPuntual(shader, activeLights.at(i)->getName());
+		static_cast<TLuz *> (activeLights.at(i)->getEntidad())->setLuz(shader, activeLights.at(i)->getName());
 	}
 	//por ultimo cargar la posicion que ocupa la luz en su matriz de luz
 }

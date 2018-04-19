@@ -9,13 +9,14 @@
 
 #include "MotorFisicas.hpp"
 #include "DebugFisicas.hpp"
-#include "cameraThird.hpp"
 
 #include "Pista.hpp"
 #include "GestorJugadores.hpp"
 #include "GestorCarrera.hpp"
 #include "GestorColisiones.hpp"
 #include "Timer.hpp"
+
+#include "cameraThird.hpp"
 
 
 class EscenaJuego : public Escena {

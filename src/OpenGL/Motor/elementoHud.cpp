@@ -12,7 +12,6 @@ elementoHud::elementoHud(float w, float h, const char* n, const char* p){
     //Inicializamos y creamos el elemento del hud
     setData();
     setBuffersOpenGL();
-    loadImage();
 }
 
 //Constructor que crea e inicializa el quad con una color
@@ -88,42 +87,12 @@ void elementoHud::setBuffersOpenGL(){
     glBindVertexArray(0); 
 }
 
-//Funcion para cargar la imagen del archivo y crear la textura en OpenGL
-void elementoHud::loadImage(){
-
-    
-    //Enlazar la textura con OpenGl para obtener la id
-    glGenTextures(1, &idText);
-    
-    //Para que stb cargue la imagen correctamente
-	stbi_set_flip_vertically_on_load(true); 
-    
-    //Cargar la imagen a partir de la libreria stb
-	int w, h, comp;
-	unsigned char *imgTexture = stbi_load(path, &w, &h, &comp, 4);
-    
-    //Le decimos a OpenGL que es una textura 2D
-	glBindTexture(GL_TEXTURE_2D, idText);
-    //Creamos la textura en OpenGL
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, imgTexture);
-    //Parametros de la textura
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    //Desactivamos la textura hasta el dibujado
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-    //Liberamos la memoria reservada por la libreria stb
-	stbi_image_free(imgTexture);
-    
-}
-
 //Funcion para dibujar el elemento hud
 void elementoHud::draw(Shader *shader){
 
     //Activamos la textura 0 y enlazamos la textura anteriormente definida
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, idText);
+    glBindTexture(GL_TEXTURE_2D, TGestorImagenes::getInstacia()->cargarImagen(path)->getID());
 
     //Calculamos la matriz model del elemento
     glm::mat4 model = tras * rot * esc;
@@ -168,8 +137,6 @@ const char* elementoHud::getName(){
 void elementoHud::cambiarTextura(const char* p){
     //Asignar la nueva ruta
     path = p;
-    //Cargar la nueva textura
-    loadImage();
 }
 
 //Funcion para cambiar el color del elemento hud

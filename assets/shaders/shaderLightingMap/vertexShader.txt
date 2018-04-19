@@ -13,7 +13,6 @@ out data{
     vec2 textCoords; //Coordenadas de textura
     vec3 worldPos; // Vertice en coordenadas del mundo 
     vec3 worldNormal; //Normal del vertice en coordenadas del mundo
-    vec4 worldLightPos; //Vertice en coordenadas de la luz
     mat3 tbnMatrix; //Inversa de la matriz TBN
 } vs_out;
 
@@ -44,9 +43,6 @@ void main()
     mat3 TBN = mat3(tang, bitang, norm);
     //Inversa para poder pasar a espacio tangente
     vs_out.tbnMatrix = transpose(TBN);
-
-    //Calculamos la posicion del vertice respecto a la luz
-    vs_out.worldLightPos = lightMatrix * vec4(vs_out.worldPos, 1.0);
 
     //Calcular posicion final del pixel a partir de la multiplicacion de la MVP por la posicion del  vertice
     gl_Position = projection * view * model * vec4(aPos, 1.0);

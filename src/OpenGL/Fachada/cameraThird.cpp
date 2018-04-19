@@ -1,23 +1,74 @@
 #include "cameraThird.hpp"
 #include "TMotor.hpp"
 
-cameraThird::cameraThird(TNodo *m, TNodo *parent, const char *n, GLuint i) {
-	node = m;
-	parentNode = parent;
+cameraThird::cameraThird(const char *name, const char *parentName) {
+	
+	
+	camara = TMotor::instancia().newCameraNode(name, parentName);
+	//this->nodo = nodo;
+	//parentNode = parent;
+	
+	/*
 	name = n;
 	id = i;
 	direction = 0;
 	zdirection = 0;
 	auxX = 0;
+	
 	rigidBody = initializePhysics();
 	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 
+*/
 }
 
 cameraThird::~cameraThird() {
 }
 
+void cameraThird::lookAt(glm::vec3 posicion){
+
+/*
+glPushMatrix();
+        glLoadIdentity();
+        gluLookAt(camara->getPosition().x, camara->getPosition().y, camara->getPosition().z, 
+                  posicion.x, posicion.y, posicion.z, 
+                  0,1,0); 
+
+        GLfloat MV[16];
+        glGetFloatv(GL_MODELVIEW_MATRIX, MV);        
+    glPopMatrix();
+
+    glm::mat4 T(MV[0], MV[1], MV[2], MV[3],
+                MV[4], MV[5], MV[6], MV[7],
+                MV[8], MV[9], MV[10], MV[11],
+                MV[12], MV[13], MV[14], MV[15]);
+
+    T = glm::inverse(T);
+    T[2][0] = -T[2][0];
+    T[2][1] = -T[2][1];
+    T[2][2] = -T[2][2];
+
+
+    T[0][0] = -T[0][0];
+    T[0][1] = -T[0][1];
+    T[0][2] = -T[0][2]; 
+
+	glPushMatrix(); 
+	glMultMatrixf(glm::value_ptr(T));
+	glPopMatrix(); 
+*/
+
+}
+
+void cameraThird::update(glm::vec3 posicion,glm::vec3 rotacion,btVector3 direccion){
+
+float distanciaX=20; 
+camara->setPosition(posicion.x - direccion.getX()*distanciaX,posicion.y +7,posicion.z - direccion.getZ()*distanciaX); 
+camara->setRotation(0,rotacion.y +180,0); 
+//gluLookAt(posicion.x - direccion.getX()*distanciaX,posicion.y+ 7,posicion.z - direccion.getZ()*distanciaX , posicion.x,posicion.y,posicion.z,0,1,0);
+
+}
 btRigidBody *cameraThird::initializePhysics() {
+	/*
 	btVector3 escala(5, 5, 5);
 	btVector3 posicion(-10, 10, 31);
 	btScalar masa = btScalar(10);
@@ -55,10 +106,11 @@ btRigidBody *cameraThird::initializePhysics() {
 	//bullet->setObjetos(objetos);
 	rigidBody->setGravity(btVector3(0, 0, 0));
 	return rigidBody;
+	*/
 }
 
 void cameraThird::moveCamera(btRigidBody * pj1, btVector3 dir) {
-
+/*
 	cout << "estoy en moveCamera(64) en cameraThird" << endl;
 	glm::vec3 RelativeToCar;
 
@@ -158,6 +210,7 @@ void cameraThird::moveCamera(btRigidBody * pj1, btVector3 dir) {
 	fpsActiva = false;
 
 	//}
+	*/
 }
 void cameraThird::movefpsCamera(btRigidBody * pj1) {
 	/*
@@ -207,7 +260,7 @@ void cameraThird::movefpsCamera(btRigidBody * pj1) {
 	*/
 }
 void cameraThird::moveCameraControl(btRigidBody *pj1) {
-
+/*
 	TNodo *camera = node;
 	position = getParentPosition();
 	float change_x = 0.0f;
@@ -248,7 +301,7 @@ void cameraThird::moveCameraControl(btRigidBody *pj1) {
 	//camera->setTarget(core::vector3df(playerPos.X, playerPos.Y + 25.0f, playerPos.Z));
 	//pj1->getNodo()->setRotation( core::vector3df( 0, direction, 0 ) );
 	fpsActiva = false;
-
+*/
 }
 
 
@@ -261,14 +314,17 @@ const char *cameraThird::getName() {
 }
 
 glm::mat4 cameraThird::getParentPosition() {
+	/*
 	glm::mat4 aux = (static_cast<TTransform*>(parentNode->getPadre()->getEntidad())->getMatriz());
 	return aux;
+*/
 }
 
 glm::mat4 cameraThird::getParentRotation() {
-	
+/*	
 	glm::mat4 aux = (static_cast<TTransform*>(parentNode->getPadre()->getPadre()->getEntidad())->getMatriz());
 	return aux;
+*/
 }
 
 
@@ -279,7 +335,7 @@ void cameraThird::setID(GLuint id) {
 
 void cameraThird::setName(const char *nombre) {
 	name = nombre;
-	node->setName(nombre);
+	//node->setName(nombre);
 }
 
 
@@ -289,22 +345,24 @@ void cameraThird::setRotation(glm::vec3 axis, GLfloat angle) {
 	//rotation.x = angle*axis.x;	
 	//rotation.y = angle*axis.y;
 	//rotation.z = angle*axis.z;
-
+/*
 	static_cast<TTransform*>(node->getPadre()->getPadre()->getEntidad())->setMatriz(getParentRotation());
 	static_cast<TTransform*>(node->getPadre()->getPadre()->getEntidad())->rotar(axis.x, axis.y, axis.z, angle);
 	rotation =	static_cast<TTransform*>(node->getPadre()->getPadre()->getEntidad())->getMatriz();
+*/
 }
 
 
 void cameraThird::setPosition(GLfloat X, GLfloat Y, GLfloat Z) {
+	/*
 	static_cast<TTransform*>(node->getPadre()->getEntidad())->setMatriz(getParentPosition());
 	static_cast<TTransform*>(node->getPadre()->getEntidad())->trasladar(X, Y, Z);
 	position = static_cast<TTransform*>(node->getPadre()->getEntidad())->getMatriz();
-
+*/
 }
 
 void cameraThird::setParentNode(TNodo* p) {
-	parentNode = p;
+	//parentNode = p;
 }
 
 

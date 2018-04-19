@@ -1,6 +1,7 @@
 #include "EscenaJuego.hpp"
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
+	end=false;
 	ipConexion = "";
 	TMotor::instancia().newHud("OnGameHUD");
 	//TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "aok", "assets/HUD/MainMenu/aok_logo.png");
@@ -513,8 +514,10 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 
 		pj.at(0)->setPosicion(resetPos, resetOri);
 	}
-
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS){
+		end=true;
+	}
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end==true) {
 		if (tipoEscena == Escena::tipo_escena::ONLINE) {
 			client->ShutDownClient();
 		}

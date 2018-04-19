@@ -69,6 +69,7 @@ private:
 	bool muestraDebug;
 	bool show_demo_window;
 	bool show_another_window;
+	bool end;
 	
 	void renderDebug();
 };

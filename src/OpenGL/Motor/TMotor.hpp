@@ -57,6 +57,7 @@ public:
 	Shader *getShaderDebug();
 	Shader *getShaderDirectionalDepth();
 	Shader *getShaderPointDepth();
+	Shader *getShaderSkybox();
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
 
@@ -82,6 +83,7 @@ protected:
 	Shader *shaderDebug; //Shader que usa el motor para el modo debug
 	Shader *shaderDirectionalDepth; //Shader para el calculo de las sombras de las luces dirigidas
 	Shader *shaderPointDepth; //Shader para el calculo de las sombras de las luces puntuales
+	Shader *shaderSkybox;
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)

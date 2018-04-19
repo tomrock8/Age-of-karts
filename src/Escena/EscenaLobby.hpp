@@ -20,6 +20,7 @@ public:
 	void mostrarInfoLobby(int indice);
 	Escena::tipo_escena comprobarInputs();
 	void mostrarTipoPersonaje(int i);
+	void mostrarLobbyImgui();
 
 
 	// METODOS GET
@@ -49,7 +50,14 @@ private:
 	//ITexture* logoAOK; // Textura del logo del juego
 	bool selection;
 	bool offline;
+	bool end;
 	std::string iphost;
+
+
+	// IMGUI
+	bool muestraImgui;
+	bool show_demo_window;
+	bool show_another_window;
 };
 
 #endif /* ESCENALOBBY_H */

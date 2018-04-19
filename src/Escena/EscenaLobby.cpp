@@ -1,6 +1,7 @@
 #include "EscenaLobby.hpp"
 
 EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tipo) {
+	end=false;
 	nElementos = 0;
 	nElementos2 = 0;
 	count = 3;
@@ -60,10 +61,19 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 
 	logoAOK = Motor3d::instancia().getDriver()->getTexture("assets/logoAOK.png");
 	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));*/
+
+	// -----------------------
+	//	IMGUI
+	// -----------------------
+	show_demo_window = false;
+	show_another_window = false;
+	muestraImgui = true;
+
 }
 EscenaLobby::~EscenaLobby() {
 	cout << "Destructor ESCENA LOBBY. Entro.";
 	limpiar();
+	
 	cout << "Salgo.\n";
 }
 
@@ -85,6 +95,8 @@ void EscenaLobby::dibujar() {
 void EscenaLobby::limpiar() {
 	/*Motor3d::instancia().getScene()->clear();
 	Motor3d::instancia().getGUI()->clear();*/
+	muestraImgui=NULL;
+
 }
 
 void EscenaLobby::update() {
@@ -97,6 +109,9 @@ void EscenaLobby::update() {
 		}*/
 	}
 	else {
+
+		mostrarLobbyImgui();
+		
 		bool show = false;
 
 		//Online. EN cuanto tengamos la ip inicializamos el cliente para conectar
@@ -166,6 +181,53 @@ void EscenaLobby::update() {
 		}
 	}
 }
+
+void EscenaLobby::mostrarLobbyImgui(){
+// ------------------------------
+	// -------- IMGUI ---------------
+	// ------------------------------
+
+	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	static char str0[128] = "Hello, world!";
+	// Mostrar ventanas
+	 int display_w = 0 , display_h = 0;
+	 
+	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+	glfwGetFramebufferSize( TMotor::instancia().getVentana() , &display_w , &display_h );
+	ImGui_ImplGlfwGL3_NewFrame();
+	
+	if (ImGui::Begin("Hola", &muestraImgui, ImGuiWindowFlags_NoResize |  ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | 
+	ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_NavEnableGamepad)){
+		
+		ImGui::OpenPopup("About");
+		ImGui::SetNextWindowSize( ImVec2( (float)display_w , (float)display_h ) );
+        if (ImGui::BeginPopupModal("About", &muestraImgui, ImGuiWindowFlags_AlwaysAutoResize  |  ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | 
+		ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar))
+        {
+			
+			static float f = 0.0f;
+			static int counter = 0;
+			ImGui::Text("ONLINE!");                           // Display some text (you can use a format string too)
+			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+			ImGui::InputText("Introducir IP", str0, IM_ARRAYSIZE(str0));
+			//ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our windows open/close state
+			//ImGui::Checkbox("Another Window", &show_another_window);
+
+			if (ImGui::Button("Button"))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+				counter++;
+			ImGui::SameLine();
+			ImGui::Text("counter = %d", counter);
+
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+			ImGui::EndPopup();
+		}
+		ImGui::CloseCurrentPopup();
+	}
+	ImGui::End();
+}
+
 void EscenaLobby::mostrarInfoLobby(int indice) {
 	//Inicializacion variables cliente
 	std::vector<structClientes> clientes = client->getClientes();
@@ -178,7 +240,7 @@ void EscenaLobby::mostrarInfoLobby(int indice) {
 		id_player = client->getControlPlayer();
 	}
 	bool checkReady = true;		//boolean para comprobar si todos estan listos
-	bool checkReadyMe = true;		//Para online. Boolean para comprobar si tu esta listo (teniendo en cuenta si estas solo o hay mas gente)
+	bool checkReadyMe = true;		//Para online. Boolean para comprobar si tu estas listo (teniendo en cuenta si estas solo o hay mas gente)
 	bool bc = false;				//boolean aux
 
 	//Diferenciamos informacion en funcion de online/offline
@@ -365,10 +427,12 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a texto (tipo 
 
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
-
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS){
+		end=true;
+	}
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end==true) {
 		//if(conectado)
-
+		ImGui::CloseCurrentPopup();
 		if (offline) {
 			client->BorrarClientes();
 		}
@@ -616,8 +680,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 			pressed = true;
 		}
-	}
-	else pressed = false;
+	}else pressed = false;
 	//textoUI->setText(this->texto.c_str());
 
 	if (iniciado)

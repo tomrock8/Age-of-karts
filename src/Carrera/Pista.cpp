@@ -44,17 +44,19 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 	//Mapa->setPosition(0.0f, -10.0f, 0.0f);
 	//Mapa->setRotation(glm::vec3(0,1,0), 90.0f);
 
-	
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
+	
+//	btDynamicsWorld *mundo = bullet->getMundo();
+	btVector3 pos(Mapa->getPosition().x, Mapa->getPosition().y, Mapa->getPosition().z);
+	bullet->initializePhysics(Mapa->getName(), pos, Mapa);
 
 	//---------------------------FISICAS-------------------------------//
-
+	/*
 	fisicasMapa = new btBulletWorldImporter(0);
 	fisicasMapa->loadFile(fisicas);
 	{
 		int num = fisicasMapa->getNumRigidBodies();
-
+	
 		for (int i = 0; i < num; i++) {
 			CuerpoColisionMapa = (btRigidBody*)fisicasMapa->getRigidBodyByIndex(i);//recoger el rigidbody
 			//almacenar en puntero al nodo irrlich para poder actualizar( en caso de ser  necesario)
@@ -62,8 +64,8 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 			mundo->addRigidBody(CuerpoColisionMapa);//almacenar rigidbody en el mundo
 		}
 	}
-
-
+	
+	*/
 	// ------------------------------------------------------
 
 	

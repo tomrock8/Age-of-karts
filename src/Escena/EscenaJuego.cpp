@@ -48,7 +48,7 @@ void EscenaJuego::init() {
 	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_0->translate(glm::vec3(2.5f, 12.0f, 2.0f));
 	
-	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
+	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_1->translate(glm::vec3(150.0f, 12.0f, 0.0f));
 
 	obj3D * luzPuntual_2 = TMotor::instancia().newLightNode("light_2", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
@@ -104,7 +104,7 @@ void EscenaJuego::init() {
 	}
 
 	// Gravedad
-	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -100.f, 0.0));
+	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -30.f, 0.0));
 
 	//----------------------------
 	//	Debug Bullet
@@ -201,8 +201,8 @@ void EscenaJuego::init() {
 		//-----------------------------
 		//	CAMARA
 		//-----------------------------
-	camera = TMotor::instancia().newCamera3ThPerson("camara_jugador3apersona", "escena_raiz");
-	camera->setParentNode(pj.at(controlPlayer)->getNodo()->getNode());
+	camera = new cameraThird("camara_jugador3apersona", "escena_raiz");
+	//camera->setParentNode(pj.at(controlPlayer)->getNodo()->getNode());
 //		camara = new Camara3persona();
 //		tipoCamara = 0;
 //		cambioCamara = false;
@@ -442,13 +442,16 @@ void EscenaJuego::update() {
 	pj = jugadores->getJugadores();
 
 
+	camera->update(pj.at(controlPlayer)->getNodo()->getPosition(),pj.at(controlPlayer)->getNodo()->getRotation(),pj.at(controlPlayer)->getVectorDireccion());
+	camera->lookAt(pj.at(controlPlayer)->getNodo()->getPosition());
+/*
 	float distanciaX = -20;
 	float posX = pj.at(controlPlayer)->getVectorDireccion().getX()*distanciaX;
 	float posZ = pj.at(controlPlayer)->getVectorDireccion().getZ()*distanciaX;
 
-	camera->setPosition(posX, 7, posZ);
+	camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition().x - posX, 0, pj.at(controlPlayer)->getNodo()->getPosition().z - posZ);
 	camera->setRotation(glm::vec3(0, 1, 0), 180);
-	/*switch(tipoCamara){
+	switch(tipoCamara){
 		case 0:		//Camara 3a persona fija
 			camara->moveCamera(pj.at(controlPlayer));
 		break;

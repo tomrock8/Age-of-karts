@@ -94,7 +94,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	
 	InicializarFisicas();
-	InicializarFisicasRuedas();
+	//InicializarFisicasRuedas();
 
 }
 void Corredor::setParametros() {

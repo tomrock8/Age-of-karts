@@ -1,8 +1,7 @@
 #ifndef ELEMENTOHUD_H
 #define ELEMENTOHUD_H
  
-#include "libGL.hpp" 
-#include "stb_image.h"
+#include "TGestorImagenes.hpp"
 #include "Shader.hpp"
 #include <array>
 
@@ -46,8 +45,6 @@ private:
 
     GLuint VAO, VBO, EBO; //Buffers de OpenGL
 
-    GLuint idText; //Id de la textura al crearla con OpenGL
-
     glm::vec4 color; //Color del elemento hud
 
     glm::mat4 tras; //Matriz de traslacion
@@ -58,7 +55,6 @@ private:
     //---- FUNCIONES ----
     void setData();
     void setBuffersOpenGL();
-    void loadImage();
 
 };
 #endif

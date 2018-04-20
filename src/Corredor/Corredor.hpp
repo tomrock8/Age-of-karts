@@ -52,7 +52,7 @@ public:
 	void setAceite();
 	void setObjetivoTelederigido();
 	void setParametros();
-	void setParametros(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo);
+	void setParametros(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo,float velocidadLimiteGiro);
 	void setTipoObj();
 	void setTipoObj(EstadosJugador::estado_objeto objeto);
 	void SetFuerzaVelocidad(int turbo);
@@ -78,7 +78,7 @@ public:
 	int getVueltas();
 	float getMaxVuetas();
 	float getTiempoVueltaTotal();
-	void getParametros(float * fuerza, float * velocidadMedia, float * velocidadMaximaTurbo, float * velocidadMaxima, float * masa, float * indiceGiroAlto, float * indiceGiroBajo);
+	void getParametros(float * fuerza, float * velocidadMedia, float * velocidadMaximaTurbo, float * velocidadMaxima, float * masa, float * indiceGiroAlto, float * indiceGiroBajo, float * velocidadLimiteGiro);
 
 	// Update
 	void update();
@@ -101,7 +101,6 @@ public:
 	bool getTurbo();
 	Waypoint *getWaypointActual();
 	Waypoint *getWaypointSiguiente();
-	Waypoint *getWaypointAnterior();
 	bool getProteccion();
 	EstadosJugador *getEstados();
 	int getLimite();
@@ -129,7 +128,6 @@ protected:
 	//cameraThird *camara3Persona;
 
 	//WAYPOINTS
-	Waypoint *anterior; // Punto Actual
 	Waypoint *actual; // Punto Actual
 	Waypoint *siguiente; // Punto Siguiente
 	Waypoint *siguiente_aux; // Punto Siguiente
@@ -140,7 +138,6 @@ protected:
 	// Control de vueltas
 	btScalar distanciaWaypoint;
 	btScalar distanciaWaypointActual;
-	btScalar distanciaWaypointAnterior;
 
 	//bullet
 	btRaycastVehicle *vehiculo;

@@ -264,7 +264,7 @@ void EscenaJuego::renderDebug() {
 	// ------------------------------
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-	Corredor *jugador = GestorJugadores::getInstancia()->getJugadores().at(0);
+	Corredor *jugador = GestorJugadores::getInstancia()->getJugadores().at(controlPlayer);
 
 	// Mostrar ventanas
 
@@ -281,8 +281,8 @@ void EscenaJuego::renderDebug() {
 		ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
 		ImGui::Text(jugador->toString().c_str());
 
-		static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo;
-		jugador->getParametros(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo);
+		static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo,velocidadLimiteGiro;
+		jugador->getParametros(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo,&velocidadLimiteGiro);
 
 		ImGui::SliderFloat("fuerza", &fuerza, 0.0f, 10000.0f);
 
@@ -290,10 +290,10 @@ void EscenaJuego::renderDebug() {
 		ImGui::SliderFloat("velocidadMaximaTurbo", &velocidadMaximaTurbo, 0.0f, 800.0f);
 		ImGui::SliderFloat("velocidadMaxima", &velocidadMaxima, 0.0f, 800.0f);
 		ImGui::SliderFloat("Masa", &masa, 0.0f, 8000.0f);
-		ImGui::SliderFloat2("Indice giro alto-bajo", new float[2]{ indiceGiroAlto, indiceGiroBajo }, -1, 1);
-		//ImGui::SliderFloat("indiceGiroAlto", &indiceGiroAlto, 0.0f, 1.0f);
-		//ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f);
-		jugador->setParametros(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo);
+		ImGui::SliderFloat("VelocidadLimiteGiro", &velocidadLimiteGiro, 0.0f, 8000.0f);
+		ImGui::SliderFloat("indiceGiroAlto", &indiceGiroAlto, 0.0f, 1.0f);
+		ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f);
+		jugador->setParametros(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo,velocidadLimiteGiro);
 
 
 
@@ -302,8 +302,8 @@ void EscenaJuego::renderDebug() {
 		resetOri[0] = jugador->getNodo()->getRotation().z;
 		resetOri[1] = jugador->getNodo()->getRotation().y;
 		resetOri[2] = jugador->getNodo()->getRotation().x;
-
-
+		
+		
 		ImGui::SliderFloat3("Posicion", posicion, -100, 100);
 		ImGui::SameLine();
 		if (ImGui::Button("Set position"))

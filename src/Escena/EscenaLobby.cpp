@@ -44,6 +44,8 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 
 	TMotor::instancia().newHud("LobbyHUD");
 	TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "comenzarPartida", "assets/HUD/LobbyMenu/empezar.png");
+	TMotor::instancia().initDebugWindow();
+	
 }
 
 EscenaLobby::~EscenaLobby() {
@@ -67,6 +69,7 @@ void EscenaLobby::update() {
 	}
 	else {
 
+	mostrarLobbyImgui();
 		bool show = false;
 
 		//Online. EN cuanto tengamos la ip inicializamos el cliente para conectar
@@ -131,7 +134,47 @@ void EscenaLobby::update() {
 		}
 	}
 }
+void EscenaLobby::mostrarLobbyImgui(){
+	// ------------------------------
+  	// -------- IMGUI ---------------
+  	// ------------------------------
+	bool  show_demo_window=true;
+  	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+  	// Mostrar ventanas
+   	int display_w = 0 , display_h = 0;
+	
+  	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
+  	glfwGetFramebufferSize( TMotor::instancia().getVentana() , &display_w , &display_h );
+ 
+  	ImGui_ImplGlfwGL3_NewFrame();
+	ImGui::SetNextWindowSize( ImVec2( (float)display_w , (float)display_h ) );
+ 
+	if (ImGui::Begin("Hola", NULL, ImGuiWindowFlags_NoResize 
+	| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
+	| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard 
+	| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal)){
 
+		static float f = 0.0f;
+		static int counter = 0;
+
+		ImGui::Text("ONLINE!");                           // Display some text (you can use a format string too)
+		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+		ImGui::InputText("Introducir IP", str0, IM_ARRAYSIZE(str0), ImGuiConfigFlags_NavEnableKeyboard 
+	| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_CallbackCharFilter);
+
+		if (ImGui::Button("Button"))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+		counter++;
+
+		ImGui::SameLine();
+		ImGui::Text("counter = %d", counter);
+		if (show_demo_window){
+			ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+				ImGui::ShowDemoWindow(&show_demo_window);
+		}
+	}
+  	ImGui::End();
+}
+ 
 
 void EscenaLobby::mostrarInfoLobby(int indice) {
 	//Inicializacion variables cliente
@@ -436,6 +479,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				if (!selection) {
 					cout << "1";
 					ipConexion += "1";
+					str0[128]+='1';
 				}
 				else {
 					selection = false;
@@ -460,6 +504,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				if (!selection) {
 					cout << "2";
 					ipConexion += "2";
+					str0[128]+='2';
 				}
 				else {
 					selection = false;
@@ -485,6 +530,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			if (!offline) {
 				cout << "3";
 				ipConexion += "3";
+				str0[128]+='3';
 
 			}
 			else {
@@ -506,6 +552,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if (!pressed) {
 			cout << "4";
 			ipConexion += "4";
+			str0[128]+='4';
 			pressed = true;
 		}
 	}
@@ -513,6 +560,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if (!pressed) {
 			cout << "5";
 			ipConexion += "5";
+			str0[128]+='6';
 			pressed = true;
 		}
 	}
@@ -520,6 +568,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if (!pressed) {
 			cout << "6";
 			ipConexion += "6";
+			str0[128]+='6';
 			pressed = true;
 		}
 	}
@@ -527,6 +576,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if (!pressed) {
 			cout << "7";
 			ipConexion += "7";
+			str0[128]+='7';
 			pressed = true;
 		}
 	}
@@ -534,6 +584,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if (!pressed) {
 			cout << "8";
 			ipConexion += "8";
+			str0[128]+='9';
 			pressed = true;
 		}
 	}
@@ -541,6 +592,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if (!pressed) {
 			cout << "9";
 			ipConexion += "9";
+			str0[128]+='9';
 			pressed = true;
 		}
 	}
@@ -548,6 +600,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if (!pressed) {
 			cout << "0";
 			ipConexion += "0";
+			str0[128]+='0';
 			pressed = true;
 		}
 	}
@@ -555,6 +608,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if (!pressed) {
 			cout << ".";
 			ipConexion += ".";
+			str0[128]+='.';
 			pressed = true;
 		}
 	}

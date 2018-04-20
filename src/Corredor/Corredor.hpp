@@ -29,6 +29,7 @@ class Corredor : public RakNet::NetworkIDObject
 public:
 	typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
 	Corredor(btVector3 pos, tipo_jugador tipo);
+
 	void InicializarFisicas();
 	void InicializarFisicasRuedas();
 	void resetFuerzas();
@@ -51,6 +52,7 @@ public:
 	void setAceite();
 	void setObjetivoTelederigido();
 	void setParametros();
+	void setParametros(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo);
 	void setTipoObj();
 	void setTipoObj(EstadosJugador::estado_objeto objeto);
 	void SetFuerzaVelocidad(int turbo);
@@ -76,6 +78,7 @@ public:
 	int getVueltas();
 	float getMaxVuetas();
 	float getTiempoVueltaTotal();
+	void getParametros(float * fuerza, float * velocidadMedia, float * velocidadMaximaTurbo, float * velocidadMaxima, float * masa, float * indiceGiroAlto, float * indiceGiroBajo);
 
 	// Update
 	void update();
@@ -113,11 +116,11 @@ public:
 	void usarObjetos();
 	void lanzarHabilidad();
 
-	
+
 	std::string toString();
 
 protected:
-	obj3D *cuboNodo;
+	obj3D * cuboNodo;
 	obj3D *rueda1;
 	obj3D *rueda2;
 	obj3D *rueda3;

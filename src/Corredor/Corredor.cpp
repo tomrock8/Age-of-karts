@@ -76,10 +76,10 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	// HAY QUE MODIFICAR DE QUE NODO PENDEN!!!
 	const char* strRueda = "assets/rueda/rueda.obj";
-	rueda1 = TMotor::instancia().newMeshNode("rueda1", strRueda, "escena_raiz",false);
-	rueda2 = TMotor::instancia().newMeshNode("rueda2", strRueda, "escena_raiz",false);
-	rueda3 = TMotor::instancia().newMeshNode("rueda3", strRueda, "escena_raiz",false);
-	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "escena_raiz",false);
+	rueda1 = TMotor::instancia().newMeshNode("rueda1", strRueda, "escena_raiz", false);
+	rueda2 = TMotor::instancia().newMeshNode("rueda2", strRueda, "escena_raiz", false);
+	rueda3 = TMotor::instancia().newMeshNode("rueda3", strRueda, "escena_raiz", false);
+	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "escena_raiz", false);
 
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
@@ -91,13 +91,35 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	//InicializarFisicasRuedas();
 
 }
+void Corredor::setParametros(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo) {
+	// Creo que hay que setear los parametros en el cuerpo de colision
+	
+	this->Fuerza = fuerza;
+	this->velocidadMedia = velocidadMedia;
+	this->velocidadMaximaTurbo = velocidadMaximaTurbo;
+	this->velocidadMaxima = velocidadMaxima;
+	this->Masa = masa;
+	this->indiceGiroAlto = btScalar(indiceGiroAlto);
+	this->indiceGiroBajo = btScalar(indiceGiroBajo);
+}
+
+void Corredor::getParametros(float *fuerza, float *velocidadMedia, float *velocidadMaximaTurbo, float *velocidadMaxima, float *masa, float *indiceGiroAlto, float *indiceGiroBajo) {
+	*fuerza = static_cast<float>(this->Fuerza);
+	*velocidadMedia = static_cast<float>(this->velocidadMedia);
+	*velocidadMaximaTurbo = static_cast<float>(this->velocidadMaximaTurbo);
+	*velocidadMaxima = static_cast<float>(this->velocidadMaxima);
+	*masa = static_cast<float>(this->Masa);
+	*indiceGiroAlto = static_cast<float>(this->indiceGiroAlto);
+	*indiceGiroBajo = static_cast<float>(this->indiceGiroBajo);
+}
+
 void Corredor::setParametros() {
 	const char* objeto = "assets/coche.obj";
 	//cambiar parametros en funcion del tipo
 	int num = 0;
 	switch (tipojugador) {
 	case GLADIADOR:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz",false);
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz", false);
 
 		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
 
@@ -118,7 +140,7 @@ void Corredor::setParametros() {
 		num = 1;
 		break;
 	case PIRATA:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz",false);
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz", false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;
@@ -136,7 +158,7 @@ void Corredor::setParametros() {
 		num = 2;
 		break;
 	case VIKINGO:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz",false);
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz", false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(3600); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;
@@ -154,7 +176,7 @@ void Corredor::setParametros() {
 		num = 3;
 		break;
 	case CHINO:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz",false);
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz", false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;
@@ -1181,6 +1203,8 @@ std::string Corredor::toString() {
 
 	resultado += "\nOBJETO: " + to_string(EstadosJugador::estado_objeto(tipoObj));
 	resultado += "\nHabilidad: " + to_string(limite) + "/100\n";
+
+
 
 	return resultado;
 }

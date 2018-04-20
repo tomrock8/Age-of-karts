@@ -47,7 +47,7 @@ void EscenaJuego::init() {
 	// LUCES PUNTUALES
 	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_0->translate(glm::vec3(2.5f, 12.0f, 2.0f));
-	
+
 	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_1->translate(glm::vec3(150.0f, 12.0f, 0.0f));
 
@@ -116,8 +116,7 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-
-	Pista::getInstancia()->setMapa("assets/MapaPirata/mapaPirata.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+	Pista::getInstancia()->setMapa("assets/mierdamapa/mierda.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 
 	//-----------------------------
@@ -272,7 +271,8 @@ void EscenaJuego::renderDebug() {
 	ImGui_ImplGlfwGL3_NewFrame();
 	ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-	ImGui::Text("�Debug del Juego!");
+	ImGui::Text("Debug del Juego!");
+	ImGui::Text("Pulsa 9 para activar - 0 desactivar");
 	ImGui::Text("Jugadores: %i", GestorJugadores::getInstancia()->getNumJugadores());
 	ImGui::Text("Elementos de fisicas: %i", MotorFisicas::getInstancia()->getMundo()->getNumCollisionObjects());
 
@@ -280,6 +280,35 @@ void EscenaJuego::renderDebug() {
 	if (debug_Jugador) {
 		ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
 		ImGui::Text(jugador->toString().c_str());
+
+		static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo;
+		jugador->getParametros(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo);
+
+		ImGui::SliderFloat("fuerza", &fuerza, 0.0f, 10000.0f);
+
+		ImGui::SliderFloat("velocidadMedia", &velocidadMedia, 0.0f, 800.0f);
+		ImGui::SliderFloat("velocidadMaximaTurbo", &velocidadMaximaTurbo, 0.0f, 800.0f);
+		ImGui::SliderFloat("velocidadMaxima", &velocidadMaxima, 0.0f, 800.0f);
+		ImGui::SliderFloat("Masa", &masa, 0.0f, 8000.0f);
+		ImGui::SliderFloat2("Indice giro alto-bajo", new float[2]{ indiceGiroAlto, indiceGiroBajo }, -1, 1);
+		//ImGui::SliderFloat("indiceGiroAlto", &indiceGiroAlto, 0.0f, 1.0f);
+		//ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f);
+		jugador->setParametros(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo);
+
+
+
+		static float *posicion = new float[3];
+		float *resetOri = new float[3];
+		resetOri[0] = jugador->getNodo()->getRotation().z;
+		resetOri[1] = jugador->getNodo()->getRotation().y;
+		resetOri[2] = jugador->getNodo()->getRotation().x;
+
+
+		ImGui::SliderFloat3("Posicion", posicion, -100, 100);
+		ImGui::SameLine();
+		if (ImGui::Button("Set position"))
+			jugador->setPosicion(posicion, resetOri);// Hay que pasarle solo la posicion al jugador, no al nodo
+
 		if (ImGui::Button("Cerrar"))
 			debug_Jugador = false;
 		ImGui::End();
@@ -333,9 +362,8 @@ void EscenaJuego::update() {
 				if (strcmp("HabilidadPirata", items.at(i)->getNombre()) == 0
 					|| strcmp("HabilidadVikingo", items.at(i)->getNombre()) == 0
 					|| strcmp("HabilidadGladiador", items.at(i)->getNombre()) == 0
-					|| strcmp("HabilidadChino", items.at(i)->getNombre()) == 0) {
-
-
+					|| strcmp("HabilidadChino", items.at(i)->getNombre()) == 0)
+				{
 					pj.at(items.at(i)->getIDPadre())->setHabilidad(false);
 
 				}
@@ -344,11 +372,9 @@ void EscenaJuego::update() {
 				items.erase(items.begin() + i);
 				pistaca->setItems(items);
 				break;
-
 			}
 			else {
 				items.at(i)->updateHijos();
-
 			}
 		}
 	}
@@ -516,9 +542,10 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
 	}
 
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS) {
-		TMotor::instancia().setRenderDebug(!TMotor::instancia().getRenderDebug());
-	}
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS)
+		TMotor::instancia().setRenderDebug(true);
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS)
+		TMotor::instancia().setRenderDebug(false);
 
 	return tipoEscena; // Significa que debe seguir ejecutando
 }

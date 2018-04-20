@@ -56,7 +56,10 @@ EscenaLobby::~EscenaLobby() {
 
 void EscenaLobby::init() {}
 void EscenaLobby::dibujar() {}
-void EscenaLobby::limpiar() {}
+void EscenaLobby::limpiar() {
+	if (!offline)
+	TMotor::instancia().closeDebugWindow();
+}
 
 void EscenaLobby::update() {
 	if (offline) {

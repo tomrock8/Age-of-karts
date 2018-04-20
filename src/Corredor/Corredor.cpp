@@ -1166,7 +1166,7 @@ std::string Corredor::toString() {
 	std::string resultado = "";
 
 	resultado += "\nJugador " + to_string(this->getID());
-	resultado += "\nVELOCIDAD: " + to_string(vehiculo->getCurrentSpeedKmHour());
+	resultado += "\nVELOCIDAD: " + to_string((int)vehiculo->getCurrentSpeedKmHour()) + " km/h";
 	if (direccionContraria != 0) {
 		resultado += "\nVAS EN DIRECCION CONTRARIA, JUGADOR: " + to_string(this->getID()) + "\n";
 	}

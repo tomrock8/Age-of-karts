@@ -272,29 +272,27 @@ void EscenaJuego::renderDebug() {
 	// -------- IMGUI ---------------
 	// ------------------------------
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	
+
 	Corredor *jugador = GestorJugadores::getInstancia()->getJugadores().at(0);
 
 	// Mostrar ventanas
 
 	ImGui_ImplGlfwGL3_NewFrame();
 	ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	static int counter = 0;
-	ImGui::Text("Debug del corredor");
-	ImGui::Text(jugador->toString().c_str());
+	ImGui::Text("¡Debug del Juego!");
 
-
-	ImGui::Checkbox("Another Window", &show_another_window);
-	if (show_another_window) {
-		ImGui::Begin("Another Window", &show_another_window);
-		ImGui::Text("Hello from another window!");
-		if (ImGui::Button("Close Me"))
-			show_another_window = false;
+	ImGui::Checkbox("Debug Jugador", &debug_Jugador);
+	if (debug_Jugador) {
+		ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
+		ImGui::Text(jugador->toString().c_str());
+		if (ImGui::Button("Cerrrar"))
+			debug_Jugador = false;
 		ImGui::End();
 	}
 	/*
 	//ImGui::SliderFloat("Masa", &valor, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 	// Boton
+	static int counter = 0;
 	if (ImGui::Button("Button"))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
 		counter++;
 	ImGui::SameLine();

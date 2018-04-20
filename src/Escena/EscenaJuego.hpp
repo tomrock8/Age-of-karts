@@ -67,7 +67,7 @@ private:
 
 	// IMGUI
 	bool muestraDebug;
-	bool show_another_window;
+	bool debug_Jugador;
 	bool end;
 	
 	void renderDebug();

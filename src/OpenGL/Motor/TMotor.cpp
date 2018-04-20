@@ -61,8 +61,8 @@ void TMotor::initDebugWindow(){
 	if (ImGui::GetCurrentContext() == NULL) {
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO();
-		/*io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls*/
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 		ImGui_ImplGlfwGL3_Init(ventana, true);
 
 		// Setup style

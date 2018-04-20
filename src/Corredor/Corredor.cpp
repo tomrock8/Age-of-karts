@@ -28,7 +28,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	tiempoVueltaTotal = 0.f;
 	tiempoHabilidad = 0;
 	inmunidad = false;
-	tiempoInmunidad = 2; // 5 segundos inmunidad
+	tiempoInmunidad = 2;
 	timerInmunidad = 0;
 	habilidadLanzada = false;
 	tipojugador = tipo;
@@ -45,7 +45,6 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	//establecemos el primer waypoint del mapa
 
 	Pista *mapa = Pista::getInstancia();
-	anterior = mapa->getArrayWaypoints()[mapa->getTamArrayWaypoints() - 1];
 	actual = mapa->getArrayWaypoints()[0];
 	siguiente = actual->getNextWaypoint();
 	siguiente_aux = siguiente;
@@ -90,20 +89,34 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	InicializarFisicas();
 	InicializarFisicasRuedas();
 
+
+	//OPENAL
+	fuenteMotor = new AlSource();
+	fuenteMotor->setLoop(true);
+	fuenteMotor->play(SOUND_ENGINE);
+	fuenteFrenos = new AlSource();
+	fuenteItem = new AlSource();
+
 }
-void Corredor::setParametros(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo) {
+void Corredor::setParametros(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo,float velocidadLimiteGiro) {
 	// Creo que hay que setear los parametros en el cuerpo de colision
 	
 	this->Fuerza = fuerza;
 	this->velocidadMedia = velocidadMedia;
 	this->velocidadMaximaTurbo = velocidadMaximaTurbo;
 	this->velocidadMaxima = velocidadMaxima;
-	this->Masa = masa;
+	if (masa!=this->Masa){
+		this->Masa = masa;
+		btVector3 inertia(0, 0, 0);
+		CuerpoColisionChasis->getCollisionShape()->calculateLocalInertia(masa,inertia); 
+		CuerpoColisionChasis->setMassProps(masa,inertia);
+	}
 	this->indiceGiroAlto = btScalar(indiceGiroAlto);
 	this->indiceGiroBajo = btScalar(indiceGiroBajo);
+	this->velocidadLimiteGiro=velocidadLimiteGiro;
 }
 
-void Corredor::getParametros(float *fuerza, float *velocidadMedia, float *velocidadMaximaTurbo, float *velocidadMaxima, float *masa, float *indiceGiroAlto, float *indiceGiroBajo) {
+void Corredor::getParametros(float *fuerza, float *velocidadMedia, float *velocidadMaximaTurbo, float *velocidadMaxima, float *masa, float *indiceGiroAlto, float *indiceGiroBajo, float *velocidadLimiteGiro) {
 	*fuerza = static_cast<float>(this->Fuerza);
 	*velocidadMedia = static_cast<float>(this->velocidadMedia);
 	*velocidadMaximaTurbo = static_cast<float>(this->velocidadMaximaTurbo);
@@ -111,6 +124,7 @@ void Corredor::getParametros(float *fuerza, float *velocidadMedia, float *veloci
 	*masa = static_cast<float>(this->Masa);
 	*indiceGiroAlto = static_cast<float>(this->indiceGiroAlto);
 	*indiceGiroBajo = static_cast<float>(this->indiceGiroBajo);
+	*velocidadLimiteGiro=static_cast<float>(this->velocidadLimiteGiro);
 }
 
 void Corredor::setParametros() {
@@ -350,7 +364,7 @@ void Corredor::InicializarFisicas() {
 	btVector3 posTransCoche = btVector3(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 	transCoche.setOrigin(posTransCoche);
 	btQuaternion quaternion;
-	quaternion.setEulerZYX(cuboNodo->getRotation().x* PI / 180, cuboNodo->getRotation().y * PI / 180, cuboNodo->getRotation().z* PI / 180);
+	quaternion.setEulerZYX(cuboNodo->getRotation().z* PI / 180, cuboNodo->getRotation().y * PI / 180, cuboNodo->getRotation().x* PI / 180);
 	transCoche.setRotation(quaternion);
 
 	//Motionstate
@@ -393,7 +407,7 @@ void Corredor::InicializarFisicas() {
 	CrearRuedas(vehiculo, tuning);
 	mundo->addRigidBody(CuerpoColisionChasis);
 	bullet->setObjetos(objetos);
-	CuerpoColisionChasis->applyGravity();
+	//CuerpoColisionChasis->applyGravity();
 
 	// luego declaramos sus ruedas
 	// inicializamos la posicion de las ruedas
@@ -444,7 +458,6 @@ btVector3 Corredor::getVectorDireccion() { return orientacion; }
 bool Corredor::getProteccion() { return proteccion; }
 Waypoint *Corredor::getWaypointActual() { return actual; }
 Waypoint *Corredor::getWaypointSiguiente() { return siguiente; }
-Waypoint *Corredor::getWaypointAnterior() { return anterior; }
 btScalar Corredor::getdistanciaWaypoint() { return distanciaWaypoint; }
 btScalar Corredor::getdistanciaWaypointActual() { return distanciaWaypointActual; }
 int Corredor::getVueltas() { return vueltas; }
@@ -1361,6 +1374,9 @@ void Corredor::updateVectorDireccion() {
 //---------------------------------------//
 Corredor::~Corredor() {
 	cout << "\nENTRO DESTRUCTOR CORREDOR. ";
+	delete fuenteMotor;
+	delete fuenteItem;
+	delete fuenteFrenos;
 	delete vehiculo;
 	delete cuboNodo;
 	cout << "SALGO DESTRUCTOR CORREDOR\n";

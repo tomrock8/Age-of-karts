@@ -1,3 +1,6 @@
+#ifndef GESTORSONIDO_H
+#define GESTORSONIDO_H
+
 
 #include <iostream>
 #include <vector>
@@ -35,3 +38,6 @@ class GestorSonido{
         ALsizei     alBufferLen;        //bit depth 
         ALboolean   alLoop = AL_FALSE;        //loop
 };
+
+
+#endif /* GESTORSONIDO_H */

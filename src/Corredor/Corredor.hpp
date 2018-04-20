@@ -19,6 +19,7 @@
 #include "ItemTeledirigido.hpp"
 #include "TMotor.hpp"
 #include "cameraThird.hpp"
+#include "GestorSonido.hpp"
 
 
 using namespace std;
@@ -126,6 +127,12 @@ protected:
 	obj3D *rueda4;
 
 	//cameraThird *camara3Persona;
+
+	//VARIABLES OPENAL SONIDO
+
+	AlSource *fuenteMotor;
+	AlSource *fuenteItem;
+	AlSource *fuenteFrenos;
 
 	//WAYPOINTS
 	Waypoint *actual; // Punto Actual

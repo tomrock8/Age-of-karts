@@ -89,6 +89,14 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	InicializarFisicas();
 	//InicializarFisicasRuedas();
 
+
+	//OPENAL
+	fuenteMotor = new AlSource();
+	fuenteMotor->setLoop(true);
+	fuenteMotor->play(SOUND_ENGINE);
+	fuenteFrenos = new AlSource();
+	fuenteItem = new AlSource();
+
 }
 void Corredor::setParametros(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo,float velocidadLimiteGiro) {
 	// Creo que hay que setear los parametros en el cuerpo de colision
@@ -1366,6 +1374,9 @@ void Corredor::updateVectorDireccion() {
 //---------------------------------------//
 Corredor::~Corredor() {
 	cout << "\nENTRO DESTRUCTOR CORREDOR. ";
+	delete fuenteMotor;
+	delete fuenteItem;
+	delete fuenteFrenos;
 	delete vehiculo;
 	delete cuboNodo;
 	cout << "SALGO DESTRUCTOR CORREDOR\n";

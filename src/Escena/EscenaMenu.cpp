@@ -98,7 +98,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 		if (!pressed) {
 			return Escena::tipo_escena::SALIR;
 		}
-	}else if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) { 				//Inputs para el menu principal
+	}else if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) { //Inputs para el menu principal
 		//Segun se toque arriba o abajo, el usuario se va moviendo entre los distintos botones del menu
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS) {
 			if (!pressed) {

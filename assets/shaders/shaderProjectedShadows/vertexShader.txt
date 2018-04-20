@@ -1,0 +1,20 @@
+#version 330 core
+
+layout (location = 0) in vec3 aPos;
+layout (location = 1) in vec2 aTexCoords;
+layout (location = 2) in vec3 aNormal; //Normal
+layout (location = 3) in vec3 aTangents; //Tangentes
+layout (location = 4) in vec3 aBitangents; //Bitangentes
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projectionLight;
+uniform mat4 modelPrueba;
+
+
+void main()
+{
+    mat4 pollas = model;
+    pollas[3][1] = 0.0f;
+    gl_Position = projectionLight * view * model * vec4(aPos.x, 0.0f, aPos.z, 1.0);
+}

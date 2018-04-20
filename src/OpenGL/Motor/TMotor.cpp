@@ -46,7 +46,7 @@ TMotor::TMotor() {
 
 	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
 	shaderHUD = new Shader("assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt", nullptr);
-	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
+	shaderProjectedShadows = new Shader("assets/shaders/shaderProjectedShadows/vertexShader.txt", "assets/shaders/shaderProjectedShadows/fragmentShader.txt", nullptr);
 	shaderDirectionalDepth = new Shader("assets/shaders/shaderDepth/shaderLuzDirigida/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzDirigida/fragmentShader.txt", nullptr);
 	shaderPointDepth = new Shader("assets/shaders/shaderDepth/shaderLuzPuntual/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzPuntual/fragmentShader.txt"
 		, "assets/shaders/shaderDepth/shaderLuzPuntual/geometryShader.txt");
@@ -107,12 +107,18 @@ TNodo *TMotor::getActiveCamera() { return activeCamera; }
 std::vector <TNodo*> TMotor::getActiveLights() { return activeLights; }
 Shader *TMotor::getShader() { return shader; }
 Shader *TMotor::getShaderHUD() { return shaderHUD; }
-Shader *TMotor::getShaderDebug() { return shaderDebug; }
+Shader *TMotor::getShaderProjectedShadows() { return shaderProjectedShadows; }
 Shader *TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
 Shader *TMotor::getShaderPointDepth() { return shaderPointDepth; }
-TGestorRecursos *TMotor::getGR() { return gestorRecursos; }
-bool TMotor::getRenderDebug() { return renderDebug; }
-hud* TMotor::getActiveHud() { return activeHud; }
+obj3D *TMotor::getObjeto(const char* name){
+	obj3D *objeto = NULL;
+	for (int i = 0; i < objetos.size(); i++){
+		if (strcmp(objetos.at(i)->getName(), name) == 0){
+			objeto = objetos.at(i);
+		}
+	}
+	return objeto;
+}
 
 //Funcion que devuelve un hud a partir del nombre
 hud* TMotor::getHud(const char* n) {
@@ -170,7 +176,9 @@ obj3D *TMotor::newCameraNode(const char *name, const char* parentNode) {
 	TNodo *nodo = createCamNode(traslacionNodo, camara, name);
 
 	contID++;
-	return new obj3D(nodo, name, contID);
+	obj3D *o = new obj3D(nodo, name, contID);
+	objetos.push_back(o);
+	return o;
 }
 
 /*
@@ -213,7 +221,9 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(0.8f), dir, att, corte, shadow, active);
 	TNodo *nodo = createLightNode(traslacionNodo, luz, name);
 	contID++;
-	return new obj3D(nodo, name, contID);
+	obj3D *o = new obj3D(nodo, name, contID);
+	objetos.push_back(o);
+	return o;
 }
 
 obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode,bool sta) {
@@ -241,13 +251,14 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 		cout << "MALLA MOTOR: " << gestorRecursos->getRecursoMallas().at(i)->getNombre() << "\n";
 	}*/
 
-
+	cout << name << endl;
 	TMalla *malla = TMotor::instancia().createMesh(path,sta);
 	TRecursoMalla *nameMalla = static_cast<TRecursoMalla*>(gestorRecursos->getRecursoMallas().at(gestorRecursos->getRecursoMallas().size()-1));
-	//cout << "El Nombre de la malla es: " << nameMalla->getNombre() << endl;
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, nameMalla->getNombre());
 	contID++;
-	return  new obj3D(nodo, nameMalla->getNombre(), contID);
+	obj3D *o = new obj3D(nodo, name, contID);
+	objetos.push_back(o);
+	return o;
 }
 
 
@@ -334,6 +345,7 @@ void TMotor::clean() {
 void TMotor::draw(int tipo) {
 	glClearColor(0.16f, 0.533f, 0.698f, 0.0f);//Establecer el nuevo color de fondo
 
+	
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
 	if (lights.size() > 0) {
 		for (int i = 0; i < lights.size(); i++) {
@@ -369,98 +381,44 @@ void TMotor::draw(int tipo) {
 			}
 		}
 		scene->draw(shader);
+
+		//==========================================================
+		// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
+		//==========================================================
+		/*
+		getObjeto("mapa")->setVisible(false);
+		shaderProjectedShadows->use();
+		std::vector<glm::mat4> matrixAux;
+		glm::vec4 defaultVector(0, 0, 0, 1);
+		TNodo *aux = activeCamera->getPadre();
+		int cont = 0;
+		while (aux != scene) {
+			matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
+			cont++;
+			aux = aux->getPadre();
+		}
+		glm::mat4 viewMatrix;
+		//recorrido a la inversa
+		for (int i = matrixAux.size() - 1; i >= 0; i--) {
+			viewMatrix = matrixAux.at(i) * viewMatrix;
+		}
+		shaderProjectedShadows->setMat4("view", glm::inverse(viewMatrix));
+		glm::mat4 proje = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 100.0f);
+		glm::mat4 mo;
+		shaderProjectedShadows->setMat4("projectionLight", proje);
+		shaderProjectedShadows->setMat4("modelPrueba", mo);
+		scene->draw(shaderProjectedShadows);
+		getObjeto("mapa")->setVisible(true);*/
+		//====================================================
+		//====================================================
 	}
 
-	/*
-	unsigned int VBO,VAO;
-		GLfloat points[12];
-
-		points[0] = 100.5f;
-		points[1] = 100.5f;
-		points[2] = 100.0f;
-		points[3] = 0.8f;
-		points[4] = 0.5f;
-		points[5] = 0.3f;
-
-		points[6] = 200.0f;
-		points[7] = 200.0f;
-		points[8] = 200.0f;
-		points[9] = 0.8f;
-		points[10] = 0.5f;
-		points[11] = 0.3f;
-
-
-		glGenVertexArrays(1, &VAO);
-		glBindVertexArray(VAO);
-		glGenBuffers(1, &VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(points), &points, GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-		glBindVertexArray(0);
-
-		TMotor::instancia().getShaderDebug()->use();
-
-		glm::mat4 proje = glm::ortho(
-		glm::radians(70.0f), 			// El campo de vision vertical:zoom 90 (extra ancho) y 30 (zoom aumentado)
-		800.0f / 600.0f,					// Proporcion.ventana 4/3 == 800/600
-		0.01f,					// Plano de corte cercano. Tan grande como sea posible o tendras problemas de precision.
-		1000.0f						// Plano de corte lejano. Tan enano como se pueda.
-	);
-		glm::mat4 view = TMotor::instancia().getActiveCamera()->getEntidad()->getViewMatrix();
-
-		TMotor::instancia().getShaderDebug()->setMat4("projection", proje);
-		TMotor::instancia().getShaderDebug()->setMat4("view", view);
-
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_LINES, 0, 2);
-		glBindVertexArray(0);
-	*/
-
-	//if(tipo != 1 && tipo != 2){
 	//Se activa el shader para el dibujado del HUD
 	shaderHUD->use();
 
 	//Dibujamos el hud activo
 	activeHud->drawHud(shaderHUD);//}
-
-
-	/*shaderDebug->use();
-
-	if (lights.size()> 0){
-		static_cast<TLuz *>(lights[0]->getEntidad())->configureShadow();
-	}
-
-	unsigned int quadVAO = 0;
-	unsigned int quadVBO;
-
-	if (quadVAO == 0)
-	{
-		float quadVertices[] = {
-			// positions        // texture Coords
-			-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-			 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
-			 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-		};
-		// setup plane VAO
-		glGenVertexArrays(1, &quadVAO);
-		glGenBuffers(1, &quadVBO);
-		glBindVertexArray(quadVAO);
-		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	}
-	glBindVertexArray(quadVAO);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glBindVertexArray(0);*/
-
-
+	
 	int display_w, display_h;
 	glfwGetFramebufferSize(TMotor::instancia().getVentana(), &display_w, &display_h);
 	glViewport(0, 0, display_w, display_h);
@@ -485,34 +443,19 @@ void TMotor::drawCamera() {
 	TNodo *aux = activeCamera->getPadre();
 	int cont = 0;
 	while (aux != scene) {
-		//recorrer y guardar en un vector de matrices las transformaciones
-		//if (cont < 3)
 		matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
 		cont++;
 		aux = aux->getPadre();
 	}
-	//cout << cont << endl;
 	glm::mat4 viewMatrix;
 	//recorrido a la inversa
 	for (int i = matrixAux.size() - 1; i >= 0; i--) {
-		/*cout << matrixAux.at(i)[0][0] << " - " << matrixAux.at(i)[0][1] << " - " <<  matrixAux.at(i)[0][2] << " - " <<  matrixAux.at(i)[0][3] << endl;
-		cout << matrixAux.at(i)[1][0] << " - " << matrixAux.at(i)[1][1] << " - " <<  matrixAux.at(i)[1][2] << " - " <<  matrixAux.at(i)[1][3] << endl;
-		cout << matrixAux.at(i)[2][0] << " - " << matrixAux.at(i)[2][1] << " - " <<  matrixAux.at(i)[2][2] << " - " <<  matrixAux.at(i)[2][3] << endl;
-		cout << matrixAux.at(i)[3][0] << " - " << matrixAux.at(i)[3][1] << " - " <<  matrixAux.at(i)[3][2] << " - " <<  matrixAux.at(i)[3][3] << endl;
-		cout << "*********************" << endl;
-		cout << viewMatrix[0][0] << " - " << viewMatrix[0][1] << " - " <<  viewMatrix[0][2] << " - " <<  viewMatrix[0][3] << endl;
-		cout << viewMatrix[1][0] << " - " << viewMatrix[1][1] << " - " <<  viewMatrix[1][2] << " - " <<  viewMatrix[1][3] << endl;
-		cout << viewMatrix[2][0] << " - " << viewMatrix[2][1] << " - " <<  viewMatrix[2][2] << " - " <<  viewMatrix[2][3] << endl;
-		cout << viewMatrix[3][0] << " - " << viewMatrix[3][1] << " - " <<  viewMatrix[3][2] << " - " <<  viewMatrix[3][3] << endl;
-		cout << "=====================" << endl;*/
 		viewMatrix = matrixAux.at(i) * viewMatrix;
 	}
 
 	//calcular posicion de la camara y pasarsela al fragment shader
 	glm::vec4 posC = viewMatrix * defaultVector;
 	shader->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
-	//cout << "POSICION DE LA CAMARA: " << posC[0] << " - " << posC[1] << " - " << posC[2]<< endl;
-	//cout << "------------------" << endl;
 
 	//por ultimo pasar al shader la view y la projection matrix
 	shader->setMat4("view", glm::inverse(viewMatrix));
@@ -560,6 +503,14 @@ void TMotor::newHud(const char* n) {
 	setActiveHud(n);
 }
 
+//Funcion para devolver el hud activo
+hud* TMotor::getActiveHud() {
+  return activeHud;
+}
+
+TGestorRecursos *TMotor::getGR() {
+  return gestorRecursos;
+}
 
 void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw)
 {

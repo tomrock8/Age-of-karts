@@ -56,7 +56,7 @@ public:
 	hud *getActiveHud();
 	Shader *getShader();
 	Shader *getShaderHUD();
-	Shader *getShaderDebug();
+	Shader *getShaderProjectedShadows();
 	Shader *getShaderDirectionalDepth();
 	Shader *getShaderPointDepth();
 	Shader *getShaderSkybox();
@@ -85,7 +85,7 @@ protected:
 	//Shaders
 	Shader *shader; // Shader que se usa en el motor en la parte 3D
 	Shader *shaderHUD; //Shader que usa el motor para el dibujado del HUD
-	Shader *shaderDebug; //Shader que usa el motor para el modo debug
+	Shader *shaderProjectedShadows; //Shader para el calculo de de las sombras proyectadas
 	Shader *shaderDirectionalDepth; //Shader para el calculo de las sombras de las luces dirigidas
 	Shader *shaderPointDepth; //Shader para el calculo de las sombras de las luces puntuales
 	Shader *shaderSkybox;
@@ -102,9 +102,11 @@ protected:
 	std::vector <hud*> HUDs; //Vector que guarda los diferentes huds del juego
 	hud *activeHud; //Hud activo en cada momento
 
-	// imgui debug
-	bool renderDebug;
+	//Obj3D
+	std::vector <obj3D *> objetos; //Array que almacena los distintos objetos creados a lo largo del programa
+	obj3D *getObjeto(const char* name); //Metodo que devuelve un objeto a partir de su nombre
 
+	bool renderDebug;
 	TGestorRecursos *gestorRecursos;
 	GLFWwindow *ventana;
 	int screenHEIGHT;

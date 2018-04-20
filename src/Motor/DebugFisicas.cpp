@@ -39,6 +39,7 @@ void DebugDraw::drawLine(const btVector3 &from, const btVector3 &to, const btVec
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 		glBindVertexArray(0);
 
+		/*
 		TMotor::instancia().getShaderDebug()->use();
 
 		glm::mat4 proje = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix();
@@ -50,7 +51,7 @@ void DebugDraw::drawLine(const btVector3 &from, const btVector3 &to, const btVec
 
 		TMotor::instancia().getShaderDebug()->setMat4("projection", proje);
 		TMotor::instancia().getShaderDebug()->setMat4("view", view);
-
+		*/
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_LINES, 0, 2);
 		glBindVertexArray(0);

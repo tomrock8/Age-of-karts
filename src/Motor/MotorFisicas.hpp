@@ -21,7 +21,7 @@ public:
 	static MotorFisicas *getInstancia();
 	btDynamicsWorld *getMundo();
 	std::vector<btRigidBody *> getObjetos();
-	void initializePhysics(const char *name, btVector3 pos, obj3D *obj);
+	void initializePhysics(TRecursoMalla *m);
 	btCollisionShape  *CreateCollisionShape(const char *name);
 	// METODOS SET
 	void setObjetos(std::vector<btRigidBody *> objetos);

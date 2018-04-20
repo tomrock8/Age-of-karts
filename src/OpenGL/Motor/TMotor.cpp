@@ -171,7 +171,7 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 	return new obj3D(nodo, name, contID);
 }
 
-obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode) {
+obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode,bool sta) {
 	// E S C A L A D O
 	string *nameEsc = new string("escalado_" + (string)name);
 	TTransform *scaleMesh = createTransformation();
@@ -197,7 +197,7 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 	}*/
 
 
-	TMalla *malla = TMotor::instancia().createMesh(path);
+	TMalla *malla = TMotor::instancia().createMesh(path,sta);
 	TRecursoMalla *nameMalla = static_cast<TRecursoMalla*>(gestorRecursos->getRecursoMallas().at(gestorRecursos->getRecursoMallas().size()-1));
 	//cout << "El Nombre de la malla es: " << nameMalla->getNombre() << endl;
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, nameMalla->getNombre());
@@ -209,17 +209,17 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 // -------------------------------
 // M A L L A S
 // -------------------------------
-TMalla *TMotor::createMesh(const char *fich) {
+TMalla *TMotor::createMesh(const char *fich,bool sta) {
 	//	TRecursoMalla *auxMesh = gestorRecursos->getRecurso(fich);
 	//	TRecursoTextura *auxText = gestorRecursos->getRecursoTextura(fich);
 	//	return new TMalla(auxMesh, auxText);
-	return new TMalla(gestorRecursos->loadMesh(fich));
+	return new TMalla(gestorRecursos->loadMesh(fich,sta));
 	//return NULL;
 }
 
 
 void TMotor::precarga(const char* modelo) {
-	gestorRecursos->loadMesh(modelo);
+	//gestorRecursos->loadMesh(modelo);
 }
 
 TNodo  *TMotor::createMeshNode(TNodo *padre, TMalla *mesh, const char* name) {

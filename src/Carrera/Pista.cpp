@@ -40,15 +40,9 @@ Pista *Pista::getInstancia() {
 
 
 void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints) {
-	Mapa = TMotor::instancia().newMeshNode("mapa", mapa, "escena_raiz");
+	Mapa = TMotor::instancia().newMeshNode("mapa", mapa, "escena_raiz",true);
 	//Mapa->setPosition(0.0f, -10.0f, 0.0f);
 	//Mapa->setRotation(glm::vec3(0,1,0), 90.0f);
-
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	
-//	btDynamicsWorld *mundo = bullet->getMundo();
-	btVector3 pos(Mapa->getPosition().x, Mapa->getPosition().y, Mapa->getPosition().z);
-	bullet->initializePhysics(Mapa->getName(), pos, Mapa);
 
 	//---------------------------FISICAS-------------------------------//
 	/*

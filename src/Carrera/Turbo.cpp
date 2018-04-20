@@ -6,7 +6,7 @@ Turbo::Turbo(btVector3 pos, bool estado) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
-	turbo = TMotor::instancia().newMeshNode("Turbo","assets/wall/wall.obj","escena_raiz");
+	turbo = TMotor::instancia().newMeshNode("Turbo","assets/wall/wall.obj","escena_raiz",false);
 	escala = btVector3(2.5f, 0.2f, 1.25f);
 	//turbo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
 	//turbo->setMaterialFlag(EMF_LIGHTING, false);

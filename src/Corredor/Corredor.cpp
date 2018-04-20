@@ -78,10 +78,10 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	// HAY QUE MODIFICAR DE QUE NODO PENDEN!!!
 	const char* strRueda = "assets/rueda/rueda.obj";
-	rueda1 = TMotor::instancia().newMeshNode("rueda1", strRueda, "escena_raiz");
-	rueda2 = TMotor::instancia().newMeshNode("rueda2", strRueda, "escena_raiz");
-	rueda3 = TMotor::instancia().newMeshNode("rueda3", strRueda, "escena_raiz");
-	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "escena_raiz");
+	rueda1 = TMotor::instancia().newMeshNode("rueda1", strRueda, "escena_raiz",false);
+	rueda2 = TMotor::instancia().newMeshNode("rueda2", strRueda, "escena_raiz",false);
+	rueda3 = TMotor::instancia().newMeshNode("rueda3", strRueda, "escena_raiz",false);
+	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "escena_raiz",false);
 
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
@@ -103,7 +103,7 @@ void Corredor::setParametros() {
 	int num = 0;
 	switch (tipojugador) {
 	case GLADIADOR:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz",false);
 
 		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
 
@@ -124,7 +124,7 @@ void Corredor::setParametros() {
 		num = 1;
 		break;
 	case PIRATA:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz",false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;
@@ -142,7 +142,7 @@ void Corredor::setParametros() {
 		num = 2;
 		break;
 	case VIKINGO:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz",false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(3600); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;
@@ -160,7 +160,7 @@ void Corredor::setParametros() {
 		num = 3;
 		break;
 	case CHINO:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz");
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz",false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;

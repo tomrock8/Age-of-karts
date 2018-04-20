@@ -43,12 +43,13 @@ TGestorRecursos::~TGestorRecursos() {
 }
 
 
-std::vector<mesh*> TGestorRecursos::loadMesh(const char *path) {
+std::vector<mesh*> TGestorRecursos::loadMesh(const char *path,bool sta) {
 	//primero limpiamos los vectores de mesh
 	int  i = objMeshes.size();
 	if (objMeshes.size() > 0) {
 		objMeshes.erase(objMeshes.begin(), objMeshes.begin() + i);
 	}
+	statico = sta;
 	Assimp::Importer import;
 	const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
@@ -83,6 +84,11 @@ void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 		if (scene->mRootNode->mChildren[i]->mName.C_Str() != NULL) {
 
 			meshAux = getRecursoMalla(scene->mRootNode->mChildren[i]->mName.C_Str(), mesh, scene);
+			if (statico == true) {
+				MotorFisicas *bullet = MotorFisicas::getInstancia();
+				bullet->initializePhysics(meshAux);
+				cout << "salgo de crear las fisicas para : " << meshAux->getNombre() << endl;
+			}
 
 
 			//procesar el material
@@ -147,8 +153,6 @@ TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mes
 
 
 		recMalla = processMesh(mesh, scene, nameExt.c_str());
-	
-
 		recursoMallas.push_back(recMalla);
 	}
 

@@ -252,7 +252,7 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 
 
 void TMotor::precarga(const char* modelo) {
-	gestorRecursos->loadMesh(modelo);
+	//gestorRecursos->loadMesh(modelo);
 }
 
 // -------------------------------
@@ -266,10 +266,6 @@ TMalla *TMotor::createMesh(const char *fich,bool sta) {
 	//return NULL;
 }
 
-
-void TMotor::precarga(const char* modelo) {
-	//gestorRecursos->loadMesh(modelo);
-}
 
 TNodo  *TMotor::createMeshNode(TNodo *padre, TMalla *mesh, const char* name) {
 	TNodo *nodo = new TNodo(name);

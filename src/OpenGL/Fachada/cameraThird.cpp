@@ -104,7 +104,6 @@ btRigidBody *cameraThird::initializePhysics() {
 	rigidBody->setGravity(btVector3(0, 0, 0));
 	return rigidBody;
 	*/
-
 	return NULL;
 }
 

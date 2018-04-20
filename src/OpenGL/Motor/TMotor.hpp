@@ -39,7 +39,7 @@ public:
 	obj3D *newCameraNode(const char * name, const char* parentNode);
 	//cameraThird * newCamera3ThPerson(const char * name, const char * parentName);
 	obj3D *newLightNode(const char * name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode);
-	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode);
+	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode,bool sta);
 	void precarga(const char * modelo);
 
 	void newHud(const char* n);
@@ -117,7 +117,7 @@ protected:
 	// ----------------------
 
 	// Malla
-	TMalla  *createMesh(const char *fich);
+	TMalla  *createMesh(const char *fich,bool sta);
 	TNodo * createMeshNode(TNodo * padre, TMalla * mesh, const char * name);
 	// Transformacion
 	TTransform * createTransformation();

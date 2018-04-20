@@ -11,7 +11,6 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 
 	//Se asigna la opcion del menu al primer boton
 	optionMenu = 0;
-	end = false;
 	//Se crea el hud del menu principal
 	TMotor::instancia().newHud("MainMenuHUD");
 
@@ -112,205 +111,189 @@ void EscenaMenu::update() {
 }
 
 Escena::tipo_escena EscenaMenu::comprobarInputs() {
-	if (end){
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS) {
-			if (!pressed) {
-				return Escena::tipo_escena::SALIR;
-				pressed = true;
-			}
-		}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-				if (!pressed) {
-					end=false;
-					pressed = true;
-				}
-			
-		}else{
-			pressed = false;
-		}
-	}else{
-		//Si se pulsa ESCAPE se sale directamente del juego - para poder salir de todos los sitios, despues se quitara
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-			if (!pressed) {
-				end=true;
-				pressed = true;
-			}
-		}else if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) { 				//Inputs para el menu principal
-			//Segun se toque arriba o abajo, el usuario se va moviendo entre los distintos botones del menu
-			if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS) {
-				if (!pressed) {
-					fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
-					if (optionMenu == 3) {
-						optionMenu = 0;
-					}
-					else {
-						optionMenu++;
-					}
-					pressed = true;
-				}
-			}
-			else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS) {
-				if (!pressed) {
-					fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
-					if (optionMenu == 0) {
-						optionMenu = 3;
-					}
-					else {
-						optionMenu--;
-					}
-					pressed = true;
-				}
-				//Si se pulsa intro se comprueba en que opcion del menu se encuentra el usuario y se cambia a la escena correspondiente
-			}
-			else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS) {
-				fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
-				if (optionMenu == 0) {
-					cout << "LOCAL\n";
-					TMotor::instancia().setActiveHud("LocalMenuHUD");
-					pressed = true;
-				}
-				else if (optionMenu == 1) {
-					cout << "MULTIPLAYER\n";
-					ipConexion = "";
 
-					return Escena::tipo_escena::LOBBY;
-				}
-				else if (optionMenu == 2) {
-					cout << "OPCIONES\n";
+	//Si se pulsa ESCAPE se sale directamente del juego - para poder salir de todos los sitios, despues se quitara
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		if (!pressed) {
+			return Escena::tipo_escena::SALIR;
+		}
+	}else if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) { 				//Inputs para el menu principal
+		//Segun se toque arriba o abajo, el usuario se va moviendo entre los distintos botones del menu
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS) {
+			if (!pressed) {
+				fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
+				if (optionMenu == 3) {
+					optionMenu = 0;
 				}
 				else {
-					cout << "SALIR\n";
-
-					return Escena::tipo_escena::SALIR;
+					optionMenu++;
 				}
+				pressed = true;
 			}
-			else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_M) == GLFW_PRESS) {
-				if (!pressed) {
-
-					if (fuenteMenu->isPlaying()) {
-						cout << "Musica desactivada.\n";
-						fuenteMenu->stop(SOUND_MENU);
-					}
-					else {
-						cout << "Musica activada.\n";
-						fuenteMenu->play(SOUND_MENU);
-					}
-
-
-					pressed = true;
-				}
-			}
-			else pressed = false;
 		}
-
-		//Inputs para el menu de juego local
-		if (strcmp(TMotor::instancia().getActiveHud()->getName(), "LocalMenuHUD") == 0) {
-			//Si se pulsa ESCAPE se sale al menu principal
-			if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_BACKSPACE) == GLFW_PRESS) {
-				if (!pressed) {
-					TMotor::instancia().setActiveHud("MainMenuHUD");
-					optionMenu = 0;
-				}
-			}
-
-			//Segun se toque derecha o izquierda, el usuario se va moviendo entre los dos botones del menu local
-			if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
-				if (!pressed) {
-					optionMenu = 1;
-					pressed = true;
-				}
-			}
-			else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS) {
-				if (!pressed) {
-					optionMenu = 0;
-					pressed = true;
-				}
-				//Si se pulsa intro se comprueba en que opcion del menu se encuentra el usuario y se cambia a la escena correspondiente
-			}
-			else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS) {
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS) {
+			if (!pressed) {
+				fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 				if (optionMenu == 0) {
-					if (!pressed) {
-						cout << "UN JUGADOR\n";
-						ipConexion = "offline";
-						return Escena::tipo_escena::LOBBY;
-					}
+					optionMenu = 3;
 				}
-				else if (optionMenu == 1) {
-					cout << "PANTALLA PARTIDA\n";
+				else {
+					optionMenu--;
 				}
+				pressed = true;
 			}
-
-			else pressed = false;
-
+			//Si se pulsa intro se comprueba en que opcion del menu se encuentra el usuario y se cambia a la escena correspondiente
 		}
-
-
-		/*else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_1) == GLFW_PRESS){
-			cout << "SINGLE PLAYER\n";
-			ipConexion="offline";
-			return Escena::tipo_escena::LOBBY;
-		}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_2) == GLFW_PRESS){
-			cout << "MULTI PLAYER\n";
-			ipConexion="";
-			return Escena::tipo_escena::LOBBY;
-		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_3) == GLFW_PRESS){
-				cout << "OPCIONES\n";
-		}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_4) == GLFW_PRESS){
-			cout << "CREDITOS\n";
-			return Escena::tipo_escena::CREDITOS;
-		}else pressed = false;
-		*/
-
-		//MODIFICAMOS LA INTERFAZ EN FUNCION DE LAS ACCIONES DEL USUARIO
-
-		//Si esta activo el menu principal, se tienen en cuenta los siguientes inputs
-		if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) {
-			TMotor::instancia().getActiveHud()->changeTextureElement("local", "assets/HUD/MainMenu/btn_local_normal.png");
-			TMotor::instancia().getActiveHud()->changeTextureElement("online", "assets/HUD/MainMenu/btn_online_normal.png");
-			TMotor::instancia().getActiveHud()->changeTextureElement("opciones", "assets/HUD/MainMenu/btn_opciones_normal.png");
-			TMotor::instancia().getActiveHud()->changeTextureElement("salir", "assets/HUD/MainMenu/btn_salir_normal.png");
-
-			TMotor::instancia().getActiveHud()->scaleElement("local", 1.0f, 1.0f);
-			TMotor::instancia().getActiveHud()->scaleElement("online", 1.0f, 1.0f);
-			TMotor::instancia().getActiveHud()->scaleElement("opciones", 1.0f, 1.0f);
-			TMotor::instancia().getActiveHud()->scaleElement("salir", 1.0f, 1.0f);
-
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS) {
+			fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 			if (optionMenu == 0) {
-				TMotor::instancia().getActiveHud()->changeTextureElement("local", "assets/HUD/MainMenu/btn_local_pulsado.png");
-				TMotor::instancia().getActiveHud()->scaleElement("local", 1.2f, 1.2f);
+				cout << "LOCAL\n";
+				TMotor::instancia().setActiveHud("LocalMenuHUD");
+				pressed = true;
 			}
 			else if (optionMenu == 1) {
-				TMotor::instancia().getActiveHud()->changeTextureElement("online", "assets/HUD/MainMenu/btn_online_pulsado.png");
-				TMotor::instancia().getActiveHud()->scaleElement("online", 1.2f, 1.2f);
+				cout << "MULTIPLAYER\n";
+				ipConexion = "";
+
+				return Escena::tipo_escena::LOBBY;
 			}
 			else if (optionMenu == 2) {
-				TMotor::instancia().getActiveHud()->changeTextureElement("opciones", "assets/HUD/MainMenu/btn_opciones_pulsado.png");
-				TMotor::instancia().getActiveHud()->scaleElement("opciones", 1.2f, 1.2f);
+				cout << "OPCIONES\n";
 			}
 			else {
-				TMotor::instancia().getActiveHud()->changeTextureElement("salir", "assets/HUD/MainMenu/btn_salir_pulsado.png");
-				TMotor::instancia().getActiveHud()->scaleElement("salir", 1.2f, 1.2f);
+				cout << "SALIR\n";
+
+				return Escena::tipo_escena::SALIR;
+			}
+		}
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_M) == GLFW_PRESS) {
+			if (!pressed) {
+
+				if (fuenteMenu->isPlaying()) {
+					cout << "Musica desactivada.\n";
+					fuenteMenu->stop(SOUND_MENU);
+				}
+				else {
+					cout << "Musica activada.\n";
+					fuenteMenu->play(SOUND_MENU);
+				}
+
+
+				pressed = true;
+			}
+		}
+		else pressed = false;
+	}
+
+	//Inputs para el menu de juego local
+	if (strcmp(TMotor::instancia().getActiveHud()->getName(), "LocalMenuHUD") == 0) {
+		//Si se pulsa ESCAPE se sale al menu principal
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_BACKSPACE) == GLFW_PRESS) {
+			if (!pressed) {
+				TMotor::instancia().setActiveHud("MainMenuHUD");
+				optionMenu = 0;
 			}
 		}
 
-		//Si esta activa el menu de juego local, se realizan los siguientes cambios
-		if (strcmp(TMotor::instancia().getActiveHud()->getName(), "LocalMenuHUD") == 0) {
-			TMotor::instancia().getActiveHud()->changeTextureElement("unJugador", "assets/HUD/MainMenu/btn_unJugador_normal.png");
-			TMotor::instancia().getActiveHud()->changeTextureElement("pantallaPartida", "assets/HUD/MainMenu/btn_pantallaPartida_normal.png");
-
-			TMotor::instancia().getActiveHud()->scaleElement("unJugador", 1.50f, 1.75f);
-			TMotor::instancia().getActiveHud()->scaleElement("pantallaPartida", 1.50f, 1.75f);
-
+		//Segun se toque derecha o izquierda, el usuario se va moviendo entre los dos botones del menu local
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
+			if (!pressed) {
+				optionMenu = 1;
+				pressed = true;
+			}
+		}
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS) {
+			if (!pressed) {
+				optionMenu = 0;
+				pressed = true;
+			}
+			//Si se pulsa intro se comprueba en que opcion del menu se encuentra el usuario y se cambia a la escena correspondiente
+		}
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS) {
 			if (optionMenu == 0) {
-				TMotor::instancia().getActiveHud()->changeTextureElement("unJugador", "assets/HUD/MainMenu/btn_unJugador_pulsado.png");
-				TMotor::instancia().getActiveHud()->scaleElement("unJugador", 1.75f, 2.0f);
+				if (!pressed) {
+					cout << "UN JUGADOR\n";
+					ipConexion = "offline";
+					return Escena::tipo_escena::LOBBY;
+				}
 			}
-			else {
-				TMotor::instancia().getActiveHud()->changeTextureElement("pantallaPartida", "assets/HUD/MainMenu/btn_pantallaPartida_pulsado.png");
-				TMotor::instancia().getActiveHud()->scaleElement("pantallaPartida", 1.75f, 2.0f);
+			else if (optionMenu == 1) {
+				cout << "PANTALLA PARTIDA\n";
 			}
+		}
+
+		else pressed = false;
+
+	}
+
+
+	/*else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_1) == GLFW_PRESS){
+		cout << "SINGLE PLAYER\n";
+		ipConexion="offline";
+		return Escena::tipo_escena::LOBBY;
+	}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_2) == GLFW_PRESS){
+		cout << "MULTI PLAYER\n";
+		ipConexion="";
+		return Escena::tipo_escena::LOBBY;
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_3) == GLFW_PRESS){
+			cout << "OPCIONES\n";
+	}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_4) == GLFW_PRESS){
+		cout << "CREDITOS\n";
+		return Escena::tipo_escena::CREDITOS;
+	}else pressed = false;
+	*/
+
+	//MODIFICAMOS LA INTERFAZ EN FUNCION DE LAS ACCIONES DEL USUARIO
+
+	//Si esta activo el menu principal, se tienen en cuenta los siguientes inputs
+	if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) {
+		TMotor::instancia().getActiveHud()->changeTextureElement("local", "assets/HUD/MainMenu/btn_local_normal.png");
+		TMotor::instancia().getActiveHud()->changeTextureElement("online", "assets/HUD/MainMenu/btn_online_normal.png");
+		TMotor::instancia().getActiveHud()->changeTextureElement("opciones", "assets/HUD/MainMenu/btn_opciones_normal.png");
+		TMotor::instancia().getActiveHud()->changeTextureElement("salir", "assets/HUD/MainMenu/btn_salir_normal.png");
+
+		TMotor::instancia().getActiveHud()->scaleElement("local", 1.0f, 1.0f);
+		TMotor::instancia().getActiveHud()->scaleElement("online", 1.0f, 1.0f);
+		TMotor::instancia().getActiveHud()->scaleElement("opciones", 1.0f, 1.0f);
+		TMotor::instancia().getActiveHud()->scaleElement("salir", 1.0f, 1.0f);
+
+		if (optionMenu == 0) {
+			TMotor::instancia().getActiveHud()->changeTextureElement("local", "assets/HUD/MainMenu/btn_local_pulsado.png");
+			TMotor::instancia().getActiveHud()->scaleElement("local", 1.2f, 1.2f);
+		}
+		else if (optionMenu == 1) {
+			TMotor::instancia().getActiveHud()->changeTextureElement("online", "assets/HUD/MainMenu/btn_online_pulsado.png");
+			TMotor::instancia().getActiveHud()->scaleElement("online", 1.2f, 1.2f);
+		}
+		else if (optionMenu == 2) {
+			TMotor::instancia().getActiveHud()->changeTextureElement("opciones", "assets/HUD/MainMenu/btn_opciones_pulsado.png");
+			TMotor::instancia().getActiveHud()->scaleElement("opciones", 1.2f, 1.2f);
+		}
+		else {
+			TMotor::instancia().getActiveHud()->changeTextureElement("salir", "assets/HUD/MainMenu/btn_salir_pulsado.png");
+			TMotor::instancia().getActiveHud()->scaleElement("salir", 1.2f, 1.2f);
 		}
 	}
+
+	//Si esta activa el menu de juego local, se realizan los siguientes cambios
+	if (strcmp(TMotor::instancia().getActiveHud()->getName(), "LocalMenuHUD") == 0) {
+		TMotor::instancia().getActiveHud()->changeTextureElement("unJugador", "assets/HUD/MainMenu/btn_unJugador_normal.png");
+		TMotor::instancia().getActiveHud()->changeTextureElement("pantallaPartida", "assets/HUD/MainMenu/btn_pantallaPartida_normal.png");
+
+		TMotor::instancia().getActiveHud()->scaleElement("unJugador", 1.50f, 1.75f);
+		TMotor::instancia().getActiveHud()->scaleElement("pantallaPartida", 1.50f, 1.75f);
+
+		if (optionMenu == 0) {
+			TMotor::instancia().getActiveHud()->changeTextureElement("unJugador", "assets/HUD/MainMenu/btn_unJugador_pulsado.png");
+			TMotor::instancia().getActiveHud()->scaleElement("unJugador", 1.75f, 2.0f);
+		}
+		else {
+			TMotor::instancia().getActiveHud()->changeTextureElement("pantallaPartida", "assets/HUD/MainMenu/btn_pantallaPartida_pulsado.png");
+			TMotor::instancia().getActiveHud()->scaleElement("pantallaPartida", 1.75f, 2.0f);
+		}
+	}
+	
 	//Se retorna la escena Menu (donde estamos) en caso de que no se haya cambiado de pantalla
 	return Escena::tipo_escena::MENU;
 }

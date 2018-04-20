@@ -1,7 +1,7 @@
 #include "EscenaJuego.hpp"
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
-	end=false;
+	end = false;
 	ipConexion = "";
 	TMotor::instancia().newHud("OnGameHUD");
 	//TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "aok", "assets/HUD/MainMenu/aok_logo.png");
@@ -47,7 +47,7 @@ void EscenaJuego::init() {
 	// LUCES PUNTUALES
 	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_0->translate(glm::vec3(2.5f, 12.0f, 2.0f));
-	
+
 	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_1->translate(glm::vec3(150.0f, 12.0f, 0.0f));
 
@@ -60,16 +60,16 @@ void EscenaJuego::init() {
 	//LUCES DIRIGIDAS
 	obj3D * luzDirigida_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(1.0f, -1.0f, 0.0f, 1.0f), 0.001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
 	luzDirigida_0->translate(glm::vec3(2.5f, 12.0f, 0.0f));
-	
+
 	obj3D * luzDirigida_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.0f, 0.0f, 1.0f), 0.001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
 	luzDirigida_1->translate(glm::vec3(0.0f, 12.0f, 0.0f));
-	
+
 	obj3D * luzDirigida_2 = TMotor::instancia().newLightNode("light_2", glm::vec4(1.0f, -1.0f, 0.0f, 1.0f), 0.001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
 	luzDirigida_2->translate(glm::vec3(0.0f, 12.0f, 300.0f));
 
 	obj3D * luzDirigida_3 = TMotor::instancia().newLightNode("light_3", glm::vec4(1.0f, -1.0f, 0.0f, 1.0f), 0.001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
 	luzDirigida_3->translate(glm::vec3(0.0f, 12.0f, 300.0f));
-	
+
 
 	/*
 	obj3D * luzPuntual = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.00001f, glm::cos(glm::radians(60.0f)), "escena_raiz");
@@ -197,17 +197,17 @@ void EscenaJuego::init() {
 	jugadores->setJugadores(pj);
 
 	gc = new GestorCarrera();
-	
-		//-----------------------------
-		//	CAMARA
-		//-----------------------------
+
+	//-----------------------------
+	//	CAMARA
+	//-----------------------------
 	camera = new cameraThird("camara_jugador3apersona", "escena_raiz");
 	//camera->setParentNode(pj.at(controlPlayer)->getNodo()->getNode());
 //		camara = new Camara3persona();
 //		tipoCamara = 0;
 //		cambioCamara = false;
-	
-	
+
+
 	//-----------------------------
 	//	GESTOR COLISIONES
 	//-----------------------------
@@ -269,7 +269,7 @@ void EscenaJuego::dibujar() {
 }
 
 void EscenaJuego::renderDebug() {
-	
+
 	// ------------------------------
 	// -------- IMGUI ---------------
 	// ------------------------------
@@ -278,7 +278,6 @@ void EscenaJuego::renderDebug() {
 	// Mostrar ventanas
 
 	ImGui_ImplGlfwGL3_NewFrame();
-	ImGui::Begin("Debug Window", &muestraDebug);
 	static float f = 0.0f;
 	static int counter = 0;
 	ImGui::Text("Hello, world!");                           // Display some text (you can use a format string too)
@@ -308,11 +307,11 @@ void EscenaJuego::renderDebug() {
 		ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
 		ImGui::ShowDemoWindow(&show_demo_window);
 	}
-	ImGui::End();
 }
 
 void EscenaJuego::limpiar() {
 	muestraDebug = false;
+	TMotor::instancia().closeDebugWindow();
 }
 
 void EscenaJuego::update() {
@@ -442,29 +441,29 @@ void EscenaJuego::update() {
 	pj = jugadores->getJugadores();
 
 
-	camera->update(pj.at(controlPlayer)->getNodo()->getPosition(),pj.at(controlPlayer)->getNodo()->getRotation(),pj.at(controlPlayer)->getVectorDireccion());
+	camera->update(pj.at(controlPlayer)->getNodo()->getPosition(), pj.at(controlPlayer)->getNodo()->getRotation(), pj.at(controlPlayer)->getVectorDireccion());
 	camera->lookAt(pj.at(controlPlayer)->getNodo()->getPosition());
-/*
-	float distanciaX = -20;
-	float posX = pj.at(controlPlayer)->getVectorDireccion().getX()*distanciaX;
-	float posZ = pj.at(controlPlayer)->getVectorDireccion().getZ()*distanciaX;
+	/*
+		float distanciaX = -20;
+		float posX = pj.at(controlPlayer)->getVectorDireccion().getX()*distanciaX;
+		float posZ = pj.at(controlPlayer)->getVectorDireccion().getZ()*distanciaX;
 
-	camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition().x - posX, 0, pj.at(controlPlayer)->getNodo()->getPosition().z - posZ);
-	camera->setRotation(glm::vec3(0, 1, 0), 180);
-	switch(tipoCamara){
-		case 0:		//Camara 3a persona fija
-			camara->moveCamera(pj.at(controlPlayer));
-		break;
-		case 1:		//Camara 3a persona libre
-			camara->moveCameraControl(pj.at(controlPlayer));
-		break;
-		case 2:		//Camara 1a persona
-			camara->movefpsCamera(pj.at(controlPlayer));
-		break;
-		case 3:
-			camara->moveCameraControlPointer(pj.at(controlPlayer));
+		camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition().x - posX, 0, pj.at(controlPlayer)->getNodo()->getPosition().z - posZ);
+		camera->setRotation(glm::vec3(0, 1, 0), 180);
+		switch(tipoCamara){
+			case 0:		//Camara 3a persona fija
+				camara->moveCamera(pj.at(controlPlayer));
+			break;
+			case 1:		//Camara 3a persona libre
+				camara->moveCameraControl(pj.at(controlPlayer));
+			break;
+			case 2:		//Camara 1a persona
+				camara->movefpsCamera(pj.at(controlPlayer));
+			break;
+			case 3:
+				camara->moveCameraControlPointer(pj.at(controlPlayer));
 
-	}*/
+		}*/
 
 
 }
@@ -517,10 +516,10 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 
 		pj.at(0)->setPosicion(resetPos, resetOri);
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS){
-		end=true;
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		end = true;
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end==true) {
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end == true) {
 		if (tipoEscena == Escena::tipo_escena::ONLINE) {
 			client->ShutDownClient();
 		}
@@ -532,14 +531,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	}
 
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS) {
-		//debug = 0;
-		muestraDebug = false;
-	}
-	else {
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS) {
-			//debug = 1;
-			muestraDebug = true;
-		}
+		TMotor::instancia().setRenderDebug(!TMotor::instancia().getRenderDebug());
 	}
 
 	return tipoEscena; // Significa que debe seguir ejecutando
@@ -576,42 +568,11 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	else
 		Node->setPosition((float)Point[0], (float)Point[1], (float)Point[2]);
 
-
-
 	// Set rotation
 	const btQuaternion& TQuat = TObject->getOrientation();
-
 	glm::vec3 axis(TQuat.getAxis().getX(), TQuat.getAxis().getY(), TQuat.getAxis().getZ());
 	float angle = TQuat.getAngle() * RADTODEG;
-	/*if (strcmp(Node->getName(), "Jugador") == 0 ){
-		axis.x = abs(axis.x);
-		axis.y = abs(axis.y);
-		axis.z = abs(axis.z);
-		axis.x = round(axis.x);
-		axis.y = round(axis.y);
-		axis.z = round(axis.z);
-		if (angle < 5){
-			angle = 0;
-		}
-		angle = round(angle);*/
-		/*
-		axis.x = trunc(axis.x * 20 + 0.05) / 20;
-		axis.y = trunc(axis.y * 20 + 0.05) / 20;
-		axis.z = trunc(axis.z * 20 + 0.05) / 20;*/
-		/*cout<< "AXIS: "<<axis.x<<","<< axis.y<<","<< axis.z<<endl;
-		cout<<"ANGLE: "<<angle<<endl;
-		cout<<"---------------------"<<endl;
-		}*/
 	Node->setRotation(axis, angle);
 }
-std::string EscenaJuego::getIpConexion() {
-	return ipConexion;
-}
-	
-		//-----------------------------
-		//	CAMARA
-		//-----------------------------
-		//camara = new Camara3persona();
-		//tipoCamara = 0;
-		//cambioCamara = false;
-	
+
+std::string EscenaJuego::getIpConexion() { return ipConexion; }

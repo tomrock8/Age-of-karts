@@ -34,6 +34,8 @@ private:
 	int sonidoOpcion;
 	AlSource *fuenteOpcion;
 	AlSource *fuenteMenu;
+
+	void initHud();
 };
 
 #endif /* ESCENAMENU_H */

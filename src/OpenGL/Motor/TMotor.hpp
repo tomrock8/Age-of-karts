@@ -28,6 +28,8 @@ private:
 public:
 	static TMotor &instancia();
 	TMotor();
+	void initDebugWindow();
+	void closeDebugWindow();
 	void resizeScreen(int width, int height);
 	void close();
 
@@ -61,10 +63,13 @@ public:
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
 	TGestorRecursos *getGR();
+	bool getRenderDebug();
+
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
 	void setActiveLight(TNodo *l);
 	void setActiveHud(const char *n);
+	void setRenderDebug(bool renderDebug);
 
 	// DIBUJADO
 	void clean();
@@ -96,6 +101,9 @@ protected:
 	//Hud
 	std::vector <hud*> HUDs; //Vector que guarda los diferentes huds del juego
 	hud *activeHud; //Hud activo en cada momento
+
+	// imgui debug
+	bool renderDebug;
 
 	TGestorRecursos *gestorRecursos;
 	GLFWwindow *ventana;

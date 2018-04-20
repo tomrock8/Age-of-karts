@@ -1,7 +1,7 @@
 #include "EscenaLobby.hpp"
 
 EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tipo) {
-	end=false;
+	end = false;
 	nElementos = 0;
 	nElementos2 = 0;
 	count = 3;
@@ -40,64 +40,21 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	pressed = true;
 	lanzado = false;
 	conectado = false;
-	
-	
+
+
 	TMotor::instancia().newHud("LobbyHUD");
 	TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "comenzarPartida", "assets/HUD/LobbyMenu/empezar.png");
-	/*
-	u16 xPos = Motor3d::instancia().getAnchoPantalla() / 3;
-	u16 yPos = Motor3d::instancia().getAltoPantalla() / 4;
-
-	fuente = Motor3d::instancia().getGUI()->getFont("assets/fuente.bmp");
-	textoUI = Motor3d::instancia().getGUI()->addStaticText(
-		texto.c_str(),				 // Texto
-		rect<s32>(xPos, 2 * yPos, 2 * xPos, 3 * yPos), // Rectangulo de los bordes
-		false,						 // Mostrar bordes
-		true,						 // Cortar en varias lineas
-		0,							 // Nodo padre
-		0,							 // Id del elemento
-		false);						 // Rellenado (o transparente)
-	textoUI->setOverrideFont(fuente);
-
-	logoAOK = Motor3d::instancia().getDriver()->getTexture("assets/logoAOK.png");
-	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));*/
-
-	// -----------------------
-	//	IMGUI
-	// -----------------------
-	show_demo_window = false;
-	show_another_window = false;
-	muestraImgui = true;
-
 }
+
 EscenaLobby::~EscenaLobby() {
-	cout << "Destructor ESCENA LOBBY. Entro.";
+	cout << "\nDestructor ESCENA LOBBY. Entro.";
 	limpiar();
-	
 	cout << "Salgo.\n";
 }
 
-void EscenaLobby::init() {
-}
-
-void EscenaLobby::dibujar() {
-	/*Motor3d::instancia().iniciarDibujado();
-
-	//Motor3d::instancia().getDriver()->draw2DImage(logoAOK, rect<s32>(0, 0, 100, 100), 0, SColor(255, 255, 255, 255), true);
-	Motor3d::instancia().getDriver()->draw2DImage(logoAOK, position2d<s32>(Motor3d::instancia().getAnchoPantalla() / 4, 0),
-		core::rect<s32>(0, 0, logoAOK->getSize().Width, logoAOK->getSize().Height), 0,
-		video::SColor(255, 255, 255, 255), true);
-
-	Motor3d::instancia().dibujar();
-	Motor3d::instancia().terminarDibujado();*/
-}
-
-void EscenaLobby::limpiar() {
-	/*Motor3d::instancia().getScene()->clear();
-	Motor3d::instancia().getGUI()->clear();*/
-	muestraImgui=NULL;
-
-}
+void EscenaLobby::init() {}
+void EscenaLobby::dibujar() {}
+void EscenaLobby::limpiar() {}
 
 void EscenaLobby::update() {
 	if (offline) {
@@ -110,8 +67,6 @@ void EscenaLobby::update() {
 	}
 	else {
 
-		mostrarLobbyImgui();
-		
 		bool show = false;
 
 		//Online. EN cuanto tengamos la ip inicializamos el cliente para conectar
@@ -144,13 +99,10 @@ void EscenaLobby::update() {
 				if (count <= 6) {
 					cout << ".";
 					count++;
-
 				}
 				else {
-
 					cout << "\nConectando";
 					count = 0;
-
 				}
 				nElementos2 = time->getTimer();
 			}
@@ -174,59 +126,12 @@ void EscenaLobby::update() {
 				nElementos = time->getTimer();
 				conectado = true;
 				cout << "Conexion establecida!\n";
-
 				mostrarInfoLobby(-1);
-
 			}
 		}
 	}
 }
 
-void EscenaLobby::mostrarLobbyImgui(){
-// ------------------------------
-	// -------- IMGUI ---------------
-	// ------------------------------
-
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	static char str0[128] = "Hello, world!";
-	// Mostrar ventanas
-	 int display_w = 0 , display_h = 0;
-	 
-	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-	glfwGetFramebufferSize( TMotor::instancia().getVentana() , &display_w , &display_h );
-	ImGui_ImplGlfwGL3_NewFrame();
-	
-	if (ImGui::Begin("Hola", &muestraImgui, ImGuiWindowFlags_NoResize |  ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | 
-	ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_NavEnableGamepad)){
-		
-		ImGui::OpenPopup("About");
-		ImGui::SetNextWindowSize( ImVec2( (float)display_w , (float)display_h ) );
-        if (ImGui::BeginPopupModal("About", &muestraImgui, ImGuiWindowFlags_AlwaysAutoResize  |  ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | 
-		ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar))
-        {
-			
-			static float f = 0.0f;
-			static int counter = 0;
-			ImGui::Text("ONLINE!");                           // Display some text (you can use a format string too)
-			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-			ImGui::InputText("Introducir IP", str0, IM_ARRAYSIZE(str0));
-			//ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our windows open/close state
-			//ImGui::Checkbox("Another Window", &show_another_window);
-
-			if (ImGui::Button("Button"))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-				counter++;
-			ImGui::SameLine();
-			ImGui::Text("counter = %d", counter);
-
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
-			ImGui::EndPopup();
-		}
-		ImGui::CloseCurrentPopup();
-	}
-	ImGui::End();
-}
 
 void EscenaLobby::mostrarInfoLobby(int indice) {
 	//Inicializacion variables cliente
@@ -411,26 +316,21 @@ void EscenaLobby::mostrarInfoLobby(int indice) {
 
 
 void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a texto (tipo de personaje)
-	if (client->getClientes().at(i).tipoCorredor == 0) {
+	if (client->getClientes().at(i).tipoCorredor == 0)
 		cout << "GLADIADOR ";
-	}
-	else if (client->getClientes().at(i).tipoCorredor == 1) {
+	else if (client->getClientes().at(i).tipoCorredor == 1)
 		cout << "PIRATA ";
-	}
-	else if (client->getClientes().at(i).tipoCorredor == 2) {
+	else if (client->getClientes().at(i).tipoCorredor == 2)
 		cout << "VIKINGO ";
-	}
-	else if (client->getClientes().at(i).tipoCorredor == 3) {
+	else if (client->getClientes().at(i).tipoCorredor == 3)
 		cout << "GUERRERO CHINO ";
-	}
 }
 
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
-
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS){
-		end=true;
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		end = true;
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end==true) {
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end == true) {
 		//if(conectado)
 		ImGui::CloseCurrentPopup();
 		if (offline) {
@@ -680,7 +580,8 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 			pressed = true;
 		}
-	}else pressed = false;
+	}
+	else pressed = false;
 	//textoUI->setText(this->texto.c_str());
 
 	if (iniciado)
@@ -691,6 +592,4 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	return Escena::tipo_escena::LOBBY;
 }
 
-std::string EscenaLobby::getIpConexion() {
-	return ipConexion;
-}
+std::string EscenaLobby::getIpConexion() { return ipConexion; }

@@ -195,18 +195,12 @@ void EscenaJuego::init() {
 	}
 
 	jugadores->setJugadores(pj);
-
 	gc = new GestorCarrera();
 
 	//-----------------------------
 	//	CAMARA
 	//-----------------------------
 	camera = new cameraThird("camara_jugador3apersona", "escena_raiz");
-	//camera->setParentNode(pj.at(controlPlayer)->getNodo()->getNode());
-//		camara = new Camara3persona();
-//		tipoCamara = 0;
-//		cambioCamara = false;
-
 
 	//-----------------------------
 	//	GESTOR COLISIONES
@@ -222,12 +216,10 @@ void EscenaJuego::init() {
 	tiempoRefresco = glfwGetTime();
 	t->restartTimer();
 
-
-
 	// -----------------------
 	//	IMGUI
 	// -----------------------
-	show_another_window = false;
+	debug_Jugador = false;
 	muestraDebug = true;
 }
 
@@ -279,13 +271,16 @@ void EscenaJuego::renderDebug() {
 
 	ImGui_ImplGlfwGL3_NewFrame();
 	ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
 	ImGui::Text("¡Debug del Juego!");
+	ImGui::Text("Jugadores: %i", GestorJugadores::getInstancia()->getNumJugadores());
+	ImGui::Text("Elementos de fisicas: %i", MotorFisicas::getInstancia()->getMundo()->getNumCollisionObjects());
 
 	ImGui::Checkbox("Debug Jugador", &debug_Jugador);
 	if (debug_Jugador) {
 		ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
 		ImGui::Text(jugador->toString().c_str());
-		if (ImGui::Button("Cerrrar"))
+		if (ImGui::Button("Cerrar"))
 			debug_Jugador = false;
 		ImGui::End();
 	}

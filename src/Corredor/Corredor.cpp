@@ -1179,14 +1179,13 @@ std::string Corredor::toString() {
 	if (tiempoVuelta != 0)
 		resultado += "\nTIEMPO DE VUELTA: " + to_string(tiempoVuelta);
 
-	resultado += "\nOBJETO: " + EstadosJugador::estado_objeto(tipoObj);
+	resultado += "\nOBJETO: " + to_string(EstadosJugador::estado_objeto(tipoObj));
 	resultado += "\nHabilidad: " + to_string(limite) + "/100\n";
 
 	return resultado;
 }
 
 void Corredor::updateTimerObstaculos() {
-
 	if (aceiteActivado) {
 		Timer *t2 = Timer::getInstancia();
 		if (t2->getTimer() - timerAceite >= 0) {

@@ -100,6 +100,7 @@ void EscenaMenu::update() {
 	// Mostrar ventanas
 	 int display_w = 0 , display_h = 0;
 	 
+	
 	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
 	glfwGetFramebufferSize( TMotor::instancia().getVentana() , &display_w , &display_h );
 	ImGui_ImplGlfwGL3_NewFrame();
@@ -117,7 +118,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 		if (!pressed) {
 			return Escena::tipo_escena::SALIR;
 		}
-	}else if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) { 				//Inputs para el menu principal
+	}else if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) { //Inputs para el menu principal
 		//Segun se toque arriba o abajo, el usuario se va moviendo entre los distintos botones del menu
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS) {
 			if (!pressed) {

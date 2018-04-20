@@ -12,7 +12,7 @@
 Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	cargador = 0;
-	tipoObj = 0;
+	tipoObj = EstadosJugador::estado_objeto::NADA;
 	turboActivado = false;
 	objetivoFijado = false;
 	aceiteActivado = false;
@@ -34,7 +34,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	tipojugador = tipo;
 	tiempoTurbo = 0;
 	proteccion = false;
-	estado->setEstadoCarrera(PARRILLA);
+	estado->setEstadoCarrera(EstadosJugador::estado_carrera::PARRILLA);
 
 
 
@@ -50,8 +50,6 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	siguiente = actual->getNextWaypoint();
 	siguiente_aux = siguiente;
 
-
-
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
 	suspension = btScalar(1.5f); // cuanto mas valor el chasis mas alto respecto a las ruedas
@@ -64,7 +62,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	//VALORES POR DEFECTO
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
-	Masa = btScalar(200);
+	Masa = btScalar(800);
 	FuerzaMaxima = btScalar(400); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	indiceGiroAlto = btScalar(0.4);
@@ -88,11 +86,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 		cuboNodo->setRotation(0.0f, 0.0f, 0.0f);
 	}
 
-	//cameraThird = TMotor::instancia().newCamera3ThPerson("camara_jugador3apersona", "escena_raiz");
-	//cameraThird->setParentNode(this->cuboNodo->getNode());
 
-
-	
 	InicializarFisicas();
 	//InicializarFisicasRuedas();
 
@@ -223,8 +217,6 @@ void Corredor::InicializarFisicasRuedas() {
 	objetos.push_back(CuerpoColisionRueda1);
 	bullet->setObjetos(objetos);
 
-
-
 	// rueda 2
 
 	transRueda.setIdentity();
@@ -320,7 +312,6 @@ void Corredor::InicializarFisicasRuedas() {
 	mundo->addConstraint(restriccion2, true);
 	mundo->addConstraint(restriccion3, true);
 	mundo->addConstraint(restriccion4, true);
-
 }
 
 //-----------------------------//
@@ -362,7 +353,7 @@ void Corredor::InicializarFisicas() {
 
 	//rigidbody del coche
 	CuerpoColisionChasis = new btRigidBody(Masa, motionStateCoche, CentroGravedad, Inercia);
-	//CuerpoColisionChasis->setFriction(1110);
+	CuerpoColisionChasis->setFriction(1110);
 	CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
 
 	//RaycastDel Coche
@@ -380,12 +371,10 @@ void Corredor::InicializarFisicas() {
 	CrearRuedas(vehiculo, tuning);
 	mundo->addRigidBody(CuerpoColisionChasis);
 	bullet->setObjetos(objetos);
-	//rigidBody->applyGravity();
+	CuerpoColisionChasis->applyGravity();
 
 	// luego declaramos sus ruedas
-
 	// inicializamos la posicion de las ruedas
-
 }
 
 void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning) {
@@ -543,75 +532,71 @@ void Corredor::setTipoObj() {
 	*/
 	if (SimPosCarrera == 1) {
 		if (random < 16)
-			tipoObj = 1;
+			tipoObj = EstadosJugador::estado_objeto::FLECHA;
 		else if (random < 43)
-			tipoObj = 2;
+			tipoObj = EstadosJugador::estado_objeto::CAJA_FALSA;
 		else if (random < 53)
-			tipoObj = 3;
+			tipoObj = EstadosJugador::estado_objeto::TURBO;
 		else if (random < 79)
-			tipoObj = 4;
+			tipoObj = EstadosJugador::estado_objeto::ACEITE;
 		else if (random < 96)
-			tipoObj = 5;
+			tipoObj = EstadosJugador::estado_objeto::ESCUDO;
 		else if (random < 101)
-			tipoObj = 6;
-		else if (random < 101)
-			tipoObj = 7;
-		else if (random < 101)
-			tipoObj = 8;
+			tipoObj = EstadosJugador::estado_objeto::FLECHA_TRIPLE;
 	}
 	else if (SimPosCarrera == 2 || SimPosCarrera == 3) {
 		if (random < 16)
-			tipoObj = 1;
+			tipoObj = EstadosJugador::estado_objeto::FLECHA;
 		else if (random < 31)
-			tipoObj = 2;
+			tipoObj = EstadosJugador::estado_objeto::CAJA_FALSA;
 		else if (random < 46)
-			tipoObj = 3;
+			tipoObj = EstadosJugador::estado_objeto::TURBO;
 		else if (random < 61)
-			tipoObj = 4;
+			tipoObj = EstadosJugador::estado_objeto::ACEITE;
 		else if (random < 76)
-			tipoObj = 5;
+			tipoObj = EstadosJugador::estado_objeto::ESCUDO;
 		else if (random < 86)
-			tipoObj = 6;
+			tipoObj = EstadosJugador::estado_objeto::FLECHA_TRIPLE;
 		else if (random < 91)
-			tipoObj = 7;
+			tipoObj = EstadosJugador::estado_objeto::ITEM_TELEDIRIGIDO;
 		else if (random < 101)
-			tipoObj = 8;
+			tipoObj = EstadosJugador::estado_objeto::TURBO_TRIPLE;
 	}
 	else if (SimPosCarrera == 4 || SimPosCarrera == 5) {
 		if (random < 16)
-			tipoObj = 1;
+			tipoObj = EstadosJugador::estado_objeto::FLECHA;
 		else if (random < 26)
-			tipoObj = 2;
+			tipoObj = EstadosJugador::estado_objeto::CAJA_FALSA;
 		else if (random < 41)
-			tipoObj = 3;
+			tipoObj = EstadosJugador::estado_objeto::TURBO;
 		else if (random < 51)
-			tipoObj = 4;
+			tipoObj = EstadosJugador::estado_objeto::ACEITE;
 		else if (random < 61)
-			tipoObj = 5;
+			tipoObj = EstadosJugador::estado_objeto::ESCUDO;
 		else if (random < 76)
-			tipoObj = 6;
+			tipoObj = EstadosJugador::estado_objeto::FLECHA_TRIPLE;
 		else if (random < 86)
-			tipoObj = 7;
+			tipoObj = EstadosJugador::estado_objeto::ITEM_TELEDIRIGIDO;
 		else if (random < 101)
-			tipoObj = 8;
+			tipoObj = EstadosJugador::estado_objeto::TURBO_TRIPLE;
 	}
 	else if (SimPosCarrera == 6) {
 		if (random < 11)
-			tipoObj = 1;
+			tipoObj = EstadosJugador::estado_objeto::FLECHA;
 		else if (random < 14)
-			tipoObj = 2;
+			tipoObj = EstadosJugador::estado_objeto::CAJA_FALSA;
 		else if (random < 29)
-			tipoObj = 3;
+			tipoObj = EstadosJugador::estado_objeto::TURBO;
 		else if (random < 31)
-			tipoObj = 4;
+			tipoObj = EstadosJugador::estado_objeto::ACEITE;
 		else if (random < 46)
-			tipoObj = 5;
+			tipoObj = EstadosJugador::estado_objeto::ESCUDO;
 		else if (random < 61)
-			tipoObj = 6;
+			tipoObj = EstadosJugador::estado_objeto::FLECHA_TRIPLE;
 		else if (random < 76)
-			tipoObj = 7;
+			tipoObj = EstadosJugador::estado_objeto::ITEM_TELEDIRIGIDO;
 		else if (random < 101)
-			tipoObj = 8;
+			tipoObj = EstadosJugador::estado_objeto::TURBO_TRIPLE;
 	}
 
 	//cout << "Posicion: " << posicionCarrera << " - NumRandom: " << random << " - Objeto: " << tipoObj << endl;
@@ -626,8 +611,8 @@ void Corredor::setTipoObj() {
 		c->PlayerSetObject(tipoObj);
 	//cout << "Random ------>" << tipoObj << endl;
 }
-void Corredor::setTipoObj(int i) {
-	tipoObj = i;
+void Corredor::setTipoObj(EstadosJugador::estado_objeto objeto) {
+	tipoObj = objeto;
 	if (tipoObj == 8)
 		cargador = 3;
 	else if (tipoObj == 3)
@@ -697,7 +682,7 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor, int tiempo) {
 		timerTurbo = time->getTimer();
 		if (objeto) {
 			if (cargador == 1)
-				tipoObj = 0;
+				tipoObj = EstadosJugador::estado_objeto::NADA;
 			cargador--;
 			//cout << "Turbos restantes: " << cargador << endl;
 		}
@@ -729,13 +714,12 @@ void Corredor::setInmunidad(bool activo) {
 
 void Corredor::comprobarInmunidad() {
 	if (inmunidad) {
-		estado->setEstadoInmunidad(INMUNIDAD);
+		estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::INMUNIDAD);
 		resetFuerzas();
 		Timer *time = Timer::getInstancia();
 		if (time->getTimer() - timerInmunidad >= tiempoInmunidad) {
-
 			inmunidad = false;
-			estado->setEstadoInmunidad(NORMAL);
+			estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::INMUNIDAD);
 		}
 	}
 }
@@ -743,9 +727,9 @@ void Corredor::comprobarInmunidad() {
 void Corredor::setHabilidad(bool activo) {
 	habilidadLanzada = activo;
 	if (habilidadLanzada)
-		estado->setEstadoHabilidad(CONHABILIDAD);
+		estado->setEstadoHabilidad(EstadosJugador::estado_habilidad::CONHABILIDAD);
 	else
-		estado->setEstadoHabilidad(SINHABILIDAD);
+		estado->setEstadoHabilidad(EstadosJugador::estado_habilidad::SINHABILIDAD);
 }
 
 void Corredor::setFriccion(btScalar valor) {
@@ -806,7 +790,7 @@ void Corredor::resetFuerzas() {
 	CuerpoColisionChasis->setAngularVelocity(zeroVector);
 }
 void Corredor::soltarItem() {
-	setTipoObj(0);
+	setTipoObj(EstadosJugador::estado_objeto::NADA);
 	setLimite(getLimite() + 10);
 }
 
@@ -971,7 +955,6 @@ btScalar Corredor::getDistanciaPunto(btVector3 vector) {
 void Corredor::acelerar() {
 	if ((vehiculo->getCurrentSpeedKmHour() > velocidadMaxima && !turboActivado) || (turboActivado && vehiculo->getCurrentSpeedKmHour() > velocidadMaximaTurbo)) {
 		limitadorVelocidad();
-
 	}
 	else {
 		vehiculo->applyEngineForce(Fuerza, 0);
@@ -982,9 +965,9 @@ void Corredor::acelerar() {
 	vehiculo->setSteeringValue(btScalar(0), 0);
 	vehiculo->setSteeringValue(btScalar(0), 1);
 
-	estado->setEstadoMovimiento(AVANZA);
+	estado->setEstadoMovimiento(EstadosJugador::estado_movimiento::AVANZA);
 	if (!turboActivado) {
-		estado->setDireccionMovimiento(RECTO);
+		estado->setDireccionMovimiento(EstadosJugador::direccion_movimiento::RECTO);
 	}
 }
 void Corredor::frenar() {
@@ -1005,17 +988,17 @@ void Corredor::frenar() {
 	vehiculo->setSteeringValue(btScalar(0), 1);
 
 	if (vehiculo->getCurrentSpeedKmHour() < 0) {
-		estado->setEstadoMovimiento(MARCHA_ATRAS);
+		estado->setEstadoMovimiento(EstadosJugador::estado_movimiento::MARCHA_ATRAS);
 	}
 	else {
-		estado->setEstadoMovimiento(FRENA);
+		estado->setEstadoMovimiento(EstadosJugador::estado_movimiento::FRENA);
 	}
 	if (!turboActivado)
-		estado->setDireccionMovimiento(RECTO);
+		estado->setDireccionMovimiento(EstadosJugador::direccion_movimiento::RECTO);
 }
 
 void Corredor::girarDerecha() {
-	estado->setDireccionMovimiento(DERECHA);
+	estado->setDireccionMovimiento(EstadosJugador::direccion_movimiento::DERECHA);
 	if (vehiculo->getCurrentSpeedKmHour() < velocidadLimiteGiro) {
 		FuerzaGiro = indiceGiroAlto;
 	}
@@ -1028,7 +1011,7 @@ void Corredor::girarDerecha() {
 }
 
 void Corredor::girarIzquierda() {
-	estado->setDireccionMovimiento(IZQUIERDA);
+	estado->setDireccionMovimiento(EstadosJugador::direccion_movimiento::IZQUIERDA);
 	if (vehiculo->getCurrentSpeedKmHour() < velocidadLimiteGiro) {
 		FuerzaGiro = indiceGiroAlto;
 	}
@@ -1044,14 +1027,17 @@ void Corredor::frenodemano(bool activo, bool objeto) {
 	int friccion = 1.f;
 	if (activo) {
 		if (!aceiteActivado && !turboActivado) {
-			if (vehiculo->getCurrentSpeedKmHour() > 300 && (estado->getDireccionMovimiento() == IZQUIERDA || estado->getDireccionMovimiento() == DERECHA)) {
+			if (vehiculo->getCurrentSpeedKmHour() > 300
+				&& (estado->getDireccionMovimiento() == EstadosJugador::direccion_movimiento::IZQUIERDA ||
+					estado->getDireccionMovimiento() == EstadosJugador::direccion_movimiento::DERECHA))
+			{
 				int i = vehiculo->getCurrentSpeedKmHour();
 				if (i % 3 == 0)
 					limite += 1;
 			}
 		}
 
-		estado->setEstadoMovimiento(DERRAPA);
+		estado->setEstadoMovimiento(EstadosJugador::estado_movimiento::DERRAPA);
 		FuerzaGiro = btScalar(0.45);
 
 		vehiculo->applyEngineForce(FuerzaFrenado, 0);
@@ -1077,7 +1063,7 @@ void Corredor::frenodemano(bool activo, bool objeto) {
 }
 
 void Corredor::desacelerar() {
-	estado->setEstadoMovimiento(DESACELERA);
+	estado->setEstadoMovimiento(EstadosJugador::estado_movimiento::DESACELERA);
 	vehiculo->applyEngineForce(0, 0);
 	vehiculo->applyEngineForce(0, 1);
 	vehiculo->applyEngineForce(0, 2);
@@ -1147,7 +1133,7 @@ void Corredor::update() {
 	*/
 	comprobarTurbo();
 	comprobarInmunidad();
-	if (estado->getEstadoCarrera() != PARRILLA) {
+	if (estado->getEstadoCarrera() != EstadosJugador::estado_carrera::PARRILLA) {
 		movimiento();// Esto ni existe
 		updateEstado();
 	}
@@ -1158,7 +1144,6 @@ void Corredor::update() {
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
-	updateText();
 
 	//float distanciaX=20;
 	//cameraThird->setPosition(- orientacion.getX()*distanciaX,7,- orientacion.getZ()*distanciaX);
@@ -1172,69 +1157,32 @@ void Corredor::update() {
 	//	cameraThird->getPosition().z* orientacion.getZ());
 
 	//cuboNodo->setPosition()
-
+	if (vueltas > maxvueltas) {
+		estado->setEstadoCarrera(EstadosJugador::estado_carrera::FIN);
+	}
 }
 
-void Corredor::updateText() {
-	/*
-	TextoPantalla *texto = TextoPantalla::getInstancia();
-	texto->agregar("---------------------- \n");
-	texto->agregar("Jugador ");
-	texto->agregar(to_string(this->getID()));
-	//texto->agregar("VELOCIDAD: ");
-	//texto->agregar(to_string(vehiculo->getCurrentSpeedKmHour()));
+std::string Corredor::toString() {
+	std::string resultado = "";
+
+	resultado += "\nJugador " + to_string(this->getID());
+	resultado += "\nVELOCIDAD: " + to_string(vehiculo->getCurrentSpeedKmHour());
 	if (direccionContraria != 0) {
-		texto->agregar("\nVAS EN DIRECCION CONTRARIA, JUGADOR: ");
-		texto->agregar(to_string(this->getID()) + "\n");
+		resultado += "\nVAS EN DIRECCION CONTRARIA, JUGADOR: " + to_string(this->getID()) + "\n";
 	}
 
-	texto->agregar(" - POSICION: ");
-	texto->agregar(to_string(posicionCarrera));
-	texto->agregar(" - VUELTA: ");
-	if (vueltas > maxvueltas) {
-		estado->setEstadoCarrera(FIN);
-		texto->agregar("HA LLEGADO ");
-		texto->agregar(to_string(posicionCarrera) + "!\n");
-	}
-	else {
-		texto->agregar(to_string(vueltas));
-	}
-	if (tiempoVuelta != 0) {
-		texto->agregar("\nTIEMPO DE VUELTA: ");
-		texto->agregar(to_string(tiempoVuelta));
-	}
-	texto->agregar("\nOBJETO: ");
-	switch (tipoObj) {
-	case 0:
-		texto->agregar("NADA\n");
-		break;
-	case 1:
-		texto->agregar("FLECHA\n");
-		break;
-	case 2:
-		texto->agregar("CAJA FALSA\n");
-		break;
-	case 3:
-		texto->agregar("TURBO\n");
-		break;
-	case 4:
-		texto->agregar("ACEITE\n");
-		break;
-	case 5:
-		texto->agregar("ESCUDO\n");
-		break;
-	case 6:
-		texto->agregar("FLECHA TRIPLE\n");
-		break;
-	case 7:
-		texto->agregar("FLECHA TELEDIRIGIDA\n");
-		break;
-	case 8:
-		texto->agregar("TURBO TRIPLE\n");
-		break;
-	}
-	texto->agregar("Habilidad: " + to_string(limite) + "/100\n");
-	*/
+	resultado += "\nPOSICION: " + to_string(posicionCarrera);
+	resultado += "\nVUELTAS: " + to_string(vueltas);
+	if (vueltas > maxvueltas)
+		resultado += "HA LLEGADO " + to_string(posicionCarrera) + "!\n";
+
+	if (tiempoVuelta != 0)
+		resultado += "\nTIEMPO DE VUELTA: " + to_string(tiempoVuelta);
+
+	resultado += "\nOBJETO: " + EstadosJugador::estado_objeto(tipoObj);
+	resultado += "\nHabilidad: " + to_string(limite) + "/100\n";
+
+	return resultado;
 }
 
 void Corredor::updateTimerObstaculos() {
@@ -1353,53 +1301,23 @@ void Corredor::lanzarHabilidad() {
 }
 
 void Corredor::updateEstado() {
-	if (vehiculo->getCurrentSpeedKmHour() < 0.5 && vehiculo->getCurrentSpeedKmHour() > -0.5) {
-		estado->setEstadoMovimiento(QUIETO);
-	}
-	estado->setEstadoCoche(POR_DEFECTO);
-	if (proteccion == true) {
-		estado->setEstadoCoche(CON_ESCUDO);
-	}
-	if (turboActivado == true) {
-		estado->setEstadoCoche(CON_TURBO);
-	}
+	if (vehiculo->getCurrentSpeedKmHour() < 0.5 && vehiculo->getCurrentSpeedKmHour() > -0.5)
+		estado->setEstadoMovimiento(EstadosJugador::estado_movimiento::QUIETO);
 
+	estado->setEstadoCoche(EstadosJugador::estado_coche::POR_DEFECTO);
+
+	if (proteccion == true)
+		estado->setEstadoCoche(EstadosJugador::estado_coche::CON_ESCUDO);
+
+	if (turboActivado == true)
+		estado->setEstadoCoche(EstadosJugador::estado_coche::CON_TURBO);
 
 	//Objetos:
-	switch (tipoObj) {
-		// {NADA, FLECHA, FLECHA_TRIPLE, ESCUDO, ACEITE, CAJA_FALSA, TURBO} 
-	case 0:
-		estado->setEstadoObjeto(NADA);
-		break;
-	case 1:
-		estado->setEstadoObjeto(FLECHA);
-		break;
-	case 2:
-		estado->setEstadoObjeto(CAJA_FALSA);
-		break;
-	case 3:
-		estado->setEstadoObjeto(TURBO);
-		break;
-	case 4:
-		estado->setEstadoObjeto(ACEITE);
-		break;
-	case 5:
-		estado->setEstadoObjeto(ESCUDO);
-		break;
-	case 6:
-		estado->setEstadoObjeto(FLECHA_TRIPLE);
-		break;
-	case 7:
-		estado->setEstadoObjeto(ITEM_TELEDIRIGIDO);
-		break;
-	case 8:
-		estado->setEstadoObjeto(HABILIDAD);
-		break;
-	}
+	estado->setEstadoObjeto(tipoObj);
 	estado->update();
 }
-void Corredor::updateVectorDireccion()
-{
+
+void Corredor::updateVectorDireccion() {
 	/* Actualiza el vector direccion del corredor. */
 	btQuaternion quaternion = CuerpoColisionChasis->getOrientation();
 	//cameraThird->setRotation(quaternion.getX(), quaternion.getY(), quaternion.getZ());

@@ -6,11 +6,7 @@ CorredorRed::CorredorRed(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(
 	cuboNodo->setName(nombre);
 }
 
-
-void CorredorRed::updateHijos() {
-
-}
-
+void CorredorRed::updateHijos() {}
 void CorredorRed::movimiento() {
 	//std::cout << "Entro\n";
 	EstadosJugador *estados = this->getEstados();
@@ -81,7 +77,7 @@ void CorredorRed::movimiento() {
 	*/
 	int estado_obj = estados->getEstadoObjeto();
 	if (getTipoObj() != estado_obj) {
-		setTipoObj(estado_obj);
+		setTipoObj(EstadosJugador::estado_objeto(estado_obj));
 	}
 
 	/*
@@ -100,23 +96,8 @@ void CorredorRed::movimiento() {
 
 }
 
-
-
-void CorredorRed::acelerarRed() {
-	acelerar();
-}
-
-void CorredorRed::frenarRed() {
-	frenar();
-}
-void CorredorRed::girarDRed() {
-	girarDerecha();
-}
-
-void CorredorRed::girarIRed() {
-	girarIzquierda();
-}
-
-void CorredorRed::actualizarItem() {
-
-}
+void CorredorRed::acelerarRed() { acelerar(); }
+void CorredorRed::frenarRed() { frenar(); }
+void CorredorRed::girarDRed() { girarDerecha(); }
+void CorredorRed::girarIRed() { girarIzquierda(); }
+void CorredorRed::actualizarItem() {}

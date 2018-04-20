@@ -52,7 +52,7 @@ public:
 	void setObjetivoTelederigido();
 	void setParametros();
 	void setTipoObj();
-	void setTipoObj(int i);
+	void setTipoObj(EstadosJugador::estado_objeto objeto);
 	void SetFuerzaVelocidad(int turbo);
 	void setFriccion(btScalar valor);
 	void setTurbo(bool activo, bool objeto, int valor, int tiempo);
@@ -81,7 +81,6 @@ public:
 	void update();
 	void updateTimerObstaculos();
 	void updateEstado();
-	void updateText();
 	void comprobarSueloRuedas();
 	void comprobarTurbo();
 	void comprobarInmunidad();
@@ -114,11 +113,11 @@ public:
 	void usarObjetos();
 	void lanzarHabilidad();
 
-
-
+	
+	std::string toString();
 
 protected:
-	obj3D * cuboNodo;
+	obj3D *cuboNodo;
 	obj3D *rueda1;
 	obj3D *rueda2;
 	obj3D *rueda3;
@@ -172,7 +171,7 @@ protected:
 	const char* nombre;
 	int id;
 	int cargador;
-	int tipoObj; // si es 0 no tengo nada
+	EstadosJugador::estado_objeto tipoObj; // si es 0 no tengo nada
 	bool turboActivado; // para saber cuando esta activado turbo
 	bool objetivoFijado; //para el item teledirigido
 	bool aceiteActivado; //para el item teledirigido

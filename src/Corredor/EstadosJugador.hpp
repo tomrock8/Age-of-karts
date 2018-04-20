@@ -5,29 +5,20 @@
 #include <cstdlib>
 #include <iostream>
 
-
 using namespace std;
-typedef enum { QUIETO, AVANZA, MARCHA_ATRAS, FRENA, DERRAPA, DESACELERA } estado_movimiento;
-typedef enum { RECTO, IZQUIERDA, DERECHA } direccion_movimiento;
-typedef enum { NADA, FLECHA, CAJA_FALSA, TURBO, ACEITE, ESCUDO, FLECHA_TRIPLE, ITEM_TELEDIRIGIDO, HABILIDAD } estado_objeto;
-typedef enum { POR_DEFECTO, CON_TURBO, CON_ESCUDO } estado_coche;
-typedef enum { PARRILLA, CARRERA, FIN } estado_carrera;
-typedef enum { NORMAL, INMUNIDAD } estado_inmunidad;
-typedef enum { SINHABILIDAD, CONHABILIDAD } estado_habilidad;
-
 
 class EstadosJugador
 {
-private:
-	estado_movimiento estado;
-	direccion_movimiento direccion;
-	estado_objeto objeto;
-	estado_coche estadoCoche;
-	estado_carrera estadoCarrera;
-	estado_inmunidad Inmunidad;
-	estado_habilidad habilidad;
 
 public:
+	typedef enum { QUIETO, AVANZA, MARCHA_ATRAS, FRENA, DERRAPA, DESACELERA } estado_movimiento;
+	typedef enum { RECTO, IZQUIERDA, DERECHA } direccion_movimiento;
+	typedef enum { NADA, FLECHA, CAJA_FALSA, TURBO, ACEITE, ESCUDO, FLECHA_TRIPLE, ITEM_TELEDIRIGIDO, TURBO_TRIPLE, HABILIDAD } estado_objeto;
+	typedef enum { POR_DEFECTO, CON_TURBO, CON_ESCUDO } estado_coche;
+	typedef enum { PARRILLA, CARRERA, FIN } estado_carrera;
+	typedef enum { NORMAL, INMUNIDAD } estado_inmunidad;
+	typedef enum { SINHABILIDAD, CONHABILIDAD } estado_habilidad;
+
 	EstadosJugador();
 	void update();
 	void setEstadoMovimiento(estado_movimiento estado_mov);
@@ -52,6 +43,14 @@ public:
 	void setEstadoHabilidad(int Habilidad);
 	estado_habilidad getEstadoHabilidad();
 
+private:
+	estado_movimiento estado;
+	direccion_movimiento direccion;
+	estado_objeto objeto;
+	estado_coche estadoCoche;
+	estado_carrera estadoCarrera;
+	estado_inmunidad Inmunidad;
+	estado_habilidad habilidad;
 
 };
 

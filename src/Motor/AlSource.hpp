@@ -1,3 +1,6 @@
+#ifndef ALSOURCE_H
+#define ALSOURCE_H
+
 #include "alut.h"
 #include "al.h"
 #include "alc.h"
@@ -19,3 +22,6 @@ class AlSource{
         int sourceId;
         ALuint sourceAux;
 };
+
+
+#endif /* ALSOURCE */

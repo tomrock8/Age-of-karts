@@ -7,7 +7,7 @@ Caja::Caja(btVector3 posicionCaja) {
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	//nodo = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/caja.obj"));
-	nodo = TMotor::instancia().newMeshNode("Caja", "assets/caja/caja.obj", "escena_raiz");
+	nodo = TMotor::instancia().newMeshNode("Caja", "assets/caja/caja.obj", "escena_raiz",false);
 	nombre = "Caja";
 	GestorIDs::instancia().setIdentifier(nodo, nombre);
 	id = GestorIDs::instancia().getIDLibre() - 1;

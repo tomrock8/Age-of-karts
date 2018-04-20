@@ -4,7 +4,7 @@ Aceite::Aceite(btVector3 posicion, btVector3 escala, btScalar masa, float tiempo
 	float alturaLanzamiento, int idNodo) : Item(posicion, escala, masa, tiempoDesctruccion, fcolision, tamanyoNodo, radio, alturaLanzamiento, idNodo) {
 
 	//nodo = Motor3d::instancia().getScene()->addCubeSceneNode(tamanyoNodo.getX());
-	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/aceite/aceite.obj", "escena_raiz");
+	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/aceite/aceite.obj", "escena_raiz",false);
 	cout << "(Aceite::Aceite) Hay que comprobar la posicion que sea respecto del corredor al crear\n";
 	nodo->setPosition(posicion.getX(), posicion.getY(), posicion.getZ());
 	//nodo->setScale(vector3df(tamanyoNodo.getX(), tamanyoNodo.getY(), tamanyoNodo.getZ()));

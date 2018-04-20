@@ -76,20 +76,20 @@ void MotorFisicas::setObjetos(std::vector<btRigidBody *> obj) {
 	objetos = obj;
 }
 
-void MotorFisicas::initializePhysics(const char *name, btVector3 pos,obj3D *obj) {
-	
+void MotorFisicas::initializePhysics(TRecursoMalla * mesh) {
+	cout << "creando las fisicas para :" << mesh->getNombre() << endl;
 	std::vector<btRigidBody *> obje = getObjetos();
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
-	Transform.setOrigin(pos);
+	Transform.setOrigin(btVector3(0,0,0));
 	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
 
 	//create the Shape
 
 	// Add mass
 	btVector3 LocalInertia;
-	btCollisionShape *shape = CreateCollisionShape(name);
+	btCollisionShape *shape = CreateCollisionShape(mesh->getNombre());
 
 
 	// Create the rigid body object

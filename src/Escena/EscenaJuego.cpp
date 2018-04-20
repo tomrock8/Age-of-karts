@@ -45,16 +45,16 @@ EscenaJuego::~EscenaJuego() {
 void EscenaJuego::init() {
 
 	// LUCES PUNTUALES
-	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
+	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_0->translate(glm::vec3(2.5f, 12.0f, 2.0f));
 	
-	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
+	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_1->translate(glm::vec3(150.0f, 12.0f, 0.0f));
 
-	obj3D * luzPuntual_2 = TMotor::instancia().newLightNode("light_2", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
+	obj3D * luzPuntual_2 = TMotor::instancia().newLightNode("light_2", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_2->translate(glm::vec3(-150.0f, 12.0f, -300.0f));
 
-	obj3D * luzPuntual_3 = TMotor::instancia().newLightNode("light_3", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.0001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
+	obj3D * luzPuntual_3 = TMotor::instancia().newLightNode("light_3", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_3->translate(glm::vec3(0.0f, 12.0f, 300.0f));
 
 	//LUCES DIRIGIDAS
@@ -117,7 +117,7 @@ void EscenaJuego::init() {
 	//	ESCENARIO MAPA
 	//-----------------------------
 
-	Pista::getInstancia()->setMapa("assets/mierdamapa/mierda.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+	Pista::getInstancia()->setMapa("assets/MapaPirata/mapaPirata.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 
 	//-----------------------------
@@ -129,9 +129,9 @@ void EscenaJuego::init() {
 	Corredor* jugador;
 
 	btVector3 pos2[6];
-	pos2[0].setX(20);
-	pos2[0].setY(0);
-	pos2[0].setZ(20);
+	pos2[0].setX(-53.04);
+	pos2[0].setY(15);
+	pos2[0].setZ(-310.56);
 	pos2[1].setX(-10);
 	pos2[1].setY(0);
 	pos2[1].setZ(290);
@@ -507,7 +507,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_T) == GLFW_PRESS) {
 		float *resetPos = new float[3];
 		resetPos[0] = pos.getX();
-		resetPos[1] = pos.getY() + 40;
+		resetPos[1] = pos.getY() + 30;
 		resetPos[2] = pos.getZ();
 
 		float *resetOri = new float[3];

@@ -20,7 +20,7 @@ public:
 
 
 	//-----------ASSIMP-----------//
-	std::vector<mesh*> loadMesh(const char *nombre);
+	std::vector<mesh*> loadMesh(const char *nombre,bool sta);
 	void processNode(aiNode *node, const aiScene *scene);
 	
 	
@@ -49,8 +49,8 @@ private:
 	std::vector<TRecurso *> recursoMallas;
 	std::vector<TRecurso *> recursoMaterials;
 	std::vector<TRecurso *> recursoTexturas;
-
 	std::string *dir;
 	std::map<std::string, GLuint> textures;
+	bool statico;
 };
 #endif

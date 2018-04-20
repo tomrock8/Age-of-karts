@@ -107,6 +107,7 @@ btRigidBody *cameraThird::initializePhysics() {
 	rigidBody->setGravity(btVector3(0, 0, 0));
 	return rigidBody;
 	*/
+	return NULL;
 }
 
 void cameraThird::moveCamera(btRigidBody * pj1, btVector3 dir) {
@@ -318,6 +319,7 @@ glm::mat4 cameraThird::getParentPosition() {
 	glm::mat4 aux = (static_cast<TTransform*>(parentNode->getPadre()->getEntidad())->getMatriz());
 	return aux;
 */
+	return glm::mat4();
 }
 
 glm::mat4 cameraThird::getParentRotation() {
@@ -325,6 +327,7 @@ glm::mat4 cameraThird::getParentRotation() {
 	glm::mat4 aux = (static_cast<TTransform*>(parentNode->getPadre()->getPadre()->getEntidad())->getMatriz());
 	return aux;
 */
+	return glm::mat4();
 }
 
 

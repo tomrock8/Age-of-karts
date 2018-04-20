@@ -41,17 +41,8 @@ TMotor::TMotor() {
 	gestorRecursos = new TGestorRecursos(); // Inicializacion del gestor de recursos
 	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena) 
 
-
-	//----------Declaracion IMGUI---------
-
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	/*io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls*/
-	ImGui_ImplGlfwGL3_Init(ventana, true);
-
-	// Setup style
-	ImGui::StyleColorsDark();
+	initDebugWindow();
+	
 
 	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
 	shaderHUD = new Shader("assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt", nullptr);
@@ -61,6 +52,30 @@ TMotor::TMotor() {
 		, "assets/shaders/shaderDepth/shaderLuzPuntual/geometryShader.txt");
 	shaderSkybox = new Shader("assets/shaders/shaderSkybox/vertexShader.txt", "assets/shaders/shaderSkybox/fragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
+}
+
+void TMotor::initDebugWindow(){
+	//----------Declaracion IMGUI---------
+	renderDebug = true;
+	
+	if (ImGui::GetCurrentContext() == NULL) {
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO();
+		/*io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls*/
+		ImGui_ImplGlfwGL3_Init(ventana, true);
+
+		// Setup style
+		ImGui::StyleColorsDark();
+	}
+}
+
+void TMotor::closeDebugWindow(){
+	if (ImGui::GetCurrentContext() != NULL) {
+		ImGui_ImplGlfwGL3_Shutdown();
+		ImGui::DestroyContext();
+	}
+	setRenderDebug(false);
 }
 
 void TMotor::resizeScreen(int w, int h) {
@@ -105,9 +120,36 @@ obj3D *TMotor::getObjeto(const char* name){
 	return objeto;
 }
 
+//Funcion que devuelve un hud a partir del nombre
+hud* TMotor::getHud(const char* n) {
+	hud* h = NULL;
+	//Recorremos el array de HUDs
+	for (int i = 0; i < HUDs.size(); i++) {
+		//Comparamos los nombres y nos guardamos el correcto
+		if (strcmp(HUDs.at(i)->getName(), n) == 0) {
+			h = HUDs.at(i);
+		}
+	}
+	return h;
+}
+
 // METODOS SET
 void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; }
 void TMotor::setActiveLight(TNodo *light) { activeLights.push_back(light); }
+void TMotor::setRenderDebug(bool renderDebug) { this->renderDebug = renderDebug; }
+
+//Funcion para activar un hud, que sera el que se utilice, solo puede haber un hud activo por iteracion
+void TMotor::setActiveHud(const char* n) {
+	hud* h = getHud(n); //Obtenemos el hud a partir del nombre
+	activeHud = h; //Lo activamos
+}
+
+obj3D* TMotor::getObjActiveCamera() {
+	if (cameras.size() > 0)
+		return new obj3D(activeCamera, activeCamera->getName(), 99);
+
+	return NULL;
+}
 
 
 // ----------------------------------
@@ -220,6 +262,10 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 }
 
 
+void TMotor::precarga(const char* modelo) {
+	//gestorRecursos->loadMesh(modelo);
+}
+
 // -------------------------------
 // M A L L A S
 // -------------------------------
@@ -231,10 +277,6 @@ TMalla *TMotor::createMesh(const char *fich,bool sta) {
 	//return NULL;
 }
 
-
-void TMotor::precarga(const char* modelo) {
-	//gestorRecursos->loadMesh(modelo);
-}
 
 TNodo  *TMotor::createMeshNode(TNodo *padre, TMalla *mesh, const char* name) {
 	TNodo *nodo = new TNodo(name);
@@ -248,7 +290,6 @@ TNodo  *TMotor::createMeshNode(TNodo *padre, TMalla *mesh, const char* name) {
 // T R A N S F O R M A C I O N E S
 //---------------------------------------------
 TTransform *TMotor::createTransformation() { return new TTransform(); }
-
 TNodo *TMotor::createTransformationNode(TNodo *padre, TTransform *transf, const char* name) {
 	TNodo *nodo = new TNodo(name);
 	nodo->setPadre(padre);
@@ -261,7 +302,6 @@ TNodo *TMotor::createTransformationNode(TNodo *padre, TTransform *transf, const 
 // C A M A R A 
 //-----------------------
 TCamara *TMotor::createCam() { return new TCamara(); }
-
 TNodo *TMotor::createCamNode(TNodo *padre, TCamara *cam, const char* name) {//crear y registrar camara en la aplicacion
 	TNodo *nodo = new TNodo(name);
 	nodo->setPadre(padre);		//Se asigna el nodo padre
@@ -303,16 +343,14 @@ void TMotor::clean() {
 }
 
 void TMotor::draw(int tipo) {
-	//Establecer el nuevo color de fondo
-	glClearColor(0.16f, 0.533f, 0.698f, 0.0f);
+	glClearColor(0.16f, 0.533f, 0.698f, 0.0f);//Establecer el nuevo color de fondo
 
 	
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
 	if (lights.size() > 0) {
 		for (int i = 0; i < lights.size(); i++) {
 			static_cast<TLuz *>(lights[i]->getEntidad())->renderMap();
-			//Activamos el face culling
-			glEnable(GL_CULL_FACE);
+			glEnable(GL_CULL_FACE); //Activamos el face culling
 			//Para evitar el efecto del peter panning. Debido a la utilizacion de un bias (rango), se pueden producir fallos 
 			//en las sombras al quedar en algunos casos separadas de los objetos que las producen
 			glCullFace(GL_FRONT);
@@ -323,18 +361,17 @@ void TMotor::draw(int tipo) {
 			else {
 				scene->draw(shaderDirectionalDepth);
 			}
-			//Desactivamos el face culling
-			glDisable(GL_CULL_FACE);
-			//Desactivamos el framebuffer usado para el mapa de profundidad
-			static_cast<TLuz *>(lights[i]->getEntidad())->unbindDepthBuffer();
+
+			glDisable(GL_CULL_FACE);//Desactivamos el face culling
+			static_cast<TLuz *>(lights[i]->getEntidad())->unbindDepthBuffer();//Desactivamos el framebuffer usado para el mapa de profundidad
 		}
 	}
 
-	//Se llama a la funcion para limpiar los buffers de OpenGL
-	clean();
+
+	clean();//Se llama a la funcion para limpiar los buffers de OpenGL
 	if (tipo == 1 || tipo == 2) {
-		//Se activa el shader para el renderizado 3D
-		shader->use();
+		shader->use();//Se activa el shader para el renderizado 3D
+
 		//Se llama al dibujado de los distintos nodos del arbol
 		drawCamera();
 		drawLight();
@@ -385,10 +422,12 @@ void TMotor::draw(int tipo) {
 	int display_w, display_h;
 	glfwGetFramebufferSize(TMotor::instancia().getVentana(), &display_w, &display_h);
 	glViewport(0, 0, display_w, display_h);
-	
-	if (ImGui::GetFrameCount() > 0) {
-		ImGui::Render();
-		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+
+	if (renderDebug) {
+		if (ImGui::GetFrameCount() > 0) {
+			ImGui::Render();
+			ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+		}
 	}
 
 	//swap los bufers de pantalla (trasero y delantero)
@@ -464,43 +503,15 @@ void TMotor::newHud(const char* n) {
 	setActiveHud(n);
 }
 
-//Funcion para activar un hud, que sera el que se utilice, solo puede haber un hud activo por iteracion
-void TMotor::setActiveHud(const char* n) {
-	//Obtenemos el hud a partir del nombre
-	hud* h = getHud(n);
-	//Lo activamos
-	activeHud = h;
-}
-
-//Funcion que devuelve un hud a partir del nombre
-hud* TMotor::getHud(const char* n) {
-	hud* h = NULL;
-	//Recorremos el array de HUDs
-	for (int i = 0; i < HUDs.size(); i++) {
-		//Comparamos los nombres y nos guardamos el correcto
-		if (strcmp(HUDs.at(i)->getName(), n) == 0) {
-			h = HUDs.at(i);
-		}
-	}
-	return h;
-}
-
 //Funcion para devolver el hud activo
 hud* TMotor::getActiveHud() {
-	return activeHud;
-}
-obj3D* TMotor::getObjActiveCamera() {
-	if (cameras.size() > 0) {
-		return new obj3D(activeCamera, activeCamera->getName(), 99);
-
-	}
-	else return NULL;
-
+  return activeHud;
 }
 
 TGestorRecursos *TMotor::getGR() {
-	return gestorRecursos;
+  return gestorRecursos;
 }
+
 void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw)
 {
 

@@ -28,6 +28,8 @@ private:
 public:
 	static TMotor &instancia();
 	TMotor();
+	void initDebugWindow();
+	void closeDebugWindow();
 	void resizeScreen(int width, int height);
 	void close();
 
@@ -61,10 +63,13 @@ public:
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
 	TGestorRecursos *getGR();
+	bool getRenderDebug();
+
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
 	void setActiveLight(TNodo *l);
 	void setActiveHud(const char *n);
+	void setRenderDebug(bool renderDebug);
 
 	// DIBUJADO
 	void clean();
@@ -101,6 +106,7 @@ protected:
 	std::vector <obj3D *> objetos; //Array que almacena los distintos objetos creados a lo largo del programa
 	obj3D *getObjeto(const char* name); //Metodo que devuelve un objeto a partir de su nombre
 
+	bool renderDebug;
 	TGestorRecursos *gestorRecursos;
 	GLFWwindow *ventana;
 	int screenHEIGHT;

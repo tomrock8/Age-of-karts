@@ -1,7 +1,7 @@
 #include "EscenaJuego.hpp"
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
-	end=false;
+	end = false;
 	ipConexion = "";
 	TMotor::instancia().newHud("OnGameHUD");
 	//TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "aok", "assets/HUD/MainMenu/aok_logo.png");
@@ -47,7 +47,7 @@ void EscenaJuego::init() {
 	// LUCES PUNTUALES
 	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_0->translate(glm::vec3(2.5f, 12.0f, 2.0f));
-	
+
 	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_1->translate(glm::vec3(150.0f, 12.0f, 0.0f));
 
@@ -60,16 +60,16 @@ void EscenaJuego::init() {
 	//LUCES DIRIGIDAS
 	obj3D * luzDirigida_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(1.0f, -1.0f, 0.0f, 1.0f), 0.001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
 	luzDirigida_0->translate(glm::vec3(2.5f, 12.0f, 0.0f));
-	
+
 	obj3D * luzDirigida_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.0f, 0.0f, 1.0f), 0.001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
 	luzDirigida_1->translate(glm::vec3(0.0f, 12.0f, 0.0f));
-	
+
 	obj3D * luzDirigida_2 = TMotor::instancia().newLightNode("light_2", glm::vec4(1.0f, -1.0f, 0.0f, 1.0f), 0.001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
 	luzDirigida_2->translate(glm::vec3(0.0f, 12.0f, 300.0f));
 
 	obj3D * luzDirigida_3 = TMotor::instancia().newLightNode("light_3", glm::vec4(1.0f, -1.0f, 0.0f, 1.0f), 0.001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
 	luzDirigida_3->translate(glm::vec3(0.0f, 12.0f, 300.0f));
-	
+
 
 	/*
 	obj3D * luzPuntual = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.00001f, glm::cos(glm::radians(60.0f)), "escena_raiz");
@@ -116,8 +116,7 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-
-	Pista::getInstancia()->setMapa("assets/MapaPirata/mapaPirata.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+	Pista::getInstancia()->setMapa("assets/mierdamapa/mierda.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 
 	//-----------------------------
@@ -195,19 +194,13 @@ void EscenaJuego::init() {
 	}
 
 	jugadores->setJugadores(pj);
-
 	gc = new GestorCarrera();
-	
-		//-----------------------------
-		//	CAMARA
-		//-----------------------------
+
+	//-----------------------------
+	//	CAMARA
+	//-----------------------------
 	camera = new cameraThird("camara_jugador3apersona", "escena_raiz");
-	//camera->setParentNode(pj.at(controlPlayer)->getNodo()->getNode());
-//		camara = new Camara3persona();
-//		tipoCamara = 0;
-//		cambioCamara = false;
-	
-	
+
 	//-----------------------------
 	//	GESTOR COLISIONES
 	//-----------------------------
@@ -222,18 +215,14 @@ void EscenaJuego::init() {
 	tiempoRefresco = glfwGetTime();
 	t->restartTimer();
 
-
-
 	// -----------------------
 	//	IMGUI
 	// -----------------------
-	show_demo_window = false;
-	show_another_window = false;
+	debug_Jugador = false;
 	muestraDebug = true;
 }
 
 void EscenaJuego::dibujar() {
-
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	std::vector<Corredor*> pj = jugadores->getJugadores();
 
@@ -269,50 +258,75 @@ void EscenaJuego::dibujar() {
 }
 
 void EscenaJuego::renderDebug() {
-	
+
 	// ------------------------------
 	// -------- IMGUI ---------------
 	// ------------------------------
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+	Corredor *jugador = GestorJugadores::getInstancia()->getJugadores().at(0);
+
 	// Mostrar ventanas
 
 	ImGui_ImplGlfwGL3_NewFrame();
-	ImGui::Begin("Debug Window", &muestraDebug);
-	static float f = 0.0f;
+	ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+	ImGui::Text("Debug del Juego!");
+	ImGui::Text("Pulsa 9 para activar - 0 desactivar");
+	ImGui::Text("Jugadores: %i", GestorJugadores::getInstancia()->getNumJugadores());
+	ImGui::Text("Elementos de fisicas: %i", MotorFisicas::getInstancia()->getMundo()->getNumCollisionObjects());
+
+	ImGui::Checkbox("Debug Jugador", &debug_Jugador);
+	if (debug_Jugador) {
+		ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
+		ImGui::Text(jugador->toString().c_str());
+
+		static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo;
+		jugador->getParametros(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo);
+
+		ImGui::SliderFloat("fuerza", &fuerza, 0.0f, 10000.0f);
+
+		ImGui::SliderFloat("velocidadMedia", &velocidadMedia, 0.0f, 800.0f);
+		ImGui::SliderFloat("velocidadMaximaTurbo", &velocidadMaximaTurbo, 0.0f, 800.0f);
+		ImGui::SliderFloat("velocidadMaxima", &velocidadMaxima, 0.0f, 800.0f);
+		ImGui::SliderFloat("Masa", &masa, 0.0f, 8000.0f);
+		ImGui::SliderFloat2("Indice giro alto-bajo", new float[2]{ indiceGiroAlto, indiceGiroBajo }, -1, 1);
+		//ImGui::SliderFloat("indiceGiroAlto", &indiceGiroAlto, 0.0f, 1.0f);
+		//ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f);
+		jugador->setParametros(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo);
+
+
+
+		static float *posicion = new float[3];
+		float *resetOri = new float[3];
+		resetOri[0] = jugador->getNodo()->getRotation().z;
+		resetOri[1] = jugador->getNodo()->getRotation().y;
+		resetOri[2] = jugador->getNodo()->getRotation().x;
+
+
+		ImGui::SliderFloat3("Posicion", posicion, -100, 100);
+		ImGui::SameLine();
+		if (ImGui::Button("Set position"))
+			jugador->setPosicion(posicion, resetOri);// Hay que pasarle solo la posicion al jugador, no al nodo
+
+		if (ImGui::Button("Cerrar"))
+			debug_Jugador = false;
+		ImGui::End();
+	}
+	/*
+	//ImGui::SliderFloat("Masa", &valor, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	// Boton
 	static int counter = 0;
-	ImGui::Text("Hello, world!");                           // Display some text (you can use a format string too)
-	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-	ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our windows open/close state
-	ImGui::Checkbox("Another Window", &show_another_window);
-
 	if (ImGui::Button("Button"))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
 		counter++;
 	ImGui::SameLine();
 	ImGui::Text("counter = %d", counter);
-
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
-	if (show_another_window) {
-		ImGui::Begin("Another Window", &show_another_window);
-		ImGui::Text("Hello from another window!");
-		if (ImGui::Button("Close Me"))
-			show_another_window = false;
-		ImGui::End();
-	}
-
-	// 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-	if (show_demo_window) {
-		ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-		ImGui::ShowDemoWindow(&show_demo_window);
-	}
-	ImGui::End();
+	*/
 }
 
 void EscenaJuego::limpiar() {
 	muestraDebug = false;
+	TMotor::instancia().closeDebugWindow();
 }
 
 void EscenaJuego::update() {
@@ -348,9 +362,8 @@ void EscenaJuego::update() {
 				if (strcmp("HabilidadPirata", items.at(i)->getNombre()) == 0
 					|| strcmp("HabilidadVikingo", items.at(i)->getNombre()) == 0
 					|| strcmp("HabilidadGladiador", items.at(i)->getNombre()) == 0
-					|| strcmp("HabilidadChino", items.at(i)->getNombre()) == 0) {
-
-
+					|| strcmp("HabilidadChino", items.at(i)->getNombre()) == 0)
+				{
 					pj.at(items.at(i)->getIDPadre())->setHabilidad(false);
 
 				}
@@ -359,11 +372,9 @@ void EscenaJuego::update() {
 				items.erase(items.begin() + i);
 				pistaca->setItems(items);
 				break;
-
 			}
 			else {
 				items.at(i)->updateHijos();
-
 			}
 		}
 	}
@@ -442,29 +453,29 @@ void EscenaJuego::update() {
 	pj = jugadores->getJugadores();
 
 
-	camera->update(pj.at(controlPlayer)->getNodo()->getPosition(),pj.at(controlPlayer)->getNodo()->getRotation(),pj.at(controlPlayer)->getVectorDireccion());
+	camera->update(pj.at(controlPlayer)->getNodo()->getPosition(), pj.at(controlPlayer)->getNodo()->getRotation(), pj.at(controlPlayer)->getVectorDireccion());
 	camera->lookAt(pj.at(controlPlayer)->getNodo()->getPosition());
-/*
-	float distanciaX = -20;
-	float posX = pj.at(controlPlayer)->getVectorDireccion().getX()*distanciaX;
-	float posZ = pj.at(controlPlayer)->getVectorDireccion().getZ()*distanciaX;
+	/*
+		float distanciaX = -20;
+		float posX = pj.at(controlPlayer)->getVectorDireccion().getX()*distanciaX;
+		float posZ = pj.at(controlPlayer)->getVectorDireccion().getZ()*distanciaX;
 
-	camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition().x - posX, 0, pj.at(controlPlayer)->getNodo()->getPosition().z - posZ);
-	camera->setRotation(glm::vec3(0, 1, 0), 180);
-	switch(tipoCamara){
-		case 0:		//Camara 3a persona fija
-			camara->moveCamera(pj.at(controlPlayer));
-		break;
-		case 1:		//Camara 3a persona libre
-			camara->moveCameraControl(pj.at(controlPlayer));
-		break;
-		case 2:		//Camara 1a persona
-			camara->movefpsCamera(pj.at(controlPlayer));
-		break;
-		case 3:
-			camara->moveCameraControlPointer(pj.at(controlPlayer));
+		camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition().x - posX, 0, pj.at(controlPlayer)->getNodo()->getPosition().z - posZ);
+		camera->setRotation(glm::vec3(0, 1, 0), 180);
+		switch(tipoCamara){
+			case 0:		//Camara 3a persona fija
+				camara->moveCamera(pj.at(controlPlayer));
+			break;
+			case 1:		//Camara 3a persona libre
+				camara->moveCameraControl(pj.at(controlPlayer));
+			break;
+			case 2:		//Camara 1a persona
+				camara->movefpsCamera(pj.at(controlPlayer));
+			break;
+			case 3:
+				camara->moveCameraControlPointer(pj.at(controlPlayer));
 
-	}*/
+		}*/
 
 
 }
@@ -517,10 +528,10 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 
 		pj.at(0)->setPosicion(resetPos, resetOri);
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS){
-		end=true;
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		end = true;
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end==true) {
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end == true) {
 		if (tipoEscena == Escena::tipo_escena::ONLINE) {
 			client->ShutDownClient();
 		}
@@ -531,16 +542,10 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
 	}
 
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS) {
-		//debug = 0;
-		muestraDebug = false;
-	}
-	else {
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS) {
-			//debug = 1;
-			muestraDebug = true;
-		}
-	}
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS)
+		TMotor::instancia().setRenderDebug(true);
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS)
+		TMotor::instancia().setRenderDebug(false);
 
 	return tipoEscena; // Significa que debe seguir ejecutando
 }
@@ -576,42 +581,11 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	else
 		Node->setPosition((float)Point[0], (float)Point[1], (float)Point[2]);
 
-
-
 	// Set rotation
 	const btQuaternion& TQuat = TObject->getOrientation();
-
 	glm::vec3 axis(TQuat.getAxis().getX(), TQuat.getAxis().getY(), TQuat.getAxis().getZ());
 	float angle = TQuat.getAngle() * RADTODEG;
-	/*if (strcmp(Node->getName(), "Jugador") == 0 ){
-		axis.x = abs(axis.x);
-		axis.y = abs(axis.y);
-		axis.z = abs(axis.z);
-		axis.x = round(axis.x);
-		axis.y = round(axis.y);
-		axis.z = round(axis.z);
-		if (angle < 5){
-			angle = 0;
-		}
-		angle = round(angle);*/
-		/*
-		axis.x = trunc(axis.x * 20 + 0.05) / 20;
-		axis.y = trunc(axis.y * 20 + 0.05) / 20;
-		axis.z = trunc(axis.z * 20 + 0.05) / 20;*/
-		/*cout<< "AXIS: "<<axis.x<<","<< axis.y<<","<< axis.z<<endl;
-		cout<<"ANGLE: "<<angle<<endl;
-		cout<<"---------------------"<<endl;
-		}*/
 	Node->setRotation(axis, angle);
 }
-std::string EscenaJuego::getIpConexion() {
-	return ipConexion;
-}
-	
-		//-----------------------------
-		//	CAMARA
-		//-----------------------------
-		//camara = new Camara3persona();
-		//tipoCamara = 0;
-		//cambioCamara = false;
-	
+
+std::string EscenaJuego::getIpConexion() { return ipConexion; }

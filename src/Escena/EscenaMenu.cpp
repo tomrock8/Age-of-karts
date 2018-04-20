@@ -1,14 +1,30 @@
 #include "EscenaMenu.hpp"
 
 EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
-
+	initHud(); // Inicializacion del hud
 
 	/*
-		ipConexion="";
-		u16 xPos = Motor3d::instancia().getAnchoPantalla() / 3;
-		u16 yPos = Motor3d::instancia().getAltoPantalla() / 4;
+		GestorSonido::getInstacia()->setListenerData();
+		fuenteMenu = GestorSonido::cargarFuente();
+		if(!GestorSonido::getInstacia()->getFuentes().at(fuenteMenu-1)->isPlaying()){
+			GestorSonido::getInstacia()->getFuentes().at(fuenteMenu-1)->volume(0.1f);
+			GestorSonido::getInstacia()->getFuentes().at(fuenteMenu-1)->play(SOUND_MENU);
+		}
+
 	*/
 
+	GestorSonido::getInstacia()->setListenerData();
+	fuenteMenu = new AlSource();
+	fuenteMenu->volume(0.1f);
+	if (!fuenteMenu->isPlaying())
+		fuenteMenu->play(SOUND_MENU);
+
+	fuenteOpcion = new AlSource();
+
+	TMotor::instancia().initDebugWindow();
+}
+
+void EscenaMenu::initHud() {
 	//Se asigna la opcion del menu al primer boton
 	optionMenu = 0;
 	//Se crea el hud del menu principal
@@ -59,25 +75,6 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 
 	//Activamos el hud del menu principal, para que se muestre primero
 	TMotor::instancia().setActiveHud("MainMenuHUD");
-
-	/*
-		GestorSonido::getInstacia()->setListenerData();
-		fuenteMenu = GestorSonido::cargarFuente();
-		if(!GestorSonido::getInstacia()->getFuentes().at(fuenteMenu-1)->isPlaying()){
-			GestorSonido::getInstacia()->getFuentes().at(fuenteMenu-1)->volume(0.1f);
-			GestorSonido::getInstacia()->getFuentes().at(fuenteMenu-1)->play(SOUND_MENU);
-		}
-
-	*/
-
-	GestorSonido::getInstacia()->setListenerData();
-	fuenteMenu = new AlSource();
-	fuenteMenu->volume(0.1f);
-	if (!fuenteMenu->isPlaying())
-		fuenteMenu->play(SOUND_MENU);
-
-	fuenteOpcion = new AlSource();
-	fuenteOpcion->volume(1.0f);
 }
 
 EscenaMenu::~EscenaMenu() {
@@ -91,25 +88,8 @@ EscenaMenu::~EscenaMenu() {
 void EscenaMenu::init() {}
 void EscenaMenu::dibujar() {}
 void EscenaMenu::limpiar() {}
-void EscenaMenu::update() {
-
-
-
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	static char str0[128] = "Hello, world!";
-	// Mostrar ventanas
-	 int display_w = 0 , display_h = 0;
-	 
-	
-	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-	glfwGetFramebufferSize( TMotor::instancia().getVentana() , &display_w , &display_h );
-	ImGui_ImplGlfwGL3_NewFrame();
-	
-	if (ImGui::Begin("Hola", NULL, ImGuiWindowFlags_NoResize |  ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | 
-	ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_NavEnableGamepad));
-		
-	ImGui::End();
-}
+void EscenaMenu::update() {}
+std::string EscenaMenu::getIpConexion() { return ipConexion; }
 
 Escena::tipo_escena EscenaMenu::comprobarInputs() {
 
@@ -227,25 +207,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 
 	}
 
-
-	/*else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_1) == GLFW_PRESS){
-		cout << "SINGLE PLAYER\n";
-		ipConexion="offline";
-		return Escena::tipo_escena::LOBBY;
-	}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_2) == GLFW_PRESS){
-		cout << "MULTI PLAYER\n";
-		ipConexion="";
-		return Escena::tipo_escena::LOBBY;
-	}
-	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_3) == GLFW_PRESS){
-			cout << "OPCIONES\n";
-	}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_4) == GLFW_PRESS){
-		cout << "CREDITOS\n";
-		return Escena::tipo_escena::CREDITOS;
-	}else pressed = false;
-	*/
-
-	//MODIFICAMOS LA INTERFAZ EN FUNCION DE LAS ACCIONES DEL USUARIO
+		//MODIFICAMOS LA INTERFAZ EN FUNCION DE LAS ACCIONES DEL USUARIO
 
 	//Si esta activo el menu principal, se tienen en cuenta los siguientes inputs
 	if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) {
@@ -298,6 +260,6 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 	//Se retorna la escena Menu (donde estamos) en caso de que no se haya cambiado de pantalla
 	return Escena::tipo_escena::MENU;
 }
-std::string EscenaMenu::getIpConexion() {
-	return ipConexion;
-}
+
+
+

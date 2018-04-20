@@ -8,6 +8,8 @@ class AlSource{
         AlSource();
         void play(int buffer);
         void volume(float vol);
+        void setLoop(bool loop);
+        void setPitch(float change);
         bool isPlaying();
         void stop(int buffer);
         int getSourceId();

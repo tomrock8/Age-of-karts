@@ -29,6 +29,7 @@ class Corredor : public RakNet::NetworkIDObject
 public:
 	typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
 	Corredor(btVector3 pos, tipo_jugador tipo);
+
 	void InicializarFisicas();
 	void InicializarFisicasRuedas();
 	void resetFuerzas();
@@ -51,8 +52,9 @@ public:
 	void setAceite();
 	void setObjetivoTelederigido();
 	void setParametros();
+	void setParametros(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo);
 	void setTipoObj();
-	void setTipoObj(int i);
+	void setTipoObj(EstadosJugador::estado_objeto objeto);
 	void SetFuerzaVelocidad(int turbo);
 	void setFriccion(btScalar valor);
 	void setTurbo(bool activo, bool objeto, int valor, int tiempo);
@@ -76,12 +78,12 @@ public:
 	int getVueltas();
 	float getMaxVuetas();
 	float getTiempoVueltaTotal();
+	void getParametros(float * fuerza, float * velocidadMedia, float * velocidadMaximaTurbo, float * velocidadMaxima, float * masa, float * indiceGiroAlto, float * indiceGiroBajo);
 
 	// Update
 	void update();
 	void updateTimerObstaculos();
 	void updateEstado();
-	void updateText();
 	void comprobarSueloRuedas();
 	void comprobarTurbo();
 	void comprobarInmunidad();
@@ -115,7 +117,7 @@ public:
 	void lanzarHabilidad();
 
 
-
+	std::string toString();
 
 protected:
 	obj3D * cuboNodo;
@@ -172,7 +174,7 @@ protected:
 	const char* nombre;
 	int id;
 	int cargador;
-	int tipoObj; // si es 0 no tengo nada
+	EstadosJugador::estado_objeto tipoObj; // si es 0 no tengo nada
 	bool turboActivado; // para saber cuando esta activado turbo
 	bool objetivoFijado; //para el item teledirigido
 	bool aceiteActivado; //para el item teledirigido

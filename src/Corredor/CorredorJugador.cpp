@@ -4,7 +4,7 @@
 CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(pos, tipo) {
 	checkItem = false;
 	nombre = "Jugador";
-	pressed=false;
+	pressed = false;
 }
 
 /**
@@ -32,16 +32,16 @@ void CorredorJugador::movimiento() {
 
 	//-------ENTRADA TECLADO ----------//
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_S) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[2])) {
-			frenar();
-			//vehiculo-> set
-			comprobadorMovimiento = true;
-		
+		frenar();
+		//vehiculo-> set
+		comprobadorMovimiento = true;
+
 	}
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[5])) {
-	
-			acelerar();
-			comprobadorMovimiento = true;
-		
+
+		acelerar();
+		comprobadorMovimiento = true;
+
 	}
 	//GIRAR DERECHA
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
@@ -56,7 +56,7 @@ void CorredorJugador::movimiento() {
 		comprobadorMovimiento = true;
 	}
 	else {
-		estado->setDireccionMovimiento(RECTO);
+		estado->setDireccionMovimiento(EstadosJugador::direccion_movimiento::RECTO);
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[1])) {
 		frenodemano(true, false);
@@ -85,50 +85,58 @@ void CorredorJugador::actualizarItem() {
 	setPosDisparo(btVector3(cuboNodo->getPosition().x + orientacion.getX() * 10, cuboNodo->getPosition().y, cuboNodo->getPosition().z + orientacion.getZ() * 10));
 	btVector3 posDisparo2(cuboNodo->getPosition().x, cuboNodo->getPosition().y - 1, cuboNodo->getPosition().z);
 
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_1) == GLFW_PRESS){ 
-		if (!pressed){
-			setTipoObj(1);
-			pressed=true;
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_1) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::FLECHA);
+			pressed = true;
 		}
-	}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_2) == GLFW_PRESS){ 
-		if (!pressed){
-			setTipoObj(2);
-			pressed=true;
-		}
-	}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_3) == GLFW_PRESS){ 
-		if (!pressed){
-			setTipoObj(3);
-			pressed=true;
-		}
-	}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_4) == GLFW_PRESS){ 
-		if (!pressed){
-			setTipoObj(4);
-			pressed=true;
-		}
-	}else if  (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_5) == GLFW_PRESS){ 
-		if (!pressed){
-			setTipoObj(5);
-			pressed=true;//escudo
-		}
-	}else if  (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_6) == GLFW_PRESS){
-		if (!pressed){
-			setTipoObj(6);
-			pressed=true;//proytectil x3
-		}
-	}else if  (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_7) == GLFW_PRESS){ 
-		if (!pressed){
-			setTipoObj(7);
-			pressed=true;//FlechaTeledirigida
-		}
-	}else if  (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_8) == GLFW_PRESS){ 
-		if (!pressed){
-			setTipoObj(8);
-			pressed=true;//TurboTriple
-		}
-	}else{
-		pressed=false;
 	}
-		
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_2) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::CAJA_FALSA);
+			pressed = true;
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_3) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::TURBO);
+			pressed = true;
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_4) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::ACEITE);
+			pressed = true;
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_5) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::ESCUDO);
+			pressed = true;//escudo
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_6) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::FLECHA_TRIPLE);
+			pressed = true;//proytectil x3
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_7) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::ITEM_TELEDIRIGIDO);
+			pressed = true;//FlechaTeledirigida
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_8) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::TURBO_TRIPLE);
+			pressed = true;//TurboTriple
+		}
+	}
+	else {
+		pressed = false;
+	}
+
 	//Comprobador de de mando y recoleccion de inputs
 	bool mandoConectado = false;
 	const unsigned char *buttons = nullptr;

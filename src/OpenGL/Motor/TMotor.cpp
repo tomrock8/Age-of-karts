@@ -349,21 +349,23 @@ void TMotor::draw(int tipo) {
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
 	if (lights.size() > 0) {
 		for (int i = 0; i < lights.size(); i++) {
-			static_cast<TLuz *>(lights[i]->getEntidad())->renderMap();
-			glEnable(GL_CULL_FACE); //Activamos el face culling
-			//Para evitar el efecto del peter panning. Debido a la utilizacion de un bias (rango), se pueden producir fallos 
-			//en las sombras al quedar en algunos casos separadas de los objetos que las producen
-			glCullFace(GL_FRONT);
-			//Segun el tipo de luz (puntual o dirigida), usamos un shader diferente para calcular el mapa de profundidad
-			if (static_cast<TLuz *>(lights[i]->getEntidad())->getLightType() < 0.1) {
-				scene->draw(shaderPointDepth);
-			}
-			else {
-				scene->draw(shaderDirectionalDepth);
-			}
+			if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
+				static_cast<TLuz *>(lights[i]->getEntidad())->renderMap();
+				glEnable(GL_CULL_FACE); //Activamos el face culling
+				//Para evitar el efecto del peter panning. Debido a la utilizacion de un bias (rango), se pueden producir fallos 
+				//en las sombras al quedar en algunos casos separadas de los objetos que las producen
+				glCullFace(GL_FRONT);
+				//Segun el tipo de luz (puntual o dirigida), usamos un shader diferente para calcular el mapa de profundidad
+				if (static_cast<TLuz *>(lights[i]->getEntidad())->getLightType() < 0.1) {
+					scene->draw(shaderPointDepth);
+				}
+				else {
+					scene->draw(shaderDirectionalDepth);
+				}
 
-			glDisable(GL_CULL_FACE);//Desactivamos el face culling
-			static_cast<TLuz *>(lights[i]->getEntidad())->unbindDepthBuffer();//Desactivamos el framebuffer usado para el mapa de profundidad
+				glDisable(GL_CULL_FACE);//Desactivamos el face culling
+				static_cast<TLuz *>(lights[i]->getEntidad())->unbindDepthBuffer();//Desactivamos el framebuffer usado para el mapa de profundidad
+			}
 		}
 	}
 

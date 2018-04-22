@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 	pirata->setPosition(-20, 10, 0);
 	wall->setScale(5.0, 1.0, 5.0);
 	wall->setRotation(glm::vec3(0,1,0), 45.0f);
-	wall->setPosition(0, 5.0, 0);/*
+	wall->setPosition(3.0, 5.0, 0);/*
 	cube->setPosition(0, 10.0, 0);
 	cube2->setScale(0.5, 0.5, 0.5);
 	cube2->setPosition(-1.75, 8.0, 0);

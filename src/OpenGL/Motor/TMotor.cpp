@@ -395,27 +395,38 @@ void TMotor::draw(int tipo) {
 		getObjeto("mapa")->setVisible(false);
 		//Activamos el shader especifico para dibujar las sombras proyectadas
 		shaderProjectedShadows->use();
-		//Recorremos las matrices de la camara para obtener la viewMatrix
-		std::vector<glm::mat4> matrixAux;
-		glm::vec4 defaultVector(0, 0, 0, 1);
-		TNodo *aux = activeCamera->getPadre();
-		int cont = 0;
-		while (aux != scene) {
-			matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
-			cont++;
-			aux = aux->getPadre();
+		
+		if (lights.size() > 0) {
+			for (int i = 0; i < lights.size(); i++) {
+				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
+					//Recorremos las matrices de la camara para obtener la viewMatrix
+					std::vector<glm::mat4> matrixAux;
+					glm::vec4 defaultVector(0, 0, 0, 1);
+					TNodo *aux = activeCamera->getPadre();
+					int cont = 0;
+					while (aux != scene) {
+						matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
+						cont++;
+						aux = aux->getPadre();
+					}
+					glm::mat4 viewMatrix;
+					for (int i = matrixAux.size() - 1; i >= 0; i--) {
+						viewMatrix = matrixAux.at(i) * viewMatrix;
+					}
+					//Le pasamos al shader la matriz view
+					shaderProjectedShadows->setMat4("view", glm::inverse(viewMatrix));
+
+					//Le pasamos la matriz proyeccion de la luz (perspectiva)
+					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
+					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
+					//Le pasamos la posicion de la luz al shader
+					shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());
+					shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz *>(lights[i]->getEntidad())->getDirection());
+					//Dibujamos la escena con el shader de sombras proyectadas
+					scene->draw(shaderProjectedShadows);
+				}
+			}
 		}
-		glm::mat4 viewMatrix;
-		for (int i = matrixAux.size() - 1; i >= 0; i--) {
-			viewMatrix = matrixAux.at(i) * viewMatrix;
-		}
-		//Le pasamos al shader la matriz view
-		shaderProjectedShadows->setMat4("view", glm::inverse(viewMatrix));
-		//Le pasamos la matriz proyeccion de la luz (perspectiva)
-		glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
-		shaderProjectedShadows->setMat4("projectionLight", projectionLight);
-		//Dibujamos la escena con el shader de sombras proyectadas
-		scene->draw(shaderProjectedShadows);
 		//Activamos el dibujado del mapa
 		getObjeto("mapa")->setVisible(true);*/
 		//====================================================

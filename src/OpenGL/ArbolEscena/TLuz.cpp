@@ -50,14 +50,14 @@ TLuz::TLuz(glm::vec3 ambiente, glm::vec3 difusa, glm::vec3 especular, glm::vec4 
 }
 
 // METODOS SET
-void TLuz::setIntensidad(glm::vec4 color) { TColor = color; }
 void TLuz::setLightPosition(glm::vec3 pos) { lightPosition = pos; }
 void TLuz::setActive(bool active) { this->active = active; }
 
 // METODOS GET
-glm::vec4 TLuz::getIntensidad() { return TColor; }
 bool TLuz::getActive() { return active; }
 float TLuz::getLightType() { return lightDirection[3]; }
+glm::vec3 TLuz::getPosition(){ return lightPosition; }
+glm::vec4 TLuz::getDirection(){ return lightDirection; }
 
 //------------------------------------------//
 //---------------SET DE LUCES---------------//

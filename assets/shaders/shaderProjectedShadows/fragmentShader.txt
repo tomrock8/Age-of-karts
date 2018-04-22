@@ -1,7 +1,11 @@
+//Especificar version de Opengl a utilizar
 #version 330 core
+
+//Color final de cada fragmento
 out vec4 FragColor;
 
 void main()
 {             
+    //Asignamos el color negro a cada fragmento y una transparencia de 0.5 para poder ver el color o textura del elemento que haya debajo
     FragColor = vec4(vec3(0.0f), 0.5f);
 } 

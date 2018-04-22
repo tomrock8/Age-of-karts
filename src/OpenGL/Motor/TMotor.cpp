@@ -387,9 +387,15 @@ void TMotor::draw(int tipo) {
 		//==========================================================
 		// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
 		//==========================================================
+		
+		//SOMBRAS PROYECTADAS
+		//-------------------
 		/*
+		//No dibujamos el mapa (suelo) ya que no queremos que produzca ninguna tipo de sombra
 		getObjeto("mapa")->setVisible(false);
+		//Activamos el shader especifico para dibujar las sombras proyectadas
 		shaderProjectedShadows->use();
+		//Recorremos las matrices de la camara para obtener la viewMatrix
 		std::vector<glm::mat4> matrixAux;
 		glm::vec4 defaultVector(0, 0, 0, 1);
 		TNodo *aux = activeCamera->getPadre();
@@ -400,16 +406,17 @@ void TMotor::draw(int tipo) {
 			aux = aux->getPadre();
 		}
 		glm::mat4 viewMatrix;
-		//recorrido a la inversa
 		for (int i = matrixAux.size() - 1; i >= 0; i--) {
 			viewMatrix = matrixAux.at(i) * viewMatrix;
 		}
+		//Le pasamos al shader la matriz view
 		shaderProjectedShadows->setMat4("view", glm::inverse(viewMatrix));
-		glm::mat4 proje = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 100.0f);
-		glm::mat4 mo;
-		shaderProjectedShadows->setMat4("projectionLight", proje);
-		shaderProjectedShadows->setMat4("modelPrueba", mo);
+		//Le pasamos la matriz proyeccion de la luz (perspectiva)
+		glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
+		shaderProjectedShadows->setMat4("projectionLight", projectionLight);
+		//Dibujamos la escena con el shader de sombras proyectadas
 		scene->draw(shaderProjectedShadows);
+		//Activamos el dibujado del mapa
 		getObjeto("mapa")->setVisible(true);*/
 		//====================================================
 		//====================================================

@@ -1,20 +1,25 @@
+//Especificar version de Opengl a utilizar
 #version 330 core
 
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec2 aTexCoords;
+//Recoger los datos de los vertices en los buffers correctamente (segun orden de envio en el programa)
+layout (location = 0) in vec3 aPos; //Posicion
+layout (location = 1) in vec2 aTexCoords; //Coordenadas de textura
 layout (location = 2) in vec3 aNormal; //Normal
 layout (location = 3) in vec3 aTangents; //Tangentes
 layout (location = 4) in vec3 aBitangents; //Bitangentes
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projectionLight;
-uniform mat4 modelPrueba;
-
+//Uniforms para las distintas matrices necesarias para calcular la MVP
+uniform mat4 model; //Model de cada objeto
+uniform mat4 view; //Matriz view de la camara usada en cada momento
+uniform mat4 projectionLight; //Matriz proyeccion de la luz
 
 void main()
 {
-    mat4 pollas = model;
-    pollas[3][1] = 0.0f;
-    gl_Position = projectionLight * view * model * vec4(aPos.x, 0.0f, aPos.z, 1.0);
+    //Matriz modelo especial para dibujar la sombra
+    mat4 shadowsModel = model;
+    //Situamos la zona a la altura 0.1 siempre (el suelo)
+    shadowsModel[3][1] =  0.1f;
+    //Calculamos la posicion final de cada vertice a partir de las matrices anteriores
+    //Le pasamos el valor 0.1 en la posicion y de cada vertice para que dibuje los objetos planos (dando la impresion de una sombra)
+    gl_Position = projectionLight * view * shadowsModel * vec4(aPos.x, 0.1f, aPos.z, 1.0);
 }

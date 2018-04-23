@@ -1,9 +1,16 @@
+//Especificar version de Opengl a utilizar
 #version 330
  
-in vec3 texCoord;
+//Variables de entrada desde el vertex
+in vec3 textCoord; //coordenadas de textura
+
+//Color final del fragmento
 out vec4 fragColor;
-uniform samplerCube cubemap;
+
+//Uniforms
+uniform samplerCube skybox; //Cubo de texturas con las 6 texturas del skybox
  
 void main (void) {
-    fragColor = texture(cubemap, texCoord);
+    //Asignamos a cada fragmento la parte de la textura que le pertoque
+    fragColor = texture(skybox, textCoord);
 }

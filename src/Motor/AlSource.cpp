@@ -34,6 +34,10 @@ void AlSource::setPitch(float change){
 	alSourcef(sourceId, AL_PITCH, change);
 }
 
+void AlSource::setPosition(float *pos){
+	alSource3f(sourceId, AL_POSITION, pos[0], pos[1], pos[2]);
+}
+
 bool AlSource::isPlaying()
 {
 	ALenum state;

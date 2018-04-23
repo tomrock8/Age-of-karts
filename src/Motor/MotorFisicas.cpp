@@ -77,34 +77,64 @@ void MotorFisicas::setObjetos(std::vector<btRigidBody *> obj) {
 }
 
 void MotorFisicas::initializePhysics(TRecursoMalla * mesh) {
+	//Las Fisicas se cargan la primera vez que se ejecuta el juego,
+	//guardando en un fichero .bullet con el nombre de la malla.
+	//El resto de veces se comprobara antes de crear el archivo que no exista su .bullet, de lo contrario se cargara el archivo directamente.
 	cout << "creando las fisicas para :" << mesh->getNombre() << endl;
-	std::vector<btRigidBody *> obje = getObjetos();
-	// Set the initial position of the object
-	btTransform Transform;
-	Transform.setIdentity();
-	Transform.setOrigin(btVector3(0,0,0));
-	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
+	std::string fileName = mesh->getNombre();
+	fileName += ".bullet";
+	FILE * fileBullet;
+	fileBullet = fopen(fileName.c_str(), "r");
+	if (fileBullet != NULL)
+	{
+		//Si detecta fichero se carga, disminuyendo considerablemente la carga del mapa.
+		btBulletWorldImporter* fileLoader = new btBulletWorldImporter(mundo);
+		fileLoader->loadFile(fileName.c_str());
+	}
+	else {
+		//En caso de que no exista el fichero, se crearan las fisicas 
+		std::vector<btRigidBody *> obje = getObjetos();
+		// posicion inicial del obj
+		btTransform Transform;
+		Transform.setIdentity();
+		Transform.setOrigin(btVector3(0,0,0));
+		btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
+	
+		//creacion del contorno
+	
+		// la masa 0 por ser mapa estatico
+		btVector3 LocalInertia;
+		btCollisionShape *shape = CreateCollisionShape(mesh->getNombre());
+	
+	
+		// Create the rigid body object
+		btRigidBody *rigidBody = new btRigidBody(0, MotionState, shape, LocalInertia);
+	
+		rigidBody->setActivationState(DISABLE_DEACTIVATION);
+	
+	
+		// guardar el rb en el mundo de fisicas
+		mundo->addRigidBody(rigidBody);
+		obje.push_back(rigidBody);
+		setObjetos(objetos);
+		this->setObjetos(objetos);
+	
+		saveFilePhysics(mesh->getNombre());
+	}
 
-	//create the Shape
-
-	// Add mass
-	btVector3 LocalInertia;
-	btCollisionShape *shape = CreateCollisionShape(mesh->getNombre());
-
-
-	// Create the rigid body object
-	btRigidBody *rigidBody = new btRigidBody(0, MotionState, shape, LocalInertia);
-
-	rigidBody->setActivationState(DISABLE_DEACTIVATION);
-
-	//rigidBody->setUserPointer((void *)(obj));
-
-	// Add it to the world
-	mundo->addRigidBody(rigidBody);
-	obje.push_back(rigidBody);
-	setObjetos(objetos);
-	this->setObjetos(objetos);
 }
+void MotorFisicas::saveFilePhysics(const char *name) {
+	//Guarda el fichero bullet
+	btDefaultSerializer* serializer = new btDefaultSerializer();
+	mundo->serialize(serializer);
+	std::string fileName =name;
+	fileName += ".bullet";
+	
+	FILE* file = fopen(fileName.c_str(), "wb");
+	fwrite(serializer->getBufferPointer(), serializer->getCurrentBufferSize(), 1, file);
+	fclose(file);
+}
+
 btCollisionShape  *MotorFisicas::CreateCollisionShape(const char *name) {
 	//la escala estara para todos igual
 	btVector3 scale(1, 1, 1);

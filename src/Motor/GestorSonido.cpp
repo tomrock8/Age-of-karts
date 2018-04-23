@@ -25,6 +25,9 @@ GestorSonido::GestorSonido() {
 	// Clear Error Code
 	alGetError();
 
+	alListener3f(AL_POSITION, 0, 0, 0);
+	alListener3f(AL_VELOCITY, 0, 0, 0);
+
 	//Cargamos todos los sonidos al inicializar el gestor
 	int i;
 	i = cargarSonido("assets/Sounds/bounce.wav");
@@ -65,7 +68,7 @@ std::vector<*AlSource> GestorSonidogetFuentes(){
 }*/
 
 void GestorSonido::setListenerData() {
-	alListener3f(AL_POSITION, 0, 0, 0);
+	alListener3f(AL_POSITION, 4, 4, 24);
 	alListener3f(AL_VELOCITY, 0, 0, 0);
 }
 

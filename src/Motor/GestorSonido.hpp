@@ -17,6 +17,7 @@ class GestorSonido{
         static GestorSonido *getInstacia();
         GestorSonido();
         int cargarSonido(std::string file);
+        void setPosition(float *pos);
         //int cargarFuente();
         //std::vector<*AlSource> getFuentes();
         void setListenerData();

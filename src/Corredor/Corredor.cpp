@@ -495,6 +495,17 @@ void Corredor::setPosicion(float *pos, float *ori) {
 	CuerpoColisionChasis->setCenterOfMassTransform(trans);
 
 }
+
+void Corredor::setPosicionSources(){
+	float *pos = new float[3];
+	pos[0] = cuboNodo->getPosition().x;
+	pos[1] = cuboNodo->getPosition().y;
+	pos[2] = cuboNodo->getPosition().z;
+	fuenteMotor->setPosition(pos);
+	fuenteFrenos->setPosition(pos);
+	fuenteItem->setPosition(pos);
+}
+
 void Corredor::setPosicionCarrera(int i, int j) {
 	if (j == 0) {
 		if (vueltas <= maxvueltas)
@@ -1195,6 +1206,7 @@ void Corredor::update() {
 	if (vueltas > maxvueltas) {
 		estado->setEstadoCarrera(EstadosJugador::estado_carrera::FIN);
 	}
+	setPosicionSources();
 }
 
 std::string Corredor::toString() {

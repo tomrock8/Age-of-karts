@@ -42,8 +42,11 @@ TMotor::TMotor() {
 	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena) 
 
 	initDebugWindow();
-	
 
+	//Inicializamos el skybox que usara el motor
+	skybox = new Skybox();
+
+	//Creamos los distintos shaders que se van a usar para algun aspecto del motor
 	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
 	shaderHUD = new Shader("assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt", nullptr);
 	shaderProjectedShadows = new Shader("assets/shaders/shaderProjectedShadows/vertexShader.txt", "assets/shaders/shaderProjectedShadows/fragmentShader.txt", nullptr);
@@ -110,6 +113,7 @@ Shader *TMotor::getShaderHUD() { return shaderHUD; }
 Shader *TMotor::getShaderProjectedShadows() { return shaderProjectedShadows; }
 Shader *TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
 Shader *TMotor::getShaderPointDepth() { return shaderPointDepth; }
+Shader *TMotor::getShaderSkybox() { return shaderSkybox; }
 obj3D *TMotor::getObjeto(const char* name){
 	obj3D *objeto = NULL;
 	for (int i = 0; i < objetos.size(); i++){
@@ -343,9 +347,9 @@ void TMotor::clean() {
 }
 
 void TMotor::draw(int tipo) {
+
 	glClearColor(0.16f, 0.533f, 0.698f, 0.0f);//Establecer el nuevo color de fondo
 
-	
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
 	if (lights.size() > 0) {
 		for (int i = 0; i < lights.size(); i++) {
@@ -372,25 +376,38 @@ void TMotor::draw(int tipo) {
 
 	clean();//Se llama a la funcion para limpiar los buffers de OpenGL
 	if (tipo == 1 || tipo == 2) {
-		shader->use();//Se activa el shader para el renderizado 3D
+		//DIBUJADO DEL SKYBOX
+		//-------------------
+		//Activamos el shader especifico del skybox
+		shaderSkybox->use(); 
+		//Establecemos las matrices view y projection a partir del dibujado de la camara
+		drawCamera(shaderSkybox); 
+		//Llamamos al metodo de dibujado del skybox
+		skybox->drawSkyBox();
 
-		//Se llama al dibujado de los distintos nodos del arbol
-		drawCamera();
+		//DIBUJADO DEL ARBOL
+		//------------------
+		//Se activa el shader para el renderizado 3D
+		shader->use();
+		//Establecemos las matrices view y projection a partir del dibujado de la camara
+		drawCamera(shader);
+		//Establecemos los datos de las distintas luces
 		drawLight();
+		//Configuramos los shaders para producir las sombras de cada luz
 		if (lights.size() > 0) {
 			for (int i = 0; i < lights.size(); i++) {
 				static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow();
 			}
 		}
+		//Dibujamos los distintos nodos del arbol
 		scene->draw(shader);
 
 		//==========================================================
 		// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
 		//==========================================================
-		
-		//SOMBRAS PROYECTADAS
-		//-------------------
 		/*
+		//DIBUJADO DE LAS SOMBRAS PROYECTADAS
+		//-----------------------------------
 		//No dibujamos el mapa (suelo) ya que no queremos que produzca ninguna tipo de sombra
 		getObjeto("mapa")->setVisible(false);
 		//Activamos el shader especifico para dibujar las sombras proyectadas
@@ -399,23 +416,8 @@ void TMotor::draw(int tipo) {
 		if (lights.size() > 0) {
 			for (int i = 0; i < lights.size(); i++) {
 				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
-					//Recorremos las matrices de la camara para obtener la viewMatrix
-					std::vector<glm::mat4> matrixAux;
-					glm::vec4 defaultVector(0, 0, 0, 1);
-					TNodo *aux = activeCamera->getPadre();
-					int cont = 0;
-					while (aux != scene) {
-						matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
-						cont++;
-						aux = aux->getPadre();
-					}
-					glm::mat4 viewMatrix;
-					for (int i = matrixAux.size() - 1; i >= 0; i--) {
-						viewMatrix = matrixAux.at(i) * viewMatrix;
-					}
-					//Le pasamos al shader la matriz view
-					shaderProjectedShadows->setMat4("view", glm::inverse(viewMatrix));
-
+					//Establecemos la matrix view llamando al dibujado de la camara
+					drawCamera(shaderProjectedShadows);
 					//Le pasamos la matriz proyeccion de la luz (perspectiva)
 					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
 					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
@@ -455,7 +457,7 @@ void TMotor::draw(int tipo) {
 }
 
 
-void TMotor::drawCamera() {
+void TMotor::drawCamera(Shader *s) {
 	//recorrer el nodo a la inversa hasta la raiz y guardar las matrices que se obtienen de sus entidades
 	//para luego multiplicarlas en orden inverso
 	std::vector<glm::mat4> matrixAux;
@@ -475,11 +477,11 @@ void TMotor::drawCamera() {
 
 	//calcular posicion de la camara y pasarsela al fragment shader
 	glm::vec4 posC = viewMatrix * defaultVector;
-	shader->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
+	s->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
 
 	//por ultimo pasar al shader la view y la projection matrix
-	shader->setMat4("view", glm::inverse(viewMatrix));
-	shader->setMat4("projection", activeCamera->getEntidad()->getProjectionMatrix());
+	s->setMat4("view", glm::inverse(viewMatrix));
+	s->setMat4("projection", activeCamera->getEntidad()->getProjectionMatrix());
 }
 
 void TMotor::drawLight() {

@@ -22,6 +22,7 @@ public:
 	btDynamicsWorld *getMundo();
 	std::vector<btRigidBody *> getObjetos();
 	void initializePhysics(TRecursoMalla *m);
+	void saveFilePhysics(const char * name);
 	btCollisionShape  *CreateCollisionShape(const char *name);
 	// METODOS SET
 	void setObjetos(std::vector<btRigidBody *> objetos);

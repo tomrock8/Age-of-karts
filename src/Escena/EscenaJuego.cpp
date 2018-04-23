@@ -73,15 +73,15 @@ void EscenaJuego::init() {
 
 	/*
 	obj3D * luzPuntual = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.00001f, glm::cos(glm::radians(60.0f)), "escena_raiz");
-	luzPuntual->translate(glm::vec3(-10.0f,20.0f, 310.0f));
-	*/
-	/*TMotor::instancia().newLightNode(glm::vec3(0.0f, 30.0f, 0.0f), "light_0", glm::vec4(0.0f, 0.f, -1.0f, 1.0f), 0.25f, glm::cos(glm::radians(30.0f)), "escena_raiz");
+	luzPuntual->translate(glm::vec3(-10.0f,20.0f, 310.0f));*/
+	/*
+	TMotor::instancia().newLightNode(glm::vec3(0.0f, 30.0f, 0.0f), "light_0", glm::vec4(0.0f, 0.f, -1.0f, 1.0f), 0.25f, glm::cos(glm::radians(30.0f)), "escena_raiz");
 	obj3D *luz0 = TMotor::instancia().newLightNode("light_0", glm::vec4(.0f, 0.f, 0.f, 0.0f), 0.01f, 0.0f, "escena_raiz");
 	luz0->translate(glm::vec3(-290.0f, 100.0f, 30.61f));
 	TMotor::instancia().newLightNode(glm::vec3(0.0f, 15.0f, 0.0f), "light_1", glm::vec4(.0f, 0.f, 0.f, 0.0f), 0.01f, 0.0f, "escena_raiz");
 	*/
-
-	/*
+	/*/
+	
 	obj3D *caja2 = TMotor::instancia().newMeshNode( "escudo2", "assets/wall/wall.obj", "escena_raiz");
 	TNodo *aux = TMotor::instancia().getNode("rotacion_escudo2");
 	caja2->translate(glm::vec3(0.0f, 0.0f, -6.61f));

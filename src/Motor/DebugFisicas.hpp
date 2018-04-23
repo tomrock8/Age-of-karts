@@ -25,6 +25,7 @@ public:
 
 private:
 	int mode;
+	unsigned int index = 0;
 };
 
 #endif /* DEBUGFISICAS_H */

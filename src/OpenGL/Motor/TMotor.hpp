@@ -72,6 +72,9 @@ public:
 	void setActiveLight(TNodo *l);
 	void setActiveHud(const char *n);
 	void setRenderDebug(bool renderDebug);
+	void setDebugBullet(bool b);
+	void setVerticesDebug(float a, float b, float c, float x, float y, float z);
+	void setIndexDebug();
 
 	// DIBUJADO
 	void clean();
@@ -110,6 +113,7 @@ protected:
 	obj3D *getObjeto(const char* name); //Metodo que devuelve un objeto a partir de su nombre
 
 	bool renderDebug;
+	bool debugBullet = false;
 	TGestorRecursos *gestorRecursos;
 	GLFWwindow *ventana;
 	int screenHEIGHT;
@@ -136,4 +140,9 @@ protected:
 	
 	//Skybox del mapa
 	Skybox *skybox;
+
+	//Debug Bullet
+	std::vector <GLfloat> vertices; //Array de vertices para los puntos de las lineas
+	std::vector <unsigned short> indices; //Array de indices para dibujar las lineas correctamente
+	unsigned short index = 0; //Para crear los distintos indices
 };

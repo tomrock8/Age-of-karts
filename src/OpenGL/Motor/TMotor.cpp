@@ -143,6 +143,22 @@ hud* TMotor::getHud(const char* n) {
 void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; }
 void TMotor::setActiveLight(TNodo *light) { activeLights.push_back(light); }
 void TMotor::setRenderDebug(bool renderDebug) { this->renderDebug = renderDebug; }
+void TMotor::setDebugBullet(bool b){ debugBullet = b; }
+//Funcion que recibe dos puntos para dibujar una linea y los mete en el array de vertices para el debug
+void TMotor::setVerticesDebug(float a, float b, float c, float x, float y, float z){
+	vertices.push_back(a);
+	vertices.push_back(b);
+	vertices.push_back(c);
+	vertices.push_back(x);
+	vertices.push_back(y);
+	vertices.push_back(z);
+}
+//Funcion qu eva creando progresivamente los indices para el dibujado de las distintas lineas
+void TMotor::setIndexDebug(){
+	indices.push_back(index);
+	indices.push_back(index+1);
+	index +=2;
+}
 
 //Funcion para activar un hud, que sera el que se utilice, solo puede haber un hud activo por iteracion
 void TMotor::setActiveHud(const char* n) {
@@ -403,6 +419,43 @@ void TMotor::draw(int tipo) {
 		//Dibujamos los distintos nodos del arbol
 		scene->draw(shader);
 
+		//DIBUJADO DEL DEBUG DE BULLET
+		//----------------------------
+		if (debugBullet == true){ //Si el debug de bullet esta activado
+			//Creamos los buffers de OpenGl necesarios
+			unsigned int VAO, VBO, EBO;
+			glGenVertexArrays(1, &VAO);
+			glGenBuffers(1, &VBO);
+			glGenBuffers(1, &EBO);
+			//Activamos el VAO
+			glBindVertexArray(VAO);
+			//Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+			glEnableVertexAttribArray(0);
+			//Le pasamos los indices para coger correctamente los puntos de las lineas
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0], GL_STATIC_DRAW);
+			//Activamos el shader del debug
+			shaderDebug->use();
+			//Pasamos la view y la projection matrix al shader debug
+			drawCamera(shaderDebug);
+			//Creamos y le pasamos la matriz model al shader (matriz identidad)
+			glm::mat4 model;
+			shaderDebug->setMat4("model", model);
+			//Llamamos al dibujado de las distintas lineas
+			glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_SHORT, 0);
+			//Desactivamos los buffers usados para dibujar las lineas
+			glBindVertexArray(0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			//Limpiamos los vectores de vertices e indices para la siguiente iteracion
+			vertices.clear();
+			indices.clear();
+			index = 0;
+		}
+		
 		//==========================================================
 		// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
 		//==========================================================
@@ -437,6 +490,7 @@ void TMotor::draw(int tipo) {
 	}
 
 	//Se activa el shader para el dibujado del HUD
+	
 	shaderHUD->use();
 
 	//Dibujamos el hud activo

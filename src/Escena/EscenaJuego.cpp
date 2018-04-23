@@ -529,8 +529,11 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
 	}
 
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS)
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS){
 		TMotor::instancia().setRenderDebug(true);
+		TMotor::instancia().setDebugBullet(true);
+		debug = true;
+	}
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS)
 		TMotor::instancia().setRenderDebug(false);
 

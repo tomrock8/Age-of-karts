@@ -92,12 +92,9 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 
 		while (!myfile.eof()) {
 
+
+
 			getline(myfile, tipo, ' ');//caja turbo o waypoint
-			getline(myfile, pX, ' ');//posiciones
-			getline(myfile, pY, ' ');//posiciones
-			getline(myfile, pZ, ' ');//posiciones
-
-
 			tipoObj = stoi(tipo);
 			Waypoint *w =new Waypoint();
 			if (tipoObj == 0) {//WAYPOINT
@@ -132,6 +129,12 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 				getline(myfile, v4Y, ' ');
 				getline(myfile, v4Z, ' ');
 				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector4(btVector3(stof(v4X), stof(v4Y), stof(v4Z)));
+
+				//WP central
+				
+				getline(myfile, pX, ' ');//posiciones central wp
+				getline(myfile, pY, ' ');//posiciones central wp
+				getline(myfile, pZ, ' ');//posiciones central wp
 				//=========================================//
 				//			rellenar los waypoints		   //
 				//=========================================//

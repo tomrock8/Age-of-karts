@@ -88,7 +88,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
-		cuboNodo->setRotation(0.0f, 0.0f, 0.0f);
+		cuboNodo->setRotation(0.0f, 90.0f, 0.0f);
 	}
 
 

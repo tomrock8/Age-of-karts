@@ -114,7 +114,7 @@ void EscenaJuego::init() {
 	pos2[0].setX(11.3);
 	pos2[0].setY(4);
 	pos2[0].setZ(-641);
-	pos2[1].setX(14.3);
+	pos2[1].setX(-14.3);
 	pos2[1].setY(4);
 	pos2[1].setZ(-641);
 	pos2[2].setX(-50);
@@ -168,6 +168,10 @@ void EscenaJuego::init() {
 				jugador = new CorredorRed(pos2[i], tj);
 		}
 		jugador->setID(i);
+		pj.push_back(jugador);
+		jugadores->aumentarJugadores();
+		jugador = new CorredorIA(pos2[1], Corredor::tipo_jugador::CHINO);
+		jugador->getNodo()->rotate(glm::vec3(0, 1, 0), 90);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
 	}

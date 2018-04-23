@@ -444,6 +444,8 @@ void TMotor::draw(int tipo) {
 			//Creamos y le pasamos la matriz model al shader (matriz identidad)
 			glm::mat4 model;
 			shaderDebug->setMat4("model", model);
+			//Establecemos el ancho de las lineas
+			glLineWidth(3.0f);
 			//Llamamos al dibujado de las distintas lineas
 			glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_SHORT, 0);
 			//Desactivamos los buffers usados para dibujar las lineas

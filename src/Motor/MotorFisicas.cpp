@@ -189,6 +189,4 @@ btCollisionShape  *MotorFisicas::CreateCollisionShape(const char *name) {
 //	return fisicasMapa;
 //}
 
-	if (fileBullet != NULL)
-	{
-		cout << "El fichero existe, CARGO  fisicas" << endl;
+	

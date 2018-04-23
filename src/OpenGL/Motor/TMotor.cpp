@@ -349,21 +349,23 @@ void TMotor::draw(int tipo) {
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
 	if (lights.size() > 0) {
 		for (int i = 0; i < lights.size(); i++) {
-			static_cast<TLuz *>(lights[i]->getEntidad())->renderMap();
-			glEnable(GL_CULL_FACE); //Activamos el face culling
-			//Para evitar el efecto del peter panning. Debido a la utilizacion de un bias (rango), se pueden producir fallos 
-			//en las sombras al quedar en algunos casos separadas de los objetos que las producen
-			glCullFace(GL_FRONT);
-			//Segun el tipo de luz (puntual o dirigida), usamos un shader diferente para calcular el mapa de profundidad
-			if (static_cast<TLuz *>(lights[i]->getEntidad())->getLightType() < 0.1) {
-				scene->draw(shaderPointDepth);
-			}
-			else {
-				scene->draw(shaderDirectionalDepth);
-			}
+			if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
+				static_cast<TLuz *>(lights[i]->getEntidad())->renderMap();
+				glEnable(GL_CULL_FACE); //Activamos el face culling
+				//Para evitar el efecto del peter panning. Debido a la utilizacion de un bias (rango), se pueden producir fallos 
+				//en las sombras al quedar en algunos casos separadas de los objetos que las producen
+				glCullFace(GL_FRONT);
+				//Segun el tipo de luz (puntual o dirigida), usamos un shader diferente para calcular el mapa de profundidad
+				if (static_cast<TLuz *>(lights[i]->getEntidad())->getLightType() < 0.1) {
+					scene->draw(shaderPointDepth);
+				}
+				else {
+					scene->draw(shaderDirectionalDepth);
+				}
 
-			glDisable(GL_CULL_FACE);//Desactivamos el face culling
-			static_cast<TLuz *>(lights[i]->getEntidad())->unbindDepthBuffer();//Desactivamos el framebuffer usado para el mapa de profundidad
+				glDisable(GL_CULL_FACE);//Desactivamos el face culling
+				static_cast<TLuz *>(lights[i]->getEntidad())->unbindDepthBuffer();//Desactivamos el framebuffer usado para el mapa de profundidad
+			}
 		}
 	}
 
@@ -385,29 +387,47 @@ void TMotor::draw(int tipo) {
 		//==========================================================
 		// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
 		//==========================================================
+		
+		//SOMBRAS PROYECTADAS
+		//-------------------
 		/*
+		//No dibujamos el mapa (suelo) ya que no queremos que produzca ninguna tipo de sombra
 		getObjeto("mapa")->setVisible(false);
+		//Activamos el shader especifico para dibujar las sombras proyectadas
 		shaderProjectedShadows->use();
-		std::vector<glm::mat4> matrixAux;
-		glm::vec4 defaultVector(0, 0, 0, 1);
-		TNodo *aux = activeCamera->getPadre();
-		int cont = 0;
-		while (aux != scene) {
-			matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
-			cont++;
-			aux = aux->getPadre();
+		
+		if (lights.size() > 0) {
+			for (int i = 0; i < lights.size(); i++) {
+				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
+					//Recorremos las matrices de la camara para obtener la viewMatrix
+					std::vector<glm::mat4> matrixAux;
+					glm::vec4 defaultVector(0, 0, 0, 1);
+					TNodo *aux = activeCamera->getPadre();
+					int cont = 0;
+					while (aux != scene) {
+						matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
+						cont++;
+						aux = aux->getPadre();
+					}
+					glm::mat4 viewMatrix;
+					for (int i = matrixAux.size() - 1; i >= 0; i--) {
+						viewMatrix = matrixAux.at(i) * viewMatrix;
+					}
+					//Le pasamos al shader la matriz view
+					shaderProjectedShadows->setMat4("view", glm::inverse(viewMatrix));
+
+					//Le pasamos la matriz proyeccion de la luz (perspectiva)
+					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
+					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
+					//Le pasamos la posicion de la luz al shader
+					shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());
+					shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz *>(lights[i]->getEntidad())->getDirection());
+					//Dibujamos la escena con el shader de sombras proyectadas
+					scene->draw(shaderProjectedShadows);
+				}
+			}
 		}
-		glm::mat4 viewMatrix;
-		//recorrido a la inversa
-		for (int i = matrixAux.size() - 1; i >= 0; i--) {
-			viewMatrix = matrixAux.at(i) * viewMatrix;
-		}
-		shaderProjectedShadows->setMat4("view", glm::inverse(viewMatrix));
-		glm::mat4 proje = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 100.0f);
-		glm::mat4 mo;
-		shaderProjectedShadows->setMat4("projectionLight", proje);
-		shaderProjectedShadows->setMat4("modelPrueba", mo);
-		scene->draw(shaderProjectedShadows);
+		//Activamos el dibujado del mapa
 		getObjeto("mapa")->setVisible(true);*/
 		//====================================================
 		//====================================================

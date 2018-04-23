@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
 	TGestorImagenes::getInstacia();
 
 	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
-	cam->translate(glm::vec3(0.0f, 12.0f, 15.0f));
+	cam->translate(glm::vec3(0.0f, 4.0f, 15.0f));
 	
 	//Evento de glfw para redimensionar la pantalla
 	glfwSetFramebufferSizeCallback(TMotor::instancia().getVentana(), resize_callback);
@@ -44,7 +44,8 @@ int main(int argc, char* argv[]) {
 	//chino->setPosition(5.5, 0, 0);*/
 	pirata->setPosition(-20, 10, 0);
 	wall->setScale(5.0, 1.0, 5.0);
-	wall->setPosition(0, 4.0, 0);/*
+	wall->setRotation(glm::vec3(0,1,0), 45.0f);
+	wall->setPosition(3.0, 5.0, 0);/*
 	cube->setPosition(0, 10.0, 0);
 	cube2->setScale(0.5, 0.5, 0.5);
 	cube2->setPosition(-1.75, 8.0, 0);

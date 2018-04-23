@@ -30,14 +30,12 @@ public:
 	void configurePointShadow();
 
 	// METODOS GET
-	glm::vec4 getIntensidad();	// devuelve la intensidad que sera de tipo color
 	bool getActive();
 	float getLightType();
+	glm::vec3 getPosition(); 
+	glm::vec4 getDirection();
 
 	// METODOS SET
-	void setIntensidad(glm::vec4 color);	// recoge la intensidad Tcolor y la almacena en la variable color
-	//void setPosition();	//pasarle una vector de 3 posiciones
-	// Luz puntual
 	void setLuz(Shader *shader, const char* nombre);
 	void setActive(bool active);
 	void setLightPosition(glm::vec3 pos);
@@ -48,8 +46,6 @@ public:
 
 private:
 	//Atributos y caracteristicas de la luz
-	glm::vec4 TColor;
-	
 	char numLight; //Numero de luz
 	glm::vec3 lightPosition;
 	glm::vec4 lightDirection; //Para la luz dirigida -> si la luz es puntual es todo 0.0f

@@ -20,7 +20,7 @@ MotorFisicas::~MotorFisicas() {
 	//cout << "ENTRO DESTRUCTOR MOTOR DE FISICAS\n";
 	//
 	//cout << "Destruyendo Objetos del mundo. Son " << mundo->getNumCollisionObjects() << "\n";
-	for (int i = 0; i <  mundo->getNumCollisionObjects(); i++) {
+	for (int i = 0; i < mundo->getNumCollisionObjects(); i++) {
 		cout << "EL " << i;
 		btCollisionObject* obj = mundo->getCollisionObjectArray()[i];
 		btCollisionShape* shape = obj->getCollisionShape();
@@ -31,12 +31,12 @@ MotorFisicas::~MotorFisicas() {
 		delete shape;
 		//cout << "\n";
 	}
-//	cout << "Objetos del mundo destruidos.\n";
+	//	cout << "Objetos del mundo destruidos.\n";
 
-	//cout << "Destruyendo mundo";
+		//cout << "Destruyendo mundo";
 	delete mundo;
 	cout << "\n";
-	
+
 	//cout << "Destruyendo solver";
 	delete solver;
 	//cout << "\n";
@@ -44,17 +44,17 @@ MotorFisicas::~MotorFisicas() {
 	//cout << "Destruyendo dispatcher";
 	delete dispatcher;
 	//cout << "\n";
-	
+
 	//cout << "Destruyendo confColision";
 	delete confColision;
 	//cout << "\n";
-	
+
 	//cout << "Destruyendo broadPhase";
 	delete broadPhase;
 	//cout << "\n";
-	
+
 	instancia = nullptr;
-//	cout << "SALGO DESTRUCTOR MOTOR DE FISICAS\n";
+	//	cout << "SALGO DESTRUCTOR MOTOR DE FISICAS\n";
 }
 
 MotorFisicas *MotorFisicas::getInstancia() {
@@ -82,12 +82,12 @@ void MotorFisicas::initializePhysics(TRecursoMalla * mesh) {
 	//El resto de veces se comprobara antes de crear el archivo que no exista su .bullet, de lo contrario se cargara el archivo directamente.
 	cout << "creando las fisicas para :" << mesh->getNombre() << endl;
 	std::string fileName = mesh->getNombre();
+	fileName = "assets/fisicas/" + fileName;
 	fileName += ".bullet";
 	FILE * fileBullet;
 	fileBullet = fopen(fileName.c_str(), "r");
 	if (fileBullet != NULL)
 	{
-		cout << "El fichero existe, CARGO  fisicas" << endl;
 		//Si detecta fichero se carga, disminuyendo considerablemente la carga del mapa.
 		btBulletWorldImporter* fileLoader = new btBulletWorldImporter(mundo);
 		fileLoader->loadFile(fileName.c_str());
@@ -99,28 +99,28 @@ void MotorFisicas::initializePhysics(TRecursoMalla * mesh) {
 		// posicion inicial del obj
 		btTransform Transform;
 		Transform.setIdentity();
-		Transform.setOrigin(btVector3(0,0,0));
+		Transform.setOrigin(btVector3(0, 0, 0));
 		btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
-	
+
 		//creacion del contorno
-	
+
 		// la masa 0 por ser mapa estatico
 		btVector3 LocalInertia;
 		btCollisionShape *shape = CreateCollisionShape(mesh->getNombre());
-	
-	
+
+
 		// Create the rigid body object
 		btRigidBody *rigidBody = new btRigidBody(0, MotionState, shape, LocalInertia);
-	
+
 		rigidBody->setActivationState(DISABLE_DEACTIVATION);
-	
-	
+
+
 		// guardar el rb en el mundo de fisicas
 		mundo->addRigidBody(rigidBody);
 		obje.push_back(rigidBody);
 		setObjetos(objetos);
 		this->setObjetos(objetos);
-	
+
 		saveFilePhysics(mesh->getNombre());
 	}
 
@@ -129,9 +129,10 @@ void MotorFisicas::saveFilePhysics(const char *name) {
 	//Guarda el fichero bullet
 	btDefaultSerializer* serializer = new btDefaultSerializer();
 	mundo->serialize(serializer);
-	std::string fileName =name;
+	std::string fileName = name;
+	fileName = "assets/fisicas/" + fileName;
 	fileName += ".bullet";
-	
+
 	FILE* file = fopen(fileName.c_str(), "wb");
 	fwrite(serializer->getBufferPointer(), serializer->getCurrentBufferSize(), 1, file);
 	fclose(file);
@@ -148,7 +149,7 @@ btCollisionShape  *MotorFisicas::CreateCollisionShape(const char *name) {
 	if (mesh != NULL) {
 
 
-		
+
 		for (unsigned i{ 0 }; i < mesh->getIndices().size(); i += 3) {
 			btVector3 vertex_1{
 				mesh->getVertex()[mesh->getIndices()[i]].x,
@@ -170,16 +171,16 @@ btCollisionShape  *MotorFisicas::CreateCollisionShape(const char *name) {
 		//
 		////antes de crear el shape comprobamos que realmente haya algo para crear
 		//if (numTriangles < 1 || numVertex < 3) {
-		
-	
+
+
 		//btTriangleIndexVertexArray* nain = new btTriangleIndexVertexArray(numTriangles / 3, (int*)(&mesh->getIndices()[0]), sizeof(unsigned short) * 3,
 		//numVertex, (btScalar*)(&mesh->getVertex()[0]), sizeof(glm::vec3));
-		shape = new btBvhTriangleMeshShape(triangleMesh, true,true);
+		shape = new btBvhTriangleMeshShape(triangleMesh, true, true);
 		shape->setLocalScaling(scale);
 
 	}
 
-return shape;
+	return shape;
 }
 //void MotorFisicas::setMapaFisicas(stringw mapa){
 //	fileLoader->loadFile("fisicas/carretera.bullet");
@@ -187,3 +188,7 @@ return shape;
 //btBulletWorldImporter *MotorFisicas::getFisicas() {
 //	return fisicasMapa;
 //}
+
+	if (fileBullet != NULL)
+	{
+		cout << "El fichero existe, CARGO  fisicas" << endl;

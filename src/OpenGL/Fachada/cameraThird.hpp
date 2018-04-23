@@ -31,7 +31,7 @@ public:
 	const char * getName();
 	glm::mat4 getParentPosition();
 	glm::mat4 getParentRotation();
-
+	glm::quat RotationBetweenVectors(glm::vec3 start, glm::vec3 dest);
 
 	//METODOS SET
 	void setID(GLuint);

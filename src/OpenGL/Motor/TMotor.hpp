@@ -61,6 +61,7 @@ public:
 	Shader *getShaderDirectionalDepth();
 	Shader *getShaderPointDepth();
 	Shader *getShaderSkybox();
+	Shader *getShaderDebug();
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
 	TGestorRecursos *getGR();
@@ -90,6 +91,7 @@ protected:
 	Shader *shaderDirectionalDepth; //Shader para el calculo de las sombras de las luces dirigidas
 	Shader *shaderPointDepth; //Shader para el calculo de las sombras de las luces puntuales
 	Shader *shaderSkybox; //Shader para el dibujado del skybox
+	Shader *shaderDebug; //Shader para el modo debug de Bullet
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)

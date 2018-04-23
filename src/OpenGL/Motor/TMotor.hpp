@@ -131,4 +131,5 @@ protected:
 	TLuz    *createLight();
 	TNodo   *createLightNode(TNodo * padre, TLuz * luz, const char* name);
 	
+
 };

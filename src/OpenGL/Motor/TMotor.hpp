@@ -1,5 +1,6 @@
 #pragma once
 #include "libGL.hpp"
+#include "Skybox.hpp"
 #include "TMalla.hpp"
 #include "TCamara.hpp"
 #include "TLuz.hpp"
@@ -60,6 +61,7 @@ public:
 	Shader *getShaderDirectionalDepth();
 	Shader *getShaderPointDepth();
 	Shader *getShaderSkybox();
+	Shader *getShaderDebug();
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
 	TGestorRecursos *getGR();
@@ -74,7 +76,7 @@ public:
 	// DIBUJADO
 	void clean();
 	void draw(int tipo);
-	void drawCamera();
+	void drawCamera(Shader *s);
 	void drawLight();
 	
 	void toEulerAngle(float x,float y,float z, float w, float& roll, float& pitch, float& yaw);
@@ -88,7 +90,8 @@ protected:
 	Shader *shaderProjectedShadows; //Shader para el calculo de de las sombras proyectadas
 	Shader *shaderDirectionalDepth; //Shader para el calculo de las sombras de las luces dirigidas
 	Shader *shaderPointDepth; //Shader para el calculo de las sombras de las luces puntuales
-	Shader *shaderSkybox;
+	Shader *shaderSkybox; //Shader para el dibujado del skybox
+	Shader *shaderDebug; //Shader para el modo debug de Bullet
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)
@@ -131,5 +134,6 @@ protected:
 	TLuz    *createLight();
 	TNodo   *createLightNode(TNodo * padre, TLuz * luz, const char* name);
 	
-
+	//Skybox del mapa
+	Skybox *skybox;
 };

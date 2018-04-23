@@ -34,3 +34,4 @@ glm::mat4 TEntidad::getViewMatrix() {
 glm::mat4 TEntidad::getModelViewProjectionMatrix() {
 	return projectionMatrix * viewMatrix * modelMatrix;
 }
+

@@ -48,7 +48,7 @@ void EscenaJuego::init() {
 	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, true, "escena_raiz");
 	luzPuntual_0->translate(glm::vec3(1.0f, 12.0f, 2.0f));
 
-	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
+	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, true, "escena_raiz");
 	luzPuntual_1->translate(glm::vec3(-2.0f, 12.0f, 0.0f));
 
 	obj3D * luzPuntual_2 = TMotor::instancia().newLightNode("light_2", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
@@ -69,24 +69,6 @@ void EscenaJuego::init() {
 
 	obj3D * luzDirigida_3 = TMotor::instancia().newLightNode("light_3", glm::vec4(1.0f, -1.0f, 0.0f, 1.0f), 0.001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
 	luzDirigida_3->translate(glm::vec3(0.0f, 12.0f, 300.0f));
-
-
-	/*
-	obj3D * luzPuntual = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.00001f, glm::cos(glm::radians(60.0f)), "escena_raiz");
-	luzPuntual->translate(glm::vec3(-10.0f,20.0f, 310.0f));*/
-	/*
-	TMotor::instancia().newLightNode(glm::vec3(0.0f, 30.0f, 0.0f), "light_0", glm::vec4(0.0f, 0.f, -1.0f, 1.0f), 0.25f, glm::cos(glm::radians(30.0f)), "escena_raiz");
-	obj3D *luz0 = TMotor::instancia().newLightNode("light_0", glm::vec4(.0f, 0.f, 0.f, 0.0f), 0.01f, 0.0f, "escena_raiz");
-	luz0->translate(glm::vec3(-290.0f, 100.0f, 30.61f));
-	TMotor::instancia().newLightNode(glm::vec3(0.0f, 15.0f, 0.0f), "light_1", glm::vec4(.0f, 0.f, 0.f, 0.0f), 0.01f, 0.0f, "escena_raiz");
-	*/
-	/*/
-	
-	obj3D *caja2 = TMotor::instancia().newMeshNode( "escudo2", "assets/wall/wall.obj", "escena_raiz");
-	TNodo *aux = TMotor::instancia().getNode("rotacion_escudo2");
-	caja2->translate(glm::vec3(0.0f, 0.0f, -6.61f));
-	*/
-
 
 	//ARGUMENTOS MAIN
 	debug = 0;
@@ -116,7 +98,8 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	Pista::getInstancia()->setMapa("assets/MapaPirata/mapaPirata.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+	Pista::getInstancia()->setMapa("assets/MapaPirata/mapaPirata.obj", "assets/mierdamapa/fisica4.bullet", "assets/MapaPirata/wp.obj");
+	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/Elementos.obj", "escena_raiz", false);
 	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 
 	//-----------------------------
@@ -128,12 +111,12 @@ void EscenaJuego::init() {
 	Corredor* jugador;
 
 	btVector3 pos2[6];
-	pos2[0].setX(4);
+	pos2[0].setX(11.3);
 	pos2[0].setY(4);
-	pos2[0].setZ(24);
-	pos2[1].setX(-10);
-	pos2[1].setY(0);
-	pos2[1].setZ(290);
+	pos2[0].setZ(-641);
+	pos2[1].setX(-14.3);
+	pos2[1].setY(4);
+	pos2[1].setZ(-641);
 	pos2[2].setX(-50);
 	pos2[2].setY(0);
 	pos2[2].setZ(310);
@@ -185,6 +168,10 @@ void EscenaJuego::init() {
 				jugador = new CorredorRed(pos2[i], tj);
 		}
 		jugador->setID(i);
+		pj.push_back(jugador);
+		jugadores->aumentarJugadores();
+		jugador = new CorredorIA(pos2[1], Corredor::tipo_jugador::CHINO);
+		jugador->getNodo()->rotate(glm::vec3(0, 1, 0), 90);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
 	}

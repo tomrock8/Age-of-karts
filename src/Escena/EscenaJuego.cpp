@@ -220,6 +220,7 @@ void EscenaJuego::init() {
 	// -----------------------
 	debug_Jugador = false;
 	muestraDebug = true;
+	TMotor::instancia().initDebugWindow();
 
 	//-----------------------
 	// OPENAL

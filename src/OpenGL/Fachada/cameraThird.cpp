@@ -103,7 +103,7 @@ static_cast<TTransform*>(camara->getNode()->getPadre()->getEntidad())->setMatriz
 
 void cameraThird::update(glm::vec3 posicion, glm::vec3 rotacion, btVector3 direccion) {
 
-	float distanciaX = 15;
+	float distanciaX = 12;
 	camara->setPosition(posicion.x - direccion.getX()*distanciaX, posicion.y + 5, posicion.z - direccion.getZ()*distanciaX);
 	//camara->setRotation(0, rotacion.y + 180, 0);
 	//gluLookAt(posicion.x - direccion.getX()*distanciaX,posicion.y+ 7,posicion.z - direccion.getZ()*distanciaX , posicion.x,posicion.y,posicion.z,0,1,0);

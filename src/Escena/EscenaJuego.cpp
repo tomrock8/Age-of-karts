@@ -98,7 +98,7 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	Pista::getInstancia()->setMapa("assets/MapaPirata/mapaPirata.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+	Pista::getInstancia()->setMapa("assets/MapaPirata/mapaPirata.obj", "assets/mierdamapa/fisica4.bullet", "assets/MapaPirata/wp.obj");
 	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/Elementos.obj", "escena_raiz", false);
 	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 
@@ -111,12 +111,12 @@ void EscenaJuego::init() {
 	Corredor* jugador;
 
 	btVector3 pos2[6];
-	pos2[0].setX(4);
+	pos2[0].setX(11.3);
 	pos2[0].setY(4);
-	pos2[0].setZ(24);
-	pos2[1].setX(-10);
-	pos2[1].setY(0);
-	pos2[1].setZ(290);
+	pos2[0].setZ(-641);
+	pos2[1].setX(14.3);
+	pos2[1].setY(4);
+	pos2[1].setZ(-641);
 	pos2[2].setX(-50);
 	pos2[2].setY(0);
 	pos2[2].setZ(310);

@@ -74,7 +74,6 @@ public:
 	void setRenderDebug(bool renderDebug);
 	void setDebugBullet(bool b);
 	void setVerticesDebug(float a, float b, float c, float x, float y, float z);
-	void setIndexDebug();
 
 	// DIBUJADO
 	void clean();
@@ -143,6 +142,4 @@ protected:
 
 	//Debug Bullet
 	std::vector <GLfloat> vertices; //Array de vertices para los puntos de las lineas
-	std::vector <unsigned short> indices; //Array de indices para dibujar las lineas correctamente
-	unsigned short index = 0; //Para crear los distintos indices
 };

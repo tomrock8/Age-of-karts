@@ -153,13 +153,6 @@ void TMotor::setVerticesDebug(float a, float b, float c, float x, float y, float
 	vertices.push_back(y);
 	vertices.push_back(z);
 }
-//Funcion qu eva creando progresivamente los indices para el dibujado de las distintas lineas
-void TMotor::setIndexDebug(){
-	indices.push_back(index);
-	indices.push_back(index+1);
-	index +=2;
-}
-
 //Funcion para activar un hud, que sera el que se utilice, solo puede haber un hud activo por iteracion
 void TMotor::setActiveHud(const char* n) {
 	hud* h = getHud(n); //Obtenemos el hud a partir del nombre
@@ -423,20 +416,16 @@ void TMotor::draw(int tipo) {
 		//----------------------------
 		if (debugBullet == true){ //Si el debug de bullet esta activado
 			//Creamos los buffers de OpenGl necesarios
-			unsigned int VAO, VBO, EBO;
+			unsigned int VAO, VBO;
 			glGenVertexArrays(1, &VAO);
 			glGenBuffers(1, &VBO);
-			glGenBuffers(1, &EBO);
 			//Activamos el VAO
 			glBindVertexArray(VAO);
 			//Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
 			glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), 0);
 			glEnableVertexAttribArray(0);
-			//Le pasamos los indices para coger correctamente los puntos de las lineas
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0], GL_STATIC_DRAW);
 			//Activamos el shader del debug
 			shaderDebug->use();
 			//Pasamos la view y la projection matrix al shader debug
@@ -447,15 +436,12 @@ void TMotor::draw(int tipo) {
 			//Establecemos el ancho de las lineas
 			glLineWidth(3.0f);
 			//Llamamos al dibujado de las distintas lineas
-			glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_SHORT, 0);
+			glDrawArrays(GL_LINES, 0, vertices.size());
 			//Desactivamos los buffers usados para dibujar las lineas
 			glBindVertexArray(0);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-			//Limpiamos los vectores de vertices e indices para la siguiente iteracion
+			//Limpiamos el vector de vertices para la siguiente iteracion
 			vertices.clear();
-			indices.clear();
-			index = 0;
 		}
 		
 		//==========================================================

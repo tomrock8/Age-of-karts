@@ -2,9 +2,8 @@
 
 void DebugDraw::drawLine(const btVector3 &from, const btVector3 &to, const btVector3 &color)
 {
-	//Se llama a las funciones del motor para guardar los dos puntos y crear sus indices
+	//Se llama a la funcion del motor para guardar los dos puntos
 	TMotor::instancia().setVerticesDebug(from.getX(), from.getY(), from.getZ(), to.getX(), to.getY(), to.getZ());
-	TMotor::instancia().setIndexDebug();
 }
 
 

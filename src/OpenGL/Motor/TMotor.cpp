@@ -54,6 +54,7 @@ TMotor::TMotor() {
 	shaderPointDepth = new Shader("assets/shaders/shaderDepth/shaderLuzPuntual/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzPuntual/fragmentShader.txt"
 		, "assets/shaders/shaderDepth/shaderLuzPuntual/geometryShader.txt");
 	shaderSkybox = new Shader("assets/shaders/shaderSkybox/vertexShader.txt", "assets/shaders/shaderSkybox/fragmentShader.txt", nullptr);
+	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 }
 
@@ -114,6 +115,7 @@ Shader *TMotor::getShaderProjectedShadows() { return shaderProjectedShadows; }
 Shader *TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
 Shader *TMotor::getShaderPointDepth() { return shaderPointDepth; }
 Shader *TMotor::getShaderSkybox() { return shaderSkybox; }
+Shader *TMotor::getShaderDebug() { return shaderDebug; }
 obj3D *TMotor::getObjeto(const char* name){
 	obj3D *objeto = NULL;
 	for (int i = 0; i < objetos.size(); i++){
@@ -255,7 +257,6 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 		cout << "MALLA MOTOR: " << gestorRecursos->getRecursoMallas().at(i)->getNombre() << "\n";
 	}*/
 
-	cout << name << endl;
 	TMalla *malla = TMotor::instancia().createMesh(path,sta);
 	TRecursoMalla *nameMalla = static_cast<TRecursoMalla*>(gestorRecursos->getRecursoMallas().at(gestorRecursos->getRecursoMallas().size()-1));
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, nameMalla->getNombre());

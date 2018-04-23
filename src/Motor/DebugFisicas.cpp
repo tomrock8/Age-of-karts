@@ -8,53 +8,26 @@ void DebugDraw::drawLine(const btVector3 &from, const btVector3 &to, const btVec
 		vector3df(to[0], to[1], to[2]), newColor);
 	*/
 
-		unsigned int VBO,VAO;
-		GLfloat points[12];
-
-		points[0] = from.getX();
-		points[1] = from.getY();
-		points[2] = from.getZ();
-		points[3] = color.getX();
-		points[4] = color.getY();
-		points[5] = color.getZ();
-
-		points[6] = to.getX();
-		points[7] = to.getY();
-		points[8] = to.getZ();
-		points[9] = color.getX();
-		points[10] = color.getY();
-		points[11] = color.getZ();
-
-		cout << "UNA LINEA" << endl;
-		cout << "Dibujando linea de (" << points[0] <<" , "<< points[1] <<" , "<< points[2] <<") a ("<< points[6] <<" , "<< points[7] <<" , "<< points[8] <<")\n";
-
-		glGenVertexArrays(1, &VAO);
-		glBindVertexArray(VAO);
-		glGenBuffers(1, &VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(points), &points, GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-		glBindVertexArray(0);
-
-		/*
-		TMotor::instancia().getShaderDebug()->use();
-
-		glm::mat4 proje = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix();
-		glm::mat4 view = TMotor::instancia().getActiveCamera()->getEntidad()->getViewMatrix();
-		cout << view[0][0] <<" - ";
-		cout << view[1][1]<<" - ";
-		cout << view[2][2]<<" - "; 
-		cout << view[3][3]<<" - "<< endl;
-
-		TMotor::instancia().getShaderDebug()->setMat4("projection", proje);
-		TMotor::instancia().getShaderDebug()->setMat4("view", view);
-		*/
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_LINES, 0, 2);
-		glBindVertexArray(0);
+	cout << from.getX() <<" - " << from.getY() << " - " << from.getZ() << endl;
+	/*vector<GLfloat> vertices;
+    vector<GLuint> indices;
+    unsigned int indexI = 0;
+ 
+    for (vector<PhysicsDebugDraw::LINE>::iterator it = lines.begin(); it != lines.end(); it++)
+    {
+        PhysicsDebugDraw::LINE l = (*it);
+        vertices.push_back(l.a.x);
+        vertices.push_back(l.a.y);
+        vertices.push_back(l.a.z);
+ 
+        vertices.push_back(l.b.x);
+        vertices.push_back(l.b.y);
+        vertices.push_back(l.b.z);
+ 
+        indices.push_back(indexI);
+        indices.push_back(indexI + 1);
+        indexI += 2;
+    }*/
 }
 
 void DebugDraw::drawContactPoint(const btVector3 &PointOnB, const btVector3 &normalOnB,

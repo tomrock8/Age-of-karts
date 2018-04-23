@@ -34,6 +34,7 @@ GestorSonido::GestorSonido() {
 	i = cargarSonido("assets/Sounds/sound.wav");
 	i = cargarSonido("assets/Sounds/menu.wav");
 	i = cargarSonido("assets/Sounds/car_engine.wav");
+	i = cargarSonido("assets/Sounds/throw.wav");
 }
 
 int GestorSonido::cargarSonido(std::string file) {

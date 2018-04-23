@@ -736,6 +736,7 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor, int tiempo) {
 		velocidadMaxima = velocidadMaximaTurbo;
 		Timer *time = Timer::getInstancia();
 		timerTurbo = time->getTimer();
+		pitchMotor += 0.2f;
 		if (objeto) {
 			if (cargador == 1)
 				tipoObj = EstadosJugador::estado_objeto::NADA;
@@ -847,6 +848,7 @@ void Corredor::resetFuerzas() {
 }
 void Corredor::soltarItem() {
 	setTipoObj(EstadosJugador::estado_objeto::NADA);
+	fuenteItem->play(SOUND_THROW);
 	setLimite(getLimite() + 10);
 }
 
@@ -1028,6 +1030,7 @@ void Corredor::acelerar() {
 
 
 	if(pitchMotor < 1) pitchMotor += 0.01f;
+	else if(pitchMotor > 1) pitchMotor -= 0.001f;
 }
 void Corredor::frenar() {
 	if (vehiculo->getCurrentSpeedKmHour() < velocidadMaximaAtras) {

@@ -220,6 +220,11 @@ void EscenaJuego::init() {
 	// -----------------------
 	debug_Jugador = false;
 	muestraDebug = true;
+
+	//-----------------------
+	// OPENAL
+	//----------------------
+	GestorSonido::getInstacia()->setListenerData();
 }
 
 void EscenaJuego::dibujar() {

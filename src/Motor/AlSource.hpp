@@ -13,6 +13,7 @@ class AlSource{
         void volume(float vol);
         void setLoop(bool loop);
         void setPitch(float change);
+        void setPosition(float *pos);
         bool isPlaying();
         void stop(int buffer);
         int getSourceId();

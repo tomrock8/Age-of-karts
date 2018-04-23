@@ -86,12 +86,14 @@ void MotorFisicas::initializePhysics(TRecursoMalla * mesh) {
 	fileName += ".bullet";
 	FILE * fileBullet;
 	fileBullet = fopen(fileName.c_str(), "r");
-	if (fileBullet != NULL) {
+	if (fileBullet != NULL)
+	{
 		//Si detecta fichero se carga, disminuyendo considerablemente la carga del mapa.
 		btBulletWorldImporter* fileLoader = new btBulletWorldImporter(mundo);
 		fileLoader->loadFile(fileName.c_str());
 	}
 	else {
+		cout << "El fichero no existe, CREO fisicas" << endl;
 		//En caso de que no exista el fichero, se crearan las fisicas 
 		std::vector<btRigidBody *> obje = getObjetos();
 		// posicion inicial del obj
@@ -186,3 +188,5 @@ btCollisionShape  *MotorFisicas::CreateCollisionShape(const char *name) {
 //btBulletWorldImporter *MotorFisicas::getFisicas() {
 //	return fisicasMapa;
 //}
+
+	

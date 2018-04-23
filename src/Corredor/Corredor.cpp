@@ -101,6 +101,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	fuenteMotor = new AlSource();
 	fuenteMotor->setLoop(true);
 	fuenteMotor->setPitch(pitchMotor);
+	fuenteMotor->volume(0.3f);
 	fuenteMotor->play(SOUND_ENGINE);
 	fuenteFrenos = new AlSource();
 	fuenteItem = new AlSource();

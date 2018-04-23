@@ -55,7 +55,7 @@ void cameraThird::lookAt(glm::vec3 posicion) {
 		glPopMatrix();
 	*/
 
-/*
+
 glm::vec3 delta = posicion-camara->getPosition();
 glm::vec3 up;
 glm::vec3 direction(glm::normalize(delta));
@@ -77,9 +77,9 @@ glm::mat4 M(right.x, right.y, right.z, 0.0f,
 up.x, up.y, up.z, 0.0f,                      
 direction.x, direction.y, direction.z, 0.0f, 
 camara->getPosition().x, camara->getPosition().y, camara->getPosition().z, 1.0f);   
-*/
 
- 
+
+ /*
 
 glm::vec3 delta =(posicion-camara->getPosition());
 glm::vec3 desiredUp(0,1,0.00001); 
@@ -93,7 +93,7 @@ glm::mat4 M=glm::toMat4(targetOrientation);
 M[3][0]=camara->getPosition().x;
 M[3][1]=camara->getPosition().y;
 M[3][2]=camara->getPosition().z;
-
+*/
 
 glm::mat4 lookAtCamara(camara->getNode()->getEntidad()->getModelViewMatrix()* M);
 //glMultMatrixf(glm::value_ptr(M));

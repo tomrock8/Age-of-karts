@@ -65,7 +65,7 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 	
 	//lectura de fichero
 	std::string line;
-	std::string tipo, pX, pY, pZ, orientacionWp, v1X, v1Y, v1Z, v2X, v2Y, v2Z;
+	std::string tipo, pX, pY, pZ, orientacionWp, v1X, v1Y, v1Z, v2X, v2Y, v2Z,v3X, v3Y, v3Z, v4X, v4Y, v4Z;
 	std::string tamanyoArrayWaypoints;
 	std::string tamanyoArrayCajas;
 	std::string tamanyoArrayTurbo;
@@ -92,12 +92,9 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 
 		while (!myfile.eof()) {
 
+
+
 			getline(myfile, tipo, ' ');//caja turbo o waypoint
-			getline(myfile, pX, ' ');//posiciones
-			getline(myfile, pY, ' ');//posiciones
-			getline(myfile, pZ, ' ');//posiciones
-
-
 			tipoObj = stoi(tipo);
 			Waypoint *w =new Waypoint();
 			if (tipoObj == 0) {//WAYPOINT
@@ -122,6 +119,22 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 				getline(myfile, v2Y, ' ');
 				getline(myfile, v2Z, ' ');
 				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector2(btVector3(stof(v2X), stof(v2Y), stof(v2Z)));
+				//vector3
+				getline(myfile, v3X, ' ');
+				getline(myfile, v3Y, ' ');
+				getline(myfile, v3Z, ' ');
+				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector3(btVector3(stof(v3X), stof(v3Y), stof(v3Z)));
+				//vector4
+				getline(myfile, v4X, ' ');
+				getline(myfile, v4Y, ' ');
+				getline(myfile, v4Z, ' ');
+				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector4(btVector3(stof(v4X), stof(v4Y), stof(v4Z)));
+
+				//WP central
+				
+				getline(myfile, pX, ' ');//posiciones central wp
+				getline(myfile, pY, ' ');//posiciones central wp
+				getline(myfile, pZ, ' ');//posiciones central wp
 				//=========================================//
 				//			rellenar los waypoints		   //
 				//=========================================//

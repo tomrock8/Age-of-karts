@@ -29,6 +29,8 @@ public:
 	void setOrientacion(float grados);
 	void setVector1(btVector3 p1);
 	void setVector2(btVector3 p2);
+	void setVector3(btVector3 p3);
+	void setVector4(btVector3 p4);
 	void setID(int i);
 	//metodos GET
 
@@ -37,6 +39,8 @@ public:
 	Waypoint *getNextWaypoint();
 	btVector3 getVector1();
 	btVector3 getVector2();
+	btVector3 getVector3();
+	btVector3 getVector4();
 	btVector3 getRotation();
 	int getID();
 private:
@@ -51,6 +55,8 @@ private:
 	//vectores
 	btVector3 vector1;
 	btVector3 vector2;
+	btVector3 vector3;
+	btVector3 vector4;
 	int id;
 };
 

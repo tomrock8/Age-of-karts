@@ -95,11 +95,23 @@ void Waypoint::setVector1(btVector3 p) {
 void Waypoint::setVector2(btVector3 p2) {
 	vector2 = p2;
 }
+void Waypoint::setVector3(btVector3 p3) {
+	vector3 = p3;
+}
+void Waypoint::setVector4(btVector3 p4) {
+	vector4 = p4;
+}
 btVector3 Waypoint::getVector1() {
 	return vector1;
 }
 btVector3 Waypoint::getVector2() {
 	return vector2;
+}
+btVector3 Waypoint::getVector3() {
+	return vector3;
+}
+btVector3 Waypoint::getVector4() {
+	return vector4;
 }
 void Waypoint::setID(int i){
 	id=i;

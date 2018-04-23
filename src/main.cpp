@@ -8,8 +8,6 @@
 
 //Callback para el redimensionamiento de la pantalla
 void resize_callback(GLFWwindow* window, int width, int height);
-void character_callback(GLFWwindow *window, unsigned int codepoint);
-
 int main(int argc, char* argv[]) {
 
 	TMotor::instancia();
@@ -88,7 +86,6 @@ int main(int argc, char* argv[]) {
 		if (strcmp(activeCamera->getName() , TMotor::instancia().getActiveCamera()->getName())) {
 			 activeCamera = TMotor::instancia().getObjActiveCamera();
 		}
-		glfwSetCharCallback(TMotor::instancia().getVentana(), character_callback);
 		//activeCamera = TMotor::instancia().newCameraNode(TMotor::instancia().getActiveCamera()->getName(), TMotor::instancia().getActiveCamera()->getPadre()->getName());
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_I) == GLFW_PRESS) {
 			 activeCamera->translate(glm::vec3(0, 0, -.4f));
@@ -136,12 +133,6 @@ int main(int argc, char* argv[]) {
 
 	cout << "FIN DE JUEGO\n";
 	return 0;
-}
-void character_callback(GLFWwindow *window, unsigned int codepoint)	//metodo para obtener la tecla pulsada y mostrarla por pantalla 
-{																		//(usada para introducir datos como la ip)
-	if (codepoint >= 48 && codepoint <= 57) {
-		std::cout << codepoint - 48 << std::endl;
-	}
 }
 
 //Manejador para el evento de redimensionamiento de la pantalla

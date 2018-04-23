@@ -88,7 +88,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
-		cuboNodo->setRotation(0.0f, 0.0f, 0.0f);
+		cuboNodo->setRotation(0.0f, 90.0f, 0.0f);
 	}
 
 
@@ -97,8 +97,11 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 
 	//OPENAL
+	pitchMotor = 0.5f;
 	fuenteMotor = new AlSource();
 	fuenteMotor->setLoop(true);
+	fuenteMotor->setPitch(pitchMotor);
+	fuenteMotor->volume(0.3f);
 	fuenteMotor->play(SOUND_ENGINE);
 	fuenteFrenos = new AlSource();
 	fuenteItem = new AlSource();
@@ -507,6 +510,7 @@ void Corredor::setPosicionSources(){
 	pos[0] = cuboNodo->getPosition().x;
 	pos[1] = cuboNodo->getPosition().y;
 	pos[2] = cuboNodo->getPosition().z;
+	fuenteMotor->setPitch(pitchMotor);
 	fuenteMotor->setPosition(pos);
 	fuenteFrenos->setPosition(pos);
 	fuenteItem->setPosition(pos);
@@ -1021,6 +1025,9 @@ void Corredor::acelerar() {
 	if (!turboActivado) {
 		estado->setDireccionMovimiento(EstadosJugador::direccion_movimiento::RECTO);
 	}
+
+
+	if(pitchMotor < 1) pitchMotor += 0.01f;
 }
 void Corredor::frenar() {
 	if (vehiculo->getCurrentSpeedKmHour() < velocidadMaximaAtras) {
@@ -1128,6 +1135,8 @@ void Corredor::desacelerar() {
 	vehiculo->setBrake(160, 1);
 	vehiculo->setBrake(160, 2);
 	vehiculo->setBrake(160, 3);
+
+	if(pitchMotor > 0.5f) pitchMotor -= 0.01f;
 }
 
 void Corredor::limitadorVelocidad() {

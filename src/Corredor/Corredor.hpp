@@ -134,6 +134,7 @@ protected:
 	AlSource *fuenteMotor;
 	AlSource *fuenteItem;
 	AlSource *fuenteFrenos;
+	float pitchMotor;
 
 	//WAYPOINTS
 	Waypoint *actual; // Punto Actual

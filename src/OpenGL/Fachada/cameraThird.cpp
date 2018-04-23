@@ -3,6 +3,7 @@
 
 cameraThird::cameraThird(const char *name, const char *parentName) {
 	camara = TMotor::instancia().newCameraNode(name, parentName);
+	camara->rotate(glm::vec3(0,1,0),180);
 	//this->nodo = nodo;
 	//parentNode = parent;
 
@@ -54,13 +55,41 @@ void cameraThird::lookAt(glm::vec3 posicion) {
 		glPopMatrix();
 	*/
 
+
+glm::vec3 delta = posicion-camara->getPosition();
+glm::vec3 up;
+glm::vec3 direction(glm::normalize(delta));
+
+if(abs(direction.x)< 0.00001 && abs(direction.z) < 0.00001){ 
+   if(direction.y > 0)
+     up = glm::vec3(0.0, 0.0, -1.0); //if direction points in +y
+   else
+        up = glm::vec3(0.0, 0.0, 1.0); //if direction points in -y 
+   } else {
+        up = glm::vec3(0.0, 1.0, 0.0); //y-axis is the general up
+   }
+
+up=glm::normalize(up);
+glm::vec3 right = glm::normalize(glm::cross(up,direction));
+up= glm::normalize(glm::cross(direction, right));
+   
+glm::mat4 M(right.x, right.y, right.z, 0.0f,     
+up.x, up.y, up.z, 0.0f,                      
+direction.x, direction.y, direction.z, 0.0f, 
+camara->getPosition().x, camara->getPosition().y, camara->getPosition().z, 1.0f);   
+
+
+glm::mat4 lookAtCamara(camara->getNode()->getEntidad()->getModelViewMatrix()* M);
+//glMultMatrixf(glm::value_ptr(M));
+static_cast<TTransform*>(camara->getNode()->getPadre()->getEntidad())->setMatriz(lookAtCamara);
+
 }
 
 void cameraThird::update(glm::vec3 posicion, glm::vec3 rotacion, btVector3 direccion) {
 
 	float distanciaX = 20;
 	camara->setPosition(posicion.x - direccion.getX()*distanciaX, posicion.y + 7, posicion.z - direccion.getZ()*distanciaX);
-	camara->setRotation(0, rotacion.y + 180, 0);
+	//camara->setRotation(0, rotacion.y + 180, 0);
 	//gluLookAt(posicion.x - direccion.getX()*distanciaX,posicion.y+ 7,posicion.z - direccion.getZ()*distanciaX , posicion.x,posicion.y,posicion.z,0,1,0);
 
 }

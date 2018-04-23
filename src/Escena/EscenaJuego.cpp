@@ -117,6 +117,7 @@ void EscenaJuego::init() {
 	//	ESCENARIO MAPA
 	//-----------------------------
 	Pista::getInstancia()->setMapa("assets/MapaPirata/mapaPirata.obj", "assets/mierdamapa/fisica4.bullet", "assets/Mapa01/ObjMapa2.0.obj");
+	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/Elementos.obj", "escena_raiz", false);
 	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 
 	//-----------------------------

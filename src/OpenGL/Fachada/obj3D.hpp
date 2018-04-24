@@ -27,7 +27,7 @@ public:
 	glm::vec3 getPosition();
 	glm::vec3 getRotation();
 	TNodo * getNode();
-	glm::vec3 getEscala();
+	glm::vec3 getScale();
 	bool isVisible();
 
 	//METODOS SET

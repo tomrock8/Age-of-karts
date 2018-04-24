@@ -16,7 +16,7 @@ TMotor::TMotor() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// CREACION OBJETO VENTANA PARA USAR LAS FUNCIONES DE GLFW
-	ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", NULL, NULL);
+	ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", glfwGetPrimaryMonitor(), NULL);
 
 	glfwGetFramebufferSize(ventana, &screenWIDTH, &screenHEIGHT);	//almacena las dimensiones de la ventana en las variables screen
 	glEnable(GL_DEPTH_TEST);

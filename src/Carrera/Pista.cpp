@@ -84,15 +84,9 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 		getline(myfile, tamanyoArrayCajas, ' ');
 		getline(myfile, tamanyoArrayTurbo, ' ');
 
-
-
-
 		//arrayCajas.resize(stoi(tamanyoArrayCajas));
 
-
 		while (!myfile.eof()) {
-
-
 
 			getline(myfile, tipo, ' ');//caja turbo o waypoint
 			tipoObj = stoi(tipo);

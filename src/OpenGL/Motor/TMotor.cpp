@@ -414,7 +414,7 @@ void TMotor::draw(int tipo) {
 
 		//DIBUJADO DEL DEBUG DE BULLET
 		//----------------------------
-		if (debugBullet == true){ //Si el debug de bullet esta activado
+		if (debugBullet && vertices.size() > 0){ //Si el debug de bullet esta activado
 			//Creamos los buffers de OpenGl necesarios
 			unsigned int VAO, VBO;
 			glGenVertexArrays(1, &VAO);

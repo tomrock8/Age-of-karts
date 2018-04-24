@@ -16,12 +16,17 @@ TMotor::TMotor() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// CREACION OBJETO VENTANA PARA USAR LAS FUNCIONES DE GLFW
-	ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", glfwGetPrimaryMonitor(), NULL);
+	//ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", glfwGetPrimaryMonitor(), NULL);
+	ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", NULL, NULL);
 
 	glfwGetFramebufferSize(ventana, &screenWIDTH, &screenHEIGHT);	//almacena las dimensiones de la ventana en las variables screen
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	//glEnable(GL_MULTISAMPLE_ARB); // Antialiasing MSAA
+	//glEnable(GL_MULTISAMPLE); // Antialiasing Simple
+	//glEnable(GL_POLYGON_SMOOTH); // Difuminar dientes de sierra
 
 	if (!ventana) {
 		glfwTerminate();
@@ -480,12 +485,14 @@ void TMotor::draw(int tipo) {
 	}
 
 	//Se activa el shader para el dibujado del HUD
-	
+	glDisable(GL_DEPTH_TEST);
 	shaderHUD->use();
+	
 
 	//Dibujamos el hud activo
 	activeHud->drawHud(shaderHUD);//}
-	
+	glEnable(GL_DEPTH_TEST);
+
 	int display_w, display_h;
 	glfwGetFramebufferSize(TMotor::instancia().getVentana(), &display_w, &display_h);
 	glViewport(0, 0, display_w, display_h);

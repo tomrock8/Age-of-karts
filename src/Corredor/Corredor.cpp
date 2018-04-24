@@ -101,7 +101,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 
 	InicializarFisicas();
-	InicializarFisicasRuedas();
+	//InicializarFisicasRuedas();
 
 
 	//OPENAL
@@ -263,8 +263,8 @@ void Corredor::InicializarFisicasRuedas() {
 	CuerpoColisionRueda1 = new btRigidBody(masar, motionStateRueda1, FormaColisionR1, LocalInertia);
 	CuerpoColisionRueda1->setUserPointer((void *)(rueda1));
 
-	CuerpoColisionRueda1->setActivationState(DISABLE_DEACTIVATION);
-
+	//CuerpoColisionRueda1->setActivationState(DISABLE_DEACTIVATION);
+	CuerpoColisionRueda1->setCollisionFlags(CuerpoColisionRueda1->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda1);
 	objetos.push_back(CuerpoColisionRueda1);
@@ -287,8 +287,8 @@ void Corredor::InicializarFisicasRuedas() {
 	CuerpoColisionRueda2 = new btRigidBody(masar, motionStateRueda2, FormaColisionR2, LocalInertia);
 	CuerpoColisionRueda2->setUserPointer((void *)(rueda2));
 
-	CuerpoColisionRueda2->setActivationState(DISABLE_DEACTIVATION);
-
+	//CuerpoColisionRueda2->setActivationState(DISABLE_DEACTIVATION);
+	CuerpoColisionRueda2->setCollisionFlags(CuerpoColisionRueda2->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda2);
 	objetos.push_back(CuerpoColisionRueda2);
@@ -312,8 +312,8 @@ void Corredor::InicializarFisicasRuedas() {
 	CuerpoColisionRueda3 = new btRigidBody(masar, motionStateRueda3, FormaColisionR3, LocalInertia);
 	CuerpoColisionRueda3->setUserPointer((void *)(rueda3));
 
-	CuerpoColisionRueda3->setActivationState(DISABLE_DEACTIVATION);
-
+	//CuerpoColisionRueda3->setActivationState(DISABLE_DEACTIVATION);
+	CuerpoColisionRueda3->setCollisionFlags(CuerpoColisionRueda3->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda3);
 	objetos.push_back(CuerpoColisionRueda3);
@@ -336,8 +336,8 @@ void Corredor::InicializarFisicasRuedas() {
 	CuerpoColisionRueda4 = new btRigidBody(masar, motionStateRueda4, FormaColisionR4, LocalInertia);
 	CuerpoColisionRueda4->setUserPointer((void *)(rueda4));
 
-	CuerpoColisionRueda4->setActivationState(DISABLE_DEACTIVATION);
-
+	//CuerpoColisionRueda4->setActivationState(DISABLE_DEACTIVATION);
+	CuerpoColisionRueda4->setCollisionFlags(CuerpoColisionRueda4->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda4);
 	objetos.push_back(CuerpoColisionRueda4);
@@ -1213,7 +1213,7 @@ void Corredor::update() {
 	updateTimerObstaculos();
 	updateEstado();
 	comprobarSueloRuedas();
-	actualizarRuedas();
+	//actualizarRuedas();
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());

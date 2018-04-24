@@ -246,7 +246,7 @@ void EscenaJuego::renderDebug() {
 	ImGui::Text("Jugadores: %i", GestorJugadores::getInstancia()->getNumJugadores());
 	ImGui::Text("Elementos de fisicas: %i", MotorFisicas::getInstancia()->getMundo()->getNumCollisionObjects());
 
-	if (ImGui::SliderFloat("Gravedad", &gravedad, -100.0f, 0.0f))
+	if (ImGui::SliderFloat("Gravedad", &gravedad, -100.0f, 0.0f, "%.2f", 1.0f))
 		MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
 
 	if (ImGui::Checkbox("Debug Fisicas", &debug))
@@ -260,14 +260,14 @@ void EscenaJuego::renderDebug() {
 		static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro;
 		jugador->getParametrosDebug(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo, &velocidadLimiteGiro);
 
-		ImGui::SliderFloat("fuerza", &fuerza, 0.0f, 10000.0f);
-		ImGui::SliderFloat("velocidadMedia", &velocidadMedia, 0.0f, 800.0f);
-		ImGui::SliderFloat("velocidadMaximaTurbo", &velocidadMaximaTurbo, 0.0f, 800.0f);
-		ImGui::SliderFloat("velocidadMaxima", &velocidadMaxima, 0.0f, 800.0f);
-		ImGui::SliderFloat("Masa", &masa, 0.0f, 8000.0f);
-		ImGui::SliderFloat("VelocidadLimiteGiro", &velocidadLimiteGiro, 0.0f, 8000.0f);
-		ImGui::SliderFloat("indiceGiroAlto", &indiceGiroAlto, 0.0f, 1.0f);
-		ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f);
+		ImGui::SliderFloat("fuerza", &fuerza, 1000.0f, 10000.0f, "%.1f", 10.0f);
+		ImGui::SliderFloat("velocidadMedia", &velocidadMedia, 100.0f, 800.0f, "%.1f", 10.0f);
+		ImGui::SliderFloat("velocidadMaximaTurbo", &velocidadMaximaTurbo, 100.0f, 800.0f, "%.1f", 10.0f);
+		ImGui::SliderFloat("velocidadMaxima", &velocidadMaxima, 100.0f, 800.0f, "%.1f", 10.0f);
+		ImGui::SliderFloat("Masa", &masa, 0.0f, 8000.0f, "%.1f", 10.0f);
+		ImGui::SliderFloat("VelocidadLimiteGiro", &velocidadLimiteGiro, 0.0f, 8000.0f, "%.1f", 100.0f);
+		ImGui::SliderFloat("indiceGiroAlto", &indiceGiroAlto, 0.0f, 1.0f, "%.4f", 0.01f);
+		ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f, "%.4f", 0.01f);
 		jugador->setParametrosDebug(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro);
 
 		static float *posicion = new float[3];
@@ -277,7 +277,7 @@ void EscenaJuego::renderDebug() {
 		resetOri[2] = jugador->getNodo()->getRotation().x;
 
 
-		ImGui::SliderFloat3("Posicion", posicion, -100, 100);
+		ImGui::SliderFloat3("Posicion", posicion, -100, 100, "%.2f", 1.0f);
 		ImGui::SameLine();
 		if (ImGui::Button("Set position"))
 			jugador->setPosicion(posicion, resetOri);// Hay que pasarle solo la posicion al jugador, no al nodo
@@ -300,15 +300,6 @@ void EscenaJuego::renderDebug() {
 			debug_Jugador = false;
 		ImGui::End();
 	}
-	/*
-	//ImGui::SliderFloat("Masa", &valor, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-	// Boton
-	static int counter = 0;
-	if (ImGui::Button("Button"))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-		counter++;
-	ImGui::SameLine();
-	ImGui::Text("counter = %d", counter);
-	*/
 }
 
 void EscenaJuego::limpiar() {

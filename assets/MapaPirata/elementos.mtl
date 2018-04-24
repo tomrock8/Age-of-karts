@@ -1,5 +1,44 @@
 # Blender MTL File: 'mapa4.0.blend'
-# Material Count: 65
+# Material Count: 68
+
+newmtl MetaMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas\Meta_normal.png
+map_Kd texturas\meta_diffuse.png
+map_Ks texturas\Meta_specular.png
+
+newmtl barcoMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas\Barco_Normal.png
+map_Kd texturas\Barco_Diffuse.png
+map_Ks texturas\Barco_Specular.png
+
+newmtl marMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.020088 0.313328 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas\mar_normal.png
+map_Kd texturas\mar_diffuse.png
+map_Ks texturas\mar_specular.png
 
 newmtl palmera1MAT
 Ns 96.078431
@@ -10,9 +49,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.003
 Ns 96.078431
@@ -23,9 +62,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.005
 Ns 96.078431
@@ -36,9 +75,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.007
 Ns 96.078431
@@ -49,9 +88,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.009
 Ns 96.078431
@@ -62,9 +101,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.011
 Ns 96.078431
@@ -75,9 +114,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.013
 Ns 96.078431
@@ -88,9 +127,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.015
 Ns 96.078431
@@ -101,9 +140,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.017
 Ns 96.078431
@@ -114,9 +153,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.019
 Ns 96.078431
@@ -127,9 +166,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.021
 Ns 96.078431
@@ -140,9 +179,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.023
 Ns 96.078431
@@ -153,9 +192,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.025
 Ns 96.078431
@@ -166,9 +205,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.027
 Ns 96.078431
@@ -179,9 +218,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.029
 Ns 96.078431
@@ -192,9 +231,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.031
 Ns 96.078431
@@ -205,9 +244,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.033
 Ns 96.078431
@@ -218,9 +257,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.035
 Ns 96.078431
@@ -231,9 +270,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.037
 Ns 96.078431
@@ -244,9 +283,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.039
 Ns 96.078431
@@ -257,9 +296,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.041
 Ns 96.078431
@@ -270,9 +309,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.043
 Ns 96.078431
@@ -283,9 +322,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.045
 Ns 96.078431
@@ -296,9 +335,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.047
 Ns 96.078431
@@ -309,9 +348,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.049
 Ns 96.078431
@@ -322,9 +361,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.051
 Ns 96.078431
@@ -335,9 +374,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.053
 Ns 96.078431
@@ -348,9 +387,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.055
 Ns 96.078431
@@ -361,9 +400,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.057
 Ns 96.078431
@@ -374,9 +413,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.059
 Ns 96.078431
@@ -387,9 +426,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.061
 Ns 96.078431
@@ -400,9 +439,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.063
 Ns 96.078431
@@ -413,9 +452,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.065
 Ns 96.078431
@@ -426,9 +465,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.067
 Ns 96.078431
@@ -439,9 +478,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.069
 Ns 96.078431
@@ -452,9 +491,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.071
 Ns 96.078431
@@ -465,9 +504,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera1MAT_palmera1_diffuse.png.073
 Ns 96.078431
@@ -478,9 +517,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera1_diffuse.png
-map_Bump texturas\\palmera1_normal.png
-map_Ks texturas\\palmera1_specular.png
+map_Kd texturas\palmera1_diffuse.png
+map_Bump texturas\palmera1_normal.png
+map_Ks texturas\palmera1_specular.png
 
 newmtl palmera2MAT
 Ns 96.078431
@@ -491,9 +530,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_NONE
 Ns 96.078431
@@ -504,9 +543,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump texturas\\palmera2_normal.png
-map_Kd texturas\\palmera2_difuse.png
-map_Ks texturas\\palmera2_specular.png
+map_Bump texturas\palmera2_normal.png
+map_Kd texturas\palmera2_difuse.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.007
 Ns 96.078431
@@ -517,9 +556,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.009
 Ns 96.078431
@@ -530,9 +569,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.011
 Ns 96.078431
@@ -543,9 +582,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.013
 Ns 96.078431
@@ -556,9 +595,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.016
 Ns 96.078431
@@ -569,9 +608,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.018
 Ns 96.078431
@@ -582,9 +621,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.020
 Ns 96.078431
@@ -595,9 +634,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.022
 Ns 96.078431
@@ -608,9 +647,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.024
 Ns 96.078431
@@ -621,9 +660,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.026
 Ns 96.078431
@@ -634,9 +673,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.028
 Ns 96.078431
@@ -647,9 +686,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.030
 Ns 96.078431
@@ -660,9 +699,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.032
 Ns 96.078431
@@ -673,9 +712,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.034
 Ns 96.078431
@@ -686,9 +725,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.036
 Ns 96.078431
@@ -699,9 +738,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.038
 Ns 96.078431
@@ -712,9 +751,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.040
 Ns 96.078431
@@ -725,9 +764,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.042
 Ns 96.078431
@@ -738,9 +777,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.044
 Ns 96.078431
@@ -751,9 +790,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.046
 Ns 96.078431
@@ -764,9 +803,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.048
 Ns 96.078431
@@ -777,9 +816,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.050
 Ns 96.078431
@@ -790,9 +829,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.052
 Ns 96.078431
@@ -803,9 +842,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.054
 Ns 96.078431
@@ -816,9 +855,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.056
 Ns 96.078431
@@ -829,9 +868,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png
 
 newmtl palmera2MAT_palmera2_difuse.png.058
 Ns 96.078431
@@ -842,6 +881,6 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\\palmera2_difuse.png
-map_Bump texturas\\palmera2_normal.png
-map_Ks texturas\\palmera2_specular.png
+map_Kd texturas\palmera2_difuse.png
+map_Bump texturas\palmera2_normal.png
+map_Ks texturas\palmera2_specular.png

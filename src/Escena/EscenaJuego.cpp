@@ -170,10 +170,6 @@ void EscenaJuego::init() {
 		jugador->setID(i);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
-		jugador = new CorredorIA(pos2[1], Corredor::tipo_jugador::CHINO);
-		jugador->getNodo()->rotate(glm::vec3(0, 1, 0), 90);
-		pj.push_back(jugador);
-		jugadores->aumentarJugadores();
 	}
 
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {

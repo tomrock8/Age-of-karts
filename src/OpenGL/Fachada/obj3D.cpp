@@ -81,7 +81,7 @@ glm::vec3 obj3D::getRotation() {
 TNodo *obj3D::getNode() {
 	return node;
 }
-glm::vec3 obj3D::getEscala(){
+glm::vec3 obj3D::getScale(){
 	return escala;
 }
 

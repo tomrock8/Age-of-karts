@@ -81,19 +81,26 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "escena_raiz", false);
 
 
-	//rueda1->setRotation(180,0,0);
-	//rueda2.setRotation();
-	//rueda3.setRotation();
-	//rueda4.setRotation();
-	
+	rueda1->setScale(1,1,1);//alante derecha
+	rueda2->setScale(1,1,1);//delante izquierda
+	rueda3->setScale(1,1,1);//atras derecha
+	rueda4->setScale(1,1,1);//atras izquierda
+
+	rueda1->setVisible(true);//alante derecha
+	rueda2->setVisible(true);//delante izquierda
+	rueda3->setVisible(true);//atras derecha
+	rueda4->setVisible(true);//atras izquierda
+
+
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
+		cuboNodo->setScale(1, 1, 1.5);
 		cuboNodo->setRotation(0.0f, 90.0f, 0.0f);
 	}
 
 
 	InicializarFisicas();
-	//InicializarFisicasRuedas();
+	InicializarFisicasRuedas();
 
 
 	//OPENAL
@@ -387,7 +394,7 @@ void Corredor::InicializarFisicas() {
 
 	//Forma Colision
 	//btVector3 TamanyoFormaColision(cuboNodo->getScale().X, cuboNodo->getScale().Y, cuboNodo->getScale().Z * 2);
-	btVector3 TamanyoFormaColision(1, 1, 2);
+	btVector3 TamanyoFormaColision(cuboNodo->getScale().x, cuboNodo->getScale().y, cuboNodo->getScale().z * 2);
 	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
 	FormaColision = new btBoxShape(TamanyoFormaColision);
 	//masa coche
@@ -1204,7 +1211,7 @@ void Corredor::update() {
 	updateTimerObstaculos();
 	updateEstado();
 	comprobarSueloRuedas();
-	//actualizarRuedas();
+	actualizarRuedas();
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());

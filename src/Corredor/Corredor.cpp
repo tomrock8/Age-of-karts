@@ -81,17 +81,15 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "escena_raiz", false);
 
 
-	rueda1->setScale(1,1,1);//alante derecha
-	rueda2->setScale(1,1,1);//delante izquierda
-	rueda3->setScale(1,1,1);//atras derecha
-	rueda4->setScale(1,1,1);//atras izquierda
+	rueda1->setScale(1, 1, 1);//alante derecha
+	rueda2->setScale(1, 1, 1);//delante izquierda
+	rueda3->setScale(1, 1, 1);//atras derecha
+	rueda4->setScale(1, 1, 1);//atras izquierda
 
 	rueda1->setVisible(false);//alante derecha
 	rueda2->setVisible(false);//delante izquierda
 	rueda3->setVisible(false);//atras derecha
 	rueda4->setVisible(false);//atras izquierda
-
-	
 
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
@@ -99,10 +97,8 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 		cuboNodo->setRotation(0.0f, 90.0f, 0.0f);
 	}
 
-
 	InicializarFisicas();
 	InicializarFisicasRuedas();
-
 
 	//OPENAL
 	pitchMotor = 0.5f;
@@ -113,27 +109,25 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	fuenteMotor->play(SOUND_ENGINE);
 	fuenteFrenos = new AlSource();
 	fuenteItem = new AlSource();
-
 }
-void Corredor::setParametros(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo,float velocidadLimiteGiro) {
-	// Creo que hay que setear los parametros en el cuerpo de colision
-	
+
+void Corredor::setParametrosDebug(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo, float velocidadLimiteGiro) {
 	this->Fuerza = fuerza;
 	this->velocidadMedia = velocidadMedia;
 	this->velocidadMaximaTurbo = velocidadMaximaTurbo;
 	this->velocidadMaxima = velocidadMaxima;
-	if (masa!=this->Masa){
+	if (masa != this->Masa) {
 		this->Masa = masa;
 		btVector3 inertia(0, 0, 0);
-		CuerpoColisionChasis->getCollisionShape()->calculateLocalInertia(masa,inertia); 
-		CuerpoColisionChasis->setMassProps(masa,inertia);
+		CuerpoColisionChasis->getCollisionShape()->calculateLocalInertia(masa, inertia);
+		CuerpoColisionChasis->setMassProps(masa, inertia);
 	}
 	this->indiceGiroAlto = btScalar(indiceGiroAlto);
 	this->indiceGiroBajo = btScalar(indiceGiroBajo);
-	this->velocidadLimiteGiro=velocidadLimiteGiro;
+	this->velocidadLimiteGiro = velocidadLimiteGiro;
 }
 
-void Corredor::getParametros(float *fuerza, float *velocidadMedia, float *velocidadMaximaTurbo, float *velocidadMaxima, float *masa, float *indiceGiroAlto, float *indiceGiroBajo, float *velocidadLimiteGiro) {
+void Corredor::getParametrosDebug(float *fuerza, float *velocidadMedia, float *velocidadMaximaTurbo, float *velocidadMaxima, float *masa, float *indiceGiroAlto, float *indiceGiroBajo, float *velocidadLimiteGiro) {
 	*fuerza = static_cast<float>(this->Fuerza);
 	*velocidadMedia = static_cast<float>(this->velocidadMedia);
 	*velocidadMaximaTurbo = static_cast<float>(this->velocidadMaximaTurbo);
@@ -141,7 +135,34 @@ void Corredor::getParametros(float *fuerza, float *velocidadMedia, float *veloci
 	*masa = static_cast<float>(this->Masa);
 	*indiceGiroAlto = static_cast<float>(this->indiceGiroAlto);
 	*indiceGiroBajo = static_cast<float>(this->indiceGiroBajo);
-	*velocidadLimiteGiro=static_cast<float>(this->velocidadLimiteGiro);
+	*velocidadLimiteGiro = static_cast<float>(this->velocidadLimiteGiro);
+}
+
+void Corredor::getParametrosRuedasDebug(float *suspensionStiffness, float *DampingCompression, float *DampingRelaxation, float *frictionSlip, float *rollInfluence, float *suspForce, float *suspTravelCm) {
+	btWheelInfo &wheel = this->vehiculo->getWheelInfo(0);
+
+	*suspensionStiffness = static_cast<float>(wheel.m_suspensionStiffness);
+	*DampingCompression = static_cast<float>(wheel.m_wheelsDampingCompression);
+	*DampingRelaxation = static_cast<float>(wheel.m_wheelsDampingRelaxation);
+	*frictionSlip = static_cast<float>(wheel.m_frictionSlip);
+	*rollInfluence = static_cast<float>(wheel.m_rollInfluence);
+	*suspForce = static_cast<float>(wheel.m_maxSuspensionForce);
+	*suspTravelCm = static_cast<float>(wheel.m_maxSuspensionTravelCm);
+}
+
+void Corredor::setParametrosRuedasDebug(float suspensionStiffness, float DampingCompression, float DampingRelaxation, float frictionSlip, float rollInfluence, float suspForce, float suspTravelCm) {
+	btWheelInfo &wheel = this->vehiculo->getWheelInfo(0);
+
+	for (int i = 0; i < vehiculo->getNumWheels(); i++) {
+		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
+		wheel.m_suspensionStiffness = btScalar(suspensionStiffness);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
+		wheel.m_wheelsDampingCompression = btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
+		wheel.m_wheelsDampingRelaxation = btScalar(0.5) * 2 * btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_frictionSlip = btScalar(frictionSlip);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
+		wheel.m_rollInfluence = btScalar(rollInfluence);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
+		wheel.m_maxSuspensionForce = btScalar(suspForce);  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
+		wheel.m_maxSuspensionTravelCm = btScalar(suspTravelCm); //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 										   
+	}
 }
 
 void Corredor::setParametros() {
@@ -252,7 +273,7 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda1 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	FormaColisionR1 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	FormaColisionR1 = new btCylinderShapeX(btVector3(ancho, radio, radio));
 	//FormaColisionR1 = new btSphereShape(radio);
 
 	// Add mass
@@ -281,7 +302,7 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda2 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	FormaColisionR2 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	FormaColisionR2 = new btCylinderShapeX(btVector3(ancho, radio, radio));
 	//FormaColisionR2 = new btSphereShape(radio);
 
 	CuerpoColisionRueda2 = new btRigidBody(masar, motionStateRueda2, FormaColisionR2, LocalInertia);
@@ -306,7 +327,7 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda3 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	FormaColisionR3 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	FormaColisionR3 = new btCylinderShapeX(btVector3(ancho, radio, radio));
 	//FormaColisionR3 = new btSphereShape(radio);
 
 	CuerpoColisionRueda3 = new btRigidBody(masar, motionStateRueda3, FormaColisionR3, LocalInertia);
@@ -330,7 +351,7 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda4 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	FormaColisionR4 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	FormaColisionR4 = new btCylinderShapeX(btVector3(ancho, radio, radio));
 	//FormaColisionR4 = new btSphereShape(radio);
 
 	CuerpoColisionRueda4 = new btRigidBody(masar, motionStateRueda4, FormaColisionR4, LocalInertia);
@@ -356,7 +377,7 @@ void Corredor::InicializarFisicasRuedas() {
 	restriccion3 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda3, pivotA, pivotB, axisA, axisB, false);
 	pivotA = btVector3(3.f, 5.f, -3.f);
 	restriccion4 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda4, pivotA, pivotB, axisA, axisB, false);
-	
+
 	restriccion1->enableAngularMotor(true, 1, 0);
 	restriccion2->enableAngularMotor(true, 1, 0);
 	restriccion3->enableAngularMotor(true, 1, 0);
@@ -451,7 +472,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
 		wheel.m_suspensionStiffness = btScalar(20);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
 		wheel.m_wheelsDampingCompression = btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-		wheel.m_wheelsDampingRelaxation = btScalar(0.5)* 2 *btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_wheelsDampingRelaxation = btScalar(0.5) * 2 * btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = btScalar(0);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
 		wheel.m_maxSuspensionForce = 10000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
@@ -514,7 +535,7 @@ void Corredor::setPosicion(float *pos, float *ori) {
 
 }
 
-void Corredor::setPosicionSources(){
+void Corredor::setPosicionSources() {
 	float *pos = new float[3];
 	pos[0] = cuboNodo->getPosition().x;
 	pos[1] = cuboNodo->getPosition().y;
@@ -1038,8 +1059,8 @@ void Corredor::acelerar() {
 	}
 
 
-	if(pitchMotor < 1) pitchMotor += 0.01f;
-	else if(pitchMotor > 1) pitchMotor -= 0.001f;
+	if (pitchMotor < 1) pitchMotor += 0.01f;
+	else if (pitchMotor > 1) pitchMotor -= 0.001f;
 }
 void Corredor::frenar() {
 	if (vehiculo->getCurrentSpeedKmHour() < velocidadMaximaAtras) {
@@ -1148,7 +1169,7 @@ void Corredor::desacelerar() {
 	vehiculo->setBrake(160, 2);
 	vehiculo->setBrake(160, 3);
 
-	if(pitchMotor > 0.5f) pitchMotor -= 0.01f;
+	if (pitchMotor > 0.5f) pitchMotor -= 0.01f;
 }
 
 void Corredor::limitadorVelocidad() {

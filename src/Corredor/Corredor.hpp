@@ -53,7 +53,6 @@ public:
 	void setAceite();
 	void setObjetivoTelederigido();
 	void setParametros();
-	void setParametros(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo,float velocidadLimiteGiro);
 	void setTipoObj();
 	void setTipoObj(EstadosJugador::estado_objeto objeto);
 	void SetFuerzaVelocidad(int turbo);
@@ -69,6 +68,8 @@ public:
 	void setTipoJugador(int tj);
 	void setVueltas(int j);
 	void setTiempoVuelta(float t);
+	void setParametrosDebug(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo, float velocidadLimiteGiro);
+	void setParametrosRuedasDebug(float suspensionStiffness, float DampingCompression, float DampingRelaxation, float frictionSlip, float rollInfluence, float suspForce, float suspTravelCm);
 
 	//waypoints
 	void setPosicionCarrera(int i, int j);
@@ -80,7 +81,8 @@ public:
 	int getVueltas();
 	float getMaxVuetas();
 	float getTiempoVueltaTotal();
-	void getParametros(float * fuerza, float * velocidadMedia, float * velocidadMaximaTurbo, float * velocidadMaxima, float * masa, float * indiceGiroAlto, float * indiceGiroBajo, float * velocidadLimiteGiro);
+	void getParametrosDebug(float * fuerza, float * velocidadMedia, float * velocidadMaximaTurbo, float * velocidadMaxima, float * masa, float * indiceGiroAlto, float * indiceGiroBajo, float * velocidadLimiteGiro);
+	void getParametrosRuedasDebug(float * suspensionStiffness, float * DampingCompression, float * DampingRelaxation, float * frictionSlip, float * rollInfluence, float * suspForce, float * suspTravelCm);
 
 	// Update
 	void update();

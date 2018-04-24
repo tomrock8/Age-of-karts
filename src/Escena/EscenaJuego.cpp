@@ -230,12 +230,10 @@ void EscenaJuego::dibujar() {
 }
 
 void EscenaJuego::renderDebug() {
-
 	// ------------------------------
 	// -------- IMGUI ---------------
 	// ------------------------------
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
 	Corredor *jugador = GestorJugadores::getInstancia()->getJugadores().at(controlPlayer);
 
 	// Mostrar ventanas
@@ -247,30 +245,22 @@ void EscenaJuego::renderDebug() {
 	ImGui::Text("Pulsa 9 para activar - 0 desactivar");
 	ImGui::Text("Jugadores: %i", GestorJugadores::getInstancia()->getNumJugadores());
 	ImGui::Text("Elementos de fisicas: %i", MotorFisicas::getInstancia()->getMundo()->getNumCollisionObjects());
-	if (ImGui::SliderFloat("Gravedad", &gravedad, -100.0f, 0.0f)) {
-		MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
-	}
 
+	if (ImGui::SliderFloat("Gravedad", &gravedad, -100.0f, 0.0f))
+		MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
+
+	if (ImGui::Checkbox("Debug Fisicas", &debug))
+		TMotor::instancia().setDebugBullet(debug);
 
 	ImGui::Checkbox("Debug Jugador", &debug_Jugador);
-	ImGui::Checkbox("Debug Fisicas", &debug);
-
-	if (debug) {
-		TMotor::instancia().setDebugBullet(true);
-	}
-	else {
-		TMotor::instancia().setDebugBullet(false);
-	}
-
 	if (debug_Jugador) {
 		ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
 		ImGui::Text(jugador->toString().c_str());
 
 		static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro;
-		jugador->getParametros(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo, &velocidadLimiteGiro);
+		jugador->getParametrosDebug(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo, &velocidadLimiteGiro);
 
 		ImGui::SliderFloat("fuerza", &fuerza, 0.0f, 10000.0f);
-
 		ImGui::SliderFloat("velocidadMedia", &velocidadMedia, 0.0f, 800.0f);
 		ImGui::SliderFloat("velocidadMaximaTurbo", &velocidadMaximaTurbo, 0.0f, 800.0f);
 		ImGui::SliderFloat("velocidadMaxima", &velocidadMaxima, 0.0f, 800.0f);
@@ -278,9 +268,7 @@ void EscenaJuego::renderDebug() {
 		ImGui::SliderFloat("VelocidadLimiteGiro", &velocidadLimiteGiro, 0.0f, 8000.0f);
 		ImGui::SliderFloat("indiceGiroAlto", &indiceGiroAlto, 0.0f, 1.0f);
 		ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f);
-		jugador->setParametros(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro);
-
-
+		jugador->setParametrosDebug(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro);
 
 		static float *posicion = new float[3];
 		float *resetOri = new float[3];
@@ -293,6 +281,20 @@ void EscenaJuego::renderDebug() {
 		ImGui::SameLine();
 		if (ImGui::Button("Set position"))
 			jugador->setPosicion(posicion, resetOri);// Hay que pasarle solo la posicion al jugador, no al nodo
+
+		if (ImGui::CollapsingHeader("Ruedas")) {
+			static float suspensionStiffness, DampingCompression, DampingRelaxation, frictionSlip, rollInfluence, suspForce, suspTravelCm;
+			jugador->getParametrosRuedasDebug(&suspensionStiffness, &DampingCompression, &DampingRelaxation, &frictionSlip, &rollInfluence, &suspForce, &suspTravelCm);
+			ImGui::SliderFloat("suspensionStiffness", &suspensionStiffness, 0.0f, 50.0f);
+			ImGui::SliderFloat("frictionSlip", &frictionSlip, 1000.0f, 50000.0f, "%.1f", 100.0f);
+			ImGui::SliderFloat("rollInfluence", &rollInfluence, 0.0f, 0.1f, "%.3f", 0.001f);
+			ImGui::SliderFloat("suspForce", &suspForce, 1000.0f, 50000.0f,"%.1f", 100.0f);
+			ImGui::SliderFloat("suspTravelCm", &suspTravelCm, 1000.0f, 50000.0f, "%.1f", 100.0f);
+			jugador->setParametrosRuedasDebug(suspensionStiffness, DampingCompression, DampingRelaxation, frictionSlip, rollInfluence, suspForce, suspTravelCm);
+			ImGui::Text("DampingCompression: %.3f", DampingCompression);
+			ImGui::SameLine();
+			ImGui::Text("DampingRelaxation: %.3f", DampingRelaxation);
+		}
 
 		if (ImGui::Button("Cerrar"))
 			debug_Jugador = false;

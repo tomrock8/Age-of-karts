@@ -235,7 +235,7 @@ void Corredor::InicializarFisicasRuedas() {
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	float masar = 0.000000000000001f;
+	float masar = 0.05f;
 	float radio = 1.2;
 	float ancho = 1.2;
 	btVector3 HalfExtents(1, 1, 1);

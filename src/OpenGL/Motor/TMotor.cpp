@@ -55,6 +55,7 @@ TMotor::TMotor() {
 		, "assets/shaders/shaderDepth/shaderLuzPuntual/geometryShader.txt");
 	shaderSkybox = new Shader("assets/shaders/shaderSkybox/vertexShader.txt", "assets/shaders/shaderSkybox/fragmentShader.txt", nullptr);
 	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
+	shaderCartoon = new Shader("assets/shaders/shaderCartoon/vertexShader.txt", "assets/shaders/shaderCartoon/fragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 }
 
@@ -397,20 +398,21 @@ void TMotor::draw(int tipo) {
 
 		//DIBUJADO DEL ARBOL
 		//------------------
+		Shader *s = shader;
 		//Se activa el shader para el renderizado 3D
-		shader->use();
+		s->use();
 		//Establecemos las matrices view y projection a partir del dibujado de la camara
-		drawCamera(shader);
+		drawCamera(s);
 		//Establecemos los datos de las distintas luces
-		drawLight();
+		drawLight(s);
 		//Configuramos los shaders para producir las sombras de cada luz
 		if (lights.size() > 0) {
 			for (int i = 0; i < lights.size(); i++) {
-				static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow();
+				static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow(s);
 			}
 		}
 		//Dibujamos los distintos nodos del arbol
-		scene->draw(shader);
+		scene->draw(s);
 
 		//DIBUJADO DEL DEBUG DE BULLET
 		//----------------------------
@@ -527,7 +529,7 @@ void TMotor::drawCamera(Shader *s) {
 	s->setMat4("projection", activeCamera->getEntidad()->getProjectionMatrix());
 }
 
-void TMotor::drawLight() {
+void TMotor::drawLight(Shader *s) {
 	//recorrer el nodo a la inversa hasta la raiz y guardar las matrices que se obtienen de sus entidades
 	//para luego multiplicarlas en orden inverso
 	glm::vec4 defaultVector(0, 0, 0, 1);
@@ -551,7 +553,7 @@ void TMotor::drawLight() {
 		glm::vec4 lPos = lightMatrix * defaultVector;
 		glm::vec3 pos(lPos.x, lPos.y, lPos.z);
 		static_cast<TLuz *> (activeLights.at(i)->getEntidad())->setLightPosition(pos);
-		static_cast<TLuz *> (activeLights.at(i)->getEntidad())->setLuz(shader, activeLights.at(i)->getName());
+		static_cast<TLuz *> (activeLights.at(i)->getEntidad())->setLuz(s, activeLights.at(i)->getName());
 	}
 	//por ultimo cargar la posicion que ocupa la luz en su matriz de luz
 }

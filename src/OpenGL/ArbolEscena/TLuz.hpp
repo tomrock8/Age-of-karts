@@ -17,17 +17,17 @@ public:
 	// SOMBRAS
 	void renderMap();
 	void unbindDepthBuffer();
-	void configureShadow();
+	void configureShadow(Shader *s);
 	// --- LUZ DIRIGIDA ---
 	void calculateDepthMap();
 	void calculateLightMatrix();
 	void renderDepthMap();
-	void configureDirectionalShadow();
+	void configureDirectionalShadow(Shader *s);
 	// --- LUZ PUNTUAL ---
 	void calculateCubeDepthMap();
 	void calculateLightMatrixes();
 	void renderCubeDepthMap();
-	void configurePointShadow();
+	void configurePointShadow(Shader *s);
 
 	// METODOS GET
 	bool getActive();

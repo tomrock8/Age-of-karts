@@ -79,7 +79,7 @@ public:
 	void clean();
 	void draw(int tipo);
 	void drawCamera(Shader *s);
-	void drawLight();
+	void drawLight(Shader *s);
 	
 	void toEulerAngle(float x,float y,float z, float w, float& roll, float& pitch, float& yaw);
 
@@ -94,6 +94,7 @@ protected:
 	Shader *shaderPointDepth; //Shader para el calculo de las sombras de las luces puntuales
 	Shader *shaderSkybox; //Shader para el dibujado del skybox
 	Shader *shaderDebug; //Shader para el modo debug de Bullet
+	Shader *shaderCartoon; //Shader para el efecto cartoon
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)

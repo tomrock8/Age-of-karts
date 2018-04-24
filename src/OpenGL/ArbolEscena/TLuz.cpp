@@ -119,12 +119,12 @@ void TLuz::unbindDepthBuffer(){
 
 //Funcion para configurar los datos del shader una vez renderizado el mapa de profundidad
 //y calcular asi las sombras
-void TLuz::configureShadow(){
+void TLuz::configureShadow(Shader *s){
 	//Segun sea puntual o dirigida, se pasan unos datos
 	if (lightDirection[3] < 0.1){
-		configurePointShadow();
+		configurePointShadow(s);
 	}else{
-		configureDirectionalShadow();
+		configureDirectionalShadow(s);
 	}
 }
 
@@ -203,13 +203,13 @@ void TLuz::renderDepthMap(){
 }
 
 //Funcion que configura los datos del shader para una luz dirigida
-void TLuz::configureDirectionalShadow(){
+void TLuz::configureDirectionalShadow(Shader *s){
 	//Pasamos la matriz de luz al shader
 	int text = numLight - '0'; //Numero de luz dirigida (0-3)
 	string l = "spot_lights[";
 	l += numLight;
 	l += "].lightMatrix";
-	TMotor::instancia().getShader()->setMat4(l.c_str(), lightMatrix);
+	s->setMat4(l.c_str(), lightMatrix);
 	//Activamos la textura para el mapa de profundidad
 	glActiveTexture(GL_TEXTURE8 + text);
 	//Enlazamos la textura con el mapa de profundidad a partir de su id anteriormente creado
@@ -217,7 +217,7 @@ void TLuz::configureDirectionalShadow(){
 	//Le pasamos al shader la textura con el mapa de profundidad
 	string n = "shadowMap_";
 	n+=numLight;
-	glUniform1i(glGetUniformLocation(TMotor::instancia().getShader()->ID, n.c_str()), 8 + text);
+	glUniform1i(glGetUniformLocation(s->ID, n.c_str()), 8 + text);
 }
 
 // ----- LUZ PUNTUAL -----
@@ -310,7 +310,7 @@ void TLuz::renderCubeDepthMap(){
 }
 
 //Funcion que configura los datos del shader para una luz puntual
-void TLuz::configurePointShadow(){
+void TLuz::configurePointShadow(Shader *s){
 	int text = numLight - '0'; //Numero de luz puntual (0-3)
 	//Activamos la textura para el cubo de profundidad
 	glActiveTexture(GL_TEXTURE3 + text);
@@ -319,7 +319,7 @@ void TLuz::configurePointShadow(){
 	//Le pasamos al shader la textura con el mapa de profundidad
 	string n = "shadowCube_";
 	n+=numLight;
-	glUniform1i(glGetUniformLocation(TMotor::instancia().getShader()->ID, n.c_str()), 3 + text);
+	glUniform1i(glGetUniformLocation(s->ID, n.c_str()), 3 + text);
 	//Pasamo el plano lejano al shader
-	TMotor::instancia().getShader()->setFloat("planoLejano", 160.0f);
+	s->setFloat("planoLejano", 160.0f);
 }

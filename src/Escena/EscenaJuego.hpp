@@ -43,7 +43,7 @@ private:
 
 	void UpdatePhysics(unsigned int TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
-	int debug;
+	bool debug;
 
 	DebugDraw *debugDraw;
 

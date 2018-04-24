@@ -86,11 +86,12 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	rueda3->setScale(1,1,1);//atras derecha
 	rueda4->setScale(1,1,1);//atras izquierda
 
-	rueda1->setVisible(true);//alante derecha
-	rueda2->setVisible(true);//delante izquierda
-	rueda3->setVisible(true);//atras derecha
-	rueda4->setVisible(true);//atras izquierda
+	rueda1->setVisible(false);//alante derecha
+	rueda2->setVisible(false);//delante izquierda
+	rueda3->setVisible(false);//atras derecha
+	rueda4->setVisible(false);//atras izquierda
 
+	
 
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());

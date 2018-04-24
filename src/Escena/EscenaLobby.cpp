@@ -47,6 +47,9 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	TMotor::instancia().newHud("LobbyHUD");
 	TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "comenzarPartida", "assets/HUD/LobbyMenu/empezar.png");
 	TMotor::instancia().initDebugWindow();
+	ImGuiIO& io = ImGui::GetIO();
+	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
+	ImGui::StyleColorsLight(); 
 	
 }
 
@@ -81,9 +84,12 @@ void EscenaLobby::update() {
   	glfwGetFramebufferSize( TMotor::instancia().getVentana() , &display_w , &display_h );
 	
   	ImGui_ImplGlfwGL3_NewFrame();
-		ImGui::SetNextWindowPos(ImVec2(100, 100), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize( ImVec2( (float)display_w/2 , (float)display_h/2 ) );
- 
+	ImGui::SetNextWindowPos(ImVec2(100, 100), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize( ImVec2( (float)display_w , (float)display_h ) );
+	ImGui::SetNextWindowBgAlpha(0.0f);
+
+	ImGui::GetStyle().WindowBorderSize=0;
+
 	if (ImGui::Begin("Hola", NULL, ImGuiWindowFlags_NoResize 
 	| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
 	| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard 

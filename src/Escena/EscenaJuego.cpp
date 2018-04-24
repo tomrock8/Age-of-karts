@@ -188,6 +188,9 @@ void EscenaJuego::init() {
 	debug_Jugador = false;
 	muestraDebug = true;
 	TMotor::instancia().initDebugWindow();
+	ImGuiIO& io = ImGui::GetIO();
+	io.Fonts->AddFontDefault();
+	ImGui::StyleColorsClassic();
 
 	//-----------------------
 	// OPENAL

@@ -22,11 +22,20 @@ class GestorSonido{
         //std::vector<*AlSource> getFuentes();
         void setListenerData();
         bool getSonidoCargado();
+        float getVolGeneral();
+        float getVolMusica();
+        float getVolEfectos();
+        void setVolGeneral(float vol);
+        void setVolMusica(float vol);
+        void setVolEfectos(float vol);
         ~GestorSonido();
 
     private:
         static GestorSonido *instancia;
         bool cargado;
+        float volGeneral;
+        float volMusica;
+        float volEfectos;
         ALCcontext *context;
         ALCdevice *device;
         std::vector<int> buffers;

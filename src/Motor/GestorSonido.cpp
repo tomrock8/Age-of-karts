@@ -35,6 +35,11 @@ GestorSonido::GestorSonido() {
 	i = cargarSonido("assets/Sounds/menu.wav");
 	i = cargarSonido("assets/Sounds/car_engine.wav");
 	i = cargarSonido("assets/Sounds/throw.wav");
+
+	//Iniciamos los volumenes por defecto
+	volGeneral = 1.0f;
+	volMusica = 1.0f;
+	volEfectos = 1.0f;
 }
 
 int GestorSonido::cargarSonido(std::string file) {
@@ -75,6 +80,30 @@ void GestorSonido::setListenerData() {
 
 bool GestorSonido::getSonidoCargado() {
 	return cargado;
+}
+
+float GestorSonido::getVolGeneral(){
+	return volGeneral;
+}
+
+float GestorSonido::getVolMusica(){
+	return volMusica;
+}
+
+float GestorSonido::getVolEfectos(){
+	return volEfectos;
+}
+
+void GestorSonido::setVolGeneral(float vol){
+	volGeneral = vol;
+}
+
+void GestorSonido::setVolMusica(float vol){
+	volMusica = vol;
+}
+
+void GestorSonido::setVolEfectos(float vol){
+	volEfectos = vol;
 }
 
 GestorSonido::~GestorSonido() {

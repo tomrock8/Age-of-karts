@@ -71,7 +71,7 @@ void EscenaJuego::init() {
 	luzDirigida_3->translate(glm::vec3(0.0f, 12.0f, 300.0f));
 
 	//ARGUMENTOS MAIN
-	debug = 0;
+	debug = false;
 	fin_carrera = false;
 	t = Timer::getInstancia();
 
@@ -264,8 +264,16 @@ void EscenaJuego::renderDebug() {
 	ImGui::Text("Pulsa 9 para activar - 0 desactivar");
 	ImGui::Text("Jugadores: %i", GestorJugadores::getInstancia()->getNumJugadores());
 	ImGui::Text("Elementos de fisicas: %i", MotorFisicas::getInstancia()->getMundo()->getNumCollisionObjects());
-
+	
 	ImGui::Checkbox("Debug Jugador", &debug_Jugador);
+	ImGui::Checkbox("Debug Fisicas", &debug);
+
+	if (debug){
+		TMotor::instancia().setDebugBullet(true);
+	}else{
+		TMotor::instancia().setDebugBullet(false);
+	}
+	
 	if (debug_Jugador) {
 		ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
 		ImGui::Text(jugador->toString().c_str());
@@ -532,14 +540,16 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	}
 
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS){
-		TMotor::instancia().setRenderDebug(true);
-		TMotor::instancia().setDebugBullet(true);
-		debug = true;
+		muestraDebug = true;
 	}
-	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS)
-		//TMotor::instancia().setRenderDebug(false);
-		debug=false;
-		return tipoEscena; // Significa que debe seguir ejecutando
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS){
+		TMotor::instancia().closeDebugWindow();
+		TMotor::instancia().initDebugWindow();
+		muestraDebug = false;
+	}
+		
+
+	return tipoEscena; // Significa que debe seguir ejecutando
 }
 
 void EscenaJuego::UpdatePhysics(unsigned int TDeltaTime) {

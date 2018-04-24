@@ -1275,25 +1275,39 @@ void Corredor::updateTimerObstaculos() {
 }
 
 void Corredor::actualizarRuedas() {
+	btVector3 zeroVector(0, 0, 0);
+
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
 	//rueda1
+	CuerpoColisionRueda1->clearForces();
+	CuerpoColisionRueda1->setLinearVelocity(zeroVector);
+	CuerpoColisionRueda1->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda1->setCenterOfMassTransform(ruedas);
 	//rueda1->setRotation(180,0,0);
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
+	CuerpoColisionRueda2->clearForces();
+	CuerpoColisionRueda2->setLinearVelocity(zeroVector);
+	CuerpoColisionRueda2->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda2->setCenterOfMassTransform(ruedas);
 	//rueda2->setRotation(180,0,0);
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
+	CuerpoColisionRueda4->clearForces();
+	CuerpoColisionRueda4->setLinearVelocity(zeroVector);
+	CuerpoColisionRueda4->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda4->setCenterOfMassTransform(ruedas);
 	//rueda3->setRotation(180,0,0);
 
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
 	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
+	CuerpoColisionRueda3->clearForces();
+	CuerpoColisionRueda3->setLinearVelocity(zeroVector);
+	CuerpoColisionRueda3->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda3->setCenterOfMassTransform(ruedas);
 	//rueda4->setRotation(180,0,0);
 

@@ -43,6 +43,8 @@ private:
 
 	void UpdatePhysics(unsigned int TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
+	void renderDebug();
+
 	bool debug;
 
 	DebugDraw *debugDraw;
@@ -65,12 +67,14 @@ private:
 	bool fin_carrera;
 	Timer *t;
 
+	float gravedad;
+
 	// IMGUI
 	bool muestraDebug;
 	bool debug_Jugador;
 	bool end;
 	
-	void renderDebug();
+	
 };
 
 #endif /* ESCENAJUEGO_H */

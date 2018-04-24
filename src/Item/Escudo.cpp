@@ -12,7 +12,8 @@ Escudo::Escudo(obj3D* n, btVector3 posicion, btVector3 escala, btScalar masa, fl
 	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/escudo.obj", "escena_raiz",false);
 	cout << "(Escudo::Escudo) Hay que comprobar la posicion que sea respecto del corredor al crear";
 	nodo->setPosition(posicion.getX(), posicion.getY(), posicion.getZ());
-
+	nodo->setScale(escala.getX(),escala.getY(),escala.getZ());
+	
 	GestorIDs::instancia().setIdentifier(nodo, "Estatico");
 	id = nodo->getID();
 

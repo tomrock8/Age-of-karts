@@ -7,6 +7,7 @@ ItemTeledirigido::ItemTeledirigido(btVector3 posicion, btVector3 escala, btScala
 	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/flecha/flecha.obj", "escena_raiz",false);
 	cout << "(ItemTeledirigido::ItemTeledirigido) Hay que comprobar la posicion que sea respecto del corredor al crear\n";
 	nodo->setPosition(posicion.getX(), posicion.getY(), posicion.getZ());
+	nodo->setScale(escala.getX(),escala.getY(),escala.getZ());
 
 	GestorIDs::instancia().setIdentifier(nodo, "Estatico");
 	id = nodo->getID();

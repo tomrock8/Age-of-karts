@@ -41,7 +41,7 @@ Habilidad::Habilidad(int tipo, obj3D* n, btVector3 posicion, btVector3 escala, b
 
 	//nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
 	nodo->setPosition(posicion.getX(), posicion.getY(), posicion.getZ());
-	//nodo->setScale(tamanyoNodo.getX(), tamanyoNodo.getY(), tamanyoNodo.getZ());
+	nodo->setScale(tamanyoNodo.getX(), tamanyoNodo.getY(), tamanyoNodo.getZ());
 	//nodo->setVisible(false);
 	//nodo->setMaterialFlag(EMF_LIGHTING, false);
 	//nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);

@@ -17,10 +17,10 @@ public:
 	virtual void dibujar() override;
 	virtual void limpiar() override;
 	virtual void update() override;
+	void updateLobbyOnline();
 	void mostrarInfoLobby(int indice);
 	Escena::tipo_escena comprobarInputs();
 	void mostrarTipoPersonaje(int i);
-	void mostrarLobbyImgui();
 	int character_callback(GLFWwindow *window, unsigned int codepoint);
 	// METODOS GET
 	std::string getIpConexion();
@@ -42,7 +42,6 @@ private:
 	bool pressed;
 	bool firstInit;
 	Timer *time;
-	char str0[128];
 	//IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
 	//stringw texto; // Texto a mostrar en pantalla
 	//stringw texto2;
@@ -52,6 +51,8 @@ private:
 	bool offline;
 	bool end;
 	std::string iphost;
+	std::string connecting;
+	std::string *infoLobby;
 };
 
 #endif /* ESCENALOBBY_H */

@@ -143,7 +143,16 @@ hud* TMotor::getHud(const char* n) {
 void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; }
 void TMotor::setActiveLight(TNodo *light) { activeLights.push_back(light); }
 void TMotor::setRenderDebug(bool renderDebug) { this->renderDebug = renderDebug; }
-
+void TMotor::setDebugBullet(bool b){ debugBullet = b; }
+//Funcion que recibe dos puntos para dibujar una linea y los mete en el array de vertices para el debug
+void TMotor::setVerticesDebug(float a, float b, float c, float x, float y, float z){
+	vertices.push_back(a);
+	vertices.push_back(b);
+	vertices.push_back(c);
+	vertices.push_back(x);
+	vertices.push_back(y);
+	vertices.push_back(z);
+}
 //Funcion para activar un hud, que sera el que se utilice, solo puede haber un hud activo por iteracion
 void TMotor::setActiveHud(const char* n) {
 	hud* h = getHud(n); //Obtenemos el hud a partir del nombre
@@ -403,6 +412,38 @@ void TMotor::draw(int tipo) {
 		//Dibujamos los distintos nodos del arbol
 		scene->draw(shader);
 
+		//DIBUJADO DEL DEBUG DE BULLET
+		//----------------------------
+		if (debugBullet && vertices.size() > 0){ //Si el debug de bullet esta activado
+			//Creamos los buffers de OpenGl necesarios
+			unsigned int VAO, VBO;
+			glGenVertexArrays(1, &VAO);
+			glGenBuffers(1, &VBO);
+			//Activamos el VAO
+			glBindVertexArray(VAO);
+			//Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), 0);
+			glEnableVertexAttribArray(0);
+			//Activamos el shader del debug
+			shaderDebug->use();
+			//Pasamos la view y la projection matrix al shader debug
+			drawCamera(shaderDebug);
+			//Creamos y le pasamos la matriz model al shader (matriz identidad)
+			glm::mat4 model;
+			shaderDebug->setMat4("model", model);
+			//Establecemos el ancho de las lineas
+			glLineWidth(3.0f);
+			//Llamamos al dibujado de las distintas lineas
+			glDrawArrays(GL_LINES, 0, vertices.size());
+			//Desactivamos los buffers usados para dibujar las lineas
+			glBindVertexArray(0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			//Limpiamos el vector de vertices para la siguiente iteracion
+			vertices.clear();
+		}
+		
 		//==========================================================
 		// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
 		//==========================================================
@@ -437,6 +478,7 @@ void TMotor::draw(int tipo) {
 	}
 
 	//Se activa el shader para el dibujado del HUD
+	
 	shaderHUD->use();
 
 	//Dibujamos el hud activo

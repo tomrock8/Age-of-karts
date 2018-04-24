@@ -19,27 +19,10 @@ EscenaJuego::~EscenaJuego() {
 	//----------------------------------//
 	//-----------DESTRUCTORES-----------//
 	//----------------------------------//
-	//cout << "\n-------------- A BORRAR LA ESCENA DE JUEGO! -------------- \n";
-	//cout << "Vamos a limpiar primero la escena!...";
 	limpiar();
-	//cout << "Bien!\n";
-	//
-
-	//cout << "Voy a entrar en el destructor de bullet. Deseadme suerte...\n";
 	delete MotorFisicas::getInstancia();
-	//cout << "Bien!\n";
-
-	//cout << "Voy a entrar en el destructor de jugadores. Deseadme suerte...\n";
 	delete GestorJugadores::getInstancia();
-	//cout << "Bien!\n";
-
-	//cout << "Voy a entrar en el destructor de pista. Deseadme suerte...\n";
 	delete Pista::getInstancia();
-	//cout << "No ha ido mal.\n";
-
-	//delete TextoPantalla::getInstancia();
-
-	//delete camara;
 }
 
 void EscenaJuego::init() {
@@ -71,7 +54,7 @@ void EscenaJuego::init() {
 	luzDirigida_3->translate(glm::vec3(0.0f, 12.0f, 300.0f));
 
 	//ARGUMENTOS MAIN
-	debug = 0;
+	debug = false;
 	fin_carrera = false;
 	t = Timer::getInstancia();
 
@@ -86,7 +69,8 @@ void EscenaJuego::init() {
 	}
 
 	// Gravedad
-	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -30.f, 0.0));
+	gravedad = -30.0f;
+	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
 
 	//----------------------------
 	//	Debug Bullet
@@ -170,10 +154,6 @@ void EscenaJuego::init() {
 		jugador->setID(i);
 		pj.push_back(jugador);
 		jugadores->aumentarJugadores();
-		jugador = new CorredorIA(pos2[1], Corredor::tipo_jugador::CHINO);
-		jugador->getNodo()->rotate(glm::vec3(0, 1, 0), 90);
-		pj.push_back(jugador);
-		jugadores->aumentarJugadores();
 	}
 
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
@@ -207,6 +187,7 @@ void EscenaJuego::init() {
 	// -----------------------
 	debug_Jugador = false;
 	muestraDebug = true;
+	TMotor::instancia().initDebugWindow();
 
 	//-----------------------
 	// OPENAL
@@ -232,7 +213,6 @@ void EscenaJuego::dibujar() {
 	else {
 		for (int i = 0; i < pj.size(); i++) {
 			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
-
 				CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
 				if (!AUXILIAR->getDebugFisicas()) {
 					i = pj.size();
@@ -267,14 +247,27 @@ void EscenaJuego::renderDebug() {
 	ImGui::Text("Pulsa 9 para activar - 0 desactivar");
 	ImGui::Text("Jugadores: %i", GestorJugadores::getInstancia()->getNumJugadores());
 	ImGui::Text("Elementos de fisicas: %i", MotorFisicas::getInstancia()->getMundo()->getNumCollisionObjects());
+	if (ImGui::SliderFloat("Gravedad", &gravedad, -100.0f, 0.0f)) {
+		MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
+	}
+
 
 	ImGui::Checkbox("Debug Jugador", &debug_Jugador);
+	ImGui::Checkbox("Debug Fisicas", &debug);
+
+	if (debug) {
+		TMotor::instancia().setDebugBullet(true);
+	}
+	else {
+		TMotor::instancia().setDebugBullet(false);
+	}
+
 	if (debug_Jugador) {
 		ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
 		ImGui::Text(jugador->toString().c_str());
 
-		static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo,velocidadLimiteGiro;
-		jugador->getParametros(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo,&velocidadLimiteGiro);
+		static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro;
+		jugador->getParametros(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo, &velocidadLimiteGiro);
 
 		ImGui::SliderFloat("fuerza", &fuerza, 0.0f, 10000.0f);
 
@@ -285,7 +278,7 @@ void EscenaJuego::renderDebug() {
 		ImGui::SliderFloat("VelocidadLimiteGiro", &velocidadLimiteGiro, 0.0f, 8000.0f);
 		ImGui::SliderFloat("indiceGiroAlto", &indiceGiroAlto, 0.0f, 1.0f);
 		ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f);
-		jugador->setParametros(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo,velocidadLimiteGiro);
+		jugador->setParametros(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro);
 
 
 
@@ -294,8 +287,8 @@ void EscenaJuego::renderDebug() {
 		resetOri[0] = jugador->getNodo()->getRotation().z;
 		resetOri[1] = jugador->getNodo()->getRotation().y;
 		resetOri[2] = jugador->getNodo()->getRotation().x;
-		
-		
+
+
 		ImGui::SliderFloat3("Posicion", posicion, -100, 100);
 		ImGui::SameLine();
 		if (ImGui::Button("Set position"))
@@ -534,10 +527,15 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
 	}
 
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS)
-		TMotor::instancia().setRenderDebug(true);
-	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS)
-		TMotor::instancia().setRenderDebug(false);
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS) {
+		muestraDebug = true;
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS) {
+		TMotor::instancia().closeDebugWindow();
+		TMotor::instancia().initDebugWindow();
+		muestraDebug = false;
+	}
+
 
 	return tipoEscena; // Significa que debe seguir ejecutando
 }

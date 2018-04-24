@@ -81,19 +81,27 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "escena_raiz", false);
 
 
-	//rueda1->setRotation(180,0,0);
-	//rueda2.setRotation();
-	//rueda3.setRotation();
-	//rueda4.setRotation();
+	rueda1->setScale(1,1,1);//alante derecha
+	rueda2->setScale(1,1,1);//delante izquierda
+	rueda3->setScale(1,1,1);//atras derecha
+	rueda4->setScale(1,1,1);//atras izquierda
+
+	rueda1->setVisible(false);//alante derecha
+	rueda2->setVisible(false);//delante izquierda
+	rueda3->setVisible(false);//atras derecha
+	rueda4->setVisible(false);//atras izquierda
+
 	
+
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
+		cuboNodo->setScale(1, 1, 1.5);
 		cuboNodo->setRotation(0.0f, 90.0f, 0.0f);
 	}
 
 
 	InicializarFisicas();
-	//InicializarFisicasRuedas();
+	InicializarFisicasRuedas();
 
 
 	//OPENAL
@@ -227,8 +235,8 @@ void Corredor::InicializarFisicasRuedas() {
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	float masar = 0.000000000000001f;
-	float radio = 1;
+	float masar = 0.05f;
+	float radio = 1.2;
 	float ancho = 1.2;
 	btVector3 HalfExtents(1, 1, 1);
 
@@ -244,8 +252,8 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda1 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	//FormaColisionR1 = new btCylinderShapeX(btVector3(ancho,radio,radio));
-	FormaColisionR1 = new btSphereShape(radio);
+	FormaColisionR1 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	//FormaColisionR1 = new btSphereShape(radio);
 
 	// Add mass
 	btVector3 LocalInertia;
@@ -273,8 +281,8 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda2 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	//FormaColisionR2 = new btCylinderShapeX(btVector3(ancho,radio,radio));
-	FormaColisionR2 = new btSphereShape(radio);
+	FormaColisionR2 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	//FormaColisionR2 = new btSphereShape(radio);
 
 	CuerpoColisionRueda2 = new btRigidBody(masar, motionStateRueda2, FormaColisionR2, LocalInertia);
 	CuerpoColisionRueda2->setUserPointer((void *)(rueda2));
@@ -298,8 +306,8 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda3 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	//FormaColisionR3 = new btCylinderShapeX(btVector3(ancho,radio,radio));
-	FormaColisionR3 = new btSphereShape(radio);
+	FormaColisionR3 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	//FormaColisionR3 = new btSphereShape(radio);
 
 	CuerpoColisionRueda3 = new btRigidBody(masar, motionStateRueda3, FormaColisionR3, LocalInertia);
 	CuerpoColisionRueda3->setUserPointer((void *)(rueda3));
@@ -322,8 +330,8 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda4 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	//FormaColisionR4 = new btCylinderShapeX(btVector3(ancho,radio,radio));
-	FormaColisionR4 = new btSphereShape(radio);
+	FormaColisionR4 = new btCylinderShapeX(btVector3(ancho,radio,radio));
+	//FormaColisionR4 = new btSphereShape(radio);
 
 	CuerpoColisionRueda4 = new btRigidBody(masar, motionStateRueda4, FormaColisionR4, LocalInertia);
 	CuerpoColisionRueda4->setUserPointer((void *)(rueda4));
@@ -335,19 +343,20 @@ void Corredor::InicializarFisicasRuedas() {
 	objetos.push_back(CuerpoColisionRueda4);
 	bullet->setObjetos(objetos);
 
-
+	//Restricciones para las ruedas
 	btVector3 axisA(1.f, 1.f, 1.f);
 	btVector3 axisB(0.f, 0.f, 0.f);
-	btVector3 pivotA(2.5f, 1.8f, 2.f);
+	btVector3 pivotA(3.f, 5.f, 3.f);
 	btVector3 pivotB(0.f, 0.f, 0.f);
 
 	restriccion1 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda1, pivotA, pivotB, axisA, axisB, false);
-	pivotA = btVector3(-2.5f, 1.8f, 2.f);
+	pivotA = btVector3(-3.f, 5.f, 3.f);
 	restriccion2 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda2, pivotA, pivotB, axisA, axisB, false);
-	pivotA = btVector3(-2.5f, 1.8f, -2.f);
+	pivotA = btVector3(-3.f, 5.f, -3.f);
 	restriccion3 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda3, pivotA, pivotB, axisA, axisB, false);
-	pivotA = btVector3(2.5f, 1.8f, -2.f);
+	pivotA = btVector3(3.f, 5.f, -3.f);
 	restriccion4 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda4, pivotA, pivotB, axisA, axisB, false);
+	
 	restriccion1->enableAngularMotor(true, 1, 0);
 	restriccion2->enableAngularMotor(true, 1, 0);
 	restriccion3->enableAngularMotor(true, 1, 0);
@@ -387,7 +396,7 @@ void Corredor::InicializarFisicas() {
 
 	//Forma Colision
 	//btVector3 TamanyoFormaColision(cuboNodo->getScale().X, cuboNodo->getScale().Y, cuboNodo->getScale().Z * 2);
-	btVector3 TamanyoFormaColision(1, 1, 2);
+	btVector3 TamanyoFormaColision(cuboNodo->getScale().x, cuboNodo->getScale().y, cuboNodo->getScale().z * 2);
 	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
 	FormaColision = new btBoxShape(TamanyoFormaColision);
 	//masa coche
@@ -736,6 +745,7 @@ void Corredor::setTurbo(bool activo, bool objeto, int valor, int tiempo) {
 		velocidadMaxima = velocidadMaximaTurbo;
 		Timer *time = Timer::getInstancia();
 		timerTurbo = time->getTimer();
+		pitchMotor += 0.2f;
 		if (objeto) {
 			if (cargador == 1)
 				tipoObj = EstadosJugador::estado_objeto::NADA;
@@ -847,6 +857,7 @@ void Corredor::resetFuerzas() {
 }
 void Corredor::soltarItem() {
 	setTipoObj(EstadosJugador::estado_objeto::NADA);
+	fuenteItem->play(SOUND_THROW);
 	setLimite(getLimite() + 10);
 }
 
@@ -1028,6 +1039,7 @@ void Corredor::acelerar() {
 
 
 	if(pitchMotor < 1) pitchMotor += 0.01f;
+	else if(pitchMotor > 1) pitchMotor -= 0.001f;
 }
 void Corredor::frenar() {
 	if (vehiculo->getCurrentSpeedKmHour() < velocidadMaximaAtras) {
@@ -1201,7 +1213,7 @@ void Corredor::update() {
 	updateTimerObstaculos();
 	updateEstado();
 	comprobarSueloRuedas();
-	//actualizarRuedas();
+	actualizarRuedas();
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
@@ -1264,24 +1276,24 @@ void Corredor::updateTimerObstaculos() {
 
 void Corredor::actualizarRuedas() {
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
-	ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
 	//rueda1
 	CuerpoColisionRueda1->setCenterOfMassTransform(ruedas);
 	//rueda1->setRotation(180,0,0);
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
-	ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
 	CuerpoColisionRueda2->setCenterOfMassTransform(ruedas);
 	//rueda2->setRotation(180,0,0);
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
-	ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
 	CuerpoColisionRueda4->setCenterOfMassTransform(ruedas);
 	//rueda3->setRotation(180,0,0);
 
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
-	ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
+	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
 	CuerpoColisionRueda3->setCenterOfMassTransform(ruedas);
 	//rueda4->setRotation(180,0,0);
 

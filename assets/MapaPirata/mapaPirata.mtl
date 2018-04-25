@@ -1,5 +1,5 @@
 # Blender MTL File: 'mapa4.0.blend'
-# Material Count: 4
+# Material Count: 2
 
 newmtl CarreteraMAT
 Ns 96.078431
@@ -24,31 +24,5 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd texturas/terrain_diffuse.png
-map_Bump texturas/terrain_normal.png
-map_Ks texturas/terrain_specular.png
-
-newmtl montanaMAT_NONE
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Bump texturas/terrain_normal.png
-map_Kd texturas/terrain_diffuse.png
-map_Ks texturas/terrain_specular.png
-
-newmtl montanaMAT_terrain_difusse.png.000
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd texturas/terrain_difusse.png
 map_Bump texturas/terrain_normal.png
 map_Ks texturas/terrain_specular.png

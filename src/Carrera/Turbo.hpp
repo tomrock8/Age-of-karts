@@ -2,13 +2,13 @@
 #define TURBO_H
 
 #include <iostream>
-#include "IrrlichtLib.hpp"
-#include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "Corredor.hpp"
 #include "GestorIDs.hpp"
+#include "TMotor.hpp"
+
 class Turbo
 {
 public:
@@ -28,7 +28,9 @@ public:
 	//destructor
 	~Turbo();
 private:
-	IMeshSceneNode * turbo;
+
+	obj3D * turbo;
+
 	btVector3 escala;
 	btTransform transform;
 	btDefaultMotionState *MotionState;

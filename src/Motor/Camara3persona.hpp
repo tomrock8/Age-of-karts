@@ -3,10 +3,8 @@
 
 #include <cstdlib>
 #include <iostream>
-#include "IrrlichtLib.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "Corredor.hpp"
-#include "Graphics.hpp"
 
 class Camara3persona
 {
@@ -22,7 +20,7 @@ public:
 private:
   float direction;
   float zdirection;
-  ICameraSceneNode *camera;
+  //ICameraSceneNode *camera;
   bool fpsActiva;
   float XCamera3;
   float YCamera3;

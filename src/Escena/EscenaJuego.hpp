@@ -2,22 +2,21 @@
 #define ESCENAJUEGO_H
 
 #include <ctime>
+#include <vector>
 
 #include "GestorEscena.hpp"
 #include "Escena.hpp"
 
-#include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
 #include "DebugFisicas.hpp"
-#include "Camara3persona.hpp"
 
 #include "Pista.hpp"
 #include "GestorJugadores.hpp"
 #include "GestorCarrera.hpp"
 #include "GestorColisiones.hpp"
-#include <vector>
-#include "Graphics.hpp"
 #include "Timer.hpp"
+
+#include "cameraThird.hpp"
 
 
 class EscenaJuego : public Escena {
@@ -28,6 +27,7 @@ public:
 
 	virtual void init() override;
 	virtual void dibujar() override;
+	
 	virtual void limpiar() override;
 	virtual void update() override;
 	Escena::tipo_escena comprobarInputs();
@@ -38,33 +38,46 @@ public:
 	// METODOS SET
 
 private:
-	
+
 	std::string ipConexion;
 
-	void UpdatePhysics(u32 TDeltaTime);
+	void UpdatePhysics(unsigned int TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
-	int debug;
+	void renderDebug();
+
+	bool debug;
 
 	DebugDraw *debugDraw;
 
 	int controlPlayer;
-
-	Camara3persona *camara;
+	cameraThird *camera;
 	int tipoCamara;
 	bool cambioCamara;
 	GestorColisiones *colisiones;
 
 	int lastFPS;
-	u32 TimeStamp;
-	u32 DeltaTime;
+	std::uint32_t TimeStamp;
+	std::uint32_t DeltaTime;
 
 	Client *client;
-	vector3df pos;
+	btVector3 pos;
+	
 
-	clock_t tiempoRefresco;
+	float tiempoRefresco;
 	GestorCarrera *gc;
 	bool fin_carrera;
 	Timer *t;
+
+	float gravedad;
+
+	// IMGUI
+	bool muestraDebug;
+	bool debug_Jugador;
+	bool end;
+	
+	//SONIDO 
+	AlSource *fuenteCarrera;
+	
 };
 
 #endif /* ESCENAJUEGO_H */

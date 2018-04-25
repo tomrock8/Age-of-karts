@@ -4,37 +4,40 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "IrrlichtLib.hpp"
-#include "Motor3d.hpp"
 #include "Waypoint.hpp"
 #include "Proyectil.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "MotorFisicas.hpp"
 #include "ItemTeledirigido.hpp"
-#include "TextoPantalla.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+#include "BulletDynamics/ConstraintSolver/btHingeConstraint.h"
 #include "RaknetIncludes.hpp"
-#include "TextoPantalla.hpp"
 #include "Escudo.hpp"
 #include "EstadosJugador.hpp"
 #include "Habilidad.hpp"
 #include "ItemTeledirigido.hpp"
+#include "TMotor.hpp"
+#include "cameraThird.hpp"
+#include "GestorSonido.hpp"
 
 
 using namespace std;
 
-class Corredor: public RakNet::NetworkIDObject 
+
+class Corredor : public RakNet::NetworkIDObject
 {
-  public:
-  typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
-	Corredor(stringw rutaObj, btVector3 pos,tipo_jugador tipo);
+public:
+	typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
+	Corredor(btVector3 pos, tipo_jugador tipo);
+
 	void InicializarFisicas();
+	void InicializarFisicasRuedas();
 	void resetFuerzas();
 	void limitadorVelocidad();
 	// Destructor
 	~Corredor();
-	
+
 	void acelerar();
 	void recolocarWaypoint();
 
@@ -51,26 +54,25 @@ class Corredor: public RakNet::NetworkIDObject
 	void setObjetivoTelederigido();
 	void setParametros();
 	void setTipoObj();
-	void setTipoObj(int i);
+	void setTipoObj(EstadosJugador::estado_objeto objeto);
 	void SetFuerzaVelocidad(int turbo);
 	void setFriccion(btScalar valor);
-	void setTurbo(bool activo, bool objeto,int valor,int tiempo);
+	void setTurbo(bool activo, bool objeto, int valor, int tiempo);
 	void setInmunidad(bool activo);
 	void setHabilidad(bool activo);
-	void setWaypointActual(ISceneNode *nodo);
+	void setWaypointActual(obj3D *nodo);
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
+	void setPosicionSources();
 	void setLimite(int s);
 	void setTipoJugador(int tj);
 	void setVueltas(int j);
 	void setTiempoVuelta(float t);
-
-	
-	std::string toString();
-	
+	void setParametrosDebug(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo, float velocidadLimiteGiro);
+	void setParametrosRuedasDebug(float suspensionStiffness, float DampingCompression, float DampingRelaxation, float frictionSlip, float rollInfluence, float suspForce, float suspTravelCm);
 
 	//waypoints
-	void setPosicionCarrera(int i,int j);
+	void setPosicionCarrera(int i, int j);
 	int getPosicionCarrera();
 	void setMaxVueltas(int i);
 	btScalar getDistanciaPunto(btVector3 vector);
@@ -79,20 +81,20 @@ class Corredor: public RakNet::NetworkIDObject
 	int getVueltas();
 	float getMaxVuetas();
 	float getTiempoVueltaTotal();
-	
+	void getParametrosDebug(float * fuerza, float * velocidadMedia, float * velocidadMaximaTurbo, float * velocidadMaxima, float * masa, float * indiceGiroAlto, float * indiceGiroBajo, float * velocidadLimiteGiro);
+	void getParametrosRuedasDebug(float * suspensionStiffness, float * DampingCompression, float * DampingRelaxation, float * frictionSlip, float * rollInfluence, float * suspForce, float * suspTravelCm);
+
 	// Update
 	void update();
 	void updateTimerObstaculos();
 	void updateEstado();
-	void updateText();
 	void comprobarSueloRuedas();
 	void comprobarTurbo();
 	void comprobarInmunidad();
-	virtual void actualizarItem()=0;
-
+	virtual void actualizarItem() = 0;
 
 	// Metodos GET
-	IMeshSceneNode *getNodo();
+	obj3D *getNodo();
 	btRaycastVehicle *getVehiculo();
 	btRigidBody *getRigidBody();
 	btVector3 getVectorDireccion();
@@ -103,7 +105,6 @@ class Corredor: public RakNet::NetworkIDObject
 	bool getTurbo();
 	Waypoint *getWaypointActual();
 	Waypoint *getWaypointSiguiente();
-	Waypoint *getWaypointAnterior();
 	bool getProteccion();
 	EstadosJugador *getEstados();
 	int getLimite();
@@ -119,20 +120,25 @@ class Corredor: public RakNet::NetworkIDObject
 	void lanzarHabilidad();
 
 
-	
+	std::string toString();
 
 protected:
+	obj3D * cuboNodo;
+	obj3D *rueda1;
+	obj3D *rueda2;
+	obj3D *rueda3;
+	obj3D *rueda4;
 
-	//Irrlicht
-	IMesh * coche;
-	IMeshSceneNode *cuboNodo;
-	IMeshSceneNode *rueda1;
-	IMeshSceneNode *rueda2;
-	IMeshSceneNode *rueda3;
-	IMeshSceneNode *rueda4;
+	//cameraThird *camara3Persona;
+
+	//VARIABLES OPENAL SONIDO
+
+	AlSource *fuenteMotor;
+	AlSource *fuenteItem;
+	AlSource *fuenteFrenos;
+	float pitchMotor;
 
 	//WAYPOINTS
-	Waypoint *anterior; // Punto Actual
 	Waypoint *actual; // Punto Actual
 	Waypoint *siguiente; // Punto Siguiente
 	Waypoint *siguiente_aux; // Punto Siguiente
@@ -143,7 +149,6 @@ protected:
 	// Control de vueltas
 	btScalar distanciaWaypoint;
 	btScalar distanciaWaypointActual;
-	btScalar distanciaWaypointAnterior;
 
 	//bullet
 	btRaycastVehicle *vehiculo;
@@ -152,10 +157,32 @@ protected:
 	btRigidBody *CuerpoColisionChasis;
 	btCompoundShape *CentroGravedad;
 
+	//RUEDAS
+	btDefaultMotionState *motionStateRueda1; //interpolacion
+	btCollisionShape *FormaColisionR1;		//contornoB
+	btRigidBody *CuerpoColisionRueda1;
+
+	btDefaultMotionState *motionStateRueda2; //interpolacion
+	btCollisionShape *FormaColisionR2;		//contornoB
+	btRigidBody *CuerpoColisionRueda2;
+
+	btDefaultMotionState *motionStateRueda3; //interpolacion
+	btCollisionShape *FormaColisionR3;		//contornoB
+	btRigidBody *CuerpoColisionRueda3;
+
+	btDefaultMotionState *motionStateRueda4; //interpolacion
+	btCollisionShape *FormaColisionR4;		//contornoB
+	btRigidBody *CuerpoColisionRueda4;
+
+	btHingeConstraint *restriccion1;
+	btHingeConstraint *restriccion2;
+	btHingeConstraint *restriccion3;
+	btHingeConstraint *restriccion4;
+
 	const char* nombre;
 	int id;
 	int cargador;
-	int tipoObj; // si es 0 no tengo nada
+	EstadosJugador::estado_objeto tipoObj; // si es 0 no tengo nada
 	bool turboActivado; // para saber cuando esta activado turbo
 	bool objetivoFijado; //para el item teledirigido
 	bool aceiteActivado; //para el item teledirigido
@@ -172,10 +199,10 @@ protected:
 	float tiempoVuelta;
 	float tiempoVueltaTotal;
 	//objetos estaticos y dinamicos
-	
+
 	EstadosJugador *estado;
 	btVector3 posDisparo;
-	
+
 	//tipo jugador
 	tipo_jugador tipojugador;
 
@@ -193,7 +220,6 @@ protected:
 
 	btScalar indiceGiroAlto;
 	btScalar indiceGiroBajo;
-	btVector3 posicion;
 	btVector3 direccionRuedas;
 	btVector3 rotacionRuedas;
 	btScalar suspension;
@@ -213,9 +239,9 @@ protected:
 	//raycast
 	btVehicleRaycaster *RayCastVehiculo;
 
-	
+
 	btVector3 orientacion;
-	
+
 	void CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning);
 	void BorrarFisicas();
 
@@ -228,7 +254,7 @@ protected:
 	void frenodemano(bool activo, bool objeto);
 
 	virtual void movimiento() = 0; // A implementar por derivadas
-	virtual void updateHijos() =0 ;
+	virtual void updateHijos() = 0;
 
 	// UPDATES
 	void actualizarRuedas();

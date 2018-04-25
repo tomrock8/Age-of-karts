@@ -1,7 +1,7 @@
 #include "EscenaCreditos.hpp"
 
 EscenaCreditos::EscenaCreditos() : Escena(Escena::tipo_escena::CREDITOS) {
-	texto = L"Autores:\n\n";
+	/*texto = L"Autores:\n\n";
 	texto += "  -  Angel Gonzalez Cobo\n\n";
 	texto += "  -  Carlos Jimenez Quinto\n\n";
 	texto += "  -  Jordi Serna Valero\n\n";
@@ -27,7 +27,7 @@ EscenaCreditos::EscenaCreditos() : Escena(Escena::tipo_escena::CREDITOS) {
 	textoUI->setOverrideFont(fuente);
 	
 	logoAOK = Motor3d::instancia().getDriver()->getTexture("assets/logoAOK.png");
-	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));
+	Motor3d::instancia().getDriver()->makeColorKeyTexture(logoAOK, core::position2d<s32>(0, 0));*/
 }
 
 EscenaCreditos::~EscenaCreditos() {
@@ -40,7 +40,7 @@ void EscenaCreditos::init() {
 }
 
 void EscenaCreditos::dibujar() {
-	Motor3d::instancia().iniciarDibujado();
+	/*Motor3d::instancia().iniciarDibujado();
 
 	//Motor3d::instancia().getDriver()->draw2DImage(logoAOK, rect<s32>(0, 0, 100, 100), 0, SColor(255, 255, 255, 255), true);
 	Motor3d::instancia().getDriver()->draw2DImage(logoAOK, position2d<s32>(Motor3d::instancia().getAnchoPantalla() / 4, 0),
@@ -48,12 +48,12 @@ void EscenaCreditos::dibujar() {
 		video::SColor(255, 255, 255, 255), true);
 
 	Motor3d::instancia().dibujar();
-	Motor3d::instancia().terminarDibujado();
+	Motor3d::instancia().terminarDibujado();*/
 }
 
 void EscenaCreditos::limpiar() {
-	Motor3d::instancia().getScene()->clear();
-	Motor3d::instancia().getGUI()->clear();
+	/*Motor3d::instancia().getScene()->clear();
+	Motor3d::instancia().getGUI()->clear();*/
 }
 
 void EscenaCreditos::update() {
@@ -61,15 +61,15 @@ void EscenaCreditos::update() {
 
 Escena::tipo_escena EscenaCreditos::comprobarInputs() {
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS){
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
 	else {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)){
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_KP_1) == GLFW_PRESS){
 			cout << "SINGLE PLAYER\n";
 		}
 		else {
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)){
+			if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_KP_2) == GLFW_PRESS){
 				cout << "MULTI PLAYER\n";
 			}
 		}

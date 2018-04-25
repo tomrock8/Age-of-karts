@@ -1,12 +1,12 @@
-FUENTE := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
+FUENTE := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp)
 OBJETOS := $(subst src/,obj/,$(subst .cpp,.o,$(FUENTE)))
 
-LIBRERIAS := -lIrrlicht -lXxf86vm -lGL -lX11 -lSDL -lSDL_image -lGLU -lRakNetLibStatic  -lpthread -lsfml-graphics -lsfml-window -lsfml-system
+LIBRERIAS :=   -lGL -lSDL -lSDL_image -lGLU -lRakNetLibStatic  -lpthread -lglfw -lGLEW -lassimp -lopenal -lalut -lsndio
 LIBRERIAS_BULLET := -lBulletDynamics -lBulletCollision -lLinearMath -lBulletSoftBody -lBulletWorldImporter -lBulletFileLoader 
 
 RUTAS2 := -I. -I/usr/local/include/bullet/ 
-RUTAS := -I./include/irrlicht -I./include/raknet -I./include/irrlicht/include -I./include/bullet -I./include/SFML -L./lib -L./lib/sfml
-RUTAS_INTERNAS := -I./src -I./src/Carrera -I./src/Corredor -I./src/Escena -I./src/Item -I./src/Motor
+RUTAS :=  -I./include/raknet -I./include/bullet -I./include -I./include/assimp -I./include/GL -I./include/GLFW -I./include/glm -I./include/sdl -I./include/stb -I./include/openal -L./lib
+RUTAS_INTERNAS := -I./src -I./src/Carrera -I./src/Corredor -I./src/Escena -I./src/Item -I./src/Motor -I./src/imgui -I./src/OpenGL/Motor -I./src/OpenGL/ArbolEscena -I./src/OpenGL/Fachada -I./src/OpenGL/Shader -I./src/OpenGL/GestorRecursos -I./src/OpenGL
 
 CFLAGS := -ggdb -std=c++11 
 .PHONY: objdir info all 
@@ -64,6 +64,13 @@ objdir:
 	@mkdir -p obj/Escena
 	@mkdir -p obj/Item
 	@mkdir -p obj/Motor
+	@mkdir -p obj/OpenGL
+	@mkdir -p obj/OpenGL/ArbolEscena
+	@mkdir -p obj/OpenGL/Fachada
+	@mkdir -p obj/OpenGL/Shader
+	@mkdir -p obj/OpenGL/GestorRecursos
+	@mkdir -p obj/OpenGL/Motor
+	@mkdir -p obj/imgui
 	@echo "Creando carpeta de compilados."
 
 info:
@@ -73,7 +80,6 @@ info:
 clean:
 	@rm -f -r obj/
 	@rm -f exec
-	@rm -f ip.txt
 	@rm -f exec2
 	@echo "Limpiando resultado de compilacion."
 

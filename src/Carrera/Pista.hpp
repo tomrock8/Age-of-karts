@@ -2,9 +2,7 @@
 #define PISTA_H
 
 #include <iostream>
-#include "IrrlichtLib.hpp"
 #include "btBulletDynamicsCommon.h"
-#include "Motor3d.hpp"
 #include "MotorFisicas.hpp"
 #include "Item.hpp"
 #include <string>
@@ -14,6 +12,8 @@
 #include "Turbo.hpp"
 #include "Caja.hpp"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
+#include "TMotor.hpp"
+
 
 using namespace std;
 
@@ -23,21 +23,23 @@ class Pista
 public:
 	//Destructor
 	~Pista();
-	
+
 	static Pista *getInstancia();
-	void InicializarFisicas();
-	void BorrarFisicas();
-	
+
 	// METODOS SET
-	void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
-	void setItems(vector<Item *> itemMetodo);
+	void setMapa(const char* name);
+	void createMap(const char * path);
+	// CARGA MAPA
+	void loadWaypoints(const char *waypoints);
+	void setItems(std::vector<Item *> itemMetodo);
 	// METODOS GET
-	vector<Item *> getItems();
-	vector<Turbo*> getArrayTurbo();
-	vector<Caja*> getArrayCaja();
-	void setArrayCaja(vector<Caja*> caja);
+	std::vector<Item *> getItems();
+	void loadPirateMapElements();
+	std::vector<Turbo*> getArrayTurbo();
+	std::vector<Caja*> getArrayCaja();
+	void setArrayCaja(std::vector<Caja*> caja);
 	int getTamCajas();
-	vector<Waypoint*> getArrayWaypoints();
+	std::vector<Waypoint*> getArrayWaypoints();
 	Turbo* getTurbo();
 	Turbo* getTurbo(int id);
 	int getTamArrayWaypoints();
@@ -45,28 +47,18 @@ public:
 private:
 	Pista(void);
 	static Pista *instancia;
-	
-	//MUNDO
-	btRigidBody *CuerpoColisionMapa;
-	btCollisionShape *FormaColision;
-	btDefaultMotionState *MotionState; // posicion del cuerpo de colision
-	
 	int tamWaypoints;
-	vector<Waypoint*> arrayWaypoints;
-
+	std::vector<Waypoint*> arrayWaypoints;
 	int tamTurbos;
-	vector<Turbo*> arrayTurbos;
-	
+	std::vector<Turbo*> arrayTurbos;
 	int tamCajas;
-	vector<Caja*> arrayCajas;
-	
-	ISceneNode *Mapa;
-
-	vector<Item *> Items;
-
-
-	//fisicas del mapa
-	btBulletWorldImporter *fisicasMapa;
+	std::vector<Caja*> arrayCajas;
+	obj3D *Mapa;
+	std::vector<Item *> Items;
+	//Variables para la deteccion del mapa
+	const char *nameMap;
+	const char *path;
+	const char *wayPoints;
 };
 
 #endif /* PISTA_H */

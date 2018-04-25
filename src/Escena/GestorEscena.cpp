@@ -1,5 +1,6 @@
 #include "GestorEscena.hpp"
 
+
 GestorEscena::GestorEscena() {
 	cambioEscena = Escena::tipo_escena::MENU; // Indicador que tiene que cambiar de escena
 	escenas = new Escena*[Escena::nTipos]; // Array que contendra todas las escenas posibles
@@ -38,7 +39,9 @@ Escena::tipo_escena GestorEscena::update() {
 	if (timediff_sec >= retardo1) {
 	//	cout<<timediff_sec <<endl;
 		tiempoRefresco = clock();
+		*/
 		cambioEscena = escenaActiva->comprobarInputs();
+		/*
 		escenaActiva->update();
 		//cont++;
 	}
@@ -59,6 +62,7 @@ if(tiempo-tiempoAnterior ==1){
 	}
 	else {
 		if (cambioEscena != Escena::tipo_escena::SALIR)
+			
 			cambiaEscena(cambioEscena);
 			//tiempoActual=0;
 			//tiempoRefresco=0;
@@ -91,33 +95,6 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 		escenaActiva->limpiar();
 		escenaActiva = nullptr; // Desasignamos la escena activa
 		borraEscena(anterior->getTipoEscena());
-		/*
-		// Proceso de borrado la escena antigua en caso que sea necesario
-		if (tipo == Escena::tipo_escena::MENU) {
-			// MENU		DESDE LOBBY		-> BORRAR LOBBY
-			if (anterior->getTipoEscena() == Escena::tipo_escena::LOBBY) {
-				borraEscena(anterior->getTipoEscena());// Borrar LOBBY
-			}
-			else {
-				// MENU		DESDE CARRERA	-> BORRAR CARRERA
-				if (anterior->getTipoEscena() == Escena::tipo_escena::CARRERA || anterior->getTipoEscena() == Escena::tipo_escena::ONLINE) {
-					borraEscena(anterior->getTipoEscena()); // Borrar Carrera
-				}
-			}
-		}
-		else {
-			// CARGA	DESDE LOBBY		-> BORRAR LOBBY
-			if (tipo == Escena::tipo_escena::CARGA && anterior->getTipoEscena() == Escena::tipo_escena::LOBBY) {
-				borraEscena(anterior->getTipoEscena()); // Borrar LOBBY
-			}
-			else {
-				// CARRERA	DESDE CARGA		-> BORRAR CARGA
-				if ((tipo == Escena::tipo_escena::CARRERA || tipo == Escena::tipo_escena::ONLINE) && anterior->getTipoEscena() == Escena::tipo_escena::CARGA) {
-					borraEscena(anterior->getTipoEscena()); // Borrar Carga
-				}
-			}
-		}
-		*/
 	}
 
 	// No hay una escena activa, de manera que se crea una nueva

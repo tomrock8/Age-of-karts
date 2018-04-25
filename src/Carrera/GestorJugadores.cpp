@@ -48,11 +48,11 @@ GestorJugadores *GestorJugadores::getInstancia() {
 	return instancia;
 }
 
-vector<Corredor*> GestorJugadores::getJugadores() {
+std::vector<Corredor*> GestorJugadores::getJugadores() {
 	return pj;
 }
 
-void GestorJugadores::setJugadores(vector<Corredor*> pj1) {
+void GestorJugadores::setJugadores(std::vector<Corredor*> pj1) {
 	pj = pj1;
 }
 

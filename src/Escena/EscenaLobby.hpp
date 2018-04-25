@@ -6,9 +6,6 @@
 #include <stdio.h>
 
 #include "Escena.hpp"
-#include "Motor3d.hpp"
-#include "Timer.hpp"
-#include "Graphics.hpp"
 #include "Timer.hpp"
 
 class EscenaLobby : public Escena {
@@ -20,11 +17,11 @@ public:
 	virtual void dibujar() override;
 	virtual void limpiar() override;
 	virtual void update() override;
+	void updateLobbyOnline();
 	void mostrarInfoLobby(int indice);
 	Escena::tipo_escena comprobarInputs();
 	void mostrarTipoPersonaje(int i);
-
-
+	int character_callback(GLFWwindow *window, unsigned int codepoint);
 	// METODOS GET
 	std::string getIpConexion();
 
@@ -44,15 +41,18 @@ private:
 	float count;
 	bool pressed;
 	bool firstInit;
-	IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
 	Timer *time;
-	stringw texto; // Texto a mostrar en pantalla
-	stringw texto2;
-	IGUIStaticText *textoUI; // Nodo de irrlicht
-	ITexture* logoAOK; // Textura del logo del juego
+	//IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
+	//stringw texto; // Texto a mostrar en pantalla
+	//stringw texto2;
+	//IGUIStaticText *textoUI; // Nodo de irrlicht
+	//ITexture* logoAOK; // Textura del logo del juego
 	bool selection;
 	bool offline;
+	bool end;
 	std::string iphost;
+	std::string connecting;
+	std::string *infoLobby;
 };
 
 #endif /* ESCENALOBBY_H */

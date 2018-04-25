@@ -1,0 +1,15 @@
+//Especificar version de Opengl a utilizar
+#version 330
+ 
+//Recoger los datos de los vertices en los buffers correctamente (segun orden de envio en el programa)
+layout (location = 0) in vec3 aPos; //Posicion
+
+//Uniforms para las distintas matrices necesarias para calcular la MVP
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+ 
+void main() {
+    //Calculamos la posicion final de cada vertice a partir de las matrices anteriores
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
+}

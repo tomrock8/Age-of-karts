@@ -3,9 +3,6 @@
 
 #include "Escena.hpp"
 
-#include "Motor3d.hpp"
-#include "Graphics.hpp"
-
 class EscenaCreditos : public Escena {
 public:
 	EscenaCreditos();
@@ -22,13 +19,10 @@ public:
 	// METODOS SET
 
 private:
-
-	IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
-
-	stringw texto; // Texto a mostrar en pantalla
-	IGUIStaticText *textoUI; // Nodo de irrlicht
-	ITexture* logoAOK; // Textura del logo del juego
-
+	//IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
+	//stringw texto; // Texto a mostrar en pantalla/
+	//IGUIStaticText *textoUI; // Nodo de irrlicht
+	//ITexture* logoAOK; // Textura del logo del juego
 };
 
 #endif /* ESCENACREDITOS_H */

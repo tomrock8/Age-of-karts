@@ -195,7 +195,7 @@ void EscenaJuego::init() {
 	//-----------------------
 	// OPENAL
 	//----------------------
-	GestorSonido::getInstacia()->setListenerData();
+	TMotor::instancia().getGestorSonido()->setListenerData();
 }
 
 void EscenaJuego::dibujar() {

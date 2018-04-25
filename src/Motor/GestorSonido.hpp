@@ -14,7 +14,6 @@ using namespace std;
 
 class GestorSonido{
     public:
-        static GestorSonido *getInstacia();
         GestorSonido();
         int cargarSonido(std::string file);
         void setPosition(float *pos);
@@ -31,7 +30,6 @@ class GestorSonido{
         ~GestorSonido();
 
     private:
-        static GestorSonido *instancia;
         bool cargado;
         float volGeneral;
         float volMusica;

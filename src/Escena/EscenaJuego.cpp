@@ -195,7 +195,6 @@ void EscenaJuego::init() {
 	//-----------------------
 	// OPENAL
 	//----------------------
-	GestorSonido::getInstacia()->setListenerData();
 	fuenteCarrera = new AlSource();
 	fuenteCarrera->volume(0.3f);
 	if (!fuenteCarrera->isPlaying())

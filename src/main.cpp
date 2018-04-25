@@ -14,9 +14,6 @@ int main(int argc, char* argv[]) {
 	//GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
 	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
 
-	//CREAMOS GESTOR DE SONIDO SINGLETON
-	GestorSonido::getInstacia();
-
 	//Creamos el gestor de imagenes para el HUD
 	TGestorImagenes::getInstacia();
 
@@ -131,7 +128,6 @@ int main(int argc, char* argv[]) {
 //		activeCamera = TMotor::instancia().newCameraNode(TMotor::instancia().getActiveCamera()->getName(), TMotor::instancia().getActiveCamera()->getPadre()->getName());
 		glfwPollEvents(); // Comprobacion de eventos (Teclado, raton, joystick)
 	}
-	delete GestorSonido::getInstacia();
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
 	TMotor::instancia().close();
 

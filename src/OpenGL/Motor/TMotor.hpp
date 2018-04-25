@@ -10,6 +10,7 @@
 #include "obj3D.hpp"
 #include "cameraThird.hpp"
 #include "hud.hpp"
+#include "GestorSonido.hpp"
 #include <iostream>
 #include <stack>
 #include <math.h>
@@ -66,6 +67,7 @@ public:
 	TNodo *getNode(const char * nombre);
 	TGestorRecursos *getGR();
 	bool getRenderDebug();
+	GestorSonido *getGestorSonido();
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
@@ -108,6 +110,8 @@ protected:
 	std::vector <hud*> HUDs; //Vector que guarda los diferentes huds del juego
 	hud *activeHud; //Hud activo en cada momento
 
+	//Sonido
+	GestorSonido *gestorSonido;
 
 	bool renderDebug;
 	bool debugBullet = false;

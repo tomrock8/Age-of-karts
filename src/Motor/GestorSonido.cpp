@@ -1,13 +1,5 @@
 #include "GestorSonido.hpp"
 
-GestorSonido *GestorSonido::instancia = NULL;
-
-GestorSonido * GestorSonido::getInstacia() {
-	if (instancia == NULL)
-		instancia = new GestorSonido();
-
-	return instancia;
-}
 
 GestorSonido::GestorSonido() {
 	//inicializamos alut y crea el contexto

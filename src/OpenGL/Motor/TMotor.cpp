@@ -62,6 +62,9 @@ TMotor::TMotor() {
 	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
 	shaderCartoon = new Shader("assets/shaders/shaderCartoon/vertexShader.txt", "assets/shaders/shaderCartoon/fragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
+
+	gestorSonido = new GestorSonido();
+	gestorSonido->setListenerData();
 }
 
 void TMotor::initDebugWindow(){
@@ -102,6 +105,7 @@ void TMotor::close() {
 	glfwTerminate();									//Terminar GLFW, limpiando todos los recursos alocados por GLFW
 	glfwDestroyWindow(TMotor::instancia().getVentana());
 	delete gestorRecursos;
+	delete gestorSonido;
 	for (int i = 0; i < HUDs.size(); i++) {
 		delete HUDs[i];
 	}
@@ -122,6 +126,7 @@ Shader *TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
 Shader *TMotor::getShaderPointDepth() { return shaderPointDepth; }
 Shader *TMotor::getShaderSkybox() { return shaderSkybox; }
 Shader *TMotor::getShaderDebug() { return shaderDebug; }
+GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
 
 
 //Funcion que devuelve un hud a partir del nombre

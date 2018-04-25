@@ -39,34 +39,31 @@ Pista *Pista::getInstancia() {
 }
 
 
-void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints) {
-	Mapa = TMotor::instancia().newMeshNode("mapa", mapa, "escena_raiz",true);
-	//GestorIDs::instancia().setIdentifier(Mapa, "mapa");
-	//Mapa->setPosition(0.0f, -10.0f, 0.0f);
-	//Mapa->setRotation(glm::vec3(0,1,0), 90.0f);
+void Pista::setMapa(const char* name) {
 
-	//---------------------------FISICAS-------------------------------//
-	/*
-	fisicasMapa = new btBulletWorldImporter(0);
-	fisicasMapa->loadFile(fisicas);
-	{
-		int num = fisicasMapa->getNumRigidBodies();
-	
-		for (int i = 0; i < num; i++) {
-			CuerpoColisionMapa = (btRigidBody*)fisicasMapa->getRigidBodyByIndex(i);//recoger el rigidbody
-			//almacenar en puntero al nodo irrlich para poder actualizar( en caso de ser  necesario)
-			CuerpoColisionMapa->setUserPointer((void *)(Mapa));
-			mundo->addRigidBody(CuerpoColisionMapa);//almacenar rigidbody en el mundo
-		}
+//void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints) {
+	if(strcmp(name,"pirata")==0){
+		nameMap = "pirata";
+		path = "assets/MapaPirata/mapaPirata.obj";
+		wayPoints = "assets/MapaPirata/wp.obj";
+		loadPirateMapElements();
 	}
-	
-	*/
-	// ------------------------------------------------------
+	if (name != NULL) {
+		createMap(path);
+		loadWaypoints(wayPoints);
+		
+	}
 
-	
+}
+
+void Pista::createMap(const char *path) {
+	Mapa = TMotor::instancia().newMeshNode("mapa", path, "escena_raiz", true);
+	GestorIDs::instancia().setIdentifier(Mapa, "mapa");
+}
+void Pista::loadWaypoints(const char* waypoints) {
 	//lectura de fichero
 	std::string line;
-	std::string tipo, pX, pY, pZ, orientacionWp, v1X, v1Y, v1Z, v2X, v2Y, v2Z,v3X, v3Y, v3Z, v4X, v4Y, v4Z;
+	std::string tipo, pX, pY, pZ, orientacionWp, v1X, v1Y, v1Z, v2X, v2Y, v2Z, v3X, v3Y, v3Z, v4X, v4Y, v4Z;
 	std::string tamanyoArrayWaypoints;
 	std::string tamanyoArrayCajas;
 	std::string tamanyoArrayTurbo;
@@ -88,10 +85,10 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 		//arrayCajas.resize(stoi(tamanyoArrayCajas));
 
 		while (!myfile.eof()) {
-
+			
 			getline(myfile, tipo, ' ');//caja turbo o waypoint
 			tipoObj = stoi(tipo);
-			Waypoint *w =new Waypoint();
+			Waypoint *w = new Waypoint();
 			if (tipoObj == 0) {//WAYPOINT
 				arrayWaypoints.push_back(w);
 				//=========================================//
@@ -108,64 +105,64 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 				getline(myfile, v1X, ' ');
 				getline(myfile, v1Y, ' ');
 				getline(myfile, v1Z, ' ');
-				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector1(btVector3(stof(v1X), stof(v1Y), stof(v1Z)));
+				arrayWaypoints.at(arrayWaypoints.size() - 1)->setVector1(btVector3(stof(v1X), stof(v1Y), stof(v1Z)));
 				//vector2
 				getline(myfile, v2X, ' ');
 				getline(myfile, v2Y, ' ');
 				getline(myfile, v2Z, ' ');
-				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector2(btVector3(stof(v2X), stof(v2Y), stof(v2Z)));
+				arrayWaypoints.at(arrayWaypoints.size() - 1)->setVector2(btVector3(stof(v2X), stof(v2Y), stof(v2Z)));
 				//vector3
 				getline(myfile, v3X, ' ');
 				getline(myfile, v3Y, ' ');
 				getline(myfile, v3Z, ' ');
-				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector3(btVector3(stof(v3X), stof(v3Y), stof(v3Z)));
+				arrayWaypoints.at(arrayWaypoints.size() - 1)->setVector3(btVector3(stof(v3X), stof(v3Y), stof(v3Z)));
 				//vector4
 				getline(myfile, v4X, ' ');
 				getline(myfile, v4Y, ' ');
 				getline(myfile, v4Z, ' ');
-				arrayWaypoints.at(arrayWaypoints.size()-1)->setVector4(btVector3(stof(v4X), stof(v4Y), stof(v4Z)));
+				arrayWaypoints.at(arrayWaypoints.size() - 1)->setVector4(btVector3(stof(v4X), stof(v4Y), stof(v4Z)));
 
 				//WP central
-				
+
 				getline(myfile, pX, ' ');//posiciones central wp
 				getline(myfile, pY, ' ');//posiciones central wp
 				getline(myfile, pZ, ' ');//posiciones central wp
-				//=========================================//
-				//			rellenar los waypoints		   //
-				//=========================================//
-				//comento lo de la id de los waypoints porq da conflico con las cajas
-				arrayWaypoints.at(arrayWaypoints.size()-1)->getWaypoint()->setID(arrayWaypoints.size()-1);
+										 //=========================================//
+										 //			rellenar los waypoints		   //
+										 //=========================================//
+										 //comento lo de la id de los waypoints porq da conflico con las cajas
+				arrayWaypoints.at(arrayWaypoints.size() - 1)->getWaypoint()->setID(arrayWaypoints.size() - 1);
 
-				if (arrayWaypoints.size()-1 > 0 && arrayWaypoints.size()-1 <= (stoi(tamanyoArrayWaypoints) - 2))
+				if (arrayWaypoints.size() - 1 > 0 && arrayWaypoints.size() - 1 <= (stoi(tamanyoArrayWaypoints) - 2))
 				{
-					arrayWaypoints.at(arrayWaypoints.size()-1 - 1)->setSiguiente(arrayWaypoints.at(arrayWaypoints.size()-1));
+					arrayWaypoints.at(arrayWaypoints.size() - 1 - 1)->setSiguiente(arrayWaypoints.at(arrayWaypoints.size() - 1));
 
 				}
-				else if (arrayWaypoints.size()-1 == (stoi(tamanyoArrayWaypoints) - 1)) {
-					arrayWaypoints.at(arrayWaypoints.size()-1 - 1)->setSiguiente(arrayWaypoints.at(arrayWaypoints.size()-1));
+				else if (arrayWaypoints.size() - 1 == (stoi(tamanyoArrayWaypoints) - 1)) {
+					arrayWaypoints.at(arrayWaypoints.size() - 1 - 1)->setSiguiente(arrayWaypoints.at(arrayWaypoints.size() - 1));
 
-					arrayWaypoints.at(arrayWaypoints.size()-1)->setSiguiente(arrayWaypoints[0]);
+					arrayWaypoints.at(arrayWaypoints.size() - 1)->setSiguiente(arrayWaypoints[0]);
 
 				}
 				//cambiar a float y almacenar array de waypoints
-				arrayWaypoints.at(arrayWaypoints.size()-1)->setPosicion(stof(pX), stof(pY), stof(pZ));
-				arrayWaypoints.at(arrayWaypoints.size()-1)->setOrientacion(orientacion);//orientacion del waypoint
-				arrayWaypoints.at(arrayWaypoints.size()-1)->inicializarFisicas();
-				obj3D *im = arrayWaypoints.at(arrayWaypoints.size()-1)->getWaypoint();
+				arrayWaypoints.at(arrayWaypoints.size() - 1)->setPosicion(stof(pX), stof(pY), stof(pZ));
+				arrayWaypoints.at(arrayWaypoints.size() - 1)->setOrientacion(orientacion);//orientacion del waypoint
+				arrayWaypoints.at(arrayWaypoints.size() - 1)->inicializarFisicas();
+				obj3D *im = arrayWaypoints.at(arrayWaypoints.size() - 1)->getWaypoint();
 				GestorIDs::instancia().setIdentifier(im, im->getName());
-								arrayWaypoints.at(arrayWaypoints.size()-1)->setID(GestorIDs::instancia().getIDLibre() - 1);
+				arrayWaypoints.at(arrayWaypoints.size() - 1)->setID(GestorIDs::instancia().getIDLibre() - 1);
 
 				tamWaypoints++;
 			}
-		
+
 			if (tipoObj == 1) {//CAJA
-				Caja *cj= new Caja(btVector3(stof(pX), stof(pY), stof(pZ)));
+				Caja *cj = new Caja(btVector3(stof(pX), stof(pY), stof(pZ)));
 				arrayCajas.push_back(cj);
 				tamCajas++;
 
 			}
 			if (tipoObj == 2) {//TURBO
-				Turbo *tb= new Turbo(btVector3(stof(pX), stof(pY), stof(pZ)), false);
+				Turbo *tb = new Turbo(btVector3(stof(pX), stof(pY), stof(pZ)), false);
 				arrayTurbos.push_back(tb);
 				tamTurbos++;
 			}
@@ -178,11 +175,38 @@ void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints
 	else {
 		cout << "Error abriendo archivo";
 	}
-
 }
-
 std::vector<Item *> Pista::getItems() {
 	return Items;
+}
+
+void Pista::loadPirateMapElements() {
+	TNodo *aux = NULL;
+	std::string pX, pY, pZ,num;
+	float posX, posY, posZ;
+	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/elementos.obj", "escena_raiz", false);
+	//lectura de las palmeras y su creacion 
+	/*
+	ifstream myfile("assets/MapaPirata/palmeras1.txt");
+	std::string palm = "palmeras";
+	int i = 0;
+	std::vector<obj3D*>palmeras;
+		while (!myfile.eof()) {
+
+			//crear el array de waypoints para almacenar el path
+			getline(myfile, pX, ' ');
+			getline(myfile, pY, ' ');
+			getline(myfile, pZ, ' ');
+			std::string palm2 = palm + to_string(i);
+		
+			palmeras.push_back( TMotor::instancia().newMeshNode(palm2.c_str(), "assets/MapaPirata/palmeras1.obj", "escena_raiz", false));
+			palmeras.at(i)->setPosition(stof(pX), stof(pY), stof(pZ));
+			i++;
+		}
+	
+	myfile.close();
+	aux = NULL;
+*/
 }
 
 void Pista::setItems(std::vector<Item *> itemMetodo) {

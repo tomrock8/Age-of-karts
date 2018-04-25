@@ -113,10 +113,6 @@ protected:
 	//Sonido
 	GestorSonido *gestorSonido;
 
-	//Obj3D
-	std::vector <obj3D *> objetos; //Array que almacena los distintos objetos creados a lo largo del programa
-	obj3D *getObjeto(const char* name); //Metodo que devuelve un objeto a partir de su nombre
-
 	bool renderDebug;
 	bool debugBullet = false;
 	TGestorRecursos *gestorRecursos;

@@ -126,16 +126,8 @@ Shader *TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
 Shader *TMotor::getShaderPointDepth() { return shaderPointDepth; }
 Shader *TMotor::getShaderSkybox() { return shaderSkybox; }
 Shader *TMotor::getShaderDebug() { return shaderDebug; }
-obj3D *TMotor::getObjeto(const char* name){
-	obj3D *objeto = NULL;
-	for (int i = 0; i < objetos.size(); i++){
-		if (strcmp(objetos.at(i)->getName(), name) == 0){
-			objeto = objetos.at(i);
-		}
-	}
-	return objeto;
-}
 GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
+
 
 //Funcion que devuelve un hud a partir del nombre
 hud* TMotor::getHud(const char* n) {
@@ -202,9 +194,8 @@ obj3D *TMotor::newCameraNode(const char *name, const char* parentNode) {
 	TNodo *nodo = createCamNode(traslacionNodo, camara, name);
 
 	contID++;
-	obj3D *o = new obj3D(nodo, name, contID);
-	objetos.push_back(o);
-	return o;
+	return new obj3D(nodo, name, contID);
+	
 }
 
 /*
@@ -247,9 +238,8 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(0.8f), dir, att, corte, shadow, active);
 	TNodo *nodo = createLightNode(traslacionNodo, luz, name);
 	contID++;
-	obj3D *o = new obj3D(nodo, name, contID);
-	objetos.push_back(o);
-	return o;
+	return new obj3D(nodo, name, contID);
+	
 }
 
 obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode,bool sta) {
@@ -281,9 +271,8 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 	TRecursoMalla *nameMalla = static_cast<TRecursoMalla*>(gestorRecursos->getRecursoMallas().at(gestorRecursos->getRecursoMallas().size()-1));
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, nameMalla->getNombre());
 	contID++;
-	obj3D *o = new obj3D(nodo, name, contID);
-	objetos.push_back(o);
-	return o;
+		return new obj3D(nodo, name, contID);
+	
 }
 
 

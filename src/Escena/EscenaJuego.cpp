@@ -23,6 +23,7 @@ EscenaJuego::~EscenaJuego() {
 	delete MotorFisicas::getInstancia();
 	delete GestorJugadores::getInstancia();
 	delete Pista::getInstancia();
+	delete fuenteCarrera;
 }
 
 void EscenaJuego::init() {
@@ -311,7 +312,6 @@ void EscenaJuego::renderDebug() {
 
 void EscenaJuego::limpiar() {
 	muestraDebug = false;
-	delete fuenteCarrera;
 	TMotor::instancia().closeDebugWindow();
 }
 

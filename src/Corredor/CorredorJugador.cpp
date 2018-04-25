@@ -28,8 +28,6 @@ void CorredorJugador::movimiento() {
 		//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
 	}
 
-	int a = glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W);
-
 	//-------ENTRADA TECLADO ----------//
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_S) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[2])) {
 		frenar();

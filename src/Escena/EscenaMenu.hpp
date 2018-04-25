@@ -30,7 +30,6 @@ private:
 
 	int optionMenu;
 
-	int sonidoOpcion;
 	AlSource *fuenteOpcion;
 	AlSource *fuenteMenu;
 

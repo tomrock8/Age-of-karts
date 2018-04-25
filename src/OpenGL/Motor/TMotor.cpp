@@ -62,6 +62,9 @@ TMotor::TMotor() {
 	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
 	shaderCartoon = new Shader("assets/shaders/shaderCartoon/vertexShader.txt", "assets/shaders/shaderCartoon/fragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
+
+	gestorSonido = new GestorSonido();
+	gestorSonido->setListenerData();
 }
 
 void TMotor::initDebugWindow(){
@@ -102,6 +105,7 @@ void TMotor::close() {
 	glfwTerminate();									//Terminar GLFW, limpiando todos los recursos alocados por GLFW
 	glfwDestroyWindow(TMotor::instancia().getVentana());
 	delete gestorRecursos;
+	delete gestorSonido;
 	for (int i = 0; i < HUDs.size(); i++) {
 		delete HUDs[i];
 	}
@@ -122,15 +126,8 @@ Shader *TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
 Shader *TMotor::getShaderPointDepth() { return shaderPointDepth; }
 Shader *TMotor::getShaderSkybox() { return shaderSkybox; }
 Shader *TMotor::getShaderDebug() { return shaderDebug; }
-obj3D *TMotor::getObjeto(const char* name){
-	obj3D *objeto = NULL;
-	for (int i = 0; i < objetos.size(); i++){
-		if (strcmp(objetos.at(i)->getName(), name) == 0){
-			objeto = objetos.at(i);
-		}
-	}
-	return objeto;
-}
+GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
+
 
 //Funcion que devuelve un hud a partir del nombre
 hud* TMotor::getHud(const char* n) {
@@ -197,9 +194,8 @@ obj3D *TMotor::newCameraNode(const char *name, const char* parentNode) {
 	TNodo *nodo = createCamNode(traslacionNodo, camara, name);
 
 	contID++;
-	obj3D *o = new obj3D(nodo, name, contID);
-	objetos.push_back(o);
-	return o;
+	return new obj3D(nodo, name, contID);
+	
 }
 
 /*
@@ -242,9 +238,8 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(0.8f), dir, att, corte, shadow, active);
 	TNodo *nodo = createLightNode(traslacionNodo, luz, name);
 	contID++;
-	obj3D *o = new obj3D(nodo, name, contID);
-	objetos.push_back(o);
-	return o;
+	return new obj3D(nodo, name, contID);
+	
 }
 
 obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode,bool sta) {
@@ -275,9 +270,8 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 	TMalla *malla = TMotor::instancia().createMesh(path,sta);
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
 	contID++;
-	obj3D *o = new obj3D(nodo, name, contID);
-	objetos.push_back(o);
-	return o;
+		return new obj3D(nodo, name, contID);
+	
 }
 
 

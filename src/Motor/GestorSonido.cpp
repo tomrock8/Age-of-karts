@@ -1,13 +1,5 @@
 #include "GestorSonido.hpp"
 
-GestorSonido *GestorSonido::instancia = NULL;
-
-GestorSonido * GestorSonido::getInstacia() {
-	if (instancia == NULL)
-		instancia = new GestorSonido();
-
-	return instancia;
-}
 
 GestorSonido::GestorSonido() {
 	//inicializamos alut y crea el contexto
@@ -35,6 +27,7 @@ GestorSonido::GestorSonido() {
 	i = cargarSonido("assets/Sounds/menu.wav");
 	i = cargarSonido("assets/Sounds/car_engine.wav");
 	i = cargarSonido("assets/Sounds/throw.wav");
+	i = cargarSonido("assets/Sounds/race1.wav");
 
 	//Iniciamos los volumenes por defecto
 	volGeneral = 1.0f;

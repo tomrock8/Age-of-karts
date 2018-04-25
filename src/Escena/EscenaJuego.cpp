@@ -23,6 +23,7 @@ EscenaJuego::~EscenaJuego() {
 	delete MotorFisicas::getInstancia();
 	delete GestorJugadores::getInstancia();
 	delete Pista::getInstancia();
+	delete fuenteCarrera;
 }
 
 void EscenaJuego::init() {
@@ -83,7 +84,7 @@ void EscenaJuego::init() {
 	//	ESCENARIO MAPA
 	//-----------------------------
 	Pista::getInstancia()->setMapa("assets/MapaPirata/mapaPirata.obj", "assets/mierdamapa/fisica4.bullet", "assets/MapaPirata/wp.obj");
-	//TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/elementos.obj", "escena_raiz", false);
+	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/elementos.obj", "escena_raiz", false);
 	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 
 	//-----------------------------
@@ -195,7 +196,11 @@ void EscenaJuego::init() {
 	//-----------------------
 	// OPENAL
 	//----------------------
-	GestorSonido::getInstacia()->setListenerData();
+	fuenteCarrera = new AlSource();
+	fuenteCarrera->volume(0.3f);
+	if (!fuenteCarrera->isPlaying())
+		fuenteCarrera->play(SOUND_RACE);
+
 }
 
 void EscenaJuego::dibujar() {

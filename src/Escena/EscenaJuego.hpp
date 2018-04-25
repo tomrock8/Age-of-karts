@@ -61,6 +61,7 @@ private:
 
 	Client *client;
 	btVector3 pos;
+	
 
 	float tiempoRefresco;
 	GestorCarrera *gc;
@@ -74,6 +75,8 @@ private:
 	bool debug_Jugador;
 	bool end;
 	
+	//SONIDO 
+	AlSource *fuenteCarrera;
 	
 };
 

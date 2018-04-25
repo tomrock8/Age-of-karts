@@ -66,7 +66,7 @@ Habilidad::Habilidad(int tipo, obj3D* n, btVector3 posicion, btVector3 escala, b
 
 
 
-void Habilidad::lanzarItem(int direccion, btVector3 orientacion) {
+void Habilidad::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) {
 
 	this->orientacion = orientacion;
 

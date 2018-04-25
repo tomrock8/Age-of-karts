@@ -900,7 +900,7 @@ void Corredor::usarObjetos() {
 	std::vector<Item *> items = pista->getItems();
 
 	btVector3 posicion(cuboNodo->getPosition().x + orientacion.getX() * 10, cuboNodo->getPosition().y, cuboNodo->getPosition().z + orientacion.getZ() * 10);
-	btVector3 escala(2, 2, 2);
+	btVector3 escala(1, 1, 1);
 	btScalar masa = 50;
 	float tiempoDestruccion = 15;
 	btVector3 tamanyoNodo(3, 3, 3);
@@ -909,7 +909,7 @@ void Corredor::usarObjetos() {
 
 	if (getTipoObj() == 1) {		// PROYECTIL
 		Proyectil *pro = new Proyectil(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
-		pro->lanzarItem(1, orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		pro->lanzarItem(1, orientacion,CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro->setLanzado(true);
 		items.push_back(pro);
 		soltarItem();
@@ -969,21 +969,21 @@ void Corredor::usarObjetos() {
 		posicion = iz;
 		Proyectil *pro1 = new Proyectil(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
 		//pro1->inicializarFisicas();
-		pro1->lanzarItem(1, orientacionizquierda);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		pro1->lanzarItem(1, orientacionizquierda,CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro1->setLanzado(true);
 		items.push_back(pro1);
 
 		posicion = centro;
 		Proyectil *pro2 = new Proyectil(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
 		//pro2->inicializarFisicas();
-		pro2->lanzarItem(1, orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		pro2->lanzarItem(1, orientacion,CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro2->setLanzado(true);
 		items.push_back(pro2);
 
 		posicion = d;
 		Proyectil *pro3 = new Proyectil(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
 		//pro3->inicializarFisicas();
-		pro3->lanzarItem(1, orientacionderecha);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		pro3->lanzarItem(1, orientacionderecha,CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro3->setLanzado(true);
 		items.push_back(pro3);
 
@@ -998,7 +998,7 @@ void Corredor::usarObjetos() {
 		posicion.setY(posicion.getY() + alt);
 		ItemTeledirigido *pt = new ItemTeledirigido(posicion, escala, masa, 50, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
 		pt->setWaypoint(actual);
-		pt->lanzarItem(1, orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+		pt->lanzarItem(1, orientacion,CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pt->setLanzado(true);
 		items.push_back(pt);
 		soltarItem();
@@ -1225,6 +1225,7 @@ void Corredor::update() {
 			std::cout << "Joystick " << i << " is connected!" << std::endl;
 	}
 	*/
+	
 	comprobarTurbo();
 	comprobarInmunidad();
 	if (estado->getEstadoCarrera() != EstadosJugador::estado_carrera::PARRILLA) {
@@ -1360,7 +1361,7 @@ void Corredor::lanzarHabilidad() {
 
 			posicion.setY(posicion.getY() + alt);
 			habilidadJugador = new Habilidad(1, cuboNodo, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
-			habilidadJugador->lanzarItem(1, orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+			habilidadJugador->lanzarItem(1, orientacion,CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 			habilidadJugador->setLanzado(true);
 
 			break;
@@ -1373,7 +1374,7 @@ void Corredor::lanzarHabilidad() {
 
 			posicion.setY(posicion.getY() + alt);
 			habilidadJugador = new Habilidad(2, cuboNodo, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
-			habilidadJugador->lanzarItem(1, orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+			habilidadJugador->lanzarItem(1, orientacion,CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 			habilidadJugador->setLanzado(true);
 			break;
 
@@ -1381,7 +1382,7 @@ void Corredor::lanzarHabilidad() {
 			escala = btVector3(20, 2, 20);
 			tiempoDestruccion = 3;
 			habilidadJugador = new Habilidad(3, cuboNodo, posicion, escala, masa, tiempoDestruccion, CILINDRO, tamanyoNodo, radio, alt, cuboNodo->getID());
-			habilidadJugador->lanzarItem(1, orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+			habilidadJugador->lanzarItem(1, orientacion,CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 			habilidadJugador->setLanzado(true);
 			break;
 
@@ -1394,7 +1395,7 @@ void Corredor::lanzarHabilidad() {
 
 			posicion.setY(posicion.getY() + alt);
 			habilidadJugador = new Habilidad(4, cuboNodo, posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
-			habilidadJugador->lanzarItem(1, orientacion);// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
+			habilidadJugador->lanzarItem(1, orientacion,CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 			habilidadJugador->setLanzado(true);
 			setTurbo(true, true, FuerzaMaxima * 2, tiempoDestruccion / 3.6);
 			break;

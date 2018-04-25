@@ -17,6 +17,6 @@ Aceite::Aceite(btVector3 posicion, btVector3 escala, btScalar masa, float tiempo
 }
 
 
-void Aceite::lanzarItem(int direccion, btVector3 orientacion) {}
+void Aceite::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) {}
 void Aceite::updateHijos() {}
 void Aceite::deleteHijos() {}

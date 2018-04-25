@@ -14,6 +14,6 @@ CajaFalsa::CajaFalsa(btVector3 posicion, btVector3 escala, btScalar masa, float 
 	inicializarFisicas();
 }
 
-void CajaFalsa::lanzarItem(int direccion, btVector3 orientacion) {}
+void CajaFalsa::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) {}
 void CajaFalsa::updateHijos() {}
 void CajaFalsa::deleteHijos() {}

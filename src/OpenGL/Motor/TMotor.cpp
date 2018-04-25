@@ -273,8 +273,7 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 	}*/
 
 	TMalla *malla = TMotor::instancia().createMesh(path,sta);
-	TRecursoMalla *nameMalla = static_cast<TRecursoMalla*>(gestorRecursos->getRecursoMallas().at(gestorRecursos->getRecursoMallas().size()-1));
-	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, nameMalla->getNombre());
+	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
 	contID++;
 	obj3D *o = new obj3D(nodo, name, contID);
 	objetos.push_back(o);

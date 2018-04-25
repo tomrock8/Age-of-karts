@@ -11,7 +11,7 @@
 #include <vector>
 #include <ctime>
 #include "TMotor.hpp"
-
+#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 
 using namespace std;
 
@@ -24,7 +24,7 @@ public:
 		float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo,
 		btScalar radio, float alturaLanzamiento, int idNodo);
 	void inicializarFisicas();
-	virtual void lanzarItem(int direccion, btVector3 orientacion) = 0;
+	virtual void lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) = 0;
 	virtual void updateHijos() = 0;
 	virtual void deleteHijos() = 0;
 	bool update();
@@ -60,6 +60,7 @@ protected:
 	btScalar masa;
 	btVector3 escala;
 	btVector3 posicion;
+	btVector3 orientacionItem;
 
 	int idNodoPadre;
 	int idwaypoint;

@@ -14,6 +14,7 @@ Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesc
 	this->radio = radio;
 	this->fcolision = fcolision;
 	this->alturaLanzamiento = alturaLanzamiento;
+	orientacionItem= btVector3(1,0,0);
 }
 
 void Item::inicializarFisicas()
@@ -89,7 +90,7 @@ bool Item::comprobarDestructor() {
 
 
 bool Item::update() {
-
+	//cout<<nodo->getRotation().y<<endl;
 	if (comprobarDestructor()) {
 
 		return true;

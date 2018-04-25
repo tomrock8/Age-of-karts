@@ -28,7 +28,7 @@ Escudo::Escudo(obj3D* n, btVector3 posicion, btVector3 escala, btScalar masa, fl
 
 }
 
-void Escudo::lanzarItem(int direccion, btVector3 orientacion) {}
+void Escudo::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) {}
 void Escudo::updateHijos() {
 	movimiento();
 }

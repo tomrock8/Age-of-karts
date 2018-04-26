@@ -237,7 +237,7 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 
 	// N O D O
 	//TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(.8f), dir, att, corte);
-	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.5f), glm::vec3(0.8f), dir, att, corte, shadow, active);
+	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.7f), glm::vec3(0.8f), dir, att, corte, shadow, active);
 	TNodo *nodo = createLightNode(traslacionNodo, luz, name);
 	contID++;
 	return new obj3D(nodo, name, contID);
@@ -420,14 +420,16 @@ void TMotor::draw(int tipo) {
 				static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow(s);
 			}
 		}
-		//Activamos el glPolygonOffset = a cada fragmento de los objetos se le añade una pequeña profundidad antes de realizar los calculos del z-buffer
-		glEnable(GL_POLYGON_OFFSET_FILL);
-		//Profundidad que se le añade
-		float line_offset_slope = -1.f;
-		//Corte maximo de profundidad
-		float line_offset_unit = -30.f;
-		//Especificamos los valores anteriores a OpenGL
-		glPolygonOffset( line_offset_slope, line_offset_unit );
+		if (!debugBullet){
+			//Activamos el glPolygonOffset = a cada fragmento de los objetos se le añade una pequeña profundidad antes de realizar los calculos del z-buffer
+			glEnable(GL_POLYGON_OFFSET_FILL);
+			//Profundidad que se le añade
+			float line_offset_slope = -1.f;
+			//Corte maximo de profundidad
+			float line_offset_unit = -35.f;
+			//Especificamos los valores anteriores a OpenGL
+			glPolygonOffset( line_offset_slope, line_offset_unit );
+		}
 		//Dibujamos los distintos nodos del arbol
 		scene->draw(s);
 

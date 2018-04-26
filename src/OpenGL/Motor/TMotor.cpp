@@ -351,8 +351,9 @@ TNodo *TMotor::createLightNode(TNodo *padre, TLuz *luz, const char* name) {
 //------------------------------
 void TMotor::clean() {
 	glViewport(0, 0, screenWIDTH, screenHEIGHT);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_GREATER); 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);				//Limpia el buffer del color
 }
@@ -400,6 +401,7 @@ void TMotor::draw(int tipo) {
 		//------------------
 		
 		Shader *s = shaderCartoon;
+		
 		//Se activa el shader para el renderizado 3D
 		s->use();
 		//Establecemos las matrices view y projection a partir del dibujado de la camara
@@ -413,7 +415,30 @@ void TMotor::draw(int tipo) {
 			}
 		}
 		//Dibujamos los distintos nodos del arbol
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		float line_offset_slope = -1.f;
+		float line_offset_unit = 0.f;
+		// I also tried slope = 0.f and unit = -1.f, no changes
+
+		glPolygonOffset( line_offset_slope, line_offset_unit );
 		scene->draw(s);
+
+		s = shaderSilhouette;
+
+		//Se activa el shader para el renderizado 3D
+		shaderSilhouette->use();
+		//Establecemos las matrices view y projection a partir del dibujado de la camara
+		drawCamera(shaderSilhouette);
+		//Dibujamos los distintos nodos del arbol
+		glDisable( GL_POLYGON_OFFSET_FILL );  
+		glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_LINE_SMOOTH);
+		glCullFace(GL_FRONT);
+		glLineWidth(3.00f);
+		scene->draw(shaderSilhouette);
+		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+		glDisable(GL_CULL_FACE);
 
 		//DIBUJADO DEL DEBUG DE BULLET
 		//----------------------------

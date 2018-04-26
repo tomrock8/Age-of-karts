@@ -20,5 +20,5 @@ void main()
     //vec4 pos = vec4(aPos+aNormal * 0.5, 1.0);
     mat4 pollas = model * scale;
     //Calcular posicion final del pixel a partir de la multiplicacion de la MVP por la posicion del  vertice
-    gl_Position = projection * view * pollas * vec4(aPos+aNormal*0.01, 1.0);
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
 }

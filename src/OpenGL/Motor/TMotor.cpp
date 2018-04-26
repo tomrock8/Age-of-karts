@@ -350,12 +350,16 @@ TNodo *TMotor::createLightNode(TNodo *padre, TLuz *luz, const char* name) {
 // D I B U J A D O
 //------------------------------
 void TMotor::clean() {
+	//Establecemos el tamaño del viewport
 	glViewport(0, 0, screenWIDTH, screenHEIGHT);
+	//Limpiamos los buffers de color y profundidad
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//Activamos el z-buffer
 	glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_GREATER); 
+	//Activamos la transparencia
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);				//Limpia el buffer del color
+	//Como cada uno de los canales rgba es calculado/computado
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void TMotor::draw(int tipo) {
@@ -397,11 +401,13 @@ void TMotor::draw(int tipo) {
 		//Llamamos al metodo de dibujado del skybox
 		skybox->drawSkyBox();
 
-		//DIBUJADO DEL ARBOL
-		//------------------
+		//DIBUJADO DEL ARBOL * ESTILO CARTOON *
+		//-------------------------------------
 		
+		//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas
+
+		//Enlazamos el shader cartoon
 		Shader *s = shaderCartoon;
-		
 		//Se activa el shader para el renderizado 3D
 		s->use();
 		//Establecemos las matrices view y projection a partir del dibujado de la camara
@@ -414,30 +420,42 @@ void TMotor::draw(int tipo) {
 				static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow(s);
 			}
 		}
-		//Dibujamos los distintos nodos del arbol
+		//Activamos el glPolygonOffset = a cada fragmento de los objetos se le añade una pequeña profundidad antes de realizar los calculos del z-buffer
 		glEnable(GL_POLYGON_OFFSET_FILL);
+		//Profundidad que se le añade
 		float line_offset_slope = -1.f;
-		float line_offset_unit = 0.f;
-		// I also tried slope = 0.f and unit = -1.f, no changes
-
+		//Corte maximo de profundidad
+		float line_offset_unit = -30.f;
+		//Especificamos los valores anteriores a OpenGL
 		glPolygonOffset( line_offset_slope, line_offset_unit );
+		//Dibujamos los distintos nodos del arbol
 		scene->draw(s);
 
+		//2º RENDERIZADO = se renderizan los objetos en modo wireframe (solo las caras ocultas) para crear la silueta de los mismos
+		
+		//Enlazamos el shader de las siluetas
 		s = shaderSilhouette;
-
 		//Se activa el shader para el renderizado 3D
-		shaderSilhouette->use();
+		s->use();
 		//Establecemos las matrices view y projection a partir del dibujado de la camara
-		drawCamera(shaderSilhouette);
-		//Dibujamos los distintos nodos del arbol
+		drawCamera(s);
+		//Desactivamos el offset anterior
 		glDisable( GL_POLYGON_OFFSET_FILL );  
+		//Establecemos el dibujado del poligono en modo linea
 		glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+		//Activamos el cull face
 		glEnable(GL_CULL_FACE);
+		//Activamos el suavizado de las lineas
 		glEnable(GL_LINE_SMOOTH);
+		//Especificamos que solo queremos dibujar las caras ocultas
 		glCullFace(GL_FRONT);
-		glLineWidth(3.00f);
-		scene->draw(shaderSilhouette);
+		//Aumentamos el grosor de las lineas
+		glLineWidth(6.00f);
+		//Dibujamos los distintos nodos del arbol
+		scene->draw(s);
+		//Volvemos al modo de dibujado normal de los poligonos
 		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+		//Desactivamos el cull face
 		glDisable(GL_CULL_FACE);
 
 		//DIBUJADO DEL DEBUG DE BULLET

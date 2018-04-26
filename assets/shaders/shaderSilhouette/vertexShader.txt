@@ -12,13 +12,9 @@ layout (location = 4) in vec3 aBitangents; //Bitangentes
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
-uniform mat4 scale;
-
 
 void main()
 {
-    //vec4 pos = vec4(aPos+aNormal * 0.5, 1.0);
-    mat4 pollas = model * scale;
     //Calcular posicion final del pixel a partir de la multiplicacion de la MVP por la posicion del  vertice
     gl_Position = projection * view * model * vec4(aPos, 1.0);
 }

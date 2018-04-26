@@ -61,6 +61,7 @@ TMotor::TMotor() {
 	shaderSkybox = new Shader("assets/shaders/shaderSkybox/vertexShader.txt", "assets/shaders/shaderSkybox/fragmentShader.txt", nullptr);
 	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
 	shaderCartoon = new Shader("assets/shaders/shaderCartoon/vertexShader.txt", "assets/shaders/shaderCartoon/fragmentShader.txt", nullptr);
+	shaderSilhouette = new Shader("assets/shaders/shaderSilhouette/vertexShader.txt", "assets/shaders/shaderSilhouette/fragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 
 	gestorSonido = new GestorSonido();
@@ -126,6 +127,7 @@ Shader *TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
 Shader *TMotor::getShaderPointDepth() { return shaderPointDepth; }
 Shader *TMotor::getShaderSkybox() { return shaderSkybox; }
 Shader *TMotor::getShaderDebug() { return shaderDebug; }
+Shader *TMotor::getShaderSilhouette() { return shaderSilhouette; }
 GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
 
 
@@ -349,7 +351,7 @@ TNodo *TMotor::createLightNode(TNodo *padre, TLuz *luz, const char* name) {
 //------------------------------
 void TMotor::clean() {
 	glViewport(0, 0, screenWIDTH, screenHEIGHT);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);				//Limpia el buffer del color
@@ -396,7 +398,8 @@ void TMotor::draw(int tipo) {
 
 		//DIBUJADO DEL ARBOL
 		//------------------
-		Shader *s = shader;
+		
+		Shader *s = shaderCartoon;
 		//Se activa el shader para el renderizado 3D
 		s->use();
 		//Establecemos las matrices view y projection a partir del dibujado de la camara

@@ -63,6 +63,7 @@ public:
 	Shader *getShaderPointDepth();
 	Shader *getShaderSkybox();
 	Shader *getShaderDebug();
+	Shader *getShaderSilhouette();
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
 	TGestorRecursos *getGR();
@@ -97,6 +98,7 @@ protected:
 	Shader *shaderSkybox; //Shader para el dibujado del skybox
 	Shader *shaderDebug; //Shader para el modo debug de Bullet
 	Shader *shaderCartoon; //Shader para el efecto cartoon
+	Shader *shaderSilhouette; //Shader para crear el contorno de los objetos en el efecto cartoon
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)

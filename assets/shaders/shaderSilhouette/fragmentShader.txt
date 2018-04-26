@@ -1,0 +1,12 @@
+//Especificar version de Opengl a utilizar
+#version 330 core
+
+// Variable de salida del Fragment
+out vec4 FragColor; //Color final del fragmento
+
+//Uniforms
+uniform vec3 color; //Color del objeto
+
+void main(){
+    FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+}

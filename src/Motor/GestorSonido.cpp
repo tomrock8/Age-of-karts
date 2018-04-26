@@ -88,14 +88,26 @@ float GestorSonido::getVolEfectos(){
 }
 
 void GestorSonido::setVolGeneral(float vol){
+	float midMus = volMusica / volGeneral;
+	float midEfe = volEfectos / volGeneral;
+
 	volGeneral = vol;
+	
+	volMusica = volGeneral * midMus;
+	volEfectos = volGeneral * midEfe;
 }
 
 void GestorSonido::setVolMusica(float vol){
+	if(volGeneral < vol){
+		volGeneral = vol;
+	}
 	volMusica = vol;
 }
 
 void GestorSonido::setVolEfectos(float vol){
+	if(volGeneral < vol){
+		volGeneral = vol;
+	}
 	volEfectos = vol;
 }
 

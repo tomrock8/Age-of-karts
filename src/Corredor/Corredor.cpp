@@ -105,10 +105,12 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	fuenteMotor = new AlSource();
 	fuenteMotor->setLoop(true);
 	fuenteMotor->setPitch(pitchMotor);
-	fuenteMotor->volume(0.3f);
+	fuenteMotor->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
 	fuenteMotor->play(SOUND_ENGINE);
 	fuenteFrenos = new AlSource();
+	fuenteFrenos->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
 	fuenteItem = new AlSource();
+	fuenteItem->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
 }
 
 void Corredor::setParametrosDebug(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo, float velocidadLimiteGiro) {

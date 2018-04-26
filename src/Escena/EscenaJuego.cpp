@@ -197,7 +197,8 @@ void EscenaJuego::init() {
 	// OPENAL
 	//----------------------
 	fuenteCarrera = new AlSource();
-	fuenteCarrera->volume(0.3f);
+	fuenteCarrera->setLoop(true);
+	fuenteCarrera->volume(TMotor::instancia().getGestorSonido()->getVolMusica());
 	if (!fuenteCarrera->isPlaying())
 		fuenteCarrera->play(SOUND_RACE);
 

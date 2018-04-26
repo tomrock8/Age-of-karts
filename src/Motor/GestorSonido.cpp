@@ -31,8 +31,8 @@ GestorSonido::GestorSonido() {
 
 	//Iniciamos los volumenes por defecto
 	volGeneral = 1.0f;
-	volMusica = 1.0f;
-	volEfectos = 1.0f;
+	volMusica = 0.1f;
+	volEfectos = .60f;
 }
 
 int GestorSonido::cargarSonido(std::string file) {

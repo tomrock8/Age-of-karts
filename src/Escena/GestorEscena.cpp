@@ -193,8 +193,11 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion)
 		return true;
 
 	case Escena::tipo_escena::OPCIONES:
-		//escenaActiva = new EscenaOpciones(Escena::tipo_escena::OPCIONES);
-		return false;
+		escenaActiva = new EscenaOpciones(Escena::tipo_escena::OPCIONES);
+		agregaEscena(escenaActiva);
+		cambioEscena = Escena::tipo_escena::OPCIONES;
+
+		return true;
 	}
 
 	return false;

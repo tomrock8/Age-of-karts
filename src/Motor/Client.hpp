@@ -19,7 +19,6 @@ struct structClientes{
 };
 
 
-using namespace std;
 
 class Client
 {
@@ -54,6 +53,7 @@ public:
 	int getMaxPlayers();
 	std::vector<structClientes> getClientes();
 	bool getStarted();
+	std::string getClientStats(int i);
 
 	//METODOS SET
 	void setNetloaded(bool b);
@@ -75,6 +75,7 @@ private:
 	bool connected;
 	bool disconnection;
 	unsigned char packetIdentifier;
+	std::string packetName;
 
 	RakNet::SocketDescriptor socketDescriptor;
 	RakNet::NetworkIDManager networkIDManager;

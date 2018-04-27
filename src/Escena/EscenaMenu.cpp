@@ -14,11 +14,12 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	*/
 
 	fuenteMenu = new AlSource();
-	fuenteMenu->volume(0.1f);
+	fuenteMenu->volume(TMotor::instancia().getGestorSonido()->getVolMusica());
 	if (!fuenteMenu->isPlaying())
 		fuenteMenu->play(SOUND_MENU);
 
 	fuenteOpcion = new AlSource();
+	fuenteOpcion->volume(TMotor::instancia().getGestorSonido()->getVolEfectos() * 30.f);
 
 	TMotor::instancia().initDebugWindow();
 }
@@ -139,6 +140,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			}
 			else if (optionMenu == 2) {
 				cout << "OPCIONES\n";
+				return Escena::tipo_escena::OPCIONES;
 			}
 			else {
 				cout << "SALIR\n";

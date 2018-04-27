@@ -29,11 +29,11 @@ EscenaJuego::~EscenaJuego() {
 void EscenaJuego::init() {
 
 	// LUCES PUNTUALES
-	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
-	luzPuntual_0->translate(glm::vec3(1.0f, 12.0f, 2.0f));
+	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, true, "escena_raiz");
+	luzPuntual_0->translate(glm::vec3(100.0f, 700.0f, 0.0f));
 
 	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
-	luzPuntual_1->translate(glm::vec3(-2.0f, 12.0f, 0.0f));
+	luzPuntual_1->translate(glm::vec3(0.0f, 1500.0f, 0.0f));
 
 	obj3D * luzPuntual_2 = TMotor::instancia().newLightNode("light_2", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), true, false, "escena_raiz");
 	luzPuntual_2->translate(glm::vec3(-150.0f, 12.0f, -300.0f));
@@ -197,7 +197,8 @@ void EscenaJuego::init() {
 	// OPENAL
 	//----------------------
 	fuenteCarrera = new AlSource();
-	fuenteCarrera->volume(0.3f);
+	fuenteCarrera->setLoop(true);
+	fuenteCarrera->volume(TMotor::instancia().getGestorSonido()->getVolMusica());
 	if (!fuenteCarrera->isPlaying())
 		fuenteCarrera->play(SOUND_RACE);
 

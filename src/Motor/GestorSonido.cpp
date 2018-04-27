@@ -4,7 +4,7 @@
 GestorSonido::GestorSonido() {
 	//inicializamos alut y crea el contexto
 	device = alcOpenDevice(NULL);
-	if (device == NULL)	{
+	if (device == NULL) {
 		// Handle Exception
 		cout << "DEVICE IS NULL\n";
 	}
@@ -21,18 +21,17 @@ GestorSonido::GestorSonido() {
 	alListener3f(AL_VELOCITY, 0, 0, 0);
 
 	//Cargamos todos los sonidos al inicializar el gestor
-	int i;
-	i = cargarSonido("assets/Sounds/bounce.wav");
-	i = cargarSonido("assets/Sounds/sound.wav");
-	i = cargarSonido("assets/Sounds/menu.wav");
-	i = cargarSonido("assets/Sounds/car_engine.wav");
-	i = cargarSonido("assets/Sounds/throw.wav");
-	i = cargarSonido("assets/Sounds/race1.wav");
+	cargarSonido("assets/Sounds/bounce.wav");
+	cargarSonido("assets/Sounds/sound.wav");
+	cargarSonido("assets/Sounds/menu.wav");
+	cargarSonido("assets/Sounds/car_engine.wav");
+	cargarSonido("assets/Sounds/throw.wav");
+	cargarSonido("assets/Sounds/race1.wav");
 
 	//Iniciamos los volumenes por defecto
 	volGeneral = 1.0f;
-	volMusica = 0.1f;
-	volEfectos = .60f;
+	volMusica = .6f;
+	volEfectos = .7f;
 }
 
 int GestorSonido::cargarSonido(std::string file) {
@@ -71,41 +70,61 @@ void GestorSonido::setListenerData() {
 	alListener3f(AL_VELOCITY, 0, 0, 0);
 }
 
-bool GestorSonido::getSonidoCargado() {
-	return cargado;
+bool GestorSonido::getSonidoCargado() { return cargado; }
+float GestorSonido::getVolGeneral() { return volGeneral; }
+float GestorSonido::getVolMusica() { return volMusica; }
+float GestorSonido::getVolEfectos() { return volEfectos; }
+
+void GestorSonido::getParametros(float * general, float * musica, float * efectos) {
+	*general = volGeneral;
+	*musica = volMusica;
+	*efectos = volEfectos;
 }
 
-float GestorSonido::getVolGeneral(){
-	return volGeneral;
+void GestorSonido::ajustarVolumen(float general, float musica, float efectos) {
+	bool generalModificado = false;
+	if (volGeneral < musica) {
+		volGeneral = musica;
+		generalModificado = true;
+	}
+	volMusica = musica;
+
+	if (volGeneral < efectos) {
+		volGeneral = efectos;
+		generalModificado = true;
+	}
+	volEfectos = efectos;
+
+	if (!generalModificado) {
+		float midMus = volMusica / volGeneral;
+		float midEfe = volEfectos / volGeneral;
+
+		volGeneral = general;
+
+		volMusica = volGeneral * midMus;
+		volEfectos = volGeneral * midEfe;
+	}
 }
 
-float GestorSonido::getVolMusica(){
-	return volMusica;
-}
-
-float GestorSonido::getVolEfectos(){
-	return volEfectos;
-}
-
-void GestorSonido::setVolGeneral(float vol){
+void GestorSonido::setVolGeneral(float vol) {
 	float midMus = volMusica / volGeneral;
 	float midEfe = volEfectos / volGeneral;
 
 	volGeneral = vol;
-	
+
 	volMusica = volGeneral * midMus;
 	volEfectos = volGeneral * midEfe;
 }
 
-void GestorSonido::setVolMusica(float vol){
-	if(volGeneral < vol){
+void GestorSonido::setVolMusica(float vol) {
+	if (volGeneral < vol) {
 		volGeneral = vol;
 	}
 	volMusica = vol;
 }
 
-void GestorSonido::setVolEfectos(float vol){
-	if(volGeneral < vol){
+void GestorSonido::setVolEfectos(float vol) {
+	if (volGeneral < vol) {
 		volGeneral = vol;
 	}
 	volEfectos = vol;

@@ -778,11 +778,12 @@ bool GestorColisiones::JugadorCaja(std::vector<Caja*> cajas)
 				{
 					if (cajas.at(i)->getID() == idB)
 					{
-						for(int j = 0; j< jugadores->getNumJugadores(); j++)
+						for(int j = 0; j< jugadores->getNumJugadores(); j++){
 							//if(pj1.at(j)!=NULL)
 							if(nodoA->getID()== pj1.at(j)->getID()){
 								cajas.at(i)->romper(pj1.at(j));
 							}
+						}
 					}
 				}
 				//cout << "Entro " << i << endl;

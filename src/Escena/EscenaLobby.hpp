@@ -18,6 +18,7 @@ public:
 	virtual void limpiar() override;
 	virtual void update() override;
 	void updateLobbyOnline();
+	void debugClientInfo();
 	void mostrarInfoLobby(int indice);
 	Escena::tipo_escena comprobarInputs();
 	void mostrarTipoPersonaje(int i);

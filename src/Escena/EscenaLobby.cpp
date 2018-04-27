@@ -119,6 +119,7 @@ void EscenaLobby::update() {
 					}
 				}
 			}else{
+				if (ipConexion.compare("")==0)
 				ipConexion+=to_string(vec4a[0])+"."+to_string(vec4a[1])+"."+to_string(vec4a[2])+"."+to_string(vec4a[3]);
 				updateLobbyOnline();
 			}
@@ -200,6 +201,7 @@ void EscenaLobby::updateLobbyOnline(){
 
 		//si despues de todo se ha recibido conexion y cliente esta conectado mostramos informacion relativa
 		if (client->getConnected()) {
+			debugClientInfo();
 			nElementos = time->getTimer();
 			conectado = true;
 			ImGui::Text("Conexion establecida!\n");
@@ -207,7 +209,27 @@ void EscenaLobby::updateLobbyOnline(){
 		}
 	}
 }
- 
+
+void EscenaLobby::debugClientInfo(){
+	static std::vector<float> ping;
+	float vec[10];
+	int vec2[10];
+	ping.resize(10);
+	ping.erase(ping.begin());
+	float f=stof(client->getClientStats(0));
+	ping.push_back(f);
+	for (int i=0;i<10;i++){
+		vec2[i]=ping.at(i);
+		vec[i]=vec2[i];
+		
+	}
+	ImGui::PlotLines("PING", vec, IM_ARRAYSIZE(vec),0,(to_string(vec2[0])).c_str());
+	ImGui::Text("Ultimo paquete recibido: " );
+	ImGui::Text(client->getClientStats(2).c_str());
+	ImGui::Text(client->getClientStats(1).c_str());
+	
+	
+}
 
 void EscenaLobby::mostrarInfoLobby(int indice) {
 	//Inicializacion variables cliente

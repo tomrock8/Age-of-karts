@@ -146,4 +146,7 @@ protected:
 
 	//Debug Bullet
 	std::vector <GLfloat> vertices; //Array de vertices para los puntos de las lineas
+
+	obj3D* objMapa;
+	obj3D* objElementos;
 };

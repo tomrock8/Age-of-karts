@@ -19,6 +19,7 @@ uniform mat4 model; //Model de cada objeto
 uniform mat4 view; //Matriz view de la camara usada en cada momento
 uniform mat4 projectionLight; //Matriz proyeccion de la luz
 uniform vec3 lightPosition; //Posicion de la luz
+uniform mat4 scale;
 
 void main()
 {
@@ -28,28 +29,29 @@ void main()
     vs_out.lightPosition = lightPosition;
 
     //Matriz modelo especial para dibujar la sombra
-    mat4 shadowsModel = model;
+    
+    mat4 shadowsModel = model*scale;
     //Situamos la sombra a la altura 0.1 siempre (el suelo)
-    shadowsModel[3][1] =  0.1f;
+    shadowsModel[3][1] =  shadowsModel[3][1] - 2.5;
     //A partir de la posicion de la luz y del vertice, movemos la sombra del objeto para que no este inmediatamente debajo del mismo
     //Cuanta mas distancia entre ellos, mas separada parecera la sombra respecto del objeto que la crea
     // -- Para el eje x --
     if ( shadowsModel[3][0] < lightPosition.x){
         float dist = lightPosition.x - shadowsModel[3][0];
-        shadowsModel[3][0] -= dist/10;
+        shadowsModel[3][0] -= dist/500;
     }else{
         float dist = shadowsModel[3][0] - lightPosition.x;
-        shadowsModel[3][0] += dist/10;
+        shadowsModel[3][0] += dist/500;
     }
     // -- Para el eje z --
     if ( shadowsModel[3][2] < lightPosition.z){
         float dist = lightPosition.z - shadowsModel[3][2];
-        shadowsModel[3][2] -= dist/10;
+        shadowsModel[3][2] -= dist/500;
     }else{
         float dist = shadowsModel[3][2] - lightPosition.z;
-        shadowsModel[3][2] += dist/10;
+        shadowsModel[3][2] += dist/500;
     }
     //Calculamos la posicion final de cada vertice a partir de las matrices anteriores
     //Le pasamos el valor 0.1 en la posicion y de cada vertice para que dibuje los objetos planos (dando la impresion de una sombra)
-    gl_Position = projectionLight * view * shadowsModel * vec4(aPos.x, 0.0f, aPos.z, 1.0);
+    gl_Position = projectionLight * view * shadowsModel * vec4(aPos.x, aPos.y, aPos.z, 0.8);
 }

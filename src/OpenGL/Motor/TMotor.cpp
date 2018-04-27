@@ -271,11 +271,20 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 
 	TMalla *malla = TMotor::instancia().createMesh(path,sta);
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
+	if (strcmp(name, "mapa") == 0){
+		objMapa = new obj3D(nodo, name, contID);
+		return objMapa;
+	}
+	if (strcmp(name, "elementos") == 0){
+		objElementos = new obj3D(nodo, name, contID);
+		return objElementos;
+	}
+
 	contID++;
-		return new obj3D(nodo, name, contID);
+	return new obj3D(nodo, name, contID);
 	
 }
-
+ 
 
 void TMotor::precarga(const char* modelo) {
 	//gestorRecursos->loadMesh(modelo);
@@ -404,6 +413,7 @@ void TMotor::draw(int tipo) {
 		//DIBUJADO DEL ARBOL * ESTILO CARTOON *
 		//-------------------------------------
 		
+		//glDisable(GL_DEPTH_TEST);
 		//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas
 
 		//Enlazamos el shader cartoon
@@ -452,7 +462,7 @@ void TMotor::draw(int tipo) {
 		//Especificamos que solo queremos dibujar las caras ocultas
 		glCullFace(GL_FRONT);
 		//Aumentamos el grosor de las lineas
-		glLineWidth(6.00f);
+		glLineWidth(4.50f);
 		//Dibujamos los distintos nodos del arbol
 		scene->draw(s);
 		//Volvemos al modo de dibujado normal de los poligonos
@@ -496,33 +506,41 @@ void TMotor::draw(int tipo) {
 		// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
 		//==========================================================
 		/*
+		glEnable(GL_DEPTH_TEST);
 		//DIBUJADO DE LAS SOMBRAS PROYECTADAS
 		//-----------------------------------
 		//No dibujamos el mapa (suelo) ya que no queremos que produzca ninguna tipo de sombra
-		getObjeto("mapa")->setVisible(false);
+		objMapa->setVisible(false);
+		objElementos->setVisible(false);
 		//Activamos el shader especifico para dibujar las sombras proyectadas
 		shaderProjectedShadows->use();
-		
+		glEnable(GL_DEPTH_TEST);
 		if (lights.size() > 0) {
 			for (int i = 0; i < lights.size(); i++) {
 				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
 					//Establecemos la matrix view llamando al dibujado de la camara
 					drawCamera(shaderProjectedShadows);
 					//Le pasamos la matriz proyeccion de la luz (perspectiva)
-					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
+					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 300.0f);
 					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
 					//Le pasamos la posicion de la luz al shader
 					shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());
 					shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz *>(lights[i]->getEntidad())->getDirection());
+					glm::mat4 sc;
+					sc = scale(sc, glm::vec3(1,0.01,1));
+					shaderProjectedShadows->setMat4("scale", sc);
 					//Dibujamos la escena con el shader de sombras proyectadas
 					scene->draw(shaderProjectedShadows);
 				}
 			}
 		}
 		//Activamos el dibujado del mapa
-		getObjeto("mapa")->setVisible(true);*/
+		objMapa->setVisible(true);
+		objElementos->setVisible(true);*/
 		//====================================================
 		//====================================================
+
+		
 	}
 
 	//Se activa el shader para el dibujado del HUD

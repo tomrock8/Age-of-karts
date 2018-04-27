@@ -2,7 +2,6 @@
 #include "GestorEscena.hpp"
 #include "EscenaJuego.hpp"
 #include "TGestorImagenes.hpp"
-
 #include "Corredor.hpp"
 
 

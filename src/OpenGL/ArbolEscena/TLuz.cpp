@@ -261,7 +261,7 @@ void TLuz::calculateCubeDepthMap(){
 //Funcion para calcular las matrices de luz del cubo de profundidad
 void TLuz::calculateLightMatrixes(){
 	//Calculamos la matriz proyeccion = esta vez se usa la perspectiva ya que al ser luz puntual la luz sale en todas las direcciones
-	glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float)DEPTH_WIDTH/(float)DEPTH_HEIGHT, 0.1f, 160.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float)DEPTH_WIDTH/(float)DEPTH_HEIGHT, 0.1f, 200.0f);
 
 	//Calculamos la matriz view a partir de la posicion de la luz (una para cada lado del cubo)
 	lightMatrixes.clear();
@@ -305,7 +305,7 @@ void TLuz::renderCubeDepthMap(){
 	TMotor::instancia().getShaderPointDepth()->setMat4("lightMatrix[4]", lightMatrixes.at(4));
 	TMotor::instancia().getShaderPointDepth()->setMat4("lightMatrix[5]", lightMatrixes.at(5));
 	TMotor::instancia().getShaderPointDepth()->setVec3("lightPosition", lightPosition);
-	TMotor::instancia().getShaderPointDepth()->setFloat("planoLejano", 160.0f);
+	TMotor::instancia().getShaderPointDepth()->setFloat("planoLejano", 200.0f);
 
 }
 
@@ -321,5 +321,5 @@ void TLuz::configurePointShadow(Shader *s){
 	n+=numLight;
 	glUniform1i(glGetUniformLocation(s->ID, n.c_str()), 3 + text);
 	//Pasamo el plano lejano al shader
-	s->setFloat("planoLejano", 160.0f);
+	s->setFloat("planoLejano", 200.0f);
 }

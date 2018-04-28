@@ -1,4 +1,6 @@
 #include "Waypoint.hpp"
+#include "TMotor.hpp"
+#include "MotorFisicas.hpp"
 
 Waypoint::Waypoint() {
 	//waypoint = Motor3d::instancia().getScene()->addCubeSceneNode(0.1f);

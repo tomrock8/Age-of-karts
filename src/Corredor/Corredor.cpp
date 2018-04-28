@@ -1,9 +1,15 @@
 #include "Corredor.hpp"
-#include <string>
-#include <time.h>
 #include "Pista.hpp"
+#include "Timer.hpp"
+#include "GestorJugadores.hpp"
 #include "Client.hpp"
-
+#include "Item.hpp"
+#include "CajaFalsa.hpp"
+#include "Aceite.hpp"
+#include "Proyectil.hpp"
+#include "ItemTeledirigido.hpp"
+#include "Escudo.hpp"
+#include "Habilidad.hpp"
 
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*

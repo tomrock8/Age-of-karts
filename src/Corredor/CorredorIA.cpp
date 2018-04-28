@@ -1,4 +1,6 @@
 #include "CorredorIA.hpp"
+#include "Timer.hpp"
+
 
 CorredorIA::CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(pos, tipo)
 {

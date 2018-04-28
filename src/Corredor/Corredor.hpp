@@ -4,23 +4,18 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Waypoint.hpp"
-#include "Proyectil.hpp"
+#include <time.h>
+
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
-#include "MotorFisicas.hpp"
-#include "ItemTeledirigido.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 #include "BulletDynamics/ConstraintSolver/btHingeConstraint.h"
-#include "RaknetIncludes.hpp"
-#include "Escudo.hpp"
-#include "EstadosJugador.hpp"
-#include "Habilidad.hpp"
-#include "ItemTeledirigido.hpp"
-#include "TMotor.hpp"
-#include "cameraThird.hpp"
-#include "GestorSonido.hpp"
 
+#include "RaknetIncludes.hpp"
+
+#include "EstadosJugador.hpp"
+#include "obj3d.hpp"
+#include "Waypoint.hpp"
 
 using namespace std;
 

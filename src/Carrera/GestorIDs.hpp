@@ -1,17 +1,13 @@
 #ifndef GESTORIDS_H
 #define GESTORIDS_H
 
-
-#include "TMotor.hpp"
-
-
-using namespace std;
+#include "obj3D.hpp"
 
 class GestorIDs {
 public:
 	void setIdentifier(obj3D *nodo, const char *nombre);
 	int getIDLibre();
-        void restartID();
+	void restartID();
 	static GestorIDs &instancia();
 
 private:

@@ -5,8 +5,6 @@
 #include "Corredor.hpp"
 #include "GestorJugadores.hpp"
 
-using namespace std;
-
 class GestorJugadores {
 public:
 	~GestorJugadores(void);

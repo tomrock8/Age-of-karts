@@ -4,8 +4,12 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;
 	ipConexion = "";
 	TMotor::instancia().newHud("OnGameHUD");
-	//TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "aok", "assets/HUD/MainMenu/aok_logo.png");
-	//TMotor::instancia().getActiveHud()->traslateElement("aok", 0.0f, 0.45f);
+	TMotor::instancia().getActiveHud()->addElement(0.2f, 0.2f, "puesto", "assets/HUD/juego/puesto_6.png");
+	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
+	TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_3_3.png");
+	TMotor::instancia().getActiveHud()->traslateElement("vueltas", -0.83f, 0.68f);
+	puesto=6;
+	vueltas=3;
 	init();
 }
 
@@ -391,7 +395,7 @@ void EscenaJuego::update() {
 		pj.at(controlPlayer)->actualizarItem();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		//pj.at(controlPlayer)->update();
-
+		updateHUD();
 		if (jugadores->getNumJugadores() > 0) {
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 				pj.at(i)->update();
@@ -403,8 +407,8 @@ void EscenaJuego::update() {
 	else {
 		//cout << jugadores->getNumJugadores() << endl;
 		//if (jugadores->getNumJugadores() != 0)
-		//	pj.at(controlPlayer)->actualizarItem();
-
+		pj.at(controlPlayer)->actualizarItem();
+		updateHUD();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 		if (jugadores->getNumJugadores() != 0)
@@ -582,3 +586,49 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 }
 
 std::string EscenaJuego::getIpConexion() { return ipConexion; }
+
+void EscenaJuego::updateHUD(){
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	std::vector<Corredor*> pj = jugadores->getJugadores();
+
+	//UPDATE PUESTO
+	if (pj.at(controlPlayer)->getPosicionCarrera()!=puesto){
+		puesto=pj.at(controlPlayer)->getPosicionCarrera();
+		switch (pj.at(controlPlayer)->getPosicionCarrera()){
+			case 1:
+				TMotor::instancia().getActiveHud()->changeTextureElement("puesto","assets/HUD/juego/puesto_1.png");
+			break;
+			case 2:
+				TMotor::instancia().getActiveHud()->changeTextureElement("puesto","assets/HUD/juego/puesto_2.png");
+			break;
+			case 3:
+				TMotor::instancia().getActiveHud()->changeTextureElement("puesto","assets/HUD/juego/puesto_3.png");
+			break;
+			case 4:
+				TMotor::instancia().getActiveHud()->changeTextureElement("puesto","assets/HUD/juego/puesto_4.png");
+			break;
+			case 5:
+				TMotor::instancia().getActiveHud()->changeTextureElement("puesto","assets/HUD/juego/puesto_5.png");
+			break;
+			case 6:
+				TMotor::instancia().getActiveHud()->changeTextureElement("puesto","assets/HUD/juego/puesto_6.png");						
+			break;
+		}
+	}
+
+	//UPDATE VUELTAS
+	if (pj.at(controlPlayer)->getVueltas()!=vueltas){
+		vueltas=pj.at(controlPlayer)->getVueltas();
+		switch (pj.at(controlPlayer)->getVueltas()){
+			case 1:
+				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas","assets/HUD/juego/lap_1_3.png");
+			break;
+			case 2:
+				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas","assets/HUD/juego/lap_2_3.png");
+			break;
+			case 3:
+				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas","assets/HUD/juego/lap_3_3.png");
+			break;
+		}
+	}
+}

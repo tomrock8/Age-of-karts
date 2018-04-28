@@ -44,6 +44,7 @@ private:
 	void UpdatePhysics(unsigned int TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
 	void renderDebug();
+	void updateHUD();
 
 	bool debug;
 
@@ -77,6 +78,9 @@ private:
 	
 	//SONIDO 
 	AlSource *fuenteCarrera;
+
+	int puesto;
+	int vueltas;
 	
 };
 

@@ -15,6 +15,7 @@ public:
 	virtual void update() override;
 	Escena::tipo_escena comprobarInputs();
 	AlSource *fuenteMusica;
+	AlSource *fuenteEfectos;
 
 	// METODOS GET
 

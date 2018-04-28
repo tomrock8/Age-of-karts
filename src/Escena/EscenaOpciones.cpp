@@ -10,12 +10,17 @@ EscenaOpciones::EscenaOpciones(Escena::tipo_escena tipo) : Escena(tipo) {
 	ImGui::StyleColorsLight();
 	fuenteMusica = new AlSource();
 	fuenteMusica->volume(TMotor::instancia().getGestorSonido()->getVolMusica());
+	fuenteMusica->setLoop(true);
 	fuenteMusica->play(SOUND_MENU);
+	fuenteEfectos = new AlSource();
+	fuenteEfectos->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
+	
 
 }
 
 EscenaOpciones::~EscenaOpciones() {
 	delete fuenteMusica;
+	delete fuenteEfectos;
 }
 
 void EscenaOpciones::init() {}
@@ -65,6 +70,7 @@ void EscenaOpciones::update() {
 	ImGui::End();
 
 	fuenteMusica->volume(TMotor::instancia().getGestorSonido()->getVolMusica());
+	fuenteEfectos->volume(30.0f * TMotor::instancia().getGestorSonido()->getVolEfectos());
 }
 
 Escena::tipo_escena EscenaOpciones::comprobarInputs() {
@@ -75,5 +81,8 @@ Escena::tipo_escena EscenaOpciones::comprobarInputs() {
 		end = true;
 	}
 	else end = false;
+
+	if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS && !fuenteEfectos->isPlaying()) 
+		fuenteEfectos->play(SOUND_OPCION);
 	return Escena::tipo_escena::OPCIONES;
 }

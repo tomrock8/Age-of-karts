@@ -19,7 +19,7 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 		fuenteMenu->play(SOUND_MENU);
 
 	fuenteOpcion = new AlSource();
-	fuenteOpcion->volume(TMotor::instancia().getGestorSonido()->getVolEfectos() * 30.f);
+	fuenteOpcion->volume(30.0f * TMotor::instancia().getGestorSonido()->getVolEfectos());
 
 	TMotor::instancia().initDebugWindow();
 }

@@ -1,9 +1,7 @@
 #ifndef CORREDORIA_H
 #define CORREDORIA_H
 
-#include <iostream>
 #include "Corredor.hpp"
-#include "Waypoint.hpp"
 #include "ArbolDecision.hpp"
 
 using namespace std;

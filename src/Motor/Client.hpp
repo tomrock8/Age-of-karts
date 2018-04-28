@@ -3,11 +3,9 @@
 
 #include <iostream>
 #include <vector>
-//#include "CorredorRed.hpp"
-//#include "CorredorJugador.hpp"
+#include "Corredor.hpp"
 #include "GestorJugadores.hpp"
 #include "Escena.hpp"
-//#include "NetworkEnums.hpp"
 
 #define MAX_PLAYERS 10
 

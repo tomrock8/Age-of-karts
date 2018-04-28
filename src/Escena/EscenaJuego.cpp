@@ -1,4 +1,7 @@
 #include "EscenaJuego.hpp"
+#include "CorredorJugador.hpp"
+#include "CorredorIA.hpp"
+#include "CorredorRed.hpp"
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;

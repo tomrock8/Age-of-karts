@@ -2,6 +2,9 @@
 #include "NetworkEnums.hpp"
 #include <iostream>
 
+#include "CorredorJugador.hpp"
+#include "CorredorRed.hpp"
+
 #define DEBUG_BUILD
 
 Client *Client::instancia = NULL;

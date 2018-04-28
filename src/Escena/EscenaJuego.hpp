@@ -1,23 +1,11 @@
 #ifndef ESCENAJUEGO_H
 #define ESCENAJUEGO_H
 
-#include <ctime>
-#include <vector>
-
-#include "GestorEscena.hpp"
 #include "Escena.hpp"
-
-#include "MotorFisicas.hpp"
 #include "DebugFisicas.hpp"
-
-#include "Pista.hpp"
-#include "GestorJugadores.hpp"
-#include "GestorCarrera.hpp"
 #include "GestorColisiones.hpp"
+#include "GestorCarrera.hpp"
 #include "Timer.hpp"
-
-#include "cameraThird.hpp"
-
 
 class EscenaJuego : public Escena {
 public:

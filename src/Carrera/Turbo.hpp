@@ -1,19 +1,14 @@
 #ifndef TURBO_H
 #define TURBO_H
 
-#include <iostream>
-#include "MotorFisicas.hpp"
 #include "btBulletDynamicsCommon.h"
-#include "btBulletCollisionCommon.h"
+#include "obj3d.hpp"
 #include "Corredor.hpp"
-#include "GestorIDs.hpp"
-#include "TMotor.hpp"
 
-class Turbo
-{
+class Turbo {
 public:
-
 	Turbo(btVector3 pos, bool estado);
+	~Turbo();
 
 	// METODOS SET
 	void setTurboActivo(Corredor *corredor, bool s);
@@ -25,8 +20,7 @@ public:
 	bool getTurboActivo();
 	int getTiempoTurbo();
 	int getID();
-	//destructor
-	~Turbo();
+
 private:
 
 	obj3D * turbo;

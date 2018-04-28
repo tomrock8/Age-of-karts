@@ -14,7 +14,7 @@
 #include "RaknetIncludes.hpp"
 
 #include "EstadosJugador.hpp"
-#include "obj3d.hpp"
+#include "obj3D.hpp"
 #include "Waypoint.hpp"
 #include "GestorSonido.hpp"
 

@@ -2,7 +2,7 @@
 #define TURBO_H
 
 #include "btBulletDynamicsCommon.h"
-#include "obj3d.hpp"
+#include "obj3D.hpp"
 #include "Corredor.hpp"
 
 class Turbo {

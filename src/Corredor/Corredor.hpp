@@ -4,26 +4,22 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Waypoint.hpp"
-#include "Proyectil.hpp"
+#include <time.h>
+
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
-#include "MotorFisicas.hpp"
-#include "ItemTeledirigido.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 #include "BulletDynamics/ConstraintSolver/btHingeConstraint.h"
+
 #include "RaknetIncludes.hpp"
-#include "Escudo.hpp"
+
 #include "EstadosJugador.hpp"
-#include "Habilidad.hpp"
-#include "ItemTeledirigido.hpp"
-#include "TMotor.hpp"
-#include "cameraThird.hpp"
+#include "obj3D.hpp"
+#include "Waypoint.hpp"
 #include "GestorSonido.hpp"
 
-
-using namespace std;
-
+#define PI 3.14159265358979323846  /* pi */
+#define RADTODEG 180.0f / PI
 
 class Corredor : public RakNet::NetworkIDObject
 {

@@ -1,20 +1,12 @@
-
 #ifndef GESTORJUGADORES_H
 #define GESTORJUGADORES_H
 
-#include <iostream>
-#include <string>
-#include "Corredor.hpp"
-#include "CorredorRed.hpp"
-#include "CorredorJugador.hpp"
-#include "CorredorIA.hpp"
 #include <vector>
-
-using namespace std;
+#include "Corredor.hpp"
+#include "GestorJugadores.hpp"
 
 class GestorJugadores {
 public:
-
 	~GestorJugadores(void);
 
 	static GestorJugadores *getInstancia();
@@ -31,8 +23,6 @@ private:
 	static GestorJugadores *instancia;
 	std::vector<Corredor*> pj;
 	int numJugadores;
-
-
 };
 
 #endif

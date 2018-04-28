@@ -1,29 +1,21 @@
 #ifndef WAYPOINT_H
 #define WAYPOINT_H
 
-#include <iostream>
-#include "MotorFisicas.hpp"
 #include "btBulletDynamicsCommon.h"
-#include "btBulletCollisionCommon.h"
-#include "TMotor.hpp"
+#include "obj3D.hpp"
+
+#define PI 3.14159265358979323846  /* pi */
+#define RADTODEG 180.0f / PI
 
 using namespace std;
 
-class Waypoint
-{
+class Waypoint {
 public:
-	//Constructor
 	Waypoint();
-	//Destructor
 	~Waypoint();
-
-
 	void inicializarFisicas();
-	//auxiliares
 
-	//Update
-
-  //metodos SET
+	// METODOS SET
 	void setPosicion(float x, float y, float z);
 	void setSiguiente(Waypoint *siguiente);
 	void setOrientacion(float grados);
@@ -32,8 +24,9 @@ public:
 	void setVector3(btVector3 p3);
 	void setVector4(btVector3 p4);
 	void setID(int i);
-	//metodos GET
-
+	
+	// METODOS GET
+	int getID();
 	obj3D *getWaypoint();
 	btVector3 getPosicion();
 	Waypoint *getNextWaypoint();
@@ -42,12 +35,12 @@ public:
 	btVector3 getVector3();
 	btVector3 getVector4();
 	btVector3 getRotation();
-	int getID();
+	
 private:
 	obj3D * waypoint;
 	Waypoint *siguiente; // Siguiente punto
 
-  //fisicas
+	//fisicas
 	btDefaultMotionState *MotionState;
 	btCollisionShape *Shape;
 	btRigidBody * rigidBody;

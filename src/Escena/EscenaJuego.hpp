@@ -1,23 +1,11 @@
 #ifndef ESCENAJUEGO_H
 #define ESCENAJUEGO_H
 
-#include <ctime>
-#include <vector>
-
-#include "GestorEscena.hpp"
 #include "Escena.hpp"
-
-#include "MotorFisicas.hpp"
 #include "DebugFisicas.hpp"
-
-#include "Pista.hpp"
-#include "GestorJugadores.hpp"
-#include "GestorCarrera.hpp"
 #include "GestorColisiones.hpp"
+#include "GestorCarrera.hpp"
 #include "Timer.hpp"
-
-#include "cameraThird.hpp"
-
 
 class EscenaJuego : public Escena {
 public:
@@ -44,6 +32,7 @@ private:
 	void UpdatePhysics(unsigned int TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
 	void renderDebug();
+	void updateHUD();
 
 	bool debug;
 
@@ -77,6 +66,9 @@ private:
 	
 	//SONIDO 
 	AlSource *fuenteCarrera;
+
+	int puesto;
+	int vueltas;
 	
 };
 

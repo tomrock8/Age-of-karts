@@ -1,24 +1,10 @@
 #ifndef GESTORCOLISIONES_H
 #define GESTORCOLISIONES_H
 
-#include "Corredor.hpp"
-#include "CorredorJugador.hpp"
-#include "Caja.hpp"
-#include "Item.hpp"
-#include "Proyectil.hpp"
-#include "Pista.hpp"
-#include "btBulletDynamicsCommon.h"
-#include "btBulletCollisionCommon.h"
-#include "MotorFisicas.hpp"
-#include "GestorJugadores.hpp"
-#include <iostream>
 #include <vector>
-#include <time.h>
-#include "Timer.hpp"
-#include "TMotor.hpp"
-
-
-using namespace std;
+#include "obj3D.hpp"
+#include "GestorJugadores.hpp"
+#include "Caja.hpp"
 
 class GestorColisiones
 {

@@ -1,4 +1,9 @@
 #include "Turbo.hpp"
+#include "GestorIDs.hpp"
+#include "Timer.hpp"
+#include "MotorFisicas.hpp"
+#include "TMotor.hpp"
+
 //el turbo se creara con una id y una posicion que se recojera por fichero 
 Turbo::Turbo(btVector3 pos, bool estado) {
 	turboActivo = estado;

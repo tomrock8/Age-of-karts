@@ -645,8 +645,7 @@ TGestorRecursos *TMotor::getGR() {
   return gestorRecursos;
 }
 
-void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw)
-{
+void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw){
 
 	// roll (x-axis rotation)
 	double sinr = +2.0 * (w * x + y * z);

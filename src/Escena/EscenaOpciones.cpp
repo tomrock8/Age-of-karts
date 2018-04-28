@@ -57,6 +57,7 @@ void EscenaOpciones::update() {
 		ImGui::SliderFloat("General", &volGen, 0.0f, 1.0f);
 		ImGui::SliderFloat("Musica", &volMus, 0.0f, 1.0f);
 		ImGui::SliderFloat("Efectos", &volEfe, 0.0f, 1.0f);
+		ImGui::Text("Pulsa W para probar los efectos\n");
 
 		TMotor::instancia().getGestorSonido()->ajustarVolumen(volGen, volMus, volEfe);
 

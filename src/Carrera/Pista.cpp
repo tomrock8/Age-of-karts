@@ -95,7 +95,7 @@ void Pista::loadWaypoints(const char* waypoints) {
 				//orientacion con respecto a la carretera  //
 				//=========================================//
 				getline(myfile, orientacionWp, ' ');
-				orientacion = stoi(orientacionWp);
+				orientacion = stof(orientacionWp);
 				//cout <<"orientacion: "<<orientacion<<endl;
 				//=========================================//
 				//Vectores que complementan los waypoint   //
@@ -127,10 +127,10 @@ void Pista::loadWaypoints(const char* waypoints) {
 				getline(myfile, pX, ' ');//posiciones central wp
 				getline(myfile, pY, ' ');//posiciones central wp
 				getline(myfile, pZ, ' ');//posiciones central wp
-										 //=========================================//
-										 //			rellenar los waypoints		   //
-										 //=========================================//
-										 //comento lo de la id de los waypoints porq da conflico con las cajas
+			 //=========================================//
+			 //			rellenar los waypoints		   //
+			 //=========================================//
+			 //comento lo de la id de los waypoints porq da conflico con las cajas
 				arrayWaypoints.at(arrayWaypoints.size() - 1)->getWaypoint()->setID(arrayWaypoints.size() - 1);
 
 				if (arrayWaypoints.size() - 1 > 0 && arrayWaypoints.size() - 1 <= (stoi(tamanyoArrayWaypoints) - 2))
@@ -170,6 +170,7 @@ void Pista::loadWaypoints(const char* waypoints) {
 		}
 
 		myfile.close();
+
 
 	}
 	else {

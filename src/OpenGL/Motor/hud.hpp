@@ -18,6 +18,8 @@ public:
  
     void addElement(float w, float h, const char* n, const char* p); //Añade un elemento con textura al hud
     void addElement(float w, float h, const char* n, glm::vec4 c); //Añade un elemento con color al hud
+	void deleteElement(const char* nombre); // Elimina el elemento del array
+
 
     //Tratamiento de los elementosHud
     void rotateElement(const char* n, float angle);
@@ -34,5 +36,6 @@ private:
     std::vector <elementoHud*> elems; //Array con los elementos que forman el hud
  
     elementoHud* getElement(const char* n); //Funcion que devuelve un elemento a partir de su nombre
+	int getElementPosition(const char * n); // Funcion que devuelve la posicion del elemento en el array
 };
 #endif

@@ -3,12 +3,9 @@
 #include "MotorFisicas.hpp"
 
 Waypoint::Waypoint() {
-	//waypoint = Motor3d::instancia().getScene()->addCubeSceneNode(0.1f);
-	waypoint = TMotor::instancia().newMeshNode("Waypoint","assets/wall/wall.obj","escena_raiz",false);
+	waypoint = TMotor::instancia().newMeshNode("Waypoint", "assets/wall/wall.obj", "escena_raiz", false);
 	//waypoint->setPosition(0.0f, -100.0f, -300.0f);
-	//waypoint->setMaterialFlag(EMF_LIGHTING, false); //Desactivar iluminacion
-	//Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(waypoint->getMesh(), SColor(255, 200, 100, 100));
-	//waypoint->setVisible(false);
+	waypoint->setVisible(false);
 	//waypoint->setScale(vector3df(1500, 150, 05));
 	waypoint->setName("Waypoint");
 	siguiente = NULL; // Referenciar despues con la funcion
@@ -31,7 +28,7 @@ void Waypoint::inicializarFisicas() {
 
 	// Create the shape
 
-	Shape = new btBoxShape(btVector3(950*0.05f, 150*0.05f, 5*0.05f));
+	Shape = new btBoxShape(btVector3(950 * 0.05f, 150 * 0.05f, 5 * 0.05f));
 
 	// sin masa
 	btVector3 localInertia;
@@ -57,7 +54,7 @@ void Waypoint::inicializarFisicas() {
 // MEtodos SET
 void Waypoint::setPosicion(float x, float y, float z) {
 	//waypoint->setPosition(x, y, z);
-	waypoint->setPosition(x,y,z);
+	waypoint->setPosition(x, y, z);
 }
 
 void Waypoint::setSiguiente(Waypoint *siguiente) {
@@ -82,12 +79,12 @@ Waypoint *Waypoint::getNextWaypoint() {
 obj3D *Waypoint::getWaypoint() {
 	return waypoint;
 }
-int Waypoint::getID(){
+int Waypoint::getID() {
 	return id;
 }
 
 Waypoint::~Waypoint() {
-	cout << "ENTRO DELETE WAYPOINT " <<endl;
+	cout << "ENTRO DELETE WAYPOINT " << endl;
 	siguiente = nullptr;
 	cout << " SALGO DELETE WAYPOINT \n" << endl;
 }
@@ -115,6 +112,6 @@ btVector3 Waypoint::getVector3() {
 btVector3 Waypoint::getVector4() {
 	return vector4;
 }
-void Waypoint::setID(int i){
-	id=i;
+void Waypoint::setID(int i) {
+	id = i;
 }

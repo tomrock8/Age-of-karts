@@ -43,8 +43,9 @@ void ItemTeledirigido::updateHijos() {
 		direccionGiro(siguiente->getPosicion());
 
 	movimiento();
-
-	//cout<< actual->getWaypoint()->getID() << endl;
+	
+	ajustarAltura();
+	comprobarAltura(0.1);
 
 }
 

@@ -13,7 +13,7 @@ public:
   virtual void lanzarItem(int direccion,btVector3 orientacion,btTransform objeto) override;
   virtual void updateHijos() override;
   virtual void deleteHijos() override;
-  void movimiento();
+
 private:
 
 };

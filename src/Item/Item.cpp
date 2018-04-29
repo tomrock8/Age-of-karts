@@ -15,11 +15,15 @@ Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesc
 	this->fcolision = fcolision;
 	this->alturaLanzamiento = alturaLanzamiento;
 	orientacionItem= btVector3(1,0,0);
+
+	subir=false;
+	bajar=false;
+	indiceAltura=0;
 }
 
 void Item::inicializarFisicas()
 {
-
+	
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
@@ -132,6 +136,71 @@ void Item::Delete() {
 
 		}
 	}
+}
+
+
+
+
+
+//COmprobar distancias con el suelo
+void Item::ajustarAltura(){
+
+	btTransform posObj= rigidBody->getCenterOfMassTransform();
+	float altura= 0;
+	float diferencia = 0.03;
+	cout<<indiceAltura<<endl;
+	if(subir){
+		altura= (0.1 - indiceAltura)/diferencia;
+		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()+altura,posObj.getOrigin().getZ()));
+	}else if(bajar){
+		altura=(indiceAltura - 0.1)/diferencia;
+		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()-altura,posObj.getOrigin().getZ()));
+	}
+
+	rigidBody->setCenterOfMassTransform(posObj);
+
+	subir=false;
+	bajar=false;
+	
+
+}
+
+void Item::comprobarAltura(float altura){
+
+	MotorFisicas *mun = MotorFisicas::getInstancia();
+	btDynamicsWorld *mundo = mun->getMundo();
+	mundo->updateAabbs();
+	mundo->computeOverlappingPairs();
+	
+	// Raycast central1
+	btVector3 inicio(nodo->getPosition().x , nodo->getPosition().y , nodo->getPosition().z);
+	btVector3 fin(nodo->getPosition().x , nodo->getPosition().y - 40, nodo->getPosition().z);
+
+	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
+	btCollisionWorld::AllHitsRayResultCallback RayCast1(inicio, fin);
+	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
+	RayCast1.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
+	mundo->rayTest(inicio, fin, RayCast1);
+	
+
+	if (RayCast1.hasHit())
+	{
+		
+		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++)
+		{
+					indiceAltura=RayCast1.m_hitFractions[i];
+					if(RayCast1.m_hitFractions[i]< altura){
+					subir=true;
+							
+					}
+					if(RayCast1.m_hitFractions[i]> altura){
+
+					bajar=true;
+					
+					}	
+			}
+		}
+	
 }
 
 btRigidBody *Item::getRigidBody()

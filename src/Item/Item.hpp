@@ -27,6 +27,8 @@ public:
 	virtual void lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) = 0;
 	virtual void updateHijos() = 0;
 	virtual void deleteHijos() = 0;
+	void ajustarAltura();
+	void comprobarAltura(float altura);
 	bool update();
 	void Delete();
 
@@ -75,6 +77,10 @@ protected:
 	bool colision;
 	clock_t tiempoLanzado;
 
+
+	bool subir;
+	bool bajar;
+	float indiceAltura;
 };
 
 #endif

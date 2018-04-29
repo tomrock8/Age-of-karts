@@ -39,7 +39,8 @@ void Proyectil::lanzarItem(int direccion,btVector3 orientacion,btTransform objet
 
 void Proyectil::updateHijos(){
 
-movimiento();
+ajustarAltura();
+comprobarAltura(0.1);
 
 }
 
@@ -47,38 +48,3 @@ void Proyectil::deleteHijos(){
 	
 }
 
-void Proyectil::movimiento(){
-
-	MotorFisicas *mun = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = mun->getMundo();
-	mundo->updateAabbs();
-	mundo->computeOverlappingPairs();
-
-	// Raycast central1
-	btVector3 inicio(nodo->getPosition().x , nodo->getPosition().y , nodo->getPosition().z);
-	btVector3 fin(nodo->getPosition().x , nodo->getPosition().y - 100, nodo->getPosition().z);
-
-	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
-	btCollisionWorld::AllHitsRayResultCallback RayCast1(inicio, fin);
-	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
-	RayCast1.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
-	mundo->rayTest(inicio, fin, RayCast1);
-
-	if (RayCast1.hasHit())
-	{
-
-		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++)
-		{
-			obj3D *Node = static_cast<obj3D *>(RayCast1.m_collisionObjects[i]->getUserPointer());
-			if (Node) {
-
-				if (strcmp(Node->getName(), "mapa") == 0) {
-
-					cout<<"COLISION CON EL MAPA"<<endl;
-				}
-			}
-		}
-
-	}
-
-}

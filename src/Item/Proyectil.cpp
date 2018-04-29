@@ -17,7 +17,10 @@ float alturaLanzamiento,int idNodo) : Item(posicion,escala,masa,tiempoDesctrucci
 
 	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	rigidBody->setGravity(btVector3(0,-6,0));
-	
+	subir=false;
+	bajar=false;
+	subealto=false;
+	bajaalto=false;
 }
 
 void Proyectil::lanzarItem(int direccion,btVector3 orientacion,btTransform objeto) {
@@ -25,13 +28,15 @@ void Proyectil::lanzarItem(int direccion,btVector3 orientacion,btTransform objet
 	direccionItem: 1=Delante
 	-1=Atras	
 	*/
+	
 	objeto.setOrigin(posicion);
 	rigidBody->setCenterOfMassTransform(objeto);
 	//cout<<anguloGiro<<endl;
+	
 	if (direccion == 1)
-		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 400, 5.0f, orientacion.getZ() * 400));
+		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 400, 0, orientacion.getZ() * 400));
 	else if (direccion == -1)
-		rigidBody->setLinearVelocity(btVector3(-orientacion.getX() * 400, 5.0f, -orientacion.getZ() * 400));
+		rigidBody->setLinearVelocity(btVector3(-orientacion.getX() * 400, 0, -orientacion.getZ() * 400));
 
 	
 }
@@ -39,6 +44,7 @@ void Proyectil::lanzarItem(int direccion,btVector3 orientacion,btTransform objet
 
 void Proyectil::updateHijos(){
 
+comprobarAltura();
 movimiento();
 
 }
@@ -49,36 +55,71 @@ void Proyectil::deleteHijos(){
 
 void Proyectil::movimiento(){
 
+	btTransform posObj= rigidBody->getCenterOfMassTransform();
+	float altura= 0.5;
+	float subealto=2;
+	float bajaalto=2;
+
+	if(subir){
+		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()+altura,posObj.getOrigin().getZ()));
+	}else if(bajar){
+		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()-altura,posObj.getOrigin().getZ()));
+	}else if(subealto){
+		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()+subealto,posObj.getOrigin().getZ()));
+	}else if(bajaalto){
+		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()-bajaalto,posObj.getOrigin().getZ()));
+	}
+
+	rigidBody->setCenterOfMassTransform(posObj);
+}
+
+void Proyectil::comprobarAltura(){
+
 	MotorFisicas *mun = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = mun->getMundo();
 	mundo->updateAabbs();
 	mundo->computeOverlappingPairs();
-
+	
 	// Raycast central1
 	btVector3 inicio(nodo->getPosition().x , nodo->getPosition().y , nodo->getPosition().z);
-	btVector3 fin(nodo->getPosition().x , nodo->getPosition().y - 100, nodo->getPosition().z);
+	btVector3 fin(nodo->getPosition().x , nodo->getPosition().y - 40, nodo->getPosition().z);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast1(inicio, fin);
 	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast1.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast1);
+	subir=false;
+	bajar=false;
+	subealto=false;
+	bajaalto=false;
 
 	if (RayCast1.hasHit())
 	{
 
 		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++)
 		{
-			obj3D *Node = static_cast<obj3D *>(RayCast1.m_collisionObjects[i]->getUserPointer());
-			if (Node) {
+					
+					if(RayCast1.m_hitFractions[i]< 0.11){
+					subir=true;
+					
+						if(RayCast1.m_hitFractions[i]< 0.08){
+							
+							subir=false;
+							subealto=true;
+						}
+					
+					}else if(RayCast1.m_hitFractions[i]> 0.11){
 
-				if (strcmp(Node->getName(), "mapa") == 0) {
-
-					cout<<"COLISION CON EL MAPA"<<endl;
-				}
+					bajar=true;
+					
+						if(RayCast1.m_hitFractions[i]> 0.2){
+							
+							bajar=false;
+							bajaalto=true;
+						
+						}
+					}	
 			}
 		}
-
-	}
-
 }

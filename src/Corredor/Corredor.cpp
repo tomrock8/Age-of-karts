@@ -899,7 +899,7 @@ void Corredor::usarObjetos() {
 	Pista *pista = Pista::getInstancia();
 	std::vector<Item *> items = pista->getItems();
 
-	btVector3 posicion(cuboNodo->getPosition().x + orientacion.getX() * 10, cuboNodo->getPosition().y, cuboNodo->getPosition().z + orientacion.getZ() * 10);
+	btVector3 posicion(cuboNodo->getPosition().x + orientacion.getX() * 10, cuboNodo->getPosition().y+2, cuboNodo->getPosition().z + orientacion.getZ() * 10);
 	btVector3 escala(1, 1, 1);
 	btScalar masa = 50;
 	float tiempoDestruccion = 15;

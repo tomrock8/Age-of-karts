@@ -19,7 +19,7 @@ Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesc
 
 void Item::inicializarFisicas()
 {
-
+	
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();

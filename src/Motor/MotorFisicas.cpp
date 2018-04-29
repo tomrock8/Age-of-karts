@@ -113,7 +113,7 @@ void MotorFisicas::initializePhysics(TRecursoMalla * mesh) {
 		btRigidBody *rigidBody = new btRigidBody(0, MotionState, shape, LocalInertia);
 
 		rigidBody->setActivationState(DISABLE_DEACTIVATION);
-
+		rigidBody->setFlags(1);
 
 		// guardar el rb en el mundo de fisicas
 		mundo->addRigidBody(rigidBody);

@@ -31,7 +31,7 @@ void Waypoint::inicializarFisicas() {
 
 	// Create the shape
 
-	Shape = new btBoxShape(btVector3(1500*0.05f, 150*0.05f, 5*0.05f));
+	Shape = new btBoxShape(btVector3(950*0.05f, 150*0.05f, 5*0.05f));
 
 	// sin masa
 	btVector3 localInertia;

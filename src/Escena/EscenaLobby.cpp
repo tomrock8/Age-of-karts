@@ -464,6 +464,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 					}
 				}
 				if (iniciar && clientes.size() > 0 || clientes.size() == 1){
+					
 					return Escena::tipo_escena::CARRERA;		//Iniciar la partida offline
 				}else{
 					std::vector<structClientes> clientes = client->getClientes();

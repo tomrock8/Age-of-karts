@@ -27,10 +27,14 @@ public:
 	static Pista *getInstancia();
 
 	// METODOS SET
-	void setMapa(const char* mapa, const char *fisicas, const char *waypoint);
+	void setMapa(const char* name);
+	void createMap(const char * path);
+	// CARGA MAPA
+	void loadWaypoints(const char *waypoints);
 	void setItems(std::vector<Item *> itemMetodo);
 	// METODOS GET
 	std::vector<Item *> getItems();
+	void loadPirateMapElements();
 	std::vector<Turbo*> getArrayTurbo();
 	std::vector<Caja*> getArrayCaja();
 	void setArrayCaja(std::vector<Caja*> caja);
@@ -43,28 +47,18 @@ public:
 private:
 	Pista(void);
 	static Pista *instancia;
-
-	//MUNDO
-	btRigidBody *CuerpoColisionMapa;
-	btCollisionShape *FormaColision;
-	btDefaultMotionState *MotionState; // posicion del cuerpo de colision
-
 	int tamWaypoints;
 	std::vector<Waypoint*> arrayWaypoints;
-
 	int tamTurbos;
 	std::vector<Turbo*> arrayTurbos;
-
 	int tamCajas;
 	std::vector<Caja*> arrayCajas;
-
 	obj3D *Mapa;
-
 	std::vector<Item *> Items;
-
-
-	//fisicas del mapa
-	btBulletWorldImporter *fisicasMapa;
+	//Variables para la deteccion del mapa
+	const char *nameMap;
+	const char *path;
+	const char *wayPoints;
 };
 
 #endif /* PISTA_H */

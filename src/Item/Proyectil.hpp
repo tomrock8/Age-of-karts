@@ -13,13 +13,9 @@ public:
   virtual void lanzarItem(int direccion,btVector3 orientacion,btTransform objeto) override;
   virtual void updateHijos() override;
   virtual void deleteHijos() override;
-  void movimiento();
-  void comprobarAltura();
+ 
 private:
-bool subir;
-bool bajar;
-bool subealto;
-bool bajaalto;
+
 };
 
 #endif

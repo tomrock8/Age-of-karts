@@ -82,38 +82,53 @@ void GestorSonido::getParametros(float * general, float * musica, float * efecto
 }
 
 void GestorSonido::ajustarVolumen(float general, float musica, float efectos) {
-	bool generalModificado = false;
-	if (volGeneral < musica) {
-		volGeneral = musica;
-		generalModificado = true;
+	if (general > 0) {
+		bool generalModificado = false;
+		if (volGeneral < musica) {
+			volGeneral = musica;
+			generalModificado = true;
+		}
+		volMusica = musica;
+
+		if (volGeneral < efectos) {
+			volGeneral = efectos;
+			generalModificado = true;
+		}
+		volEfectos = efectos;
+
+		if (!generalModificado) {
+			float midMus, midEfe;
+			midMus = midEfe = 0;
+
+			if (volMusica > 0 && volGeneral > 0)
+				midMus = volMusica / volGeneral;
+			if (volEfectos > 0 && volGeneral > 0)
+				midEfe = volEfectos / volGeneral;
+
+			volGeneral = general;
+
+			volMusica = volGeneral * midMus;
+			volEfectos = volGeneral * midEfe;
+		}
 	}
-	volMusica = musica;
-
-	if (volGeneral < efectos) {
-		volGeneral = efectos;
-		generalModificado = true;
-	}
-	volEfectos = efectos;
-
-	if (!generalModificado) {
-		float midMus = volMusica / volGeneral;
-		float midEfe = volEfectos / volGeneral;
-
-		volGeneral = general;
-
-		volMusica = volGeneral * midMus;
-		volEfectos = volGeneral * midEfe;
+	else {
+		volGeneral = volMusica = volEfectos = 0;
 	}
 }
 
 void GestorSonido::setVolGeneral(float vol) {
-	float midMus = volMusica / volGeneral;
-	float midEfe = volEfectos / volGeneral;
+	if (vol > 0) {
+		float midMus = volMusica / volGeneral;
+		float midEfe = volEfectos / volGeneral;
 
-	volGeneral = vol;
+		volGeneral = vol;
 
-	volMusica = volGeneral * midMus;
-	volEfectos = volGeneral * midEfe;
+		volMusica = volGeneral * midMus;
+		volEfectos = volGeneral * midEfe;
+	}
+	else {
+		volGeneral = volMusica = volEfectos = 0;
+	}
 }
 
 void GestorSonido::setVolMusica(float vol) {

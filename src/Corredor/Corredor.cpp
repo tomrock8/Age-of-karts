@@ -719,12 +719,13 @@ void Corredor::setWaypointActual(obj3D *nodo) {
 	//de momento lo pongo así, no da la segunda vuelta pero habria que mirar cuales se han visitado y cuales no
 	//mas adelante se ve, Las IDS no funcionan bien tengo que preguntarle a santi a si que de momento lo comento para que
 	//se puedan coger las cajas.
-
+	
 	bool b = false;	//booleano para comprobar si esta siguiendo bien los waypoints
 	if (nodo->getID() > actual->getID() && nodo->getID() == siguiente_aux->getID()) {
 
 		actual = actual->getNextWaypoint();
 		siguiente = actual->getNextWaypoint();
+
 		if (actual->getID() == siguiente_aux->getID()) {
 			siguiente_aux = siguiente;
 			b = true;
@@ -732,9 +733,9 @@ void Corredor::setWaypointActual(obj3D *nodo) {
 		}
 	}
 
-	if (nodo->getID() - 6 == 0) { //caso de vuelta completa
+	if (nodo->getID() - 7 == 0) { //caso de vuelta completa
 
-		if (siguiente_aux->getID() - 6 == 0) {
+		if (siguiente_aux->getID() - 7 == 0) {
 			//cout<<"HAS DADO UNA VUELTA"<<endl;
 			if (getMaxVuetas() >= getVueltas()) {
 				cout << "VUELTA: " << tiempoVuelta << endl;
@@ -749,14 +750,14 @@ void Corredor::setWaypointActual(obj3D *nodo) {
 
 	}
 
-	if (b == false && nodo->getID() - 6 != 0 && nodo->getID() >= siguiente_aux->getWaypoint()->getID() - 2 && direccionContraria != 2) { //comprobador de recuperacion de direccion correcta en caso de no estar en la meta
+	if (b == false && nodo->getID() - 7 != 0 && nodo->getID() >= siguiente_aux->getWaypoint()->getID() - 2 && direccionContraria != 2) { //comprobador de recuperacion de direccion correcta en caso de no estar en la meta
 		direccionContraria = 0;
 	}
 	Pista *mapa = Pista::getInstancia();
 	//comprobadores direccion opuesta
-	if ((b == false && nodo->getID() < siguiente_aux->getID() - 4 && nodo->getID() - 6 != 0) || (mapa->getTamArrayWaypoints() - 1 == nodo->getID() - 6 && (actual->getID() - 6 != mapa->getTamArrayWaypoints() - 1))) {
+	if ((b == false && nodo->getID() < siguiente_aux->getID() - 4 && nodo->getID() - 7 != 0) || (mapa->getTamArrayWaypoints() - 1 == nodo->getID() - 7 && (actual->getID() - 7 != mapa->getTamArrayWaypoints() - 1))) {
 		direccionContraria = 1;
-		if ((mapa->getTamArrayWaypoints() - 1 == nodo->getID() - 6 && (actual->getID() - 6 != mapa->getTamArrayWaypoints() - 1))) {
+		if ((mapa->getTamArrayWaypoints() - 1 == nodo->getID() - 7 && (actual->getID() - 7 != mapa->getTamArrayWaypoints() - 1))) {
 			direccionContraria = 2;	//va marcha atras en la meta id=0 la comprobacion es distinta (por ser mayor el id siempre, tanto para alante como para atras)
 		}
 	}

@@ -75,7 +75,7 @@ bool GestorColisiones::JugadorWaypoint() {
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 				//if(pj1.at(i)!=NULL)
 				if (nodoA->getID() == pj1.at(i)->getNodo()->getID()) {
-					if (nodoB->getID() - 6 == 0 && pj1.at(i)->getWaypointSiguiente()->getWaypoint()->getID() - 6 == 0) {
+					if (nodoB->getID() - 7 == 0 && pj1.at(i)->getWaypointSiguiente()->getWaypoint()->getID() - 7 == 0) {
 						float timediff_sec = glfwGetTime() - tiempoInicio;
 
 						///cout<<"timediff_sec: "<<timediff_sec<<endl;

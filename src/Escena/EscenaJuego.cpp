@@ -11,6 +11,7 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
 	TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_3_3.png");
 	TMotor::instancia().getActiveHud()->traslateElement("vueltas", -0.83f, 0.68f);
+	
 	puesto=6;
 	vueltas=3;
 	init();
@@ -383,11 +384,18 @@ void EscenaJuego::update() {
 
 
 	if (t->getTimer() <= 3 && t->getTimer() >= 1) {
-		int desc = 4 - t->getTimer();
-		//textoDebug->agregar(to_string(desc));
+		if (t->getTimer()==1){
+			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras","assets/HUD/juego/CuentaAtras3.png");
+			TMotor::instancia().getActiveHud()->traslateElement("cuentaAtras", 0.0f, 0.35f);
+		}else if (t->getTimer()==2){
+			TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras","assets/HUD/juego/CuentaAtras2.png");
+		}else if (t->getTimer()==3){
+			TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras","assets/HUD/juego/CuentaAtras1.png");
+		}
 	}
 
 	if (t->getTimer() >= 4) {
+		TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras","");
 		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
 		}

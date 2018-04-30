@@ -2,7 +2,6 @@
 Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
 	float alturaLanzamiento, int idNodo)
 {
-
 	colision = false;
 	lanzado = false;
 	idNodoPadre = idNodo;
@@ -14,7 +13,7 @@ Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesc
 	this->radio = radio;
 	this->fcolision = fcolision;
 	this->alturaLanzamiento = alturaLanzamiento;
-	orientacionItem= btVector3(1,0,0);
+	orientacionItem = btVector3(1, 0, 0);
 
 	subir=false;
 	bajar=false;
@@ -22,9 +21,11 @@ Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesc
 	diferencia = 0.03;
 }
 
-void Item::inicializarFisicas()
-{
-	
+Item::~Item() {
+	delete nodo;
+}
+
+void Item::inicializarFisicas(){
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
@@ -33,7 +34,7 @@ void Item::inicializarFisicas()
 	Transform.setIdentity();
 	Transform.setOrigin(posicion);
 	MotionState = new btDefaultMotionState(Transform);
-	btVector3 HalfExtents(escala.getX() , escala.getY(), escala.getZ());
+	btVector3 HalfExtents(escala.getX(), escala.getY(), escala.getZ());
 	//btVector3 HalfExtents(1, 1, 1);
 	// Create the shape
 	switch (fcolision) {
@@ -144,7 +145,7 @@ void Item::Delete() {
 
 
 //COmprobar distancias con el suelo
-void Item::ajustarAltura(){
+void Item::ajustarAltura() {
 
 	btTransform posObj= rigidBody->getCenterOfMassTransform();
 	float altura= 0;
@@ -157,36 +158,40 @@ void Item::ajustarAltura(){
 		altura=(indiceAltura - 0.1)/diferencia;
 		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()-altura,posObj.getOrigin().getZ()));
 	}
+	else if (bajar) {
+		altura = (indiceAltura - 0.1) / diferencia;
+		posObj.setOrigin(btVector3(posObj.getOrigin().getX(), posObj.getOrigin().getY() - altura, posObj.getOrigin().getZ()));
+	}
 
 	rigidBody->setCenterOfMassTransform(posObj);
 
-	subir=false;
-	bajar=false;
-	
+	subir = false;
+	bajar = false;
+
 
 }
 
-void Item::comprobarAltura(float altura){
+void Item::comprobarAltura(float altura) {
 
 	MotorFisicas *mun = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = mun->getMundo();
 	mundo->updateAabbs();
 	mundo->computeOverlappingPairs();
-	
+
 	// Raycast central1
-	btVector3 inicio(nodo->getPosition().x , nodo->getPosition().y , nodo->getPosition().z);
-	btVector3 fin(nodo->getPosition().x , nodo->getPosition().y - 40, nodo->getPosition().z);
+	btVector3 inicio(nodo->getPosition().x, nodo->getPosition().y, nodo->getPosition().z);
+	btVector3 fin(nodo->getPosition().x, nodo->getPosition().y - 40, nodo->getPosition().z);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast1(inicio, fin);
 	RayCast1.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast1.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast1);
-	
+
 
 	if (RayCast1.hasHit())
 	{
-		
+
 		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++)
 		{
 					indiceAltura=RayCast1.m_hitFractions[i];
@@ -197,12 +202,15 @@ void Item::comprobarAltura(float altura){
 					}
 					if(RayCast1.m_hitFractions[i]> altura){
 
-					bajar=true;
-					
-					}	
+			}
+			if (RayCast1.m_hitFractions[i] > altura) {
+
+				bajar = true;
+
 			}
 		}
-	
+	}
+
 }
 
 btRigidBody *Item::getRigidBody()

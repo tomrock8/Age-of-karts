@@ -10,8 +10,7 @@
 using namespace std;
 template<class T, class Allocator = std::allocator<T>> class vector;
 
-class TNodo
-{
+class TNodo {
 public:
 	TNodo(const char* n);
 	~TNodo();
@@ -26,20 +25,16 @@ public:
 	TNodo *getPadre();
 	TNodo *getNode(const char * nombre);
 	const char *getName();
-	//int getID();
 
 	// METODOS SET
 	bool setEntidad(TEntidad *n);
 	void setPadre(TNodo *p);
-	//void setID(int s);
 	void setName(const char* n);
 
 private:
 	TEntidad * entidad; // Entidad del nodo
 	std::vector<TNodo *> hijos; // Vector que contiene los hijos que tiene el nodo
 	TNodo *padre; // Nodo padre
-	//int id; // Identificador del nodo
 	std::string *name; // Nombre del nodo
-
 };
 #endif

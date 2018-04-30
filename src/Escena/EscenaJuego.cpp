@@ -326,7 +326,6 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
-	//TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
 	std::vector<Item *> items = pistaca->getItems();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
@@ -415,9 +414,9 @@ void EscenaJuego::update() {
 		if (jugadores->getNumJugadores() > 0) {
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 				pj.at(i)->update();
-				if(strcmp(pj.at(i)->getNodo()->getName(),"JugadorIA")==0){
-				CorredorIA *IA = static_cast<CorredorIA *>(pj.at(i));
-				IA->updateHijos();
+				if (strcmp(pj.at(i)->getNodo()->getName(), "JugadorIA") == 0) {
+					CorredorIA *IA = static_cast<CorredorIA *>(pj.at(i));
+					IA->updateHijos();
 				}
 
 			}

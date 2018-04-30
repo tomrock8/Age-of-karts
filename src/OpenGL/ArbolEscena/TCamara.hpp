@@ -1,12 +1,9 @@
 #ifndef TCAMARA_H
 #define TCAMARA_H
+
 #include "libGL.hpp"
 #include "TEntidad.hpp"
 #include "Shader.hpp"
-#include "TNodo.hpp"
-#include  <iostream>
-
-using namespace std;
 
 class TCamara : public TEntidad
 {
@@ -30,6 +27,5 @@ public:
 private:
 	bool active;
 	GLfloat cercano, lejano, distancia;
-	
 };
 #endif

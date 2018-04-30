@@ -1,9 +1,6 @@
 #ifndef TMALLA_H
 #define TMALLA_H
 
-#include "libGL.hpp"
-#include <iostream>
-#include <list>
 #include <vector>
 #include "TEntidad.hpp"
 #include "mesh.hpp"
@@ -16,9 +13,9 @@ public:
 	TMalla(std::vector<mesh *> m);
 
 	// METODOS GET
-//	TRecursoMalla *getMalla();
-//	TRecursoMaterial *getMaterial();
-//	TRecursoTextura *getTextures();
+	//TRecursoMalla *getMalla();
+	//TRecursoMaterial *getMaterial();
+	//TRecursoTextura *getTextures();
 	bool isVisible();
 	void setVisible(bool visible);
 

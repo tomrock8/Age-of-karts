@@ -5,7 +5,7 @@ TNodo::TNodo(const char* n) {
 }
 
 TNodo::~TNodo() {
-	delete entidad;
+	//delete entidad;
 	delete padre;
 	//Borrado de hijos
 	for (GLuint i = 0; i < hijos.size(); i++) {
@@ -32,6 +32,9 @@ int TNodo::remHijo(TNodo*n) {//1 == ha borrado hijos
 //-----------------
 // METODOS SET
 //-----------------
+void TNodo::setPadre(TNodo *p) { padre = p; }
+void TNodo::setName(const char*n) { name = new std::string(n); }
+
 bool TNodo::setEntidad(TEntidad *n) {
 	if (n != NULL) {
 		entidad = n;
@@ -40,16 +43,11 @@ bool TNodo::setEntidad(TEntidad *n) {
 	else return false;
 }
 
-void TNodo::setPadre(TNodo *p) { padre = p; }
-//void TNodo::setID(int s) { id = s; }
-void TNodo::setName(const char*n) { name = new std::string(n); }
-
 //-----------------
 // METODOS GET
 //-----------------
 TEntidad *TNodo::getEntidad() { return entidad; }
 TNodo *TNodo::getPadre() { return padre; }
-//int TNodo::getID() { return id; }
 const char *TNodo::getName() { return name->c_str(); }
 
 TNodo *TNodo::getNode(const char* nombre) {
@@ -77,7 +75,6 @@ TNodo *TNodo::getNode(const char* nombre) {
 //----------------------------
 void TNodo::draw(Shader *shader) {
 	string n = name->c_str();
-	//std::cout << "Nodo de nombre: " << n << endl;
 	if (entidad != NULL) {
 		if (n.find("escena") == std::string::npos)
 			getEntidad()->beginDraw(shader);
@@ -85,10 +82,10 @@ void TNodo::draw(Shader *shader) {
 	for (GLuint i = 0; i < hijos.size(); i++) {
 		hijos.at(i)->draw(shader);
 	}
-	/*	for (std::list<TNodo *>::iterator Iterator = hijos.begin(); Iterator != hijos.end(); Iterator++) {
-			TNodo *TNodoActual= *Iterator;
-			TNodoActual->draw();
-		}*/
+	// for (std::list<TNodo *>::iterator Iterator = hijos.begin(); Iterator != hijos.end(); Iterator++) {
+	//   TNodo *TNodoActual = *Iterator;
+	// 	 TNodoActual->draw();
+	// }
 	if (entidad != NULL) {
 		if (n.find("escena") == std::string::npos) {
 			entidad->endDraw();

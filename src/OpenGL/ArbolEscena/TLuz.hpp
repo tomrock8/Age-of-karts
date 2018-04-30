@@ -1,15 +1,10 @@
 #ifndef TLUZ_H
 #define TLUZ_H
 
-#include <iostream>
 #include "TEntidad.hpp"
 #include "Shader.hpp"
-#include "TNodo.hpp"
 
-using namespace std;
-
-class TLuz : public TEntidad
-{
+class TLuz : public TEntidad {
 public:
 	TLuz();
 	TLuz(glm::vec3 ambiente, glm::vec3 difusa, glm::vec3 especular, glm::vec4 dir, float at, float corte, bool shadow, bool on);
@@ -32,7 +27,7 @@ public:
 	// METODOS GET
 	bool getActive();
 	float getLightType();
-	glm::vec3 getPosition(); 
+	glm::vec3 getPosition();
 	glm::vec4 getDirection();
 
 	// METODOS SET

@@ -27,7 +27,6 @@ public:
 
 private:
 	std::vector<Corredor*> pj1;
-	GestorJugadores *jugadores;
 	obj3D *nodoA;
 	obj3D *nodoB;
 	float tiempoLanzado;

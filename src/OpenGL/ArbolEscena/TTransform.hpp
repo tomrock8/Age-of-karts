@@ -1,13 +1,9 @@
 #ifndef TTRANSFORM_H
 #define TTRANSFORM_H
 
-#include <iostream>
 #include "TEntidad.hpp"
 
-using namespace std;
-
-class TTransform : public TEntidad
-{
+class TTransform : public TEntidad {
 public:
 	TTransform();
 	~TTransform();

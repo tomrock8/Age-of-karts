@@ -1,20 +1,28 @@
 #include "TAnimacion.hpp"
-/*
-TAnimacion::TAnimacion(std::vector <mesh *> m) {
-	//los vertices e indices son punteros a Trecurso malla 7
-	malla = m;
-	visible = true;
-}
-*/
+#include "Timer.hpp"
 
-bool TAnimacion::isVisible() { return visible; }
-void TAnimacion::setVisible(bool visible) { this->visible = visible; }
-/*
+TAnimacion::TAnimacion(std::vector<TMalla *> frames) {
+	TAnimacion(frames, 0, frames.size());
+}
+
+TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFrame) {
+	this->frames = frames; 
+	totalFrames = frames.size();
+	setFirstFrame(firstFrame);
+	setLastFrame(lastFrame);
+
+	actualFrame = this->firstFrame;
+	framesPerSecond = 24; // Valor que se recoge de blender
+	setVisible(true);
+	setLoopPlay(false);
+}
+
+
 void TAnimacion::beginDraw(Shader *shader) {
 	if(visible)
 		draw(shader);
 }
-*/
+
 /*
 void TAnimacion::draw(Shader *shader) {
 	for (GLuint i = 0; i < malla.size(); i++) {
@@ -40,11 +48,45 @@ void TAnimacion::draw(Shader *shader) {
 		//Desacivamos el buffer VAO antes del dibujado de la siguiente malla
 		malla.at(i)->getMesh()->disableVAO();
 	}
-
-
-
 }
 */
-/*
+
 void TAnimacion::endDraw() {}
-*/
+
+// METODOS SET
+void TAnimacion::setFirstFrame(int firstFrame) {
+	// Comprobacion de un valor que este entre el primer frame y el ultimo
+	if (firstFrame > 0 && firstFrame < this->totalFrames)
+		this->firstFrame = static_cast<unsigned short>(firstFrame);
+	else
+		this->firstFrame = 0;
+}
+
+void TAnimacion::setLastFrame(int lastFrame) {
+	// Comprobacion de un valor que este entre el primer frame y el ultimo
+	if (lastFrame > 0 && lastFrame < this->totalFrames)
+		this->lastFrame = static_cast<unsigned short>(lastFrame);
+	else
+		this->lastFrame = static_cast<unsigned short>(frames.size());
+}
+
+void TAnimacion::setLoopPlay(bool loopPlay) {
+	this->loopPlay = loopPlay;
+}
+
+void TAnimacion::setVisible(bool visible) {
+	this->visible = visible;
+}
+
+// METODOS GET
+bool TAnimacion::isVisible() {
+	return visible;
+}
+
+int TAnimacion::getActualFrame() {
+	return static_cast<int>(this->actualFrame);
+}
+
+int TAnimacion::getTotalFrames() {
+	return static_cast<int>(this->totalFrames);
+}

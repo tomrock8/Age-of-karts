@@ -6,7 +6,7 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames) {
 }
 
 TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFrame) {
-	this->frames = frames; 
+	this->frames = frames;
 	totalFrames = frames.size();
 	setFirstFrame(firstFrame);
 	setLastFrame(lastFrame);
@@ -15,41 +15,38 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFra
 	framesPerSecond = 24; // Valor que se recoge de blender
 	setVisible(true);
 	setLoopPlay(false);
+	lastFramePlayed = Timer::getInstancia()->getTimer(); // Inicializamos el tiempo utlimo
 }
 
 
 void TAnimacion::beginDraw(Shader *shader) {
-	if(visible)
+	if (visible)
 		draw(shader);
 }
 
-/*
+
 void TAnimacion::draw(Shader *shader) {
-	for (GLuint i = 0; i < malla.size(); i++) {
-		//Pasamos la modelMatrix de la malla al shader para calcular la posicion final
-		shader->setMat4("model", modelMatrix);
-		//Activamos el buffer VAO donde hemos guardado los datos de la malla anteriormente
-		malla.at(i)->getMesh()->activeVAO();
-		if (malla.at(i)->getText()->getNombre() != NULL) {
-			//Activamos la textura de la malla
-			malla.at(i)->getText()->activeTexture(shader);
+	// Reproducir el frame actual
+	frames.at(actualFrame)->draw(shader);
+
+	// Comprobar si hay que cambiar de frame
+	int framesInSeconds = framesPerSecond * 60;
+	if (Timer::getInstancia()->getTimer() - lastFramePlayed > framesInSeconds) {
+		// Aumentar el frame actual si no es el ultimo si le toca
+		if (actualFrame < totalFrames) {
+			actualFrame++;
 		}
-
-		//Activamos el material
-		malla.at(i)->getMat()->activeMaterial(shader);
-		// Se llama al dibujado de la malla
-		malla.at(i)->getMesh()->draw();
-
-		if (malla.at(i)->getText()->getNombre() != NULL) {
-			//Desactivamos las texturas usadas
-			malla.at(i)->getText()->disableTexture();
+		else {
+			// Si el frame actual es el ultimo && loop => frame actual = primero
+			if (loopPlay) {
+				actualFrame = firstFrame;
+			}
 		}
-
-		//Desacivamos el buffer VAO antes del dibujado de la siguiente malla
-		malla.at(i)->getMesh()->disableVAO();
 	}
+
+	// Guardar el tiempo ultimo de reproduccion    
+	lastFramePlayed = Timer::getInstancia()->getTimer();
 }
-*/
 
 void TAnimacion::endDraw() {}
 

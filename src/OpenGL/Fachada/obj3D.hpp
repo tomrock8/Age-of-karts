@@ -18,7 +18,6 @@ public:
 	void rotate(glm::vec3 axis, GLfloat angle);
 	void scale(float x, float y, float z);
 	void rotateFromParent();
-
 	void traslateToParent();
 
 	// METODOS GET
@@ -31,12 +30,11 @@ public:
 	bool isVisible();
 
 	//METODOS SET
-	void setID(GLuint);
+	void setID(GLuint id);
 	void setRotation(glm::vec3 axis, GLfloat angle);
 	void setPosition(float X,float Y,float Z);
 	void setRotation(float X,float Y,float Z);
 	void setScale(float X,float Y,float Z);
-	void setId(GLuint i);
 	void setName(const char *nombre);
 	void setVisible(bool visible);
 

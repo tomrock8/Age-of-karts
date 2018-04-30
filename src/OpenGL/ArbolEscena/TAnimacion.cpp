@@ -18,6 +18,14 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFra
 	lastFramePlayed = Timer::getInstancia()->getTimer(); // Inicializamos el tiempo utlimo
 }
 
+TAnimacion::~TAnimacion() {
+	// Eliminacion de todos los frames del array
+	for (int i = 0; i < frames.size(); i++) {
+		TMalla *a = frames.at(i);
+		delete a;
+	}
+	frames.clear();
+}
 
 void TAnimacion::beginDraw(Shader *shader) {
 	if (visible)

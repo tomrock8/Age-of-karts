@@ -5,7 +5,7 @@ Aceite::Aceite(btVector3 posicion, btVector3 escala, btScalar masa, float tiempo
 
 	//nodo = Motor3d::instancia().getScene()->addCubeSceneNode(tamanyoNodo.getX());
 	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/aceite/aceite.obj", "escena_raiz",false);
-	cout << "(Aceite::Aceite) Hay que comprobar la posicion que sea respecto del corredor al crear\n";
+	
 	
 	nodo->setScale(escala.getX(),escala.getY(),escala.getZ());
 

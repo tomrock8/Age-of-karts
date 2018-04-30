@@ -909,10 +909,10 @@ void Corredor::usarObjetos() {
 	std::vector<Item *> items = pista->getItems();
 
 	btVector3 posicion(cuboNodo->getPosition().x + orientacion.getX() * 10, cuboNodo->getPosition().y+2, cuboNodo->getPosition().z + orientacion.getZ() * 10);
-	btVector3 escala(1, 1, 1);
+	btVector3 escala(2, 2, 2);
 	btScalar masa = 50;
 	float tiempoDestruccion = 15;
-	btVector3 tamanyoNodo(3, 3, 3);
+	btVector3 tamanyoNodo(1, 1, 1);
 	btScalar radio = 8;
 	float alt = 1;
 

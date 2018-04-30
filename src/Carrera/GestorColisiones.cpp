@@ -32,7 +32,7 @@ void GestorColisiones::ComprobarColisiones() {
 			//if (JugadorItemTeledirigido())continue;
 		}
 	}
-	jugadores->setJugadores(pj1);
+	GestorJugadores::getInstancia()->setJugadores(pj1);
 }
 
 
@@ -44,7 +44,7 @@ bool GestorColisiones::JugadorWaypoint() {
 		strcmp("JugadorRed", nodoA->getName()) == 0)
 	{
 		if (strcmp("Waypoint", nodoB->getName()) == 0) {
-			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+			for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
 				//if(pj1.at(i)!=NULL)
 				if (nodoA->getID() == pj1.at(i)->getNodo()->getID()) {
 					if (nodoB->getID() - 7 == 0 && pj1.at(i)->getWaypointSiguiente()->getWaypoint()->getID() - 7 == 0) {
@@ -481,7 +481,7 @@ bool GestorColisiones::JugadorTurbo() {
 		strcmp("JugadorRed", nodoA->getName()) == 0)
 	{
 		if (strcmp("Turbo", nodoB->getName()) == 0) {
-			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+			for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
 				if (nodoA->getID() == pj1.at(i)->getNodo()->getID()) {
 					pj1.at(i)->setTurbo(true, false, 10000, 2);
 
@@ -507,7 +507,7 @@ bool GestorColisiones::JugadorEstatico() {
 	{
 		if (strcmp("Estatico", nodoB->getName()) == 0) {
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
-			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
+			for (int j = 0; j < GestorJugadores::getInstancia()->getNumJugadores(); j++) {
 				if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
 					if (nodoA->getID() == pj1.at(j)->getID()) {
 						if (pj1.at(j)->getInmunidad()) {
@@ -525,7 +525,7 @@ bool GestorColisiones::JugadorEstatico() {
 						if (strcmp("Aceite", items.at(i)->getNombre()) == 0) {	//Si es aceite aplicamos el deslizamiento, sino es caja falsa
 							aceite = true;
 						}
-						for (int j = 0; j < jugadores->getNumJugadores(); j++) {
+						for (int j = 0; j < GestorJugadores::getInstancia()->getNumJugadores(); j++) {
 							if (nodoA->getID() == pj1.at(j)->getID()) {
 								if (aceite) {
 									pj1.at(j)->setAceite();
@@ -592,7 +592,7 @@ bool GestorColisiones::JugadorProyectil() {
 	{
 		if (strcmp("Proyectil", nodoB->getName()) == 0) {
 			//probando escudo de jugador y que me devuelva si tiene proteccion o no
-			for (int j = 0; j < jugadores->getNumJugadores(); j++) {
+			for (int j = 0; j < GestorJugadores::getInstancia()->getNumJugadores(); j++) {
 				if (pj1.at(j) != NULL) {//tengo un personaje, y voy a ver si tiene escudo
 					if (nodoA->getID() == pj1.at(j)->getID()) {
 						if (pj1.at(j)->getInmunidad()) {
@@ -608,7 +608,7 @@ bool GestorColisiones::JugadorProyectil() {
 				if (items.at(i)->getID() == idB) {
 
 					if (!protegido) {
-						for (int j = 0; j < jugadores->getNumJugadores(); j++) {
+						for (int j = 0; j < GestorJugadores::getInstancia()->getNumJugadores(); j++) {
 							//if(pj1.at(j)!=NULL)
 							if (nodoA->getID() == pj1.at(j)->getID()) {
 								pj1.at(j)->resetFuerzas();
@@ -644,7 +644,7 @@ bool GestorColisiones::JugadorCaja(std::vector<Caja*> cajas) {
 			for (int i = 0; i < tamCajas; i++) {
 				if (cajas.at(i) != NULL) {
 					if (cajas.at(i)->getID() == idB) {
-						for (int j = 0; j < jugadores->getNumJugadores(); j++) {
+						for (int j = 0; j < GestorJugadores::getInstancia()->getNumJugadores(); j++) {
 							if (nodoA->getID() == pj1.at(j)->getID()) {
 								cajas.at(i)->romper(pj1.at(j));
 							}

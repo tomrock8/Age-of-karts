@@ -6,19 +6,17 @@ TMalla::TMalla(std::vector <mesh *> m) {
 	visible = true;
 }
 
-bool TMalla::isVisible(){
-	return visible;
-}
+// METODOS GET
+bool TMalla::isVisible() { return visible; }
 
-void TMalla::setVisible(bool visible){
-	this->visible = visible;
-}
+// METODOS SET
+void TMalla::setVisible(bool visible) { this->visible = visible; }
 
 void TMalla::beginDraw(Shader *shader) {// Depende del tipo de entidad
-	/* Llamar al metodo de dibujado del recurso que se encarga del dibujado 
-	en OpenGL de los poligonos a partir de los vertices, las normales y 
+	/* Llamar al metodo de dibujado del recurso que se encarga del dibujado
+	en OpenGL de los poligonos a partir de los vertices, las normales y
 	las coordenadas de textura(Gestor) */
-	if(visible)
+	if (visible)
 		draw(shader);
 }
 
@@ -32,7 +30,7 @@ void TMalla::draw(Shader *shader) {
 			//Activamos la textura de la malla
 			malla.at(i)->getText()->activeTexture(shader);
 		}
-			
+
 		//Activamos el material
 		malla.at(i)->getMat()->activeMaterial(shader);
 		// Se llama al dibujado de la malla
@@ -42,7 +40,7 @@ void TMalla::draw(Shader *shader) {
 			//Desactivamos las texturas usadas
 			malla.at(i)->getText()->disableTexture();
 		}
-		
+
 		//Desacivamos el buffer VAO antes del dibujado de la siguiente malla
 		malla.at(i)->getMesh()->disableVAO();
 	}

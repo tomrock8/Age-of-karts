@@ -375,7 +375,7 @@ void CorredorIA::seguirWaypoint() {
 	btScalar distanciaLado3 = btScalar(0);
 	btScalar distanciaLado4 = btScalar(0);
 		
-
+	//vector 1 y 4 son los puntos de los extremos
 	btVector3 posCoche(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 	distanciaCentro = getDistanciaPunto(siguiente->getPosicion());
 	distanciaLado1 = getDistanciaPunto(siguiente->getVector1());
@@ -390,22 +390,23 @@ void CorredorIA::seguirWaypoint() {
 
 	}
 	else {
+		/*
 		if (distanciaLado1 < distanciaCentro && distanciaLado1 < distanciaLado2 && distanciaLado1 < distanciaLado3 && distanciaLado1 < distanciaLado4) {
 			calculoAnguloGiro(siguiente->getVector1());
 
-		}
-		if (distanciaLado2 < distanciaCentro && distanciaLado2 < distanciaLado1 && distanciaLado2 < distanciaLado3 && distanciaLado2 < distanciaLado4) {
+		}*/
+		if (distanciaLado2 < distanciaCentro /*&& distanciaLado2 < distanciaLado1*/ && distanciaLado2 < distanciaLado3 /*&& distanciaLado2 < distanciaLado4*/) {
 			calculoAnguloGiro(siguiente->getVector2());
 
 		}
-		if (distanciaLado3 < distanciaCentro && distanciaLado3 < distanciaLado1 && distanciaLado3 < distanciaLado2 && distanciaLado3 < distanciaLado4) {
+		if (distanciaLado3 < distanciaCentro && distanciaLado3 < distanciaLado1 /*&& distanciaLado3 < distanciaLado2 && distanciaLado3 < distanciaLado4*/) {
 			calculoAnguloGiro(siguiente->getVector3());
 
-		}
+		}/*
 		if (distanciaLado4 < distanciaCentro && distanciaLado4 < distanciaLado1 && distanciaLado4 < distanciaLado3 && distanciaLado4 < distanciaLado2) {
 			calculoAnguloGiro(siguiente->getVector4());
 
-		}
+		}*/
 	}
 
 }
@@ -458,11 +459,11 @@ void CorredorIA::logicaDifusa() {
 
 
 	//GIRO
-	pertenenciaNoGiro = FuncionTriangular(anguloGiro, -20, 0, 20);
-	pertenenciaGiroFlojoDerecha = FuncionTriangular(anguloGiro, 5, 35, 55);
-	pertenenciaGiroFlojoIzquierda = FuncionTriangular(anguloGiro, -5, -35, -45);
-	pertenenciaGiroFuerteDerecha = FuncionTriangular(anguloGiro, 40, 80, 180);
-	pertenenciaGiroFuerteIzquierda = FuncionTriangular(anguloGiro, -40, -80, -180);
+	pertenenciaNoGiro = FuncionTriangular(anguloGiro, -40, 0, 40);
+	pertenenciaGiroFlojoDerecha = FuncionTriangular(anguloGiro, 5, 25, 40);
+	pertenenciaGiroFlojoIzquierda = FuncionTriangular(anguloGiro, -5, -25, -40);
+	pertenenciaGiroFuerteDerecha = FuncionTriangular(anguloGiro, 30, 50, 180);
+	pertenenciaGiroFuerteIzquierda = FuncionTriangular(anguloGiro, -30, -50, -180);
 
 	//VELOCIDAD
 	pertenenciaVelocidadBaja = FuncionTrapezoidal(vehiculo->getCurrentSpeedKmHour(), 0, 0, 50, 150);

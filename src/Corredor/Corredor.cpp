@@ -246,7 +246,7 @@ void Corredor::setParametros() {
 		velocidadMaxima = velocidadMedia;
 		//----GIRO/MANEJO-----
 		indiceGiroAlto = btScalar(0.4);
-		indiceGiroBajo = btScalar(0.07);
+		indiceGiroBajo = btScalar(0.08);
 		velocidadLimiteGiro = 110;
 		//------PESO------
 		//Masa = btScalar(1200);
@@ -1249,18 +1249,10 @@ void Corredor::update() {
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 
-	//float distanciaX=20;
-	//cameraThird->setPosition(- orientacion.getX()*distanciaX,7,- orientacion.getZ()*distanciaX);
-	//cameraThird->setRotation(glm::vec3(0,1,0),180);
-
-	//updateHijos();
-	//linea clave
-//	cameraThird->setPosition(0, 2, 7);
-	//	cameraThird->setRotation(cameraThird->getPosition().x * orientacion.getX(),
-	//	1,
-	//	cameraThird->getPosition().z* orientacion.getZ());
-
-	//cuboNodo->setPosition()
+	/*
+	if(strcmp(cuboNodo->getName(),"Jugador")==0)
+	cout<<actual->getID()-7<<endl;
+	*/
 	if (vueltas > maxvueltas) {
 		estado->setEstadoCarrera(EstadosJugador::estado_carrera::FIN);
 	}

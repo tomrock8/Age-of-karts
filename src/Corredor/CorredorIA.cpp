@@ -459,7 +459,7 @@ void CorredorIA::logicaDifusa() {
 
 
 	//GIRO
-	pertenenciaNoGiro = FuncionTriangular(anguloGiro, -40, 0, 40);
+	pertenenciaNoGiro = FuncionTriangular(anguloGiro, -30, 0, 30);
 	pertenenciaGiroFlojoDerecha = FuncionTriangular(anguloGiro, 5, 25, 40);
 	pertenenciaGiroFlojoIzquierda = FuncionTriangular(anguloGiro, -5, -25, -40);
 	pertenenciaGiroFuerteDerecha = FuncionTriangular(anguloGiro, 30, 50, 180);

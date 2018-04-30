@@ -19,6 +19,7 @@ Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesc
 	subir=false;
 	bajar=false;
 	indiceAltura=0;
+	diferencia = 0.03;
 }
 
 void Item::inicializarFisicas()
@@ -147,7 +148,7 @@ void Item::ajustarAltura(){
 
 	btTransform posObj= rigidBody->getCenterOfMassTransform();
 	float altura= 0;
-	float diferencia = 0.03;
+	
 	cout<<indiceAltura<<endl;
 	if(subir){
 		altura= (0.1 - indiceAltura)/diferencia;
@@ -189,6 +190,7 @@ void Item::comprobarAltura(float altura){
 		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++)
 		{
 					indiceAltura=RayCast1.m_hitFractions[i];
+					
 					if(RayCast1.m_hitFractions[i]< altura){
 					subir=true;
 							

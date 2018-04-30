@@ -924,11 +924,15 @@ void Corredor::usarObjetos() {
 		soltarItem();
 	}
 	else if (getTipoObj() == 2) {	//CAJA FALSA
-		alt = -1;
-		masa = 0;
+		alt = 3;
+		masa = 30;
+		tiempoDestruccion = 0;
+		escala = btVector3(2, 2, 2);
 		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * 10);
 		posicion.setZ(cuboNodo->getPosition().z - orientacion.getZ() * 10);
+		posicion.setY(cuboNodo->getPosition().y + alt);
 		CajaFalsa *est = new CajaFalsa(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
+		est->lanzarItem(0,btVector3(0,0,0),CuerpoColisionChasis->getCenterOfMassTransform());
 		items.push_back(est);
 
 		soltarItem();
@@ -937,11 +941,15 @@ void Corredor::usarObjetos() {
 		setTurbo(true, true, FuerzaMaxima * 4, 2);
 	}
 	else if (getTipoObj() == 4) {	//ACEITE
-		alt = -1;
-		masa = 0;
+		alt = 3;
+		masa = 30;
+		tiempoDestruccion = 0;
+		escala = btVector3(2, 2, 2);
 		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * 10);
 		posicion.setZ(cuboNodo->getPosition().z - orientacion.getZ() * 10);
+		posicion.setY(cuboNodo->getPosition().y + alt);
 		Aceite *est2 = new Aceite(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
+		est2->lanzarItem(0,btVector3(0,0,0),CuerpoColisionChasis->getCenterOfMassTransform());
 		items.push_back(est2);
 
 		soltarItem();
@@ -950,12 +958,12 @@ void Corredor::usarObjetos() {
 		//if (getProteccion() == false) setProteccion(true);
 		//decCargador();
 		if (!proteccion) {
-			alt = 2;
+			alt = 0;
 			masa = 50;
-			radio = 8;
-			escala = btVector3(10, 10, 10);
+			radio = 5;
+			escala = btVector3(5, 5, 5);
 			tamanyoNodo = btVector3(9, 9, 9);
-			tiempoDestruccion = 50;
+			tiempoDestruccion = 30;
 			posicion = btVector3(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 			posicion.setY(posicion.getY() + alt);
 			Escudo *escudo = new Escudo(cuboNodo, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());

@@ -38,7 +38,7 @@ void Escudo::movimiento() {
 	nodo->setRotation(NodoVehiculo->getRotation().x, NodoVehiculo->getRotation().y, NodoVehiculo->getRotation().z);
 	btTransform trans;
 	btQuaternion quaternion;
-	trans.setOrigin(btVector3(NodoVehiculo->getPosition().x, NodoVehiculo->getPosition().y + 2, NodoVehiculo->getPosition().z));
+	trans.setOrigin(btVector3(NodoVehiculo->getPosition().x, NodoVehiculo->getPosition().y , NodoVehiculo->getPosition().z));
 	quaternion.setEulerZYX(NodoVehiculo->getRotation().x * PI / 180, NodoVehiculo->getRotation().y * PI / 180, NodoVehiculo->getRotation().z * PI / 180);
 	trans.setRotation(quaternion);
 	rigidBody->setCenterOfMassTransform(trans);

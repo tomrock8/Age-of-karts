@@ -17,9 +17,11 @@ public:
 	cameraThird(const char *name, const char *parentName);
 	~cameraThird();
 
-	void update(glm::vec3 posicion,glm::vec3 rotacion,btVector3 direccion);
-
+	void setPosition(glm::vec3 posicion,glm::vec3 rotacion,btVector3 direccion);
+	void lookAt(glm::vec3 posicion);
+	void comprobarInputs();
 	btRigidBody * initializePhysics();
+	
 	void moveCamera(btRigidBody * pj1, btVector3 dir);
 	void movefpsCamera(btRigidBody * pj1);
 	void moveCameraControl(btRigidBody * pj1);
@@ -40,7 +42,7 @@ public:
 	void setPosition(GLfloat X, GLfloat Y, GLfloat Z);
 
 	void setParentNode(TNodo * p);
-	void lookAt(glm::vec3 posicion);
+	
 
 private:
 	

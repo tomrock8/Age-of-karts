@@ -5,6 +5,8 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames) {
 	TAnimacion(frames, 0, frames.size());
 }
 
+
+
 TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFrame) {
 	this->frames = frames; 
 	totalFrames = frames.size();
@@ -17,14 +19,18 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFra
 	setLoopPlay(false);
 }
 
+TAnimacion::~TAnimacion(){
+	
+}
 
 void TAnimacion::beginDraw(Shader *shader) {
 	if(visible)
 		draw(shader);
 }
 
-/*
+
 void TAnimacion::draw(Shader *shader) {
+/*
 	for (GLuint i = 0; i < malla.size(); i++) {
 		//Pasamos la modelMatrix de la malla al shader para calcular la posicion final
 		shader->setMat4("model", modelMatrix);
@@ -48,8 +54,9 @@ void TAnimacion::draw(Shader *shader) {
 		//Desacivamos el buffer VAO antes del dibujado de la siguiente malla
 		malla.at(i)->getMesh()->disableVAO();
 	}
-}
 */
+}
+
 
 void TAnimacion::endDraw() {}
 

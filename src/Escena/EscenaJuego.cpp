@@ -465,7 +465,7 @@ void EscenaJuego::update() {
 	pj = jugadores->getJugadores();
 
 
-	camera->update(pj.at(controlPlayer)->getNodo()->getPosition(), pj.at(controlPlayer)->getNodo()->getRotation(), pj.at(controlPlayer)->getVectorDireccion());
+	camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition(), pj.at(controlPlayer)->getNodo()->getRotation(), pj.at(controlPlayer)->getVectorDireccion());
 	camera->lookAt(pj.at(controlPlayer)->getNodo()->getPosition());
 	/*
 		float distanciaX = -20;
@@ -594,8 +594,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
 		//cout << "POSICION: " <<Point[0]<<","<< Point[1]<<","<< Point[2]<<endl; 
 		Node->setPosition((float)Point[0], (float)Point[1] + 2, (float)Point[2]);
-	}
-	else
+	}else
 		Node->setPosition((float)Point[0], (float)Point[1], (float)Point[2]);
 
 	// Set rotation

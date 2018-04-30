@@ -76,7 +76,7 @@ protected:
 	bool lanzado;
 	bool colision;
 	clock_t tiempoLanzado;
-
+	float diferencia;
 
 	bool subir;
 	bool bajar;

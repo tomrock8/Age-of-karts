@@ -111,12 +111,12 @@ void EscenaJuego::init() {
 	pos2[1].setX(-14.3);
 	pos2[1].setY(4);
 	pos2[1].setZ(-641);
-	pos2[2].setX(-50);
-	pos2[2].setY(0);
-	pos2[2].setZ(310);
-	pos2[3].setX(-50);
-	pos2[3].setY(0);
-	pos2[3].setZ(290);
+	pos2[2].setX(-11.3);
+	pos2[2].setY(4);
+	pos2[2].setZ(-620);
+	pos2[3].setX(-14.3);
+	pos2[3].setY(4);
+	pos2[3].setZ(-620);
 	pos2[4].setX(-80);
 	pos2[4].setY(0);
 	pos2[4].setZ(310);
@@ -415,6 +415,10 @@ void EscenaJuego::update() {
 		if (jugadores->getNumJugadores() > 0) {
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 				pj.at(i)->update();
+				if(strcmp(pj.at(i)->getNodo()->getName(),"JugadorIA")==0){
+				CorredorIA *IA = static_cast<CorredorIA *>(pj.at(i));
+				IA->updateHijos();
+				}
 
 			}
 		}

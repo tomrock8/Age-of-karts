@@ -330,36 +330,37 @@ void CorredorIA::movimiento()
 
 	case ACELERARGIRARDERECHA://3
 		acelerar();
-		girarDerecha();
+		girarIzquierda();
+	
 		break;
 
 	case ACELERARGIRARIZQUIERDA://4
 		acelerar();
-		girarIzquierda();
+			girarDerecha();
 		break;
 
 	case ACELERARGIRARFUERTEDERECHA://5
 		acelerar();
-		vehiculo->setSteeringValue(0.15, 0);
-		vehiculo->setSteeringValue(0.15, 1);
+		vehiculo->setSteeringValue(0.2, 0);
+		vehiculo->setSteeringValue(0.2, 1);
 		break;
 
 	case ACELERARGIRARFUERTEIZQUIERDA://6
 		acelerar();
-		vehiculo->setSteeringValue(-0.15, 0);
-		vehiculo->setSteeringValue(-0.15, 1);
+		vehiculo->setSteeringValue(-0.2, 0);
+		vehiculo->setSteeringValue(-0.2, 1);
 		break;
 
 	case FRENARGIRARFUERTEDERECHA://7
 		desacelerar();
-		vehiculo->setSteeringValue(0.15, 0);
-		vehiculo->setSteeringValue(0.15, 1);
+		vehiculo->setSteeringValue(0.2, 0);
+		vehiculo->setSteeringValue(0.2, 1);
 		break;
 
 	case FRENARGIRARFUERTEIZQUIERDA://8
 		desacelerar();
-		vehiculo->setSteeringValue(-0.15, 0);
-		vehiculo->setSteeringValue(-0.15, 1);
+		vehiculo->setSteeringValue(-0.2, 0);
+		vehiculo->setSteeringValue(-0.2, 1);
 		break;
 	}
 
@@ -457,7 +458,7 @@ void CorredorIA::logicaDifusa() {
 
 
 	//GIRO
-	pertenenciaNoGiro = FuncionTriangular(anguloGiro, -10, 0, 10);
+	pertenenciaNoGiro = FuncionTriangular(anguloGiro, -20, 0, 20);
 	pertenenciaGiroFlojoDerecha = FuncionTriangular(anguloGiro, 5, 35, 55);
 	pertenenciaGiroFlojoIzquierda = FuncionTriangular(anguloGiro, -5, -35, -45);
 	pertenenciaGiroFuerteDerecha = FuncionTriangular(anguloGiro, 40, 80, 180);
@@ -1054,8 +1055,8 @@ void CorredorIA::vision(btScalar distancia, obj3D *nodo) {
 void CorredorIA::updateHijos() {
 
 	//debugIA();
-
-	if (!debugFisicas)
+	//cout<<"pene"<<endl;
+	//if (!debugFisicas)
 		ActualizarRaytest();
 
 	if (tipoObj != 0) {

@@ -80,21 +80,26 @@ void EscenaLobby::update() {
 	static int str0 = 192;
 	static int vec4a[4] = { 192, 168, 1, 1 };
  
-  
-  	glfwGetFramebufferSize( TMotor::instancia().getVentana() , &display_w , &display_h );
 	
+  	glfwGetFramebufferSize( TMotor::instancia().getVentana() , &display_w , &display_h );
+	  
   	ImGui_ImplGlfwGL3_NewFrame();
 	ImGui::SetNextWindowPos(ImVec2(100, 100), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize( ImVec2( (float)display_w , (float)display_h ) );
 	ImGui::SetNextWindowBgAlpha(0.0f);
 
 	ImGui::GetStyle().WindowBorderSize=0;
-
-	if (ImGui::Begin("Hola", NULL, ImGuiWindowFlags_NoResize 
+	
+	if (ImGui::Begin("Hola", NULL,  ImGuiWindowFlags_NoResize 
 	| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
 	| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard 
 	| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal)){
 
+		if (display_w<1000){
+			ImGui::SetWindowFontScale(0.5f);
+		}else{
+			ImGui::SetWindowFontScale(1.0f);
+		}
 		static float f = 0.0f;
 		if (!offline){
 			ImGui::Text("ONLINE!");  

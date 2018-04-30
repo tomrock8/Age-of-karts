@@ -10,7 +10,8 @@ obj3D::obj3D(TNodo *m, const char *n, GLuint i) {
 }
 
 obj3D::~obj3D() {
-	delete node;
+	setVisible(false);
+	//delete node;
 }
 
 void obj3D::rotate(glm::vec3 axis, GLfloat angle) {

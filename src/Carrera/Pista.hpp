@@ -10,6 +10,7 @@
 class Pista {
 
 public:
+
 	//Destructor
 	~Pista();
 	void createMap(const char * path);
@@ -33,9 +34,10 @@ public:
 	std::vector<Turbo*> getArrayTurbo();
 	std::vector<Caja*> getArrayCaja();
 	std::vector<Waypoint*> getArrayWaypoints();
-	
+	std::vector<glm::vec3> getParrilla();
 	Turbo* getTurbo();
 	Turbo* getTurbo(int id);
+	
 	
 
 private:
@@ -52,7 +54,7 @@ private:
 	std::vector<Turbo*> arrayTurbos;
 	std::vector<Caja*> arrayCajas;
 	std::vector<Item *> Items;
-
+	std::vector<glm::vec3> parrilla;
 	//Variables para la deteccion del mapa
 	const char *nameMap;
 	const char *path;

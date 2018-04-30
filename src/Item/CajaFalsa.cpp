@@ -4,8 +4,8 @@ CajaFalsa::CajaFalsa(btVector3 posicion, btVector3 escala, btScalar masa, float 
 	float alturaLanzamiento, int idNodo) : Item(posicion, escala, masa, tiempoDesctruccion, fcolision, tamanyoNodo, radio, alturaLanzamiento, idNodo) {
 
 	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/caja/caja.obj", "escena_raiz",false);
-	cout << "(CajaFalsa::CajaFalsa) Hay que comprobar la posicion que sea respecto del corredor al crear\n";
-	nodo->setPosition(posicion.getX(), posicion.getY(), posicion.getZ());
+	
+	
 	nodo->setScale(escala.getX(),escala.getY(),escala.getZ());
 
 	GestorIDs::instancia().setIdentifier(nodo, "Estatico");
@@ -14,6 +14,13 @@ CajaFalsa::CajaFalsa(btVector3 posicion, btVector3 escala, btScalar masa, float 
 	inicializarFisicas();
 }
 
-void CajaFalsa::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) {}
+void CajaFalsa::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) {
+
+	btTransform posObj= rigidBody->getCenterOfMassTransform();
+	posObj.setOrigin(btVector3(posicion.getX(),posicion.getY(),posicion.getZ()));
+	posObj.setRotation(objeto.getRotation());
+	rigidBody->setCenterOfMassTransform(posObj);
+
+}
 void CajaFalsa::updateHijos() {}
 void CajaFalsa::deleteHijos() {}

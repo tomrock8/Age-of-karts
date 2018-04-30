@@ -10,8 +10,8 @@ Escudo::Escudo(obj3D* n, btVector3 posicion, btVector3 escala, btScalar masa, fl
 
 	//objetoHabilidad =  Motor3d::instancia().getScene()->getMesh("assets/Objetos/escudo.obj");
 	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/escudo.obj", "escena_raiz",false);
-	cout << "(Escudo::Escudo) Hay que comprobar la posicion que sea respecto del corredor al crear";
-	nodo->setPosition(posicion.getX(), posicion.getY(), posicion.getZ());
+	
+	
 	nodo->setScale(escala.getX(),escala.getY(),escala.getZ());
 	
 	GestorIDs::instancia().setIdentifier(nodo, "Estatico");
@@ -38,7 +38,7 @@ void Escudo::movimiento() {
 	nodo->setRotation(NodoVehiculo->getRotation().x, NodoVehiculo->getRotation().y, NodoVehiculo->getRotation().z);
 	btTransform trans;
 	btQuaternion quaternion;
-	trans.setOrigin(btVector3(NodoVehiculo->getPosition().x, NodoVehiculo->getPosition().y + 2, NodoVehiculo->getPosition().z));
+	trans.setOrigin(btVector3(NodoVehiculo->getPosition().x, NodoVehiculo->getPosition().y , NodoVehiculo->getPosition().z));
 	quaternion.setEulerZYX(NodoVehiculo->getRotation().x * PI / 180, NodoVehiculo->getRotation().y * PI / 180, NodoVehiculo->getRotation().z * PI / 180);
 	trans.setRotation(quaternion);
 	rigidBody->setCenterOfMassTransform(trans);

@@ -4,14 +4,13 @@ std::stack<glm::mat4> TEntidad::matStack;
 glm::mat4 TEntidad::modelMatrix;
 glm::mat4 TEntidad::viewMatrix;
 glm::mat4 TEntidad::projectionMatrix;
-//glm::mat4 TEntidad::MVPmatrix;
+glm::mat4 TEntidad::MVPmatrix;
 
 void TEntidad::setModelMatrix(glm::mat4 modelMatrix) {
 	this->modelMatrix = modelMatrix;
 }
 
-void TEntidad::setViewMatrix(glm::mat4 viewMatrix)
-{
+void TEntidad::setViewMatrix(glm::mat4 viewMatrix) {
 	this->viewMatrix = viewMatrix;
 }
 
@@ -32,6 +31,6 @@ glm::mat4 TEntidad::getViewMatrix() {
 }
 
 glm::mat4 TEntidad::getModelViewProjectionMatrix() {
-	return projectionMatrix * viewMatrix * modelMatrix;
+	return MVPmatrix;
 }
 

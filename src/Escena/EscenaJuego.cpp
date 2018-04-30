@@ -107,24 +107,24 @@ void EscenaJuego::init() {
 	Corredor* jugador;
 
 	btVector3 pos2[6];
-	pos2[0].setX(11.3);
-	pos2[0].setY(4);
-	pos2[0].setZ(-641);
-	pos2[1].setX(-14.3);
-	pos2[1].setY(4);
-	pos2[1].setZ(-641);
-	pos2[2].setX(-11.3);
-	pos2[2].setY(4);
-	pos2[2].setZ(-620);
-	pos2[3].setX(-14.3);
-	pos2[3].setY(4);
-	pos2[3].setZ(-620);
-	pos2[4].setX(-80);
-	pos2[4].setY(0);
-	pos2[4].setZ(310);
-	pos2[5].setX(-80);
-	pos2[5].setY(0);
-	pos2[5].setZ(290);
+	pos2[0].setX(Pista::getInstancia()->getParrilla().at(0).x);
+	pos2[0].setY(Pista::getInstancia()->getParrilla().at(0).y);
+	pos2[0].setZ(Pista::getInstancia()->getParrilla().at(0).z);
+	pos2[1].setX(Pista::getInstancia()->getParrilla().at(1).x);
+	pos2[1].setY(Pista::getInstancia()->getParrilla().at(1).y);
+	pos2[1].setZ(Pista::getInstancia()->getParrilla().at(1).z);
+	pos2[2].setX(Pista::getInstancia()->getParrilla().at(2).x);
+	pos2[2].setY(Pista::getInstancia()->getParrilla().at(2).y);
+	pos2[2].setZ(Pista::getInstancia()->getParrilla().at(2).z);
+	pos2[3].setX(Pista::getInstancia()->getParrilla().at(3).x);
+	pos2[3].setY(Pista::getInstancia()->getParrilla().at(3).y);
+	pos2[3].setZ(Pista::getInstancia()->getParrilla().at(3).z);
+	pos2[4].setX(Pista::getInstancia()->getParrilla().at(4).x);
+	pos2[4].setY(Pista::getInstancia()->getParrilla().at(4).y);
+	pos2[4].setZ(Pista::getInstancia()->getParrilla().at(4).z);
+	pos2[5].setX(Pista::getInstancia()->getParrilla().at(5).x);
+	pos2[5].setY(Pista::getInstancia()->getParrilla().at(5).y);
+	pos2[5].setZ(Pista::getInstancia()->getParrilla().at(5).z);
 
 	client = Client::getInstancia();
 	int numClients = client->getClientes().size();
@@ -384,7 +384,6 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
-	//TextoPantalla *textoDebug = TextoPantalla::getInstancia();
 	Pista *pistaca = Pista::getInstancia();
 	std::vector<Item *> items = pistaca->getItems();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
@@ -474,9 +473,9 @@ void EscenaJuego::update() {
 		if (jugadores->getNumJugadores() > 0) {
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 				pj.at(i)->update();
-				if(strcmp(pj.at(i)->getNodo()->getName(),"JugadorIA")==0){
-				CorredorIA *IA = static_cast<CorredorIA *>(pj.at(i));
-				IA->updateHijos();
+				if (strcmp(pj.at(i)->getNodo()->getName(), "JugadorIA") == 0) {
+					CorredorIA *IA = static_cast<CorredorIA *>(pj.at(i));
+					IA->updateHijos();
 				}
 
 			}
@@ -524,7 +523,7 @@ void EscenaJuego::update() {
 	pj = jugadores->getJugadores();
 
 
-	camera->update(pj.at(controlPlayer)->getNodo()->getPosition(), pj.at(controlPlayer)->getNodo()->getRotation(), pj.at(controlPlayer)->getVectorDireccion());
+	camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition(), pj.at(controlPlayer)->getNodo()->getRotation(), pj.at(controlPlayer)->getVectorDireccion());
 	camera->lookAt(pj.at(controlPlayer)->getNodo()->getPosition());
 	/*
 		float distanciaX = -20;
@@ -656,8 +655,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
 		//cout << "POSICION: " <<Point[0]<<","<< Point[1]<<","<< Point[2]<<endl; 
 		Node->setPosition((float)Point[0], (float)Point[1] + 2, (float)Point[2]);
-	}
-	else
+	}else
 		Node->setPosition((float)Point[0], (float)Point[1], (float)Point[2]);
 
 	// Set rotation

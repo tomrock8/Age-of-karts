@@ -62,12 +62,11 @@ void TTransform::rotar(GLfloat x, GLfloat y, GLfloat z, GLfloat g) {
 
 	glm::vec3 myRotationAxis(x, y, z);
 	matriz = glm::rotate(matriz, glm::radians(g), myRotationAxis);
-
 }
 
 void TTransform::setRotation(GLfloat x, GLfloat y, GLfloat z, GLfloat g) {
 	glm::vec3 myRotationAxis(x, y, z);
-	matriz = glm::rotate(glm::mat4(),glm::radians(g), myRotationAxis);
+	matriz = glm::rotate(glm::mat4(), glm::radians(g), myRotationAxis);
 }
 
 void TTransform::escalar(GLfloat x, GLfloat y, GLfloat z) {
@@ -77,11 +76,11 @@ void TTransform::escalar(GLfloat x, GLfloat y, GLfloat z) {
 		|0	0	sZ	0|
 		|0	0	0	1|
 	*/
-	matriz =  glm::scale(matriz, glm::vec3(x, y, z));
+	matriz = glm::scale(matriz, glm::vec3(x, y, z));
 }
 
-void TTransform::setScale(GLfloat x, GLfloat y, GLfloat z){
-	matriz =  glm::scale(glm::mat4(), glm::vec3(x, y, z));
+void TTransform::setScale(GLfloat x, GLfloat y, GLfloat z) {
+	matriz = glm::scale(glm::mat4(), glm::vec3(x, y, z));
 }
 
 //----------------------------//
@@ -103,14 +102,12 @@ a la funcion glPushMatrix().
 
 void TTransform::beginDraw(Shader *shader) {
 	//Apilar matriz actual
-	//std::cout << "(TTransform::beginDraw) transformacion" << std::endl;
 	matStack.push(modelMatrix);//no vale
 	modelMatrix = matriz * modelMatrix;
-
 }
+
 void TTransform::endDraw() {
 	//Desapilar matriz y ponerla como actual
-	//std::cout << "(TTransform::endDraw) Desapilo" << std::endl;
 	modelMatrix = matStack.top();
 	matStack.pop();
 	glPopMatrix();

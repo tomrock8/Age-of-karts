@@ -23,6 +23,8 @@ public:
 	Item(btVector3 posicion, btVector3 escala, btScalar masa,
 		float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo,
 		btScalar radio, float alturaLanzamiento, int idNodo);
+	~Item();
+
 	void inicializarFisicas();
 	virtual void lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) = 0;
 	virtual void updateHijos() = 0;
@@ -76,7 +78,7 @@ protected:
 	bool lanzado;
 	bool colision;
 	clock_t tiempoLanzado;
-
+	float diferencia;
 
 	bool subir;
 	bool bajar;

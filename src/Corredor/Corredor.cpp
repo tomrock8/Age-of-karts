@@ -246,7 +246,7 @@ void Corredor::setParametros() {
 		velocidadMaxima = velocidadMedia;
 		//----GIRO/MANEJO-----
 		indiceGiroAlto = btScalar(0.4);
-		indiceGiroBajo = btScalar(0.07);
+		indiceGiroBajo = btScalar(0.08);
 		velocidadLimiteGiro = 110;
 		//------PESO------
 		//Masa = btScalar(1200);
@@ -911,10 +911,10 @@ void Corredor::usarObjetos() {
 	std::vector<Item *> items = pista->getItems();
 
 	btVector3 posicion(cuboNodo->getPosition().x + orientacion.getX() * 10, cuboNodo->getPosition().y+2, cuboNodo->getPosition().z + orientacion.getZ() * 10);
-	btVector3 escala(1, 1, 1);
+	btVector3 escala(2, 2, 2);
 	btScalar masa = 50;
 	float tiempoDestruccion = 15;
-	btVector3 tamanyoNodo(3, 3, 3);
+	btVector3 tamanyoNodo(1, 1, 1);
 	btScalar radio = 8;
 	float alt = 1;
 
@@ -926,11 +926,15 @@ void Corredor::usarObjetos() {
 		soltarItem();
 	}
 	else if (getTipoObj() == 2) {	//CAJA FALSA
-		alt = -1;
-		masa = 0;
+		alt = 3;
+		masa = 30;
+		tiempoDestruccion = 0;
+		escala = btVector3(2, 2, 2);
 		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * 10);
 		posicion.setZ(cuboNodo->getPosition().z - orientacion.getZ() * 10);
+		posicion.setY(cuboNodo->getPosition().y + alt);
 		CajaFalsa *est = new CajaFalsa(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
+		est->lanzarItem(0,btVector3(0,0,0),CuerpoColisionChasis->getCenterOfMassTransform());
 		items.push_back(est);
 
 		soltarItem();
@@ -939,11 +943,15 @@ void Corredor::usarObjetos() {
 		setTurbo(true, true, FuerzaMaxima * 4, 2);
 	}
 	else if (getTipoObj() == 4) {	//ACEITE
-		alt = -1;
-		masa = 0;
+		alt = 3;
+		masa = 30;
+		tiempoDestruccion = 0;
+		escala = btVector3(2, 2, 2);
 		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * 10);
 		posicion.setZ(cuboNodo->getPosition().z - orientacion.getZ() * 10);
+		posicion.setY(cuboNodo->getPosition().y + alt);
 		Aceite *est2 = new Aceite(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
+		est2->lanzarItem(0,btVector3(0,0,0),CuerpoColisionChasis->getCenterOfMassTransform());
 		items.push_back(est2);
 
 		soltarItem();
@@ -952,12 +960,12 @@ void Corredor::usarObjetos() {
 		//if (getProteccion() == false) setProteccion(true);
 		//decCargador();
 		if (!proteccion) {
-			alt = 2;
+			alt = 0;
 			masa = 50;
-			radio = 8;
-			escala = btVector3(10, 10, 10);
+			radio = 5;
+			escala = btVector3(5, 5, 5);
 			tamanyoNodo = btVector3(9, 9, 9);
-			tiempoDestruccion = 50;
+			tiempoDestruccion = 30;
 			posicion = btVector3(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 			posicion.setY(posicion.getY() + alt);
 			Escudo *escudo = new Escudo(cuboNodo, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
@@ -1251,18 +1259,10 @@ void Corredor::update() {
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 
-	//float distanciaX=20;
-	//cameraThird->setPosition(- orientacion.getX()*distanciaX,7,- orientacion.getZ()*distanciaX);
-	//cameraThird->setRotation(glm::vec3(0,1,0),180);
-
-	//updateHijos();
-	//linea clave
-//	cameraThird->setPosition(0, 2, 7);
-	//	cameraThird->setRotation(cameraThird->getPosition().x * orientacion.getX(),
-	//	1,
-	//	cameraThird->getPosition().z* orientacion.getZ());
-
-	//cuboNodo->setPosition()
+	/*
+	if(strcmp(cuboNodo->getName(),"Jugador")==0)
+	cout<<actual->getID()-7<<endl;
+	*/
 	if (vueltas > maxvueltas) {
 		estado->setEstadoCarrera(EstadosJugador::estado_carrera::FIN);
 	}

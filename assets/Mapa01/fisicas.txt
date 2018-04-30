@@ -1,2 +1,0 @@
-import PhysicsConstraints
-PhysicsConstraints.exportBulletFile("C:/SocketWar - AgeOfKarts/SW_AoK_VS/SW_AoK_VS/assets/Mapa01/FisicasMapaIsla.bullet")

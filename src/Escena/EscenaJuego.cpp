@@ -15,7 +15,6 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	puesto = 6;
 	vueltas = 1;
 	vueltas_aux=1;
-	show_another_window=false;
 	init();
 }
 
@@ -199,6 +198,8 @@ void EscenaJuego::init() {
 	// -----------------------
 	debug_Jugador = false;
 	muestraDebug = true;
+	show_another_window=false;
+	muestraDebugIA=false;
 	TMotor::instancia().initDebugWindow();
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontDefault();
@@ -256,7 +257,7 @@ void EscenaJuego::renderDebug() {
 	// ------------------------------
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	Corredor *jugador = GestorJugadores::getInstancia()->getJugadores().at(controlPlayer);
-
+	
 	// Mostrar ventanas
 
 	ImGui_ImplGlfwGL3_NewFrame();
@@ -276,6 +277,26 @@ void EscenaJuego::renderDebug() {
 		ImGui::StyleColorsClassic();
 		ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 	}
+
+	if (muestraDebugIA){
+		std::vector<Corredor*> pj = GestorJugadores::getInstancia()->getJugadores();
+		ImGui::Begin("Datos del Corredor IA", &muestraDebugIA);
+		for (int i = 0; i < pj.size(); i++) {
+			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
+				
+				CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+				ImGui::Text("IA %i:",i);
+				sr=AUXILIAR->getDebugIA();
+				ImGui::Text(sr.c_str());
+				
+				break;
+			}
+		}
+	
+		ImGui::End();
+		sr="";
+	}
+
 	if (muestraDebug){		
 		
 		ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -292,6 +313,8 @@ void EscenaJuego::renderDebug() {
 			TMotor::instancia().setDebugBullet(debug);
 
 		ImGui::Checkbox("Debug Jugador", &debug_Jugador);
+
+		ImGui::Checkbox("Debug IA", &muestraDebugIA);
 		if (debug_Jugador) {
 			ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
 			ImGui::Text(jugador->toString().c_str());
@@ -340,6 +363,8 @@ void EscenaJuego::renderDebug() {
 			ImGui::End();
 		}
 	}
+
+	
 	if (vueltas_aux!=vueltas){
 		show_another_window=true;
 		muestra_tiempo=t->getTimer();

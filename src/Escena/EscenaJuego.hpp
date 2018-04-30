@@ -6,6 +6,7 @@
 #include "GestorColisiones.hpp"
 #include "GestorCarrera.hpp"
 #include "Timer.hpp"
+#include <vector>
 
 class EscenaJuego : public Escena {
 public:
@@ -64,6 +65,8 @@ private:
 	bool debug_Jugador;
 	bool end;
 	bool show_another_window;
+	bool muestraDebugIA;
+	std::string sr;
 	
 	//SONIDO 
 	AlSource *fuenteCarrera;

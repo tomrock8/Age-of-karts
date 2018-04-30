@@ -37,6 +37,7 @@ public:
 	void setDebugFisicas(bool activo);
 	bool getDebugFisicas();
 	void debugIA();
+	std::string getDebugIA();
 
 private:
 
@@ -68,6 +69,7 @@ private:
 	btVector3 posicionEnemigo;
 	btVector3 posicion_aux;
 	int timerRecolocar;
+	std::string texto;
 };
 
 #endif /* CORREDORIA_H */

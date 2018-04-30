@@ -67,6 +67,7 @@ void Pista::loadWaypoints(const char* waypoints) {
 	std::string tamanyoArrayWaypoints;
 	std::string tamanyoArrayCajas;
 	std::string tamanyoArrayTurbo;
+	std::string pole;
 	int tipoObj;
 	tamWaypoints = 0;
 	tamTurbos = 0;
@@ -81,6 +82,7 @@ void Pista::loadWaypoints(const char* waypoints) {
 		getline(myfile, tamanyoArrayWaypoints, ' ');
 		getline(myfile, tamanyoArrayCajas, ' ');
 		getline(myfile, tamanyoArrayTurbo, ' ');
+		getline(myfile, pole, ' ');
 
 		//arrayCajas.resize(stoi(tamanyoArrayCajas));
 
@@ -88,8 +90,13 @@ void Pista::loadWaypoints(const char* waypoints) {
 			
 			getline(myfile, tipo, ' ');//caja turbo o waypoint
 			tipoObj = stoi(tipo);
-			Waypoint *w = new Waypoint();
+			if (tipoObj != 0) {
+				getline(myfile, pX, ' ');//posiciones para cajas turbo y posiciones
+				getline(myfile, pY, ' ');//posiciones para cajas turbo y posiciones
+				getline(myfile, pZ, ' ');//posiciones para cajas turbo y posiciones
+			}
 			if (tipoObj == 0) {//WAYPOINT
+				Waypoint *w = new Waypoint();
 				arrayWaypoints.push_back(w);
 				//=========================================//
 				//orientacion con respecto a la carretera  //
@@ -123,7 +130,6 @@ void Pista::loadWaypoints(const char* waypoints) {
 				arrayWaypoints.at(arrayWaypoints.size() - 1)->setVector4(btVector3(stof(v4X), stof(v4Y), stof(v4Z)));
 
 				//WP central
-
 				getline(myfile, pX, ' ');//posiciones central wp
 				getline(myfile, pY, ' ');//posiciones central wp
 				getline(myfile, pZ, ' ');//posiciones central wp
@@ -140,7 +146,6 @@ void Pista::loadWaypoints(const char* waypoints) {
 				}
 				else if (arrayWaypoints.size() - 1 == (stoi(tamanyoArrayWaypoints) - 1)) {
 					arrayWaypoints.at(arrayWaypoints.size() - 1 - 1)->setSiguiente(arrayWaypoints.at(arrayWaypoints.size() - 1));
-
 					arrayWaypoints.at(arrayWaypoints.size() - 1)->setSiguiente(arrayWaypoints[0]);
 
 				}
@@ -151,10 +156,8 @@ void Pista::loadWaypoints(const char* waypoints) {
 				obj3D *im = arrayWaypoints.at(arrayWaypoints.size() - 1)->getWaypoint();
 				GestorIDs::instancia().setIdentifier(im, im->getName());
 				arrayWaypoints.at(arrayWaypoints.size() - 1)->setID(GestorIDs::instancia().getIDLibre() - 1);
-
 				tamWaypoints++;
 			}
-
 			if (tipoObj == 1) {//CAJA
 				Caja *cj = new Caja(btVector3(stof(pX), stof(pY), stof(pZ)));
 				arrayCajas.push_back(cj);
@@ -165,6 +168,10 @@ void Pista::loadWaypoints(const char* waypoints) {
 				Turbo *tb = new Turbo(btVector3(stof(pX), stof(pY), stof(pZ)), false);
 				arrayTurbos.push_back(tb);
 				tamTurbos++;
+			}
+			if (tipoObj == 3) {//POSICION PARRILLA
+				parrilla.push_back(glm::vec3(stof(pX), stof(pY), stof(pZ)));
+			
 			}
 			//cout << line << endl;
 		}
@@ -186,6 +193,7 @@ void Pista::loadPirateMapElements() {
 	std::string pX, pY, pZ,num;
 	float posX, posY, posZ;
 	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/elementos.obj", "escena_raiz", false);
+	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/parrilla.obj", "escena_raiz", false);
 	//lectura de las palmeras y su creacion 
 	/*
 	ifstream myfile("assets/MapaPirata/palmeras1.txt");
@@ -218,6 +226,9 @@ std::vector<Waypoint*> Pista::getArrayWaypoints() {
 }
 std::vector<Caja*> Pista::getArrayCaja() {
 	return arrayCajas;
+}
+std::vector<glm::vec3> Pista::getParrilla() {
+	return parrilla;
 }
 int Pista::getTamCajas() {
 	return tamCajas;

@@ -60,7 +60,7 @@ void ItemTeledirigido::setWaypoint(Waypoint *waypoint) {
 void ItemTeledirigido::setWaypointActual() {
 
 
-	if (colision && idwaypoint > actual->getWaypoint()->getID() || colision && idwaypoint == 6) {
+	if (colision && idwaypoint > actual->getWaypoint()->getID() || colision && idwaypoint == 7) {
 		actual = siguiente;
 
 		siguiente = actual->getNextWaypoint();

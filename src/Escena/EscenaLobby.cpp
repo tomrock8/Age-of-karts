@@ -82,9 +82,9 @@ void EscenaLobby::update() {
  
 	
   	glfwGetFramebufferSize( TMotor::instancia().getVentana() , &display_w , &display_h );
-	  
+
   	ImGui_ImplGlfwGL3_NewFrame();
-	ImGui::SetNextWindowPos(ImVec2(100, 100), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(ImVec2(100, 100));
 	ImGui::SetNextWindowSize( ImVec2( (float)display_w , (float)display_h ) );
 	ImGui::SetNextWindowBgAlpha(0.0f);
 

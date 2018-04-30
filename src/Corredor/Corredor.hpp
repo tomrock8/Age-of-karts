@@ -77,6 +77,7 @@ public:
 	int getVueltas();
 	float getMaxVuetas();
 	float getTiempoVueltaTotal();
+	float getTiempoVuelta();
 	void getParametrosDebug(float * fuerza, float * velocidadMedia, float * velocidadMaximaTurbo, float * velocidadMaxima, float * masa, float * indiceGiroAlto, float * indiceGiroBajo, float * velocidadLimiteGiro);
 	void getParametrosRuedasDebug(float * suspensionStiffness, float * DampingCompression, float * DampingRelaxation, float * frictionSlip, float * rollInfluence, float * suspForce, float * suspTravelCm);
 

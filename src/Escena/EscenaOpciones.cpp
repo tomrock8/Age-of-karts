@@ -51,6 +51,13 @@ void EscenaOpciones::update() {
 		| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
 		| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard
 		| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal)) {
+
+		if (display_w<1000){
+			ImGui::SetWindowFontScale(0.5f);
+		}else{
+			ImGui::SetWindowFontScale(1.0f);
+		}
+		
 		ImGui::Text("Opciones");
 
 		ImGui::Text("\nSonido\n");

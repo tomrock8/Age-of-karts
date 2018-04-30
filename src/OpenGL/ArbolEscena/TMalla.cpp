@@ -46,14 +46,6 @@ void TMalla::draw(Shader *shader) {
 		//Desacivamos el buffer VAO antes del dibujado de la siguiente malla
 		malla.at(i)->getMesh()->disableVAO();
 	}
-	
-	
-	
 }
 
 void TMalla::endDraw() {}
-
-// METODOS GET
-//TRecursoMalla * TMalla::getMalla() { return malla; }
-//TRecursoMaterial * TMalla::getMaterial() { return material; }
-//TRecursoTextura * TMalla::getTextures() { return textures; }

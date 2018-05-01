@@ -24,37 +24,6 @@ cameraThird::cameraThird(const char *name, const char *parentName) {
 cameraThird::~cameraThird() {}
 
 void cameraThird::lookAt(glm::vec3 posicion) {
-	/*
-	glPushMatrix();
-			glLoadIdentity();
-			gluLookAt(camara->getPosition().x, camara->getPosition().y, camara->getPosition().z,
-					  posicion.x, posicion.y, posicion.z,
-					  0,1,0);
-
-			GLfloat MV[16];
-			glGetFloatv(GL_MODELVIEW_MATRIX, MV);
-		glPopMatrix();
-
-		glm::mat4 T(MV[0], MV[1], MV[2], MV[3],
-					MV[4], MV[5], MV[6], MV[7],
-					MV[8], MV[9], MV[10], MV[11],
-					MV[12], MV[13], MV[14], MV[15]);
-
-		T = glm::inverse(T);
-		T[2][0] = -T[2][0];
-		T[2][1] = -T[2][1];
-		T[2][2] = -T[2][2];
-
-
-		T[0][0] = -T[0][0];
-		T[0][1] = -T[0][1];
-		T[0][2] = -T[0][2];
-
-		glPushMatrix();
-		glMultMatrixf(glm::value_ptr(T));
-		glPopMatrix();
-	*/
-
 
 	glm::vec3 delta = posicion - camara->getPosition();
 	glm::vec3 up;
@@ -80,24 +49,7 @@ void cameraThird::lookAt(glm::vec3 posicion) {
 		camara->getPosition().x, camara->getPosition().y, camara->getPosition().z, 1.0f);
 
 
-	/*
-
-   glm::vec3 delta =(posicion-camara->getPosition());
-   glm::vec3 desiredUp(0,1,0.00001);
-   glm::quat rot1 = RotationBetweenVectors(glm::vec3(0,0,1), delta);
-   glm::vec3 right = glm::cross(delta, desiredUp);
-   desiredUp = glm::cross(right, delta);
-   glm::vec3 newUp = rot1 * glm::vec3(0.0f, 1.0f, 0.0f);
-   glm::quat rot2 = RotationBetweenVectors(newUp, desiredUp);
-   glm::quat targetOrientation = rot2 * rot1;
-   glm::mat4 M=glm::toMat4(targetOrientation);
-   M[3][0]=camara->getPosition().x;
-   M[3][1]=camara->getPosition().y;
-   M[3][2]=camara->getPosition().z;
-   */
-
 	glm::mat4 lookAtCamara(camara->getNode()->getEntidad()->getModelViewMatrix()* M);
-	//glMultMatrixf(glm::value_ptr(M));
 	static_cast<TTransform*>(camara->getNode()->getPadre()->getEntidad())->setMatriz(lookAtCamara);
 
 }
@@ -107,11 +59,7 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 	float zoom = 12;
 	float altura =5;
 	float maximoRetardo=10;
-	//camara->setRotation(0, rotacion.y + 180, 0);
-	//gluLookAt(posicion.x - direccion.getX()*distanciaX,posicion.y+ 7,posicion.z - direccion.getZ()*distanciaX , posicion.x,posicion.y,posicion.z,0,1,0);
 	
-		
-		
 		
 		if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L)){
 		camara->setPosition(posicion.x + direccion.getX()*zoom, posicion.y + altura,posicion.z + direccion.getZ()*zoom);
@@ -158,8 +106,6 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 		
 		}
 		
-
-		//camara->setPosition(XCamera3+direccion.getX()*distanciaX + posicion.x - direccion.getX()*distanciaX, posicion.y + 200, ZCamera3+direccion.getZ()*distanciaX + posicion.z - direccion.getZ()*distanciaX);
 }
 
 void cameraThird::comprobarInputs(){
@@ -458,30 +404,4 @@ void cameraThird::setParentNode(TNodo* p) {
 }
 
 
-glm::quat cameraThird::RotationBetweenVectors(glm::vec3 start, glm::vec3 dest) {
-	start = glm::normalize(start);
-	dest = glm::normalize(dest);
 
-	float cosTheta = glm::dot(start, dest);
-	glm::vec3 rotationAxis;
-
-	if (cosTheta < -1 + 0.001f) {
-		rotationAxis = glm::cross(glm::vec3(0.0f, 0.0f, 1.0f), start);
-		if (glm::length(rotationAxis) < 0.01)
-			rotationAxis = glm::cross(glm::vec3(1.0f, 0.0f, 0.0f), start);
-		rotationAxis = glm::normalize(rotationAxis);
-		return glm::angleAxis(180.0f, rotationAxis);
-	}
-
-	rotationAxis = glm::cross(start, dest);
-
-	float s = sqrt((1 + cosTheta) * 2);
-	float invs = 1 / s;
-
-	return glm::quat(
-		s * 0.5f,
-		rotationAxis.x * invs,
-		rotationAxis.y * invs,
-		rotationAxis.z * invs
-	);
-}

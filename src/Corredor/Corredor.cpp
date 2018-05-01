@@ -471,12 +471,12 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	vehiculo->setCoordinateSystem(0, 1, 2); // 0, 1, 2
 
 	// Agrega las ruedas delanteras
-	vehiculo->addWheel((puntoConexionChasis * btVector3(4, 1, 3)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);
-	vehiculo->addWheel((puntoConexionChasis * btVector3(-4, 1, 3)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);
+	vehiculo->addWheel((puntoConexionChasis * btVector3(4, 1, 2)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);
+	vehiculo->addWheel((puntoConexionChasis * btVector3(-4, 1, 2)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, true);
 
 	// Agrega las ruedas traseras
-	vehiculo->addWheel((puntoConexionChasis * btVector3(4, 1, -3)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, false);
-	vehiculo->addWheel((puntoConexionChasis * btVector3(-4, 1, -3)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, false);
+	vehiculo->addWheel((puntoConexionChasis * btVector3(4, 1, -2)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, false);
+	vehiculo->addWheel((puntoConexionChasis * btVector3(-4, 1, -2)), direccionRuedas, rotacionRuedas, suspension, radioRueda, tuning, false);
 
 
 	for (int i = 0; i < vehiculo->getNumWheels(); i++) {

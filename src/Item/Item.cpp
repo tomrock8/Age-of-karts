@@ -110,13 +110,15 @@ bool Item::update() {
 
 void Item::Delete() {
 	// NO VA A FUNCIONAR!!!!
+	
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	for (int i = 0; i < objetos.size(); i++) {
 		obj3D *nodoActual = static_cast<obj3D *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
-		if (nodoActual->getID() == id) {
+		if (nodoActual->getID() == id && strcmp(nodoActual->getName(),"rueda1")!=0 && strcmp(nodoActual->getName(),"rueda2")!=0 && strcmp(nodoActual->getName(),"rueda3")!=0
+		&& strcmp(nodoActual->getName(),"rueda4")!=0) {
 			btRigidBody *Object = objetos.at(i);
 
 			// Delete node

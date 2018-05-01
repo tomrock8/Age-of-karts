@@ -58,8 +58,8 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 
 	float zoom = 12;
 	float altura =5;
-	float maximoRetardo=10;
-	
+	float maximoRetardo=8;
+	float retardo=0.25;
 		
 		if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L)){
 		camara->setPosition(posicion.x + direccion.getX()*zoom, posicion.y + altura,posicion.z + direccion.getZ()*zoom);
@@ -79,7 +79,7 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 		}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS){
 		
 		if(auxX<=maximoRetardo)
-		auxX+=0.5;	
+		auxX+=retardo;	
 
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
@@ -87,7 +87,7 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 		}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS){
 		
 		if(auxX>=-maximoRetardo)
-		auxX-=0.5;
+		auxX-=retardo;
 
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);		
@@ -96,9 +96,9 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 		else{
 
 		if (auxX > 0) {
-			auxX-=0.5;
+			auxX-=retardo;
 		}else if (auxX < 0){
-			auxX+=0.5;
+			auxX+=retardo;
 		}
 
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);

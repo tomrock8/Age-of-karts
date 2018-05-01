@@ -680,14 +680,29 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
 		//cout << "POSICION: " <<Point[0]<<","<< Point[1]<<","<< Point[2]<<endl; 
 		Node->setPosition((float)Point[0], (float)Point[1] + 2, (float)Point[2]);
-	}else
+	}else{
+
+		if(strcmp(Node->getName(), "rueda1") == 0 && strcmp(Node->getName(), "rueda2") == 0 && strcmp(Node->getName(), "rueda3") == 0 &&
+		strcmp(Node->getName(), "rueda4") == 0){
+
+		}else{
+		
 		Node->setPosition((float)Point[0], (float)Point[1], (float)Point[2]);
 
+		}
+
+		}
+
 	// Set rotation
+	if(strcmp(Node->getName(), "rueda1") != 0 && strcmp(Node->getName(), "rueda2") != 0 && strcmp(Node->getName(), "rueda3") != 0 &&
+		strcmp(Node->getName(), "rueda4") != 0){
+
 	const btQuaternion& TQuat = TObject->getOrientation();
 	glm::vec3 axis(TQuat.getAxis().getX(), TQuat.getAxis().getY(), TQuat.getAxis().getZ());
 	float angle = TQuat.getAngle() * RADTODEG;
 	Node->setRotation(axis, angle);
+		
+		}
 }
 
 std::string EscenaJuego::getIpConexion() { return ipConexion; }

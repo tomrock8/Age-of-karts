@@ -80,11 +80,11 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	setParametros();
 
 	// HAY QUE MODIFICAR DE QUE NODO PENDEN!!!
-	const char* strRueda = "assets/rueda/rueda.obj";
-	rueda1 = TMotor::instancia().newMeshNode("rueda1", strRueda, "escena_raiz", false);
-	rueda2 = TMotor::instancia().newMeshNode("rueda2", strRueda, "escena_raiz", false);
-	rueda3 = TMotor::instancia().newMeshNode("rueda3", strRueda, "escena_raiz", false);
-	rueda4 = TMotor::instancia().newMeshNode("rueda4", strRueda, "escena_raiz", false);
+	
+	rueda1 = TMotor::instancia().newMeshNode("rueda1", "assets/rueda/ruedaDer.obj", "escena_raiz", false);
+	rueda2 = TMotor::instancia().newMeshNode("rueda2", "assets/rueda/ruedaIzq.obj", "escena_raiz", false);
+	rueda3 = TMotor::instancia().newMeshNode("rueda3", "assets/rueda/ruedaDer.obj", "escena_raiz", false);
+	rueda4 = TMotor::instancia().newMeshNode("rueda4", "assets/rueda/ruedaIzq.obj", "escena_raiz", false);
 
 
 	rueda1->setScale(1, 1, 1);//alante derecha
@@ -92,11 +92,14 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	rueda3->setScale(1, 1, 1);//atras derecha
 	rueda4->setScale(1, 1, 1);//atras izquierda
 
+	rueda2->setRotation(glm::vec3(1,0,0),180);
+	rueda4->setRotation(glm::vec3(1,0,0),180);
+/*
 	rueda1->setVisible(false);//alante derecha
 	rueda2->setVisible(false);//delante izquierda
 	rueda3->setVisible(false);//atras derecha
 	rueda4->setVisible(false);//atras izquierda
-
+*/
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
 		cuboNodo->setScale(1, 1, 1.5);
@@ -104,7 +107,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	}
 
 	InicializarFisicas();
-	//InicializarFisicasRuedas();
+	InicializarFisicasRuedas();
 
 	//OPENAL
 	pitchMotor = 0.5f;
@@ -296,8 +299,7 @@ void Corredor::InicializarFisicasRuedas() {
 	//CuerpoColisionRueda1->setCollisionFlags(CuerpoColisionRueda1->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda1);
-	objetos.push_back(CuerpoColisionRueda1);
-	bullet->setObjetos(objetos);
+	objetos.push_back(CuerpoColisionRueda1); 
 
 	// rueda 2
 
@@ -320,8 +322,8 @@ void Corredor::InicializarFisicasRuedas() {
 	//CuerpoColisionRueda2->setCollisionFlags(CuerpoColisionRueda2->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda2);
-	objetos.push_back(CuerpoColisionRueda2);
-	bullet->setObjetos(objetos);
+	objetos.push_back(CuerpoColisionRueda2); 
+  	
 
 
 	// rueda 3
@@ -345,8 +347,7 @@ void Corredor::InicializarFisicasRuedas() {
 	//CuerpoColisionRueda3->setCollisionFlags(CuerpoColisionRueda3->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda3);
-	objetos.push_back(CuerpoColisionRueda3);
-	bullet->setObjetos(objetos);
+	objetos.push_back(CuerpoColisionRueda3); 
 
 	// rueda 4
 
@@ -369,8 +370,8 @@ void Corredor::InicializarFisicasRuedas() {
 	//CuerpoColisionRueda4->setCollisionFlags(CuerpoColisionRueda4->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda4);
-	objetos.push_back(CuerpoColisionRueda4);
-	bullet->setObjetos(objetos);
+	objetos.push_back(CuerpoColisionRueda4); 
+	
 
 	//Restricciones para las ruedas
 	btVector3 axisA(1.f, 1.f, 1.f);
@@ -395,6 +396,8 @@ void Corredor::InicializarFisicasRuedas() {
 	mundo->addConstraint(restriccion2, true);
 	mundo->addConstraint(restriccion3, true);
 	mundo->addConstraint(restriccion4, true);
+
+	bullet->setObjetos(objetos); 
 }
 
 //-----------------------------//
@@ -1254,7 +1257,7 @@ void Corredor::update() {
 	updateTimerObstaculos();
 	updateEstado();
 	comprobarSueloRuedas();
-	//actualizarRuedas();
+	actualizarRuedas();
 	updateVectorDireccion();
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
@@ -1308,41 +1311,64 @@ void Corredor::updateTimerObstaculos() {
 }
 
 void Corredor::actualizarRuedas() {
+	
+	float altura = 0.5;
 	btVector3 zeroVector(0, 0, 0);
+	glm::vec3 axis(0, 0, 0);
+	float angle = 0;
+	
 
+	
+	
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
-	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
+	
 	//rueda1
 	CuerpoColisionRueda1->clearForces();
 	CuerpoColisionRueda1->setLinearVelocity(zeroVector);
 	CuerpoColisionRueda1->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda1->setCenterOfMassTransform(ruedas);
+	rueda1->setPosition(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+altura,ruedas.getOrigin().getZ());
+	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
+	angle = ruedas.getRotation().getAngle() * RADTODEG;
+	rueda1->setRotation(axis, angle);
 	//rueda1->setRotation(180,0,0);
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
-	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
+	
 	CuerpoColisionRueda2->clearForces();
 	CuerpoColisionRueda2->setLinearVelocity(zeroVector);
 	CuerpoColisionRueda2->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda2->setCenterOfMassTransform(ruedas);
-	//rueda2->setRotation(180,0,0);
+	rueda2->setPosition(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+altura,ruedas.getOrigin().getZ());
+	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
+	angle = ruedas.getRotation().getAngle() * RADTODEG;
+	rueda2->setRotation(axis, angle);
+	
+
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
-	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
+	
 	CuerpoColisionRueda4->clearForces();
 	CuerpoColisionRueda4->setLinearVelocity(zeroVector);
 	CuerpoColisionRueda4->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda4->setCenterOfMassTransform(ruedas);
-	//rueda3->setRotation(180,0,0);
+	rueda4->setPosition(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+altura,ruedas.getOrigin().getZ());
+	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
+	angle = ruedas.getRotation().getAngle() * RADTODEG;
+	rueda4->setRotation(axis, angle);
+	
 
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
-	//ruedas.setOrigin(btVector3(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+1,ruedas.getOrigin().getZ()));
+	
 	CuerpoColisionRueda3->clearForces();
 	CuerpoColisionRueda3->setLinearVelocity(zeroVector);
 	CuerpoColisionRueda3->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda3->setCenterOfMassTransform(ruedas);
-	//rueda4->setRotation(180,0,0);
+	rueda3->setPosition(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+altura,ruedas.getOrigin().getZ());
+	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
+	angle = ruedas.getRotation().getAngle() * RADTODEG;
+	rueda3->setRotation(axis, angle);
 
 
 }

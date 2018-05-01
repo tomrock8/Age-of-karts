@@ -4,6 +4,7 @@
 cameraThird::cameraThird(const char *name, const char *parentName) {
 	camara = TMotor::instancia().newCameraNode(name, parentName);
 	camara->rotate(glm::vec3(0, 1, 0), 180);
+	auxX=0;
 	//this->nodo = nodo;
 	//parentNode = parent;
 
@@ -105,35 +106,59 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 
 	float zoom = 12;
 	float altura =5;
+	float maximoRetardo=10;
 	//camara->setRotation(0, rotacion.y + 180, 0);
 	//gluLookAt(posicion.x - direccion.getX()*distanciaX,posicion.y+ 7,posicion.z - direccion.getZ()*distanciaX , posicion.x,posicion.y,posicion.z,0,1,0);
-
-
-
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_E) == GLFW_PRESS && XCamera3 >= 0) {
-			if (XCamera3 < 30) {
-				XCamera3++;
-				ZCamera3 += 0.5;
-			}
-		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_Q) == GLFW_PRESS && XCamera3 <= 0) {
-			if (XCamera3 > -30) {
-				XCamera3--;
-				ZCamera3 += 0.5;
-			}
-		}
-		else if (XCamera3 < 0) {
-			XCamera3++;
-			ZCamera3 -= 0.5;
-		}
-		else if (XCamera3 > 0) {
-			XCamera3--;
-			ZCamera3 -= 0.5;
-		}
-
-		camara->setPosition((posicion.x + XCamera3) - direccion.getX()*zoom, posicion.y + altura,(posicion.z + ZCamera3) - direccion.getZ()*zoom);
-		if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L))
+	
+		
+		
+		
+		if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L)){
 		camara->setPosition(posicion.x + direccion.getX()*zoom, posicion.y + altura,posicion.z + direccion.getZ()*zoom);
+	
+		}
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_E) == GLFW_PRESS) {
+			
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), -90 * PI / 180);
+		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
+		
+		}
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_Q) == GLFW_PRESS) {
+
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), 90 * PI / 180);
+		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
+
+		}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS){
+		
+		if(auxX<=maximoRetardo)
+		auxX+=0.5;	
+
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);
+		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
+		
+		}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS){
+		
+		if(auxX>=-maximoRetardo)
+		auxX-=0.5;
+
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);
+		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);		
+		
+		}
+		else{
+
+		if (auxX > 0) {
+			auxX-=0.5;
+		}else if (auxX < 0){
+			auxX+=0.5;
+		}
+
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);
+		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);
+		
+		}
+		
+
 		//camara->setPosition(XCamera3+direccion.getX()*distanciaX + posicion.x - direccion.getX()*distanciaX, posicion.y + 200, ZCamera3+direccion.getZ()*distanciaX + posicion.z - direccion.getZ()*distanciaX);
 }
 

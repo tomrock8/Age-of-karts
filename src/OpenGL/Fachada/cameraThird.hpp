@@ -47,12 +47,8 @@ private:
 	float direction;
 	float zdirection;
 	bool fpsActiva;
-	float XCamera3;
-	float YCamera3;
-	float ZCamera3;
-	float XCamera1;
-	float YCamera1;
-	float ZCamera1;
+	btVector3 direccion2;
+
 	float auxX;
 	btDefaultMotionState *MotionState;
 	btCollisionShape *Shape;

@@ -1056,7 +1056,7 @@ void CorredorIA::vision(btScalar distancia, obj3D *nodo) {
 void CorredorIA::updateHijos() {
 
 	//debugIA();
-	//cout<<"pene"<<endl;
+	
 	//if (!debugFisicas)
 		ActualizarRaytest();
 

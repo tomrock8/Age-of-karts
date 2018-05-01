@@ -519,6 +519,8 @@ float Corredor::getMaxVuetas() { return maxvueltas; }
 bool Corredor::getInmunidad() { return inmunidad; }
 float Corredor::getTiempoVueltaTotal() { return tiempoVueltaTotal; }
 
+float Corredor::getTiempoVuelta() { return tiempoVuelta; }
+
 //-----------------------------//
 //---------METODOS SET---------//
 //-----------------------------//

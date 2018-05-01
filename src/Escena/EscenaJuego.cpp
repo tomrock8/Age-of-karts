@@ -9,11 +9,12 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	TMotor::instancia().newHud("OnGameHUD");
 	TMotor::instancia().getActiveHud()->addElement(0.2f, 0.2f, "puesto", "assets/HUD/juego/puesto_6.png");
 	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
-	TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_3_3.png");
+	TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_1_3.png");
 	TMotor::instancia().getActiveHud()->traslateElement("vueltas", -0.83f, 0.68f);
 
 	puesto = 6;
-	vueltas = 3;
+	vueltas = 1;
+	vueltas_aux=1;
 	init();
 }
 
@@ -197,10 +198,13 @@ void EscenaJuego::init() {
 	// -----------------------
 	debug_Jugador = false;
 	muestraDebug = true;
+	show_another_window=false;
+	muestraDebugIA=false;
 	TMotor::instancia().initDebugWindow();
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontDefault();
-	ImGui::StyleColorsClassic();
+	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
+	
 
 	//-----------------------
 	// OPENAL
@@ -243,7 +247,7 @@ void EscenaJuego::dibujar() {
 		}
 	}
 
-	if (muestraDebug)
+	
 		renderDebug();
 }
 
@@ -253,71 +257,150 @@ void EscenaJuego::renderDebug() {
 	// ------------------------------
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	Corredor *jugador = GestorJugadores::getInstancia()->getJugadores().at(controlPlayer);
-
+	
 	// Mostrar ventanas
 
 	ImGui_ImplGlfwGL3_NewFrame();
-	ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	if (show_another_window){
+		ImFontAtlas* atlas = ImGui::GetIO().Fonts;
+		ImGui::StyleColorsLight(); 
+		ImGuiIO& io = ImGui::GetIO();
 
-	ImGui::Text("Debug del Juego!");
-	ImGui::Text("Pulsa 9 para activar - 0 desactivar");
-	ImGui::Text("Jugadores: %i", GestorJugadores::getInstancia()->getNumJugadores());
-	ImGui::Text("Elementos de fisicas: %i", MotorFisicas::getInstancia()->getMundo()->getNumCollisionObjects());
+		if (io.Fonts->Fonts.Size>1){
+			ImGui::PushFont(io.Fonts->Fonts[1]);
+		}else{
+			ImGui::PushFont(io.Fonts->Fonts[0]);
 
-	if (ImGui::SliderFloat("Gravedad", &gravedad, -100.0f, 0.0f, "%.2f", 1.0f))
-		MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
-
-	if (ImGui::Checkbox("Debug Fisicas", &debug))
-		TMotor::instancia().setDebugBullet(debug);
-
-	ImGui::Checkbox("Debug Jugador", &debug_Jugador);
-	if (debug_Jugador) {
-		ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
-		ImGui::Text(jugador->toString().c_str());
-
-		static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro;
-		jugador->getParametrosDebug(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo, &velocidadLimiteGiro);
-
-		ImGui::SliderFloat("fuerza", &fuerza, 1000.0f, 10000.0f, "%.1f", 10.0f);
-		ImGui::SliderFloat("velocidadMedia", &velocidadMedia, 100.0f, 800.0f, "%.1f", 10.0f);
-		ImGui::SliderFloat("velocidadMaximaTurbo", &velocidadMaximaTurbo, 100.0f, 800.0f, "%.1f", 10.0f);
-		ImGui::SliderFloat("velocidadMaxima", &velocidadMaxima, 100.0f, 800.0f, "%.1f", 10.0f);
-		ImGui::SliderFloat("Masa", &masa, 0.0f, 8000.0f, "%.1f", 10.0f);
-		ImGui::SliderFloat("VelocidadLimiteGiro", &velocidadLimiteGiro, 0.0f, 8000.0f, "%.1f", 100.0f);
-		ImGui::SliderFloat("indiceGiroAlto", &indiceGiroAlto, 0.0f, 1.0f, "%.4f", 0.01f);
-		ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f, "%.4f", 0.01f);
-		jugador->setParametrosDebug(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro);
-
-		static float *posicion = new float[3];
-		float *resetOri = new float[3];
-		resetOri[0] = jugador->getNodo()->getRotation().z;
-		resetOri[1] = jugador->getNodo()->getRotation().y;
-		resetOri[2] = jugador->getNodo()->getRotation().x;
-
-
-		ImGui::SliderFloat3("Posicion", posicion, -100, 100, "%.2f", 1.0f);
-		ImGui::SameLine();
-		if (ImGui::Button("Set position"))
-			jugador->setPosicion(posicion, resetOri);// Hay que pasarle solo la posicion al jugador, no al nodo
-
-		if (ImGui::CollapsingHeader("Ruedas")) {
-			static float suspensionStiffness, DampingCompression, DampingRelaxation, frictionSlip, rollInfluence, suspForce, suspTravelCm;
-			jugador->getParametrosRuedasDebug(&suspensionStiffness, &DampingCompression, &DampingRelaxation, &frictionSlip, &rollInfluence, &suspForce, &suspTravelCm);
-			ImGui::SliderFloat("suspensionStiffness", &suspensionStiffness, 0.0f, 50.0f);
-			ImGui::SliderFloat("frictionSlip", &frictionSlip, 1000.0f, 50000.0f, "%.1f", 100.0f);
-			ImGui::SliderFloat("rollInfluence", &rollInfluence, 0.0f, 0.1f, "%.3f", 0.001f);
-			ImGui::SliderFloat("suspForce", &suspForce, 1000.0f, 50000.0f, "%.1f", 100.0f);
-			ImGui::SliderFloat("suspTravelCm", &suspTravelCm, 1000.0f, 50000.0f, "%.1f", 100.0f);
-			jugador->setParametrosRuedasDebug(suspensionStiffness, DampingCompression, DampingRelaxation, frictionSlip, rollInfluence, suspForce, suspTravelCm);
-			ImGui::Text("DampingCompression: %.3f", DampingCompression);
-			ImGui::SameLine();
-			ImGui::Text("DampingRelaxation: %.3f", DampingRelaxation);
 		}
+	}else{
 
-		if (ImGui::Button("Cerrar"))
-			debug_Jugador = false;
-		ImGui::End();
+		ImGui::StyleColorsClassic();
+		ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 	}
+
+	if (muestraDebugIA){
+		std::vector<Corredor*> pj = GestorJugadores::getInstancia()->getJugadores();
+		ImGui::Begin("Datos del Corredor IA", &muestraDebugIA);
+		for (int i = 0; i < pj.size(); i++) {
+			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
+				
+				CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+				ImGui::Text("IA %i:",i);
+				sr=AUXILIAR->getDebugIA();
+				ImGui::Text(sr.c_str());
+				
+				break;
+			}
+		}
+	
+		ImGui::End();
+		sr="";
+	}
+
+	if (muestraDebug){		
+		
+		ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+		ImGui::Text("Debug del Juego!");
+		ImGui::Text("Pulsa 9 para activar - 0 desactivar");
+		ImGui::Text("Jugadores: %i", GestorJugadores::getInstancia()->getNumJugadores());
+		ImGui::Text("Elementos de fisicas: %i", MotorFisicas::getInstancia()->getMundo()->getNumCollisionObjects());
+
+		if (ImGui::SliderFloat("Gravedad", &gravedad, -100.0f, 0.0f, "%.2f", 1.0f))
+			MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
+
+		if (ImGui::Checkbox("Debug Fisicas", &debug))
+			TMotor::instancia().setDebugBullet(debug);
+
+		ImGui::Checkbox("Debug Jugador", &debug_Jugador);
+
+		ImGui::Checkbox("Debug IA", &muestraDebugIA);
+		if (debug_Jugador) {
+			ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
+			ImGui::Text(jugador->toString().c_str());
+
+			static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro;
+			jugador->getParametrosDebug(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo, &velocidadLimiteGiro);
+
+			ImGui::SliderFloat("fuerza", &fuerza, 1000.0f, 10000.0f, "%.1f", 10.0f);
+			ImGui::SliderFloat("velocidadMedia", &velocidadMedia, 100.0f, 800.0f, "%.1f", 10.0f);
+			ImGui::SliderFloat("velocidadMaximaTurbo", &velocidadMaximaTurbo, 100.0f, 800.0f, "%.1f", 10.0f);
+			ImGui::SliderFloat("velocidadMaxima", &velocidadMaxima, 100.0f, 800.0f, "%.1f", 10.0f);
+			ImGui::SliderFloat("Masa", &masa, 0.0f, 8000.0f, "%.1f", 10.0f);
+			ImGui::SliderFloat("VelocidadLimiteGiro", &velocidadLimiteGiro, 0.0f, 8000.0f, "%.1f", 100.0f);
+			ImGui::SliderFloat("indiceGiroAlto", &indiceGiroAlto, 0.0f, 1.0f, "%.4f", 0.01f);
+			ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f, "%.4f", 0.01f);
+			jugador->setParametrosDebug(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro);
+
+			static float *posicion = new float[3];
+			float *resetOri = new float[3];
+			resetOri[0] = jugador->getNodo()->getRotation().z;
+			resetOri[1] = jugador->getNodo()->getRotation().y;
+			resetOri[2] = jugador->getNodo()->getRotation().x;
+
+
+			ImGui::SliderFloat3("Posicion", posicion, -100, 100, "%.2f", 1.0f);
+			ImGui::SameLine();
+			if (ImGui::Button("Set position"))
+				jugador->setPosicion(posicion, resetOri);// Hay que pasarle solo la posicion al jugador, no al nodo
+
+			if (ImGui::CollapsingHeader("Ruedas")) {
+				static float suspensionStiffness, DampingCompression, DampingRelaxation, frictionSlip, rollInfluence, suspForce, suspTravelCm;
+				jugador->getParametrosRuedasDebug(&suspensionStiffness, &DampingCompression, &DampingRelaxation, &frictionSlip, &rollInfluence, &suspForce, &suspTravelCm);
+				ImGui::SliderFloat("suspensionStiffness", &suspensionStiffness, 0.0f, 50.0f);
+				ImGui::SliderFloat("frictionSlip", &frictionSlip, 1000.0f, 50000.0f, "%.1f", 100.0f);
+				ImGui::SliderFloat("rollInfluence", &rollInfluence, 0.0f, 0.1f, "%.3f", 0.001f);
+				ImGui::SliderFloat("suspForce", &suspForce, 1000.0f, 50000.0f, "%.1f", 100.0f);
+				ImGui::SliderFloat("suspTravelCm", &suspTravelCm, 1000.0f, 50000.0f, "%.1f", 100.0f);
+				jugador->setParametrosRuedasDebug(suspensionStiffness, DampingCompression, DampingRelaxation, frictionSlip, rollInfluence, suspForce, suspTravelCm);
+				ImGui::Text("DampingCompression: %.3f", DampingCompression);
+				ImGui::SameLine();
+				ImGui::Text("DampingRelaxation: %.3f", DampingRelaxation);
+			}
+			
+			if (ImGui::Button("Cerrar"))
+				debug_Jugador = false;
+			ImGui::End();
+		}
+	}
+
+	
+	if (vueltas_aux!=vueltas){
+		show_another_window=true;
+		muestra_tiempo=t->getTimer();
+	}
+	if (show_another_window){
+			int display_w,display_h;
+			glfwGetFramebufferSize( TMotor::instancia().getVentana() , &display_w , &display_h );
+			ImGui::SetNextWindowPos(ImVec2((display_w-300)/2, (display_h-500)/2));
+			if (vueltas<=3){
+				ImGui::SetNextWindowSize( ImVec2( (float)302 , (float)80 ) );
+			}else{
+				ImGui::SetNextWindowSize( ImVec2( (float)290 , (float)40 ) );
+			}
+			
+            ImGui::Begin("Another Window", &show_another_window,  ImGuiWindowFlags_NoResize 
+			| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
+			| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard 
+			| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal);
+			if (vueltas<=3){
+				ImGui::Text("Tiempo vuelta: ");
+				ImGui::Text(to_string(jugador->getTiempoVuelta()).c_str());
+			}else{
+				ImGui::Text("Has quedado: ");
+				TMotor::instancia().getActiveHud()->traslateElement("puesto", 0.0f, 0.3f);
+				muestra_tiempo=t->getTimer();
+				//ImGui::Text(to_string(jugador->getPosicionCarrera()).c_str());
+			}
+			vueltas_aux=vueltas;
+			if (t->getTimer()-muestra_tiempo>=4){
+				show_another_window = false;
+			}
+           
+            ImGui::End();
+			
+        }
+		ImGui::PopFont();
 }
 
 void EscenaJuego::limpiar() {
@@ -403,6 +486,7 @@ void EscenaJuego::update() {
 		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
 		}
+		if (t->getTimer() >= 5 && t->getTimer() < 6)
 		colisiones->IniciarTimer();
 	}
 
@@ -559,6 +643,9 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_0) == GLFW_PRESS) {
 		TMotor::instancia().closeDebugWindow();
 		TMotor::instancia().initDebugWindow();
+		ImGuiIO& io = ImGui::GetIO();
+		io.Fonts->AddFontDefault();
+		io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
 		muestraDebug = false;
 	}
 

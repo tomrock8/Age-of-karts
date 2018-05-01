@@ -1055,8 +1055,8 @@ void CorredorIA::vision(btScalar distancia, obj3D *nodo) {
 
 void CorredorIA::updateHijos() {
 
-	//debugIA();
-	
+	debugIA();
+	//cout<<"pene"<<endl;
 	//if (!debugFisicas)
 		ActualizarRaytest();
 
@@ -1106,25 +1106,25 @@ bool CorredorIA::getDebugFisicas() {
 
 
 void CorredorIA::debugIA() {
-	/*
-	TextoPantalla * texto = TextoPantalla::getInstancia();
-	std::string agrega;
 
-	texto->agregar("WAYPOINT ACTUAL: " + to_string(actual->getID() - 6));
-	texto->agregar("\n");
-	texto->agregar("WAYPOINT SIGUIENTE: " + to_string(siguiente->getID() - 6));
-	texto->agregar("\n");
+	
+	std::string agrega;
+	texto="";
+	texto+=("WAYPOINT ACTUAL: " + to_string(actual->getID() - 7));
+	texto+=("\n");
+	texto+="WAYPOINT SIGUIENTE: " + to_string(siguiente->getID() - 7);
+	texto+="\n";
 
 	if (noGiro)
 		agrega = "NO GIRO // ";
 	else if (giroFlojoDerecha)
-		agrega = "GIRO DERECHA // ";
-	else if (giroFlojoIzquierda)
 		agrega = "GIRO IZQUIERDA // ";
+	else if (giroFlojoIzquierda)
+		agrega = "GIRO DERECHA // ";
 	else if (giroFuerteDerecha)
-		agrega = "GIRO FUERTE DERECHA //";
-	else if (giroFuerteIzquierda)
 		agrega = "GIRO FUERTE IZQUIERDA //";
+	else if (giroFuerteIzquierda)
+		agrega = "GIRO FUERTE DERECHA //";
 
 	switch (accionActualConduccion) {
 
@@ -1166,8 +1166,8 @@ void CorredorIA::debugIA() {
 
 	}
 
-	texto->agregar("ACCION CONDUCCION: " + agrega);
-	texto->agregar("\n");
+	texto+="ACCION CONDUCCION: " + agrega;
+	texto+="\n";
 
 	switch (accionActualObjetos) {
 
@@ -1232,7 +1232,10 @@ void CorredorIA::debugIA() {
 
 
 	}
-	texto->agregar("ACCION DECISION ACTUAL: " + agrega);
-	texto->agregar("\n");
-	*/
+	texto+="ACCION DECISION ACTUAL: " + agrega;
+	texto+="\n";
+}
+
+std::string CorredorIA::getDebugIA(){
+	return texto;
 }

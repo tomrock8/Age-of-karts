@@ -267,8 +267,8 @@ void Corredor::InicializarFisicasRuedas() {
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	float masar = 0.0000000000000001f;
-	float radio = 1.2;
+	float masar = 0.003f;
+	float radio = 1.5;
 	float ancho = 1.2;
 	btVector3 HalfExtents(1, 1, 1);
 
@@ -284,8 +284,8 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda1 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	FormaColisionR1 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	//FormaColisionR1 = new btSphereShape(radio);
+	//FormaColisionR1 = new btCylinderShapeX(btVector3(ancho, radio, radio));
+	FormaColisionR1 = new btSphereShape(radio);
 
 	// Add mass
 	btVector3 LocalInertia;
@@ -312,8 +312,8 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda2 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	FormaColisionR2 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	//FormaColisionR2 = new btSphereShape(radio);
+	//FormaColisionR2 = new btCylinderShapeX(btVector3(ancho, radio, radio));
+	FormaColisionR2 = new btSphereShape(radio);
 
 	CuerpoColisionRueda2 = new btRigidBody(masar, motionStateRueda2, FormaColisionR2, LocalInertia);
 	CuerpoColisionRueda2->setUserPointer((void *)(rueda2));
@@ -337,8 +337,8 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda3 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	FormaColisionR3 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	//FormaColisionR3 = new btSphereShape(radio);
+	//FormaColisionR3 = new btCylinderShapeX(btVector3(ancho, radio, radio));
+	FormaColisionR3 = new btSphereShape(radio);
 
 	CuerpoColisionRueda3 = new btRigidBody(masar, motionStateRueda3, FormaColisionR3, LocalInertia);
 	CuerpoColisionRueda3->setUserPointer((void *)(rueda3));
@@ -360,8 +360,8 @@ void Corredor::InicializarFisicasRuedas() {
 	//Motionstate
 	motionStateRueda4 = new btDefaultMotionState(transRueda); //motionState = interpolacion
 
-	FormaColisionR4 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	//FormaColisionR4 = new btSphereShape(radio);
+	//FormaColisionR4 = new btCylinderShapeX(btVector3(ancho, radio, radio));
+	FormaColisionR4 = new btSphereShape(radio);
 
 	CuerpoColisionRueda4 = new btRigidBody(masar, motionStateRueda4, FormaColisionR4, LocalInertia);
 	CuerpoColisionRueda4->setUserPointer((void *)(rueda4));

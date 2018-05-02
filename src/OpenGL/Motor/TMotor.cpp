@@ -375,7 +375,7 @@ void TMotor::clean() {
 void TMotor::draw(int tipo) {
 
 	glClearColor(0.16f, 0.533f, 0.698f, 0.0f);//Establecer el nuevo color de fondo
-
+	/*
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
 	if (lights.size() > 0) {
 		for (int i = 0; i < lights.size(); i++) {
@@ -398,16 +398,17 @@ void TMotor::draw(int tipo) {
 			}
 		}
 	}
-
+	*/
 
 	clean();//Se llama a la funcion para limpiar los buffers de OpenGL
 	if (tipo == 1 || tipo == 2) {
+		//Antes de llamar a ningun dibujado, calculamos la viewMatrix de la camara activa
+		drawCamera();
+
 		//DIBUJADO DEL SKYBOX
 		//-------------------
 		//Activamos el shader especifico del skybox
 		shaderSkybox->use(); 
-		//Establecemos las matrices view y projection a partir del dibujado de la camara
-		drawCamera(shaderSkybox); 
 		//Llamamos al metodo de dibujado del skybox
 		skybox->drawSkyBox();
 
@@ -420,8 +421,10 @@ void TMotor::draw(int tipo) {
 		Shader *s = shaderCartoon;
 		//Se activa el shader para el renderizado 3D
 		s->use();
-		//Establecemos las matrices view y projection a partir del dibujado de la camara
-		drawCamera(s);
+		//Calcular posicion de la camara y pasarsela al fragment shader
+		glm::vec4 defaultVector(0, 0, 0, 1);
+		glm::vec4 posC = v * defaultVector;
+		s->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
 		//Establecemos los datos de las distintas luces
 		drawLight(s);
 		//Configuramos los shaders para producir las sombras de cada luz
@@ -449,8 +452,6 @@ void TMotor::draw(int tipo) {
 		s = shaderSilhouette;
 		//Se activa el shader para el renderizado 3D
 		s->use();
-		//Establecemos las matrices view y projection a partir del dibujado de la camara
-		drawCamera(s);
 		//Desactivamos el offset anterior
 		glDisable( GL_POLYGON_OFFSET_FILL );  
 		//Establecemos el dibujado del poligono en modo linea
@@ -486,12 +487,9 @@ void TMotor::draw(int tipo) {
 			glEnableVertexAttribArray(0);
 			//Activamos el shader del debug
 			shaderDebug->use();
-			//Pasamos la view y la projection matrix al shader debug
-			drawCamera(shaderDebug);
-			
 			//Creamos y le pasamos la matriz mvp al shader
 			glm::mat4 model;
-			glm::mat4 mvp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * v * model;
+			glm::mat4 mvp = activeCamera->getEntidad()->getProjectionMatrix() * v * model;
 			shaderDebug->setMat4("mvp", mvp);
 			//Establecemos el ancho de las lineas
 			glLineWidth(3.0f);
@@ -508,7 +506,6 @@ void TMotor::draw(int tipo) {
 		// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
 		//==========================================================
 		/*
-		glEnable(GL_DEPTH_TEST);
 		//DIBUJADO DE LAS SOMBRAS PROYECTADAS
 		//-----------------------------------
 		//No dibujamos el mapa (suelo) ya que no queremos que produzca ninguna tipo de sombra
@@ -520,8 +517,8 @@ void TMotor::draw(int tipo) {
 		if (lights.size() > 0) {
 			for (int i = 0; i < lights.size(); i++) {
 				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
-					//Establecemos la matrix view llamando al dibujado de la camara
-					drawCamera(shaderProjectedShadows);
+					//Le pasamos al shader la matriz view
+					shaderProjectedShadows->setMat4("view", v);
 					//Le pasamos la matriz proyeccion de la luz (perspectiva)
 					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 300.0f);
 					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
@@ -570,11 +567,10 @@ void TMotor::draw(int tipo) {
 }
 
 
-void TMotor::drawCamera(Shader *s) {
+void TMotor::drawCamera() {
 	//recorrer el nodo a la inversa hasta la raiz y guardar las matrices que se obtienen de sus entidades
 	//para luego multiplicarlas en orden inverso
 	std::vector<glm::mat4> matrixAux;
-	glm::vec4 defaultVector(0, 0, 0, 1);
 	TNodo *aux = activeCamera->getPadre();
 	int cont = 0;
 	while (aux != scene) {
@@ -582,15 +578,12 @@ void TMotor::drawCamera(Shader *s) {
 		cont++;
 		aux = aux->getPadre();
 	}
+
 	glm::mat4 viewMatrix;
 	//recorrido a la inversa
 	for (int i = matrixAux.size() - 1; i >= 0; i--) {
 		viewMatrix = matrixAux.at(i) * viewMatrix;
 	}
-
-	//calcular posicion de la camara y pasarsela al fragment shader
-	glm::vec4 posC = viewMatrix * defaultVector;
-	s->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
 
 	//Guardamos la viewMatrix para calcular despues la MVP de cada objeto
 	v = glm::inverse(viewMatrix);

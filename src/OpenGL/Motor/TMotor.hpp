@@ -82,7 +82,7 @@ public:
 	// DIBUJADO
 	void clean();
 	void draw(int tipo);
-	void drawCamera(Shader *s);
+	void drawCamera();
 	void drawLight(Shader *s);
 	
 	void toEulerAngle(float x,float y,float z, float w, float& roll, float& pitch, float& yaw);

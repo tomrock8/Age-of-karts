@@ -987,4 +987,6 @@ std::string Client::getClientStats(int i){
 	}else if (i==2){
 		return packetName;
 	}
+
+	return " ";
 }

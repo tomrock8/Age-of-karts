@@ -417,7 +417,7 @@ void CorredorIA::reposicionar() {
 		posicion_aux = btVector3(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 
 	}
-	if (time->getTimer() - timerRecolocar > 2) {
+	if (time->getTimer() - timerRecolocar > 3) {
 		if ((unsigned)((unsigned)(posicion_aux.getX()) - (unsigned)(cuboNodo->getPosition().x)) < 3 && (unsigned)((unsigned)(posicion_aux.getZ()) - (unsigned)(cuboNodo->getPosition().z)) < 3) {
 			recolocarWaypoint();
 			timerRecolocar = time->getTimer();
@@ -427,7 +427,7 @@ void CorredorIA::reposicionar() {
 			//cout<<"sigue"<<endl;
 		}
 	}
-	if (time->getTimer() - timerRecolocar > 3) {
+	if (time->getTimer() - timerRecolocar > 4) {
 		timerRecolocar = time->getTimer();
 	}
 }

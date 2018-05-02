@@ -346,28 +346,28 @@ void EscenaJuego::renderDebug() {
 		}
 
 		if (muestraDebugIA){
-		std::vector<Corredor*> pj = GestorJugadores::getInstancia()->getJugadores();
-		ImGui::Begin("Datos del Corredor IA", &muestraDebugIA);
-		for (int i = 0; i < pj.size(); i++) {
-			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
-				
-				CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
-				ImGui::Text("--------------");
-				ImGui::Text("IA %i:",i);
-				sr=AUXILIAR->getDebugIA();
-				debugRageIA(i);
-				
-				debugPlot(i,AUXILIAR->getVehiculo()->getCurrentSpeedKmHour(),"Velocidad");
-				sr+=AUXILIAR->toString();
-				ImGui::Text(sr.c_str());
-				
-				
+			std::vector<Corredor*> pj = GestorJugadores::getInstancia()->getJugadores();
+			ImGui::Begin("Datos del Corredor IA", &muestraDebugIA);
+			for (int i = 0; i < pj.size(); i++) {
+				if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
+					
+					CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+					ImGui::Text("--------------");
+					ImGui::Text("IA %i:",i);
+					sr=AUXILIAR->getDebugIA();
+					debugRageIA(i);
+					
+					debugPlot(i,AUXILIAR->getVehiculo()->getCurrentSpeedKmHour(),"Velocidad");
+					sr+=AUXILIAR->toString();
+					ImGui::Text(sr.c_str());
+					
+					
+				}
 			}
-		}
 	
-		ImGui::End();
-		sr="";
-	}
+			ImGui::End();
+			sr="";
+		}
 	}
 
 	
@@ -777,17 +777,17 @@ void EscenaJuego::debugRageIA(int k){		//Funcion que sirve para dibujar el nivel
 	int vec2[100];
 	rage.at(k).erase(rage.at(k).begin());
 
-	static float f;
+	static float f[6];
 	if (pj.at(k)->getTipoObj()>0){
-		f=50;
+		f[k]=50;
 	}
 	if (pj.at(k)->getLimite()>=100){
 		rage.at(k).push_back(100);
 	}else{
-		if (f+pj.at(k)->getLimite()/2>=100){
+		if (f[k]+pj.at(k)->getLimite()/2>=100){
 			rage.at(k).push_back(99);
 		}else{
-			rage.at(k).push_back(f+pj.at(k)->getLimite()/2);
+			rage.at(k).push_back(f[k]+pj.at(k)->getLimite()/2);
 		}
 		
 	}
@@ -795,8 +795,8 @@ void EscenaJuego::debugRageIA(int k){		//Funcion que sirve para dibujar el nivel
 		vec2[i]=rage.at(k).at(i);
 		vec[i]=vec2[i];	
 	}
-	if (f>0){
-		f-=1;
+	if (f[k]>0){
+		f[k]-=1;
 	}
 	std::string extra="% ";
 	if (pj.at(k)->getTipoObj()==1 || pj.at(k)->getTipoObj()==6)
@@ -820,8 +820,8 @@ void EscenaJuego::debugPlot(int j,float k,std::string str){		//Funcion que sirve
 		vec[i]=vec2[i];
 		
 	}
-	str+=to_string(k);
-	ImGui::PlotLines(str.c_str(), vec, IM_ARRAYSIZE(vec),0,(to_string(vec2[0])).c_str());
+	str+=to_string(j);
+	ImGui::PlotLines(str.c_str(), vec, IM_ARRAYSIZE(vec),0,(to_string(vec2[9])).c_str());
 	
 	
 }

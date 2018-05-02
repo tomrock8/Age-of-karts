@@ -152,7 +152,7 @@ void Item::ajustarAltura() {
 	btTransform posObj= rigidBody->getCenterOfMassTransform();
 	float altura= 0;
 	
-	cout<<indiceAltura<<endl;
+
 	if(subir){
 		altura= (0.1 - indiceAltura)/diferencia;
 		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()+altura,posObj.getOrigin().getZ()));
@@ -248,5 +248,6 @@ void Item::setIDPadre(int id) {
 
 void Item::setColision(int id) {
 	idwaypoint = id;
+	//cout<<"idwaypoint: "<<idwaypoint<<endl;
 	colision = true;
 }

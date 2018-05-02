@@ -1,4 +1,5 @@
 #include "TMalla.hpp"
+#include "TMotor.hpp"
 
 TMalla::TMalla(std::vector <mesh *> m) {
 	//los vertices e indices son punteros a Trecurso malla 7
@@ -22,8 +23,13 @@ void TMalla::beginDraw(Shader *shader) {// Depende del tipo de entidad
 
 void TMalla::draw(Shader *shader) {
 	for (GLuint i = 0; i < malla.size(); i++) {
-		//Pasamos la modelMatrix de la malla al shader para calcular la posicion final
+		//Pasamos la modelMatrix de la malla al shader
 		shader->setMat4("model", modelMatrix);
+		//Pasamos la mvp al shader para calcular la posicion final de objeto
+		glm::mat4 mvp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getV() * modelMatrix;
+		shader->setMat4("mvp", mvp);
+		//Pasamos la transpuesta de la inversa de la model matrix al shader para el calculo de las normales
+		shader->setMat4("transInvModel", glm::transpose(glm::inverse(modelMatrix)));
 		//Activamos el buffer VAO donde hemos guardado los datos de la malla anteriormente
 		malla.at(i)->getMesh()->activeVAO();
 		if (malla.at(i)->getText()->getNombre() != NULL) {

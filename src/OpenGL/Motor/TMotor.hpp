@@ -69,6 +69,7 @@ public:
 	TGestorRecursos *getGR();
 	bool getRenderDebug();
 	GestorSonido *getGestorSonido();
+	glm::mat4 getV();
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
@@ -149,4 +150,7 @@ protected:
 
 	obj3D* objMapa;
 	obj3D* objElementos;
+
+	glm::mat4 v;
+
 };

@@ -129,6 +129,7 @@ Shader *TMotor::getShaderSkybox() { return shaderSkybox; }
 Shader *TMotor::getShaderDebug() { return shaderDebug; }
 Shader *TMotor::getShaderSilhouette() { return shaderSilhouette; }
 GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
+glm::mat4 TMotor::getV() { return v;}
 
 
 //Funcion que devuelve un hud a partir del nombre
@@ -412,8 +413,7 @@ void TMotor::draw(int tipo) {
 
 		//DIBUJADO DEL ARBOL * ESTILO CARTOON *
 		//-------------------------------------
-		
-		//glDisable(GL_DEPTH_TEST);
+
 		//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas
 
 		//Enlazamos el shader cartoon
@@ -488,9 +488,11 @@ void TMotor::draw(int tipo) {
 			shaderDebug->use();
 			//Pasamos la view y la projection matrix al shader debug
 			drawCamera(shaderDebug);
-			//Creamos y le pasamos la matriz model al shader (matriz identidad)
+			
+			//Creamos y le pasamos la matriz mvp al shader
 			glm::mat4 model;
-			shaderDebug->setMat4("model", model);
+			glm::mat4 mvp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * v * model;
+			shaderDebug->setMat4("mvp", mvp);
 			//Establecemos el ancho de las lineas
 			glLineWidth(3.0f);
 			//Llamamos al dibujado de las distintas lineas
@@ -590,9 +592,8 @@ void TMotor::drawCamera(Shader *s) {
 	glm::vec4 posC = viewMatrix * defaultVector;
 	s->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
 
-	//por ultimo pasar al shader la view y la projection matrix
-	s->setMat4("view", glm::inverse(viewMatrix));
-	s->setMat4("projection", activeCamera->getEntidad()->getProjectionMatrix());
+	//Guardamos la viewMatrix para calcular despues la MVP de cada objeto
+	v = glm::inverse(viewMatrix);
 }
 
 void TMotor::drawLight(Shader *s) {

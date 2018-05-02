@@ -9,6 +9,7 @@
 #include "GestorIDs.hpp"
 #include <iostream>
 #include "TMotor.hpp"
+#include "GestorSonido.hpp"
 
 class Caja
 {
@@ -34,6 +35,8 @@ private:
 	const char *nombre;
 	int id;
 	int timer;
+
+	AlSource *fuenteCaja;
 };
 
 #endif

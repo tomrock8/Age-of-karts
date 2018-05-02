@@ -27,6 +27,13 @@ Caja::Caja(btVector3 posicionCaja) {
 	mundo->addRigidBody(rigidBody);
 	objetos.push_back(rigidBody);
 	bullet->setObjetos(objetos);
+
+	fuenteCaja = new AlSource();
+	fuenteCaja->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
+	float *posicionFuente = new float[3];
+	posicionFuente[0] = posicion.getX();
+	posicionFuente[1] = posicion.getY();
+	posicionFuente[2] = posicion.getZ();
 }
 
 btRigidBody *Caja::inicializarFisicas()
@@ -82,6 +89,8 @@ void Caja::romper(Corredor *pj1Col) {
 		if (nodoActual->getID() == id) {
 			btRigidBody *Object = objetos.at(i);
 
+			fuenteCaja->play(SOUND_CRACK);
+
 			// Delete irrlicht node
 			obj3D *Node = static_cast<obj3D *>(Object->getUserPointer());
 			Node->setVisible(false);
@@ -117,6 +126,9 @@ void Caja::Delete() {
 			mundo->removeRigidBody(Object);
 
 			// Free memory
+			fuenteCaja->stop(SOUND_CRACK);
+			delete fuenteCaja;
+
 			delete Object->getMotionState();
 			delete Object->getCollisionShape();
 			delete Object;

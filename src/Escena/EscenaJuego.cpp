@@ -278,25 +278,6 @@ void EscenaJuego::renderDebug() {
 		ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 	}
 
-	if (muestraDebugIA){
-		std::vector<Corredor*> pj = GestorJugadores::getInstancia()->getJugadores();
-		ImGui::Begin("Datos del Corredor IA", &muestraDebugIA);
-		for (int i = 0; i < pj.size(); i++) {
-			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
-				
-				CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
-				ImGui::Text("IA %i:",i);
-				sr=AUXILIAR->getDebugIA();
-				ImGui::Text(sr.c_str());
-				
-				break;
-			}
-		}
-	
-		ImGui::End();
-		sr="";
-	}
-
 	if (muestraDebug){		
 		
 		ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -316,9 +297,10 @@ void EscenaJuego::renderDebug() {
 
 		ImGui::Checkbox("Debug IA", &muestraDebugIA);
 		if (debug_Jugador) {
+			
 			ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
 			ImGui::Text(jugador->toString().c_str());
-
+			debugPlot(controlPlayer,jugador->getVehiculo()->getCurrentSpeedKmHour(),"Velocidad");
 			static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro;
 			jugador->getParametrosDebug(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo, &velocidadLimiteGiro);
 
@@ -362,6 +344,30 @@ void EscenaJuego::renderDebug() {
 				debug_Jugador = false;
 			ImGui::End();
 		}
+
+		if (muestraDebugIA){
+		std::vector<Corredor*> pj = GestorJugadores::getInstancia()->getJugadores();
+		ImGui::Begin("Datos del Corredor IA", &muestraDebugIA);
+		for (int i = 0; i < pj.size(); i++) {
+			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
+				
+				CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+				ImGui::Text("--------------");
+				ImGui::Text("IA %i:",i);
+				sr=AUXILIAR->getDebugIA();
+				debugRageIA(i);
+				
+				debugPlot(i,AUXILIAR->getVehiculo()->getCurrentSpeedKmHour(),"Velocidad");
+				sr+=AUXILIAR->toString();
+				ImGui::Text(sr.c_str());
+				
+				
+			}
+		}
+	
+		ImGui::End();
+		sr="";
+	}
 	}
 
 	
@@ -378,7 +384,7 @@ void EscenaJuego::renderDebug() {
 			}else{
 				ImGui::SetNextWindowSize( ImVec2( (float)290 , (float)40 ) );
 			}
-			
+			ImGui::SetNextWindowBgAlpha(0.6f); 
             ImGui::Begin("Another Window", &show_another_window,  ImGuiWindowFlags_NoResize 
 			| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
 			| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard 
@@ -459,7 +465,7 @@ void EscenaJuego::update() {
 
 
 	if (fin_carrera) {
-		cout << "CARRERA FINALIZADA, PULSA F.";
+		//cout << "CARRERA FINALIZADA, PULSA F.";
 	}
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 
@@ -751,4 +757,71 @@ void EscenaJuego::updateHUD() {
 			break;
 		}
 	}
+}
+
+void EscenaJuego::debugRageIA(int k){		//Funcion que sirve para dibujar el nivel de enfado de la IA en una grafica (k=id jugador)
+
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	std::vector<Corredor*> pj = jugadores->getJugadores();
+	static std::vector<std::vector<float>> rage;
+	rage.resize(6);
+	rage.at(k).resize(100);
+	
+	if (t->getTimer()<1){
+		
+		for (int i=0;i<100;i++){
+			rage.at(k).at(i)=0;
+		}
+	}
+	float vec[100];
+	int vec2[100];
+	rage.at(k).erase(rage.at(k).begin());
+
+	static float f;
+	if (pj.at(k)->getTipoObj()>0){
+		f=50;
+	}
+	if (pj.at(k)->getLimite()>=100){
+		rage.at(k).push_back(100);
+	}else{
+		if (f+pj.at(k)->getLimite()/2>=100){
+			rage.at(k).push_back(99);
+		}else{
+			rage.at(k).push_back(f+pj.at(k)->getLimite()/2);
+		}
+		
+	}
+	for (int i=0;i<100;i++){
+		vec2[i]=rage.at(k).at(i);
+		vec[i]=vec2[i];	
+	}
+	if (f>0){
+		f-=1;
+	}
+	std::string extra="% ";
+	if (pj.at(k)->getTipoObj()==1 || pj.at(k)->getTipoObj()==6)
+	extra="% - Proyectil preparado";
+	string str="ENFADO ACUMULADO "+to_string(k);
+	ImGui::PlotLines(str.c_str(), vec, IM_ARRAYSIZE(vec),0,(to_string(vec2[99])+extra).c_str(), 0.0f, 100.0f, ImVec2(0,100));
+}
+
+void EscenaJuego::debugPlot(int j,float k,std::string str){		//Funcion que sirve para dibujar la variacion de una variable cualquiera en una grafica 
+																//(j=id jugador,k=variable a mostrar, str=nombre de la grafica)
+	static std::vector<std::vector<float>> valores;
+	float vec[10];
+	int vec2[10];
+	valores.resize(6);
+	valores.at(j).resize(100);
+	valores.at(j).erase(valores.at(j).begin());
+	float f=k;
+	valores.at(j).push_back(f);
+	for (int i=0;i<10;i++){
+		vec2[i]=valores.at(j).at(i);
+		vec[i]=vec2[i];
+		
+	}
+	str+=to_string(k);
+	ImGui::PlotLines(str.c_str(), vec, IM_ARRAYSIZE(vec),0,(to_string(vec2[0])).c_str());
+	
+	
 }

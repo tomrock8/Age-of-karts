@@ -33,8 +33,10 @@ private:
 	void UpdatePhysics(unsigned int TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
 	void renderDebug();
+	void debugRageIA(int k);
+	void debugPlot(int j,float k,std::string str);
 	void updateHUD();
-
+	
 	bool debug;
 
 	DebugDraw *debugDraw;

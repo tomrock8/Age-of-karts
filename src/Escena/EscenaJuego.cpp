@@ -247,7 +247,7 @@ void EscenaJuego::dibujar() {
 		}
 	}
 
-	
+	if (tipoEscena != Escena::tipo_escena::ONLINE) 	
 		renderDebug();
 }
 
@@ -282,6 +282,8 @@ void EscenaJuego::renderDebug() {
 		
 		ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
+		debugPlot(controlPlayer,ImGui::GetIO().Framerate,"Frames");
+	
 		ImGui::Text("Debug del Juego!");
 		ImGui::Text("Pulsa 9 para activar - 0 desactivar");
 		ImGui::Text("Jugadores: %i", GestorJugadores::getInstancia()->getNumJugadores());

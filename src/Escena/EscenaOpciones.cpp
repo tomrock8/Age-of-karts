@@ -14,7 +14,7 @@ EscenaOpciones::EscenaOpciones(Escena::tipo_escena tipo) : Escena(tipo) {
 	fuenteMusica->play(SOUND_MENU);
 	fuenteEfectos = new AlSource();
 	fuenteEfectos->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
-	
+
 
 }
 
@@ -52,12 +52,13 @@ void EscenaOpciones::update() {
 		| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard
 		| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal)) {
 
-		if (display_w<1000){
+		if (display_w < 1000) {
 			ImGui::SetWindowFontScale(0.5f);
-		}else{
+		}
+		else {
 			ImGui::SetWindowFontScale(1.0f);
 		}
-		
+
 		ImGui::Text("Opciones");
 
 		ImGui::Text("\nSonido\n");
@@ -90,7 +91,7 @@ Escena::tipo_escena EscenaOpciones::comprobarInputs() {
 	}
 	else end = false;
 
-	if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS && !fuenteEfectos->isPlaying()) 
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS && !fuenteEfectos->isPlaying())
 		fuenteEfectos->play(SOUND_OPCION);
 	return Escena::tipo_escena::OPCIONES;
 }

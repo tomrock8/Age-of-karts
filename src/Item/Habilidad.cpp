@@ -7,46 +7,32 @@ Habilidad::Habilidad(int tipo, obj3D* n, btVector3 posicion, btVector3 escala, b
 	NodoVehiculo = n;
 	cont = 0;
 	cont2 = 10;
+	const char* strEscudo = "assets/escudo/escudo.obj";
 	switch (tipoHabilidad) {
 
 	case 1:
-		//objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadGladiador.obj");
-
-		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/habilidadGladiador.obj", "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("Estatico", strEscudo, "escena_raiz",false);
 		nombre = "HabilidadPirata";
 		break;
 
 	case 2:
-		//objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadVikingo.obj");
-
-		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/habilidadVikingo.obj", "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("Estatico", strEscudo, "escena_raiz",false);
 		nombre = "HabilidadVikingo";
 		break;
 
 	case 3:
-		//objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/onda.obj");
-
-		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/onda.obj", "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("Estatico", strEscudo, "escena_raiz",false);
 		nombre = "HabilidadGladiador";
 		break;
 
 	case 4:
-		//objetoHabilidad = Motor3d::instancia().getScene()->getMesh("assets/Objetos/habilidadChino.obj");
-
-		nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/habilidadChino.obj", "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("Estatico", strEscudo, "escena_raiz",false);
 		nombre = "HabilidadChino";
 		break;
 
 	}
-
-	//nodo = Motor3d::instancia().getScene()->addMeshSceneNode(objetoHabilidad, 0);
 	
 	nodo->setScale(tamanyoNodo.getX(), tamanyoNodo.getY(), tamanyoNodo.getZ());
-	//nodo->setVisible(false);
-	//nodo->setMaterialFlag(EMF_LIGHTING, false);
-	//nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	//nodo->setMaterialType(EMT_TRANSPARENT_ALPHA_CHANNEL);
-
 	GestorIDs::instancia().setIdentifier(nodo, "Estatico");
 	id = nodo->getID();
 	nodo->setName(nombre);
@@ -61,15 +47,8 @@ Habilidad::Habilidad(int tipo, obj3D* n, btVector3 posicion, btVector3 escala, b
 
 }
 
-
-
-
-
-
 void Habilidad::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) {
-
 	this->orientacion = orientacion;
-
 
 	if (tipoHabilidad == 1) { // PIRATA
 
@@ -81,9 +60,7 @@ void Habilidad::lanzarItem(int direccion, btVector3 orientacion,btTransform obje
 }
 
 void Habilidad::updateHijos() {
-
 	movimiento();
-
 }
 
 
@@ -143,15 +120,8 @@ void Habilidad::movimiento() {
 		rigidBody->setCenterOfMassTransform(trans);
 
 		break;
-
 	}
-
-
-
 }
 
 
-void Habilidad::deleteHijos() {
-
-
-}
+void Habilidad::deleteHijos() {}

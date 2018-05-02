@@ -51,15 +51,12 @@ void ItemTeledirigido::updateHijos() {
 
 
 void ItemTeledirigido::setWaypoint(Waypoint *waypoint) {
-
 	actual = waypoint;
 	siguiente = waypoint->getNextWaypoint();
 
 }
 
 void ItemTeledirigido::setWaypointActual() {
-
-
 	if (colision && idwaypoint > actual->getWaypoint()->getID() || colision && idwaypoint == 7) {
 		actual = siguiente;
 

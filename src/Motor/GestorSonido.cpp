@@ -27,10 +27,12 @@ GestorSonido::GestorSonido() {
 	cargarSonido("assets/Sounds/car_engine.wav");
 	cargarSonido("assets/Sounds/throw.wav");
 	cargarSonido("assets/Sounds/race1.wav");
+	cargarSonido("assets/Sounds/crack.wav");
+	cargarSonido("assets/Sounds/drift_loop.wav");
 
 	//Iniciamos los volumenes por defecto
 	volGeneral = 1.0f;
-	volMusica = .6f;
+	volMusica = .06f;
 	volEfectos = .7f;
 }
 

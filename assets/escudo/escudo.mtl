@@ -1,0 +1,15 @@
+# Blender MTL File: 'escudo.blend'
+# Material Count: 1
+
+newmtl mat_escudo
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Bump Escudo_Normal.png
+map_Kd Escudo_difuse.png
+map_Ks Escudo_Height.png

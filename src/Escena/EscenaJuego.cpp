@@ -33,6 +33,7 @@ EscenaJuego::~EscenaJuego() {
 	delete GestorJugadores::getInstancia();
 	delete Pista::getInstancia();
 	delete fuenteCarrera;
+	delete fuenteCountDown;
 }
 
 void EscenaJuego::init() {
@@ -214,6 +215,12 @@ void EscenaJuego::init() {
 	fuenteCarrera->volume(TMotor::instancia().getGestorSonido()->getVolMusica());
 	if (!fuenteCarrera->isPlaying())
 		fuenteCarrera->play(SOUND_RACE);
+	fuenteCountDown = new AlSource();
+	fuenteCountDown->volume(30 * TMotor::instancia().getGestorSonido()->getVolEfectos());
+	countDown3 = false;
+	countDown2 = false;
+	countDown1 = false;
+	countDownGo = false;
 
 }
 
@@ -477,15 +484,33 @@ void EscenaJuego::update() {
 		if (t->getTimer() == 1) {
 			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtras3.png");
 			TMotor::instancia().getActiveHud()->traslateElement("cuentaAtras", 0.0f, 0.35f);
+			if(!countDown3){
+				fuenteCountDown->play(SOUND_OPCION);
+				countDown3 = true;
+			}
 		}
 		else if (t->getTimer() == 2) {
 			TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtras2.png");
+			if(!countDown2){
+				fuenteCountDown->play(SOUND_OPCION);
+				countDown2 = true;
+			}
 		}
 		else if (t->getTimer() == 3) {
 			TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtras1.png");
+			if(!countDown1){
+				fuenteCountDown->play(SOUND_OPCION);
+				countDown1 = true;
+			}
 		}
 		else if (t->getTimer() == 4) {
 			TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtrasGo.png");
+			if(!countDownGo){
+				countDownGo = true;
+				fuenteCountDown->stop(SOUND_OPCION);
+				fuenteCountDown->setPitch(2.f);
+				fuenteCountDown->play(SOUND_OPCION);
+			}
 		}
 	}
 

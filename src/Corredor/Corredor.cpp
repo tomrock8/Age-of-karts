@@ -114,7 +114,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	fuenteMotor = new AlSource();
 	fuenteMotor->setLoop(true);
 	fuenteMotor->setPitch(pitchMotor);
-	fuenteMotor->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
+	fuenteMotor->volume(1 * TMotor::instancia().getGestorSonido()->getVolEfectos());
 	fuenteMotor->play(SOUND_ENGINE);
 	fuenteFrenos = new AlSource();
 	fuenteFrenos->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
@@ -705,9 +705,6 @@ void Corredor::setTipoObj() {
 	else if (tipoObj == 3)
 		cargador = 1;
 
-	Client *c = Client::getInstancia();
-	if (c->getConnected())
-		c->PlayerSetObject(tipoObj);
 	//cout << "Random ------>" << tipoObj << endl;
 }
 void Corredor::setTipoObj(EstadosJugador::estado_objeto objeto) {
@@ -1150,6 +1147,9 @@ void Corredor::frenodemano(bool activo, bool objeto) {
 					limite += 1;
 			}
 		}
+
+		fuenteFrenos->volume(10* TMotor::instancia().getGestorSonido()->getVolEfectos());
+		fuenteFrenos->play(SOUND_DRIFT);
 
 		estado->setEstadoMovimiento(EstadosJugador::estado_movimiento::DERRAPA);
 		FuerzaGiro = btScalar(0.45);

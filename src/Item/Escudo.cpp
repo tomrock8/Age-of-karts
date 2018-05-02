@@ -9,7 +9,7 @@ Escudo::Escudo(obj3D* n, btVector3 posicion, btVector3 escala, btScalar masa, fl
 	NodoVehiculo = n;
 
 	//objetoHabilidad =  Motor3d::instancia().getScene()->getMesh("assets/Objetos/escudo.obj");
-	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/Objetos/escudo.obj", "escena_raiz",false);
+	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/escudo/escudo.obj", "escena_raiz",false);
 	
 	
 	nodo->setScale(escala.getX(),escala.getY(),escala.getZ());

@@ -7,14 +7,12 @@ layout (location = 0) in vec3 aPos; //Posicion
 //Variables de salida del Vertex al Fragment shader
 out vec3 textCoord; //Coordenadas de textura
 
-//Uniforms para las distintas matrices necesarias para calcular la MVP
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+//Uniform con la matriz mvp
+uniform mat4 mvp;
  
 void main() {
-    //Calculamos la posicion final de cada vertice a partir de las matrices anteriores
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    //Calculamos la posicion final de cada vertice a partir de la matriz mvp
+    gl_Position = mvp * vec4(aPos, 1.0);
     //Usamos las mismas coordenadas de posicion de cada vertice como coordenadas de textura para dibujar la textura en el fragment
     textCoord = aPos;
 }

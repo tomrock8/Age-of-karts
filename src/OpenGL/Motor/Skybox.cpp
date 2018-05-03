@@ -137,9 +137,11 @@ void Skybox::drawSkyBox(){
     model = glm::translate(model, glm::vec3(0, -500, 0));
     //Lo escalamos para que englobe totalmente al mapa
     model = glm::scale(model, glm::vec3(5000, 5000, 5000));
+    //Calculamos la matriz mvp a partir de la projection y view de la camara activa
+	glm::mat4 mvp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getV() * model;
 
     //Pasamos los datos necesarios al shader 
-    TMotor::instancia().getShaderSkybox()->setMat4("model", model); //Matriz model
+    TMotor::instancia().getShaderSkybox()->setMat4("mvp", mvp); //Matriz mvp
 	glUniform1i(glGetUniformLocation(TMotor::instancia().getShaderSkybox()->ID, "skybox"), 0); //Cubo de texturas
     //Activamos el VAO que hemos seteado antes
     glBindVertexArray(VAO);

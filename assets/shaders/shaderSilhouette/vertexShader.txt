@@ -8,13 +8,11 @@ layout (location = 2) in vec3 aNormal; //Normal
 layout (location = 3) in vec3 aTangents; //Tangentes
 layout (location = 4) in vec3 aBitangents; //Bitangentes
 
-//Uniforms para las distintas matrices necesarias para calcular la MVP
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+//Uniform para la matriz MVP
+uniform mat4 mvp;
 
 void main()
 {
     //Calcular posicion final del pixel a partir de la multiplicacion de la MVP por la posicion del  vertice
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    gl_Position = mvp * vec4(aPos, 1.0);
 }

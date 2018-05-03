@@ -15,10 +15,10 @@ out data{
     vec3 worldNormal; //Normal del vertice en coordenadas del mundo
 } vs_out;
 
-//Uniforms para las distintas matrices necesarias para calcular la MVP
+//Uniforms para la matriz MVP
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+uniform mat4 transInvModel;
+uniform mat4 mvp;
 
 void main()
 { 
@@ -31,8 +31,8 @@ void main()
     //Pasar el vector normal a coordenadas del mundo
     //Multiplicarlo por la traspuesta de la inversa de la esq. izq. superior de la matriz model
     //Aplicarle a la normal las transformaciones de la malla para adaptarla a estas
-    vs_out.worldNormal = mat3(transpose(inverse(model))) * aNormal;
+    vs_out.worldNormal = mat3(transInvModel) * aNormal;
 
     //Calcular posicion final del pixel a partir de la multiplicacion de la MVP por la posicion del  vertice
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    gl_Position = mvp * vec4(aPos, 1.0);
 }

@@ -69,6 +69,7 @@ public:
 	TGestorRecursos *getGR();
 	bool getRenderDebug();
 	GestorSonido *getGestorSonido();
+	glm::mat4 getV();
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
@@ -81,7 +82,7 @@ public:
 	// DIBUJADO
 	void clean();
 	void draw(int tipo);
-	void drawCamera(Shader *s);
+	void drawCamera();
 	void drawLight(Shader *s);
 	
 	void toEulerAngle(float x,float y,float z, float w, float& roll, float& pitch, float& yaw);
@@ -149,4 +150,7 @@ protected:
 
 	obj3D* objMapa;
 	obj3D* objElementos;
+
+	glm::mat4 v;
+
 };

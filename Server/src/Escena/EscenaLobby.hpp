@@ -7,6 +7,7 @@
 
 #include "Escena.hpp"
 #include "Timer.hpp"
+#include "Server.hpp"
 
 class EscenaLobby : public Escena {
 public:
@@ -34,7 +35,6 @@ private:
 	int nElementos; // Numeros para la IP (los ultimos 3)
 	int nElementos2;
 	std::string ipConexion;
-	Client *client;
 	bool iniciar;
 	bool iniciado;
 	bool conectado;

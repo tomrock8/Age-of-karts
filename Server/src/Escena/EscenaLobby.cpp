@@ -1,6 +1,10 @@
 #include "EscenaLobby.hpp"
 
 EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tipo) {
+	
+	Server::getInstancia()->CreateServerInterface();
+	Server::getInstancia()->ServerStartup();
+	
 	end = false;
 	nElementos = 0;
 	nElementos2 = 0;
@@ -28,10 +32,10 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 		//Offline 
 		offline = true;
 		count = 0;
-		client = Client::getInstancia();
+		//client = Client::getInstancia();
 
-		if (client->getClientes().size() == 0)
-			client->setArrayClients("", 3, false, true, -1);
+		//if (client->getClientes().size() == 0)
+		//	client->setArrayClients("", 3, false, true, -1);
 	}
 	else {
 		//Online con ip, cargada por sesion anterior 
@@ -134,11 +138,11 @@ void EscenaLobby::update() {
 					ImGui::ShowDemoWindow(&show_demo_window);
 			}
 		}else{
-			std::vector<structClientes> clientes = client->getClientes();
+			//std::vector<structClientes> clientes = client->getClientes();
 
-			for (int i=0;i<clientes.size();i++){
-				mostrarInfoLobby(i);
-			}
+			//for (int i=0;i<clientes.size();i++){
+			//	mostrarInfoLobby(i);
+			//}
 		}
 	}
 	ImGui::Text(infoLobby->c_str());
@@ -155,15 +159,15 @@ void EscenaLobby::updateLobbyOnline(){
 		nElementos2 = time->getTimer();	//tiempo de mostrar informacion conectado (actualizacion puntos suspensivos)
 		nElementos = time->getTimer();	//tiempo limite para conectar
 		if (firstInit) {						//con ip introducida por teclado
-			client = Client::getInstancia();
-			client->CreateClientInterface();
-			client->SetIP(ipConexion);
-			client->ClientStartup();
+			//client = Client::getInstancia();
+			//client->CreateClientInterface();
+			//client->SetIP(ipConexion);
+			//client->ClientStartup();
 
 		}
 		else {								//con ip recordada por sesion
-			client = Client::getInstancia();
-			client->setNetloaded(false);
+			//client = Client::getInstancia();
+			//client->setNetloaded(false);
 		}
 		iniciado = true;
 	}
@@ -188,12 +192,13 @@ void EscenaLobby::updateLobbyOnline(){
 			
 				nElementos2 = time->getTimer();
 			}
-			if (!client->getConnected()) 
-				ImGui::Text(connecting.c_str());
+			//if (!client->getConnected()) 
+			//	ImGui::Text(connecting.c_str());
 				
-			if (client->ReceivePackets() == 3) {			//en caso de saltar already connected, tratamos de actualizar la informacion a partir del servidor
-				client->ActualizarClienteConectado();
-			}
+			//if (client->ReceivePackets() == 3) {			//en caso de saltar already connected, tratamos de actualizar la informacion a partir del servidor
+			//	client->ActualizarClienteConectado();
+			//}
+			/*
 			if (client->ReceivePackets() == 1 || time->getTimer() - nElementos > 8) {			//si la respuesta es 1, significa que se ha producido un error (conexion, tiempo agotadod de servidor,etc). 
 																						//O bien se ha acabado el tiempo para conectar
 				//reseteamos parametros
@@ -203,8 +208,10 @@ void EscenaLobby::updateLobbyOnline(){
 				client->ShutDownClient();
 				nElementos = time->getTimer();
 			}
+			*/
 
 		//si despues de todo se ha recibido conexion y cliente esta conectado mostramos informacion relativa
+		/*
 		if (client->getConnected()) {
 			debugClientInfo();
 			nElementos = time->getTimer();
@@ -212,10 +219,12 @@ void EscenaLobby::updateLobbyOnline(){
 			ImGui::Text("Conexion establecida!\n");
 			mostrarInfoLobby(-1);
 		}
+		*/
 	}
 }
 
 void EscenaLobby::debugClientInfo(){
+	/*
 	static std::vector<float> ping;
 	float vec[10];
 	int vec2[10];
@@ -233,11 +242,12 @@ void EscenaLobby::debugClientInfo(){
 	ImGui::Text(client->getClientStats(2).c_str());
 	ImGui::Text(client->getClientStats(1).c_str());
 	
-	
+	*/
 }
 
 void EscenaLobby::mostrarInfoLobby(int indice) {
 	//Inicializacion variables cliente
+	/*
 	std::vector<structClientes> clientes = client->getClientes();
 	int size = clientes.size();
 	int id_player;
@@ -415,11 +425,12 @@ void EscenaLobby::mostrarInfoLobby(int indice) {
 		infoLobby->append("\n\nIP conexion: ");
 		infoLobby->append(iphost);
 	}
-	
+	*/
 }
 
 
 void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a texto (tipo de personaje)
+	/*
 	if (client->getClientes().at(i).tipoCorredor == 0)
 		infoLobby->append("GLADIADOR ");
 	else if (client->getClientes().at(i).tipoCorredor == 1)
@@ -428,20 +439,21 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a texto (tipo 
 		infoLobby->append("VIKINGO ");
 	else if (client->getClientes().at(i).tipoCorredor == 3)
 		infoLobby->append("GUERRERO CHINO ");
+	*/
 }
 
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		end = true;
+		return Escena::tipo_escena::SALIR;
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end == true) {
 		//if(conectado)
 		if (offline) {
-			client->BorrarClientes();
+			//client->BorrarClientes();
 		}
 		else if (iniciar) {
 			nElementos = time->getTimer();
-			client->ShutDownClient();
+			//client->ShutDownClient();
 		}
 
 		iniciar = false;
@@ -453,6 +465,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS && !selection) {
 		//Space==Control de ready/Iniciar partida
+		/*
 		if (!pressed) {
 			pressed = true;
 			if (conectado) {
@@ -484,6 +497,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 			 
 		}
+		*/
 	}
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS && !selection) {
 		//Left==change character (one side)
@@ -491,10 +505,11 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			pressed = true;
 			if (conectado) {
 				cout << "Entro en cambiar jugador izquierda\n";
-				client->ChangeCharacter(false);
+				//client->ChangeCharacter(false);
 				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 			}
 			if (offline) {
+				/*
 				std::vector<structClientes> clientes = client->getClientes();
 				int k = count;
 				if (clientes.at(k).tipoCorredor == 0) {
@@ -503,6 +518,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				else {
 					client->setArrayClients(clientes.at(k).ip, clientes.at(k).tipoCorredor - 1, clientes.at(k).ready, clientes.at(k).corredorJugador, k);
 				}
+				*/
 			}
 		}
 
@@ -513,10 +529,11 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			pressed = true;
 			if (conectado) {
 				cout << "Entro en cambiar jugador derecha\n";
-				client->ChangeCharacter(true);
+				//client->ChangeCharacter(true);
 				//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 			}
 			if (offline) {
+				/*
 				std::vector<structClientes> clientes = client->getClientes();
 				int k = count;
 				if (clientes.at(k).tipoCorredor == 3) {
@@ -525,6 +542,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				else {
 					client->setArrayClients(clientes.at(k).ip, clientes.at(k).tipoCorredor + 1, clientes.at(k).ready, clientes.at(k).corredorJugador, k);
 				}
+				*/
 			}
 		}
 	}
@@ -538,11 +556,12 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		//Online: Selccionar opcion/introducir texto | Anyadir clientes offline
 		if (!pressed) {
 			if (offline) {
+				/*
 				if (client->getClientes().size() < 6) {
 					client->setArrayClients("", 3, true, false, -1);
 					//cout<<"client size: "<<client->getClientes().size()<<endl;
 				}
-
+				*/
 			}
 			pressed = true;
 		}
@@ -551,6 +570,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		//Online: Selccionar opcion/introducir texto | Borrar clientes offline
 		if (!pressed) {
 			if (offline) {
+				/*
 				if (client->getClientes().size() > 1) {
 					int l = client->getClientes().size() - 1;
 					client->BorrarCliente(l);
@@ -558,7 +578,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 						count--;
 					}
 				}
-
+				*/
 			}
 			pressed = true;
 		}
@@ -567,7 +587,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		//Online: Introducir texto | Offline: Cambiar jugador/IA
 		if (!pressed) {
 			if (offline) {
-
+				/*
 				std::vector<structClientes> clientes = client->getClientes();
 				int k = count;
 				if (k != 0) {
@@ -578,18 +598,21 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 						client->setArrayClients(clientes.at(k).ip, clientes.at(k).tipoCorredor, false, true, k);
 					}
 				}
+				*/
 			}
 			pressed = true;
 		}
 	}
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS && !selection && offline) {
 		if (!pressed) {
+			/*
 			if (client->getClientes().size() - 1 > count) {
 				count++;
 			}
 			else {
 				count = 0;
 			}
+			*/
 			pressed = true;
 		}
 	}
@@ -600,7 +623,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				count--;
 			}
 			else {
-				count = client->getClientes().size() - 1;
+				//count = client->getClientes().size() - 1;
 			}
 			pressed = true;
 		}
@@ -609,8 +632,8 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	//textoUI->setText(this->texto.c_str());
 
 	if (iniciado)
-		if (client->getStarted())
-			return Escena::tipo_escena::ONLINE;
+		//if (client->getStarted())
+		//	return Escena::tipo_escena::ONLINE;
 
 
 	return Escena::tipo_escena::LOBBY;

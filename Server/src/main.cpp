@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
 
 	TMotor::instancia();
 	//GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
-	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
+	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::LOBBY);
 
 	//Creamos el gestor de imagenes para el HUD
 	TGestorImagenes::getInstacia();

@@ -6,9 +6,9 @@
 #include "Corredor.hpp"
 #include "GestorJugadores.hpp"
 
-#define MAX_PLAYERS 10
+#define MAX_PLAYERS_CLIENTS 10
 
-struct structClientes{
+struct structClientesClient{
     std::string ip;
     int tipoCorredor;
     bool ready;
@@ -48,7 +48,7 @@ public:
 	int getNumPlayers();
 	int getNumClients();
 	int getMaxPlayers();
-	std::vector<structClientes> getClientes();
+	std::vector<structClientesClient> getClientes();
 	bool getStarted();
 	std::string getClientStats(int i);
 
@@ -94,7 +94,7 @@ private:
 	bool pressed;
 	bool pressed2;
 	bool pressed3;
-	std::vector<structClientes> clientes;
+	std::vector<structClientesClient> clientes;
 	
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 

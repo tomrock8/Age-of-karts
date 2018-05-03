@@ -268,7 +268,7 @@ int Client::ReceivePackets() {
 		RakNet::RakString paramRakString;
 		std::string paramString;
 
-		structClientes clientAux;
+		structClientesClient clientAux;
 		//switch para comprobar el tipo de paquete recibido
 		switch (packetIdentifier)
 		{
@@ -839,7 +839,7 @@ int Client::getMaxPlayers() {
 }
 
 
-std::vector<structClientes> Client::getClientes() {
+std::vector<structClientesClient> Client::getClientes() {
 	return clientes;
 }
 
@@ -852,7 +852,7 @@ void Client::setNetloaded(bool b) {
 
 void Client::setArrayClients(std::string ip, int tipo, bool rdy, bool corredorJ, int nuevo) {
 	controlPlayer = clientes.size();
-	structClientes clientAux;
+	structClientesClient clientAux;
 	clientAux.ip = ip;
 	clientAux.tipoCorredor = tipo;
 	clientAux.ready = rdy;

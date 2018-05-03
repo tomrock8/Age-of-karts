@@ -1264,7 +1264,7 @@ void Corredor::update() {
 
 	/*
 	if(strcmp(cuboNodo->getName(),"Jugador")==0)
-	cout<<actual->getID()-7<<endl;
+	cout<<actual->getID()<<endl;
 	*/
 	if (vueltas > maxvueltas) {
 		estado->setEstadoCarrera(EstadosJugador::estado_carrera::FIN);

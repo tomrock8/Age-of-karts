@@ -1,0 +1,16 @@
+//Especificar version de Opengl a utilizar
+#version 330
+
+//Color final de la linea
+out vec4 fragColor;
+
+//Variable de entrada desde el vertex shader
+in vec2 textCoords;
+
+//Uniform
+uniform sampler2D image; //Textura del billboard
+ 
+void main (void) {
+    //Asignamos a cada billboard la imagen que le corresponde
+    fragColor = texture(image, textCoords);
+}

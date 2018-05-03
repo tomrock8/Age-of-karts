@@ -387,7 +387,15 @@ void CorredorIA::seguirWaypoint() {
 	
 	if (distanciaCentro < distanciaLado1 && distanciaCentro < distanciaLado2 && distanciaCentro < distanciaLado3 && distanciaCentro < distanciaLado4) {
 		//if(posCoche.distance(siguiente->getPosicion())>50)
+		if(!enemigo)
 		valor=0;
+		else{
+			int random = rand() % 100 + 1;
+			if(random>50)
+			valor=1;
+			else
+			valor=2;
+		}
 	}
 	
 		/*
@@ -409,22 +417,23 @@ void CorredorIA::seguirWaypoint() {
 	switch(valor){
 
 		case 0:
+		
 		if(posCoche.distance(siguiente->getPosicion())>25)
 		calculoAnguloGiro(siguiente->getPosicion());
-
-		cout<<posCoche.distance(siguiente->getPosicion())<<endl;
+			
+		//cout<<posCoche.distance(siguiente->getPosicion())<<endl;
 		break;
 		case 1:
 		if(posCoche.distance(siguiente->getVector2())>25)
 		calculoAnguloGiro(siguiente->getVector2());
 
-		cout<<posCoche.distance(siguiente->getVector2())<<endl;
+		//cout<<posCoche.distance(siguiente->getVector2())<<endl;
 		break;
 		case 2:
 		if(posCoche.distance(siguiente->getVector3())>25)
 		calculoAnguloGiro(siguiente->getVector3());
 
-		cout<<posCoche.distance(siguiente->getVector3())<<endl;
+		//cout<<posCoche.distance(siguiente->getVector3())<<endl;
 		break;
 
 	}
@@ -1010,6 +1019,9 @@ void CorredorIA::ActualizarRaytest() {
 				enemigo = false;
 				Vision = true;
 			}
+		}
+		if(enemigo){
+			enemigo=true;
 		}
 
 	}

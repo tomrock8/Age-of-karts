@@ -57,7 +57,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	direccionRuedas = btVector3(0, -1, 0);
 	rotacionRuedas = btVector3(-1, 0, 0);
-	suspension = btScalar(1.5f); // cuanto mas valor el chasis mas alto respecto a las ruedas
+	suspension = btScalar(2.f); // cuanto mas valor el chasis mas alto respecto a las ruedas
 	anchoRueda = btScalar(0.4);			  //0.4
 	radioRueda = btScalar(0.5);			  //No menor de 0.4 sino ni se mueve (ruedas pequenyas)
 	alturaConexionChasis = btScalar(1.2); //influye mucho en la acceleracion de salida
@@ -67,7 +67,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	//VALORES POR DEFECTO
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
-	Masa = btScalar(400);
+	Masa = btScalar(800);
 	FuerzaMaxima = btScalar(400); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	indiceGiroAlto = btScalar(0.4);
@@ -269,7 +269,7 @@ void Corredor::InicializarFisicasRuedas() {
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	float masar = 0.003f;
+	float masar = 0.02f;
 	float radio = 1.5;
 	float ancho = 1.2;
 	btVector3 HalfExtents(1, 1, 1);
@@ -378,15 +378,15 @@ void Corredor::InicializarFisicasRuedas() {
 	//Restricciones para las ruedas
 	btVector3 axisA(1.f, 1.f, 1.f);
 	btVector3 axisB(1.f, 1.f, 1.f);
-	btVector3 pivotA(3.f, 5.f, 3.f);
+	btVector3 pivotA(3.f, 5.f, 2.f);
 	btVector3 pivotB(0.f, 0.f, 0.f);
 
 	restriccion1 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda1, pivotA, pivotB, axisA, axisB, false);
-	pivotA = btVector3(-3.f, 5.f, 3.f);
+	pivotA = btVector3(-3.f, 5.f, 2.f);
 	restriccion2 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda2, pivotA, pivotB, axisA, axisB, false);
-	pivotA = btVector3(-3.f, 5.f, -3.f);
+	pivotA = btVector3(-3.f, 5.f, -2.f);
 	restriccion3 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda3, pivotA, pivotB, axisA, axisB, false);
-	pivotA = btVector3(3.f, 5.f, -3.f);
+	pivotA = btVector3(3.f, 5.f, -2.f);
 	restriccion4 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda4, pivotA, pivotB, axisA, axisB, false);
 
 	//restriccion1->enableAngularMotor(true, 1, 0);
@@ -484,11 +484,11 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 	for (int i = 0; i < vehiculo->getNumWheels(); i++) {
 		btWheelInfo &wheel = vehiculo->getWheelInfo(i);
 		wheel.m_suspensionStiffness = btScalar(20);    // a mas valor mas altura del chasis respecto a las ruedas va en funcion de compresion y relajacion
-		wheel.m_wheelsDampingCompression = btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
-		wheel.m_wheelsDampingRelaxation = btScalar(0.5) * 2 * btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
+		wheel.m_wheelsDampingCompression = 4.2f;//btScalar(0.3) * 2 * btSqrt(wheel.m_suspensionStiffness); //Derrape a mayor giro //btScalar(0.3)*2*btSqrt(wheel.m_suspensionStiffness);  //btScalar(0.8) //valor anterior=2.3f; 
+		wheel.m_wheelsDampingRelaxation = 3.2f;//btScalar(0.5) * 2 * btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f; 
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = btScalar(0);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
-		wheel.m_maxSuspensionForce = 10000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
+		wheel.m_maxSuspensionForce = 30000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa) 
 		wheel.m_maxSuspensionTravelCm = 10000.f; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 										   
 	}
 
@@ -1204,7 +1204,7 @@ void Corredor::limitadorVelocidad() {
 }
 
 void Corredor::comprobarSueloRuedas() {
-	/*
+	
 		int cont=0;
 		for(int i = 0; i < vehiculo->getNumWheels(); i++){
 		if(!vehiculo->getWheelInfo(i).m_raycastInfo.m_isInContact){
@@ -1216,9 +1216,10 @@ void Corredor::comprobarSueloRuedas() {
 		}
 
 		if(cont==4){
-
+		CuerpoColisionChasis->setLinearVelocity(btVector3(CuerpoColisionChasis->getLinearVelocity().getX(),-30,CuerpoColisionChasis->getLinearVelocity().getZ()));
+		CuerpoColisionChasis->setAngularVelocity(btVector3(0,0,0));
 		}
-	*/
+	
 }
 
 void Corredor::recolocarWaypoint() {
@@ -1232,7 +1233,7 @@ void Corredor::recolocarWaypoint() {
 	trans.setRotation(quaternion);
 
 	CuerpoColisionChasis->setCenterOfMassTransform(trans);
-	resetFuerzas();
+	//resetFuerzas();
 }
 
 //---------------------------------------//
@@ -1325,53 +1326,52 @@ void Corredor::actualizarRuedas() {
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
 	
 	//rueda1
-	CuerpoColisionRueda1->clearForces();
-	CuerpoColisionRueda1->setLinearVelocity(zeroVector);
-	CuerpoColisionRueda1->setAngularVelocity(zeroVector);
+	
 	CuerpoColisionRueda1->setCenterOfMassTransform(ruedas);
 	rueda1->setPosition(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+altura,ruedas.getOrigin().getZ());
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda1->setRotation(axis, angle);
+	CuerpoColisionRueda1->clearForces();
+	CuerpoColisionRueda1->setLinearVelocity(zeroVector);
 	//rueda1->setRotation(180,0,0);
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
 	
-	CuerpoColisionRueda2->clearForces();
-	CuerpoColisionRueda2->setLinearVelocity(zeroVector);
-	CuerpoColisionRueda2->setAngularVelocity(zeroVector);
+	
 	CuerpoColisionRueda2->setCenterOfMassTransform(ruedas);
 	rueda2->setPosition(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+altura,ruedas.getOrigin().getZ());
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda2->setRotation(axis, angle);
-	
+	CuerpoColisionRueda2->clearForces();
+	CuerpoColisionRueda2->setLinearVelocity(zeroVector);
 
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
 	
-	CuerpoColisionRueda4->clearForces();
-	CuerpoColisionRueda4->setLinearVelocity(zeroVector);
-	CuerpoColisionRueda4->setAngularVelocity(zeroVector);
+	
+	//CuerpoColisionRueda4->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda4->setCenterOfMassTransform(ruedas);
 	rueda4->setPosition(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+altura,ruedas.getOrigin().getZ());
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda4->setRotation(axis, angle);
-	
+	CuerpoColisionRueda4->clearForces();
+	CuerpoColisionRueda4->setLinearVelocity(zeroVector);
 
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
 	
-	CuerpoColisionRueda3->clearForces();
-	CuerpoColisionRueda3->setLinearVelocity(zeroVector);
-	CuerpoColisionRueda3->setAngularVelocity(zeroVector);
+	
+	//CuerpoColisionRueda3->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda3->setCenterOfMassTransform(ruedas);
 	rueda3->setPosition(ruedas.getOrigin().getX(),ruedas.getOrigin().getY()+altura,ruedas.getOrigin().getZ());
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda3->setRotation(axis, angle);
-
+	CuerpoColisionRueda3->clearForces();
+	CuerpoColisionRueda3->setLinearVelocity(zeroVector);
 
 }
 

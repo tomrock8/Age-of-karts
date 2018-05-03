@@ -81,7 +81,7 @@ void EscenaJuego::init() {
 	}
 
 	// Gravedad
-	gravedad = -55.0f;
+	gravedad = -10.0f;
 	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
 
 	//----------------------------

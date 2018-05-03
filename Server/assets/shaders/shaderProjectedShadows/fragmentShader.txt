@@ -1,0 +1,39 @@
+//Especificar version de Opengl a utilizar
+#version 330 core
+
+//Color final de cada fragmento
+out vec4 FragColor;
+
+// Variables de entrada desde el VertexShader
+in data{
+    vec3 worldPos; // Fragmento en coordenadas del mundo 
+    vec3 lightPosition; //Posicion de la luz
+}fs_in;
+
+//Uniforms
+uniform vec4 lightDirection; //Direccion de la luz
+
+void main()
+{             
+    //Comprobamos si se trata de una luz puntual o dirigida
+    if (lightDirection.w < 0.1){ //Si es una luz puntual, el fragmento siempre va a proyectar sombra
+        //Asignamos el color negro a cada fragmento y una transparencia de 0.4 para poder ver el color o textura del elemento que haya debajo
+        FragColor = vec4(vec3(0.0f), 1.0f);
+    }else{ //Si es una luz dirigida, debemos comprobar si el fragmento esta dentro del foco para ver si proyecta sombra o no
+        //Calcular la direccion entre la fuente de luz y la posicion en el mundo del fragmento
+        vec3 lightD = normalize(fs_in.lightPosition - fs_in.worldPos);
+        //Comprobar si el fragmento esta dentro del foco mediante el producto escalar entre el vector direccion de la luz y el vector entre la luz y el fragmento
+        float inside = dot(lightD, normalize(vec3(-lightDirection))); 
+        //Si el fragmento es dentro del foco..
+        if ( inside > 0.5 /*coseno de 60 grados*/ ){
+            //Lo pintamos con la transparencia normal
+            FragColor = vec4(vec3(0.0f), 0.4f);
+        }else{
+            //Sino lo pintamos totalmente transparente
+            FragColor = vec4(vec3(0.0f), 0.0f);
+        }
+    }
+    
+
+    
+} 

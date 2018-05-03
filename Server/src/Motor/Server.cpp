@@ -9,7 +9,7 @@ Server *Server::instancia = NULL;
 
 Server *Server::getInstancia() {
 	if (instancia == NULL)
-		instancia = new Server(int);
+		instancia = new Server(6);
 
 	return instancia;
 }
@@ -859,7 +859,7 @@ int Server::getCommands(){
                 GestorJugadores *jugadores = GestorJugadores::getInstancia();
                 players = jugadores->getJugadores();
                 if(objeto < 9 && objeto > -1 && index < jugadores->getNumJugadores() && index > -1){
-                    players[index]->setTipoObj(objeto);
+                    players[index]->setTipoObj((EstadosJugador::estado_objeto)objeto);
                 }else std::cout << "Parametros incorrectos\n";
             }
         }

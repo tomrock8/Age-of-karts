@@ -1,0 +1,21 @@
+//Especificar version de Opengl a utilizar
+#version 330 core
+
+//Recoger los datos de los vertices en los buffers correctamente (segun orden de envio en el programa)
+layout (location = 0) in vec3 aPos; //Posicion 
+layout (location = 1) in vec2 aTexCoords; //Coordenadas de textura
+
+//Variable de salida al fragment
+out vec2 textCoords;
+
+//Matriz model del elemento hud
+uniform mat4 model;
+
+
+void main()
+{
+    //Coordenadas de textura para cada vertice del elemento hud
+    textCoords = aTexCoords;
+    //Posicion final del pixel en pantalla
+    gl_Position = model * vec4(aPos, 1.0);
+}

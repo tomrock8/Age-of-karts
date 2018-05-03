@@ -1,0 +1,67 @@
+# Blender MTL File: 'mapa4.0.blend'
+# Material Count: 5
+
+newmtl MetaMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas/Meta_normal.png
+map_Kd texturas/meta_diffuse.png
+map_Ks texturas/Meta_specular.png
+
+newmtl barcoMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas/Barco_Normal.png
+map_Kd texturas/Barco_Diffuse.png
+map_Ks texturas/Barco_Specular.png
+
+newmtl marMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.020088 0.313328 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas/mar_normal.png
+map_Kd texturas/mar_diffuse.png
+map_Ks texturas/mar_specular.png
+
+newmtl palmera1MAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texturas/palmera1_diffuse.png
+map_Bump texturas/palmera1_normal.png
+map_Ks texturas/palmera1_specular.png
+
+newmtl palmera2MAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texturas/palmera2_difuse.png
+map_Bump texturas/palmera2_normal.png
+map_Ks texturas/palmera2_specular.png

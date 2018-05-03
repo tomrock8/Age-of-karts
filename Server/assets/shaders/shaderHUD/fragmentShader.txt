@@ -1,0 +1,24 @@
+//Especificar version de Opengl a utilizar
+#version 330 core
+
+// Variable de salida del Fragment
+out vec4 FragColor; //Color final del pixel
+
+//Variable de entrada del vertex shader
+in vec2 textCoords;
+
+//Textura del elemento hud
+uniform sampler2D ourTexture;
+
+//Color del elemento hud
+uniform vec4 ourColor;
+
+void main()
+{
+    //Se asigna la textura al vertice en funcion de las coordenadas de textura
+    if (ourColor.w < 0.1){
+        FragColor = texture(ourTexture, textCoords);
+    }else{
+        FragColor = ourColor;
+    }
+}

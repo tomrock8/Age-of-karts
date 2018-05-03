@@ -70,6 +70,7 @@ private:
 	btVector3 posicion_aux;
 	int timerRecolocar;
 	std::string texto;
+	float valorGiroFuerte;
 };
 
 #endif /* CORREDORIA_H */

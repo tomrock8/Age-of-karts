@@ -190,12 +190,12 @@ void Corredor::setParametros() {
 		FuerzaMaxima = btScalar(3800);
 		Fuerza = FuerzaMaxima;
 		//----VELOCIDAD-------
-		velocidadMedia = 360;
+		velocidadMedia = 375;
 		velocidadMaximaTurbo = 490;
 		velocidadMaxima = velocidadMedia;
 		//----GIRO/MANEJO-----
 		indiceGiroAlto = btScalar(0.4);
-		indiceGiroBajo = btScalar(0.075);
+		indiceGiroBajo = btScalar(0.063);
 		velocidadLimiteGiro = 150;
 		//------PESO------
 		//Masa = btScalar(400);
@@ -208,12 +208,12 @@ void Corredor::setParametros() {
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;
 		//----VELOCIDAD-------
-		velocidadMedia = 370;
+		velocidadMedia = 380;
 		velocidadMaximaTurbo = 495;
 		velocidadMaxima = velocidadMedia;
 		//----GIRO/MANEJO-----
 		indiceGiroAlto = btScalar(0.4);
-		indiceGiroBajo = btScalar(0.08);
+		indiceGiroBajo = btScalar(0.065);
 		velocidadLimiteGiro = 130;
 		//------PESO------
 		//Masa = btScalar(400);
@@ -226,12 +226,12 @@ void Corredor::setParametros() {
 		FuerzaMaxima = btScalar(3600); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;
 		//----VELOCIDAD-------
-		velocidadMedia = 360;
+		velocidadMedia = 375;
 		velocidadMaximaTurbo = 490;
 		velocidadMaxima = velocidadMedia;
 		//----GIRO/MANEJO-----
 		indiceGiroAlto = btScalar(0.4);
-		indiceGiroBajo = btScalar(0.085);
+		indiceGiroBajo = btScalar(0.07);
 		velocidadLimiteGiro = 180;
 		//------PESO------
 		//Masa = btScalar(400);
@@ -249,7 +249,7 @@ void Corredor::setParametros() {
 		velocidadMaxima = velocidadMedia;
 		//----GIRO/MANEJO-----
 		indiceGiroAlto = btScalar(0.4);
-		indiceGiroBajo = btScalar(0.08);
+		indiceGiroBajo = btScalar(0.06);
 		velocidadLimiteGiro = 110;
 		//------PESO------
 		//Masa = btScalar(1200);
@@ -1186,10 +1186,10 @@ void Corredor::desacelerar() {
 	vehiculo->setSteeringValue(0, 0);
 	vehiculo->setSteeringValue(0, 1);
 
-	vehiculo->setBrake(160, 0);
-	vehiculo->setBrake(160, 1);
-	vehiculo->setBrake(160, 2);
-	vehiculo->setBrake(160, 3);
+	vehiculo->setBrake(200, 0);
+	vehiculo->setBrake(200, 1);
+	vehiculo->setBrake(200, 2);
+	vehiculo->setBrake(200, 3);
 
 	if (pitchMotor > 0.5f) pitchMotor -= 0.01f;
 }

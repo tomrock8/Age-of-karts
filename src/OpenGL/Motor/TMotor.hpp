@@ -7,6 +7,7 @@
 #include "TTransform.hpp"
 #include "TGestorRecursos.hpp"
 #include "TNodo.hpp"
+#include "TAnimacion.hpp"
 #include "obj3D.hpp"
 #include "cameraThird.hpp"
 #include "hud.hpp"
@@ -41,6 +42,8 @@ public:
 	obj3D *newCameraNode(const char * name, const char* parentNode);
 	//cameraThird * newCamera3ThPerson(const char * name, const char * parentName);
 	obj3D *newLightNode(const char * name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode);
+	obj3D * newAnimation(const char * name, const char * path, const char * parentNode, int framesIni, int framesFin);
+	TAnimacion * createAnimation(const char * path, int framesIni, int framesFin);
 	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode,bool sta);
 	void precarga(const char * modelo);
 
@@ -131,6 +134,7 @@ protected:
 
 	// Malla
 	TMalla  *createMesh(const char *fich,bool sta);
+	TNodo * createAnimationNode(TNodo * padre, TAnimacion * mesh, const char * name);
 	TNodo * createMeshNode(TNodo * padre, TMalla * mesh, const char * name);
 	// Transformacion
 	TTransform * createTransformation();

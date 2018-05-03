@@ -227,7 +227,7 @@ void EscenaJuego::init() {
 void EscenaJuego::dibujar() {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	std::vector<Corredor*> pj = jugadores->getJugadores();
-
+	//static_cast<TAnimacion*>(pj.at(0)->getNodo()->getNode()->getEntidad())->draw(TMotor::instancia());
 	//------- RENDER ----------
 	if (debug) {
 		for (int i = 0; i < pj.size(); i++) {

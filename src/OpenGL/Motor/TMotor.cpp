@@ -244,7 +244,61 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 	return new obj3D(nodo, name, contID);
 	
 }
+obj3D *TMotor::newAnimation(const char *name, const char *path, const char* parentNode, int framesIni, int framesFin) {
+	// E S C A L A D O
+	string *nameEsc = new string("escalado_" + (string)name);
+	TTransform *scaleMesh = createTransformation();
+	TNodo *scaleNodeMesh = createTransformationNode(getNode(parentNode), scaleMesh, nameEsc->c_str());
 
+	// R O T A C I O N
+	string *nameRot = new string("rotacion_" + (string)name);
+	TTransform *rotateMesh = createTransformation();
+	if (strcmp(parentNode, "escena_raiz") != 0)	rotateMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getPadre()->getEntidad())->getMatriz());
+	TNodo *rotationNodeMesh = createTransformationNode(scaleNodeMesh, rotateMesh, nameRot->c_str());
+
+	// T R A S L A C I O N
+	string *nameTras = new string("traslacion_" + (string)name);
+	TTransform *traslationMesh = createTransformation();
+	if (strcmp(parentNode, "escena_raiz") != 0)	traslationMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getEntidad())->getMatriz());
+	TNodo *traslationNodeMesh = createTransformationNode(rotationNodeMesh, traslationMesh, nameTras->c_str());
+
+
+	// N O D O
+	/*cout << "\nContenido de mallas en TMotor\n";
+	for (int i = 0; i < gestorRecursos->getRecursoMallas().size(); i++) {
+	cout << "MALLA MOTOR: " << gestorRecursos->getRecursoMallas().at(i)->getNombre() << "\n";
+	}*/
+
+	TAnimacion *anim = TMotor::instancia().createAnimation(path, framesIni, framesFin);
+	TNodo  *nodo = TMotor::instancia().createAnimationNode(traslationNodeMesh, anim, name);
+	//if (strcmp(name, "mapa") == 0) {
+	//	objMapa = new obj3D(nodo, name, contID);
+	//	return objMapa;
+	//}
+	//if (strcmp(name, "elementos") == 0) {
+	//	objElementos = new obj3D(nodo, name, contID);
+	//	return objElementos;
+	//}
+
+	contID++;
+	return new obj3D(nodo, name, contID);
+
+}
+TAnimacion *TMotor::createAnimation(const char *path, int framesIni, int framesFin) {
+	const char * obj = ".obj";
+	string ruta = path;
+	ruta += to_string(framesIni);
+	ruta += obj;
+	std::vector<TMalla*> animation;
+	for (int i = framesIni; i < framesFin; i++) {
+		string ruta = path;
+		ruta += to_string(i);
+		ruta += obj;
+		cout << "los objs son : " << ruta << endl;
+		animation.push_back(new TMalla(gestorRecursos->loadMesh(ruta.c_str(), false)));
+	}
+	return new TAnimacion(animation);
+}
 obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode,bool sta) {
 	// E S C A L A D O
 	string *nameEsc = new string("escalado_" + (string)name);
@@ -272,14 +326,14 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 
 	TMalla *malla = TMotor::instancia().createMesh(path,sta);
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
-	if (strcmp(name, "mapa") == 0){
-		objMapa = new obj3D(nodo, name, contID);
-		return objMapa;
-	}
-	if (strcmp(name, "elementos") == 0){
-		objElementos = new obj3D(nodo, name, contID);
-		return objElementos;
-	}
+	//if (strcmp(name, "mapa") == 0){
+	//	objMapa = new obj3D(nodo, name, contID);
+	//	return objMapa;
+	//}
+	//if (strcmp(name, "elementos") == 0){
+	//	objElementos = new obj3D(nodo, name, contID);
+	//	return objElementos;
+	//}
 
 	contID++;
 	return new obj3D(nodo, name, contID);
@@ -302,7 +356,13 @@ TMalla *TMotor::createMesh(const char *fich,bool sta) {
 	//return NULL;
 }
 
-
+TNodo  *TMotor::createAnimationNode(TNodo *padre, TAnimacion *mesh, const char* name) {
+	TNodo *nodo = new TNodo(name);
+	nodo->setPadre(padre);
+	nodo->setEntidad(mesh);
+	padre->addHijo(nodo);
+	return nodo;
+}
 TNodo  *TMotor::createMeshNode(TNodo *padre, TMalla *mesh, const char* name) {
 	TNodo *nodo = new TNodo(name);
 	nodo->setPadre(padre);

@@ -203,7 +203,11 @@ void Corredor::setParametros() {
 		num = 1;
 		break;
 	case PIRATA:
+	
+		//cuboNodo = TMotor::instancia().newAnimation("Jugador", "assets/Animations/Celebracion/PirataCelebracion_000","escena_raiz", 105, 448);
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz", false);
+
+		//cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Pirata/PirataConducion.obj", "escena_raiz", false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;

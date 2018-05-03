@@ -177,7 +177,7 @@ void Corredor::setParametrosRuedasDebug(float suspensionStiffness, float Damping
 }
 
 void Corredor::setParametros() {
-	const char* objeto = "assets/Karts/Vikingo/VikingoConduccion/vikingoConIzq.obj";
+	const char* objeto = "assets/Karts/Vikingo/vikingoConIzq.obj";
 	//cambiar parametros en funcion del tipo
 	int num = 0;
 	switch (tipojugador) {

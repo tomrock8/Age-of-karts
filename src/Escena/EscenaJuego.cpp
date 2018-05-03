@@ -11,7 +11,10 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
 	TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_1_3.png");
 	TMotor::instancia().getActiveHud()->traslateElement("vueltas", -0.83f, 0.68f);
-
+	TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "objeto", "assets/HUD/juego/objetos/vacio.png");
+	TMotor::instancia().getActiveHud()->traslateElement("objeto",  0.75f, 0.75f);
+	
+	objeto = 0;
 	puesto = 6;
 	vueltas = 1;
 	vueltas_aux=1;
@@ -781,6 +784,47 @@ void EscenaJuego::updateHUD() {
 			break;
 		case 3:
 			TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_3_3.png");
+			break;
+		}
+	}
+
+	//UPDATE OBJETOS
+
+	if (pj.at(controlPlayer)->getTipoObj() != objeto || pj.at(controlPlayer)->getTipoObj() ==8) {
+		objeto = pj.at(controlPlayer)->getTipoObj();
+		switch (pj.at(controlPlayer)->getTipoObj()) {
+		case 0:
+			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vacio.png");
+			break;
+		case 1:
+			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/flecha.png");
+			break;
+		case 2:
+			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/caja_falsa2.png");
+			break;
+		case 3:
+			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vino.png");
+			break;
+		case 4:
+			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/aceite.png");
+			break;
+		case 5:
+			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/escudo.png");
+			break;
+		case 6:
+			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/flecha3.png");
+			break;
+		case 7:
+			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/flecha_teledirigida.png");
+			break;
+		case 8:
+			if (pj.at(controlPlayer)->getCargador()==1){
+				TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vino1.png");
+			}else if (pj.at(controlPlayer)->getCargador()==2){
+				TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vino2.png");
+			}else if (pj.at(controlPlayer)->getCargador()==3){
+				TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vino3.png");
+			}
 			break;
 		}
 	}

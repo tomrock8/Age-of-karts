@@ -79,6 +79,7 @@ private:
 	bool countDownGo;
 
 	int puesto;
+	int objeto;
 	int vueltas;
 	int vueltas_aux;
 	float muestra_tiempo;

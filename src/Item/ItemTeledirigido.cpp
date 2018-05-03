@@ -1,4 +1,5 @@
 #include "ItemTeledirigido.hpp"
+#include "Pista.hpp"
 
 
 ItemTeledirigido::ItemTeledirigido(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
@@ -57,10 +58,17 @@ void ItemTeledirigido::setWaypoint(Waypoint *waypoint) {
 }
 
 void ItemTeledirigido::setWaypointActual() {
-	if (colision && idwaypoint > actual->getWaypoint()->getID() || colision && idwaypoint == 7) {
-		actual = siguiente;
+	Pista *mapa = Pista::getInstancia();
+	actual = mapa->getArrayWaypoints()[0];
 
-		siguiente = actual->getNextWaypoint();
+	if (colision && idwaypoint > actual->getWaypoint()->getID() || colision && idwaypoint == 7) {
+		actual = mapa->getArrayWaypoints()[idwaypoint-7];
+		if (actual->getID()-7==mapa->getArrayWaypoints().size()-1){
+			siguiente = mapa->getArrayWaypoints()[0];
+		}else{
+			siguiente = actual->getNextWaypoint();
+		}
+		
 
 	}
 	colision = false;

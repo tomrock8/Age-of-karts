@@ -205,7 +205,11 @@ void Corredor::setParametros() {
 		num = 1;
 		break;
 	case PIRATA:
+	
+		//cuboNodo = TMotor::instancia().newAnimation("Jugador", "assets/Animations/Celebracion/PirataCelebracion_000","escena_raiz", 105, 448);
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz", false);
+
+		//cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Pirata/PirataConducion.obj", "escena_raiz", false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;
@@ -1273,6 +1277,21 @@ void Corredor::update() {
 		estado->setEstadoCarrera(EstadosJugador::estado_carrera::FIN);
 	}
 	setPosicionSources();
+
+	//Modificamos el billboard en funcion de la posicion del corredor
+	if (posicionCarrera == 1) {
+		b->setImage("assets/HUD/juego/puesto_1.png");
+	}else if (posicionCarrera == 2) {
+		b->setImage("assets/HUD/juego/puesto_2.png");
+	}else if (posicionCarrera == 3) {
+		b->setImage("assets/HUD/juego/puesto_3.png");
+	}else if (posicionCarrera == 4) {
+		b->setImage("assets/HUD/juego/puesto_4.png");
+	}else if (posicionCarrera == 5) {
+		b->setImage("assets/HUD/juego/puesto_5.png");
+	}else {
+		b->setImage("assets/HUD/juego/puesto_6.png");
+	}
 }
 
 std::string Corredor::toString() {

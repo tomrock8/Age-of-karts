@@ -41,7 +41,7 @@ CorredorIA::CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(po
 	pertenenciaVelocidadBaja = 0;
 	pertenenciaVelocidadMedia = 0;
 	pertenenciaVelocidadAlta = 0;
-
+	valorGiroFuerte = 0.15;
 
 
 
@@ -341,26 +341,26 @@ void CorredorIA::movimiento()
 
 	case ACELERARGIRARFUERTEDERECHA://5
 		acelerar();
-		vehiculo->setSteeringValue(0.2, 0);
-		vehiculo->setSteeringValue(0.2, 1);
+		vehiculo->setSteeringValue(valorGiroFuerte, 0);
+		vehiculo->setSteeringValue(valorGiroFuerte, 1);
 		break;
 
 	case ACELERARGIRARFUERTEIZQUIERDA://6
 		acelerar();
-		vehiculo->setSteeringValue(-0.2, 0);
-		vehiculo->setSteeringValue(-0.2, 1);
+		vehiculo->setSteeringValue(-valorGiroFuerte, 0);
+		vehiculo->setSteeringValue(-valorGiroFuerte, 1);
 		break;
 
 	case FRENARGIRARFUERTEDERECHA://7
 		desacelerar();
-		vehiculo->setSteeringValue(0.2, 0);
-		vehiculo->setSteeringValue(0.2, 1);
+		vehiculo->setSteeringValue(valorGiroFuerte, 0);
+		vehiculo->setSteeringValue(valorGiroFuerte, 1);
 		break;
 
 	case FRENARGIRARFUERTEIZQUIERDA://8
 		desacelerar();
-		vehiculo->setSteeringValue(-0.2, 0);
-		vehiculo->setSteeringValue(-0.2, 1);
+		vehiculo->setSteeringValue(-valorGiroFuerte, 0);
+		vehiculo->setSteeringValue(-valorGiroFuerte, 1);
 		break;
 	}
 
@@ -374,7 +374,7 @@ void CorredorIA::seguirWaypoint() {
 	btScalar distanciaLado2 = btScalar(0);
 	btScalar distanciaLado3 = btScalar(0);
 	btScalar distanciaLado4 = btScalar(0);
-		
+	int valor;	
 	//vector 1 y 4 son los puntos de los extremos
 	btVector3 posCoche(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 	distanciaCentro = getDistanciaPunto(siguiente->getPosicion());
@@ -384,29 +384,58 @@ void CorredorIA::seguirWaypoint() {
 	distanciaLado4 = getDistanciaPunto(siguiente->getVector4());
 	
 
-
+	
 	if (distanciaCentro < distanciaLado1 && distanciaCentro < distanciaLado2 && distanciaCentro < distanciaLado3 && distanciaCentro < distanciaLado4) {
-		calculoAnguloGiro(siguiente->getPosicion());
-
+		//if(posCoche.distance(siguiente->getPosicion())>50)
+		if(!enemigo)
+		valor=0;
+		else{
+			int random = rand() % 100 + 1;
+			if(random>50)
+			valor=1;
+			else
+			valor=2;
+		}
 	}
-	else {
+	
 		/*
 		if (distanciaLado1 < distanciaCentro && distanciaLado1 < distanciaLado2 && distanciaLado1 < distanciaLado3 && distanciaLado1 < distanciaLado4) {
 			calculoAnguloGiro(siguiente->getVector1());
-
 		}*/
 		if (distanciaLado2 < distanciaCentro /*&& distanciaLado2 < distanciaLado1*/ && distanciaLado2 < distanciaLado3 /*&& distanciaLado2 < distanciaLado4*/) {
-			calculoAnguloGiro(siguiente->getVector2());
-
+			//if(posCoche.distance(siguiente->getVector2())>50)	
+			valor =1;
 		}
 		if (distanciaLado3 < distanciaCentro && distanciaLado3 < distanciaLado1 /*&& distanciaLado3 < distanciaLado2 && distanciaLado3 < distanciaLado4*/) {
-			calculoAnguloGiro(siguiente->getVector3());
-
+			//if(posCoche.distance(siguiente->getVector3())>50)
+			valor=2;
 		}/*
 		if (distanciaLado4 < distanciaCentro && distanciaLado4 < distanciaLado1 && distanciaLado4 < distanciaLado3 && distanciaLado4 < distanciaLado2) {
 			calculoAnguloGiro(siguiente->getVector4());
 
 		}*/
+	switch(valor){
+
+		case 0:
+		
+		if(posCoche.distance(siguiente->getPosicion())>25)
+		calculoAnguloGiro(siguiente->getPosicion());
+			
+		//cout<<posCoche.distance(siguiente->getPosicion())<<endl;
+		break;
+		case 1:
+		if(posCoche.distance(siguiente->getVector2())>25)
+		calculoAnguloGiro(siguiente->getVector2());
+
+		//cout<<posCoche.distance(siguiente->getVector2())<<endl;
+		break;
+		case 2:
+		if(posCoche.distance(siguiente->getVector3())>25)
+		calculoAnguloGiro(siguiente->getVector3());
+
+		//cout<<posCoche.distance(siguiente->getVector3())<<endl;
+		break;
+
 	}
 
 }
@@ -449,6 +478,7 @@ void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
 	if (angulo2 > anguloGiro)
 		anguloGiro = -anguloGiro;
 
+	//cout<<anguloGiro<<endl;
 
 }
 
@@ -459,11 +489,11 @@ void CorredorIA::logicaDifusa() {
 
 
 	//GIRO
-	pertenenciaNoGiro = FuncionTriangular(anguloGiro, -30, 0, 30);
-	pertenenciaGiroFlojoDerecha = FuncionTriangular(anguloGiro, 5, 25, 40);
-	pertenenciaGiroFlojoIzquierda = FuncionTriangular(anguloGiro, -5, -25, -40);
-	pertenenciaGiroFuerteDerecha = FuncionTriangular(anguloGiro, 30, 50, 180);
-	pertenenciaGiroFuerteIzquierda = FuncionTriangular(anguloGiro, -30, -50, -180);
+	pertenenciaNoGiro = FuncionTriangular(anguloGiro, -35, 0, 35);
+	pertenenciaGiroFlojoDerecha = FuncionTriangular(anguloGiro, 5, 30, 40);
+	pertenenciaGiroFlojoIzquierda = FuncionTriangular(anguloGiro, -5, -30, -40);
+	pertenenciaGiroFuerteDerecha = FuncionTriangular(anguloGiro, 40, 90, 180);
+	pertenenciaGiroFuerteIzquierda = FuncionTriangular(anguloGiro, -40, -90, -180);
 
 	//VELOCIDAD
 	pertenenciaVelocidadBaja = FuncionTrapezoidal(vehiculo->getCurrentSpeedKmHour(), 0, 0, 50, 150);
@@ -526,6 +556,7 @@ void CorredorIA::logicaDifusa() {
 		noGiro = true;
 		giroFuerteIzquierda = false;
 		giroFlojoIzquierda = false;
+		//cout<<"NO"<<endl;
 	}
 
 	if (pertenenciaGiroFlojoDerecha > pertenenciaNoGiro && pertenenciaGiroFlojoDerecha > pertenenciaGiroFuerteDerecha
@@ -535,6 +566,7 @@ void CorredorIA::logicaDifusa() {
 		noGiro = false;
 		giroFuerteIzquierda = false;
 		giroFlojoIzquierda = false;
+		//cout<<"GIROFlojo"<<endl;
 	}
 	if (pertenenciaGiroFuerteDerecha > pertenenciaNoGiro && pertenenciaGiroFuerteDerecha > pertenenciaGiroFlojoDerecha
 		&& pertenenciaGiroFuerteDerecha > pertenenciaGiroFlojoIzquierda && pertenenciaGiroFuerteDerecha > pertenenciaGiroFuerteIzquierda) {
@@ -543,6 +575,7 @@ void CorredorIA::logicaDifusa() {
 		noGiro = false;
 		giroFuerteIzquierda = false;
 		giroFlojoIzquierda = false;
+		//cout<<"GIROFUERTE"<<endl;
 	}
 
 	if (pertenenciaGiroFlojoIzquierda > pertenenciaNoGiro &&  pertenenciaGiroFlojoIzquierda > pertenenciaGiroFuerteIzquierda
@@ -552,6 +585,7 @@ void CorredorIA::logicaDifusa() {
 		noGiro = false;
 		giroFuerteIzquierda = false;
 		giroFlojoIzquierda = true;
+		//cout<<"GIROFlojo"<<endl;
 	}
 	if (pertenenciaGiroFuerteIzquierda > pertenenciaNoGiro && pertenenciaGiroFuerteIzquierda > pertenenciaGiroFlojoIzquierda
 		&& pertenenciaGiroFuerteIzquierda > pertenenciaGiroFlojoDerecha && pertenenciaGiroFuerteIzquierda > pertenenciaGiroFuerteDerecha) {
@@ -560,6 +594,7 @@ void CorredorIA::logicaDifusa() {
 		noGiro = false;
 		giroFuerteIzquierda = true;
 		giroFlojoIzquierda = false;
+		//cout<<"GIROFUERTE"<<endl;
 	}
 
 
@@ -985,6 +1020,9 @@ void CorredorIA::ActualizarRaytest() {
 				Vision = true;
 			}
 		}
+		if(enemigo){
+			enemigo=true;
+		}
 
 	}
 
@@ -1056,7 +1094,6 @@ void CorredorIA::vision(btScalar distancia, obj3D *nodo) {
 void CorredorIA::updateHijos() {
 
 	debugIA();
-	//cout<<"pene"<<endl;
 	//if (!debugFisicas)
 		ActualizarRaytest();
 

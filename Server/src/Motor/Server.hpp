@@ -35,6 +35,8 @@ struct structPaquetes{
 class Server
 {
     private:
+        static Server *instancia;
+
         int numSockets;
         int numIPs;
         int maxPlayers;
@@ -64,6 +66,7 @@ class Server
         void DebugServerInfo();
 
     public:
+        static Server *getInstancia();
         Server(int);
         void CreateServerInterface();
         void ServerStartup();

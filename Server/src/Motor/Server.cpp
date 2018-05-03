@@ -3,12 +3,21 @@
 #include "NetworkEnums.hpp"
 #include "CorredorRed.hpp"
 
+Server *Server::instancia = NULL;
+
 #define MAX_PLAYERS 6 //numero maximo de jugadores conectados al servidor
 
+Server *Server::getInstancia() {
+	if (instancia == NULL)
+		instancia = new Server(int);
+
+	return instancia;
+}
 
 //======================================================================
 // Se inicializan los parametros que necesita el servidor para funcionar
 //======================================================================
+
 Server::Server(int maxPlay)
 {
     started = false; //Indica si la carrera ha empezado

@@ -1272,6 +1272,21 @@ void Corredor::update() {
 		estado->setEstadoCarrera(EstadosJugador::estado_carrera::FIN);
 	}
 	setPosicionSources();
+
+	//Modificamos el billboard en funcion de la posicion del corredor
+	if (posicionCarrera == 1) {
+		b->setImage("assets/HUD/juego/puesto_1.png");
+	}else if (posicionCarrera == 2) {
+		b->setImage("assets/HUD/juego/puesto_2.png");
+	}else if (posicionCarrera == 3) {
+		b->setImage("assets/HUD/juego/puesto_3.png");
+	}else if (posicionCarrera == 4) {
+		b->setImage("assets/HUD/juego/puesto_4.png");
+	}else if (posicionCarrera == 5) {
+		b->setImage("assets/HUD/juego/puesto_5.png");
+	}else {
+		b->setImage("assets/HUD/juego/puesto_6.png");
+	}
 }
 
 std::string Corredor::toString() {

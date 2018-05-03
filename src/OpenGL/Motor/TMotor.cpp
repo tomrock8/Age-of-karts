@@ -542,14 +542,14 @@ void TMotor::draw(int tipo) {
 		objElementos->setVisible(true);*/
 		//====================================================
 		//====================================================
-
+	
+		//DIBUJADO DE LOS BILLBOARDS
+		//--------------------------
+		shaderBillboard->use();
+		for (int i = 1; i < billboards.size(); i++){
+			billboards.at(i)->draw(shaderBillboard);
+		}
 		
-	}
-
-	//Se dibujan los billboards
-	shaderBillboard->use();
-	for (int i = 1; i < billboards.size(); i++){
-		billboards.at(i)->draw(shaderBillboard);
 	}
 
 	//Se activa el shader para el dibujado del HUD

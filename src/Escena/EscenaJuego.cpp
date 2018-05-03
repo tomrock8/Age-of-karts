@@ -34,6 +34,7 @@ EscenaJuego::~EscenaJuego() {
 	delete Pista::getInstancia();
 	delete fuenteCarrera;
 	delete fuenteCountDown;
+	cout << "Destructor de Escena JUEGO. Salgo" << endl;
 }
 
 void EscenaJuego::init() {

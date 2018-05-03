@@ -19,7 +19,7 @@ struct structClientes{
     std::string ip;
     int tipoCorredor;
     bool ready;
-    vector<structPrediccion> prediccion;
+    std::vector<structPrediccion> prediccion;
 };
 
 struct structPaquetes{
@@ -47,7 +47,7 @@ class Server
         RakNet::MessageID typeID;
         RakNet::Packet *p;
 
-        vector<Corredor*> players;
+        std::vector<Corredor*> players;
         int controlPlayer;
         int numPlayers;
         bool spawned;
@@ -55,10 +55,10 @@ class Server
         int timeStamp;
 
         bool started;
-        vector<int> arrayReady;
-        vector<int> arrayTipoCorredor;
-        vector<structClientes> clientes;
-        vector<structPaquetes> paquetes;
+        std::vector<int> arrayReady;
+        std::vector<int> arrayTipoCorredor;
+        std::vector<structClientes> clientes;
+        std::vector<structPaquetes> paquetes;
 
         unsigned char GetPacketIdentifier(RakNet::Packet *p);
         void DebugServerInfo();

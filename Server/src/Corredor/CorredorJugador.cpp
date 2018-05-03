@@ -1,9 +1,10 @@
 #include "CorredorJugador.hpp"
 #include "Client.hpp"
 
-CorredorJugador::CorredorJugador(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo) : Corredor(rutaObj, pos,tipo) {
+CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(pos, tipo) {
 	checkItem = false;
-	nombre="Jugador";
+	nombre = "Jugador";
+	pressed = false;
 }
 
 /**
@@ -14,36 +15,56 @@ void CorredorJugador::movimiento() {
 
 	bool comprobadorMovimiento = false;
 
+	//Comprobador de de mando y recoleccion de inputs
+	bool mandoConectado = false;
+	const unsigned char *buttons = nullptr;
+	const float *axes = nullptr;
+	if (1 == glfwJoystickPresent(id+1)) {
+		mandoConectado = true;
+		int buttonCount;
+		buttons = glfwGetJoystickButtons(id+1, &buttonCount);
+		int axesCount;
+		axes = glfwGetJoystickAxes(id+1, &axesCount);
+		//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
+	}
+
 	//-------ENTRADA TECLADO ----------//
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_S) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[2])) {
 		frenar();
 		//vehiculo-> set
 		comprobadorMovimiento = true;
+
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[5])) {
+
 		acelerar();
 		comprobadorMovimiento = true;
+
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+	//GIRAR DERECHA
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
 		girarDerecha();
 
 		comprobadorMovimiento = true;
+
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+	//GIRAR IZQUIERDA
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) {
 		girarIzquierda();
 		comprobadorMovimiento = true;
-	}else{
-		estado->setDireccionMovimiento(RECTO);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+	else {
+		estado->setDireccionMovimiento(EstadosJugador::direccion_movimiento::RECTO);
+	}
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[1])) {
 		frenodemano(true, false);
 		comprobadorMovimiento = true;
 	}
 	else {
 		frenodemano(false, false);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-			recolocarWaypoint();
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_R) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[5])) {
+		recolocarWaypoint();
 	}
 
 	if (!comprobadorMovimiento) {
@@ -54,37 +75,78 @@ void CorredorJugador::movimiento() {
 
 }
 
-
-
-void CorredorJugador::updateHijos(){
-
-}
-
-
+void CorredorJugador::updateHijos() {}
 
 void CorredorJugador::actualizarItem() {
 
 	int direccionItem = 1;
-	setPosDisparo(btVector3(cuboNodo->getPosition().X + orientacion.getX() * 10, cuboNodo->getPosition().Y, cuboNodo->getPosition().Z + orientacion.getZ() * 10));
-	btVector3 posDisparo2(cuboNodo->getPosition().X, cuboNodo->getPosition().Y - 1, cuboNodo->getPosition().Z);
+	setPosDisparo(btVector3(cuboNodo->getPosition().x + orientacion.getX() * 10, cuboNodo->getPosition().y, cuboNodo->getPosition().z + orientacion.getZ() * 10));
+	btVector3 posDisparo2(cuboNodo->getPosition().x, cuboNodo->getPosition().y - 1, cuboNodo->getPosition().z);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) setTipoObj(1);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) setTipoObj(2);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) setTipoObj(3);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) setTipoObj(4);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) setTipoObj(5);//escudo
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6)) setTipoObj(6);//proytectil x3
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7)) setTipoObj(7);//FlechaTeledirigida
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8)) setTipoObj(8);//TurboTriple
-
-	/*if (sf::Keyboard::isKeyReleased(sf::Keyboard::P))
-	{
-		// comprobacion del item
-		if (getCheckItem() == true) {
-			setCheckItem(false);
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_1) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::FLECHA);
+			pressed = true;
 		}
 	}
-	else*/ if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_2) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::CAJA_FALSA);
+			pressed = true;
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_3) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::TURBO);
+			pressed = true;
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_4) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::ACEITE);
+			pressed = true;
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_5) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::ESCUDO);
+			pressed = true;//escudo
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_6) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::FLECHA_TRIPLE);
+			pressed = true;//proytectil x3
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_7) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::ITEM_TELEDIRIGIDO);
+			pressed = true;//FlechaTeledirigida
+		}
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_8) == GLFW_PRESS) {
+		if (!pressed) {
+			setTipoObj(EstadosJugador::estado_objeto::TURBO_TRIPLE);
+			pressed = true;//TurboTriple
+		}
+	}
+	else {
+		pressed = false;
+	}
+
+	//Comprobador de de mando y recoleccion de inputs
+	bool mandoConectado = false;
+	const unsigned char *buttons = nullptr;
+	if (1 == glfwJoystickPresent(id+1))
+	{
+		mandoConectado = true;
+		int buttonCount;
+		buttons = glfwGetJoystickButtons(id+1, &buttonCount);
+		//  || (mandoConectado && GLFW_PRESS == buttons[12]) 
+	}
+
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_P) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[0]))
 	{
 		if (getTipoObj() != 0 && !checkItem)
 		{
@@ -96,24 +158,17 @@ void CorredorJugador::actualizarItem() {
 			//Llama a la funcion de la clase padre
 			usarObjetos();
 		}
-	}else{
+	}
+	else {
 		if (getCheckItem() == true) {
 			setCheckItem(false);
 		}
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)){
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[2])) {
 		lanzarHabilidad();
 	}
 }
 
-/*
-	Comprueba si el jugador pulsa P para crear un item y lanzarlo
-*/
-std::string CorredorJugador::toString() {
-	std::string text = Corredor::toString();
-	text += "\n -- CORREDOR JUGADOR -- ";
-	return text;
-}
 bool CorredorJugador::setComprobadorMovimiento(bool s) {
 	comprobadorMovimiento = s;
 	return comprobadorMovimiento;

@@ -1,6 +1,6 @@
 #include <ctime>
 
-#include "Motor3d.hpp"
+#include "obj3D.hpp"
 #include "MotorFisicas.hpp"
 #include "DebugFisicas.hpp"
 #include "Camara3persona.hpp"
@@ -10,7 +10,6 @@
 #include "GestorCarrera.hpp"
 #include "GestorColisiones.hpp"
 #include <vector>
-#include "Graphics.hpp"
 #include "Server.hpp"
 #include "Timer.hpp"
 
@@ -19,7 +18,7 @@ const int W_WIDTH = 1024;
 const int H_WIDTH = 600;
 
 
-void UpdatePhysics(u32 TDeltaTime);
+void UpdatePhysics(unsigned int TDeltaTime);
 void UpdateRender(btRigidBody *TObject);
 
 int main()
@@ -28,19 +27,16 @@ int main()
     
     int debug;
     
-    DebugDraw *debugDraw;
-    
-    Camara3persona *camara;
+    cameraThird *camara;
     int tipoCamara;
     bool cambioCamara;
     GestorColisiones *colisiones;
     
-    int lastFPS;
-    u32 TimeStamp;
-    u32 DeltaTime;
+    std::uint32_t DeltaTime;
+    std::uint32_t TimeStamp;
     
     Server *server;
-    vector3df pos;
+    btVector3 pos;
     
     clock_t tiempoRefresco;
     clock_t tiempoRefrescoServer;
@@ -63,21 +59,14 @@ int main()
     GestorIDs::instancia().restartID(); 
     
     // Gravedad
-    MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -50.f, 0.0));
-    
-    //----------------------------
-    //	Debug Bullet
-    //----------------------------
-    debugDraw = new DebugDraw(Motor3d::instancia().getDevice());
-    debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-    MotorFisicas::getInstancia()->getMundo()->setDebugDrawer(debugDraw);
+    MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -45.f, 0.0));
     
     //-----------------------------
     //	ESCENARIO MAPA
     //-----------------------------
     Pista *pistaca = Pista::getInstancia();
-    pistaca->setMapa("assets/Mapa01/mapaIsla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
-    pistaca->getArrayWaypoints();
+    Pista::getInstancia()->setMapa("pirata");
+            
     
     //-----------------------------
     //	JUGADORES
@@ -91,31 +80,40 @@ int main()
     //-----------------------------
     //	CAMARA
     //-----------------------------
-    camara = new Camara3persona();
-    tipoCamara = 0;
-    cambioCamara = false;
+	camara = new cameraThird("camara_jugador3apersona", "escena_raiz");
     
     //-----------------------------
     //	GESTOR COLISIONES
     //-----------------------------
     colisiones = new GestorColisiones();
-    TextoPantalla *textoDebug = TextoPantalla::getInstancia();
     
     //-----------------------------
     //	TIME
     //-----------------------------
-    lastFPS = -1;
-    TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
+    TimeStamp = glfwGetTime();
     DeltaTime = 0;
-    tiempoRefresco = clock();
-    tiempoRefrescoServer = clock();
+    tiempoRefresco = glfwGetTime();
+    tiempoRefrescoServer = glfwGetTime();
+
+	// -----------------------
+	//	IMGUI
+	// -----------------------
+	bool debug_Jugador = false;
+	bool muestraDebug = true;
+	bool show_another_window=false;
+	bool muestraDebugIA=false;
+	TMotor::instancia().initDebugWindow();
+	ImGuiIO& io = ImGui::GetIO();
+	io.Fonts->AddFontDefault();
+	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
+
     // -----------------------------
     //  GAME LOOP
     // -----------------------------
     RakSleep(30);
     bool checkInit=false;
     bool iniciar=false;
-    while (Motor3d::instancia().getDevice()->run())
+    while (!glfwWindowShouldClose(TMotor::instancia().getVentana()))
     {
         
         server->ReceivePackets();
@@ -134,19 +132,10 @@ int main()
             // Gravedad
             MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, -50.f, 0.0));
             
-            //----------------------------
-            //	Debug Bullet
-            //----------------------------
-            debugDraw = new DebugDraw(Motor3d::instancia().getDevice());
-            debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-            MotorFisicas::getInstancia()->getMundo()->setDebugDrawer(debugDraw);
-            
             //-----------------------------
             //	ESCENARIO MAPA
             //-----------------------------
-            Pista *pistaca = Pista::getInstancia();
-            pistaca->setMapa("assets/Mapa01/mapaIsla.obj", "assets/Mapa01/FisicasMapaIsla.bullet", "assets/Mapa01/ObjMapa2.0.obj");
-            pistaca->getArrayWaypoints();
+	        Pista::getInstancia()->setMapa("pirata");
             
             //-----------------------------
             //	JUGADORES
@@ -160,42 +149,49 @@ int main()
             //-----------------------------
             //	CAMARA
             //-----------------------------
-            camara = new Camara3persona();
-            tipoCamara = 0;
-            cambioCamara = false;
+	        camara = new cameraThird("camara_jugador3apersona", "escena_raiz");
             
             //-----------------------------
             //	GESTOR COLISIONES
             //-----------------------------
             colisiones = new GestorColisiones();
-            TextoPantalla *textoDebug = TextoPantalla::getInstancia();
             
             //-----------------------------
             //	TIME
             //-----------------------------
-            lastFPS = -1;
-            TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
+            TimeStamp = glfwGetTime();
             DeltaTime = 0;
             tiempoRefresco = clock();
             tiempoRefrescoServer = clock();           
             checkInit=false;
             jugadores = GestorJugadores::getInstancia();
-            vector<Corredor*> pj = jugadores->getJugadores();
+            std::vector<Corredor*> pj = jugadores->getJugadores();
             for (int i = 0; i < jugadores->getNumJugadores(); i++) { 
                 pj.at(i)->getEstados()->setEstadoCarrera(0); 
                 pj.at(i)->getEstados()->setEstadoCarrera(0); 
             } 
             iniciar=false;
+
+            // -----------------------
+            //	IMGUI
+            // -----------------------
+            debug_Jugador = false;
+            muestraDebug = true;
+            show_another_window=false;
+            muestraDebugIA=false;
+            TMotor::instancia().initDebugWindow();
+            ImGuiIO& io = ImGui::GetIO();
+            io.Fonts->AddFontDefault();
+            io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
         }
         //========================================================
         //EMPIEZA UPDATE
         //========================================================
         
-        TextoPantalla *textoDebug = TextoPantalla::getInstancia();
         Pista *pistaca = Pista::getInstancia();
-        vector<Item *> items = pistaca->getItems();
+        std::vector<Item *> items = pistaca->getItems();
         jugadores = GestorJugadores::getInstancia();
-        vector<Corredor*> pj = jugadores->getJugadores();
+        std::vector<Corredor*> pj = jugadores->getJugadores();
         if(pj.size()==0){
             server->setStarted(false);
         }
@@ -212,7 +208,6 @@ int main()
             }
             if (t->getTimer()<=3 && t->getTimer()>=1){ 
                 int desc=4-t->getTimer(); 
-                textoDebug->agregar(to_string(desc)); 
             } 
             if (t->getTimer()==4){ 
                 for (int i = 0; i < jugadores->getNumJugadores(); i++) { 
@@ -223,10 +218,9 @@ int main()
             //cout<<"jugadores->getnum: "<<jugadores->getNumJugadores();
             //cout<<"size: "<<pj.size()<<endl;
             //cout << irrTimer->getTime() << endl;
-            textoDebug->limpiar();
             
-            DeltaTime = Motor3d::instancia().getDevice()->getTimer()->getTime() - TimeStamp;
-            TimeStamp = Motor3d::instancia().getDevice()->getTimer()->getTime();
+            DeltaTime = glfwGetTime() * 1000 - TimeStamp;
+            TimeStamp = glfwGetTime() * 1000;
             UpdatePhysics(DeltaTime);
             
             for (int i = 0; i < pistaca->getTamCajas(); i++) {
@@ -247,7 +241,6 @@ int main()
                         || strcmp("HabilidadGladiador", items.at(i)->getNombre()) == 0
                         || strcmp("HabilidadChino", items.at(i)->getNombre()) == 0){
 
-                            
                             pj.at(items.at(i)->getIDPadre())->setHabilidad(false);
                             
                         }
@@ -265,34 +258,19 @@ int main()
             pistaca->setItems(items);
             
             if (fin_carrera){
-                textoDebug->agregar("CARRERA FINALIZADA, PULSA F.");
             }
-            //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
             pj = jugadores->getJugadores();
             
-            camara->moveCameraControlServer();
+            //camara->moveCameraControlServer();
             
             colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
-            //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
             if (jugadores->getNumJugadores() != 0){
                 server->aumentarTimestamp();
                 for (int i = 0; i < jugadores->getNumJugadores(); i++) {
                     pj.at(i)->update();
                 }
             }
-            
-           
-            /*
-            if (jugadores->getNumJugadores() != 0) {
-                clock_t tiempoActual = clock();
-                clock_t timediff = tiempoActual - tiempoRefresco;
-                float timediff_sec = ((float)timediff) / 100000;
-                if (timediff_sec >= 0.01) {
-                    //client->PlayerMovement();
-                    tiempoRefresco = clock();
-                }
-            }
-            */     
+
             clock_t tiempoActual = clock();
             clock_t timediff = tiempoActual - tiempoRefrescoServer;
             float timediff_sec = ((float)timediff) / 100000;
@@ -313,19 +291,8 @@ int main()
             jugadores->setJugadores(pj);
         }
         if(server->getCommands()==1) return 0;
-        int fps = Motor3d::instancia().getDriver()->getFPS();
-        if (lastFPS != fps) {
-            core::stringw tmp(L"Age of karts SERVER [");
-            tmp += Motor3d::instancia().getDriver()->getName();
-            tmp += L"] fps: ";
-            tmp += fps;
-            
-            Motor3d::instancia().getDevice()->setWindowCaption(tmp.c_str());
-            lastFPS = fps;
-        }
-
-        //server->Update();
         
+
         //========================================================
         //ACABA UPDATE
         //========================================================
@@ -333,35 +300,197 @@ int main()
         //EMPIEZA DRAW
         //========================================================
         
-        jugadores = GestorJugadores::getInstancia();
-        pj = jugadores->getJugadores();
-        
+        GestorJugadores *jugadores = GestorJugadores::getInstancia();
+        std::vector<Corredor*> pj = jugadores->getJugadores();
+
         //------- RENDER ----------
-        Motor3d::instancia().iniciarDibujado();
-        Motor3d::instancia().getScene()->drawAll();
-        
-        //Todo lo que se quiera dibujar debe ir aqui abajo por la iluminacion
-        SMaterial materialDriver;
-        materialDriver.Lighting = false;
-        Motor3d::instancia().getDriver()->setTransform(video::ETS_WORLD, core::matrix4());
-        Motor3d::instancia().getDriver()->setMaterial(materialDriver);
-        
-        //Para poder dibujar lineas debug
         if (debug) {
-            SMaterial debugMat;
-            debugMat.Lighting = true;
-            Motor3d::instancia().getDriver()->setMaterial(debugMat);
-            Motor3d::instancia().getDriver()->setTransform(ETS_WORLD, IdentityMatrix);
+            for (int i = 0; i < pj.size(); i++) {
+                if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
+                    CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+                    AUXILIAR->setDebugFisicas(true);
+                    AUXILIAR->ActualizarRaytest();
+                }
+            }
             MotorFisicas::getInstancia()->getMundo()->debugDrawWorld();
         }
-        
-        Motor3d::instancia().getGUI()->drawAll();
-        Motor3d::instancia().terminarDibujado();
+        else {
+            for (int i = 0; i < pj.size(); i++) {
+                if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
+                    CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+                    if (!AUXILIAR->getDebugFisicas()) {
+                        i = pj.size();
+                    }
+                    else {
+                        AUXILIAR->setDebugFisicas(false);
+                        AUXILIAR->ActualizarRaytest();
+                    }
+                }
+            }
+	    }   
+
+        	// ------------------------------
+	// -------- IMGUI ---------------
+	// ------------------------------
+	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	Corredor *jugador = GestorJugadores::getInstancia()->getJugadores().at(controlPlayer);
+	
+	// Mostrar ventanas
+
+	ImGui_ImplGlfwGL3_NewFrame();
+	if (show_another_window){
+		ImFontAtlas* atlas = ImGui::GetIO().Fonts;
+		ImGui::StyleColorsLight(); 
+		ImGuiIO& io = ImGui::GetIO();
+
+		if (io.Fonts->Fonts.Size>1){
+			ImGui::PushFont(io.Fonts->Fonts[1]);
+		}else{
+			ImGui::PushFont(io.Fonts->Fonts[0]);
+
+		}
+	}else{
+
+		ImGui::StyleColorsClassic();
+		ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
+	}
+	if (tipoEscena != Escena::tipo_escena::ONLINE) {
+		if (muestraDebug){		
+			
+			ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+			debugPlot(controlPlayer,ImGui::GetIO().Framerate,"Frames");
+		
+			ImGui::Text("Debug del Juego!");
+			ImGui::Text("Pulsa 9 para activar - 0 desactivar");
+			ImGui::Text("Jugadores: %i", GestorJugadores::getInstancia()->getNumJugadores());
+			ImGui::Text("Elementos de fisicas: %i", MotorFisicas::getInstancia()->getMundo()->getNumCollisionObjects());
+
+			if (ImGui::SliderFloat("Gravedad", &gravedad, -100.0f, 0.0f, "%.2f", 1.0f))
+				MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
+
+			if (ImGui::Checkbox("Debug Fisicas", &debug))
+				TMotor::instancia().setDebugBullet(debug);
+
+			ImGui::Checkbox("Debug Jugador", &debug_Jugador);
+
+			ImGui::Checkbox("Debug IA", &muestraDebugIA);
+			if (debug_Jugador) {
+				
+				ImGui::Begin("Datos del Corredor Jugador", &debug_Jugador);
+				ImGui::Text(jugador->toString().c_str());
+				debugPlot(controlPlayer,jugador->getVehiculo()->getCurrentSpeedKmHour(),"Velocidad");
+				static float fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro;
+				jugador->getParametrosDebug(&fuerza, &velocidadMedia, &velocidadMaximaTurbo, &velocidadMaxima, &masa, &indiceGiroAlto, &indiceGiroBajo, &velocidadLimiteGiro);
+
+				ImGui::SliderFloat("fuerza", &fuerza, 1000.0f, 10000.0f, "%.1f", 10.0f);
+				ImGui::SliderFloat("velocidadMedia", &velocidadMedia, 100.0f, 800.0f, "%.1f", 10.0f);
+				ImGui::SliderFloat("velocidadMaximaTurbo", &velocidadMaximaTurbo, 100.0f, 800.0f, "%.1f", 10.0f);
+				ImGui::SliderFloat("velocidadMaxima", &velocidadMaxima, 100.0f, 800.0f, "%.1f", 10.0f);
+				ImGui::SliderFloat("Masa", &masa, 0.0f, 8000.0f, "%.1f", 10.0f);
+				ImGui::SliderFloat("VelocidadLimiteGiro", &velocidadLimiteGiro, 0.0f, 8000.0f, "%.1f", 100.0f);
+				ImGui::SliderFloat("indiceGiroAlto", &indiceGiroAlto, 0.0f, 1.0f, "%.4f", 0.01f);
+				ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f, "%.4f", 0.01f);
+				jugador->setParametrosDebug(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro);
+
+				static float *posicion = new float[3];
+				float *resetOri = new float[3];
+				resetOri[0] = jugador->getNodo()->getRotation().z;
+				resetOri[1] = jugador->getNodo()->getRotation().y;
+				resetOri[2] = jugador->getNodo()->getRotation().x;
+
+
+				ImGui::SliderFloat3("Posicion", posicion, -100, 100, "%.2f", 1.0f);
+				ImGui::SameLine();
+				if (ImGui::Button("Set position"))
+					jugador->setPosicion(posicion, resetOri);// Hay que pasarle solo la posicion al jugador, no al nodo
+
+				if (ImGui::CollapsingHeader("Ruedas")) {
+					static float suspensionStiffness, DampingCompression, DampingRelaxation, frictionSlip, rollInfluence, suspForce, suspTravelCm;
+					jugador->getParametrosRuedasDebug(&suspensionStiffness, &DampingCompression, &DampingRelaxation, &frictionSlip, &rollInfluence, &suspForce, &suspTravelCm);
+					ImGui::SliderFloat("suspensionStiffness", &suspensionStiffness, 0.0f, 50.0f);
+					ImGui::SliderFloat("frictionSlip", &frictionSlip, 1000.0f, 50000.0f, "%.1f", 100.0f);
+					ImGui::SliderFloat("rollInfluence", &rollInfluence, 0.0f, 0.1f, "%.3f", 0.001f);
+					ImGui::SliderFloat("suspForce", &suspForce, 1000.0f, 50000.0f, "%.1f", 100.0f);
+					ImGui::SliderFloat("suspTravelCm", &suspTravelCm, 1000.0f, 50000.0f, "%.1f", 100.0f);
+					jugador->setParametrosRuedasDebug(suspensionStiffness, DampingCompression, DampingRelaxation, frictionSlip, rollInfluence, suspForce, suspTravelCm);
+					ImGui::Text("DampingCompression: %.3f", DampingCompression);
+					ImGui::SameLine();
+					ImGui::Text("DampingRelaxation: %.3f", DampingRelaxation);
+				}
+				
+				if (ImGui::Button("Cerrar"))
+					debug_Jugador = false;
+				ImGui::End();
+			}
+
+			if (muestraDebugIA){
+				std::vector<Corredor*> pj = GestorJugadores::getInstancia()->getJugadores();
+				ImGui::Begin("Datos del Corredor IA", &muestraDebugIA);
+				for (int i = 0; i < pj.size(); i++) {
+					if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
+						
+						CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+						ImGui::Text("--------------");
+						ImGui::Text("IA %i:",i);
+						sr=AUXILIAR->getDebugIA();
+						debugRageIA(i);
+						
+						debugPlot(i,AUXILIAR->getVehiculo()->getCurrentSpeedKmHour(),"Velocidad");
+						sr+=AUXILIAR->toString();
+						ImGui::Text(sr.c_str());
+						
+						
+					}
+				}
+		
+				ImGui::End();
+				sr="";
+			}
+		}
+	}
+	
+	if (vueltas_aux!=vueltas){
+		show_another_window=true;
+		muestra_tiempo=t->getTimer();
+	}
+	if (show_another_window){
+			int display_w,display_h;
+			glfwGetFramebufferSize( TMotor::instancia().getVentana() , &display_w , &display_h );
+			ImGui::SetNextWindowPos(ImVec2((display_w-300)/2, (display_h-500)/2));
+			if (vueltas<=3){
+				ImGui::SetNextWindowSize( ImVec2( (float)302 , (float)80 ) );
+			}else{
+				ImGui::SetNextWindowSize( ImVec2( (float)290 , (float)40 ) );
+			}
+			ImGui::SetNextWindowBgAlpha(0.6f); 
+            ImGui::Begin("Another Window", &show_another_window,  ImGuiWindowFlags_NoResize 
+			| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
+			| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard 
+			| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal);
+			if (vueltas<=3){
+				ImGui::Text("Tiempo vuelta: ");
+				ImGui::Text(to_string(jugador->getTiempoVuelta()).c_str());
+			}else{
+				ImGui::Text("Has quedado: ");
+				TMotor::instancia().getActiveHud()->traslateElement("puesto", 0.0f, 0.3f);
+				muestra_tiempo=t->getTimer();
+				//ImGui::Text(to_string(jugador->getPosicionCarrera()).c_str());
+			}
+			vueltas_aux=vueltas;
+			if (t->getTimer()-muestra_tiempo>=4){
+				show_another_window = false;
+			}
+           
+            ImGui::End();
+			
+        }
+		ImGui::PopFont();
         //========================================================
         //ACABA DRAW
         //========================================================
         
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && Motor3d::instancia().getDevice()->isWindowActive()){
+        if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS){
             server->ShutDownServer();
             Motor3d::instancia().getDevice()->drop();
             return 0;
@@ -373,39 +502,54 @@ int main()
 }
 
 
-void UpdatePhysics(u32 TDeltaTime) {
-    MotorFisicas *bullet = MotorFisicas::getInstancia();
-    btDynamicsWorld *mundo = bullet->getMundo();
-    vector<btRigidBody *> objetos = bullet->getObjetos();
-    mundo->stepSimulation(TDeltaTime * 0.01f, 1);
-    int c = 0;
-    for (int i=0;i<objetos.size();i++){
-        c++;
-        UpdateRender(objetos.at(i));
-    }
+void UpdatePhysics(unsigned int TDeltaTime) {
+    //TDeltaTime= TDeltaTime*2;
+	MotorFisicas *bullet = MotorFisicas::getInstancia();
+	btDynamicsWorld *mundo = bullet->getMundo();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
+	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
+	int c = 0;
+	for (int i = 0; i < objetos.size(); i++) {
+		c++;
+		UpdateRender(objetos.at(i));
+	}
 }
 
 // Passes bullet's orientation to irrlicht
 void UpdateRender(btRigidBody *TObject) {
-    IMeshSceneNode *Node = static_cast<IMeshSceneNode *>(TObject->getUserPointer());
-    // Set position
-    btVector3 Point = TObject->getCenterOfMassPosition();
-    
-    Pista *mapa = Pista::getInstancia();
-    //btTransform t;
-    //TObject->getMotionState()->getWorldTransform(t);	
-    //Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
-    if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
-        Node->setPosition(vector3df((f32)Point[0], (f32)Point[1] + 2, (f32)Point[2]));
-    }
-    else
-        Node->setPosition(vector3df((f32)Point[0], (f32)Point[1], (f32)Point[2]));
-    // Set rotation
-    vector3df Euler;
-    const btQuaternion& TQuat = TObject->getOrientation();
-    quaternion q(TQuat.getX(), TQuat.getY(), TQuat.getZ(), TQuat.getW());
-    q.toEuler(Euler);
-    Euler *= RADTODEG;
-    Node->setRotation(Euler);
-    
+    obj3D *Node = static_cast<obj3D *>(TObject->getUserPointer());
+	// Set position
+	btVector3 Point = TObject->getCenterOfMassPosition();
+
+	Pista *mapa = Pista::getInstancia();
+
+	//btTransform t;
+	//TObject->getMotionState()->getWorldTransform(t);	
+	//Node->setPosition(vector3df(t.getOrigin().getX(),t.getOrigin().getY(),t.getOrigin().getZ()));
+	if (strcmp(Node->getName(), "Jugador") == 0 || strcmp(Node->getName(), "JugadorIA") == 0 || strcmp(Node->getName(), "JugadorRed") == 0) {
+		//cout << "POSICION: " <<Point[0]<<","<< Point[1]<<","<< Point[2]<<endl; 
+		Node->setPosition((float)Point[0], (float)Point[1] + 2, (float)Point[2]);
+	}else{
+
+		if(strcmp(Node->getName(), "rueda1") == 0 && strcmp(Node->getName(), "rueda2") == 0 && strcmp(Node->getName(), "rueda3") == 0 &&
+		strcmp(Node->getName(), "rueda4") == 0){
+
+		}else{
+		
+		Node->setPosition((float)Point[0], (float)Point[1], (float)Point[2]);
+
+		}
+
+		}
+
+	// Set rotation
+	if(strcmp(Node->getName(), "rueda1") != 0 && strcmp(Node->getName(), "rueda2") != 0 && strcmp(Node->getName(), "rueda3") != 0 &&
+		strcmp(Node->getName(), "rueda4") != 0){
+
+	const btQuaternion& TQuat = TObject->getOrientation();
+	glm::vec3 axis(TQuat.getAxis().getX(), TQuat.getAxis().getY(), TQuat.getAxis().getZ());
+	float angle = TQuat.getAngle() * RADTODEG;
+	Node->setRotation(axis, angle);
+		
+		}
 }

@@ -1,20 +1,24 @@
 #include "Turbo.hpp"
+#include "GestorIDs.hpp"
+#include "Timer.hpp"
+#include "MotorFisicas.hpp"
+#include "TMotor.hpp"
+
 //el turbo se creara con una id y una posicion que se recojera por fichero 
 Turbo::Turbo(btVector3 pos, bool estado) {
 	turboActivo = estado;
 	turboTocado = estado;
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	
-	vector<btRigidBody *> objetos = bullet->getObjetos();
-	turbo = Motor3d::instancia().getScene()->addCubeSceneNode(5.0f);
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
+	turbo = TMotor::instancia().newMeshNode("Turbo","assets/wall/wall.obj","escena_raiz",false);
 	escala = btVector3(2.5f, 0.2f, 1.25f);
-	turbo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
-	turbo->setMaterialFlag(EMF_LIGHTING, false);
+	//turbo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
+	//turbo->setMaterialFlag(EMF_LIGHTING, false);
 	//turbo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	GestorIDs::instancia().setIdentifier(turbo, "Turbo");
 	id = turbo->getID();
 	//asignar un color , a falta de ponerle una textura 
-	Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(turbo->getMesh(), SColor(255, 255, 0, 0));
 	//posicion origen 
 	transform;
 	transform.setIdentity();
@@ -57,7 +61,8 @@ void Turbo::setTurboActivo(Corredor *c, bool s) {
 	if (turboActivo && turboTocado) {//si esta activo almacenamos tiempo y aumentamos fuerza
 		c->SetFuerzaVelocidad(150000);
 		c->acelerar();
-		tiempo = Motor3d::instancia().getDevice()->getTimer()->getTime();
+		Timer *t = Timer::getInstancia();
+		tiempo = t->getTimer();
 	}
 	else c->SetFuerzaVelocidad(100000);
 	turboTocado = false;

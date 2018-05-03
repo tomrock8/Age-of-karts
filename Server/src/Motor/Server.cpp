@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include <iostream>
 #include "NetworkEnums.hpp"
+#include "CorredorRed.hpp"
 
 #define MAX_PLAYERS 6 //numero maximo de jugadores conectados al servidor
 
@@ -409,7 +410,7 @@ void Server::ReceivePackets()
 							tj=Corredor::tipo_jugador::CHINO;
 						}
 						std::cout << "Creo jugador \n";
-						jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
+						jugador = new CorredorRed(pos2[i], tj);
 						jugador->setID(i);
 						players.push_back(jugador);
 						prediccionAux.timeStamp = 0;
@@ -543,17 +544,17 @@ void Server::ReceivePackets()
 							parambool = true;
 						}
 						//std::cout << "Posicion Z: " << paramFloat << "\n";
-						paramFloat = players.at(id)->getNodo()->getRotation().X - clientes.at(id).prediccion.at(i).rotacion[0];
+						paramFloat = players.at(id)->getNodo()->getRotation().x - clientes.at(id).prediccion.at(i).rotacion[0];
 						if(paramFloat > diff || paramFloat < -diff){
 							//std::cout << "Rotacion X\n";
 							parambool = true;
 						}
-						paramFloat = players.at(id)->getNodo()->getRotation().Y - clientes.at(id).prediccion.at(i).rotacion[1];
+						paramFloat = players.at(id)->getNodo()->getRotation().y - clientes.at(id).prediccion.at(i).rotacion[1];
 						if(paramFloat > diff || paramFloat < -diff){
 							//std::cout << "Rotacion Y\n";
 							parambool = true;
 						}
-						paramFloat = players.at(id)->getNodo()->getRotation().Z - clientes.at(id).prediccion.at(i).rotacion[2];
+						paramFloat = players.at(id)->getNodo()->getRotation().z - clientes.at(id).prediccion.at(i).rotacion[2];
 						if(paramFloat > diff || paramFloat < -diff){
 							//std::cout << "Rotacion Z\n";
 							parambool = true;
@@ -575,9 +576,9 @@ void Server::ReceivePackets()
 					bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getX());
 					bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getY());
 					bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getZ());
-					bsOut.Write(players.at(id)->getNodo()->getRotation().X);
-					bsOut.Write(players.at(id)->getNodo()->getRotation().Y);
-					bsOut.Write(players.at(id)->getNodo()->getRotation().Z);
+					bsOut.Write(players.at(id)->getNodo()->getRotation().x);
+					bsOut.Write(players.at(id)->getNodo()->getRotation().y);
+					bsOut.Write(players.at(id)->getNodo()->getRotation().z);
 					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 				}
 				
@@ -779,9 +780,9 @@ void Server::refreshServer()
 		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getX());
 		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getY());
 		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getZ());
-		bsOut.Write(players.at(i)->getNodo()->getRotation().X);
-		bsOut.Write(players.at(i)->getNodo()->getRotation().Y);
-		bsOut.Write(players.at(i)->getNodo()->getRotation().Z);
+		bsOut.Write(players.at(i)->getNodo()->getRotation().x);
+		bsOut.Write(players.at(i)->getNodo()->getRotation().y);
+		bsOut.Write(players.at(i)->getNodo()->getRotation().z);
 		bsOut.Write(estados->getEstadoMovimiento());
 		bsOut.Write(estados->getDireccionMovimiento());
 		bsOut.Write(estados->getEstadoObjeto());

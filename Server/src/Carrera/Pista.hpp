@@ -1,72 +1,64 @@
 #ifndef PISTA_H
 #define PISTA_H
 
-#include <iostream>
-#include "IrrlichtLib.hpp"
-#include "btBulletDynamicsCommon.h"
-#include "Motor3d.hpp"
-#include "MotorFisicas.hpp"
-#include "Item.hpp"
-#include <string>
-#include <fstream>
 #include <vector>
-#include "Waypoint.hpp"
-#include "Turbo.hpp"
+
+#include "Item.hpp"
 #include "Caja.hpp"
-#include "BulletWorldImporter/btBulletWorldImporter.h"
+#include "Turbo.hpp"
 
-using namespace std;
-
-class Pista
-{
+class Pista {
 
 public:
+
 	//Destructor
 	~Pista();
+	void createMap(const char * path);
+	// CARGA MAPA
+	void loadWaypoints(const char *waypoints);
+	void loadPirateMapElements();
 	
-	static Pista *getInstancia();
-	void InicializarFisicas();
-	void BorrarFisicas();
-	
+
 	// METODOS SET
-	void setMapa(stringw mapa, const char *fisicas, const char *waypoint);
-	void setItems(vector<Item *> itemMetodo);
+	void setMapa(const char* name);
+	void setItems(std::vector<Item *> itemMetodo);
+	void setArrayCaja(std::vector<Caja*> caja);
+
 	// METODOS GET
-	vector<Item *> getItems();
-	vector<Turbo*> getArrayTurbo();
-	vector<Caja*> getArrayCaja();
-	void setArrayCaja(vector<Caja*> caja);
-	int getTamCajas();
-	vector<Waypoint*> getArrayWaypoints();
+	static Pista *getInstancia();
+	
+	int getTamCajas(); 
+	int getTamArrayWaypoints();
+
+	std::vector<Item *> getItems();
+	std::vector<Turbo*> getArrayTurbo();
+	std::vector<Caja*> getArrayCaja();
+	std::vector<Waypoint*> getArrayWaypoints();
+	std::vector<glm::vec3> getParrilla();
 	Turbo* getTurbo();
 	Turbo* getTurbo(int id);
-	int getTamArrayWaypoints();
+	
+	
 
 private:
 	Pista(void);
 	static Pista *instancia;
-	
-	//MUNDO
-	btRigidBody *CuerpoColisionMapa;
-	btCollisionShape *FormaColision;
-	btDefaultMotionState *MotionState; // posicion del cuerpo de colision
-	
+
+	obj3D *Mapa;
+
 	int tamWaypoints;
-	vector<Waypoint*> arrayWaypoints;
-
 	int tamTurbos;
-	vector<Turbo*> arrayTurbos;
-	
 	int tamCajas;
-	vector<Caja*> arrayCajas;
-	
-	ISceneNode *Mapa;
 
-	vector<Item *> Items;
-
-
-	//fisicas del mapa
-	btBulletWorldImporter *fisicasMapa;
+	std::vector<Waypoint*> arrayWaypoints;
+	std::vector<Turbo*> arrayTurbos;
+	std::vector<Caja*> arrayCajas;
+	std::vector<Item *> Items;
+	std::vector<glm::vec3> parrilla;
+	//Variables para la deteccion del mapa
+	const char *nameMap;
+	const char *path;
+	const char *wayPoints;
 };
 
 #endif /* PISTA_H */

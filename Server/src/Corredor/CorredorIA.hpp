@@ -1,23 +1,23 @@
 #ifndef CORREDORIA_H
 #define CORREDORIA_H
 
-#include <iostream>
-#include "IrrlichtLib.hpp"
 #include "Corredor.hpp"
-#include "Motor3d.hpp"
-#include "Waypoint.hpp"
 #include "ArbolDecision.hpp"
 
 using namespace std;
-typedef enum {NADA1,ACELERAR,FRENAR,ACELERARGIRARDERECHA,ACELERARGIRARIZQUIERDA,ACELERARGIRARFUERTEDERECHA,ACELERARGIRARFUERTEIZQUIERDA,
-FRENARGIRARFUERTEDERECHA,FRENARGIRARFUERTEIZQUIERDA,
-DISTANCIAOBJETIVOCAJA,DISTANCIAOBJETIVOENEMIGO,DISTANCIAOBJETIVOTURBO,SEGUIRWAYPOINT,USAROBJETO,USARHABILIDAD} acciones_IA;
+typedef enum {
+	NADA1, ACELERAR, FRENAR,
+	ACELERARGIRARDERECHA, ACELERARGIRARIZQUIERDA, ACELERARGIRARFUERTEDERECHA, ACELERARGIRARFUERTEIZQUIERDA,
+	FRENARGIRARFUERTEDERECHA, FRENARGIRARFUERTEIZQUIERDA,
+	DISTANCIAOBJETIVOCAJA, DISTANCIAOBJETIVOENEMIGO, DISTANCIAOBJETIVOTURBO,
+	SEGUIRWAYPOINT, USAROBJETO, USARHABILIDAD
+} acciones_IA;
 
 
 class CorredorIA : public Corredor
 {
-  public:
-	CorredorIA(stringw rutaObj, btVector3 pos,Corredor::tipo_jugador tipo);
+public:
+	CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo);
 	~CorredorIA();
 	void deleteArbol();
 
@@ -27,40 +27,41 @@ class CorredorIA : public Corredor
 	void reposicionar();
 	void calculoAnguloGiro(btVector3 posicion);
 	void ActualizarRaytest();
-	void comprobarDireccion(ISceneNode *nodo);
+	void comprobarDireccion(obj3D *nodo);
 	//Logica difusa
 	void logicaDifusa();
 	double FuncionTrapezoidal(double valor, double a, double b, double c, double d);
 	double FuncionTriangular(double valor, double a, double b, double c);
-	void vision(btScalar distancia,ISceneNode *nodo);
+	void vision(btScalar distancia, obj3D *nodo);
 	void seguirWaypoint();
 	void setDebugFisicas(bool activo);
 	bool getDebugFisicas();
 	void debugIA();
+	std::string getDebugIA();
 
-  private:
+private:
 
 	btScalar anguloGiro;
 	btScalar distanciaObjetivo;
-	double pertenenciaCerca,pertenenciaMedia,pertenenciaLejos;
-	double pertenenciaGiroFuerteDerecha,pertenenciaGiroFlojoDerecha,pertenenciaNoGiro,pertenenciaGiroFuerteIzquierda,pertenenciaGiroFlojoIzquierda;
-	double pertenenciaVelocidadBaja,pertenenciaVelocidadMedia,pertenenciaVelocidadAlta;
-	
-	bool distanciaCerca,distanciaMedia,distanciaLejos;
-	bool velocidadBaja,velocidadMedia,velocidadAlta;
-	bool giroFuerteDerecha,giroFlojoDerecha,noGiro,giroFuerteIzquierda,giroFlojoIzquierda;
-	bool caja,turbo,enemigo,Vision,Objeto;
+	double pertenenciaCerca, pertenenciaMedia, pertenenciaLejos;
+	double pertenenciaGiroFuerteDerecha, pertenenciaGiroFlojoDerecha, pertenenciaNoGiro, pertenenciaGiroFuerteIzquierda, pertenenciaGiroFlojoIzquierda;
+	double pertenenciaVelocidadBaja, pertenenciaVelocidadMedia, pertenenciaVelocidadAlta;
+
+	bool distanciaCerca, distanciaMedia, distanciaLejos;
+	bool velocidadBaja, velocidadMedia, velocidadAlta;
+	bool giroFuerteDerecha, giroFlojoDerecha, noGiro, giroFuerteIzquierda, giroFlojoIzquierda;
+	bool caja, turbo, enemigo, Vision, Objeto;
 	bool Waypoint;
 	bool enemigoatras;
 	bool enemigolados;
 	bool habilidad;
 	bool debugFisicas;
 
-	btScalar distanciaCaja,distanciaTurbo,distanciaEnemigo;
+	btScalar distanciaCaja, distanciaTurbo, distanciaEnemigo;
 
 	ArbolDecision *arbolconduccion;
-	ArbolDecision *arbolobjetos;		
-	
+	ArbolDecision *arbolobjetos;
+
 	int accionActualConduccion;
 	int accionActualObjetos;
 	btVector3 posicionCaja;
@@ -68,6 +69,7 @@ class CorredorIA : public Corredor
 	btVector3 posicionEnemigo;
 	btVector3 posicion_aux;
 	int timerRecolocar;
+	std::string texto;
 };
 
 #endif /* CORREDORIA_H */

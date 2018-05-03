@@ -293,7 +293,7 @@ void EscenaJuego::renderDebug() {
 			
 			ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-			debugPlot(controlPlayer,ImGui::GetIO().Framerate,"Frames");
+			debugPlot(9,ImGui::GetIO().Framerate,"Frames");
 		
 			ImGui::Text("Debug del Juego!");
 			ImGui::Text("Pulsa 9 para activar - 0 desactivar");
@@ -882,7 +882,7 @@ void EscenaJuego::debugPlot(int j,float k,std::string str){		//Funcion que sirve
 	static std::vector<std::vector<float>> valores;
 	float vec[10];
 	int vec2[10];
-	valores.resize(6);
+	valores.resize(10);
 	valores.at(j).resize(100);
 	valores.at(j).erase(valores.at(j).begin());
 	float f=k;

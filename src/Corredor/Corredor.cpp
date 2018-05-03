@@ -67,7 +67,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	//VALORES POR DEFECTO
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
-	Masa = btScalar(800);
+	Masa = btScalar(450);
 	FuerzaMaxima = btScalar(400); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	indiceGiroAlto = btScalar(0.4);
@@ -1220,8 +1220,10 @@ void Corredor::comprobarSueloRuedas() {
 		}
 
 		if(cont==4){
-		CuerpoColisionChasis->setLinearVelocity(btVector3(CuerpoColisionChasis->getLinearVelocity().getX(),-30,CuerpoColisionChasis->getLinearVelocity().getZ()));
-		CuerpoColisionChasis->setAngularVelocity(btVector3(0,0,0));
+			if (estado->getEstadoMovimiento()!=EstadosJugador::estado_movimiento::DERRAPA){
+				CuerpoColisionChasis->setLinearVelocity(btVector3(CuerpoColisionChasis->getLinearVelocity().getX(),-30,CuerpoColisionChasis->getLinearVelocity().getZ()));
+				CuerpoColisionChasis->setAngularVelocity(btVector3(0,0,0));
+			}
 		}
 	
 }
@@ -1237,7 +1239,7 @@ void Corredor::recolocarWaypoint() {
 	trans.setRotation(quaternion);
 
 	CuerpoColisionChasis->setCenterOfMassTransform(trans);
-	//resetFuerzas();
+	resetFuerzas();
 }
 
 //---------------------------------------//
@@ -1351,8 +1353,6 @@ void Corredor::actualizarRuedas() {
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda1->setRotation(axis, angle);
-	CuerpoColisionRueda1->clearForces();
-	CuerpoColisionRueda1->setLinearVelocity(zeroVector);
 	//rueda1->setRotation(180,0,0);
 	//rueda2
 	ruedas = vehiculo->getWheelTransformWS(1);
@@ -1363,8 +1363,7 @@ void Corredor::actualizarRuedas() {
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda2->setRotation(axis, angle);
-	CuerpoColisionRueda2->clearForces();
-	CuerpoColisionRueda2->setLinearVelocity(zeroVector);
+
 
 	//rueda3
 	ruedas = vehiculo->getWheelTransformWS(2);
@@ -1376,8 +1375,7 @@ void Corredor::actualizarRuedas() {
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda4->setRotation(axis, angle);
-	CuerpoColisionRueda4->clearForces();
-	CuerpoColisionRueda4->setLinearVelocity(zeroVector);
+	
 
 	//rueda4
 	ruedas = vehiculo->getWheelTransformWS(3);
@@ -1389,8 +1387,18 @@ void Corredor::actualizarRuedas() {
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda3->setRotation(axis, angle);
-	CuerpoColisionRueda3->clearForces();
-	CuerpoColisionRueda3->setLinearVelocity(zeroVector);
+	
+
+	if (estado->getEstadoMovimiento()!=EstadosJugador::estado_movimiento::DERRAPA){
+		CuerpoColisionRueda1->clearForces();
+		CuerpoColisionRueda1->setLinearVelocity(zeroVector);
+		CuerpoColisionRueda2->clearForces();
+		CuerpoColisionRueda2->setLinearVelocity(zeroVector);
+		CuerpoColisionRueda3->clearForces();
+		CuerpoColisionRueda3->setLinearVelocity(zeroVector);
+		CuerpoColisionRueda4->clearForces();
+		CuerpoColisionRueda4->setLinearVelocity(zeroVector);
+	}
 
 }
 

@@ -17,6 +17,7 @@
 #include <math.h>
 #include "imgui.h"
 #include "imgui_impl_glfw_gl3.h"
+#include "billboard.hpp"
 
 #define WIDTH 1600
 #define HEIGHT 900
@@ -48,6 +49,7 @@ public:
 	void precarga(const char * modelo);
 
 	void newHud(const char* n);
+	billboard *newBillboard(obj3D *o);
 	//float *toEuler(double pich, double yaw, double roll);
 
 	// METODOS GET
@@ -56,6 +58,7 @@ public:
 	GLfloat getHeight();
 	TNodo *getSceneNode();
 	TNodo *getActiveCamera();
+	glm::mat4 getV();
 	obj3D *getObjActiveCamera();
 	hud *getHud(const char* n);
 	hud *getActiveHud();
@@ -72,7 +75,6 @@ public:
 	TGestorRecursos *getGR();
 	bool getRenderDebug();
 	GestorSonido *getGestorSonido();
-	glm::mat4 getV();
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
@@ -103,10 +105,12 @@ protected:
 	Shader *shaderDebug; //Shader para el modo debug de Bullet
 	Shader *shaderCartoon; //Shader para el efecto cartoon
 	Shader *shaderSilhouette; //Shader para crear el contorno de los objetos en el efecto cartoon
+	Shader *shaderBillboard; //Shader para dibujar los diferentes billboards 
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)
 	TNodo *activeCamera;       // Camara activa del vector
+	glm::mat4 v;  //Matriz view de la camara activa
 
 	//Luces
 	std::vector <TNodo *> lights;
@@ -118,6 +122,15 @@ protected:
 
 	//Sonido
 	GestorSonido *gestorSonido;
+
+	//Skybox del mapa
+	Skybox *skybox;
+
+	//Debug Bullet
+	std::vector <GLfloat> vertices; //Array de vertices para los puntos de las lineas
+
+	//Billboards
+	std::vector <billboard *> billboards; //Array de los diferentes billboards utilizados en el motor
 
 	bool renderDebug;
 	bool debugBullet = false;
@@ -145,16 +158,8 @@ protected:
 	// Luz
 	TLuz    *createLight();
 	TNodo   *createLightNode(TNodo * padre, TLuz * luz, const char* name);
-	
-	//Skybox del mapa
-	Skybox *skybox;
-
-	//Debug Bullet
-	std::vector <GLfloat> vertices; //Array de vertices para los puntos de las lineas
 
 	obj3D* objMapa;
 	obj3D* objElementos;
-
-	glm::mat4 v;
 
 };

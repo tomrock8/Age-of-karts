@@ -62,6 +62,7 @@ TMotor::TMotor() {
 	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
 	shaderCartoon = new Shader("assets/shaders/shaderCartoon/vertexShader.txt", "assets/shaders/shaderCartoon/fragmentShader.txt", nullptr);
 	shaderSilhouette = new Shader("assets/shaders/shaderSilhouette/vertexShader.txt", "assets/shaders/shaderSilhouette/fragmentShader.txt", nullptr);
+	shaderBillboard = new Shader("assets/shaders/shaderBillboard/vertexShader.txt", "assets/shaders/shaderBillboard/fragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 
 	gestorSonido = new GestorSonido();
@@ -109,6 +110,9 @@ void TMotor::close() {
 	delete gestorSonido;
 	for (int i = 0; i < HUDs.size(); i++) {
 		delete HUDs[i];
+	}
+	for (int i = 0; i < billboards.size(); i++) {
+		delete billboards[i];
 	}
 }
 
@@ -598,7 +602,13 @@ void TMotor::draw(int tipo) {
 		objElementos->setVisible(true);*/
 		//====================================================
 		//====================================================
-
+	
+		//DIBUJADO DE LOS BILLBOARDS
+		//--------------------------
+		shaderBillboard->use();
+		for (int i = 1; i < billboards.size(); i++){
+			billboards.at(i)->draw(shaderBillboard);
+		}
 		
 	}
 
@@ -606,9 +616,8 @@ void TMotor::draw(int tipo) {
 	glDisable(GL_DEPTH_TEST);
 	shaderHUD->use();
 	
-
 	//Dibujamos el hud activo
-	activeHud->drawHud(shaderHUD);//}
+	activeHud->drawHud(shaderHUD);
 	glEnable(GL_DEPTH_TEST);
 
 	int display_w, display_h;
@@ -682,7 +691,7 @@ void TMotor::drawLight(Shader *s) {
 
 //Funcion para crear un nuevo hud dentro del motor
 void TMotor::newHud(const char* n) {
-	//creamos el nuevo hud con su nombre
+	//Creamos el nuevo hud con su nombre
 	hud* h = new hud(n);
 	//Lo añadimos al array de hud
 	HUDs.push_back(h);
@@ -726,4 +735,14 @@ void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float
 		roll = euler.x;
 		pitch = euler.y;
 		yaw = euler.z;*/
+}
+
+// --- BILLBOARD ---
+billboard *TMotor::newBillboard(obj3D *o){
+	//creamos el nuevo hud con su nombre
+	billboard* b = new billboard(o);
+	//Lo añadimos al array de hud
+	billboards.push_back(b);
+	//Lo devolvemos
+	return b;
 }

@@ -248,6 +248,6 @@ void Item::setIDPadre(int id) {
 
 void Item::setColision(int id) {
 	idwaypoint = id;
-	//cout<<"idwaypoint: "<<idwaypoint<<endl;
+	//cout<<"idwaypoint: "<<idwaypoint-7<<endl;
 	colision = true;
 }

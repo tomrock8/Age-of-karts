@@ -34,6 +34,7 @@ EscenaJuego::~EscenaJuego() {
 	delete Pista::getInstancia();
 	delete fuenteCarrera;
 	delete fuenteCountDown;
+	cout << "Destructor de Escena JUEGO. Salgo" << endl;
 }
 
 void EscenaJuego::init() {
@@ -81,7 +82,7 @@ void EscenaJuego::init() {
 	}
 
 	// Gravedad
-	gravedad = -45.0f;
+	gravedad = -55.0f;
 	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
 
 	//----------------------------
@@ -107,9 +108,9 @@ void EscenaJuego::init() {
 	Corredor* jugador;
 
 	btVector3 pos2[6];
-	pos2[0].setX(Pista::getInstancia()->getParrilla().at(0).x);
-	pos2[0].setY(Pista::getInstancia()->getParrilla().at(0).y);
-	pos2[0].setZ(Pista::getInstancia()->getParrilla().at(0).z);
+	pos2[0].setX(Pista::getInstancia()->getParrilla().at(5).x);
+	pos2[0].setY(Pista::getInstancia()->getParrilla().at(5).y);
+	pos2[0].setZ(Pista::getInstancia()->getParrilla().at(5).z);
 	pos2[1].setX(Pista::getInstancia()->getParrilla().at(1).x);
 	pos2[1].setY(Pista::getInstancia()->getParrilla().at(1).y);
 	pos2[1].setZ(Pista::getInstancia()->getParrilla().at(1).z);
@@ -122,9 +123,9 @@ void EscenaJuego::init() {
 	pos2[4].setX(Pista::getInstancia()->getParrilla().at(4).x);
 	pos2[4].setY(Pista::getInstancia()->getParrilla().at(4).y);
 	pos2[4].setZ(Pista::getInstancia()->getParrilla().at(4).z);
-	pos2[5].setX(Pista::getInstancia()->getParrilla().at(5).x);
-	pos2[5].setY(Pista::getInstancia()->getParrilla().at(5).y);
-	pos2[5].setZ(Pista::getInstancia()->getParrilla().at(5).z);
+	pos2[5].setX(Pista::getInstancia()->getParrilla().at(0).x);
+	pos2[5].setY(Pista::getInstancia()->getParrilla().at(0).y);
+	pos2[5].setZ(Pista::getInstancia()->getParrilla().at(0).z);
 
 	client = Client::getInstancia();
 	int numClients = client->getClientes().size();

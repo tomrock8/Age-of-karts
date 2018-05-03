@@ -17,6 +17,7 @@
 #include "obj3D.hpp"
 #include "Waypoint.hpp"
 #include "GestorSonido.hpp"
+#include "billboard.hpp"
 
 #define PI 3.14159265358979323846  /* pi */
 #define RADTODEG 180.0f / PI
@@ -125,6 +126,9 @@ protected:
 	obj3D *rueda2;
 	obj3D *rueda3;
 	obj3D *rueda4;
+
+	//BILLBOARD
+	billboard* b;
 
 	//cameraThird *camara3Persona;
 

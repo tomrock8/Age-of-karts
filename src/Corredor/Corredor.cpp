@@ -105,6 +105,9 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 		cuboNodo->setScale(1, 1, 1.5);
 		cuboNodo->setRotation(0.0f, 90.0f, 0.0f);
 	}
+	//Creamos el billboard de cada corredor
+	b = TMotor::instancia().newBillboard(cuboNodo);
+	b->setImage("assets/HUD/MainMenu/sw_logo.png");
 
 	InicializarFisicas();
 	InicializarFisicasRuedas();
@@ -183,7 +186,6 @@ void Corredor::setParametros() {
 	switch (tipojugador) {
 	case GLADIADOR:
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz", false);
-
 		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
 
 		//----ACELERACION-----

@@ -90,7 +90,7 @@ void elementoHud::setBuffersOpenGL(){
 //Funcion para dibujar el elemento hud
 void elementoHud::draw(Shader *shader){
 
-    //Activamos la textura 0 y enlazamos la textura anteriormente definida
+    //Activamos la textura 0 y enlazamos la imagen del elemento hud
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, TGestorImagenes::getInstacia()->cargarImagen(path)->getID());
 

@@ -18,7 +18,6 @@ public:
 	virtual void dibujar() override;
 	virtual void limpiar() override;
 	virtual void update() override;
-	void mostrarInfoLobby(int indice);
 	Escena::tipo_escena comprobarInputs();
 	int character_callback(GLFWwindow *window, unsigned int codepoint);
 	// METODOS GET

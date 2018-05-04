@@ -70,13 +70,6 @@ private:
 	bool muestraDebugIA;
 	std::string sr;
 	
-	//SONIDO 
-	AlSource *fuenteCarrera;
-	AlSource *fuenteCountDown;
-	bool countDown3;
-	bool countDown2;
-	bool countDown1;
-	bool countDownGo;
 
 	int puesto;
 	int vueltas;

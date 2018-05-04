@@ -1,4 +1,3 @@
-#include "billboard.hpp"
 #include "TMotor.hpp"
 #include "TGestorImagenes.hpp"
 
@@ -27,7 +26,7 @@ void billboard::setBuffersOpenGL(){
         0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
         0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
         -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-        };
+    };
 
     //Inicalizar cada uno de los buffers
     glGenVertexArrays(1, &VAO);

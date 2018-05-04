@@ -301,7 +301,7 @@ TAnimacion *TMotor::createAnimation(const char *path, int framesIni, int framesF
 		cout << "los objs son : " << ruta << endl;
 		animation.push_back(new TMalla(gestorRecursos->loadMesh(ruta.c_str(), false)));
 	}
-	return new TAnimacion(animation);
+	return new TAnimacion(animation,framesIni, framesFin);
 }
 obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode,bool sta) {
 	// E S C A L A D O

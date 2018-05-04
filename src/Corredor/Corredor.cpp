@@ -210,8 +210,8 @@ void Corredor::setParametros() {
 		break;
 	case PIRATA:
 	
-		//cuboNodo = TMotor::instancia().newAnimation("Jugador", "assets/Animations/Celebracion/PirataCelebracion_000","escena_raiz", 105, 448);
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz", false);
+		cuboNodo = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/pirata_000","escena_raiz", 105, 448);
+		//cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz", false);
 
 		//cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Pirata/PirataConducion.obj", "escena_raiz", false);
 		//----ACELERACION-----

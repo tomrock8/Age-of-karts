@@ -18,11 +18,8 @@ public:
 	virtual void dibujar() override;
 	virtual void limpiar() override;
 	virtual void update() override;
-	void updateLobbyOnline();
-	void debugClientInfo();
 	void mostrarInfoLobby(int indice);
 	Escena::tipo_escena comprobarInputs();
-	void mostrarTipoPersonaje(int i);
 	int character_callback(GLFWwindow *window, unsigned int codepoint);
 	// METODOS GET
 	std::string getIpConexion();

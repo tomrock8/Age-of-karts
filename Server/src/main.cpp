@@ -25,6 +25,9 @@ int main(int argc, char* argv[]) {
 	TMotor::instancia().setActiveCamera(TMotor::instancia().getNode("camara_libre"));
 	obj3D *activeCamera = TMotor::instancia().getObjActiveCamera();
 
+	Server::getInstancia()->CreateServerInterface();
+	Server::getInstancia()->ServerStartup();
+
     // -----------------------------//
 	//	GAME LOOP
 	// -----------------------------//
@@ -43,7 +46,9 @@ int main(int argc, char* argv[]) {
 		glfwPollEvents(); // Comprobacion de eventos (Teclado, raton, joystick)
 	}
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
-	TMotor::instancia().close();
+	Server::getInstancia()->ShutDownServer();
+    delete Server::getInstancia();
+    TMotor::instancia().close();
 
 	cout << "FIN DE JUEGO\n";
 	return 0;

@@ -967,3 +967,23 @@ bool Server::getStarted(){
 void Server::aumentarTimestamp(){
 	timeStamp++;
 }
+
+std::string Server::getStringClients(){
+	std::string ret = "\n Clientes: \n";
+	for(int i = 0; i < clientes.size(); i++){
+		ret.append(to_string(i) + ": " + clientes.at(i).ip + "\n" + " - Tipo: ");
+		if (clientes.at(i).tipoCorredor == 0)
+			ret.append("GLADIADOR ");
+		else if (clientes.at(i).tipoCorredor == 1)
+			ret.append("PIRATA ");
+		else if (clientes.at(i).tipoCorredor == 2)
+			ret.append("VIKINGO ");
+		else if (clientes.at(i).tipoCorredor == 3)
+			ret.append("GUERRERO CHINO ");
+		if(clientes.at(i).ready)
+			ret.append("\n - LISTO\n");
+		else
+			ret.append("\n - NO LISTO\n");
+	}
+	return ret;
+}

@@ -83,6 +83,8 @@ class Server
         void Update();
         void aumentarTimestamp();
 
+        std::string getStringClients();
+
         RakNet::RakPeerInterface *server;
 
         std::string serverPort;

@@ -1,7 +1,7 @@
 #ifndef ESCENA_H
 #define ESCENA_H
 
-#include "Server.hpp"
+#include "Client.hpp"
 #include "GestorSonido.hpp"
 #include "TMotor.hpp"
 class Escena {

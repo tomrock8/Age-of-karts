@@ -1,6 +1,10 @@
 #include "Waypoint.hpp"
 #include "TMotor.hpp"
 #include "MotorFisicas.hpp"
+#include "math.h"
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for C++  
+#endif
 
 Waypoint::Waypoint() {
 	waypoint = TMotor::instancia().newMeshNode("Waypoint", "assets/wall/wall.obj", "escena_raiz", false);
@@ -21,7 +25,7 @@ void Waypoint::inicializarFisicas() {
 	transform.setIdentity();
 	transform.setOrigin(btVector3(waypoint->getPosition().x, waypoint->getPosition().y, waypoint->getPosition().z));
 	btQuaternion quaternion;
-	quaternion.setEulerZYX(waypoint->getRotation().z* PI / 180, waypoint->getRotation().y * PI / 180, waypoint->getRotation().x* PI / 180);
+	quaternion.setEulerZYX(waypoint->getRotation().z* M_PI / 180, waypoint->getRotation().y * M_PI / 180, waypoint->getRotation().x* M_PI / 180);
 	transform.setRotation(quaternion);
 
 	MotionState = new btDefaultMotionState(transform);

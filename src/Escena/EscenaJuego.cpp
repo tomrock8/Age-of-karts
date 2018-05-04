@@ -736,7 +736,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 
 	const btQuaternion& TQuat = TObject->getOrientation();
 	glm::vec3 axis(TQuat.getAxis().getX(), TQuat.getAxis().getY(), TQuat.getAxis().getZ());
-	float angle = TQuat.getAngle() * RADTODEG;
+	float angle = TQuat.getAngle() * (180.0f / M_PI);
 	Node->setRotation(axis, angle);
 		
 		}

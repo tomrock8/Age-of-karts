@@ -67,13 +67,13 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 		}
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_E) == GLFW_PRESS) {
 			
-		direccion2 = direccion.rotate(btVector3(0, 1, 0), -90 * PI / 180);
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), -90 * M_PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
 		
 		}
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_Q) == GLFW_PRESS) {
 
-		direccion2 = direccion.rotate(btVector3(0, 1, 0), 90 * PI / 180);
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), 90 * M_PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
 
 		}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS){
@@ -81,7 +81,7 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 		if(auxX<=maximoRetardo)
 		auxX+=retardo;	
 
-		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
 		
 		}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS){
@@ -89,7 +89,7 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 		if(auxX>=-maximoRetardo)
 		auxX-=retardo;
 
-		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);		
 		
 		}
@@ -101,7 +101,7 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 			auxX+=retardo;
 		}
 
-		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);
 		
 		}

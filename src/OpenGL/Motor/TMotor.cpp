@@ -718,7 +718,7 @@ void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float
 	// pitch (y-axis rotation)
 	double sinp = +2.0 * (w * y - z * x);
 	if (fabs(sinp) >= 1)
-		pitch = copysign(PI / 2, sinp); // use 90 degrees if out of range
+		pitch = copysign(M_PI / 2, sinp); // use 90 degrees if out of range
 	else
 		pitch = asin(sinp);
 

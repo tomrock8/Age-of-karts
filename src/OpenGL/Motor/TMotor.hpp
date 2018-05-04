@@ -19,16 +19,14 @@
 #include "imgui_impl_glfw_gl3.h"
 #include "billboard.hpp"
 
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for C++  
+#endif
+
 #define WIDTH 1600
 #define HEIGHT 900
-#define PI 3.14159265358979323846  /* pi */
-#define RADTODEG 180.0f / PI
 
 class TMotor {
-
-private:
-
-
 public:
 	static TMotor &instancia();
 	TMotor();
@@ -45,7 +43,7 @@ public:
 	obj3D *newLightNode(const char * name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode);
 	obj3D * newAnimation(const char * name, const char * path, const char * parentNode, int framesIni, int framesFin);
 	TAnimacion * createAnimation(const char * path, int framesIni, int framesFin);
-	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode,bool sta);
+	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode, bool sta);
 	void precarga(const char * modelo);
 
 	void newHud(const char* n);
@@ -89,8 +87,8 @@ public:
 	void draw(int tipo);
 	void drawCamera();
 	void drawLight(Shader *s);
-	
-	void toEulerAngle(float x,float y,float z, float w, float& roll, float& pitch, float& yaw);
+
+	void toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw);
 
 protected:
 	TNodo * scene; //Nodo raiz
@@ -146,7 +144,7 @@ protected:
 	// ----------------------
 
 	// Malla
-	TMalla  *createMesh(const char *fich,bool sta);
+	TMalla  *createMesh(const char *fich, bool sta);
 	TNodo * createAnimationNode(TNodo * padre, TAnimacion * mesh, const char * name);
 	TNodo * createMeshNode(TNodo * padre, TMalla * mesh, const char * name);
 	// Transformacion

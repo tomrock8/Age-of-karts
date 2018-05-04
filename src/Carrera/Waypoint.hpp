@@ -4,11 +4,6 @@
 #include "btBulletDynamicsCommon.h"
 #include "obj3D.hpp"
 
-#define PI 3.14159265358979323846  /* pi */
-#define RADTODEG 180.0f / PI
-
-using namespace std;
-
 class Waypoint {
 public:
 	Waypoint();

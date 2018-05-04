@@ -10,7 +10,11 @@
 #include "ItemTeledirigido.hpp"
 #include "Escudo.hpp"
 #include "Habilidad.hpp"
+#include "math.h"
 
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for C++  
+#endif
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
 //-------------------------\*

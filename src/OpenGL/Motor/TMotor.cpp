@@ -602,9 +602,11 @@ void TMotor::draw(int tipo) {
 		objElementos->setVisible(true);*/
 		//====================================================
 		//====================================================
-	
+
+		
 		//DIBUJADO DE LOS BILLBOARDS
 		//--------------------------
+		glDisable(GL_DEPTH_TEST);
 		shaderBillboard->use();
 		for (int i = 1; i < billboards.size(); i++){
 			billboards.at(i)->draw(shaderBillboard);
@@ -613,7 +615,7 @@ void TMotor::draw(int tipo) {
 	}
 
 	//Se activa el shader para el dibujado del HUD
-	glDisable(GL_DEPTH_TEST);
+	
 	shaderHUD->use();
 	
 	//Dibujamos el hud activo

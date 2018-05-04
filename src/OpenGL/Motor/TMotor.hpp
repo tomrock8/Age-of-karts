@@ -8,7 +8,6 @@
 #include "TGestorRecursos.hpp"
 #include "TNodo.hpp"
 #include "TAnimacion.hpp"
-#include "obj3D.hpp"
 #include "cameraThird.hpp"
 #include "hud.hpp"
 #include "GestorSonido.hpp"
@@ -18,6 +17,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw_gl3.h"
 #include "billboard.hpp"
+#include "particleSystem.hpp"
 
 #ifdef _WIN32
 #define _USE_MATH_DEFINES // for C++  

@@ -20,7 +20,7 @@ public:
 
 
 	//-----------ASSIMP-----------//
-	std::vector<mesh*> loadMesh(const char *nombre,bool sta);
+	std::vector<mesh*> loadMesh(const char *nombre,bool sta,bool anim);
 	void processNode(aiNode *node, const aiScene *scene);
 	
 	
@@ -52,5 +52,7 @@ private:
 	std::string *dir;
 	std::map<std::string, GLuint> textures;
 	bool statico;
+	bool animation;
+	int animationCount;
 };
 #endif

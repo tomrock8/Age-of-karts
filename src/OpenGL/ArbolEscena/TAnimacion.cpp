@@ -42,9 +42,9 @@ void TAnimacion::draw(Shader *shader) {
 
 	// Comprobar si hay que cambiar de frame
 	int framesInSeconds = framesPerSecond;
-	if (Timer::getInstancia()->getTimer() - lastFramePlayed > framesInSeconds) {
+	if (Timer::getInstancia()->getTimer() / framesInSeconds > 0) {
 		// Aumentar el frame actual si no es el ultimo si le toca
-		if (actualFrame < totalFrames) {
+		if (actualFrame < totalFrames -1) {
 			actualFrame++;
 		}
 		else {

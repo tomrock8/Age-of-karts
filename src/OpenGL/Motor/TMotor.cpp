@@ -298,8 +298,8 @@ TAnimacion *TMotor::createAnimation(const char *path, int framesIni, int framesF
 		string ruta = path;
 		ruta += to_string(i);
 		ruta += obj;
-		cout << "los objs son : " << ruta << endl;
-		animation.push_back(new TMalla(gestorRecursos->loadMesh(ruta.c_str(), false)));
+		//cout << "los objs son : " << ruta << endl;
+		animation.push_back(new TMalla(gestorRecursos->loadMesh(ruta.c_str(), false,true)));
 	}
 	return new TAnimacion(animation,framesIni, framesFin);
 }
@@ -356,7 +356,7 @@ TMalla *TMotor::createMesh(const char *fich,bool sta) {
 	//	TRecursoMalla *auxMesh = gestorRecursos->getRecurso(fich);
 	//	TRecursoTextura *auxText = gestorRecursos->getRecursoTextura(fich);
 	//	return new TMalla(auxMesh, auxText);
-	return new TMalla(gestorRecursos->loadMesh(fich,sta));
+	return new TMalla(gestorRecursos->loadMesh(fich,sta,false));
 	//return NULL;
 }
 

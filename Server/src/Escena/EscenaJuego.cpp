@@ -13,6 +13,7 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_1_3.png");
 	TMotor::instancia().getActiveHud()->traslateElement("vueltas", -0.83f, 0.68f);
 
+	tipoEscena=tipo;
 	puesto = 6;
 	vueltas = 1;
 	vueltas_aux=1;
@@ -20,8 +21,18 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 }
 
 EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo) {
-	this->ipConexion = ipConexion;
+	end = false;
 	TMotor::instancia().newHud("OnGameHUD");
+	TMotor::instancia().getActiveHud()->addElement(0.2f, 0.2f, "puesto", "assets/HUD/juego/puesto_6.png");
+	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
+	TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_1_3.png");
+	TMotor::instancia().getActiveHud()->traslateElement("vueltas", -0.83f, 0.68f);
+
+	puesto = 6;
+	vueltas = 1;
+	vueltas_aux=1;
+	tipoEscena=tipo;
+	this->ipConexion = ipConexion;
 	init();
 }
 
@@ -71,6 +82,13 @@ void EscenaJuego::init() {
 
 	GestorIDs::instancia().restartID();
 
+	if (tipoEscena == Escena::tipo_escena::ONLINE) {
+		client = Client::getInstancia();
+		controlPlayer = client->getControlPlayer();
+	}
+	else {
+		controlPlayer = 0;
+	}
 
 	// Gravedad
 	gravedad = -45.0f;
@@ -152,7 +170,9 @@ void EscenaJuego::init() {
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontDefault();
 	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
-
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	if (jugadores->getJugadores().size()>0)
+		Server::getInstancia()->setStarted(false);
 	std::cout << "salgo del init\n";
 }
 
@@ -186,7 +206,7 @@ void EscenaJuego::dibujar() {
 		}
 	}
 
-	
+	if (tipoEscena != Escena::tipo_escena::ONLINE) 
 		renderDebug();
 }
 
@@ -216,7 +236,7 @@ void EscenaJuego::renderDebug() {
 		ImGui::StyleColorsClassic();
 		ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 	}
-	if (tipoEscena != Escena::tipo_escena::ONLINE) {
+
 		if (muestraDebug){		
 			
 			ImGui::Text("Renderizado: %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -310,7 +330,7 @@ void EscenaJuego::renderDebug() {
 				sr="";
 			}
 		}
-	}
+	
 	
 	if (vueltas_aux!=vueltas){
 		show_another_window=true;
@@ -356,7 +376,7 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
-	std::cout << "Entro update\n";
+	Server::getInstancia()->ReceivePackets();
 	Pista *pistaca = Pista::getInstancia();
 	std::vector<Item *> items = pistaca->getItems();
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
@@ -454,33 +474,34 @@ void EscenaJuego::update() {
 		//textoDebug->agregar(pj.at(0)->toString());
 	}
 	else {
-		//cout << jugadores->getNumJugadores() << endl;
-		//if (jugadores->getNumJugadores() != 0)
-		pj.at(controlPlayer)->actualizarItem();
-		updateHUD();
-		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
-										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
-		if (jugadores->getNumJugadores() != 0)
-			//client->aumentarTimestamp();
-		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-			pj.at(i)->update();
+		if (jugadores->getNumJugadores() > 0){
+			//cout << jugadores->getNumJugadores() << endl;
+			//if (jugadores->getNumJugadores() != 0)
+			pj.at(controlPlayer)->actualizarItem();
+			updateHUD();
+			colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
+											//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
+		
+				//client->aumentarTimestamp();
+			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+				pj.at(i)->update();
+			}
+
+			//textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
+			//if (jugadores->getNumJugadores() != 0)
+				//textoDebug->agregar(pj.at(controlPlayer)->toString());
+
+			if (jugadores->getNumJugadores() != 0) {
+				float tiempoActual = glfwGetTime();
+				float timediff_sec = tiempoActual - tiempoRefresco;
+
+			}
 		}
 
-		//textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-		//if (jugadores->getNumJugadores() != 0)
-			//textoDebug->agregar(pj.at(controlPlayer)->toString());
-
-		if (jugadores->getNumJugadores() != 0) {
-			float tiempoActual = glfwGetTime();
-			float timediff_sec = tiempoActual - tiempoRefresco;
-
-		}
+		if (jugadores->getNumJugadores() > 0)
+			if (gc->update())
+				fin_carrera = true;
 	}
-
-	if (jugadores->getNumJugadores() != 0)
-		if (gc->update())
-			fin_carrera = true;
-
 
 	jugadores->setJugadores(pj);
 
@@ -512,7 +533,7 @@ void EscenaJuego::update() {
 
 		}*/
 
-	std::cout << "Salgo update\n";
+
 }
 
 Escena::tipo_escena EscenaJuego::comprobarInputs() {

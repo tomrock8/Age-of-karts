@@ -93,7 +93,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	}
 
 	if(Server::getInstancia()->getStarted())
-		return Escena::tipo_escena::CARRERA;
+		return Escena::tipo_escena::ONLINE;
 
 	return Escena::tipo_escena::LOBBY;
 }

@@ -15,12 +15,23 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	puesto = 6;
 	vueltas = 1;
 	vueltas_aux=1;
+	tipoEscena=tipo;
 	init();
 }
 
 EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo) {
 	this->ipConexion = ipConexion;
+	end = false;
 	TMotor::instancia().newHud("OnGameHUD");
+	TMotor::instancia().getActiveHud()->addElement(0.2f, 0.2f, "puesto", "assets/HUD/juego/puesto_6.png");
+	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
+	TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_1_3.png");
+	TMotor::instancia().getActiveHud()->traslateElement("vueltas", -0.83f, 0.68f);
+
+	puesto = 6;
+	vueltas = 1;
+	vueltas_aux=1;
+	tipoEscena=tipo;
 	init();
 }
 
@@ -254,7 +265,7 @@ void EscenaJuego::dibujar() {
 		}
 	}
 
-	
+
 		renderDebug();
 }
 
@@ -479,7 +490,7 @@ void EscenaJuego::update() {
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 
 
-
+	
 	if (t->getTimer() <= 4 && t->getTimer() >= 1) {
 		if (t->getTimer() == 1) {
 			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtras3.png");

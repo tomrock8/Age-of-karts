@@ -48,6 +48,7 @@ public:
 
 	void newHud(const char* n);
 	billboard *newBillboard(obj3D *o);
+	void newParticleSystem(obj3D *o);
 	//float *toEuler(double pich, double yaw, double roll);
 
 	// METODOS GET
@@ -104,6 +105,7 @@ protected:
 	Shader *shaderCartoon; //Shader para el efecto cartoon
 	Shader *shaderSilhouette; //Shader para crear el contorno de los objetos en el efecto cartoon
 	Shader *shaderBillboard; //Shader para dibujar los diferentes billboards 
+	Shader *shaderParticles; //Shader para el dibujado de las particulas
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)
@@ -129,6 +131,9 @@ protected:
 
 	//Billboards
 	std::vector <billboard *> billboards; //Array de los diferentes billboards utilizados en el motor
+
+	//Particles
+	std::vector <particleSystem *> particleSystems; //Array con las diferentes particulas usadas en el motor
 
 	bool renderDebug;
 	bool debugBullet = false;

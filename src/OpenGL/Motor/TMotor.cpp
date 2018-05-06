@@ -63,6 +63,7 @@ TMotor::TMotor() {
 	shaderCartoon = new Shader("assets/shaders/shaderCartoon/vertexShader.txt", "assets/shaders/shaderCartoon/fragmentShader.txt", nullptr);
 	shaderSilhouette = new Shader("assets/shaders/shaderSilhouette/vertexShader.txt", "assets/shaders/shaderSilhouette/fragmentShader.txt", nullptr);
 	shaderBillboard = new Shader("assets/shaders/shaderBillboard/vertexShader.txt", "assets/shaders/shaderBillboard/fragmentShader.txt", nullptr);
+	shaderParticles = new Shader("assets/shaders/shaderParticles/vertexShader.txt", "assets/shaders/shaderParticles/fragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 
 	gestorSonido = new GestorSonido();
@@ -113,6 +114,9 @@ void TMotor::close() {
 	}
 	for (int i = 0; i < billboards.size(); i++) {
 		delete billboards[i];
+	}
+	for (int i = 0; i < particleSystems.size(); i++) {
+		delete particleSystems[i];
 	}
 }
 
@@ -478,7 +482,7 @@ void TMotor::draw(int tipo) {
 
 		//DIBUJADO DEL ARBOL * ESTILO CARTOON *
 		//-------------------------------------
-
+		
 		//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas
 
 		//Enlazamos el shader cartoon
@@ -497,6 +501,7 @@ void TMotor::draw(int tipo) {
 				static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow(s);
 			}
 		}
+		
 		if (!debugBullet){
 			//Activamos el glPolygonOffset = a cada fragmento de los objetos se le añade una pequeña profundidad antes de realizar los calculos del z-buffer
 			glEnable(GL_POLYGON_OFFSET_FILL);
@@ -603,6 +608,13 @@ void TMotor::draw(int tipo) {
 		//====================================================
 		//====================================================
 
+		//DIBUJADO DE LAS PARTICULAS
+		//--------------------------
+		
+		shaderParticles->use();
+		for (int i = 0; i < particleSystems.size(); i++){
+			particleSystems.at(i)->draw(shaderParticles);
+		}
 		
 		//DIBUJADO DE LOS BILLBOARDS
 		//--------------------------
@@ -741,10 +753,18 @@ void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float
 
 // --- BILLBOARD ---
 billboard *TMotor::newBillboard(obj3D *o){
-	//creamos el nuevo hud con su nombre
+	//Creamos el nuevo billboard con su nombre
 	billboard* b = new billboard(o);
-	//Lo añadimos al array de hud
+	//Lo añadimos al array de billboards
 	billboards.push_back(b);
 	//Lo devolvemos
 	return b;
+}
+
+// --- PARTICLE SYSTEMS ---
+void TMotor::newParticleSystem(obj3D *o){
+	//Creamos el nuevo billboard con su nombre
+	particleSystem *p = new particleSystem(o);
+	//Lo añadimos al array de billboards
+	particleSystems.push_back(p);
 }

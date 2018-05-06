@@ -14,12 +14,12 @@ struct Particula{
     Particula(){
         position = glm::vec3(0.f);
         velocity = glm::vec3(0.f);
-        size = 1.0f;
+        size = 0.25f;
         life = 0.0f;
     }
 };
 
-const int numMaxParticles = 100000; //Numero maximo de particulas del sistema
+const int numMaxParticles = 10000; //Numero maximo de particulas del sistema
 
 class particleSystem 
 {
@@ -31,22 +31,22 @@ class particleSystem
 
     private:
         // --- VARIABLES ---
-        std::vector<Particula> particulas; //Contenedor de todas las particulas del sistema
+        std::vector<Particula *> particulas; //Contenedor de todas las particulas del sistema
 
         int lastParticleFound; //Ultima particula recuperada
         int particlesAlive; //Particulas vivas en cada iteracion
         int newParticlesPerIteration; //Numero de particulas nuevas por iteracion
-        float delta;
+        float lastTime;
 
         obj3D *elemento; //Objeto al que seguiran las particulas
 
         GLuint VAO, VBO, VBO_position; //Buffers de Opengl
-        GLfloat position_data[]; //Array de datos de posicion que se rellena en cada iteracion y despues se le pasa al buffer
+        GLfloat *position_data; //Array de datos de posicion que se rellena en cada iteracion y despues se le pasa al buffer
 
         // --- METODOS ---
         void setBuffersOpenGL();
         int findLastDeadParticle();
-        void rebirthParticle(Particula p);
+        void rebirthParticle(Particula *p);
         void update();
 };
 

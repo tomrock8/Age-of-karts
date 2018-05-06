@@ -112,6 +112,8 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	//Creamos el billboard de cada corredor
 	b = TMotor::instancia().newBillboard(cuboNodo);
 	b->setImage("assets/HUD/MainMenu/sw_logo.png");
+	//Creamos las particulas del humo
+	//TMotor::instancia().newParticleSystem(cuboNodo);
 
 	InicializarFisicas();
 	InicializarFisicasRuedas();

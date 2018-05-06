@@ -108,6 +108,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
 		cuboNodo->setScale(1, 1, 1.5);
 		cuboNodo->setRotation(0.0f, 90.0f, 0.0f);
+		
 	}
 	//Creamos el billboard de cada corredor
 	b = TMotor::instancia().newBillboard(cuboNodo);
@@ -210,9 +211,11 @@ void Corredor::setParametros() {
 		break;
 	case PIRATA:
 	
-		cuboNodo = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/pirata_000","escena_raiz", 105, 448);
-		//cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz", false);
 
+		GiroDerIni = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 237, 395);
+		GiroDerFin = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 395, 572);
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000237.obj", "escena_raiz", false);
+		
 		//cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Pirata/PirataConducion.obj", "escena_raiz", false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
@@ -1513,6 +1516,13 @@ void Corredor::updateVectorDireccion() {
 
 	orientacion.normalize();
 	//cout<< "ORIENTACION XNORMAL COCHE=="<< orientacion.getX() << " ORIENTACION ZNORMAL COCHE=="<< orientacion.getZ()  << endl;
+}
+obj3D *Corredor::getGiroDer() {
+	return GiroDerIni;
+}
+void Corredor::setActiveObj3D(obj3D *obj) {
+
+	cuboNodo = obj;
 }
 //---------------------------------------//
 //--------------DESTRUCTOR---------------//

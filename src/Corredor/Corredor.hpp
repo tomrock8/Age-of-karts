@@ -236,9 +236,14 @@ protected:
 
 	//raycast
 	btVehicleRaycaster *RayCastVehiculo;
-
-
 	btVector3 orientacion;
+
+
+	//Animaciones
+	obj3D *GiroDerIni;
+	obj3D *GiroDerFin;
+
+
 
 	void CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning);
 	void BorrarFisicas();
@@ -257,6 +262,10 @@ protected:
 	// UPDATES
 	void actualizarRuedas();
 	void updateVectorDireccion();
+
+	obj3D * getGiroDer();
+
+	void setActiveObj3D(obj3D * obj);
 
 };
 

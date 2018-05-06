@@ -15,7 +15,7 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFra
 	setLastFrame(lastFrame);
 
 	actualFrame = this->firstFrame;
-	framesPerSecond = 24; // Valor que se recoge de blender
+	framesPerSecond = 60; // Valor que se recoge de blender
 	setVisible(true);
 	setLoopPlay(false);
 	lastFramePlayed = Timer::getInstancia()->getTimer(); // Inicializamos el tiempo utlimo

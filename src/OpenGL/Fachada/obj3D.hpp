@@ -13,6 +13,8 @@ public:
 	obj3D(TNodo *mesh, const char *name, GLuint id);
 	~obj3D();
 
+	void setNode(TNodo * m);
+
 	void translate(glm::vec3);
 	void rotate(glm::vec3 axis, GLfloat angle);
 	void scale(float x, float y, float z);

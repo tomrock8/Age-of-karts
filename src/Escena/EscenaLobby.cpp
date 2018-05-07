@@ -73,7 +73,6 @@ void EscenaLobby::update() {
 	infoLobby->clear();
 	glfwPollEvents();
 
-	bool  show_demo_window=true;
   	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
   	// Mostrar ventanas
    	int display_w = 0 , display_h = 0;
@@ -129,10 +128,7 @@ void EscenaLobby::update() {
 				updateLobbyOnline();
 			}
 
-			if (show_demo_window){
-				ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-					ImGui::ShowDemoWindow(&show_demo_window);
-			}
+	
 		}else{
 			std::vector<structClientes> clientes = client->getClientes();
 

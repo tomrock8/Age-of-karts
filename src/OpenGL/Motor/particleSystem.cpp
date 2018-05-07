@@ -4,7 +4,8 @@
 particleSystem::particleSystem(obj3D *o){
     //Inicializamos el vector que contendra todas las particulas
     for (int i = 0; i < numMaxParticles; i++){
-        particulas.push_back(Particula());
+        Particula *p = new Particula();
+        particulas.push_back(p);
     }
     //Enlazamos el objeto 
     elemento = o;
@@ -14,8 +15,10 @@ particleSystem::particleSystem(obj3D *o){
     lastParticleFound = 0;
     particlesAlive = 0;
     //Y el numero de particulas nuevas que habran en cada iteracion
-    newParticlesPerIteration = 5000;
-    delta = 0.01f;
+    newParticlesPerIteration = 50;
+    lastTime = 0.0f;
+    //Inicializamos los arrays que haran de buffers con los datos de posicion y color de cada particula
+    position_data = new GLfloat[4*numMaxParticles]();
 }
 
 //Destructor para eliminar los datos utilizados
@@ -70,7 +73,7 @@ int particleSystem::findLastDeadParticle(){
     //Primero, buscamos a partir de la ultima posicion guardada que tengamos
     for (int i = lastParticleFound; i < numMaxParticles; i++){
         //Si la vida de la particula es menor o igual que 0...
-        if (particulas.at(i).life <= 0.0f){
+        if (particulas.at(i)->life <= 0.0f){
             //Guardamos el indice en la variable 
             lastParticleFound = i;
             //Lo devolvemos
@@ -81,7 +84,7 @@ int particleSystem::findLastDeadParticle(){
     //En caso de no encontrar ninguna particula muerta, se realiza una busqueda lineal desde el principio
     for (int i = 0; i < numMaxParticles; i++){
         //Si la vida de la particula es menor o igual que 0...
-        if (particulas.at(i).life <= 0.0f){
+        if (particulas.at(i)->life <= 0.0f){
             //Guardamos el indice en la variable 
             lastParticleFound = i;
             //Lo devolvemos
@@ -95,38 +98,48 @@ int particleSystem::findLastDeadParticle(){
 }
 
 //Funcion que inicializa una nueva particula del sistema
-void particleSystem::rebirthParticle(Particula p){
+void particleSystem::rebirthParticle(Particula *p){
     //Valor random (0-50) para calcular los distintos datos de la particula
-    float random = ((rand() % 100) - 50) / 10.0f;
+    float random = ((rand() % 5) - 5) / 2.5f;
     //La posicion de la particula dependera del objeto al que este enlazada
-    p.position = glm::vec3(elemento->getPosition()[0], elemento->getPosition()[1], elemento->getPosition()[2]);
-    p.position += random; //Le sumamos el valor random
+    p->position = glm::vec3(0, 2, 0);
+    p->position.x += random; //Le sumamos el valor random
+    p->position.z += random; //Le sumamos el valor random
     //Reseteamos la vida 
-    p.life = 1.0f;
+    p->life = 1.0f;
 }
 
 //Funcion que actualiza el contenedor de particulas en cada iteracion para producir el ciclo de vida/muerte de las mismas
 void particleSystem::update(){
+    float now = glfwGetTime();
+    float delta = now - lastTime;
+    lastTime = now;
+
+    int nuevas = (int)(delta*50.0);
     //Primero, añadimos las nuevas particulas de cada iteracion
-    for (int i = 0; i < newParticlesPerIteration; i++){
-        rebirthParticle(particulas[findLastDeadParticle()]);
+    for (int i = 0; i < nuevas; i++){
+        int index = findLastDeadParticle();
+        rebirthParticle(particulas.at(index)); 
     }
+    
     //Despues, actualizamos todas las particulas del sistema
     particlesAlive = 0; //Reseteamos el numero de particulas vivas
-    for (int i = 0; i < numMaxParticles; i++){
-        Particula p = particulas[i]; //Recogemos la particula del contenedor
-        p.life -= delta; //Reducimos su vida
 
-        if (p.life > 0.0f){ //Si aun sigue viva...
-            p.velocity = glm::vec3(0.0f,-9.81f, 0.0f) * delta * 0.5f; //Velocidad en funcion de la gravedad
-            p.position += p.velocity * delta; //Modificamos la posicion de la particula en funcion de la velocidad
+    for (int i = 0; i < numMaxParticles; i++){
+        Particula *p = particulas.at(i); //Recogemos la particula del contenedor
+        p->life -= delta; //Reducimos su vida
+
+        if (p->life > 0.0f){ //Si aun sigue viva...
+            p->velocity = glm::vec3(0.0f,9.81f, 0.0f) * delta * 10.0f; //Velocidad en funcion de la gravedad
+            p->position += p->velocity * delta; //Modificamos la posicion de la particula en funcion de la velocidad
 
             //Llenamos los buffers que anteriormente hemos declarado
             // --- POSICION Y TAMANYO ---
-            position_data[4*particlesAlive+0] = p.position[0];
-            position_data[4*particlesAlive+1] = p.position[1];
-            position_data[4*particlesAlive+2] = p.position[2];
-            position_data[4*particlesAlive+3] = p.size;
+            
+            position_data[4*particlesAlive+0] = p->position[0];
+            position_data[4*particlesAlive+1] = p->position[1];
+            position_data[4*particlesAlive+2] = p->position[2];
+            position_data[4*particlesAlive+3] = p->size;
         }
 
         particlesAlive++; //Aumentamos el numero de particulas vivas
@@ -135,8 +148,19 @@ void particleSystem::update(){
 
 //Funcion para dibujar las particulas
 void particleSystem::draw(Shader *s){
+    
     //Primero, actualizamos las particulas del contenedor
     update();
+
+    //Calculamos la matriz viewProjection y se la pasamos al shader
+    glm::mat4 vp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getV();
+    s->setMat4("vp", vp);
+
+    glm::vec3 cR = glm::vec3(TMotor::instancia().getV()[0][0], TMotor::instancia().getV()[1][0], TMotor::instancia().getV()[2][0]);
+    s->setVec3("camRight", cR);
+
+    glm::vec3 cU = glm::vec3(TMotor::instancia().getV()[0][1], TMotor::instancia().getV()[1][1], TMotor::instancia().getV()[2][1]);
+    s->setVec3("camUp", cU);
 
     //Despues, pasamos a dibujar
     glBindVertexArray(VAO); //Enlazamos el VAO que antes hemos rellenado
@@ -151,8 +175,10 @@ void particleSystem::draw(Shader *s){
     glVertexAttribDivisor(1, 1); //El atributo 1 (posicion y tamayo) se usa cada vector de 4 por particula o quad (forma base)
 
     //Dibujamos las particulas -> INSTANCED == se dibuja la misma forma tanta veces como se le diga 
-    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particlesAlive); 
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 18, particlesAlive); 
 
     //Desenlazamos el VAO hasta el siguiente dibujado
     glBindVertexArray(0);
+
+
 }

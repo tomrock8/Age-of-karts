@@ -113,6 +113,8 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	//Creamos el billboard de cada corredor
 	b = TMotor::instancia().newBillboard(cuboNodo);
 	b->setImage("assets/HUD/MainMenu/sw_logo.png");
+	//Creamos las particulas del humo
+	//TMotor::instancia().newParticleSystem(cuboNodo);
 
 	InicializarFisicas();
 	InicializarFisicasRuedas();
@@ -1266,9 +1268,10 @@ void Corredor::update() {
 	
 	comprobarTurbo();
 	comprobarInmunidad();
-	if (estado->getEstadoCarrera() != EstadosJugador::estado_carrera::PARRILLA) {
+	if (estado->getEstadoCarrera() == EstadosJugador::estado_carrera::CARRERA) {
 		movimiento();// Esto ni existe
 		updateEstado();
+		
 	}
 	updateTimerObstaculos();
 	updateEstado();

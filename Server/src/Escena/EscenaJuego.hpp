@@ -51,7 +51,6 @@ private:
 	std::uint32_t TimeStamp;
 	std::uint32_t DeltaTime;
 
-	Client *client;
 	btVector3 pos;
 	
 

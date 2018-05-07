@@ -82,13 +82,8 @@ void EscenaJuego::init() {
 
 	GestorIDs::instancia().restartID();
 
-	if (tipoEscena == Escena::tipo_escena::ONLINE) {
-		client = Client::getInstancia();
-		controlPlayer = client->getControlPlayer();
-	}
-	else {
-		controlPlayer = 0;
-	}
+	
+	controlPlayer = 0;
 
 	// Gravedad
 	gravedad = -45.0f;
@@ -206,7 +201,7 @@ void EscenaJuego::dibujar() {
 		}
 	}
 
-	if (tipoEscena != Escena::tipo_escena::ONLINE) 
+	//if (tipoEscena != Escena::tipo_escena::ONLINE) 
 		renderDebug();
 }
 
@@ -481,8 +476,7 @@ void EscenaJuego::update() {
 			updateHUD();
 			colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 											//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
-		
-				//client->aumentarTimestamp();
+			Server::getInstancia()->aumentarTimestamp();
 			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 				pj.at(i)->update();
 			}
@@ -494,6 +488,12 @@ void EscenaJuego::update() {
 			if (jugadores->getNumJugadores() != 0) {
 				float tiempoActual = glfwGetTime();
 				float timediff_sec = tiempoActual - tiempoRefresco;
+
+				if (timediff_sec >= 0.01) {
+					//cout<<"REFRESCO\n";
+					Server::getInstancia()->refreshServer();
+					tiempoRefresco = glfwGetTime();
+				}
 
 			}
 		}
@@ -552,7 +552,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 			//client->FinalizarCarrera();
 		}
 		else if (tipoEscena != Escena::tipo_escena::ONLINE) {
-			return Escena::tipo_escena::MENU;
+			return Escena::tipo_escena::SALIR;
 		}
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_C) == GLFW_PRESS) {
@@ -584,7 +584,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end == true) {
 
-		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
+		return Escena::tipo_escena::SALIR; // Esto deberia cargar la escena de carga - menu
 	}
 
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS) {

@@ -44,7 +44,7 @@ CorredorIA::CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(po
 	pertenenciaVelocidadBaja = 0;
 	pertenenciaVelocidadMedia = 0;
 	pertenenciaVelocidadAlta = 0;
-	valorGiroFuerte = 0.15;
+	valorGiroFuerte = 0.18;
 
 
 

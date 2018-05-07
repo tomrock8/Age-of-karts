@@ -103,6 +103,8 @@ void particleSystem::rebirthParticle(Particula *p){
     float dist = -7.0f; //Distancia donde se moveran las particulas
     float altura = -1.0f; //Altura donde se situaran las particulas
     //Establecemos la posicion de la particula en funcion de su posicion y orientacion
+    float random = (rand() % 100 - 1) / 100.0f;
+    dist += random;
     p->position = glm::vec3(posParticle.x + dist * oriParticle.x, posParticle.y - altura, posParticle.z + dist * oriParticle.z);
     //Reseteamos la vida y el tamaño de la particula
     p->life = 1.0f;
@@ -153,9 +155,18 @@ void particleSystem::update(){
 
 
         if (p->life > 0.0f){ //Si aun sigue viva...
+        /*
+            if ( ((int)(p->life * 10) % 2) == 0){
+
+            p->size += sizeParticle - 0.05; //Modificamos el tamaño de la particulas con el tiempo
+            }else{*/
+
             p->size += sizeParticle; //Modificamos el tamaño de la particulas con el tiempo
+            //}
             //Llenamos los buffers que anteriormente hemos declarado
             // --- POSICION Y TAMANYO ---
+
+            //p->position = glm::vec3( p->position.x - 0.5 * oriParticle.x,  p->position.y,  p->position.z - 0.5 * oriParticle.z);
             position_data[4*particlesAlive+0] = p->position[0];
             position_data[4*particlesAlive+1] = p->position[1];
             position_data[4*particlesAlive+2] = p->position[2];

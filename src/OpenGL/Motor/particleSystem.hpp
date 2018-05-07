@@ -14,12 +14,12 @@ struct Particula{
     Particula(){
         position = glm::vec3(0.f);
         velocity = glm::vec3(0.f);
-        size = 0.25f;
+        size = 0.65f;
         life = 0.0f;
     }
 };
 
-const int numMaxParticles = 10000; //Numero maximo de particulas del sistema
+const int numMaxParticles = 50; //Numero maximo de particulas del sistema
 
 class particleSystem 
 {

@@ -15,7 +15,7 @@ particleSystem::particleSystem(obj3D *o){
     lastParticleFound = 0;
     particlesAlive = 0;
     //Y el numero de particulas nuevas que habran en cada iteracion
-    newParticlesPerIteration = 50;
+    newParticlesPerIteration = 5;
     lastTime = 0.0f;
     //Inicializamos los arrays que haran de buffers con los datos de posicion y color de cada particula
     position_data = new GLfloat[4*numMaxParticles]();
@@ -32,14 +32,14 @@ particleSystem::~particleSystem(){
 //Funcion para setear los buffers de OpenGl que se usaran para pasar os datos del sistema del particulas
 void particleSystem::setBuffersOpenGL(){
 
-    //Coordenadas para crear el quad que contendra cada particula (solo datos de posicion de cada vertice)
+    //Coordenadas para crear el quad que contendra cada particula (solo datos de posicion y coordenadas de textura de cada vertice)
     static const GLfloat data[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f,
-        0.5f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
     };
 
     //Inicalizar cada uno de los buffers
@@ -54,15 +54,18 @@ void particleSystem::setBuffersOpenGL(){
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(data), &data[0], GL_STATIC_DRAW);
     //Lo establecemos como el primero atributo del buffer que le llegara al shader
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    //Segundo, las coordenadas de textura para cada vertice
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
-    //Segundo, enlazar el VBO al que se le pasan los datos de posicion y tamaño de cada particula
+    //Tercero, enlazar el VBO al que se le pasan los datos de posicion y tamaño de cada particula
     glBindBuffer(GL_ARRAY_BUFFER, VBO_position);
     glBufferData(GL_ARRAY_BUFFER, numMaxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW); //NULL = lo llenaremos en cada iteracion
     //Lo establecemos como el segundo atributo del buffer que le llegara al shader
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(2);
 
     //Desactivamos el VAO hasta el dibujado del quad
     glBindVertexArray(0); 
@@ -102,24 +105,23 @@ void particleSystem::rebirthParticle(Particula *p){
     //Valor random (0-50) para calcular los distintos datos de la particula
     float random = ((rand() % 5) - 5) / 2.5f;
     //La posicion de la particula dependera del objeto al que este enlazada
-    p->position = glm::vec3(0, 2, 0);
-    p->position.x += random; //Le sumamos el valor random
-    p->position.z += random; //Le sumamos el valor random
+    /*
+    cout << "Rotacion en x: " << elemento->getRotation()[0] << endl;
+    cout << "Rotacion en z: " << elemento->getRotation()[2] << endl;
+    cout << "......................." << endl;*/
+    p->position = glm::vec3(elemento->getPosition()[0], elemento->getPosition()[1]-1.0, elemento->getPosition()[2]);
+    //p->position.x += random; //Le sumamos el valor random
+    //p->position.z += random; //Le sumamos el valor random
     //Reseteamos la vida 
     p->life = 1.0f;
+    p->size = 0.65f;
 }
 
 //Funcion que actualiza el contenedor de particulas en cada iteracion para producir el ciclo de vida/muerte de las mismas
 void particleSystem::update(){
-    float now = glfwGetTime();
-    float delta = now - lastTime;
-    lastTime = now;
-
-    int nuevas = (int)(delta*50.0);
     //Primero, añadimos las nuevas particulas de cada iteracion
-    for (int i = 0; i < nuevas; i++){
-        int index = findLastDeadParticle();
-        rebirthParticle(particulas.at(index)); 
+    for (int i = 0; i < newParticlesPerIteration; i++){
+        rebirthParticle(particulas.at(findLastDeadParticle())); 
     }
     
     //Despues, actualizamos todas las particulas del sistema
@@ -127,19 +129,23 @@ void particleSystem::update(){
 
     for (int i = 0; i < numMaxParticles; i++){
         Particula *p = particulas.at(i); //Recogemos la particula del contenedor
-        p->life -= delta; //Reducimos su vida
+        p->life -= 0.1; //Reducimos su vida
 
         if (p->life > 0.0f){ //Si aun sigue viva...
-            p->velocity = glm::vec3(0.0f,9.81f, 0.0f) * delta * 10.0f; //Velocidad en funcion de la gravedad
-            p->position += p->velocity * delta; //Modificamos la posicion de la particula en funcion de la velocidad
+            //p->velocity = glm::vec3(0.0f,9.81f, 0.0f) * delta * 10.0f; //Velocidad en funcion de la gravedad
+            //p->position += p->velocity * delta; //Modificamos la posicion de la particula en funcion de la velocidad
 
             //Llenamos los buffers que anteriormente hemos declarado
             // --- POSICION Y TAMANYO ---
-            
+            //p->position[0] += -0.5;
+            //p->position[2] += -0.5 + elemento->getRotation()[2];
+            p->size += 0.25;
             position_data[4*particlesAlive+0] = p->position[0];
             position_data[4*particlesAlive+1] = p->position[1];
             position_data[4*particlesAlive+2] = p->position[2];
             position_data[4*particlesAlive+3] = p->size;
+        }else{
+            //p->size = 0.65f;
         }
 
         particlesAlive++; //Aumentamos el numero de particulas vivas
@@ -151,6 +157,12 @@ void particleSystem::draw(Shader *s){
     
     //Primero, actualizamos las particulas del contenedor
     update();
+
+    //Activamos la textura 0 y enlazamos la imagen del elemento hud
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, TGestorImagenes::getInstacia()->cargarImagen("assets/smoke.png")->getID());
+    //Le pasamos la textura al shader
+    s->setInt("image", 0);
 
     //Calculamos la matriz viewProjection y se la pasamos al shader
     glm::mat4 vp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getV();
@@ -172,7 +184,8 @@ void particleSystem::draw(Shader *s){
 
     //Le decimos a OpenGL como tratar la informacion de cada buffer
     glVertexAttribDivisor(0, 0); //El atributo 0 (forma base) se utiliza de igual forma para todos
-    glVertexAttribDivisor(1, 1); //El atributo 1 (posicion y tamayo) se usa cada vector de 4 por particula o quad (forma base)
+    glVertexAttribDivisor(1, 0); //El atributo 1 (coordenadas de textura) se utiliza de igual forma para todos
+    glVertexAttribDivisor(2, 1); //El atributo 2 (posicion y tamayo) se usa cada vector de 4 por particula o quad (forma base)
 
     //Dibujamos las particulas -> INSTANCED == se dibuja la misma forma tanta veces como se le diga 
     glDrawArraysInstanced(GL_TRIANGLES, 0, 18, particlesAlive); 

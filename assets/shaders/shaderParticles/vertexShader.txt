@@ -3,7 +3,11 @@
  
 //Recoger los datos de los vertices en los buffers correctamente (segun orden de envio en el programa)
 layout (location = 0) in vec3 aVertex; //Vertices
-layout (location = 1) in vec4 aPos; //Posicion y tamanyo
+layout (location = 1) in vec2 aCoords; //Vertices
+layout (location = 2) in vec4 aPos; //Posicion y tamanyo
+
+//Variables de salida al Fragment shader
+out vec2 textCoords;
 
 //Uniform para la matriz mvp
 uniform mat4 vp;
@@ -13,6 +17,11 @@ uniform vec3 camUp;
 void main() {
     //El billboard estara 1.5 unidades por encima del objeto enlazado en un principio
     vec3 particlePosition = aPos.xyz;
+    //particlePosition.x += 0.5;
+    //particlePosition.z += 0.5;
+
+    //Pasamos las coordenadas de textura al fragment shader
+    textCoords = aCoords;
 
     vec3 pos = particlePosition + camRight * aVertex.x *aPos.w + camUp * aVertex.y * aPos.w;
     //Calculamos la posicion final del billboard en la pantalla a partir de la matriz view-projection

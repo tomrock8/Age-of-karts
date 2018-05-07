@@ -610,7 +610,8 @@ void TMotor::draw(int tipo) {
 
 		//DIBUJADO DE LAS PARTICULAS
 		//--------------------------
-		
+
+		glDisable(GL_DEPTH_TEST);
 		shaderParticles->use();
 		for (int i = 0; i < particleSystems.size(); i++){
 			particleSystems.at(i)->draw(shaderParticles);

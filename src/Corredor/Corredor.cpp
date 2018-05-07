@@ -114,7 +114,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	b = TMotor::instancia().newBillboard(cuboNodo);
 	b->setImage("assets/HUD/MainMenu/sw_logo.png");
 	//Creamos las particulas del humo
-	//TMotor::instancia().newParticleSystem(cuboNodo);
+	TMotor::instancia().newParticleSystem(cuboNodo);
 
 	InicializarFisicas();
 	InicializarFisicasRuedas();

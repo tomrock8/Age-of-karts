@@ -188,6 +188,7 @@ void Corredor::setParametrosRuedasDebug(float suspensionStiffness, float Damping
 
 void Corredor::setParametros() {
 	const char* objeto = "assets/Karts/Vikingo/vikingoConIzq.obj";
+	
 	//cambiar parametros en funcion del tipo
 	int num = 0;
 	switch (tipojugador) {
@@ -1526,6 +1527,7 @@ TNodo *Corredor::getGiroDer() {
 void Corredor::setActiveObj3D(TNodo *obj) {
 	static_cast<TMalla*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
 	static_cast<TAnimacion*>(obj->getEntidad())->setVisible(true);
+	static_cast<TAnimacion*>(obj->getEntidad())->setPlaying(true);
 	cuboNodo->setNode(obj);
 	
 }

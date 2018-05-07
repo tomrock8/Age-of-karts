@@ -1313,7 +1313,7 @@ void Corredor::update() {
 	p->setOrientation(glm::vec3(orientacion.getX(), orientacion.getY(), orientacion.getZ()));
 	// COLOR Y TAMANYO
 	if(estado->getEstadoCoche() == EstadosJugador::estado_coche::CON_TURBO){
-		p->setSize(0.35f); //Si el coche esta con turbo, el tamanyo es mas grande
+		p->setSize(0.5f); //Si el coche esta con turbo, el tamanyo es mas grande
 		p->setColor(glm::vec3(1.0f, 1.0f, 0.0f)); //Se le pasa un color amarillo
 	}else{
 		if(estado->getEstadoMovimiento() == EstadosJugador::estado_movimiento::AVANZA){

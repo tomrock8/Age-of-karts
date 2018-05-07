@@ -103,8 +103,8 @@ void particleSystem::rebirthParticle(Particula *p){
     float dist = -7.0f; //Distancia donde se moveran las particulas
     float altura = -1.0f; //Altura donde se situaran las particulas
     //Establecemos la posicion de la particula en funcion de su posicion y orientacion
-    float random = (rand() % 100 - 1) / 100.0f;
-    dist += random;
+    float random = (rand() % 100 - 1) / 50.0f; //Valor random para modificar la posicion de las particulas dentro de un area
+    dist += random; //Se lo sumamos a la distancia
     p->position = glm::vec3(posParticle.x + dist * oriParticle.x, posParticle.y - altura, posParticle.z + dist * oriParticle.z);
     //Reseteamos la vida y el tamaño de la particula
     p->life = 1.0f;

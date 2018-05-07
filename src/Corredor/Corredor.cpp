@@ -502,7 +502,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
     	wheel.m_wheelsDampingRelaxation = btScalar(0.5) * 2 * btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f;  
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = btScalar(0);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
-    	wheel.m_maxSuspensionForce = 10000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa)  
+    	wheel.m_maxSuspensionForce = 50000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa)  
 		wheel.m_maxSuspensionTravelCm = 10000.f; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 										   
 	}
 
@@ -1231,7 +1231,7 @@ void Corredor::comprobarSueloRuedas() {
 
 		if(cont==4){
 			if (estado->getEstadoMovimiento()!=EstadosJugador::estado_movimiento::DERRAPA){
-				CuerpoColisionChasis->setLinearVelocity(btVector3(CuerpoColisionChasis->getLinearVelocity().getX(),-30,CuerpoColisionChasis->getLinearVelocity().getZ()));
+				CuerpoColisionChasis->setLinearVelocity(btVector3(CuerpoColisionChasis->getLinearVelocity().getX(),-20,CuerpoColisionChasis->getLinearVelocity().getZ()));
 				CuerpoColisionChasis->setAngularVelocity(btVector3(0,0,0));
 			}
 		}

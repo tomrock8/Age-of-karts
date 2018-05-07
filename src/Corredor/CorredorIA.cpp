@@ -465,18 +465,18 @@ void CorredorIA::reposicionar() {
 }
 
 void CorredorIA::calculoAnguloGiro(btVector3 posicion) {
-	double M_PI = 3.14159265358979323846;
+	double MPI = 3.14159265358979323846;
 	btVector3 orientacionCoche(orientacion.getX(), orientacion.getY(), orientacion.getZ());
 	btVector3 direccion = btVector3(posicion.getX() - cuboNodo->getPosition().x,
 		posicion.getY() - cuboNodo->getPosition().y,
 		posicion.getZ() - cuboNodo->getPosition().z);
 
 	//direccion.normalize();
-	anguloGiro = orientacionCoche.angle(direccion) * 180.0f / M_PI;
+	anguloGiro = orientacionCoche.angle(direccion) * 180.0f / MPI;
 
-	btVector3 orientacionCocheGirada = orientacionCoche.rotate(btVector3(0, 1, 0), 2 * M_PI / 180);
+	btVector3 orientacionCocheGirada = orientacionCoche.rotate(btVector3(0, 1, 0), 2 * MPI / 180);
 
-	btScalar angulo2 = orientacionCocheGirada.angle(direccion) * 180 / M_PI;
+	btScalar angulo2 = orientacionCocheGirada.angle(direccion) * 180 / MPI;
 
 	if (angulo2 > anguloGiro)
 		anguloGiro = -anguloGiro;
@@ -649,7 +649,7 @@ double CorredorIA::FuncionTriangular(double valor, double a, double b, double c)
 }
 
 void CorredorIA::ActualizarRaytest() {
-	double M_PI = 3.14159265358979323846;
+	double MPI = 3.14159265358979323846;
 	MotorFisicas *mun = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = mun->getMundo();
 	mundo->updateAabbs();
@@ -733,7 +733,7 @@ void CorredorIA::ActualizarRaytest() {
 
 	// Raycast izquierda1
 	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*Raycastlados + cuboNodo->getPosition().z + orientacion.getZ()*RaycastladosY);
-	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * M_PI / 180);
+	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * MPI / 180);
 	fingirado.setX(fingirado.getX()*-distanciaRaycastLados + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY);
 	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().z + orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
@@ -749,7 +749,7 @@ void CorredorIA::ActualizarRaytest() {
 
 	// Raycast izquierda2 
 	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*Raycastlados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
-	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * M_PI / 180);
+	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * MPI / 180);
 	fingirado.setX(fingirado.getX()*-distanciaRaycastLados + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY);
 	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
@@ -764,7 +764,7 @@ void CorredorIA::ActualizarRaytest() {
 
 	// Raycast derecha1 
 	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycastlados + cuboNodo->getPosition().z + orientacion.getZ() * RaycastladosY);
-	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * M_PI / 180);
+	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * MPI / 180);
 	fingirado.setX(fingirado.getX()*distanciaRaycastLados + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY);
 	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().z + orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
@@ -779,7 +779,7 @@ void CorredorIA::ActualizarRaytest() {
 
 	// Raycast derecha2 
 	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycastlados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
-	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * M_PI / 180);
+	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * MPI / 180);
 	fingirado.setX(fingirado.getX()*distanciaRaycastLados + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY);
 	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());

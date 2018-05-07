@@ -6,7 +6,7 @@ CajaFalsa::CajaFalsa(btVector3 posicion, btVector3 escala, btScalar masa, float 
 	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/caja/caja.obj", "escena_raiz",false);
 	
 	
-	nodo->setScale(escala.getX(),escala.getY(),escala.getZ());
+	nodo->setScale(tamanyoNodo.getX(),tamanyoNodo.getY(),tamanyoNodo.getZ());
 
 	GestorIDs::instancia().setIdentifier(nodo, "Estatico");
 	id = nodo->getID();

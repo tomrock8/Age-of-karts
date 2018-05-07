@@ -15,7 +15,7 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	offline = false;
 	selection = false;
 	TMotor::instancia().newHud("LobbyHUD");
-
+	
 	//Comprobamos que tipo de lobby entramos
 	if (ipConexion.compare("") == 0) {
 		//Online sin ip (a introducir)
@@ -32,25 +32,6 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 		count = 0;
 		client = Client::getInstancia();
 
-		if (client->getClientes().size() == 0){
-			client->setArrayClients("", 3, false, true, -1);
-			client->setArrayClients("", 1, true, false, -1);
-			client->setArrayClients("", 0, true, false, -1);
-			client->setArrayClients("", 2, true, false, -1);
-
-			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador1", "assets/HUD/LobbyMenu/seleccion_chino.png");
-			TMotor::instancia().getActiveHud()->traslateElement("jugador1", -0.5f, 0.35f);
-			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador2", "assets/HUD/LobbyMenu/seleccion_pirata.png");
-			TMotor::instancia().getActiveHud()->traslateElement("jugador2", 0.0f, 0.35f);
-			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador3", "assets/HUD/LobbyMenu/seleccion_gladiador.png");
-			TMotor::instancia().getActiveHud()->traslateElement("jugador3", 0.5f, 0.35f);	
-			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador4", "assets/HUD/LobbyMenu/seleccion_vikingo.png");	
-			TMotor::instancia().getActiveHud()->traslateElement("jugador4", -0.5f, -0.15f);	
-			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador5", "assets/HUD/LobbyMenu/seleccion_vacia.png");	
-			TMotor::instancia().getActiveHud()->traslateElement("jugador5", 0.0f, -0.15f);	
-			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador6", "assets/HUD/LobbyMenu/seleccion_vacia.png");	
-			TMotor::instancia().getActiveHud()->traslateElement("jugador6", 0.5f, -0.15f);	
-		}
 	}
 	else {
 		//Online con ip, cargada por sesion anterior 
@@ -63,6 +44,26 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	conectado = false;
 
 
+	if (offline){		
+		client->setArrayClients("", 3, false, true, -1);
+		client->setArrayClients("", 1, true, false, -1);
+		client->setArrayClients("", 0, true, false, -1);
+		client->setArrayClients("", 2, true, false, -1);
+
+		TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador1", "assets/HUD/LobbyMenu/seleccion_chino.png");
+		TMotor::instancia().getActiveHud()->traslateElement("jugador1", -0.5f, 0.35f);
+		TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador2", "assets/HUD/LobbyMenu/seleccion_pirata.png");
+		TMotor::instancia().getActiveHud()->traslateElement("jugador2", 0.0f, 0.35f);
+		TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador3", "assets/HUD/LobbyMenu/seleccion_gladiador.png");
+		TMotor::instancia().getActiveHud()->traslateElement("jugador3", 0.5f, 0.35f);	
+		TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador4", "assets/HUD/LobbyMenu/seleccion_vikingo.png");	
+		TMotor::instancia().getActiveHud()->traslateElement("jugador4", -0.5f, -0.15f);	
+		TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador5", "assets/HUD/LobbyMenu/seleccion_vacia.png");	
+		TMotor::instancia().getActiveHud()->traslateElement("jugador5", 0.0f, -0.15f);	
+		TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador6", "assets/HUD/LobbyMenu/seleccion_vacia.png");	
+		TMotor::instancia().getActiveHud()->traslateElement("jugador6", 0.5f, -0.15f);	
+		
+	}
 	TMotor::instancia().initDebugWindow();
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
@@ -218,6 +219,20 @@ void EscenaLobby::updateLobbyOnline(){
 
 		//si despues de todo se ha recibido conexion y cliente esta conectado mostramos informacion relativa
 		if (client->getConnected()) {
+			if (!offline && !conectado){
+				TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador1", "assets/HUD/LobbyMenu/seleccion_vacia.png");
+				TMotor::instancia().getActiveHud()->traslateElement("jugador1", -0.5f, 0.35f);
+				TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador2", "assets/HUD/LobbyMenu/seleccion_vacia.png");
+				TMotor::instancia().getActiveHud()->traslateElement("jugador2", 0.0f, 0.35f);
+				TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador3", "assets/HUD/LobbyMenu/seleccion_vacia.png");
+				TMotor::instancia().getActiveHud()->traslateElement("jugador3", 0.5f, 0.35f);	
+				TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador4", "assets/HUD/LobbyMenu/seleccion_vacia.png");	
+				TMotor::instancia().getActiveHud()->traslateElement("jugador4", -0.5f, -0.15f);	
+				TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador5", "assets/HUD/LobbyMenu/seleccion_vacia.png");	
+				TMotor::instancia().getActiveHud()->traslateElement("jugador5", 0.0f, -0.15f);	
+				TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador6", "assets/HUD/LobbyMenu/seleccion_vacia.png");	
+				TMotor::instancia().getActiveHud()->traslateElement("jugador6", 0.5f, -0.15f);	
+			}
 			debugClientInfo();
 			nElementos = time->getTimer();
 			conectado = true;
@@ -454,6 +469,7 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a texto (tipo 
 		break;
 	}
 	
+	TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vacia.png");
 	if (client->getClientes().at(i).tipoCorredor == 0){
 		TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_gladiador.png");
 		infoLobby->append("GLADIATOR ");
@@ -467,11 +483,13 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a texto (tipo 
 		TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_chino.png");
 		infoLobby->append("CHINESE WARRIOR ");
 	}
-	if (client->getClientes().size() < 6){
-		TMotor::instancia().getActiveHud()->changeTextureElement("jugador6", "assets/HUD/LobbyMenu/seleccion_vacia.png");
-		if (client->getClientes().size() < 5)
-		TMotor::instancia().getActiveHud()->changeTextureElement("jugador5", "assets/HUD/LobbyMenu/seleccion_vacia.png");
+	if (offline){
+		if (client->getClientes().size() < 6){
+			TMotor::instancia().getActiveHud()->changeTextureElement("jugador6", "assets/HUD/LobbyMenu/seleccion_vacia.png");
+			if (client->getClientes().size() < 5)
+			TMotor::instancia().getActiveHud()->changeTextureElement("jugador5", "assets/HUD/LobbyMenu/seleccion_vacia.png");
 
+		}
 	}
 }
 

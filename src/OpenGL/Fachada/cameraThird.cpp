@@ -56,8 +56,8 @@ void cameraThird::lookAt(glm::vec3 posicion) {
 
 void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 direccion) {
 
-	float zoom = 12;
-	float altura =5;
+	float zoom = 15;
+	float altura =7;
 	float maximoRetardo=8;
 	float retardo=0.25;
 		

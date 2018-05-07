@@ -60,10 +60,6 @@ void Item::inicializarFisicas(){
 	// Create the rigid body object
 	rigidBody = new btRigidBody(masa, MotionState, Shape, LocalInertia);
 
-	if (masa != 0)
-		rigidBody->setActivationState(DISABLE_DEACTIVATION);
-	else
-		rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
 
 	rigidBody->setUserPointer((void *)(nodo));

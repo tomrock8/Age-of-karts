@@ -496,7 +496,7 @@ void EscenaJuego::update() {
 	if (t->getTimer() <= 4 && t->getTimer() >= 1) {
 		if (t->getTimer() == 1) {
 			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtras3.png");
-			TMotor::instancia().getActiveHud()->traslateElement("cuentaAtras", 0.0f, 0.35f);
+			TMotor::instancia().getActiveHud()->traslateElement("cuentaAtras", 0.0f, 0.80f);
 			if(!countDown3){
 				fuenteCountDown->play(SOUND_OPCION);
 				countDown3 = true;
@@ -593,8 +593,9 @@ void EscenaJuego::update() {
 
 	pj = jugadores->getJugadores();
 
-
+	if(pj.at(controlPlayer)->getEstados()->getEstadoInmunidad() != EstadosJugador::estado_inmunidad::INMUNIDAD)
 	camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition(), pj.at(controlPlayer)->getNodo()->getRotation(), pj.at(controlPlayer)->getVectorDireccion());
+	
 	camera->lookAt(pj.at(controlPlayer)->getNodo()->getPosition());
 	/*
 		float distanciaX = -20;

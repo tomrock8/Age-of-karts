@@ -114,7 +114,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	b = TMotor::instancia().newBillboard(cuboNodo);
 	b->setImage("assets/HUD/MainMenu/sw_logo.png");
 	//Creamos las particulas del humo
-	//TMotor::instancia().newParticleSystem(cuboNodo);
+	p = TMotor::instancia().newParticleSystem();
 
 	InicializarFisicas();
 	InicializarFisicasRuedas();
@@ -188,6 +188,7 @@ void Corredor::setParametrosRuedasDebug(float suspensionStiffness, float Damping
 
 void Corredor::setParametros() {
 	const char* objeto = "assets/Karts/Vikingo/vikingoConIzq.obj";
+	
 	//cambiar parametros en funcion del tipo
 	int num = 0;
 	switch (tipojugador) {
@@ -213,11 +214,11 @@ void Corredor::setParametros() {
 		break;
 	case PIRATA:
 	
-
-		GiroDerIni = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 237, 395);
-		GiroDerFin = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 395, 572);
+//		GiroDerIni = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 237, 395);
+//		GiroDerFin = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 395, 572);
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000237.obj", "escena_raiz", false);
-		
+		GiroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", 237, 395), "Jugador");
+		static_cast<TAnimacion*>(GiroDerIni->getEntidad())->setVisible(false);
 		//cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Pirata/PirataConducion.obj", "escena_raiz", false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
@@ -501,7 +502,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
     	wheel.m_wheelsDampingRelaxation = btScalar(0.5) * 2 * btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f;  
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = btScalar(0);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
-    	wheel.m_maxSuspensionForce = 10000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa)  
+    	wheel.m_maxSuspensionForce = 50000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa)  
 		wheel.m_maxSuspensionTravelCm = 10000.f; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 										   
 	}
 
@@ -832,7 +833,7 @@ void Corredor::comprobarInmunidad() {
 		Timer *time = Timer::getInstancia();
 		if (time->getTimer() - timerInmunidad >= tiempoInmunidad) {
 			inmunidad = false;
-			estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::INMUNIDAD);
+			estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::NORMAL);
 		}
 	}
 }
@@ -1230,7 +1231,7 @@ void Corredor::comprobarSueloRuedas() {
 
 		if(cont==4){
 			if (estado->getEstadoMovimiento()!=EstadosJugador::estado_movimiento::DERRAPA){
-				CuerpoColisionChasis->setLinearVelocity(btVector3(CuerpoColisionChasis->getLinearVelocity().getX(),-30,CuerpoColisionChasis->getLinearVelocity().getZ()));
+				CuerpoColisionChasis->setLinearVelocity(btVector3(CuerpoColisionChasis->getLinearVelocity().getX(),-20,CuerpoColisionChasis->getLinearVelocity().getZ()));
 				CuerpoColisionChasis->setAngularVelocity(btVector3(0,0,0));
 			}
 		}
@@ -1303,6 +1304,24 @@ void Corredor::update() {
 		b->setImage("assets/HUD/juego/puesto_5.png");
 	}else {
 		b->setImage("assets/HUD/juego/puesto_6.png");
+	}
+
+	//Establecemos los parametros de las particulas
+	// POSICION
+	p->setPosition(cuboNodo->getPosition());
+	// ORIENTACION
+	p->setOrientation(glm::vec3(orientacion.getX(), orientacion.getY(), orientacion.getZ()));
+	// COLOR Y TAMANYO
+	if(estado->getEstadoCoche() == EstadosJugador::estado_coche::CON_TURBO){
+		p->setSize(0.75f); //Si el coche esta con turbo, el tamanyo es mas grande
+		p->setColor(glm::vec3(1.0f, 1.0f, 0.0f)); //Se le pasa un color amarillo
+	}else{
+		if(estado->getEstadoMovimiento() == EstadosJugador::estado_movimiento::AVANZA){
+			p->setSize(0.25f); //Si el coche acelera, el tamanyo es mas grande
+		}else{
+			p->setSize(0.075f); //Si esta parado, el tamanyo es mas pequeño
+		}
+		p->setColor(glm::vec3(1.0f, 1.0f, 1.0f)); //Se le pasa un color blanco
 	}
 }
 
@@ -1520,12 +1539,15 @@ void Corredor::updateVectorDireccion() {
 	orientacion.normalize();
 	//cout<< "ORIENTACION XNORMAL COCHE=="<< orientacion.getX() << " ORIENTACION ZNORMAL COCHE=="<< orientacion.getZ()  << endl;
 }
-obj3D *Corredor::getGiroDer() {
+TNodo *Corredor::getGiroDer() {
 	return GiroDerIni;
 }
-void Corredor::setActiveObj3D(obj3D *obj) {
-
-	cuboNodo = obj;
+void Corredor::setActiveObj3D(TNodo *obj) {
+	static_cast<TMalla*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
+	static_cast<TAnimacion*>(obj->getEntidad())->setVisible(true);
+	static_cast<TAnimacion*>(obj->getEntidad())->setPlaying(true);
+	cuboNodo->setNode(obj);
+	
 }
 //---------------------------------------//
 //--------------DESTRUCTOR---------------//

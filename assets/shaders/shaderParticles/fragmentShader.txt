@@ -4,7 +4,14 @@
 //Color final de la linea
 out vec4 fragColor;
  
+//Variable de entrada desde el vertex shader
+in vec2 textCoords;
+
+//Uniform
+uniform sampler2D image; //Textura de cada particula
+uniform vec3 color; //Color de la particula
+ 
 void main (void) {
-    //Asignamos a cada linea un color rojo
-    fragColor = vec4(0.0, 1.0, 0.0, 1.0);
+    //Asignamos a cada particula la imagen que le corresponde
+    fragColor = texture(image, textCoords) * vec4(color, 1.0);
 }

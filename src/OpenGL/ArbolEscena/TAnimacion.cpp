@@ -4,6 +4,7 @@
 TAnimacion::TAnimacion(std::vector<TMalla *> frames) {
 	TAnimacion(frames, 0, frames.size());
 	visible = true;
+	isPlaying = false;
 }
 
 
@@ -31,7 +32,7 @@ TAnimacion::~TAnimacion() {
 }
 
  void TAnimacion::beginDraw(Shader *shader) {
-	if (visible)
+	if (visible && isPlaying)
 		draw(shader);
 }
 
@@ -42,7 +43,7 @@ void TAnimacion::draw(Shader *shader) {
 
 	// Comprobar si hay que cambiar de frame
 	int framesInSeconds = framesPerSecond;
-	if (Timer::getInstancia()->getTimer() / framesInSeconds > 0) {
+	//if (Timer::getInstancia()->getTimer() / framesInSeconds > 0) {
 		// Aumentar el frame actual si no es el ultimo si le toca
 		if (actualFrame < totalFrames -1) {
 			actualFrame++;
@@ -53,7 +54,7 @@ void TAnimacion::draw(Shader *shader) {
 				actualFrame = firstFrame;
 			}
 		}
-	}
+	//}
 
 	// Guardar el tiempo ultimo de reproduccion    
 	lastFramePlayed = Timer::getInstancia()->getTimer();
@@ -98,4 +99,7 @@ int TAnimacion::getActualFrame() {
 
 int TAnimacion::getTotalFrames() {
 	return static_cast<int>(this->totalFrames);
+}
+void TAnimacion::setPlaying(bool s) {
+	isPlaying = s;
 }

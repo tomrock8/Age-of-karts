@@ -14,6 +14,8 @@ Aceite::Aceite(btVector3 posicion, btVector3 escala, btScalar masa, float tiempo
 	nombre = "Aceite";
 
 	inicializarFisicas();
+
+	rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
 

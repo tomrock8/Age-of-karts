@@ -611,7 +611,7 @@ void TMotor::draw(int tipo) {
 		//DIBUJADO DE LAS PARTICULAS
 		//--------------------------
 
-		glDisable(GL_DEPTH_TEST);
+		//glDisable(GL_DEPTH_TEST);
 		shaderParticles->use();
 		for (int i = 0; i < particleSystems.size(); i++){
 			particleSystems.at(i)->draw(shaderParticles);
@@ -763,9 +763,11 @@ billboard *TMotor::newBillboard(obj3D *o){
 }
 
 // --- PARTICLE SYSTEMS ---
-void TMotor::newParticleSystem(obj3D *o){
+particleSystem *TMotor::newParticleSystem(){
 	//Creamos el nuevo billboard con su nombre
-	particleSystem *p = new particleSystem(o);
+	particleSystem *p = new particleSystem();
 	//Lo añadimos al array de billboards
 	particleSystems.push_back(p);
+	//Lo devolvemos
+	return p;
 }

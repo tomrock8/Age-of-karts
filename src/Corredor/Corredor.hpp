@@ -18,6 +18,7 @@
 #include "Waypoint.hpp"
 #include "GestorSonido.hpp"
 #include "billboard.hpp"
+#include "particleSystem.hpp"
 
 class Corredor : public RakNet::NetworkIDObject
 {
@@ -127,6 +128,9 @@ protected:
 
 	//BILLBOARD
 	billboard* b;
+
+	//PARTICULAS HUMO
+	particleSystem *p;
 
 	//cameraThird *camara3Persona;
 

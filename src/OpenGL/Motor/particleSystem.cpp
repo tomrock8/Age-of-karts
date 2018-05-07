@@ -1,14 +1,12 @@
 #include "TMotor.hpp"
 
 //Constructor que crea un sistema de particulas que siguen a un objeto
-particleSystem::particleSystem(obj3D *o){
+particleSystem::particleSystem(){
     //Inicializamos el vector que contendra todas las particulas
     for (int i = 0; i < numMaxParticles; i++){
         Particula *p = new Particula();
         particulas.push_back(p);
     }
-    //Enlazamos el objeto 
-    elemento = o;
     //Establecemos los buffers de OpenGL
     setBuffersOpenGL();
     //Inicializamos el contador a 0 de las distintas variables que utilizaremos
@@ -16,7 +14,6 @@ particleSystem::particleSystem(obj3D *o){
     particlesAlive = 0;
     //Y el numero de particulas nuevas que habran en cada iteracion
     newParticlesPerIteration = 5;
-    lastTime = 0.0f;
     //Inicializamos los arrays que haran de buffers con los datos de posicion y color de cada particula
     position_data = new GLfloat[4*numMaxParticles]();
 }
@@ -102,19 +99,38 @@ int particleSystem::findLastDeadParticle(){
 
 //Funcion que inicializa una nueva particula del sistema
 void particleSystem::rebirthParticle(Particula *p){
-    //Valor random (0-50) para calcular los distintos datos de la particula
-    float random = ((rand() % 5) - 5) / 2.5f;
-    //La posicion de la particula dependera del objeto al que este enlazada
-    /*
-    cout << "Rotacion en x: " << elemento->getRotation()[0] << endl;
-    cout << "Rotacion en z: " << elemento->getRotation()[2] << endl;
-    cout << "......................." << endl;*/
-    p->position = glm::vec3(elemento->getPosition()[0], elemento->getPosition()[1]-1.0, elemento->getPosition()[2]);
-    //p->position.x += random; //Le sumamos el valor random
-    //p->position.z += random; //Le sumamos el valor random
-    //Reseteamos la vida 
+    //Parametros de cada particula
+    float dist = -7.0f; //Distancia donde se moveran las particulas
+    float altura = -1.0f; //Altura donde se situaran las particulas
+    //Establecemos la posicion de la particula en funcion de su posicion y orientacion
+    p->position = glm::vec3(posParticle.x + dist * oriParticle.x, posParticle.y - altura, posParticle.z + dist * oriParticle.z);
+    //Reseteamos la vida y el tamaño de la particula
     p->life = 1.0f;
     p->size = 0.65f;
+}
+
+void particleSystem::sortParticles(){
+    std::sort(&particulas.at(0), &particulas.at(49));
+}
+
+//Funcion para seterar la posicion del sistema de particulas
+void particleSystem::setPosition(glm::vec3 p){
+    posParticle = p;
+}
+
+//Funcion para setear la orientacion del sistema de particulas
+void particleSystem::setOrientation(glm::vec3 o){
+    oriParticle = o;
+}
+
+//Funcion para setear el tamaño del sistema de particulas
+void particleSystem::setSize(float s){
+    sizeParticle = s;
+}
+
+//Funcion para setear el color del sistema de particulas
+void particleSystem::setColor(glm::vec3 c){
+    colorParticle = c;
 }
 
 //Funcion que actualiza el contenedor de particulas en cada iteracion para producir el ciclo de vida/muerte de las mismas
@@ -127,25 +143,25 @@ void particleSystem::update(){
     //Despues, actualizamos todas las particulas del sistema
     particlesAlive = 0; //Reseteamos el numero de particulas vivas
 
+    glm::mat4 cameraMatrix = TMotor::instancia().getV();
+    glm::vec4 defaultVector(0, 0, 0, 1);
+    glm::vec3 posCamera = glm::vec3(cameraMatrix * defaultVector);
+
     for (int i = 0; i < numMaxParticles; i++){
         Particula *p = particulas.at(i); //Recogemos la particula del contenedor
         p->life -= 0.1; //Reducimos su vida
 
-        if (p->life > 0.0f){ //Si aun sigue viva...
-            //p->velocity = glm::vec3(0.0f,9.81f, 0.0f) * delta * 10.0f; //Velocidad en funcion de la gravedad
-            //p->position += p->velocity * delta; //Modificamos la posicion de la particula en funcion de la velocidad
 
+        if (p->life > 0.0f){ //Si aun sigue viva...
+            p->size += sizeParticle; //Modificamos el tamaño de la particulas con el tiempo
             //Llenamos los buffers que anteriormente hemos declarado
             // --- POSICION Y TAMANYO ---
-            //p->position[0] += -0.5;
-            //p->position[2] += -0.5 + elemento->getRotation()[2];
-            p->size += 0.25;
             position_data[4*particlesAlive+0] = p->position[0];
             position_data[4*particlesAlive+1] = p->position[1];
             position_data[4*particlesAlive+2] = p->position[2];
             position_data[4*particlesAlive+3] = p->size;
         }else{
-            //p->size = 0.65f;
+            p->distanceToCamera = -1.0f;
         }
 
         particlesAlive++; //Aumentamos el numero de particulas vivas
@@ -168,12 +184,18 @@ void particleSystem::draw(Shader *s){
     glm::mat4 vp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getV();
     s->setMat4("vp", vp);
 
+    //Calculamos el vector derecha de la camara y se lo pasamos al shader
     glm::vec3 cR = glm::vec3(TMotor::instancia().getV()[0][0], TMotor::instancia().getV()[1][0], TMotor::instancia().getV()[2][0]);
     s->setVec3("camRight", cR);
 
+    //Calculamos el vector arriba de la camara y se lo pasamos al shader
     glm::vec3 cU = glm::vec3(TMotor::instancia().getV()[0][1], TMotor::instancia().getV()[1][1], TMotor::instancia().getV()[2][1]);
     s->setVec3("camUp", cU);
 
+    //Le pasamos el color de las particulas al shader
+    s->setVec3("color", colorParticle);
+
+    //sortParticles();
     //Despues, pasamos a dibujar
     glBindVertexArray(VAO); //Enlazamos el VAO que antes hemos rellenado
 

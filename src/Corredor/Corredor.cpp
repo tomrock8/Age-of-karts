@@ -114,7 +114,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	b = TMotor::instancia().newBillboard(cuboNodo);
 	b->setImage("assets/HUD/MainMenu/sw_logo.png");
 	//Creamos las particulas del humo
-	TMotor::instancia().newParticleSystem(cuboNodo);
+	p = TMotor::instancia().newParticleSystem();
 
 	InicializarFisicas();
 	InicializarFisicasRuedas();
@@ -1304,6 +1304,24 @@ void Corredor::update() {
 		b->setImage("assets/HUD/juego/puesto_5.png");
 	}else {
 		b->setImage("assets/HUD/juego/puesto_6.png");
+	}
+
+	//Establecemos los parametros de las particulas
+	// POSICION
+	p->setPosition(cuboNodo->getPosition());
+	// ORIENTACION
+	p->setOrientation(glm::vec3(orientacion.getX(), orientacion.getY(), orientacion.getZ()));
+	// COLOR Y TAMANYO
+	if(estado->getEstadoCoche() == EstadosJugador::estado_coche::CON_TURBO){
+		p->setSize(0.35f); //Si el coche esta con turbo, el tamanyo es mas grande
+		p->setColor(glm::vec3(1.0f, 1.0f, 0.0f)); //Se le pasa un color amarillo
+	}else{
+		if(estado->getEstadoMovimiento() == EstadosJugador::estado_movimiento::AVANZA){
+			p->setSize(0.25f); //Si el coche acelera, el tamanyo es mas grande
+		}else{
+			p->setSize(0.075f); //Si esta parado, el tamanyo es mas pequeño
+		}
+		p->setColor(glm::vec3(1.0f, 1.0f, 1.0f)); //Se le pasa un color blanco
 	}
 }
 

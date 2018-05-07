@@ -9,8 +9,9 @@ in vec2 textCoords;
 
 //Uniform
 uniform sampler2D image; //Textura de cada particula
+uniform vec3 color; //Color de la particula
  
 void main (void) {
     //Asignamos a cada particula la imagen que le corresponde
-    fragColor = texture(image, textCoords);
+    fragColor = texture(image, textCoords) * vec4(color, 1.0);
 }

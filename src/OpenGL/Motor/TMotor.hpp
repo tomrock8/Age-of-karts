@@ -49,7 +49,7 @@ public:
 
 	void newHud(const char* n);
 	billboard *newBillboard(obj3D *o);
-	void newParticleSystem(obj3D *o);
+	particleSystem *newParticleSystem();
 	//float *toEuler(double pich, double yaw, double roll);
 
 	// METODOS GET

@@ -817,9 +817,12 @@ void Server::refreshServer()
 		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getX());
 		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getY());
 		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getZ());
+		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassTransform().getRotation());
+		/*
 		bsOut.Write(players.at(i)->getNodo()->getRotation().x);
 		bsOut.Write(players.at(i)->getNodo()->getRotation().y);
 		bsOut.Write(players.at(i)->getNodo()->getRotation().z);
+		*/
 		bsOut.Write(estados->getEstadoMovimiento());
 		bsOut.Write(estados->getDireccionMovimiento());
 		bsOut.Write(estados->getEstadoObjeto());

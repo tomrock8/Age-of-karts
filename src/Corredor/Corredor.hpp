@@ -59,6 +59,7 @@ public:
 	void setWaypointActual(obj3D *nodo);
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
+	void setPosicionBullet(float *pos, btQuaternion ori);
 	void setPosicionSources();
 	void setLimite(int s);
 	void setTipoJugador(int tj);

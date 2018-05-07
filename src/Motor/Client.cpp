@@ -265,6 +265,8 @@ int Client::ReceivePackets() {
 		bool ulti = false;
 		bool parambool;
 
+		btQuaternion rotacionBullet;
+
 		RakNet::RakString paramRakString;
 		std::string paramString;
 
@@ -653,9 +655,12 @@ int Client::ReceivePackets() {
 					bsIn.Read(pos[0]); //POSICION ACTUAL
 					bsIn.Read(pos[1]);	//
 					bsIn.Read(pos[2]);	//
+					bsIn.Read(rotacionBullet);
+					/*
 					bsIn.Read(ori[0]);	//ROTACION
 					bsIn.Read(ori[1]);	//
 					bsIn.Read(ori[2]);	//
+					*/
 
 					bsIn.Read(param);		//ESTADOS
 					if (i != controlPlayer)
@@ -682,7 +687,8 @@ int Client::ReceivePackets() {
 					if (i != controlPlayer)
 						players.at(id)->setLimite(param);
 
-					players.at(id)->setPosicion(pos, ori);
+					//players.at(id)->setPosicion(pos, ori);
+					players.at(id)->setPosicionBullet(pos, rotacionBullet);
 				}
 			}
 

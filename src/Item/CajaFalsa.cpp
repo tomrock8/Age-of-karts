@@ -12,6 +12,8 @@ CajaFalsa::CajaFalsa(btVector3 posicion, btVector3 escala, btScalar masa, float 
 	id = nodo->getID();
 	nombre = "CajaFalsa";
 	inicializarFisicas();
+
+	rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
 void CajaFalsa::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) {

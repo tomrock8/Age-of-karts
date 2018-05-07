@@ -833,7 +833,7 @@ void Corredor::comprobarInmunidad() {
 		Timer *time = Timer::getInstancia();
 		if (time->getTimer() - timerInmunidad >= tiempoInmunidad) {
 			inmunidad = false;
-			estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::INMUNIDAD);
+			estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::NORMAL);
 		}
 	}
 }

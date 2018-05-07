@@ -593,8 +593,9 @@ void EscenaJuego::update() {
 
 	pj = jugadores->getJugadores();
 
-
+	if(pj.at(controlPlayer)->getEstados()->getEstadoInmunidad() != EstadosJugador::estado_inmunidad::INMUNIDAD)
 	camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition(), pj.at(controlPlayer)->getNodo()->getRotation(), pj.at(controlPlayer)->getVectorDireccion());
+	
 	camera->lookAt(pj.at(controlPlayer)->getNodo()->getPosition());
 	/*
 		float distanciaX = -20;

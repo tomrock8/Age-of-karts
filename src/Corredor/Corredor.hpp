@@ -114,6 +114,7 @@ public:
 	void usarObjetos();
 	void lanzarHabilidad();
 
+	TNodo * getGiroDer();
 
 	std::string toString();
 
@@ -240,8 +241,11 @@ protected:
 
 
 	//Animaciones
-	obj3D *GiroDerIni;
-	obj3D *GiroDerFin;
+	//obj3D *GiroDerIni;
+	//obj3D *GiroDerFin;
+	TNodo *parado;
+	TNodo *GiroDerIni;
+	TNodo *GiroDerFin;
 
 
 
@@ -263,9 +267,8 @@ protected:
 	void actualizarRuedas();
 	void updateVectorDireccion();
 
-	obj3D * getGiroDer();
 
-	void setActiveObj3D(obj3D * obj);
+	void setActiveObj3D(TNodo * obj);
 
 };
 

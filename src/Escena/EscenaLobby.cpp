@@ -48,8 +48,8 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 			TMotor::instancia().getActiveHud()->traslateElement("jugador4", -0.5f, -0.15f);	
 			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador5", "assets/HUD/LobbyMenu/seleccion_vacia.png");	
 			TMotor::instancia().getActiveHud()->traslateElement("jugador5", 0.0f, -0.15f);	
-			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador6", "assets/HUD/LobbyMenu/seleccion_vacia.png");	
-			TMotor::instancia().getActiveHud()->traslateElement("jugado6", 0.5f, -0.15f);	
+			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "jugador6", "assets/HUD/LobbyMenu/seleccion_vacia2.png");	
+			TMotor::instancia().getActiveHud()->traslateElement("jugador6", 0.5f, -0.15f);	
 		}
 	}
 	else {
@@ -468,7 +468,7 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a texto (tipo 
 		infoLobby->append("CHINESE WARRIOR ");
 	}
 	if (client->getClientes().size() < 6){
-		TMotor::instancia().getActiveHud()->changeTextureElement("jugador6", "assets/HUD/LobbyMenu/seleccion_vacio.png");
+		TMotor::instancia().getActiveHud()->changeTextureElement("jugador6", "assets/HUD/LobbyMenu/seleccion_vacio2.png");
 		if (client->getClientes().size() < 5)
 		TMotor::instancia().getActiveHud()->changeTextureElement("jugador5", "assets/HUD/LobbyMenu/seleccion_vacio.png");
 

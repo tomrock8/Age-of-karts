@@ -357,7 +357,7 @@ void EscenaJuego::renderDebug() {
 					debug_Jugador = false;
 				ImGui::End();
 			}
-
+			
 			if (muestraDebugIA){
 				std::vector<Corredor*> pj = GestorJugadores::getInstancia()->getJugadores();
 				ImGui::Begin("Datos del Corredor IA", &muestraDebugIA);
@@ -395,7 +395,12 @@ void EscenaJuego::renderDebug() {
 			if (vueltas<=3){
 				ImGui::SetNextWindowSize( ImVec2( (float)302 , (float)80 ) );
 			}else{
-				ImGui::SetNextWindowSize( ImVec2( (float)290 , (float)40 ) );
+				if (fin_carrera){
+					ImGui::SetNextWindowPos(ImVec2((display_w-300)/2, (display_h-600)/2));
+					ImGui::SetNextWindowSize( ImVec2( (float)450 , (float)120 ) );
+				}else{
+					ImGui::SetNextWindowSize( ImVec2( (float)290 , (float)40 ) );
+				}
 			}
 			ImGui::SetNextWindowBgAlpha(0.6f); 
             ImGui::Begin("Another Window", &show_another_window,  ImGuiWindowFlags_NoResize 
@@ -406,9 +411,15 @@ void EscenaJuego::renderDebug() {
 				ImGui::Text("Tiempo vuelta: ");
 				ImGui::Text(to_string(jugador->getTiempoVuelta()).c_str());
 			}else{
+				if (fin_carrera) {
+					ImGui::Text("CARRERA FINALIZADA!");
+					ImGui::Text("PULSA F PARA VOLVER");
+					
+				}
 				ImGui::Text("Has quedado: ");
 				TMotor::instancia().getActiveHud()->traslateElement("puesto", 0.0f, 0.3f);
 				muestra_tiempo=t->getTimer();
+				
 				//ImGui::Text(to_string(jugador->getPosicionCarrera()).c_str());
 			}
 			vueltas_aux=vueltas;
@@ -477,9 +488,7 @@ void EscenaJuego::update() {
 	}
 
 
-	if (fin_carrera) {
-		//cout << "CARRERA FINALIZADA, PULSA F.";
-	}
+	
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 
 
@@ -518,7 +527,7 @@ void EscenaJuego::update() {
 		}
 	}
 
-	if (t->getTimer() >= 5) {
+	if (t->getTimer() < 8 && t->getTimer() >= 5) {
 		TMotor::instancia().getActiveHud()->deleteElement("cuentaAtras");
 		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
 			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);

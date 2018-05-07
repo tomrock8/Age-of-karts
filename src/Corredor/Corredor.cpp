@@ -1268,9 +1268,10 @@ void Corredor::update() {
 	
 	comprobarTurbo();
 	comprobarInmunidad();
-	if (estado->getEstadoCarrera() != EstadosJugador::estado_carrera::PARRILLA) {
+	if (estado->getEstadoCarrera() == EstadosJugador::estado_carrera::CARRERA) {
 		movimiento();// Esto ni existe
 		updateEstado();
+		
 	}
 	updateTimerObstaculos();
 	updateEstado();

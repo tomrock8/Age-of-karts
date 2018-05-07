@@ -43,7 +43,7 @@ void CorredorJugador::movimiento() {
 	}
 	//GIRAR DERECHA
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
-	//	this->getNodo()->setNode(GiroDerIni->getNode());
+		this->setActiveObj3D(this->getGiroDer());
 		girarDerecha();
 
 		comprobadorMovimiento = true;

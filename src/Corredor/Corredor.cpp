@@ -188,6 +188,7 @@ void Corredor::setParametrosRuedasDebug(float suspensionStiffness, float Damping
 
 void Corredor::setParametros() {
 	const char* objeto = "assets/Karts/Vikingo/vikingoConIzq.obj";
+	
 	//cambiar parametros en funcion del tipo
 	int num = 0;
 	switch (tipojugador) {
@@ -213,11 +214,11 @@ void Corredor::setParametros() {
 		break;
 	case PIRATA:
 	
-
-		GiroDerIni = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 237, 395);
-		GiroDerFin = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 395, 572);
+//		GiroDerIni = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 237, 395);
+//		GiroDerFin = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 395, 572);
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000237.obj", "escena_raiz", false);
-		
+		GiroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", 237, 395), "Jugador");
+		static_cast<TAnimacion*>(GiroDerIni->getEntidad())->setVisible(false);
 		//cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Pirata/PirataConducion.obj", "escena_raiz", false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
@@ -832,7 +833,7 @@ void Corredor::comprobarInmunidad() {
 		Timer *time = Timer::getInstancia();
 		if (time->getTimer() - timerInmunidad >= tiempoInmunidad) {
 			inmunidad = false;
-			estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::INMUNIDAD);
+			estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::NORMAL);
 		}
 	}
 }
@@ -1268,9 +1269,10 @@ void Corredor::update() {
 	
 	comprobarTurbo();
 	comprobarInmunidad();
-	if (estado->getEstadoCarrera() != EstadosJugador::estado_carrera::PARRILLA) {
+	if (estado->getEstadoCarrera() == EstadosJugador::estado_carrera::CARRERA) {
 		movimiento();// Esto ni existe
 		updateEstado();
+		
 	}
 	updateTimerObstaculos();
 	updateEstado();
@@ -1519,12 +1521,15 @@ void Corredor::updateVectorDireccion() {
 	orientacion.normalize();
 	//cout<< "ORIENTACION XNORMAL COCHE=="<< orientacion.getX() << " ORIENTACION ZNORMAL COCHE=="<< orientacion.getZ()  << endl;
 }
-obj3D *Corredor::getGiroDer() {
+TNodo *Corredor::getGiroDer() {
 	return GiroDerIni;
 }
-void Corredor::setActiveObj3D(obj3D *obj) {
-
-	cuboNodo = obj;
+void Corredor::setActiveObj3D(TNodo *obj) {
+	static_cast<TMalla*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
+	static_cast<TAnimacion*>(obj->getEntidad())->setVisible(true);
+	static_cast<TAnimacion*>(obj->getEntidad())->setPlaying(true);
+	cuboNodo->setNode(obj);
+	
 }
 //---------------------------------------//
 //--------------DESTRUCTOR---------------//

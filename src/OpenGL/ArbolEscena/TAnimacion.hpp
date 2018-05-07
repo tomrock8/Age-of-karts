@@ -15,6 +15,7 @@ public:
 	// METODOS GET
 	int getActualFrame();
 	int getTotalFrames();
+	void setPlaying(bool s);
 	bool isVisible();
 
 	//METODOS SET
@@ -40,5 +41,6 @@ private:
 
 	bool visible; // Indicador para dibujar
 	bool loopPlay; // Indicador para reiniciar la animacion
+	bool isPlaying; //Indicador para empezar a dibujar
 };
 #endif

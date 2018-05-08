@@ -420,20 +420,19 @@ void CorredorIA::seguirWaypoint() {
 	switch(valor){
 
 		case 0:
-		
-		if(posCoche.distance(siguiente->getPosicion())>25)
+		if(posCoche.distance(siguiente->getPosicion())>20)
 		calculoAnguloGiro(siguiente->getPosicion());
 			
 		//cout<<posCoche.distance(siguiente->getPosicion())<<endl;
 		break;
 		case 1:
-		if(posCoche.distance(siguiente->getVector2())>25)
+		if(posCoche.distance(siguiente->getVector2())>20)
 		calculoAnguloGiro(siguiente->getVector2());
 
 		//cout<<posCoche.distance(siguiente->getVector2())<<endl;
 		break;
 		case 2:
-		if(posCoche.distance(siguiente->getVector3())>25)
+		if(posCoche.distance(siguiente->getVector3())>20)
 		calculoAnguloGiro(siguiente->getVector3());
 
 		//cout<<posCoche.distance(siguiente->getVector3())<<endl;

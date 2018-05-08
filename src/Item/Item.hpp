@@ -83,6 +83,7 @@ protected:
 	bool subir;
 	bool bajar;
 	float indiceAltura;
+	float alturaItem;
 };
 
 #endif

@@ -444,7 +444,7 @@ void Corredor::InicializarFisicas() {
 
 	//Forma Colision
 	//btVector3 TamanyoFormaColision(cuboNodo->getScale().X, cuboNodo->getScale().Y, cuboNodo->getScale().Z * 2);
-	btVector3 TamanyoFormaColision(cuboNodo->getScale().x, cuboNodo->getScale().y, cuboNodo->getScale().z * 2);
+	btVector3 TamanyoFormaColision(cuboNodo->getScale().x*2, cuboNodo->getScale().y * 1.2, cuboNodo->getScale().z * 2);
 	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
 	FormaColision = new btBoxShape(TamanyoFormaColision);
 	//masa coche
@@ -830,8 +830,10 @@ void Corredor::comprobarInmunidad() {
 	if (inmunidad) {
 		estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::INMUNIDAD);
 		resetFuerzas();
+		CuerpoColisionChasis->setCollisionFlags(CuerpoColisionChasis->getCollisionFlags() | btCollisionObject::CO_GHOST_OBJECT);
 		Timer *time = Timer::getInstancia();
 		if (time->getTimer() - timerInmunidad >= tiempoInmunidad) {
+			CuerpoColisionChasis->setCollisionFlags(0);
 			inmunidad = false;
 			estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::NORMAL);
 		}

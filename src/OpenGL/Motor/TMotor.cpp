@@ -773,3 +773,45 @@ particleSystem *TMotor::newParticleSystem(){
 	//Lo devolvemos
 	return p;
 }
+
+// --- DEFERRED SHADING ---
+void TMotor::setDeferredBuffers(){
+	//Creamos y enlazamos el buffer del deferred shading
+	glGenBuffers(1, &defBuffer);
+	glBindBuffer(GL_FRAMEBUFFER, defBuffer);
+
+	//Creamos las texturas que guardaran los distintos datos de posicion, normales y color
+	glGenTextures(1, &defPosition);
+	glGenTextures(1, &defNormal);
+	glGenTextures(1, &defDiffuseSpecular);
+
+	//Definimos cada una de las distintas texturas
+	// --- TEXTURA DE POSICION ---
+	glBindTexture(GL_TEXTURE_2D, defPosition); //Decimos que se trata de una textura 2D
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, screenWIDTH, screenHEIGHT, 0, GL_RGB, GL_FLOAT, NULL); //Utilizamos una textura de 16 bits de precision
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //|
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //| Parametros de la textura
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, defPosition, 0); //Adjuntamos la textura al frambuffer definido
+
+	// --- TEXTURA DE NORMALES ---
+	glBindTexture(GL_TEXTURE_2D, defNormal); //Decimos que se trata de una textura 2D
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, screenWIDTH, screenHEIGHT, 0, GL_RGB, GL_FLOAT, NULL); //Utilizamos una textura de 16 bits de precision
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //|
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //| Parametros de la textura
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, defNormal, 0); //Adjuntamos la textura al frambuffer definido
+ 
+	// --- TEXTURA DE COLOR ---
+	glBindTexture(GL_TEXTURE_2D, defDiffuseSpecular); //Decimos que se trata de una textura 2D
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, screenWIDTH, screenHEIGHT, 0, GL_RGBA, GL_FLOAT, NULL); //Utilizamos una textura de 8 bits de precision
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //|
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //| Parametros de la textura
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, defDiffuseSpecular, 0); //Adjuntamos la textura al frambuffer definido
+
+	//Le decimos a OpenGL las texturas adjuntas que va a utilizar para renderizar en el buffer
+	GLuint textAdjuntas[3] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
+	glDrawBuffers(3,textAdjuntas);
+
+	//Desenlazamos el buffer hasta el dibujado
+	glBindBuffer(GL_FRAMEBUFFER, 0);
+	
+}

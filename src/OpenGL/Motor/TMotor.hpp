@@ -142,7 +142,7 @@ protected:
 
 	//Deferred shading
 	GLuint defBuffer; //Buffer que contendra todas las texturas con las posicion, normales y colores para renderizar posterioremente mediante deferred shading
-	GLuint defPosition, defNormal, defDiffuseSpecular; //Cada uno de los buffers que contendra la informacion anterior
+	GLuint defPosition, defNormal, defDiffuseSpecular; //Cada una de las texturas que contendran la informacion anterior
 
 	bool renderDebug;
 	bool debugBullet = false;

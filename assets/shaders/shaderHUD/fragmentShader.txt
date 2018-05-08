@@ -7,18 +7,28 @@ out vec4 FragColor; //Color final del pixel
 //Variable de entrada del vertex shader
 in vec2 textCoords;
 
-//Textura del elemento hud
-uniform sampler2D ourTexture;
-
-//Color del elemento hud
-uniform vec4 ourColor;
+//Uniforms
+uniform sampler2D ourTexture; //Textura del elemento hud
+uniform vec4 ourColor; //Color del elemento hud
+uniform bool transparency; //true == elemento hud transparente
+uniform float transparencyLevel; //Nivel de transparencia del elemento hud
 
 void main()
 {
-    //Se asigna la textura al vertice en funcion de las coordenadas de textura
+    //Si existe textura, se le asigna
     if (ourColor.w < 0.1){
-        FragColor = texture(ourTexture, textCoords);
-    }else{
+        //Si la transparencia del elemento esta activada...
+        if (transparency == true){
+            //Se hacen transparentes (segun el nivel definido) aquellos elementos de la imagen que no sean totalmente transparentes
+            if (texture(ourTexture, textCoords).w > 0.0){
+                FragColor = vec4(vec3(texture(ourTexture, textCoords)), transparencyLevel);
+            }else{
+                FragColor = texture(ourTexture, textCoords);
+            }
+        }else{ //Sino se le asigna la textura tal cual
+            FragColor = texture(ourTexture, textCoords);
+        }
+    }else{ //Sino se le asigna el color que se le haya definido
         FragColor = ourColor;
     }
 }

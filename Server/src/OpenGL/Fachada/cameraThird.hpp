@@ -4,6 +4,10 @@
 #include "libGL.hpp" 
 #include "obj3D.hpp" 
 #include "btBulletDynamicsCommon.h"
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for C++  
+#include <cmath>  
+#endif
 
 class cameraThird {
 public:

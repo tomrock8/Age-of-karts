@@ -1,13 +1,17 @@
 #include "ItemTeledirigido.hpp"
-
+#include "Pista.hpp"
+#include "math.h"
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for C++  4
+#endif
 
 ItemTeledirigido::ItemTeledirigido(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
 	float alturaLanzamiento, int idNodo) : Item(posicion, escala, masa, tiempoDesctruccion, fcolision, tamanyoNodo, radio, alturaLanzamiento, idNodo) {
 
-	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/flecha/flecha.obj", "escena_raiz",false);
+	nodo = TMotor::instancia().newMeshNode("Estatico", "assets/flecha/flecha.obj", "escena_raiz", false);
 	//cout << "(ItemTeledirigido::ItemTeledirigido) Hay que comprobar la posicion que sea respecto del corredor al crear\n";
 	//nodo->setPosition(posicion.getX(), posicion.getY(), posicion.getZ());
-	nodo->setScale(tamanyoNodo.getX(),tamanyoNodo.getY(),tamanyoNodo.getZ());
+	nodo->setScale(tamanyoNodo.getX(), tamanyoNodo.getY(), tamanyoNodo.getZ());
 
 	GestorIDs::instancia().setIdentifier(nodo, "Estatico");
 	id = nodo->getID();
@@ -24,7 +28,7 @@ ItemTeledirigido::ItemTeledirigido(btVector3 posicion, btVector3 escala, btScala
 
 
 
-void ItemTeledirigido::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) {
+void ItemTeledirigido::lanzarItem(int direccion, btVector3 orientacion, btTransform objeto) {
 	this->orientacion = orientacion;
 	objeto.setOrigin(posicion);
 	rigidBody->setCenterOfMassTransform(objeto);
@@ -57,10 +61,18 @@ void ItemTeledirigido::setWaypoint(Waypoint *waypoint) {
 }
 
 void ItemTeledirigido::setWaypointActual() {
-	if (colision && idwaypoint > actual->getWaypoint()->getID() || colision && idwaypoint == 7) {
-		actual = siguiente;
+	Pista *mapa = Pista::getInstancia();
+	actual = mapa->getArrayWaypoints()[0];
 
-		siguiente = actual->getNextWaypoint();
+	if (colision && idwaypoint > actual->getWaypoint()->getID() || colision && idwaypoint == 7) {
+		actual = mapa->getArrayWaypoints()[idwaypoint - 7];
+		if (actual->getID() - 7 == mapa->getArrayWaypoints().size() - 1) {
+			siguiente = mapa->getArrayWaypoints()[0];
+		}
+		else {
+			siguiente = actual->getNextWaypoint();
+		}
+
 
 	}
 	colision = false;
@@ -76,11 +88,11 @@ void ItemTeledirigido::direccionGiro(btVector3 posicion) {
 		posicion.getZ() - nodo->getPosition().z);
 
 	//direccion.normalize();
-	anguloGiro = orientacionCoche.angle(direccion) * 180 / PI;
+	anguloGiro = orientacionCoche.angle(direccion) * 180 / M_PI;
 
-	btVector3 orientacionCocheGirada = orientacionCoche.rotate(btVector3(0, 1, 0), 2 * PI / 180);
+	btVector3 orientacionCocheGirada = orientacionCoche.rotate(btVector3(0, 1, 0), 2 * M_PI / 180);
 
-	btScalar angulo2 = orientacionCocheGirada.angle(direccion) * 180 / PI;
+	btScalar angulo2 = orientacionCocheGirada.angle(direccion) * 180 / M_PI;
 
 	if (angulo2 > anguloGiro)
 		anguloGiro = -anguloGiro;
@@ -101,7 +113,7 @@ void ItemTeledirigido::ActualizarRaytest() {
 	float distanciaRaycast = 150; // longitud del rayo
 	float distanciaCoche = 2; // distancia entre el rayo y el coche, donde empieza
 	float Raycast23 = 10; // distancia entre raycast 2 y 3
-	float Raycast45=20;
+	float Raycast45 = 20;
 
 	enemigo = false;
 
@@ -154,7 +166,7 @@ void ItemTeledirigido::ActualizarRaytest() {
 	RayCast5.m_flags |= btTriangleRaycastCallback::kF_FilterBackfaces;
 	RayCast5.m_flags |= btTriangleRaycastCallback::kF_UseSubSimplexConvexCastRaytest;
 	mundo->rayTest(inicio, fin, RayCast5);
-	
+
 
 	if (RayCast1.hasHit())
 	{
@@ -251,14 +263,14 @@ void ItemTeledirigido::movimiento() {
 	trans.setOrigin(btVector3(nodo->getPosition().x, nodo->getPosition().y, nodo->getPosition().z));
 
 	if (anguloGiro > 0) {
-		orientacion = orientacion.rotate(btVector3(0, 1, 0), giro*PI / 180);
-		quaternion.setEulerZYX(0, (nodo->getRotation().y +giro) * PI / 180, 0);
+		orientacion = orientacion.rotate(btVector3(0, 1, 0), giro * M_PI / 180);
+		quaternion.setEulerZYX(0, (nodo->getRotation().y + giro) * M_PI / 180, 0);
 		//cout<< "derecha" << endl;
 	}
 
 	else {
-		orientacion = orientacion.rotate(btVector3(0, 1, 0), (-giro)*PI / 180);
-		quaternion.setEulerZYX(0, (nodo->getRotation().y-giro) * PI / 180, 0);
+		orientacion = orientacion.rotate(btVector3(0, 1, 0), (-giro) * M_PI / 180);
+		quaternion.setEulerZYX(0, (nodo->getRotation().y - giro) * M_PI / 180, 0);
 
 		//cout<< "izquierda" << endl;
 	}

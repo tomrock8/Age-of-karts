@@ -17,9 +17,8 @@
 #include "obj3D.hpp"
 #include "Waypoint.hpp"
 #include "GestorSonido.hpp"
-
-#define PI 3.14159265358979323846  /* pi */
-#define RADTODEG 180.0f / PI
+#include "billboard.hpp"
+#include "particleSystem.hpp"
 
 class Corredor : public RakNet::NetworkIDObject
 {
@@ -59,6 +58,7 @@ public:
 	void setWaypointActual(obj3D *nodo);
 	void setProteccion(bool s);
 	void setPosicion(float *pos, float *ori);
+	void setPosicionBullet(float *pos, btQuaternion ori);
 	void setPosicionSources();
 	void setLimite(int s);
 	void setTipoJugador(int tj);
@@ -116,6 +116,7 @@ public:
 	void usarObjetos();
 	void lanzarHabilidad();
 
+	TNodo * getGiroDer();
 
 	std::string toString();
 
@@ -125,6 +126,12 @@ protected:
 	obj3D *rueda2;
 	obj3D *rueda3;
 	obj3D *rueda4;
+
+	//BILLBOARD
+	billboard* b;
+
+	//PARTICULAS HUMO
+	particleSystem *p;
 
 	//cameraThird *camara3Persona;
 
@@ -235,9 +242,17 @@ protected:
 
 	//raycast
 	btVehicleRaycaster *RayCastVehiculo;
-
-
 	btVector3 orientacion;
+
+
+	//Animaciones
+	//obj3D *GiroDerIni;
+	//obj3D *GiroDerFin;
+	TNodo *parado;
+	TNodo *GiroDerIni;
+	TNodo *GiroDerFin;
+
+
 
 	void CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning);
 	void BorrarFisicas();
@@ -256,6 +271,9 @@ protected:
 	// UPDATES
 	void actualizarRuedas();
 	void updateVectorDireccion();
+
+
+	void setActiveObj3D(TNodo * obj);
 
 };
 

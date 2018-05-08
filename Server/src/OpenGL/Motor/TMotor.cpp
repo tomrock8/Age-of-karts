@@ -62,6 +62,8 @@ TMotor::TMotor() {
 	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
 	shaderCartoon = new Shader("assets/shaders/shaderCartoon/vertexShader.txt", "assets/shaders/shaderCartoon/fragmentShader.txt", nullptr);
 	shaderSilhouette = new Shader("assets/shaders/shaderSilhouette/vertexShader.txt", "assets/shaders/shaderSilhouette/fragmentShader.txt", nullptr);
+	shaderBillboard = new Shader("assets/shaders/shaderBillboard/vertexShader.txt", "assets/shaders/shaderBillboard/fragmentShader.txt", nullptr);
+	shaderParticles = new Shader("assets/shaders/shaderParticles/vertexShader.txt", "assets/shaders/shaderParticles/fragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 
 	gestorSonido = new GestorSonido();
@@ -109,6 +111,12 @@ void TMotor::close() {
 	delete gestorSonido;
 	for (int i = 0; i < HUDs.size(); i++) {
 		delete HUDs[i];
+	}
+	for (int i = 0; i < billboards.size(); i++) {
+		delete billboards[i];
+	}
+	for (int i = 0; i < particleSystems.size(); i++) {
+		delete particleSystems[i];
 	}
 }
 
@@ -244,7 +252,61 @@ obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float co
 	return new obj3D(nodo, name, contID);
 	
 }
+obj3D *TMotor::newAnimation(const char *name, const char *path, const char* parentNode, int framesIni, int framesFin) {
+	// E S C A L A D O
+	string *nameEsc = new string("escalado_" + (string)name);
+	TTransform *scaleMesh = createTransformation();
+	TNodo *scaleNodeMesh = createTransformationNode(getNode(parentNode), scaleMesh, nameEsc->c_str());
 
+	// R O T A C I O N
+	string *nameRot = new string("rotacion_" + (string)name);
+	TTransform *rotateMesh = createTransformation();
+	if (strcmp(parentNode, "escena_raiz") != 0)	rotateMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getPadre()->getEntidad())->getMatriz());
+	TNodo *rotationNodeMesh = createTransformationNode(scaleNodeMesh, rotateMesh, nameRot->c_str());
+
+	// T R A S L A C I O N
+	string *nameTras = new string("traslacion_" + (string)name);
+	TTransform *traslationMesh = createTransformation();
+	if (strcmp(parentNode, "escena_raiz") != 0)	traslationMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getEntidad())->getMatriz());
+	TNodo *traslationNodeMesh = createTransformationNode(rotationNodeMesh, traslationMesh, nameTras->c_str());
+
+
+	// N O D O
+	/*cout << "\nContenido de mallas en TMotor\n";
+	for (int i = 0; i < gestorRecursos->getRecursoMallas().size(); i++) {
+	cout << "MALLA MOTOR: " << gestorRecursos->getRecursoMallas().at(i)->getNombre() << "\n";
+	}*/
+
+	TAnimacion *anim = TMotor::instancia().createAnimation(path, framesIni, framesFin);
+	TNodo  *nodo = TMotor::instancia().createAnimationNode(traslationNodeMesh, anim, name);
+	//if (strcmp(name, "mapa") == 0) {
+	//	objMapa = new obj3D(nodo, name, contID);
+	//	return objMapa;
+	//}
+	//if (strcmp(name, "elementos") == 0) {
+	//	objElementos = new obj3D(nodo, name, contID);
+	//	return objElementos;
+	//}
+
+	contID++;
+	return new obj3D(nodo, name, contID);
+
+}
+TAnimacion *TMotor::createAnimation(const char *path, int framesIni, int framesFin) {
+	const char * obj = ".obj";
+	string ruta = path;
+	ruta += to_string(framesIni);
+	ruta += obj;
+	std::vector<TMalla*> animation;
+	for (int i = framesIni; i < framesFin; i++) {
+		string ruta = path;
+		ruta += to_string(i);
+		ruta += obj;
+		//cout << "los objs son : " << ruta << endl;
+		animation.push_back(new TMalla(gestorRecursos->loadMesh(ruta.c_str(), false,true)));
+	}
+	return new TAnimacion(animation,framesIni, framesFin);
+}
 obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode,bool sta) {
 	// E S C A L A D O
 	string *nameEsc = new string("escalado_" + (string)name);
@@ -272,14 +334,14 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 
 	TMalla *malla = TMotor::instancia().createMesh(path,sta);
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
-	if (strcmp(name, "mapa") == 0){
-		objMapa = new obj3D(nodo, name, contID);
-		return objMapa;
-	}
-	if (strcmp(name, "elementos") == 0){
-		objElementos = new obj3D(nodo, name, contID);
-		return objElementos;
-	}
+	//if (strcmp(name, "mapa") == 0){
+	//	objMapa = new obj3D(nodo, name, contID);
+	//	return objMapa;
+	//}
+	//if (strcmp(name, "elementos") == 0){
+	//	objElementos = new obj3D(nodo, name, contID);
+	//	return objElementos;
+	//}
 
 	contID++;
 	return new obj3D(nodo, name, contID);
@@ -298,11 +360,17 @@ TMalla *TMotor::createMesh(const char *fich,bool sta) {
 	//	TRecursoMalla *auxMesh = gestorRecursos->getRecurso(fich);
 	//	TRecursoTextura *auxText = gestorRecursos->getRecursoTextura(fich);
 	//	return new TMalla(auxMesh, auxText);
-	return new TMalla(gestorRecursos->loadMesh(fich,sta));
+	return new TMalla(gestorRecursos->loadMesh(fich,sta,false));
 	//return NULL;
 }
 
-
+TNodo  *TMotor::createAnimationNode(TNodo *padre, TAnimacion *mesh, const char* name) {
+	TNodo *nodo = new TNodo(name);
+	nodo->setPadre(padre);
+	nodo->setEntidad(mesh);
+	padre->addHijo(nodo);
+	return nodo;
+}
 TNodo  *TMotor::createMeshNode(TNodo *padre, TMalla *mesh, const char* name) {
 	TNodo *nodo = new TNodo(name);
 	nodo->setPadre(padre);
@@ -375,7 +443,7 @@ void TMotor::clean() {
 void TMotor::draw(int tipo) {
 
 	glClearColor(0.16f, 0.533f, 0.698f, 0.0f);//Establecer el nuevo color de fondo
-
+	/*
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
 	if (lights.size() > 0) {
 		for (int i = 0; i < lights.size(); i++) {
@@ -398,30 +466,33 @@ void TMotor::draw(int tipo) {
 			}
 		}
 	}
-
+	*/
 
 	clean();//Se llama a la funcion para limpiar los buffers de OpenGL
 	if (tipo == 1 || tipo == 2) {
+		//Antes de llamar a ningun dibujado, calculamos la viewMatrix de la camara activa
+		drawCamera();
+
 		//DIBUJADO DEL SKYBOX
 		//-------------------
 		//Activamos el shader especifico del skybox
 		shaderSkybox->use(); 
-		//Establecemos las matrices view y projection a partir del dibujado de la camara
-		drawCamera(shaderSkybox); 
 		//Llamamos al metodo de dibujado del skybox
 		skybox->drawSkyBox();
 
 		//DIBUJADO DEL ARBOL * ESTILO CARTOON *
 		//-------------------------------------
-
+		
 		//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas
 
 		//Enlazamos el shader cartoon
 		Shader *s = shaderCartoon;
 		//Se activa el shader para el renderizado 3D
 		s->use();
-		//Establecemos las matrices view y projection a partir del dibujado de la camara
-		drawCamera(s);
+		//Calcular posicion de la camara y pasarsela al fragment shader
+		glm::vec4 defaultVector(0, 0, 0, 1);
+		glm::vec4 posC = v * defaultVector;
+		s->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
 		//Establecemos los datos de las distintas luces
 		drawLight(s);
 		//Configuramos los shaders para producir las sombras de cada luz
@@ -430,6 +501,7 @@ void TMotor::draw(int tipo) {
 				static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow(s);
 			}
 		}
+		
 		if (!debugBullet){
 			//Activamos el glPolygonOffset = a cada fragmento de los objetos se le añade una pequeña profundidad antes de realizar los calculos del z-buffer
 			glEnable(GL_POLYGON_OFFSET_FILL);
@@ -449,8 +521,6 @@ void TMotor::draw(int tipo) {
 		s = shaderSilhouette;
 		//Se activa el shader para el renderizado 3D
 		s->use();
-		//Establecemos las matrices view y projection a partir del dibujado de la camara
-		drawCamera(s);
 		//Desactivamos el offset anterior
 		glDisable( GL_POLYGON_OFFSET_FILL );  
 		//Establecemos el dibujado del poligono en modo linea
@@ -486,12 +556,9 @@ void TMotor::draw(int tipo) {
 			glEnableVertexAttribArray(0);
 			//Activamos el shader del debug
 			shaderDebug->use();
-			//Pasamos la view y la projection matrix al shader debug
-			drawCamera(shaderDebug);
-			
 			//Creamos y le pasamos la matriz mvp al shader
 			glm::mat4 model;
-			glm::mat4 mvp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * v * model;
+			glm::mat4 mvp = activeCamera->getEntidad()->getProjectionMatrix() * v * model;
 			shaderDebug->setMat4("mvp", mvp);
 			//Establecemos el ancho de las lineas
 			glLineWidth(3.0f);
@@ -508,7 +575,6 @@ void TMotor::draw(int tipo) {
 		// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
 		//==========================================================
 		/*
-		glEnable(GL_DEPTH_TEST);
 		//DIBUJADO DE LAS SOMBRAS PROYECTADAS
 		//-----------------------------------
 		//No dibujamos el mapa (suelo) ya que no queremos que produzca ninguna tipo de sombra
@@ -520,8 +586,8 @@ void TMotor::draw(int tipo) {
 		if (lights.size() > 0) {
 			for (int i = 0; i < lights.size(); i++) {
 				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
-					//Establecemos la matrix view llamando al dibujado de la camara
-					drawCamera(shaderProjectedShadows);
+					//Le pasamos al shader la matriz view
+					shaderProjectedShadows->setMat4("view", v);
 					//Le pasamos la matriz proyeccion de la luz (perspectiva)
 					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 300.0f);
 					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
@@ -542,16 +608,31 @@ void TMotor::draw(int tipo) {
 		//====================================================
 		//====================================================
 
+		//DIBUJADO DE LAS PARTICULAS
+		//--------------------------
+
+		glDisable(GL_DEPTH_TEST);
+		shaderParticles->use();
+		for (int i = 0; i < particleSystems.size(); i++){
+			particleSystems.at(i)->draw(shaderParticles);
+		}
+		
+		//DIBUJADO DE LOS BILLBOARDS
+		//--------------------------
+		glDisable(GL_DEPTH_TEST);
+		shaderBillboard->use();
+		for (int i = 1; i < billboards.size(); i++){
+			billboards.at(i)->draw(shaderBillboard);
+		}
 		
 	}
 
 	//Se activa el shader para el dibujado del HUD
-	glDisable(GL_DEPTH_TEST);
+	
 	shaderHUD->use();
 	
-
 	//Dibujamos el hud activo
-	activeHud->drawHud(shaderHUD);//}
+	activeHud->drawHud(shaderHUD);
 	glEnable(GL_DEPTH_TEST);
 
 	int display_w, display_h;
@@ -570,11 +651,10 @@ void TMotor::draw(int tipo) {
 }
 
 
-void TMotor::drawCamera(Shader *s) {
+void TMotor::drawCamera() {
 	//recorrer el nodo a la inversa hasta la raiz y guardar las matrices que se obtienen de sus entidades
 	//para luego multiplicarlas en orden inverso
 	std::vector<glm::mat4> matrixAux;
-	glm::vec4 defaultVector(0, 0, 0, 1);
 	TNodo *aux = activeCamera->getPadre();
 	int cont = 0;
 	while (aux != scene) {
@@ -582,15 +662,12 @@ void TMotor::drawCamera(Shader *s) {
 		cont++;
 		aux = aux->getPadre();
 	}
+
 	glm::mat4 viewMatrix;
 	//recorrido a la inversa
 	for (int i = matrixAux.size() - 1; i >= 0; i--) {
 		viewMatrix = matrixAux.at(i) * viewMatrix;
 	}
-
-	//calcular posicion de la camara y pasarsela al fragment shader
-	glm::vec4 posC = viewMatrix * defaultVector;
-	s->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
 
 	//Guardamos la viewMatrix para calcular despues la MVP de cada objeto
 	v = glm::inverse(viewMatrix);
@@ -629,7 +706,7 @@ void TMotor::drawLight(Shader *s) {
 
 //Funcion para crear un nuevo hud dentro del motor
 void TMotor::newHud(const char* n) {
-	//creamos el nuevo hud con su nombre
+	//Creamos el nuevo hud con su nombre
 	hud* h = new hud(n);
 	//Lo añadimos al array de hud
 	HUDs.push_back(h);
@@ -656,7 +733,7 @@ void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float
 	// pitch (y-axis rotation)
 	double sinp = +2.0 * (w * y - z * x);
 	if (fabs(sinp) >= 1)
-		pitch = copysign(PI / 2, sinp); // use 90 degrees if out of range
+		pitch = copysign(M_PI / 2, sinp); // use 90 degrees if out of range
 	else
 		pitch = asin(sinp);
 
@@ -673,4 +750,24 @@ void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float
 		roll = euler.x;
 		pitch = euler.y;
 		yaw = euler.z;*/
+}
+
+// --- BILLBOARD ---
+billboard *TMotor::newBillboard(obj3D *o){
+	//Creamos el nuevo billboard con su nombre
+	billboard* b = new billboard(o);
+	//Lo añadimos al array de billboards
+	billboards.push_back(b);
+	//Lo devolvemos
+	return b;
+}
+
+// --- PARTICLE SYSTEMS ---
+particleSystem *TMotor::newParticleSystem(){
+	//Creamos el nuevo billboard con su nombre
+	particleSystem *p = new particleSystem();
+	//Lo añadimos al array de billboards
+	particleSystems.push_back(p);
+	//Lo devolvemos
+	return p;
 }

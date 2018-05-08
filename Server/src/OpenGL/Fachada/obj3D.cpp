@@ -13,7 +13,9 @@ obj3D::~obj3D() {
 	setVisible(false);
 	//delete node;
 }
-
+void obj3D::setNode(TNodo *m) {
+	node = m;
+}
 void obj3D::rotate(glm::vec3 axis, GLfloat angle) {
 	rotation.x += angle * axis.x;
 	rotation.y += angle * axis.y;

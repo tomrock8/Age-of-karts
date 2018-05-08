@@ -4,7 +4,6 @@
 #include "Corredor.hpp"
 #include "ArbolDecision.hpp"
 
-using namespace std;
 typedef enum {
 	NADA1, ACELERAR, FRENAR,
 	ACELERARGIRARDERECHA, ACELERARGIRARIZQUIERDA, ACELERARGIRARFUERTEDERECHA, ACELERARGIRARFUERTEIZQUIERDA,
@@ -70,6 +69,7 @@ private:
 	btVector3 posicion_aux;
 	int timerRecolocar;
 	std::string texto;
+	float valorGiroFuerte;
 };
 
 #endif /* CORREDORIA_H */

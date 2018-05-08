@@ -156,6 +156,7 @@ void EscenaLobby::update() {
 				//mostrarInfoLobby(i);
 				mostrarTipoPersonaje(i);
 			}
+			mostrarInfoLobbyPropia();
 		}
 	}
 	ImGui::Text(infoLobby->c_str());
@@ -238,7 +239,8 @@ void EscenaLobby::updateLobbyOnline(){
 				TMotor::instancia().getActiveHud()->addElement(0.35f, 1.0f, "habilidades", "assets/HUD/LobbyMenu/seleccion_vacia.png");	
 				TMotor::instancia().getActiveHud()->traslateElement("habilidades", 0.71f, 0.1f);	
 			}
-			debugClientInfo();
+			//debugClientInfo(); DEBUG DE RED!
+			mostrarInfoLobbyPropia();
 			nElementos = time->getTimer();
 			conectado = true;
 			ImGui::Text("Connection stablished!\n");
@@ -248,6 +250,7 @@ void EscenaLobby::updateLobbyOnline(){
 				//mostrarInfoLobby(i);
 				mostrarTipoPersonaje(i);
 			}
+			
 		}
 	}
 }
@@ -272,8 +275,60 @@ void EscenaLobby::debugClientInfo(){
 	
 	
 }
+void EscenaLobby::mostrarInfoLobbyPropia() {
+	std::vector<structClientes> clientes = client->getClientes();
+	bool checkReadyMe = true;
+	bool checkReady = true;
+	int id_player;
+	bool bc=false;
+	if (offline) {
+		id_player = 0;
+	}
+	else {
+		id_player = client->getControlPlayer();
+	}
+	infoLobby->append("\nNumber of players: ");
 
-void EscenaLobby::mostrarInfoLobby(int indice) {
+	infoLobby->append(to_string(clientes.size()));
+	infoLobby->append(" / 6");
+	for (int c = 0; c < clientes.size(); c++) {
+		if (clientes.at(c).ready == 0) {	//comprobamos si han aceptado todos
+			bc = true;
+			break;
+		}
+	}
+	if (clientes.size()==1){
+		bc = false;
+	}
+	if (bc == false) {		//si todos los  clientes han aceptado
+		infoLobby->append(" [Ready] ");
+	}
+	else {		//si no han aceptado todos
+		checkReady = false;
+		checkReadyMe = false;
+	}
+	if (bc){
+		if (clientes.at(id_player).ready){
+			checkReadyMe = true;
+			infoLobby->append(" [Ready] ");
+		}else{
+			infoLobby->append(" [Not Ready] ");
+		}
+	}
+
+	if (checkReady){
+		infoLobby->append("\n\n Everyone is ready. Press space to start the race\n");
+	}else{
+		if (checkReadyMe){
+			infoLobby->append("\n\n Waiting other players (Press space to cancel)\n");
+		}else{
+			infoLobby->append("\n\n Waiting players (Press space to be ready)\n");
+		}
+	}
+	crearFicheroIP();
+}
+//Muestra toda la información por texto de imgui, antiguo
+/*void EscenaLobby::mostrarInfoLobby(int indice) {
 	//Inicializacion variables cliente
 	std::vector<structClientes> clientes = client->getClientes();
 	int size = clientes.size();
@@ -399,11 +454,11 @@ void EscenaLobby::mostrarInfoLobby(int indice) {
 				iniciar = false;	//si no todos estan ready, no se puede iniciar partida offline
 
 			if (checkReadyMe) {
-				infoLobby->append("\n\n Waiting other players (Press space to cancel)\n");
+				infoLobby->append("\n\n Waiting players (Press space to be ready)\n");
 			}
 			else {
 				if (offline) {
-					infoLobby->append("\n\n Waiting other players (Press space to start the race)\n");
+					infoLobby->append("\n\n Waiting players (Press space to start the race)\n");
 
 				}
 				else {
@@ -423,9 +478,13 @@ void EscenaLobby::mostrarInfoLobby(int indice) {
 		}
 
 	}
+	
+	crearFicheroIP();
+}*/
 
+void EscenaLobby::crearFicheroIP(){
 	if (!offline && iphost.compare("") == 0) {
-		if (id_player == 0) {		//leemos ipserver
+		if (client->getControlPlayer() == 0) {		//leemos ipserver
 			system("ip addr show $dev | awk '/inet/ {print $2}' | cut -d/ -f1 > ip.txt");
 			std::string line;
 			std::ifstream myfile;
@@ -452,9 +511,7 @@ void EscenaLobby::mostrarInfoLobby(int indice) {
 		infoLobby->append("\n\nConnection IP: ");
 		infoLobby->append(iphost);
 	}
-	
 }
-
 
 void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a texto (tipo de personaje)
 	std::string str;
@@ -482,22 +539,22 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a texto (tipo 
 	TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vacia.png");
 	if (client->getClientes().at(i).tipoCorredor == 0){
 		TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_gladiador.png");
-		infoLobby->append("GLADIATOR ");
+		//infoLobby->append("GLADIATOR ");
 		if (offline && i==0 || !offline && client->getControlPlayer()==i)
 		TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades_gladiador.png");
 	}else if (client->getClientes().at(i).tipoCorredor == 1){
 		TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_pirata.png");
-		infoLobby->append("PIRATE ");
+		//infoLobby->append("PIRATE ");
 		if (offline && i==0 || !offline && client->getControlPlayer()==i)
 		TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades_pirata.png");
 	}else if (client->getClientes().at(i).tipoCorredor == 2){
 		TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vikingo.png");
-		infoLobby->append("VIKING ");
+		//infoLobby->append("VIKING ");
 		if (offline && i==0 || !offline && client->getControlPlayer()==i)
 		TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades_vikingo.png");
 	}else if (client->getClientes().at(i).tipoCorredor == 3){
 		TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_chino.png");
-		infoLobby->append("CHINESE WARRIOR ");
+		//infoLobby->append("CHINESE WARRIOR ");
 		if (offline && i==0 || !offline && client->getControlPlayer()==i)
 		TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades_chino.png");
 	}

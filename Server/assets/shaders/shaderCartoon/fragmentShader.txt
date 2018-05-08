@@ -45,12 +45,6 @@ uniform samplerCube shadowCube_0; //Cubo de profundidad para el calculo de las s
 uniform samplerCube shadowCube_1; //Cubo de profundidad para el calculo de las sombras de la luz puntual 1
 uniform samplerCube shadowCube_2; //Cubo de profundidad para el calculo de las sombras de la luz puntual 2
 uniform samplerCube shadowCube_3; //Cubo de profundidad para el calculo de las sombras de la luz puntual 3
-/*
-uniform Light spot_lights[numLights]; //Vector de luces dirigidas
-uniform sampler2D shadowMap_0; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 0
-uniform sampler2D shadowMap_1; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 1
-uniform sampler2D shadowMap_2; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 2
-uniform sampler2D shadowMap_3; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 3*/
 
 uniform Material material; //Material de la malla para cada vertice
 uniform vec3 posCamera; //Posicion de la camara

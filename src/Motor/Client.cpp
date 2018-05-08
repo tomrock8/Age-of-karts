@@ -688,7 +688,8 @@ int Client::ReceivePackets() {
 						players.at(id)->setLimite(param);
 
 					//players.at(id)->setPosicion(pos, ori);
-					players.at(id)->setPosicionBullet(pos, rotacionBullet);
+					if(players.at(id)->getEstados()->getEstadoCarrera != EstadosJugador::estado_carrera::PARRILLA);
+						players.at(id)->setPosicionBullet(pos, rotacionBullet);
 				}
 			}
 

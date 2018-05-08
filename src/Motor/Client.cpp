@@ -649,6 +649,8 @@ int Client::ReceivePackets() {
 				float *ori = new float[3];
 				for (int i = 0; i < players.size(); i++) {
 					bsIn.Read(id);			//CONTROLPLAYER
+					std::cout << "i. " << i << " id: " << id << std::endl;
+					id = i;
 					bsIn.Read(pos[0]); //POSICION ACTUAL
 					bsIn.Read(pos[1]);	//
 					bsIn.Read(pos[2]);	//
@@ -685,7 +687,7 @@ int Client::ReceivePackets() {
 							players.at(id)->setLimite(param);
 
 						//players.at(id)->setPosicion(pos, ori);
-						if (players.at(id)->getEstados()->getEstadoCarrera() != EstadosJugador::estado_carrera::PARRILLA);
+						//if (players.at(id)->getEstados()->getEstadoCarrera() != EstadosJugador::estado_carrera::PARRILLA);
 						players.at(id)->setPosicionBullet(pos, rotacionBullet);
 					}
 				}

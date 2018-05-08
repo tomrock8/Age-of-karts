@@ -20,7 +20,7 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 
 	fuenteOpcion = new AlSource();
 	fuenteOpcion->volume(30.0f * TMotor::instancia().getGestorSonido()->getVolEfectos());
-
+	Client::getInstancia()->BorrarClientes();
 	TMotor::instancia().initDebugWindow();
 }
 
@@ -37,12 +37,16 @@ void EscenaMenu::initHud() {
 	//--BOTONES--
 	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "local", "assets/HUD/MainMenu/btn_local_normal.png");
 	TMotor::instancia().getActiveHud()->traslateElement("local", -0.01f, -0.15f);
+	TMotor::instancia().getActiveHud()->changeTransparencyElement("local", true, 0.2);
 	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "online", "assets/HUD/MainMenu/btn_online_normal.png");
 	TMotor::instancia().getActiveHud()->traslateElement("online", -0.01f, -0.35f);
+	TMotor::instancia().getActiveHud()->changeTransparencyElement("online", true, 0.4);
 	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "opciones", "assets/HUD/MainMenu/btn_opciones_normal.png");
 	TMotor::instancia().getActiveHud()->traslateElement("opciones", -0.01f, -0.55f);
+	TMotor::instancia().getActiveHud()->changeTransparencyElement("opciones", true, 0.6);
 	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "salir", "assets/HUD/MainMenu/btn_salir_normal.png");
 	TMotor::instancia().getActiveHud()->traslateElement("salir", -0.01f, -0.75f);
+	TMotor::instancia().getActiveHud()->changeTransparencyElement("salir", true, 0.8);
 	//--LOGO SW--
 	TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "sw", "assets/HUD/MainMenu/sw_logo.png");
 	TMotor::instancia().getActiveHud()->traslateElement("sw", 0.85f, -0.80f);

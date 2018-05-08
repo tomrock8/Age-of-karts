@@ -1,14 +1,12 @@
 #include "TMotor.hpp"
 
 //Constructor que crea un sistema de particulas que siguen a un objeto
-particleSystem::particleSystem(obj3D *o){
+particleSystem::particleSystem(){
     //Inicializamos el vector que contendra todas las particulas
     for (int i = 0; i < numMaxParticles; i++){
         Particula *p = new Particula();
         particulas.push_back(p);
     }
-    //Enlazamos el objeto 
-    elemento = o;
     //Establecemos los buffers de OpenGL
     setBuffersOpenGL();
     //Inicializamos el contador a 0 de las distintas variables que utilizaremos
@@ -16,9 +14,9 @@ particleSystem::particleSystem(obj3D *o){
     particlesAlive = 0;
     //Y el numero de particulas nuevas que habran en cada iteracion
     newParticlesPerIteration = 5;
-    lastTime = 0.0f;
-    //Inicializamos los arrays que haran de buffers con los datos de posicion y color de cada particula
+    //Inicializamos los arrays que haran de buffers con los datos de posicion y transparencia de cada particula
     position_data = new GLfloat[4*numMaxParticles]();
+    transparency_data = new GLfloat[numMaxParticles]();
 }
 
 //Destructor para eliminar los datos utilizados
@@ -67,6 +65,13 @@ void particleSystem::setBuffersOpenGL(){
     glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(2);
 
+    //Cuarto, enlazar el VBO al que se le pasan los datos de transparencia de cada particula
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_transparency);
+    glBufferData(GL_ARRAY_BUFFER, numMaxParticles * sizeof(GLubyte), NULL, GL_STREAM_DRAW); //NULL = lo llenaremos en cada iteracion
+    //Lo establecemos como el tercer atributo del buffer que le llegara al shader
+    glVertexAttribPointer(3, 1, GL_UNSIGNED_BYTE, GL_TRUE, 0, (void*)0);
+    glEnableVertexAttribArray(3);
+
     //Desactivamos el VAO hasta el dibujado del quad
     glBindVertexArray(0); 
 }
@@ -102,19 +107,36 @@ int particleSystem::findLastDeadParticle(){
 
 //Funcion que inicializa una nueva particula del sistema
 void particleSystem::rebirthParticle(Particula *p){
-    //Valor random (0-50) para calcular los distintos datos de la particula
-    float random = ((rand() % 5) - 5) / 2.5f;
-    //La posicion de la particula dependera del objeto al que este enlazada
-    /*
-    cout << "Rotacion en x: " << elemento->getRotation()[0] << endl;
-    cout << "Rotacion en z: " << elemento->getRotation()[2] << endl;
-    cout << "......................." << endl;*/
-    p->position = glm::vec3(elemento->getPosition()[0], elemento->getPosition()[1]-1.0, elemento->getPosition()[2]);
-    //p->position.x += random; //Le sumamos el valor random
-    //p->position.z += random; //Le sumamos el valor random
-    //Reseteamos la vida 
+    //Parametros de cada particula
+    float dist = -7.0f; //Distancia donde se moveran las particulas
+    float altura = -1.0f; //Altura donde se situaran las particulas
+    //Establecemos la posicion de la particula en funcion de su posicion y orientacion
+    float random = (rand() % 100 - 1) / 50.0f; //Valor random para modificar la posicion de las particulas dentro de un area
+    dist += random; //Se lo sumamos a la distancia
+    p->position = glm::vec3(posParticle.x + dist * oriParticle.x, posParticle.y - altura, posParticle.z + dist * oriParticle.z);
+    //Reseteamos la vida y el tamaño de la particula
     p->life = 1.0f;
     p->size = 0.65f;
+}
+
+//Funcion para seterar la posicion del sistema de particulas
+void particleSystem::setPosition(glm::vec3 p){
+    posParticle = p;
+}
+
+//Funcion para setear la orientacion del sistema de particulas
+void particleSystem::setOrientation(glm::vec3 o){
+    oriParticle = o;
+}
+
+//Funcion para setear el tamaño del sistema de particulas
+void particleSystem::setSize(float s){
+    sizeParticle = s;
+}
+
+//Funcion para setear el color del sistema de particulas
+void particleSystem::setColor(glm::vec3 c){
+    colorParticle = c;
 }
 
 //Funcion que actualiza el contenedor de particulas en cada iteracion para producir el ciclo de vida/muerte de las mismas
@@ -127,25 +149,29 @@ void particleSystem::update(){
     //Despues, actualizamos todas las particulas del sistema
     particlesAlive = 0; //Reseteamos el numero de particulas vivas
 
+    glm::mat4 cameraMatrix = TMotor::instancia().getV();
+    glm::vec4 defaultVector(0, 0, 0, 1);
+    glm::vec3 posCamera = glm::vec3(cameraMatrix * defaultVector);
+
     for (int i = 0; i < numMaxParticles; i++){
         Particula *p = particulas.at(i); //Recogemos la particula del contenedor
         p->life -= 0.1; //Reducimos su vida
 
-        if (p->life > 0.0f){ //Si aun sigue viva...
-            //p->velocity = glm::vec3(0.0f,9.81f, 0.0f) * delta * 10.0f; //Velocidad en funcion de la gravedad
-            //p->position += p->velocity * delta; //Modificamos la posicion de la particula en funcion de la velocidad
 
+        if (p->life > 0.0f){ //Si aun sigue viva...
+            p->size += sizeParticle; //Modificamos el tamaño de la particulas con el tiempo
+            p->distanceToCamera = glm::length2(p->position - posCamera);
             //Llenamos los buffers que anteriormente hemos declarado
             // --- POSICION Y TAMANYO ---
-            //p->position[0] += -0.5;
-            //p->position[2] += -0.5 + elemento->getRotation()[2];
-            p->size += 0.25;
             position_data[4*particlesAlive+0] = p->position[0];
             position_data[4*particlesAlive+1] = p->position[1];
             position_data[4*particlesAlive+2] = p->position[2];
             position_data[4*particlesAlive+3] = p->size;
+            // --- TRANSPARENCIA ---
+            transparency_data[particlesAlive] = (rand() % 10 - 1) / 10.f;
+
         }else{
-            //p->size = 0.65f;
+            p->distanceToCamera = glm::length2(p->position - posCamera);
         }
 
         particlesAlive++; //Aumentamos el numero de particulas vivas
@@ -168,11 +194,44 @@ void particleSystem::draw(Shader *s){
     glm::mat4 vp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getV();
     s->setMat4("vp", vp);
 
+    //Calculamos el vector derecha de la camara y se lo pasamos al shader
     glm::vec3 cR = glm::vec3(TMotor::instancia().getV()[0][0], TMotor::instancia().getV()[1][0], TMotor::instancia().getV()[2][0]);
     s->setVec3("camRight", cR);
 
+    //Calculamos el vector arriba de la camara y se lo pasamos al shader
     glm::vec3 cU = glm::vec3(TMotor::instancia().getV()[0][1], TMotor::instancia().getV()[1][1], TMotor::instancia().getV()[2][1]);
     s->setVec3("camUp", cU);
+
+    //Le pasamos el color de las particulas al shader
+    s->setVec3("color", colorParticle);
+
+    /*
+    for (int i = 0; i < particulas.size()-1; i++){
+        Particula *minP = particulas.at(i);
+        int aux = 0;
+        for (int j = i + 1; j < particulas.size()-1; j++){
+            float dMin = minP->distanceToCamera;
+            float dActual = particulas.at(j)->distanceToCamera;
+            if (dMin < dActual){
+                minP = particulas.at(j);
+                aux = j;
+            }
+        }
+        glm::vec4 posAux = glm::vec4(position_data[4*i+0],position_data[4*i+1],position_data[4*i+2],position_data[4*i+3]);
+        Particula *p = particulas.at(i);
+        particulas[i] = minP;
+        position_data[4*i+0] = position_data[4*aux+0];
+        position_data[4*i+1] = position_data[4*aux+1];
+        position_data[4*i+2] = position_data[4*aux+2];
+        position_data[4*i+3] = position_data[4*aux+3];
+        particulas[aux] = p;
+        position_data[4*aux+0] = posAux.x;
+        position_data[4*aux+1] = posAux.y;
+        position_data[4*aux+2] = posAux.z;
+        position_data[4*aux+3] = posAux.w;
+        cout << "distancia : " << particulas.at(i)->distanceToCamera << endl;
+    }
+    cout << "-----------------------" << endl;*/
 
     //Despues, pasamos a dibujar
     glBindVertexArray(VAO); //Enlazamos el VAO que antes hemos rellenado
@@ -181,17 +240,22 @@ void particleSystem::draw(Shader *s){
     glBindBuffer(GL_ARRAY_BUFFER, VBO_position); 
     glBufferData(GL_ARRAY_BUFFER, numMaxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW); 
     glBufferSubData(GL_ARRAY_BUFFER, 0, particlesAlive * sizeof(GLfloat) * 4, position_data); //Lo llenamos con el array que hemos rellenado en la funcion update
+    
+    //Activamos el buffer que guarda la transparencia de las particulas
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_transparency); 
+    glBufferData(GL_ARRAY_BUFFER, numMaxParticles * sizeof(GLubyte), NULL, GL_STREAM_DRAW); 
+    glBufferSubData(GL_ARRAY_BUFFER, 0, particlesAlive * sizeof(GLubyte), transparency_data); //Lo llenamos con el array que hemos rellenado en la funcion update
 
     //Le decimos a OpenGL como tratar la informacion de cada buffer
     glVertexAttribDivisor(0, 0); //El atributo 0 (forma base) se utiliza de igual forma para todos
     glVertexAttribDivisor(1, 0); //El atributo 1 (coordenadas de textura) se utiliza de igual forma para todos
     glVertexAttribDivisor(2, 1); //El atributo 2 (posicion y tamayo) se usa cada vector de 4 por particula o quad (forma base)
-
+    glVertexAttribDivisor(3, 1); //El atributo 3 (transparencia) se usa cada valor float por particula o quad (forma base)
+    
     //Dibujamos las particulas -> INSTANCED == se dibuja la misma forma tanta veces como se le diga 
     glDrawArraysInstanced(GL_TRIANGLES, 0, 18, particlesAlive); 
 
     //Desenlazamos el VAO hasta el siguiente dibujado
     glBindVertexArray(0);
-
-
+    
 }

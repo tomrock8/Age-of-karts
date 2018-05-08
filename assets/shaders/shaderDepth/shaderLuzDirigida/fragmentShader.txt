@@ -1,7 +1,0 @@
-//Especificar version de Opengl a utilizar
-#version 330 core
-
-void main()
-{      
-    //Vacio ya que no tenemos ni necesitamos informacion de color para calcular el mapa de profundidad       
-} 

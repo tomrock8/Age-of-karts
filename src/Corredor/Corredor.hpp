@@ -18,6 +18,7 @@
 #include "Waypoint.hpp"
 #include "GestorSonido.hpp"
 #include "billboard.hpp"
+#include "particleSystem.hpp"
 
 class Corredor : public RakNet::NetworkIDObject
 {
@@ -114,8 +115,7 @@ public:
 	void usarObjetos();
 	void lanzarHabilidad();
 
-	TNodo * getGiroDerIni();
-	TNodo * getGiroDerFin();
+	TNodo * getGiroDer();
 
 	std::string toString();
 
@@ -128,6 +128,9 @@ protected:
 
 	//BILLBOARD
 	billboard* b;
+
+	//PARTICULAS HUMO
+	particleSystem *p;
 
 	//cameraThird *camara3Persona;
 
@@ -269,10 +272,12 @@ protected:
 	void updateVectorDireccion();
 
 
-	
-
 	void setActiveObj3D(TNodo * obj);
 
 };
 
 #endif /* CORREDOR_H */
+	TNodo * getGiroDerIni();
+	TNodo * getGiroDerFin();
+	void updateVectorDireccion();
+

@@ -49,7 +49,7 @@ public:
 
 	void newHud(const char* n);
 	billboard *newBillboard(obj3D *o);
-	void newParticleSystem(obj3D *o);
+	particleSystem *newParticleSystem();
 	//float *toEuler(double pich, double yaw, double roll);
 
 	// METODOS GET
@@ -163,7 +163,6 @@ protected:
 	TLuz    *createLight();
 	TNodo   *createLightNode(TNodo * padre, TLuz * luz, const char* name);
 
-	obj3D* objMapa;
-	obj3D* objElementos;
+	std::vector <obj3D *> notShadowObjects; //Array que contendra los objetos del mundo que no deben proyectar sombras (Mapa, elementos...)
 
 };

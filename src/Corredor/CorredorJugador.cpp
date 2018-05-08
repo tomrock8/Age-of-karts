@@ -5,6 +5,8 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 	checkItem = false;
 	nombre = "Jugador";
 	pressed = false;
+	GiroDer = false;
+
 }
 
 /**
@@ -43,15 +45,16 @@ void CorredorJugador::movimiento() {
 	}
 	//GIRAR DERECHA
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
-		//this->setActiveObj3D(this->getGiroDer());
+		this->setActiveObj3D(this->getGiroDerIni());
 		girarDerecha();
-
 		comprobadorMovimiento = true;
-
+		GiroDer = true;
 	}
+	
 	//GIRAR IZQUIERDA
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) {
 		girarIzquierda();
+	
 		comprobadorMovimiento = true;
 	}
 	else {
@@ -73,6 +76,13 @@ void CorredorJugador::movimiento() {
 			desacelerar();
 		}
 	}
+
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_RELEASE && GiroDer) {
+		this->setActiveObj3D(this->getGiroDerFin());
+		
+		GiroDer = false;
+	}
+	if(!GiroDer)this->setActiveObj3D(this->getNodo()->getNode());
 
 }
 

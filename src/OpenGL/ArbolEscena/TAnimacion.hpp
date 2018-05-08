@@ -16,13 +16,15 @@ public:
 	int getActualFrame();
 	int getTotalFrames();
 	void setPlaying(bool s);
+	bool setPlaying();
+	void ResetAnimation();
 	bool isVisible();
 
 	//METODOS SET
 	void setFirstFrame(int firstFrame);
 	void setLastFrame(int lastFrame);
 	void setVisible(bool visible);
-	void setLoopPlay(bool loopPlay);
+	
 
 	// DIBUJADO
 	virtual void beginDraw(Shader *shader) override;
@@ -40,7 +42,7 @@ private:
 	unsigned short lastFrame; // Ultimo frame a reproducir
 
 	bool visible; // Indicador para dibujar
-	bool loopPlay; // Indicador para reiniciar la animacion
+	//bool loopPlay; // Indicador para reiniciar la animacion
 	bool isPlaying; //Indicador para empezar a dibujar
 };
 #endif

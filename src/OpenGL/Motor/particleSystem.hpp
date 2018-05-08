@@ -16,7 +16,6 @@ struct Particula{
         velocity = glm::vec3(0.f);
         size = 0.65f;
         life = 0.0f;
-        distanceToCamera = 0.0f;
     }
 };
 

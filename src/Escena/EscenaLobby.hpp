@@ -19,7 +19,9 @@ public:
 	virtual void update() override;
 	void updateLobbyOnline();
 	void debugClientInfo();
+	void crearFicheroIP();
 	void mostrarInfoLobby(int indice);
+	void mostrarInfoLobbyPropia();
 	Escena::tipo_escena comprobarInputs();
 	void mostrarTipoPersonaje(int i);
 	int character_callback(GLFWwindow *window, unsigned int codepoint);

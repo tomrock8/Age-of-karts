@@ -9,7 +9,7 @@ in vec2 textCoords;
 
 //Uniform
 uniform sampler2D image; //Textura de cada particula
-uniform vec3 color; //Color de la particula
+uniform vec3 color; //Color de cada particula
  
 void main (void) {
     //Asignamos la textura de cada particula

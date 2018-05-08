@@ -271,9 +271,17 @@ protected:
 	void actualizarRuedas();
 	void updateVectorDireccion();
 
+	TNodo * getGiroDerIni();
+
+	TNodo * getGiroDerFin();
+
 
 	void setActiveObj3D(TNodo * obj);
 
 };
 
 #endif /* CORREDOR_H */
+	TNodo * getGiroDerIni();
+	TNodo * getGiroDerFin();
+	void updateVectorDireccion();
+

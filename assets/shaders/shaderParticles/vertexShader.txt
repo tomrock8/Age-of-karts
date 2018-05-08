@@ -3,31 +3,34 @@
  
 //Recoger los datos de los vertices en los buffers correctamente (segun orden de envio en el programa)
 layout (location = 0) in vec3 aVertex; //Vertices
-layout (location = 1) in vec2 aCoords; //Coordenadas de textura
+layout (location = 1) in vec2 aCoords; //Vertices
 layout (location = 2) in vec4 aPos; //Posicion y tamanyo
-layout (location = 3) in float aTransparency; //Transparencia
 
 //Variables de salida al Fragment shader
 out vec2 textCoords;
-out float trans;
 
-//Uniforms
-uniform mat4 vp; //Matriz view-projection
-uniform vec3 camRight; //Vector derecha de la camara
-uniform vec3 camUp; //Vector arriba de la camara
+//Uniform para la matriz mvp
+uniform mat4 vp;
+uniform vec3 camRight;
+uniform vec3 camUp;
  
 void main() {
+    //El billboard estara 1.5 unidades por encima del objeto enlazado en un principio
+    vec3 particlePosition = aPos.xyz;
+    //particlePosition.x += 0.5;
+    //particlePosition.z += 0.5;
 
     //Pasamos las coordenadas de textura al fragment shader
     textCoords = aCoords;
 
-    //Pasamos la transparencia al fragment shader
-    trans = aTransparency;
-
-    vec3 particlePosition = aPos.xyz;
-    //Las particulas se modifican en funcion de la distancia
     vec3 pos = particlePosition + camRight * aVertex.x *aPos.w + camUp * aVertex.y * aPos.w;
     //Calculamos la posicion final del billboard en la pantalla a partir de la matriz view-projection
     gl_Position = vp * vec4(pos, 1.0);
-
+    /*
+    //Hacemos la division de perspectiva
+    gl_Position /= gl_Position.w;
+    //Conforme mas lejos este el objeto mas grande se hace
+    gl_Position.xy += aPos.xy * vec2(0.05, 0.1);
+    //Aumentamos la altura en funcion de la distancia
+    gl_Position.y += 0.07;*/
 }

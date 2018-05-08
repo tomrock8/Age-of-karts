@@ -11,5 +11,5 @@ Ni 1.000000
 d 1.000000
 illum 1
 map_Bump Escudo_Normal.png
-map_Kd Escudo_Diffuse.png
+map_Kd Escudo_difuse.png
 map_Ks Escudo_Height.png

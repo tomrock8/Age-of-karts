@@ -9,7 +9,6 @@ struct Particula{
     glm::vec3 position, velocity; //Posicion y velocidad de la particular
     float size; //Tamaño de la particular en coordenadas del mundo, no de pantalla
     float life; //Vida de la particular, se utiliza para que las particulas vayan creandose y muriendo continuamente
-    float distanceToCamera; //Distancia de la particula a la camara
 
     //Constructor para definir una particula
     Particula(){
@@ -50,9 +49,8 @@ class particleSystem
         float sizeParticle; //Tamanyo del sistema de particulas
         glm::vec3 colorParticle; //Color del sistema de particulas
 
-        GLuint VAO, VBO, VBO_position, VBO_transparency; //Buffers de Opengl
+        GLuint VAO, VBO, VBO_position; //Buffers de Opengl
         GLfloat *position_data; //Array de datos de posicion que se rellena en cada iteracion y despues se le pasa al buffer
-        GLfloat *transparency_data; //Array de datos de transparencia que se rellena en cada iteracion y despues se le pasa al buffer
 
         // --- METODOS ---
         void setBuffersOpenGL();

@@ -107,6 +107,7 @@ protected:
 	Shader *shaderSilhouette; //Shader para crear el contorno de los objetos en el efecto cartoon
 	Shader *shaderBillboard; //Shader para dibujar los diferentes billboards 
 	Shader *shaderParticles; //Shader para el dibujado de las particulas
+	Shader *shaderGbuffer; //Shader para renderizar la escena en el buffer que despues se usara en el deferred shading
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)
@@ -136,6 +137,13 @@ protected:
 	//Particles
 	std::vector <particleSystem *> particleSystems; //Array con las diferentes particulas usadas en el motor
 
+	//Objetos
+	std::vector <obj3D *> notShadowObjects; //Array que contendra los objetos del mundo que no deben proyectar sombras (Mapa, elementos...)
+
+	//Deferred shading
+	GLuint defBuffer; //Buffer que contendra todas las texturas con las posicion, normales y colores para renderizar posterioremente mediante deferred shading
+	GLuint defPosition, defNormal, defDiffuseSpecular; //Cada uno de los buffers que contendra la informacion anterior
+
 	bool renderDebug;
 	bool debugBullet = false;
 	TGestorRecursos *gestorRecursos;
@@ -151,7 +159,7 @@ protected:
 
 	// Malla
 	TMalla  *createMesh(const char *fich, bool sta);
-	
+	// Nodo
 	TNodo * createMeshNode(TNodo * padre, TMalla * mesh, const char * name);
 	// Transformacion
 	TTransform * createTransformation();
@@ -162,7 +170,6 @@ protected:
 	// Luz
 	TLuz    *createLight();
 	TNodo   *createLightNode(TNodo * padre, TLuz * luz, const char* name);
-
-	std::vector <obj3D *> notShadowObjects; //Array que contendra los objetos del mundo que no deben proyectar sombras (Mapa, elementos...)
-
+	//Deferred shading
+	void setDeferredBuffers();
 };

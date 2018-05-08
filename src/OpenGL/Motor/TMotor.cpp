@@ -64,6 +64,7 @@ TMotor::TMotor() {
 	shaderSilhouette = new Shader("assets/shaders/shaderSilhouette/vertexShader.txt", "assets/shaders/shaderSilhouette/fragmentShader.txt", nullptr);
 	shaderBillboard = new Shader("assets/shaders/shaderBillboard/vertexShader.txt", "assets/shaders/shaderBillboard/fragmentShader.txt", nullptr);
 	shaderParticles = new Shader("assets/shaders/shaderParticles/vertexShader.txt", "assets/shaders/shaderParticles/fragmentShader.txt", nullptr);
+	shaderGbuffer = new Shader("assets/shaders/shaderDeferred/gBufferVertexShader.txt", "assets/shaders/shaderDeferred/gBufferFragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 
 	gestorSonido = new GestorSonido();
@@ -482,7 +483,7 @@ void TMotor::draw(int tipo) {
 		//-------------------------------------
 		
 		//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas
-
+		
 		//Enlazamos el shader cartoon
 		Shader *s = shaderCartoon;
 		//Se activa el shader para el renderizado 3D
@@ -612,7 +613,7 @@ void TMotor::draw(int tipo) {
 		//DIBUJADO DE LAS PARTICULAS
 		//--------------------------
 
-		glDisable(GL_DEPTH_TEST);
+		//glDisable(GL_DEPTH_TEST);
 		shaderParticles->use();
 		for (int i = 0; i < particleSystems.size(); i++){
 			particleSystems.at(i)->draw(shaderParticles);

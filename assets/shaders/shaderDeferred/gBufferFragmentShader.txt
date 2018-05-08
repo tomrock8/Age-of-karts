@@ -1,0 +1,38 @@
+//Especificar version de Opengl a utilizar
+#version 330 core
+
+
+layout (location = 0) out vec3 gPosition;
+layout (location = 1) out vec3 gNormal;
+layout (location = 2) out vec4 gDiffuseSpecular;
+
+// Variables de entrada desde el VertexShader
+in data{
+    vec2 textCoords; //Coordenadas de textura
+    vec3 worldPos; // Fragmento en coordenadas del mundo 
+    vec3 worldNormal; //Normal del Fragmento en coordenadas del mundo
+} fs_in;
+
+//Estructura con los datos del material
+struct Material{
+    //Componentes de color del material
+    vec4 color_ambient;
+    vec4 color_diffuse;
+    vec4 color_specular;
+    
+    float brightness; //Brillo del material -> para el calculo de la la componente especular de la luz
+};
+
+uniform Material material; //Material de la malla para cada vertice
+uniform sampler2D texture_diffuse; //Textura difusa de la malla
+uniform sampler2D texture_specular; //Textura especular de la malla
+
+void main(){
+    //Almacenamos la informacion de cada fragmento en los buffers correspondientes
+    // --- POSICION ---
+    gPosition = fs_in.worldPos;
+    // --- NORMAL ---
+    gNormal = normalize(fs_in.worldNormal);
+    // --- TEXTURA DIFUSA Y ESPECULAR ---
+    gDiffuseSpecular = vec4(vec3(texture(texture_diffuse, fs_in.textCoords).rgb), material.brightness);
+}

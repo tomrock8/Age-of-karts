@@ -50,8 +50,9 @@ class particleSystem
         float sizeParticle; //Tamanyo del sistema de particulas
         glm::vec3 colorParticle; //Color del sistema de particulas
 
-        GLuint VAO, VBO, VBO_position; //Buffers de Opengl
+        GLuint VAO, VBO, VBO_position, VBO_transparency; //Buffers de Opengl
         GLfloat *position_data; //Array de datos de posicion que se rellena en cada iteracion y despues se le pasa al buffer
+        GLfloat *transparency_data; //Array de datos de transparencia que se rellena en cada iteracion y despues se le pasa al buffer
 
         // --- METODOS ---
         void setBuffersOpenGL();

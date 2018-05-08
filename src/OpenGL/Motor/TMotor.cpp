@@ -334,14 +334,12 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 
 	TMalla *malla = TMotor::instancia().createMesh(path,sta);
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
-	//if (strcmp(name, "mapa") == 0){
-	//	objMapa = new obj3D(nodo, name, contID);
-	//	return objMapa;
-	//}
-	//if (strcmp(name, "elementos") == 0){
-	//	objElementos = new obj3D(nodo, name, contID);
-	//	return objElementos;
-	//}
+
+	if (strcmp(name, "mapa") == 0 || strcmp(name, "elementos") == 0){
+	obj3D *obj = new obj3D(nodo, name, contID);
+	notShadowObjects.push_back(obj);
+	return obj;
+	}
 
 	contID++;
 	return new obj3D(nodo, name, contID);
@@ -574,15 +572,17 @@ void TMotor::draw(int tipo) {
 		//==========================================================
 		// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
 		//==========================================================
-		/*
+		
 		//DIBUJADO DE LAS SOMBRAS PROYECTADAS
 		//-----------------------------------
-		//No dibujamos el mapa (suelo) ya que no queremos que produzca ninguna tipo de sombra
-		objMapa->setVisible(false);
-		objElementos->setVisible(false);
+		/*
+		//No dibujamos aquellos elementos que no queremos que proyecten sombras
+		for (int i = 0; i < notShadowObjects.size(); i++){
+			notShadowObjects.at(i)->setVisible(false);
+		}
 		//Activamos el shader especifico para dibujar las sombras proyectadas
 		shaderProjectedShadows->use();
-		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_DEPTH_TEST);
 		if (lights.size() > 0) {
 			for (int i = 0; i < lights.size(); i++) {
 				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
@@ -602,9 +602,10 @@ void TMotor::draw(int tipo) {
 				}
 			}
 		}
-		//Activamos el dibujado del mapa
-		objMapa->setVisible(true);
-		objElementos->setVisible(true);*/
+		//Reactivamos el dibujado de los elementos 
+		for (int i = 0; i < notShadowObjects.size(); i++){
+			notShadowObjects.at(i)->setVisible(true);
+		}*/
 		//====================================================
 		//====================================================
 

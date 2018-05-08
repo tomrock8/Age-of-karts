@@ -6,12 +6,19 @@ out vec4 fragColor;
  
 //Variable de entrada desde el vertex shader
 in vec2 textCoords;
+in float trans;
 
 //Uniform
 uniform sampler2D image; //Textura de cada particula
 uniform vec3 color; //Color de la particula
  
 void main (void) {
-    //Asignamos a cada particula la imagen que le corresponde
-    fragColor = texture(image, textCoords) * vec4(color, 1.0);
+    //Asignamos la transparencia de cada particula
+    if (texture(image, textCoords).w > 0.0){
+        fragColor = vec4(vec3(texture(image, textCoords)), trans);
+    }else{
+        fragColor = texture(image, textCoords);
+    }
+    //Despues la multiplicamos por el color
+    fragColor *= vec4(color, 0.75f);
 }

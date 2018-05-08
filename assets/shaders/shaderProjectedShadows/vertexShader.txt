@@ -1,0 +1,57 @@
+//Especificar version de Opengl a utilizar
+#version 330 core
+
+//Recoger los datos de los vertices en los buffers correctamente (segun orden de envio en el programa)
+layout (location = 0) in vec3 aPos; //Posicion
+layout (location = 1) in vec2 aTexCoords; //Coordenadas de textura
+layout (location = 2) in vec3 aNormal; //Normal
+layout (location = 3) in vec3 aTangents; //Tangentes
+layout (location = 4) in vec3 aBitangents; //Bitangentes
+
+//Variables de salida del Vertex al Fragment shader
+out data{
+    vec3 worldPos; // Vertice en coordenadas del mundo 
+    vec3 lightPosition; //Posicion de la luz
+}vs_out;
+
+//Uniforms para las distintas matrices necesarias para calcular la MVP
+uniform mat4 model; //Model de cada objeto
+uniform mat4 view; //Matriz view de la camara usada en cada momento
+uniform mat4 projectionLight; //Matriz proyeccion de la luz
+uniform vec3 lightPosition; //Posicion de la luz
+uniform mat4 scale;
+
+void main()
+{
+    //Posicion de vertice por las transfomaciones de la malla (matriz model)
+    vs_out.worldPos = vec3(model * vec4(aPos, 1.0));
+    //Pasamos la posicion de la luz al fragment
+    vs_out.lightPosition = lightPosition;
+
+    //Matriz modelo especial para dibujar la sombra
+    
+    mat4 shadowsModel = model*scale;
+    //Situamos la sombra a la altura 0.1 siempre (el suelo)
+    shadowsModel[3][1] =  shadowsModel[3][1] - 2.5;
+    //A partir de la posicion de la luz y del vertice, movemos la sombra del objeto para que no este inmediatamente debajo del mismo
+    //Cuanta mas distancia entre ellos, mas separada parecera la sombra respecto del objeto que la crea
+    // -- Para el eje x --
+    if ( shadowsModel[3][0] < lightPosition.x){
+        float dist = lightPosition.x - shadowsModel[3][0];
+        shadowsModel[3][0] -= dist/500;
+    }else{
+        float dist = shadowsModel[3][0] - lightPosition.x;
+        shadowsModel[3][0] += dist/500;
+    }
+    // -- Para el eje z --
+    if ( shadowsModel[3][2] < lightPosition.z){
+        float dist = lightPosition.z - shadowsModel[3][2];
+        shadowsModel[3][2] -= dist/500;
+    }else{
+        float dist = shadowsModel[3][2] - lightPosition.z;
+        shadowsModel[3][2] += dist/500;
+    }
+    //Calculamos la posicion final de cada vertice a partir de las matrices anteriores
+    //Le pasamos el valor 0.1 en la posicion y de cada vertice para que dibuje los objetos planos (dando la impresion de una sombra)
+    gl_Position = projectionLight * view * shadowsModel * vec4(aPos.x, aPos.y, aPos.z, 0.8);
+}

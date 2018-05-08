@@ -1,0 +1,28 @@
+# Blender MTL File: 'PirataGiroIzq.blend'
+# Material Count: 2
+
+newmtl KartPirataMAT
+Ns 92.156863
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Texturas/kartPirata_diffuse.png
+map_Bump Texturas/kartPirata_normal.png
+map_Ks Texturas/kartPirata_specular.png
+
+newmtl PirataMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd Texturas/pirata_diffuse.png
+map_Bump Texturas/pirata_normal.png
+map_Ks Texturas/pirata_specular.png

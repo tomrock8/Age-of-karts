@@ -1,0 +1,19 @@
+//Especificar version de Opengl a utilizar
+#version 330 core
+
+//Entrada desde el geometry shader (fragmento en coordenadas del mundo)
+in vec4 worldPos;
+
+//Uniforms
+uniform vec3 lightPosition; //Posicion de la luz
+uniform float planoLejano; //Plano lejano utilizado para construir la matriz perspectiva de las matrices de luz del cubo de profundidad
+
+void main()
+{
+    //Obtenemos distancia entre el vertice y el punto de luz
+    float d = length(worldPos.xyz - lightPosition);
+    //La dividimos entre el plano lejano para normalizarlas en el rango [0,1]
+    d = d / planoLejano;
+    //De esta forma, obtenemos la profundidad de cada fragmento
+    gl_FragDepth = d;
+}  

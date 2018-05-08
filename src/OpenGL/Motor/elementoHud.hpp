@@ -29,6 +29,7 @@ public:
     void escalado(float x, float y);
     void cambiarTextura(const char* p);
     void cambiarColor(glm::vec4 c);
+    void cambiarTransparencia(bool t, float l);
 
 private:
     //---- VARIABLES ----
@@ -36,6 +37,8 @@ private:
     float height; //Alto del quad
     const char* name; //Nombre del quad 
     const char* path; //Ruta de la imagen
+    bool transparency; //Booleano para saber si el elemento HUD debe ser transparente
+    float transLevel; //Nivel de transparencia del elemento HUD
 
     std::array<float, 20> data; //Array con las posiciones y coordenadas de textura de cada vertice del quad
     GLuint indices[6] = { //Indices para crear los triangulos que forman el cuadrado

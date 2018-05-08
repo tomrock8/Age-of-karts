@@ -27,6 +27,7 @@ public:
     void scaleElement(const char* n, float x, float y);
     void changeTextureElement(const char* n, const char* p);
     void changeColorElement(const char* n, glm::vec4 c);
+    void changeTransparencyElement(const char* n, bool t, float l);
  
     void drawHud(Shader *shader); //Dibuja todos los elementos del hud
  

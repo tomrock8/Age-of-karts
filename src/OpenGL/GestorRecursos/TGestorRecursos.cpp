@@ -43,7 +43,7 @@ TGestorRecursos::~TGestorRecursos() {
 }
 
 
-std::vector<mesh*> TGestorRecursos::loadMesh(const char *path,bool sta) {
+std::vector<mesh*> TGestorRecursos::loadMesh(const char *path,bool sta,bool anim) {
 	//primero limpiamos los vectores de mesh
 	int  i = objMeshes.size();
 	if (objMeshes.size() > 0) {
@@ -57,7 +57,10 @@ std::vector<mesh*> TGestorRecursos::loadMesh(const char *path,bool sta) {
 		return objMeshes;
 	}
 	objMeshes.reserve(scene->mNumMeshes);	//lectura de assimp
-
+	animation = anim;
+	if (animation) {
+		animationCount = 0;
+	}
 	dir = new string(std::string(path).substr(0, std::string(path).find_last_of('/') + 1));
 	////cout << " directorio " << dir->c_str() << endl;
 
@@ -87,7 +90,7 @@ void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 			if (statico == true) {
 				MotorFisicas *bullet = MotorFisicas::getInstancia();
 				bullet->initializePhysics(meshAux);
-				cout << "salgo de crear las fisicas para : " << meshAux->getNombre() << endl;
+				//cout << "salgo de crear las fisicas para : " << meshAux->getNombre() << endl;
 			}
 
 
@@ -129,12 +132,21 @@ TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mes
 		cout << "MALLA GR: " << recursoMallas.at(i)->getNombre() << "\n";
 	}*/
 
+	
 
 	bool encontrado = false;
 	TRecursoMalla *recMalla = NULL;
-
-
 	std::string nameExt = nombre;
+	//gestor de recursos no e aplica animaciones
+	if (animation) {
+		nameExt += animationCount;
+		recMalla = processMesh(mesh, scene, nameExt.c_str());
+		recursoMallas.push_back(recMalla);
+		animationCount++;
+		return recMalla;
+	}
+
+	
 	for (GLuint i = 0; i < recursoMallas.size(); i++) {
 		recMalla = (TRecursoMalla *)recursoMallas.at(i);
 		std::string nameRecMalla = recMalla->getNombre();

@@ -11,38 +11,42 @@ Habilidad::Habilidad(int tipo, obj3D* n, btVector3 posicion, btVector3 escala, b
 	switch (tipoHabilidad) {
 
 	case 1:
-		nodo = TMotor::instancia().newMeshNode("Estatico", strEscudo, "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadPirata", strEscudo, "escena_raiz",false);
 		nombre = "HabilidadPirata";
+		GestorIDs::instancia().setIdentifier(nodo, "HabilidadPirata");
 		break;
 
 	case 2:
-		nodo = TMotor::instancia().newMeshNode("Estatico", strEscudo, "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadVikingo", strEscudo, "escena_raiz",false);
 		nombre = "HabilidadVikingo";
+		GestorIDs::instancia().setIdentifier(nodo, "HabilidadVikingo");
 		break;
 
 	case 3:
-		nodo = TMotor::instancia().newMeshNode("Estatico", strEscudo, "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadGladiador", strEscudo, "escena_raiz",false);
 		nombre = "HabilidadGladiador";
+		GestorIDs::instancia().setIdentifier(nodo, "HabilidadGladiador");
 		break;
 
 	case 4:
-		nodo = TMotor::instancia().newMeshNode("Estatico", strEscudo, "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadChino", strEscudo, "escena_raiz",false);
 		nombre = "HabilidadChino";
+		GestorIDs::instancia().setIdentifier(nodo, "HabilidadChino");
 		break;
 
 	}
 	
 	nodo->setScale(tamanyoNodo.getX(), tamanyoNodo.getY(), tamanyoNodo.getZ());
-	GestorIDs::instancia().setIdentifier(nodo, "Estatico");
+	
 	id = nodo->getID();
 	nodo->setName(nombre);
 
 	inicializarFisicas();
 
 	if (tipoHabilidad == 4 || tipoHabilidad == 2 || tipoHabilidad == 3) {
-		rigidBody->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
-		rigidBody->setGravity(btVector3(0, 0, 0));
-		rigidBody->setActivationState(DISABLE_DEACTIVATION);
+		rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		//rigidBody->setGravity(btVector3(0, 0, 0));
+		
 	}
 
 }
@@ -51,7 +55,7 @@ void Habilidad::lanzarItem(int direccion, btVector3 orientacion,btTransform obje
 	this->orientacion = orientacion;
 
 	if (tipoHabilidad == 1) { // PIRATA
-
+		rigidBody->setActivationState(DISABLE_DEACTIVATION);
 		rigidBody->setGravity(btVector3(0, -300, 0));
 		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 300, 1.0f, orientacion.getZ() * 300));
 
@@ -75,7 +79,7 @@ void Habilidad::movimiento() {
 
 
 	case 2: // VIKINGO
-
+		
 		giro = 15;
 		trans.setOrigin(btVector3(NodoVehiculo->getPosition().x + orientacion.getX() * 15, NodoVehiculo->getPosition().y, NodoVehiculo->getPosition().z + orientacion.getZ() * 15));
 
@@ -98,16 +102,16 @@ void Habilidad::movimiento() {
 
 	case 3: // GLADIADOR
 
-	//nodo->setPosition(NodoVehiculo->getPosition().x,NodoVehiculo->getPosition().y+2,NodoVehiculo->getPosition().z);
-
-	//if(nodo->getScale().X<=10)
-	//nodo->setScale(nodo->getScale().X +1,nodo->getScale().Y,nodo->getScale().Z +1);
+		//nodo->setPosition(NodoVehiculo->getPosition().x,NodoVehiculo->getPosition().y+2,NodoVehiculo->getPosition().z);
+		
+		if(nodo->getScale().x<=10)
+		nodo->setScale(nodo->getScale().x +1,nodo->getScale().x,nodo->getScale().x +1);
 
 		trans.setOrigin(btVector3(NodoVehiculo->getPosition().x, NodoVehiculo->getPosition().y - cont2 + 2, NodoVehiculo->getPosition().z));
 		quaternion.setEulerZYX(NodoVehiculo->getRotation().x * PI / 180, NodoVehiculo->getRotation().y * PI / 180, NodoVehiculo->getRotation().z * PI / 180);
 		trans.setRotation(quaternion);
 		rigidBody->setCenterOfMassTransform(trans);
-
+		
 		if (cont2 != 0)
 			cont2--;
 

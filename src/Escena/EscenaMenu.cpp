@@ -20,7 +20,7 @@ EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 
 	fuenteOpcion = new AlSource();
 	fuenteOpcion->volume(30.0f * TMotor::instancia().getGestorSonido()->getVolEfectos());
-
+	Client::getInstancia()->BorrarClientes();
 	TMotor::instancia().initDebugWindow();
 }
 
@@ -92,7 +92,6 @@ void EscenaMenu::update() {}
 std::string EscenaMenu::getIpConexion() { return ipConexion; }
 
 Escena::tipo_escena EscenaMenu::comprobarInputs() {
-
 	//Si se pulsa ESCAPE se sale directamente del juego - para poder salir de todos los sitios, despues se quitara
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		if (!pressed) {
@@ -260,6 +259,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 	
 	//Se retorna la escena Menu (donde estamos) en caso de que no se haya cambiado de pantalla
 	return Escena::tipo_escena::MENU;
+
 }
 
 

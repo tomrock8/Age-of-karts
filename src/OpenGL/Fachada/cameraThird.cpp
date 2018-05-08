@@ -14,11 +14,11 @@ cameraThird::cameraThird(const char *name, const char *parentName) {
 	direction = 0;
 	zdirection = 0;
 	auxX = 0;
-
+*/
 	rigidBody = initializePhysics();
 	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 
-*/
+
 }
 
 cameraThird::~cameraThird() {}
@@ -56,24 +56,27 @@ void cameraThird::lookAt(glm::vec3 posicion) {
 
 void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 direccion) {
 
-	float zoom = 12;
-	float altura =5;
+	float zoom = 15;
+	float altura =7;
 	float maximoRetardo=8;
 	float retardo=0.25;
 		
+
+
+
 		if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L)){
 		camara->setPosition(posicion.x + direccion.getX()*zoom, posicion.y + altura,posicion.z + direccion.getZ()*zoom);
 	
 		}
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_E) == GLFW_PRESS) {
 			
-		direccion2 = direccion.rotate(btVector3(0, 1, 0), -90 * PI / 180);
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), -90 * M_PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
 		
 		}
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_Q) == GLFW_PRESS) {
 
-		direccion2 = direccion.rotate(btVector3(0, 1, 0), 90 * PI / 180);
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), 90 * M_PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
 
 		}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS){
@@ -81,7 +84,7 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 		if(auxX<=maximoRetardo)
 		auxX+=retardo;	
 
-		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
 		
 		}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS){
@@ -89,7 +92,7 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 		if(auxX>=-maximoRetardo)
 		auxX-=retardo;
 
-		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);		
 		
 		}
@@ -101,7 +104,7 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 			auxX+=retardo;
 		}
 
-		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * PI / 180);
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
 		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);
 		
 		}
@@ -114,7 +117,7 @@ void cameraThird::comprobarInputs(){
 
 }
 btRigidBody *cameraThird::initializePhysics() {
-	/*
+	
 	btVector3 escala(5, 5, 5);
 	btVector3 posicion(-10, 10, 31);
 	btScalar masa = btScalar(10);
@@ -143,7 +146,7 @@ btRigidBody *cameraThird::initializePhysics() {
 	btTransform t;
 	rigidBody->getMotionState()->getWorldTransform(t);
 	// Store a pointer to the irrlicht node so we can update it later
-	rigidBody->setUserPointer((void *)(this->node));
+	rigidBody->setUserPointer((void *)(camara));
 
 	rigidBody->setActivationState(DISABLE_DEACTIVATION);
 	// Add it to the world
@@ -152,8 +155,8 @@ btRigidBody *cameraThird::initializePhysics() {
 	//bullet->setObjetos(objetos);
 	rigidBody->setGravity(btVector3(0, 0, 0));
 	return rigidBody;
-	*/
-	return NULL;
+	
+
 }
 
 void cameraThird::moveCamera(btRigidBody * pj1, btVector3 dir) {

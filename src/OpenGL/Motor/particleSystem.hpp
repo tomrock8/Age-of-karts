@@ -19,13 +19,6 @@ struct Particula{
         life = 0.0f;
         distanceToCamera = 0.0f;
     }
-
-    bool operator()(Particula that){
-        // Sort in reverse order : far particles drawn first.
-        cout << "pollas" << endl;
-        //return this->distanceToCamera > that.distanceToCamera;
-        return false;
-    }
 };
 
 const int numMaxParticles = 50; //Numero maximo de particulas del sistema
@@ -65,7 +58,6 @@ class particleSystem
         int findLastDeadParticle();
         void rebirthParticle(Particula *p);
         void update();
-        void sortParticles();
 };
 
 #endif

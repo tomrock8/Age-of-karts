@@ -111,10 +111,6 @@ void particleSystem::rebirthParticle(Particula *p){
     p->size = 0.65f;
 }
 
-void particleSystem::sortParticles(){
-    std::sort(&particulas.at(0), &particulas.at(49));
-}
-
 //Funcion para seterar la posicion del sistema de particulas
 void particleSystem::setPosition(glm::vec3 p){
     posParticle = p;
@@ -155,24 +151,16 @@ void particleSystem::update(){
 
 
         if (p->life > 0.0f){ //Si aun sigue viva...
-        /*
-            if ( ((int)(p->life * 10) % 2) == 0){
-
-            p->size += sizeParticle - 0.05; //Modificamos el tamaño de la particulas con el tiempo
-            }else{*/
-
             p->size += sizeParticle; //Modificamos el tamaño de la particulas con el tiempo
-            //}
+            p->distanceToCamera = glm::length2(p->position - posCamera);
             //Llenamos los buffers que anteriormente hemos declarado
             // --- POSICION Y TAMANYO ---
-
-            //p->position = glm::vec3( p->position.x - 0.5 * oriParticle.x,  p->position.y,  p->position.z - 0.5 * oriParticle.z);
             position_data[4*particlesAlive+0] = p->position[0];
             position_data[4*particlesAlive+1] = p->position[1];
             position_data[4*particlesAlive+2] = p->position[2];
             position_data[4*particlesAlive+3] = p->size;
         }else{
-            p->distanceToCamera = -1.0f;
+            p->distanceToCamera = glm::length2(p->position - posCamera);
         }
 
         particlesAlive++; //Aumentamos el numero de particulas vivas
@@ -205,8 +193,35 @@ void particleSystem::draw(Shader *s){
 
     //Le pasamos el color de las particulas al shader
     s->setVec3("color", colorParticle);
+    
+    /*
+    for (int i = 0; i < particulas.size()-1; i++){
+        Particula *minP = particulas.at(i);
+        int aux = 0;
+        for (int j = i + 1; j < particulas.size()-1; j++){
+            float dMin = minP->distanceToCamera;
+            float dActual = particulas.at(j)->distanceToCamera;
+            if (dMin < dActual){
+                minP = particulas.at(j);
+                aux = j;
+            }
+        }
+        glm::vec4 posAux = glm::vec4(position_data[4*i+0],position_data[4*i+1],position_data[4*i+2],position_data[4*i+3]);
+        Particula *p = particulas.at(i);
+        particulas[i] = minP;
+        position_data[4*i+0] = position_data[4*aux+0];
+        position_data[4*i+1] = position_data[4*aux+1];
+        position_data[4*i+2] = position_data[4*aux+2];
+        position_data[4*i+3] = position_data[4*aux+3];
+        particulas[aux] = p;
+        position_data[4*aux+0] = posAux.x;
+        position_data[4*aux+1] = posAux.y;
+        position_data[4*aux+2] = posAux.z;
+        position_data[4*aux+3] = posAux.w;
+        cout << "distancia : " << particulas.at(i)->distanceToCamera << endl;
+    }
+    cout << "-----------------------" << endl;*/
 
-    //sortParticles();
     //Despues, pasamos a dibujar
     glBindVertexArray(VAO); //Enlazamos el VAO que antes hemos rellenado
 
@@ -225,6 +240,5 @@ void particleSystem::draw(Shader *s){
 
     //Desenlazamos el VAO hasta el siguiente dibujado
     glBindVertexArray(0);
-
-
+    
 }

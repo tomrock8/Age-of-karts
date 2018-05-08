@@ -18,7 +18,7 @@ void main()
     //Comprobamos si se trata de una luz puntual o dirigida
     if (lightDirection.w < 0.1){ //Si es una luz puntual, el fragmento siempre va a proyectar sombra
         //Asignamos el color negro a cada fragmento y una transparencia de 0.4 para poder ver el color o textura del elemento que haya debajo
-        FragColor = vec4(vec3(0.0f), 1.0f);
+        FragColor = vec4(vec3(0.0f), 0.4f);
     }else{ //Si es una luz dirigida, debemos comprobar si el fragmento esta dentro del foco para ver si proyecta sombra o no
         //Calcular la direccion entre la fuente de luz y la posicion en el mundo del fragmento
         vec3 lightD = normalize(fs_in.lightPosition - fs_in.worldPos);

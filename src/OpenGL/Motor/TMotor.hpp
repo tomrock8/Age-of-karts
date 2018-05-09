@@ -108,6 +108,10 @@ protected:
 	Shader *shaderBillboard; //Shader para dibujar los diferentes billboards 
 	Shader *shaderParticles; //Shader para el dibujado de las particulas
 	Shader *shaderGbuffer; //Shader para renderizar la escena en el buffer que despues se usara en el deferred shading
+	Shader *shaderDeferred; //Shader que renderiza en la pantalla a partir de los datos guardados por el gBuffer
+
+	//Tipo de shader usado
+	const char* shaderName;
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)

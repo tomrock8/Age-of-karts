@@ -50,11 +50,12 @@ void CorredorJugador::movimiento() {
 	}
 	//GIRAR DERECHA
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
-		if (GiroDer == true) {
+		//if (GiroDer == true) {
 			static_cast<TAnimacion*>(getGiroDerFin()->getEntidad())->setVisible(false);
 			static_cast<TAnimacion*>(getGiroDerFin()->getEntidad())->ResetAnimation();
-		}
-		animacion(this->getGiroDerIni());
+	//	}
+		//animacion(this->getGiroDerIni());
+			iniciarAnimacion(GIRODERINI);
 		girarDerecha();
 		comprobadorMovimiento = true;
 		GiroDer = true;

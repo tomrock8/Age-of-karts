@@ -75,6 +75,7 @@ public:
 	TGestorRecursos *getGR();
 	bool getRenderDebug();
 	GestorSonido *getGestorSonido();
+	int getNumPantallas();
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
@@ -83,9 +84,10 @@ public:
 	void setRenderDebug(bool renderDebug);
 	void setDebugBullet(bool b);
 	void setVerticesDebug(float a, float b, float c, float x, float y, float z);
+	void aumentarPantallaPartida();
 
 	// DIBUJADO
-	void clean();
+	void clean(int tipo, int split);
 	void draw(int tipo);
 	void drawCamera();
 	void drawLight(Shader *s);
@@ -150,6 +152,8 @@ protected:
 	GLFWwindow *ventana;
 	int screenHEIGHT;
 	int screenWIDTH;
+
+	int numPantallas;
 
 	GLuint contID;
 

@@ -182,7 +182,11 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	CAMARA
 	//-----------------------------
-	camera = new cameraThird("camara_jugador3apersona", "escena_raiz");
+	cameraThird *cameraAux;
+	for(int x = 0; x < TMotor::instancia().getNumPantallas(); x++){
+		cameraAux = new cameraThird("camara_jugador3apersona", "escena_raiz");
+		camera.push_back(cameraAux);
+	}
 
 	//-----------------------------
 	//	GESTOR COLISIONES
@@ -592,33 +596,13 @@ void EscenaJuego::update() {
 
 
 	pj = jugadores->getJugadores();
-
-	if(pj.at(controlPlayer)->getEstados()->getEstadoInmunidad() != EstadosJugador::estado_inmunidad::INMUNIDAD)
-	camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition(), pj.at(controlPlayer)->getNodo()->getRotation(), pj.at(controlPlayer)->getVectorDireccion());
 	
-	camera->lookAt(pj.at(controlPlayer)->getNodo()->getPosition());
-	/*
-		float distanciaX = -20;
-		float posX = pj.at(controlPlayer)->getVectorDireccion().getX()*distanciaX;
-		float posZ = pj.at(controlPlayer)->getVectorDireccion().getZ()*distanciaX;
-
-		camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition().x - posX, 0, pj.at(controlPlayer)->getNodo()->getPosition().z - posZ);
-		camera->setRotation(glm::vec3(0, 1, 0), 180);
-		switch(tipoCamara){
-			case 0:		//Camara 3a persona fija
-				camara->moveCamera(pj.at(controlPlayer));
-			break;
-			case 1:		//Camara 3a persona libre
-				camara->moveCameraControl(pj.at(controlPlayer));
-			break;
-			case 2:		//Camara 1a persona
-				camara->movefpsCamera(pj.at(controlPlayer));
-			break;
-			case 3:
-				camara->moveCameraControlPointer(pj.at(controlPlayer));
-
-		}*/
-
+	for(int x = 0; x < TMotor::instancia().getNumPantallas(); x++){
+		if(pj.at(controlPlayer+x)->getEstados()->getEstadoInmunidad() != EstadosJugador::estado_inmunidad::INMUNIDAD){
+			camera.at(x)->setPosition(pj.at(controlPlayer+x)->getNodo()->getPosition(), pj.at(controlPlayer+x)->getNodo()->getRotation(), pj.at(controlPlayer+x)->getVectorDireccion());		
+			camera.at(x)->lookAt(pj.at(controlPlayer+x)->getNodo()->getPosition());
+		}
+	}
 
 }
 

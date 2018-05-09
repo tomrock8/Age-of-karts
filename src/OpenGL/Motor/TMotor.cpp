@@ -69,6 +69,8 @@ TMotor::TMotor() {
 
 	gestorSonido = new GestorSonido();
 	gestorSonido->setListenerData();
+
+	numPantallas = 1;
 }
 
 void TMotor::initDebugWindow(){
@@ -139,6 +141,7 @@ Shader *TMotor::getShaderDebug() { return shaderDebug; }
 Shader *TMotor::getShaderSilhouette() { return shaderSilhouette; }
 GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
 glm::mat4 TMotor::getV() { return v;}
+int TMotor::getNumPantallas() {return numPantallas;}
 
 
 //Funcion que devuelve un hud a partir del nombre
@@ -423,20 +426,37 @@ TNodo *TMotor::createLightNode(TNodo *padre, TLuz *luz, const char* name) {
 	return nodo;
 }
 
+void TMotor::aumentarPantallaPartida(){
+	numPantallas ++;
+}
+
 //------------------------------
 // D I B U J A D O
 //------------------------------
-void TMotor::clean() {
+void TMotor::clean(int tipo, int split) {
 	//Establecemos el tamaño del viewport
-	glViewport(0, 0, screenWIDTH, screenHEIGHT);
-	//Limpiamos los buffers de color y profundidad
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//Activamos el z-buffer
-	glEnable(GL_DEPTH_TEST);
-	//Activamos la transparencia
-	glEnable(GL_BLEND);
-	//Como cada uno de los canales rgba es calculado/computado
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	if ((tipo == 1 || tipo == 2) && numPantallas > 1){
+		if(split == 1)
+			glViewport(0, screenHEIGHT/2, screenWIDTH/2, screenHEIGHT/2);
+		else if(split == 2)
+			glViewport(screenWIDTH/2, screenHEIGHT/2, screenWIDTH/2, screenHEIGHT/2);
+		else if(split == 3)
+			glViewport(0, 0, screenWIDTH/2, screenHEIGHT/2);
+		else if(split == 4)
+			glViewport(screenWIDTH/2, 0, screenWIDTH/2, screenHEIGHT/2);
+	}else {
+		glViewport(0, 0, screenWIDTH, screenHEIGHT);
+	}
+	if(split == 1) {
+		//Limpiamos los buffers de color y profundidad
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//Activamos el z-buffer
+		glEnable(GL_DEPTH_TEST);
+		//Activamos la transparencia
+		glEnable(GL_BLEND);
+		//Como cada uno de los canales rgba es calculado/computado
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
 }
 
 void TMotor::draw(int tipo) {
@@ -466,185 +486,190 @@ void TMotor::draw(int tipo) {
 		}
 	}
 	*/
+	for(int pantallas = 1; pantallas <= numPantallas; pantallas++){
+		if (tipo == 1 || tipo == 2) {
+			clean(tipo, pantallas);//Se llama a la funcion para limpiar los buffers de OpenGL
+			//Antes de llamar a ningun dibujado, calculamos la viewMatrix de la camara activa
+			setActiveCamera(cameras.at(pantallas));
+			
+			drawCamera();
 
-	clean();//Se llama a la funcion para limpiar los buffers de OpenGL
-	if (tipo == 1 || tipo == 2) {
-		//Antes de llamar a ningun dibujado, calculamos la viewMatrix de la camara activa
-		drawCamera();
+			//DIBUJADO DEL SKYBOX
+			//-------------------
+			//Activamos el shader especifico del skybox
+			shaderSkybox->use(); 
+			//Llamamos al metodo de dibujado del skybox
+			skybox->drawSkyBox();
 
-		//DIBUJADO DEL SKYBOX
-		//-------------------
-		//Activamos el shader especifico del skybox
-		shaderSkybox->use(); 
-		//Llamamos al metodo de dibujado del skybox
-		skybox->drawSkyBox();
-
-		//DIBUJADO DEL ARBOL * ESTILO CARTOON *
-		//-------------------------------------
-		
-		//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas
-		
-		//Enlazamos el shader cartoon
-		Shader *s = shaderCartoon;
-		//Se activa el shader para el renderizado 3D
-		s->use();
-		//Calcular posicion de la camara y pasarsela al fragment shader
-		glm::vec4 defaultVector(0, 0, 0, 1);
-		glm::vec4 posC = v * defaultVector;
-		s->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
-		//Establecemos los datos de las distintas luces
-		drawLight(s);
-		//Configuramos los shaders para producir las sombras de cada luz
-		if (lights.size() > 0) {
-			for (int i = 0; i < lights.size(); i++) {
-				static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow(s);
-			}
-		}
-		
-		if (!debugBullet){
-			//Activamos el glPolygonOffset = a cada fragmento de los objetos se le añade una pequeña profundidad antes de realizar los calculos del z-buffer
-			glEnable(GL_POLYGON_OFFSET_FILL);
-			//Profundidad que se le añade
-			float line_offset_slope = -1.f;
-			//Corte maximo de profundidad
-			float line_offset_unit = -35.f;
-			//Especificamos los valores anteriores a OpenGL
-			glPolygonOffset( line_offset_slope, line_offset_unit );
-		}
-		//Dibujamos los distintos nodos del arbol
-		scene->draw(s);
-
-		//2º RENDERIZADO = se renderizan los objetos en modo wireframe (solo las caras ocultas) para crear la silueta de los mismos
-		
-		//Enlazamos el shader de las siluetas
-		s = shaderSilhouette;
-		//Se activa el shader para el renderizado 3D
-		s->use();
-		//Desactivamos el offset anterior
-		glDisable( GL_POLYGON_OFFSET_FILL );  
-		//Establecemos el dibujado del poligono en modo linea
-		glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-		//Activamos el cull face
-		glEnable(GL_CULL_FACE);
-		//Activamos el suavizado de las lineas
-		glEnable(GL_LINE_SMOOTH);
-		//Especificamos que solo queremos dibujar las caras ocultas
-		glCullFace(GL_FRONT);
-		//Aumentamos el grosor de las lineas
-		glLineWidth(4.50f);
-		//Dibujamos los distintos nodos del arbol
-		scene->draw(s);
-		//Volvemos al modo de dibujado normal de los poligonos
-		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
-		//Desactivamos el cull face
-		glDisable(GL_CULL_FACE);
-
-		//DIBUJADO DEL DEBUG DE BULLET
-		//----------------------------
-		if (debugBullet && vertices.size() > 0){ //Si el debug de bullet esta activado
-			//Creamos los buffers de OpenGl necesarios
-			unsigned int VAO, VBO;
-			glGenVertexArrays(1, &VAO);
-			glGenBuffers(1, &VBO);
-			//Activamos el VAO
-			glBindVertexArray(VAO);
-			//Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
-			glBindBuffer(GL_ARRAY_BUFFER, VBO);
-			glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), 0);
-			glEnableVertexAttribArray(0);
-			//Activamos el shader del debug
-			shaderDebug->use();
-			//Creamos y le pasamos la matriz mvp al shader
-			glm::mat4 model;
-			glm::mat4 mvp = activeCamera->getEntidad()->getProjectionMatrix() * v * model;
-			shaderDebug->setMat4("mvp", mvp);
-			//Establecemos el ancho de las lineas
-			glLineWidth(3.0f);
-			//Llamamos al dibujado de las distintas lineas
-			glDrawArrays(GL_LINES, 0, vertices.size());
-			//Desactivamos los buffers usados para dibujar las lineas
-			glBindVertexArray(0);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			//Limpiamos el vector de vertices para la siguiente iteracion
-			vertices.clear();
-		}
-		
-		//==========================================================
-		// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
-		//==========================================================
-		
-		//DIBUJADO DE LAS SOMBRAS PROYECTADAS
-		//-----------------------------------
-		/*
-		//No dibujamos aquellos elementos que no queremos que proyecten sombras
-		for (int i = 0; i < notShadowObjects.size(); i++){
-			notShadowObjects.at(i)->setVisible(false);
-		}
-		//Activamos el shader especifico para dibujar las sombras proyectadas
-		shaderProjectedShadows->use();
-		glDisable(GL_DEPTH_TEST);
-		if (lights.size() > 0) {
-			for (int i = 0; i < lights.size(); i++) {
-				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
-					//Le pasamos al shader la matriz view
-					shaderProjectedShadows->setMat4("view", v);
-					//Le pasamos la matriz proyeccion de la luz (perspectiva)
-					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 300.0f);
-					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
-					//Le pasamos la posicion de la luz al shader
-					shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());
-					shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz *>(lights[i]->getEntidad())->getDirection());
-					glm::mat4 sc;
-					sc = scale(sc, glm::vec3(1,0.01,1));
-					shaderProjectedShadows->setMat4("scale", sc);
-					//Dibujamos la escena con el shader de sombras proyectadas
-					scene->draw(shaderProjectedShadows);
+			//DIBUJADO DEL ARBOL * ESTILO CARTOON *
+			//-------------------------------------
+			
+			//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas
+			
+			//Enlazamos el shader cartoon
+			Shader *s = shaderCartoon;
+			//Se activa el shader para el renderizado 3D
+			s->use();
+			//Calcular posicion de la camara y pasarsela al fragment shader
+			glm::vec4 defaultVector(0, 0, 0, 1);
+			glm::vec4 posC = v * defaultVector;
+			s->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
+			//Establecemos los datos de las distintas luces
+			drawLight(s);
+			//Configuramos los shaders para producir las sombras de cada luz
+			if (lights.size() > 0) {
+				for (int i = 0; i < lights.size(); i++) {
+					static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow(s);
 				}
 			}
-		}
-		//Reactivamos el dibujado de los elementos 
-		for (int i = 0; i < notShadowObjects.size(); i++){
-			notShadowObjects.at(i)->setVisible(true);
-		}*/
-		//====================================================
-		//====================================================
+			
+			if (!debugBullet){
+				//Activamos el glPolygonOffset = a cada fragmento de los objetos se le añade una pequeña profundidad antes de realizar los calculos del z-buffer
+				glEnable(GL_POLYGON_OFFSET_FILL);
+				//Profundidad que se le añade
+				float line_offset_slope = -1.f;
+				//Corte maximo de profundidad
+				float line_offset_unit = -35.f;
+				//Especificamos los valores anteriores a OpenGL
+				glPolygonOffset( line_offset_slope, line_offset_unit );
+			}
+			//Dibujamos los distintos nodos del arbol
+			scene->draw(s);
 
-		//DIBUJADO DE LAS PARTICULAS
-		//--------------------------
+			//2º RENDERIZADO = se renderizan los objetos en modo wireframe (solo las caras ocultas) para crear la silueta de los mismos
+			
+			//Enlazamos el shader de las siluetas
+			s = shaderSilhouette;
+			//Se activa el shader para el renderizado 3D
+			s->use();
+			//Desactivamos el offset anterior
+			glDisable( GL_POLYGON_OFFSET_FILL );  
+			//Establecemos el dibujado del poligono en modo linea
+			glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+			//Activamos el cull face
+			glEnable(GL_CULL_FACE);
+			//Activamos el suavizado de las lineas
+			glEnable(GL_LINE_SMOOTH);
+			//Especificamos que solo queremos dibujar las caras ocultas
+			glCullFace(GL_FRONT);
+			//Aumentamos el grosor de las lineas
+			glLineWidth(4.50f);
+			//Dibujamos los distintos nodos del arbol
+			scene->draw(s);
+			//Volvemos al modo de dibujado normal de los poligonos
+			glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+			//Desactivamos el cull face
+			glDisable(GL_CULL_FACE);
 
-		//glDisable(GL_DEPTH_TEST);
-		shaderParticles->use();
-		for (int i = 0; i < particleSystems.size(); i++){
-			particleSystems.at(i)->draw(shaderParticles);
+			//DIBUJADO DEL DEBUG DE BULLET
+			//----------------------------
+			if (debugBullet && vertices.size() > 0){ //Si el debug de bullet esta activado
+				//Creamos los buffers de OpenGl necesarios
+				unsigned int VAO, VBO;
+				glGenVertexArrays(1, &VAO);
+				glGenBuffers(1, &VBO);
+				//Activamos el VAO
+				glBindVertexArray(VAO);
+				//Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
+				glBindBuffer(GL_ARRAY_BUFFER, VBO);
+				glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), 0);
+				glEnableVertexAttribArray(0);
+				//Activamos el shader del debug
+				shaderDebug->use();
+				//Creamos y le pasamos la matriz mvp al shader
+				glm::mat4 model;
+				glm::mat4 mvp = activeCamera->getEntidad()->getProjectionMatrix() * v * model;
+				shaderDebug->setMat4("mvp", mvp);
+				//Establecemos el ancho de las lineas
+				glLineWidth(3.0f);
+				//Llamamos al dibujado de las distintas lineas
+				glDrawArrays(GL_LINES, 0, vertices.size());
+				//Desactivamos los buffers usados para dibujar las lineas
+				glBindVertexArray(0);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				//Limpiamos el vector de vertices para la siguiente iteracion
+				vertices.clear();
+			}
+			
+			//==========================================================
+			// NO TOQUEIS ESTE FRAGMENTO DE CODIGO
+			//==========================================================
+			
+			//DIBUJADO DE LAS SOMBRAS PROYECTADAS
+			//-----------------------------------
+			/*
+			//No dibujamos aquellos elementos que no queremos que proyecten sombras
+			for (int i = 0; i < notShadowObjects.size(); i++){
+				notShadowObjects.at(i)->setVisible(false);
+			}
+			//Activamos el shader especifico para dibujar las sombras proyectadas
+			shaderProjectedShadows->use();
+			glDisable(GL_DEPTH_TEST);
+			if (lights.size() > 0) {
+				for (int i = 0; i < lights.size(); i++) {
+					if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
+						//Le pasamos al shader la matriz view
+						shaderProjectedShadows->setMat4("view", v);
+						//Le pasamos la matriz proyeccion de la luz (perspectiva)
+						glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 300.0f);
+						shaderProjectedShadows->setMat4("projectionLight", projectionLight);
+						//Le pasamos la posicion de la luz al shader
+						shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());
+						shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz *>(lights[i]->getEntidad())->getDirection());
+						glm::mat4 sc;
+						sc = scale(sc, glm::vec3(1,0.01,1));
+						shaderProjectedShadows->setMat4("scale", sc);
+						//Dibujamos la escena con el shader de sombras proyectadas
+						scene->draw(shaderProjectedShadows);
+					}
+				}
+			}
+			//Reactivamos el dibujado de los elementos 
+			for (int i = 0; i < notShadowObjects.size(); i++){
+				notShadowObjects.at(i)->setVisible(true);
+			}*/
+			//====================================================
+			//====================================================
+
+			//DIBUJADO DE LAS PARTICULAS
+			//--------------------------
+
+			//glDisable(GL_DEPTH_TEST);
+			shaderParticles->use();
+			for (int i = 0; i < particleSystems.size(); i++){
+				particleSystems.at(i)->draw(shaderParticles);
+			}
+			
+			//DIBUJADO DE LOS BILLBOARDS
+			//--------------------------
+			glDisable(GL_DEPTH_TEST);
+			shaderBillboard->use();
+			for (int i = 1; i < billboards.size(); i++){
+				billboards.at(i)->draw(shaderBillboard);
+			}
+			
+		}else{
+			clean(tipo, 1);
 		}
+
+		//Se activa el shader para el dibujado del HUD
 		
-		//DIBUJADO DE LOS BILLBOARDS
-		//--------------------------
-		glDisable(GL_DEPTH_TEST);
-		shaderBillboard->use();
-		for (int i = 1; i < billboards.size(); i++){
-			billboards.at(i)->draw(shaderBillboard);
-		}
+		shaderHUD->use();
 		
-	}
+		//Dibujamos el hud activo
+		activeHud->drawHud(shaderHUD);
+		glEnable(GL_DEPTH_TEST);
 
-	//Se activa el shader para el dibujado del HUD
-	
-	shaderHUD->use();
-	
-	//Dibujamos el hud activo
-	activeHud->drawHud(shaderHUD);
-	glEnable(GL_DEPTH_TEST);
+		int display_w, display_h;
+		glfwGetFramebufferSize(TMotor::instancia().getVentana(), &display_w, &display_h);
+		glViewport(0, 0, display_w, display_h);
 
-	int display_w, display_h;
-	glfwGetFramebufferSize(TMotor::instancia().getVentana(), &display_w, &display_h);
-	glViewport(0, 0, display_w, display_h);
-
-	if (renderDebug) {
-		if (ImGui::GetFrameCount() > 0) {
-			ImGui::Render();
-			ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+		if (renderDebug) {
+			if (ImGui::GetFrameCount() > 0) {
+				ImGui::Render();
+				ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+			}
 		}
 	}
 

@@ -42,7 +42,7 @@ private:
 	DebugDraw *debugDraw;
 
 	int controlPlayer;
-	cameraThird *camera;
+	std::vector<cameraThird *> camera;
 	int tipoCamara;
 	bool cambioCamara;
 	GestorColisiones *colisiones;

@@ -6,7 +6,9 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 	nombre = "Jugador";
 	pressed = false;
 	GiroDer = false;
-
+	//control de animaciones
+	animacionPrevia = getAnimQuieto();
+	iniciarAnimacion(PARADO, animacionPrevia,NULL);
 }
 
 /**
@@ -16,6 +18,11 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 void CorredorJugador::movimiento() {
 
 	bool comprobadorMovimiento = false;
+
+	//if (!comprobadorMovimiento == false) {
+		/*animacion del personaje quieto*/
+		//iniciarAnimacion(PARADO, animacionPrevia);
+	//}
 
 	//Comprobador de de mando y recoleccion de inputs
 	bool mandoConectado = false;
@@ -35,18 +42,21 @@ void CorredorJugador::movimiento() {
 		frenar();
 		//vehiculo-> set
 		comprobadorMovimiento = true;
-
 	}
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[5])) {
-
 		acelerar();
 		comprobadorMovimiento = true;
 
 	}
 	//GIRAR DERECHA
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
-		this->setActiveObj3D(this->getGiroDerIni());
+		
 		girarDerecha();
+		
+		iniciarAnimacion(GIRODERINI, animacionPrevia, getGiroDerFin());
+	
+		/*animacion derecha */
+
 		comprobadorMovimiento = true;
 		GiroDer = true;
 	}
@@ -78,11 +88,11 @@ void CorredorJugador::movimiento() {
 	}
 
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_RELEASE && GiroDer) {
-		this->setActiveObj3D(this->getGiroDerFin());
-		
+		iniciarAnimacion(GIRODERFIN, animacionPrevia,getGiroDerIni());
+		animacionPrevia = getGiroDerFin();
 		GiroDer = false;
 	}
-	if(!GiroDer)this->setActiveObj3D(this->getNodo()->getNode());
+
 
 }
 
@@ -176,11 +186,21 @@ void CorredorJugador::actualizarItem() {
 		}
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[2])) {
+		iniciarAnimacion(HABILIDAD, animacionPrevia,NULL);
+		animacionPrevia = getHabilidadAnim();
 		lanzarHabilidad();
 	}
+	
 }
 
 bool CorredorJugador::setComprobadorMovimiento(bool s) {
 	comprobadorMovimiento = s;
 	return comprobadorMovimiento;
+}
+void CorredorJugador::animacion(TNodo* anim) {
+	
+	static_cast<TAnimacion*>(anim->getEntidad())->setVisible(true);
+	static_cast<TAnimacion*>(anim->getEntidad())->setPlaying(true);
+	this->setActiveObj3D(anim);
+
 }

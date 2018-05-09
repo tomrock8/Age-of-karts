@@ -17,6 +17,7 @@ public:
 	virtual void actualizarItem() override;
 	std::string toString();
 	bool setComprobadorMovimiento(bool s);
+	void animacion(TNodo * anim);
 	void update();
 
 private:
@@ -26,6 +27,8 @@ private:
 	//Item *actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos);
 	//controlador para las animaciones
 	bool GiroDer;
+	bool animado = true;
+	TNodo *animacionPrevia;
 };
 
 #endif /* CORREDORJUGADOR_H */

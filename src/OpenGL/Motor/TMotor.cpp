@@ -377,7 +377,14 @@ TNodo  *TMotor::createMeshNode(TNodo *padre, TMalla *mesh, const char* name) {
 	padre->addHijo(nodo);
 	return nodo;
 }
-
+TNodo  *TMotor::createStaticMeshNode(TNodo*padre, const char* path, const char* name) {
+	TNodo *nodo = new TNodo(name);
+	nodo->setPadre(padre);
+	nodo->setEntidad(createMesh(path, false));
+	padre->addHijo(nodo);
+	return nodo;
+	
+}
 //---------------------------------------------
 // T R A N S F O R M A C I O N E S
 //---------------------------------------------

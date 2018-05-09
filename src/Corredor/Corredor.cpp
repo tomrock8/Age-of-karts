@@ -214,13 +214,16 @@ void Corredor::setParametros() {
 		break;
 	case PIRATA:
 
-		//		GiroDerIni = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 237, 395);
-		//		GiroDerFin = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 395, 572);
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "escena_raiz", false);
-		GiroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 162, 176), "Jugador");
-		GiroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 176, 187), "Jugador");
-		static_cast<TAnimacion*>(GiroDerIni->getEntidad())->setVisible(false);
-		static_cast<TAnimacion*>(GiroDerFin->getEntidad())->setVisible(false);
+		
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", " ", "escena_raiz", false);
+		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(),"assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj","quieto");
+		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 162, 176), "GiroDerIni");
+		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 176, 187), "GiroDerIzq");
+		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Habilidad/PirataHabilidad_000", 165, 202), "Habilidad");
+		//static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
+		static_cast<TAnimacion*>(giroDerIni->getEntidad())->setVisible(false);
+		static_cast<TAnimacion*>(giroDerFin->getEntidad())->setVisible(false);
+		static_cast<TAnimacion*>(giroDerIni->getEntidad())->setVisible(false);
 		//cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Pirata/PirataConducion.obj", "escena_raiz", false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
@@ -1555,23 +1558,36 @@ void Corredor::updateVectorDireccion() {
 	orientacion.normalize();
 	//cout<< "ORIENTACION XNORMAL COCHE=="<< orientacion.getX() << " ORIENTACION ZNORMAL COCHE=="<< orientacion.getZ()  << endl;
 }
+//----------------------------------------
+//---Nodos para el cambio de animacion
+//----------------------------------------
 TNodo *Corredor::getGiroDerIni() {
-	return GiroDerIni;
+	return giroDerIni;
 }
 TNodo *Corredor::getGiroDerFin() {
-	return GiroDerFin;
+	return giroDerFin;
+}
+TNodo *Corredor::getHabilidadAnim() {
+	return animHabilidad;
+}
+TNodo *Corredor::getAnimQuieto() {
+	static_cast<TMalla*>(quieto->getEntidad())->setVisible(true);
+	return quieto;
 }
 
 void Corredor::setActiveObj3D(TNodo *obj) {
+	if (strcmp(obj->getName(), "quieto") != 0) {
+		static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
+	}
+//	else {
+	//	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(true);
+//	}
+	
 	//se hacen invisibles tanto  las posibles mallas como las animaciones del nodo
-	static_cast<TMalla*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
-	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
-	
-		static_cast<TAnimacion*>(obj->getEntidad())->setVisible(true);
-		static_cast<TAnimacion*>(obj->getEntidad())->setPlaying(true);
-	
+//	static_cast<TMalla*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
 
 	cuboNodo->setNode(obj);
+
 
 }
 //---------------------------------------//

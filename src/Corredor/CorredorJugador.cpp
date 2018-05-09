@@ -17,6 +17,11 @@ void CorredorJugador::movimiento() {
 
 	bool comprobadorMovimiento = false;
 
+	if (!comprobadorMovimiento == false) {
+		//malla para cuando el personaje esta quieto
+		animacion(this->getAnimQuieto());
+	}
+
 	//Comprobador de de mando y recoleccion de inputs
 	bool mandoConectado = false;
 	const unsigned char *buttons = nullptr;
@@ -45,7 +50,11 @@ void CorredorJugador::movimiento() {
 	}
 	//GIRAR DERECHA
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
-		this->setActiveObj3D(this->getGiroDerIni());
+		if (GiroDer == true) {
+			static_cast<TAnimacion*>(getGiroDerFin()->getEntidad())->setVisible(false);
+			static_cast<TAnimacion*>(getGiroDerFin()->getEntidad())->ResetAnimation();
+		}
+		animacion(this->getGiroDerIni());
 		girarDerecha();
 		comprobadorMovimiento = true;
 		GiroDer = true;
@@ -78,11 +87,13 @@ void CorredorJugador::movimiento() {
 	}
 
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_RELEASE && GiroDer) {
-		this->setActiveObj3D(this->getGiroDerFin());
+		static_cast<TAnimacion*>(getGiroDerIni()->getEntidad())->setVisible(false);
+		static_cast<TAnimacion*>(getGiroDerIni()->getEntidad())->ResetAnimation();
+		animacion(this->getGiroDerFin());
 		
 		GiroDer = false;
 	}
-	if(!GiroDer)this->setActiveObj3D(this->getNodo()->getNode());
+
 
 }
 
@@ -176,11 +187,20 @@ void CorredorJugador::actualizarItem() {
 		}
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[2])) {
+		animacion(this->getHabilidadAnim());
 		lanzarHabilidad();
 	}
+	
 }
 
 bool CorredorJugador::setComprobadorMovimiento(bool s) {
 	comprobadorMovimiento = s;
 	return comprobadorMovimiento;
+}
+void CorredorJugador::animacion(TNodo* anim) {
+	
+	static_cast<TAnimacion*>(anim->getEntidad())->setVisible(true);
+	static_cast<TAnimacion*>(anim->getEntidad())->setPlaying(true);
+	this->setActiveObj3D(anim);
+
 }

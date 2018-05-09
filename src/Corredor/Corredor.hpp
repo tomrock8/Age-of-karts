@@ -119,7 +119,7 @@ public:
 	std::string toString();
 
 	//movimiento de animaciones
-	void iniciarAnimacion(movimiento_jugador mov);
+	void iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *previoGiro);
 
 protected:
 	obj3D * cuboNodo;

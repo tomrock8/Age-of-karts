@@ -28,6 +28,7 @@ private:
 	//controlador para las animaciones
 	bool GiroDer;
 	bool animado = true;
+	TNodo *animacionPrevia;
 };
 
 #endif /* CORREDORJUGADOR_H */

@@ -1560,9 +1560,11 @@ void Corredor::updateVectorDireccion() {
 	orientacion.normalize();
 	//cout<< "ORIENTACION XNORMAL COCHE=="<< orientacion.getX() << " ORIENTACION ZNORMAL COCHE=="<< orientacion.getZ()  << endl;
 }
-//----------------------------------------
-//---Nodos para el cambio de animacion
-//----------------------------------------
+
+
+//------------------------------------------------------------------//
+//---------------------ANIMACION------------------------------------//
+//------------------------------------------------------------------//
 TNodo *Corredor::getGiroDerIni() {
 	return giroDerIni;
 }
@@ -1576,14 +1578,26 @@ TNodo *Corredor::getAnimQuieto() {
 	static_cast<TMalla*>(quieto->getEntidad())->setVisible(true);
 	return quieto;
 }
-void Corredor::iniciarAnimacion(movimiento_jugador mov) {
+
+void Corredor::iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *previoGiro) {
+
+	static_cast<TAnimacion*>(previo->getEntidad())->setVisible(false);
+	static_cast<TAnimacion*>(previo->getEntidad())->ResetAnimation();
+	
+	if (previoGiro != NULL) {
+		static_cast<TAnimacion*>(previoGiro->getEntidad())->setVisible(false);
+		static_cast<TAnimacion*>(previoGiro->getEntidad())->ResetAnimation();
+	}
+
 	if (mov != movimiento_jugador::PARADO) {
 		static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
 	}
 	else {
 		static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
 		static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->ResetAnimation();
+
 	}
+
 	switch (mov) {
 	case movimiento_jugador::PARADO:
 		cuboNodo->setNode(quieto);

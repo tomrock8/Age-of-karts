@@ -7,6 +7,7 @@ obj3D::obj3D(TNodo *m, const char *n, GLuint i) {
 	rotation = glm::vec3(0.0f);
 	name = n;
 	id = i;
+
 }
 
 obj3D::~obj3D() {

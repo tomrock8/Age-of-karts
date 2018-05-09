@@ -51,6 +51,8 @@ TMotor::TMotor() {
 	//Inicializamos el skybox que usara el motor
 	skybox = new Skybox();
 
+	shaderName = "shaderCartoon"; //Shader que se usa por defecto
+
 	//Creamos los distintos shaders que se van a usar para algun aspecto del motor
 	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
 	shaderHUD = new Shader("assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt", nullptr);
@@ -65,7 +67,11 @@ TMotor::TMotor() {
 	shaderBillboard = new Shader("assets/shaders/shaderBillboard/vertexShader.txt", "assets/shaders/shaderBillboard/fragmentShader.txt", nullptr);
 	shaderParticles = new Shader("assets/shaders/shaderParticles/vertexShader.txt", "assets/shaders/shaderParticles/fragmentShader.txt", nullptr);
 	shaderGbuffer = new Shader("assets/shaders/shaderDeferred/gBufferVertexShader.txt", "assets/shaders/shaderDeferred/gBufferFragmentShader.txt", nullptr);
+	shaderDeferred = new Shader("assets/shaders/shaderDeferred/deferredVertexShader.txt", "assets/shaders/shaderDeferred/deferredFragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
+
+	//Setamos el buffer y las texturas que guardaran los datos de posicion, normales y color para el deferred shading
+	setDeferredBuffers();
 
 	gestorSonido = new GestorSonido();
 	gestorSonido->setListenerData();
@@ -380,7 +386,14 @@ TNodo  *TMotor::createMeshNode(TNodo *padre, TMalla *mesh, const char* name) {
 	padre->addHijo(nodo);
 	return nodo;
 }
-
+TNodo  *TMotor::createStaticMeshNode(TNodo*padre, const char* path, const char* name) {
+	TNodo *nodo = new TNodo(name);
+	nodo->setPadre(padre);
+	nodo->setEntidad(createMesh(path, false));
+	padre->addHijo(nodo);
+	return nodo;
+	
+}
 //---------------------------------------------
 // T R A N S F O R M A C I O N E S
 //---------------------------------------------
@@ -501,66 +514,132 @@ void TMotor::draw(int tipo) {
 			//Llamamos al metodo de dibujado del skybox
 			skybox->drawSkyBox();
 
-			//DIBUJADO DEL ARBOL * ESTILO CARTOON *
-			//-------------------------------------
-			
-			//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas
-			
-			//Enlazamos el shader cartoon
-			Shader *s = shaderCartoon;
-			//Se activa el shader para el renderizado 3D
-			s->use();
-			//Calcular posicion de la camara y pasarsela al fragment shader
-			glm::vec4 defaultVector(0, 0, 0, 1);
-			glm::vec4 posC = v * defaultVector;
-			s->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
-			//Establecemos los datos de las distintas luces
-			drawLight(s);
-			//Configuramos los shaders para producir las sombras de cada luz
-			if (lights.size() > 0) {
-				for (int i = 0; i < lights.size(); i++) {
-					static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow(s);
-				}
-			}
-			
-			if (!debugBullet){
-				//Activamos el glPolygonOffset = a cada fragmento de los objetos se le añade una pequeña profundidad antes de realizar los calculos del z-buffer
-				glEnable(GL_POLYGON_OFFSET_FILL);
-				//Profundidad que se le añade
-				float line_offset_slope = -1.f;
-				//Corte maximo de profundidad
-				float line_offset_unit = -35.f;
-				//Especificamos los valores anteriores a OpenGL
-				glPolygonOffset( line_offset_slope, line_offset_unit );
-			}
-			//Dibujamos los distintos nodos del arbol
-			scene->draw(s);
 
-			//2º RENDERIZADO = se renderizan los objetos en modo wireframe (solo las caras ocultas) para crear la silueta de los mismos
-			
-			//Enlazamos el shader de las siluetas
-			s = shaderSilhouette;
-			//Se activa el shader para el renderizado 3D
-			s->use();
-			//Desactivamos el offset anterior
-			glDisable( GL_POLYGON_OFFSET_FILL );  
-			//Establecemos el dibujado del poligono en modo linea
-			glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-			//Activamos el cull face
-			glEnable(GL_CULL_FACE);
-			//Activamos el suavizado de las lineas
-			glEnable(GL_LINE_SMOOTH);
-			//Especificamos que solo queremos dibujar las caras ocultas
-			glCullFace(GL_FRONT);
-			//Aumentamos el grosor de las lineas
-			glLineWidth(4.50f);
-			//Dibujamos los distintos nodos del arbol
-			scene->draw(s);
-			//Volvemos al modo de dibujado normal de los poligonos
-			glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
-			//Desactivamos el cull face
-			glDisable(GL_CULL_FACE);
+			//Si el shader deferred esta activado...
+			if (strcmp(shaderName, "shaderDeferred") == 0){
+				glDisable(GL_BLEND);
+				//1º DIBUJADO = se guardan los datos de posicion, normales y color de los distintos objetos en el buffer mediante las texturas
 
+				//Enlazamos el buffer
+				glBindFramebuffer(GL_FRAMEBUFFER, defBuffer);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				//Activamos el shader que guardara los datos
+				shaderGbuffer->use();
+				//Dibujamos los distintos nodos del arbol
+				scene->draw(shaderGbuffer);
+				//Desenlazamos el buffer usado
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+				glEnable(GL_BLEND);
+
+				//2º DIBUJADO = se renderiza la imagen por pantalla en un quad a partir de los datos anteriores
+
+				//Se limpian los buffers de color y profundidad de OpenGL
+				//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				//Activamos el shader
+				shaderDeferred->use();
+				//Se activan las texturas con los datos de los objetos y se le pasan al shader
+				//POSICION
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, defPosition); 
+				glUniform1i(glGetUniformLocation(shaderDeferred->ID, "texture_position"), 0);
+				//NORMALES
+				glActiveTexture(GL_TEXTURE1);
+				glBindTexture(GL_TEXTURE_2D, defNormal); 
+				glUniform1i(glGetUniformLocation(shaderDeferred->ID, "texture_normal"), 1);
+				//COLOR DIFUSO Y BRILLO
+				glActiveTexture(GL_TEXTURE2);
+				glBindTexture(GL_TEXTURE_2D, defDiffuseSpecular);	
+				glUniform1i(glGetUniformLocation(shaderDeferred->ID, "texture_diffuseSpecular"), 2);
+				//Establecemos los datos de las distintas luces
+				drawLight(shaderDeferred);
+				//Calcular posicion de la camara y pasarsela al fragment shader
+				glm::vec4 defaultVector(0, 0, 0, 1);
+				glm::vec4 posC = v * defaultVector;
+				shaderDeferred->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
+				unsigned int quadVAO, quadVBO;
+				float quadVertices[] = {
+					// positions        // texture Coords
+					-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+					-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+					1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+					1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+				};
+				// setup plane VAO
+				glGenVertexArrays(1, &quadVAO);
+				glGenBuffers(1, &quadVBO);
+				glBindVertexArray(quadVAO);
+				glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+				glEnableVertexAttribArray(0);
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+				glEnableVertexAttribArray(1);
+				glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+				glBindVertexArray(quadVAO);
+				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+				glBindVertexArray(0);
+
+			}
+
+			if (strcmp(shaderName, "shaderCartoon") == 0){
+				//DIBUJADO DEL ARBOL * ESTILO CARTOON *
+				//-------------------------------------
+				
+				//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas
+				
+				//Enlazamos el shader cartoon
+				Shader *s = shaderCartoon;
+				//Se activa el shader para el renderizado 3D
+				s->use();
+				//Calcular posicion de la camara y pasarsela al fragment shader
+				glm::vec4 defaultVector(0, 0, 0, 1);
+				glm::vec4 posC = v * defaultVector;
+				s->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
+				//Establecemos los datos de las distintas luces
+				drawLight(s);
+				//Configuramos los shaders para producir las sombras de cada luz
+				if (lights.size() > 0) {
+					for (int i = 0; i < lights.size(); i++) {
+						static_cast<TLuz *>(lights[i]->getEntidad())->configureShadow(s);
+					}
+					
+					if (!debugBullet){
+						//Activamos el glPolygonOffset = a cada fragmento de los objetos se le añade una pequeña profundidad antes de realizar los calculos del z-buffer
+						glEnable(GL_POLYGON_OFFSET_FILL);
+						//Profundidad que se le añade
+						float line_offset_slope = -1.f;
+						//Corte maximo de profundidad
+						float line_offset_unit = -35.f;
+						//Especificamos los valores anteriores a OpenGL
+						glPolygonOffset( line_offset_slope, line_offset_unit );
+					}
+					//Dibujamos los distintos nodos del arbol
+					scene->draw(s);
+
+				//2º RENDERIZADO = se renderizan los objetos en modo wireframe (solo las caras ocultas) para crear la silueta de los mismos
+				
+				//Enlazamos el shader de las siluetas
+				s = shaderSilhouette;
+				//Se activa el shader para el renderizado 3D
+				s->use();
+				//Desactivamos el offset anterior
+				glDisable( GL_POLYGON_OFFSET_FILL );  
+				//Establecemos el dibujado del poligono en modo linea
+				glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+				//Activamos el cull face
+				glEnable(GL_CULL_FACE);
+				//Activamos el suavizado de las lineas
+				glEnable(GL_LINE_SMOOTH);
+				//Especificamos que solo queremos dibujar las caras ocultas
+				glCullFace(GL_FRONT);
+				//Aumentamos el grosor de las lineas
+				glLineWidth(4.50f);
+				//Dibujamos los distintos nodos del arbol
+				scene->draw(s);
+				//Volvemos al modo de dibujado normal de los poligonos
+				glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+				//Desactivamos el cull face
+				glDisable(GL_CULL_FACE);}
+			}
 			//DIBUJADO DEL DEBUG DE BULLET
 			//----------------------------
 			if (debugBullet && vertices.size() > 0){ //Si el debug de bullet esta activado
@@ -672,7 +751,7 @@ void TMotor::draw(int tipo) {
 			}
 		}
 	}
-
+	
 	//swap los bufers de pantalla (trasero y delantero)
 	glfwSwapBuffers(TMotor::instancia().getVentana());
 }
@@ -802,8 +881,8 @@ particleSystem *TMotor::newParticleSystem(){
 // --- DEFERRED SHADING ---
 void TMotor::setDeferredBuffers(){
 	//Creamos y enlazamos el buffer del deferred shading
-	glGenBuffers(1, &defBuffer);
-	glBindBuffer(GL_FRAMEBUFFER, defBuffer);
+	glGenFramebuffers(1, &defBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, defBuffer);
 
 	//Creamos las texturas que guardaran los distintos datos de posicion, normales y color
 	glGenTextures(1, &defPosition);
@@ -813,30 +892,30 @@ void TMotor::setDeferredBuffers(){
 	//Definimos cada una de las distintas texturas
 	// --- TEXTURA DE POSICION ---
 	glBindTexture(GL_TEXTURE_2D, defPosition); //Decimos que se trata de una textura 2D
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, screenWIDTH, screenHEIGHT, 0, GL_RGB, GL_FLOAT, NULL); //Utilizamos una textura de 16 bits de precision
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //|
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //| Parametros de la textura
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, screenWIDTH, screenHEIGHT, 0, GL_RGBA, GL_FLOAT, NULL); //Utilizamos una textura de 16 bits de precision
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //|
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); //| Parametros de la textura
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, defPosition, 0); //Adjuntamos la textura al frambuffer definido
 
 	// --- TEXTURA DE NORMALES ---
 	glBindTexture(GL_TEXTURE_2D, defNormal); //Decimos que se trata de una textura 2D
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, screenWIDTH, screenHEIGHT, 0, GL_RGB, GL_FLOAT, NULL); //Utilizamos una textura de 16 bits de precision
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //|
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //| Parametros de la textura
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, screenWIDTH, screenHEIGHT, 0, GL_RGBA, GL_FLOAT, NULL); //Utilizamos una textura de 16 bits de precision
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //|
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); //| Parametros de la textura
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, defNormal, 0); //Adjuntamos la textura al frambuffer definido
  
 	// --- TEXTURA DE COLOR ---
 	glBindTexture(GL_TEXTURE_2D, defDiffuseSpecular); //Decimos que se trata de una textura 2D
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, screenWIDTH, screenHEIGHT, 0, GL_RGBA, GL_FLOAT, NULL); //Utilizamos una textura de 8 bits de precision
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //|
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //| Parametros de la textura
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, screenWIDTH, screenHEIGHT, 0, GL_RGBA, GL_FLOAT, NULL); //Utilizamos una textura de 8 bits de precision
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //|
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); //| Parametros de la textura
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, defDiffuseSpecular, 0); //Adjuntamos la textura al frambuffer definido
 
 	//Le decimos a OpenGL las texturas adjuntas que va a utilizar para renderizar en el buffer
-	GLuint textAdjuntas[3] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
+	GLenum textAdjuntas[3] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
 	glDrawBuffers(3,textAdjuntas);
 
 	//Desenlazamos el buffer hasta el dibujado
-	glBindBuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	
 }

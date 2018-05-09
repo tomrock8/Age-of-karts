@@ -25,7 +25,9 @@ private:
 	bool pressed;
 	//Item *actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos);
 	//controlador para las animaciones
-	bool GiroDer;
+	bool giroDer;
+	bool giroIzq;
+	TNodo *animacionPrevia;
 };
 
 #endif /* CORREDORJUGADOR_H */

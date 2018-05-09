@@ -44,5 +44,6 @@ private:
 	bool visible; // Indicador para dibujar
 	//bool loopPlay; // Indicador para reiniciar la animacion
 	bool isPlaying; //Indicador para empezar a dibujar
+	bool endAnimation; //controlar que no entre en bucle
 };
 #endif

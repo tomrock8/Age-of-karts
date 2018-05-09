@@ -5,8 +5,11 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 	checkItem = false;
 	nombre = "Jugador";
 	pressed = false;
-	GiroDer = false;
-
+	giroDer = false;
+	giroIzq = false;
+	//control de animaciones
+	animacionPrevia = getAnimQuieto();
+	iniciarAnimacion(PARADO, animacionPrevia,NULL);
 }
 
 /**
@@ -16,6 +19,11 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 void CorredorJugador::movimiento() {
 
 	bool comprobadorMovimiento = false;
+	
+	//if (!comprobadorMovimiento == false) {
+		/*animacion del personaje quieto*/
+		//iniciarAnimacion(PARADO, animacionPrevia);
+	//}
 
 	//Comprobador de de mando y recoleccion de inputs
 	bool mandoConectado = false;
@@ -35,26 +43,31 @@ void CorredorJugador::movimiento() {
 		frenar();
 		//vehiculo-> set
 		comprobadorMovimiento = true;
-
 	}
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_W) == GLFW_PRESS || (mandoConectado && -0.5f <= axes[5])) {
-
 		acelerar();
 		comprobadorMovimiento = true;
 
 	}
 	//GIRAR DERECHA
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
-		this->setActiveObj3D(this->getGiroDerIni());
+		
 		girarDerecha();
+		
+		iniciarAnimacion(GIRODERINI, animacionPrevia, getGiroDerFin());
+		//animacionPrevia = getGiroDerIni();
+		giroDer = true;
 		comprobadorMovimiento = true;
-		GiroDer = true;
+		
 	}
 	
 	//GIRAR IZQUIERDA
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) {
 		girarIzquierda();
 	
+		iniciarAnimacion(GIROIZQINI, animacionPrevia, getGiroIzqFin());
+		//animacionPrevia = getGiroIzqIni();
+		giroIzq = true;
 		comprobadorMovimiento = true;
 	}
 	else {
@@ -77,12 +90,18 @@ void CorredorJugador::movimiento() {
 		}
 	}
 
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_RELEASE && GiroDer) {
-		this->setActiveObj3D(this->getGiroDerFin());
-		
-		GiroDer = false;
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_RELEASE && giroDer) {
+		iniciarAnimacion(GIRODERFIN, animacionPrevia,getGiroDerIni());
+		animacionPrevia = getGiroDerFin();
+		giroDer = false;
 	}
-	if(!GiroDer)this->setActiveObj3D(this->getNodo()->getNode());
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_RELEASE && giroIzq) {
+		iniciarAnimacion(GIROIZQFIN, animacionPrevia, getGiroIzqIni());
+		animacionPrevia = getGiroDerFin();
+		giroIzq = false;
+	}
+	
+
 
 }
 
@@ -176,8 +195,11 @@ void CorredorJugador::actualizarItem() {
 		}
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[2])) {
+		iniciarAnimacion(HABILIDAD, animacionPrevia,NULL);
+		animacionPrevia = getHabilidadAnim();
 		lanzarHabilidad();
 	}
+	
 }
 
 bool CorredorJugador::setComprobadorMovimiento(bool s) {

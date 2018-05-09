@@ -39,6 +39,7 @@ public:
 	//obj3D *newLightNode(glm::vec3 traslation, const char * name, glm::vec4 dir, float att, float corte, const char* parentNode);
 	//TNodo *newMeshNode(glm::vec3 traslation, const char * name, const char * path);
 	obj3D *newCameraNode(const char * name, const char* parentNode);
+
 	//cameraThird * newCamera3ThPerson(const char * name, const char * parentName);
 	TNodo * createAnimationNode(TNodo * padre, TAnimacion * mesh, const char * name);
 	obj3D *newLightNode(const char * name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode);
@@ -50,6 +51,8 @@ public:
 	void newHud(const char* n);
 	billboard *newBillboard(obj3D *o);
 	particleSystem *newParticleSystem();
+	//animaciones y malla
+	TNodo * createStaticMeshNode(TNodo * padre, const char * path, const char * name);
 	//float *toEuler(double pich, double yaw, double roll);
 
 	// METODOS GET
@@ -110,6 +113,10 @@ protected:
 	Shader *shaderBillboard; //Shader para dibujar los diferentes billboards 
 	Shader *shaderParticles; //Shader para el dibujado de las particulas
 	Shader *shaderGbuffer; //Shader para renderizar la escena en el buffer que despues se usara en el deferred shading
+	Shader *shaderDeferred; //Shader que renderiza en la pantalla a partir de los datos guardados por el gBuffer
+
+	//Tipo de shader usado
+	const char* shaderName;
 
 	//Camaras
 	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)
@@ -165,6 +172,7 @@ protected:
 	TMalla  *createMesh(const char *fich, bool sta);
 	// Nodo
 	TNodo * createMeshNode(TNodo * padre, TMalla * mesh, const char * name);
+	
 	// Transformacion
 	TTransform * createTransformation();
 	TNodo   * createTransformationNode(TNodo * padre, TTransform * transf, const char* name);

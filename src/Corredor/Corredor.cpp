@@ -214,13 +214,19 @@ void Corredor::setParametros() {
 		break;
 	case PIRATA:
 
-		//		GiroDerIni = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 237, 395);
-		//		GiroDerFin = TMotor::instancia().newAnimation("Jugador", "assets/Animacion/Pirata/GiroDerIni/pirataGiroDER_000", "escena_raiz", 395, 572);
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "escena_raiz", false);
-		GiroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 162, 176), "Jugador");
-		GiroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 176, 187), "Jugador");
-		static_cast<TAnimacion*>(GiroDerIni->getEntidad())->setVisible(false);
-		static_cast<TAnimacion*>(GiroDerFin->getEntidad())->setVisible(false);
+
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", " ", "escena_raiz", false);
+		/* Nodos de animacion */
+		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "quieto");
+		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 162, 176), "GiroDerIni");
+		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 176, 187), "GiroDerFin");
+		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Giroizq/pirataGiroIzq_000", 162, 176), "GiroIzqIni");
+		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Giroizq/pirataGiroIzq_000", 176, 187), "GiroIzqFin");
+		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Habilidad/PirataHabilidad_000", 165, 202), "Habilidad");
+		//static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
+		static_cast<TAnimacion*>(giroDerIni->getEntidad())->setVisible(false);
+		static_cast<TAnimacion*>(giroDerFin->getEntidad())->setVisible(false);
+		static_cast<TAnimacion*>(giroDerIni->getEntidad())->setVisible(false);
 		//cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Pirata/PirataConducion.obj", "escena_raiz", false);
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
@@ -446,7 +452,7 @@ void Corredor::InicializarFisicas() {
 
 	//Forma Colision
 	//btVector3 TamanyoFormaColision(cuboNodo->getScale().X, cuboNodo->getScale().Y, cuboNodo->getScale().Z * 2);
-	btVector3 TamanyoFormaColision(cuboNodo->getScale().x*2, cuboNodo->getScale().y * 1.2, cuboNodo->getScale().z * 2);
+	btVector3 TamanyoFormaColision(cuboNodo->getScale().x * 2, cuboNodo->getScale().y * 1.2, cuboNodo->getScale().z * 2);
 	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
 	FormaColision = new btBoxShape(TamanyoFormaColision);
 	//masa coche
@@ -504,7 +510,7 @@ void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehic
 		wheel.m_wheelsDampingRelaxation = btScalar(0.5) * 2 * btSqrt(wheel.m_suspensionStiffness);  //1 //valor anterior=4.4f;  
 		wheel.m_frictionSlip = btScalar(10000);  //100;  //conviene que el valor no sea muy bajo. En ese caso desliza y cuesta de mover 
 		wheel.m_rollInfluence = btScalar(0);       //0.1f;  //Empieza a rodar muy loco, si el valor es alto 
-    	wheel.m_maxSuspensionForce = 50000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa)  
+		wheel.m_maxSuspensionForce = 50000.f;  //A mayor valor, mayor estabilidad, (agarre de las ruedas al suelo), pero el manejo empeora (derrapa)  
 		wheel.m_maxSuspensionTravelCm = 10000.f; //a menos valor la suspension es mas dura por lo tanto el chasis no baja tanto 										   
 	}
 
@@ -1240,13 +1246,13 @@ void Corredor::comprobarSueloRuedas() {
 		}
 	}
 
-		if(cont==4){
-			if (estado->getEstadoMovimiento()!=EstadosJugador::estado_movimiento::DERRAPA){
-				CuerpoColisionChasis->setLinearVelocity(btVector3(CuerpoColisionChasis->getLinearVelocity().getX(),-20,CuerpoColisionChasis->getLinearVelocity().getZ()));
-				CuerpoColisionChasis->setAngularVelocity(btVector3(0,0,0));
-			}
+	if (cont == 4) {
+		if (estado->getEstadoMovimiento() != EstadosJugador::estado_movimiento::DERRAPA) {
+			CuerpoColisionChasis->setLinearVelocity(btVector3(CuerpoColisionChasis->getLinearVelocity().getX(), -20, CuerpoColisionChasis->getLinearVelocity().getZ()));
+			CuerpoColisionChasis->setAngularVelocity(btVector3(0, 0, 0));
 		}
-	
+	}
+
 }
 
 void Corredor::recolocarWaypoint() {
@@ -1328,13 +1334,15 @@ void Corredor::update() {
 	// ORIENTACION
 	p->setOrientation(glm::vec3(orientacion.getX(), orientacion.getY(), orientacion.getZ()));
 	// COLOR Y TAMANYO
-	if(estado->getEstadoCoche() == EstadosJugador::estado_coche::CON_TURBO){
+	if (estado->getEstadoCoche() == EstadosJugador::estado_coche::CON_TURBO) {
 		p->setSize(0.75f); //Si el coche esta con turbo, el tamanyo es mas grande
 		p->setColor(glm::vec3(1.0f, 1.0f, 0.0f)); //Se le pasa un color amarillo
-	}else{
-		if(estado->getEstadoMovimiento() == EstadosJugador::estado_movimiento::AVANZA){
+	}
+	else {
+		if (estado->getEstadoMovimiento() == EstadosJugador::estado_movimiento::AVANZA) {
 			p->setSize(0.25f); //Si el coche acelera, el tamanyo es mas grande
-		}else{
+		}
+		else {
 			p->setSize(0.075f); //Si esta parado, el tamanyo es mas pequeño
 		}
 		p->setColor(glm::vec3(1.0f, 1.0f, 1.0f)); //Se le pasa un color blanco
@@ -1555,25 +1563,81 @@ void Corredor::updateVectorDireccion() {
 	orientacion.normalize();
 	//cout<< "ORIENTACION XNORMAL COCHE=="<< orientacion.getX() << " ORIENTACION ZNORMAL COCHE=="<< orientacion.getZ()  << endl;
 }
+
+
+//------------------------------------------------------------------//
+//---------------------ANIMACION------------------------------------//
+//------------------------------------------------------------------//
 TNodo *Corredor::getGiroDerIni() {
-	return GiroDerIni;
+	return giroDerIni;
 }
 TNodo *Corredor::getGiroDerFin() {
-	return GiroDerFin;
+	return giroDerFin;
 }
 
-void Corredor::setActiveObj3D(TNodo *obj) {
-	//se hacen invisibles tanto  las posibles mallas como las animaciones del nodo
-	static_cast<TMalla*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
-	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
-	
-		static_cast<TAnimacion*>(obj->getEntidad())->setVisible(true);
-		static_cast<TAnimacion*>(obj->getEntidad())->setPlaying(true);
-	
+TNodo *Corredor::getGiroIzqIni() {
+	return giroIzqIni;
+}
+TNodo *Corredor::getGiroIzqFin() {
+	return giroIzqFin;
+}
+TNodo *Corredor::getHabilidadAnim() {
+	return animHabilidad;
+}
+TNodo *Corredor::getAnimQuieto() {
+	static_cast<TMalla*>(quieto->getEntidad())->setVisible(true);
+	return quieto;
+}
+/*Metodo para cambiar entre animaciones cuando se pulsan los botones
+mov = ESTADO DE LA ANIMACION
+Previo = ANIMACION ANTERIOR A LA SOLICITADA, se parara y se deja de dibujar
+previoGIRO =  animacion solo para los giros, en caso de existir las para. (necesario para controlar la animacion de los giros)
+*/
+void Corredor::iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *previoGiro) {
 
-	cuboNodo->setNode(obj);
+	static_cast<TAnimacion*>(previo->getEntidad())->setVisible(false);
+	static_cast<TAnimacion*>(previo->getEntidad())->ResetAnimation();
+	
+	if (previoGiro != NULL) {
+		static_cast<TAnimacion*>(previoGiro->getEntidad())->setVisible(false);
+		static_cast<TAnimacion*>(previoGiro->getEntidad())->ResetAnimation();
+	}
+
+	if (mov != movimiento_jugador::PARADO) {
+		static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
+	}
+	else {
+		static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
+		static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->ResetAnimation();
+
+	}
+
+	switch (mov) {
+	case movimiento_jugador::PARADO:
+		cuboNodo->setNode(quieto);
+		break;
+	case movimiento_jugador::GIRODERINI:
+		cuboNodo->setNode(giroDerIni);
+		break;
+	case movimiento_jugador::GIRODERFIN:
+		cuboNodo->setNode(giroDerFin);
+		break;
+	case movimiento_jugador::GIROIZQINI:
+		cuboNodo->setNode(giroIzqIni);
+		break;
+	case movimiento_jugador::GIROIZQFIN:
+		cuboNodo->setNode(giroIzqFin);
+		break;
+	case movimiento_jugador::HABILIDAD:
+		cuboNodo->setNode(animHabilidad);
+		break;
+	}
+	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(true);
+	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setPlaying(true);
+
 
 }
+
 //---------------------------------------//
 //--------------DESTRUCTOR---------------//
 //---------------------------------------//

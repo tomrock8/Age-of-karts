@@ -705,7 +705,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		//Online: Selccionar opcion/introducir texto | Borrar clientes offline
 		if (!pressed) {
 			if (offline) {
-				if (client->getClientes().size() > 4) {
+				if (client->getClientes().size() > 0) {
 					int l = client->getClientes().size() - 1;
 					client->BorrarCliente(l);
 					if (count > 0) {

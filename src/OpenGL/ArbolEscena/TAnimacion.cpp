@@ -37,7 +37,7 @@ void TAnimacion::beginDraw(Shader *shader) {
 void TAnimacion::draw(Shader *shader) {
 	// Reproducir el frame actual
 	if (isPlaying) {
-		cout << "animando con el frame: " << actualFrame << endl;
+		//cout << "animando con el frame: " << actualFrame << endl;
 		frames.at(actualFrame)->draw(shader);
 
 		// Comprobar si hay que cambiar de frame

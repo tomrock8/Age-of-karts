@@ -55,7 +55,7 @@ void CorredorJugador::movimiento() {
 		girarDerecha();
 		
 		iniciarAnimacion(GIRODERINI, animacionPrevia, getGiroDerFin());
-		//animacionPrevia = getGiroDerIni();
+		
 		giroDer = true;
 		comprobadorMovimiento = true;
 		
@@ -91,13 +91,15 @@ void CorredorJugador::movimiento() {
 	}
 
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_RELEASE && giroDer) {
+	
 		iniciarAnimacion(GIRODERFIN, animacionPrevia,getGiroDerIni());
 		animacionPrevia = getGiroDerFin();
 		giroDer = false;
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_RELEASE && giroIzq) {
+	
 		iniciarAnimacion(GIROIZQFIN, animacionPrevia, getGiroIzqIni());
-		animacionPrevia = getGiroDerFin();
+		animacionPrevia = getGiroIzqFin();
 		giroIzq = false;
 	}
 	

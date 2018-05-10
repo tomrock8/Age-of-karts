@@ -1606,11 +1606,11 @@ void Corredor::iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *prev
 	if (mov != movimiento_jugador::PARADO) {
 		static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
 	}
-	else {
-		static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
-		static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->ResetAnimation();
-
-	}
+	//else {
+	//	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
+	//	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->ResetAnimation();
+	//
+	//}
 
 	switch (mov) {
 	case movimiento_jugador::PARADO:
@@ -1634,6 +1634,18 @@ void Corredor::iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *prev
 	}
 	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(true);
 	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setPlaying(true);
+	/*
+	cout << "||||||||||||||||||||||||||||||||||||||||||||" << endl;
+	cout << "visibilidad de los nodos : " << endl;
+
+	cout << "PARADO       : " << static_cast<TMalla*>(quieto->getEntidad())->isVisible() << endl;
+	cout << "GIRO DER INI : " << static_cast<TAnimacion*>(giroDerIni->getEntidad())->isVisible() << endl;
+	cout << "GIRO DER FIN : " << static_cast<TAnimacion*>(giroDerFin->getEntidad())->isVisible() << endl;
+	cout << "GIRO IZQ INI : " << static_cast<TAnimacion*>(giroIzqIni->getEntidad())->isVisible() << endl;
+	cout << "GIRO IZQ FIN : " << static_cast<TAnimacion*>(giroIzqFin->getEntidad())->isVisible() << endl;
+	cout << "HABILIDAD    : " << static_cast<TAnimacion*>(animHabilidad->getEntidad())->isVisible() << endl;
+	cout << "--------------------------------------------" << endl;
+	*/
 
 
 }

@@ -98,6 +98,7 @@ public:
 	void drawLight(Shader *s);
 	void drawSkybox();
 	void drawHudMenus();
+	void drawIMGUI();
 	void drawBillboards();
 	void drawParticles();
 	void drawProjectedShadows();

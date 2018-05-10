@@ -572,19 +572,10 @@ void TMotor::draw(int tipo) {
 
 		drawHudMenus();
 
-		int display_w, display_h;
-		glfwGetFramebufferSize(TMotor::instancia().getVentana(), &display_w, &display_h);
-		glViewport(0, 0, display_w, display_h);
-
-		if (renderDebug) {
-			if (ImGui::GetFrameCount() > 0) {
-				ImGui::Render();
-				ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
-			}
-		}
+		drawIMGUI();
 	}
 	
-	//swap los bufers de pantalla (trasero y delantero)
+	//Se intercambian los dos buffers (delantero y trasero)
 	glfwSwapBuffers(TMotor::instancia().getVentana());
 }
 
@@ -665,6 +656,17 @@ void TMotor::drawHudMenus(){
 	activeHud->drawHud(shaderHUD);
 	//Desactivamos el z-buffer, queremos dibujarlo encima de todo
 	glEnable(GL_DEPTH_TEST);
+}
+
+// ---- DIBUJADO DE LAS VENTANAS DE IMGUI ----
+//Funcion que dibuja las ventanas creadas mediante la libreria IMGUI
+void TMotor::drawIMGUI(){
+	if (renderDebug) {
+		if (ImGui::GetFrameCount() > 0) {
+			ImGui::Render();
+			ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+		}
+	}
 }
 
 // ---- DIBUJADO DE LOS BILLBOARDS ----

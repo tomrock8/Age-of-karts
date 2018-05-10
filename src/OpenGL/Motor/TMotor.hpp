@@ -44,10 +44,15 @@ public:
 	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode, bool sta); //Nuevo Objeto 3D
 	obj3D *newCameraNode(const char * name, const char* parentNode); //Nueva Camara
 	obj3D *newLightNode(const char * name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode); //Nueva Luz
-	obj3D * newAnimation(const char * name, const char * path, const char * parentNode, int framesIni, int framesFin); //Nueva Animacion
 	void newHud(const char* n); //Nuevo HUD-Menu
 	billboard *newBillboard(obj3D *o); //Nuevo Billboard
 	particleSystem *newParticleSystem(); //Nuevo Sistema de Particulas
+
+	//CREACION DE ANIMACIONES
+	TNodo * createStaticMeshNode(TNodo * padre, const char * path, const char * name);
+	TNodo * createAnimationNode(TNodo * padre, TAnimacion * mesh, const char * name);
+	TAnimacion * createAnimation(const char * path, int framesIni, int framesFin);
+	obj3D *newAnimation(const char * name, const char * path, const char * parentNode, int framesIni, int framesFin);
 
 	// METODOS GET
 	GLFWwindow *getVentana();
@@ -178,10 +183,6 @@ protected:
 	// Luz
 	TLuz    *createLight();
 	TNodo   *createLightNode(TNodo * padre, TLuz * luz, const char* name);
-	// Animacion
-	TAnimacion * createAnimation(const char * path, int framesIni, int framesFin);
-	TNodo * createAnimationNode(TNodo * padre, TAnimacion * mesh, const char * name);
-	TNodo * createStaticMeshNode(TNodo * padre, const char * path, const char * name);
 	//Deferred shading
 	void setDeferredBuffers();
 };

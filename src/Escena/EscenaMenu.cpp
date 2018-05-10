@@ -31,7 +31,8 @@ void EscenaMenu::initHud() {
 	TMotor::instancia().newHud("MainMenuHUD");
 
 	//Se añaden los distintos elementos del hud y se posicionan correctamente
-	
+	//--FONDO
+	TMotor::instancia().getActiveHud()->addElement(2.0f, 2.0f, "fondo", "assets/HUD/MainMenu/HUD_Fondo.png");
 	//--LOGO AOK--
 	TMotor::instancia().getActiveHud()->addElement(0.7f, 0.7f, "aok", "assets/HUD/MainMenu/aok_logo.png");
 	TMotor::instancia().getActiveHud()->traslateElement("aok", 0.60f, 0.45f);
@@ -52,11 +53,11 @@ void EscenaMenu::initHud() {
 	TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "sw", "assets/HUD/MainMenu/sw_logo.png");
 	TMotor::instancia().getActiveHud()->traslateElement("sw", -0.75f, -0.80f);
 	TMotor::instancia().getActiveHud()->scaleElement("sw", 0.20f, 0.20f);
-	//--FONDO
-	TMotor::instancia().getActiveHud()->addElement(2.0f, 2.0f, "fondo", "assets/HUD/MainMenu/HUD_Fondo.png");
+
+
 	//Se crea el hud del menu local
 	TMotor::instancia().newHud("LocalMenuHUD");
-
+	
 	//Se añaden los distintos elementos del hud y se posicionan correctamente
 	//--TEXTO ELEGIR MODO--
 	TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "elegirModo", "assets/HUD/MainMenu/elegirModo.png");

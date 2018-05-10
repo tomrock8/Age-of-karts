@@ -89,12 +89,24 @@ public:
 	void aumentarPantallaPartida();
 	void setShaderActive(const char* s);
 	void setSkyBox();
+	void setViewport(int x, int y, int width, int height);
 
 	// DIBUJADO
-	void clean(int tipo, int split);
+	void clean(float r, float g, float b, float a);
 	void draw(int tipo);
 	void drawCamera();
 	void drawLight(Shader *s);
+	void drawSkybox();
+	void drawHudMenus();
+	void drawBillboards();
+	void drawParticles();
+	void drawProjectedShadows();
+	void drawMappingShadows();
+	void drawDebugBullet();
+
+	// DIBUJADO SEGUN SHADER ACTIVO
+	void usingShaderCartoon();
+	void usingShaderDeferred();
 
 protected:
 	//Ventana de GLFW donde se renderiza el motor
@@ -141,6 +153,7 @@ protected:
 
 	//Skybox del mapa
 	Skybox *skybox;
+	bool skyboxActive = false;
 
 	//Debug Bullet
 	std::vector <GLfloat> vertices; //Array de vertices para los puntos de las lineas

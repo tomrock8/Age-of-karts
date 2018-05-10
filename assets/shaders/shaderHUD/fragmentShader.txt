@@ -13,11 +13,29 @@ uniform sampler2D ourTexture;
 //Color del elemento hud
 uniform vec4 ourColor;
 
+//Transparencia del elemento hud
+uniform float transparencyLevel;
+uniform bool transparency;
+
 void main()
 {
     //Se asigna la textura al vertice en funcion de las coordenadas de textura
     if (ourColor.w < 0.1){
-        FragColor = texture(ourTexture, textCoords);
+        if (transparency == true){
+             if (texture(ourTexture, textCoords).w > 0.0){
+                FragColor = vec4(vec3(texture(ourTexture, textCoords)), transparency);
+            }else{
+                //Descartamos el fragmento si la transparencia de la imagen es 0, para que no borre nada de debajo
+                discard;
+            }
+        }else{
+             if (texture(ourTexture, textCoords).w > 0.0){
+                FragColor = texture(ourTexture, textCoords);
+            }else{
+                //Descartamos el fragmento si la transparencia de la imagen es 0, para que no borre nada de debajo
+                discard;
+            }
+        }
     }else{
         FragColor = ourColor;
     }

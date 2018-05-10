@@ -45,10 +45,19 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 
 
 	if (offline){		
-		client->setArrayClients("", 3, false, true, -1);
-		client->setArrayClients("", 1, true, false, -1);
-		client->setArrayClients("", 0, true, false, -1);
-		client->setArrayClients("", 2, true, false, -1);
+
+		for(int mandos = 1; mandos < 4; mandos++){
+			if(glfwJoystickPresent(mandos) == 1){
+				std::cout << "Mando " << mandos << " detectado!" << std::endl;
+				TMotor::instancia().aumentarPantallaPartida();
+			}
+		}
+		for(int numClientes = 0; numClientes < 4; numClientes++){
+			if(numClientes < TMotor::instancia().getNumPantallas())
+				client->setArrayClients("", numClientes, false, true, -1);
+			else
+				client->setArrayClients("", numClientes, true, false, -1);		
+		}
 
 		TMotor::instancia().getActiveHud()->addElement(0.35f, 0.55f, "jugador1", "assets/HUD/LobbyMenu/seleccion_chino.png");
 		TMotor::instancia().getActiveHud()->traslateElement("jugador1", 0.3f, 0.25f);
@@ -287,6 +296,7 @@ void EscenaLobby::mostrarInfoLobbyPropia() {
 	else {
 		id_player = client->getControlPlayer();
 	}
+	infoLobby->append("\nNumero de mandos conectados: " + to_string(TMotor::instancia().getNumPantallas()));
 	infoLobby->append("\nNumber of players: ");
 
 	infoLobby->append(to_string(clientes.size()));
@@ -695,7 +705,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		//Online: Selccionar opcion/introducir texto | Borrar clientes offline
 		if (!pressed) {
 			if (offline) {
-				if (client->getClientes().size() > 4) {
+				if (client->getClientes().size() > 0) {
 					int l = client->getClientes().size() - 1;
 					client->BorrarCliente(l);
 					if (count > 0) {

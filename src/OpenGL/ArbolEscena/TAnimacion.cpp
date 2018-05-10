@@ -3,7 +3,7 @@
 
 TAnimacion::TAnimacion(std::vector<TMalla *> frames) {
 	TAnimacion(frames, 0, frames.size());
-	visible = true;
+	visible = false;
 	isPlaying = false;
 }
 
@@ -14,10 +14,9 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFra
 	totalFrames = frames.size();
 	setFirstFrame(firstFrame);
 	setLastFrame(lastFrame);
-
 	actualFrame = this->firstFrame;
 	framesPerSecond = 60; // Valor que se recoge de blender
-	setVisible(true);
+	setVisible(false);
 	
 }
 
@@ -38,6 +37,7 @@ void TAnimacion::beginDraw(Shader *shader) {
 void TAnimacion::draw(Shader *shader) {
 	// Reproducir el frame actual
 	if (isPlaying) {
+		//cout << "animando con el frame: " << actualFrame << endl;
 		frames.at(actualFrame)->draw(shader);
 
 		// Comprobar si hay que cambiar de frame
@@ -47,11 +47,16 @@ void TAnimacion::draw(Shader *shader) {
 		if (actualFrame < totalFrames - 1) {
 			actualFrame++;
 		}
-		else {
+		//else {
 			// Si el frame actual es el ultimo && loop => frame actual = primero
 			//actualFrame = firstFrame;
-			isPlaying = false;
-		}
+			//isPlaying = false;
+		//}
+		
+	}
+	if (!isPlaying) {
+		setVisible(false);
+		actualFrame = firstFrame;
 	}
 
 	// Guardar el tiempo ultimo de reproduccion    

@@ -261,7 +261,8 @@ void EscenaJuego::dibujar() {
 	}
 
 	
-		renderDebug();
+	renderDebug();
+	TMotor::instancia().draw(getTipoEscena());
 }
 
 void EscenaJuego::renderDebug() {

@@ -92,9 +92,15 @@ EscenaMenu::~EscenaMenu() {
 }
 
 void EscenaMenu::init() {}
-void EscenaMenu::dibujar() {}
+
+void EscenaMenu::dibujar() {
+	TMotor::instancia().draw(getTipoEscena());
+}
+
 void EscenaMenu::limpiar() {}
+
 void EscenaMenu::update() {}
+
 std::string EscenaMenu::getIpConexion() { return ipConexion; }
 
 Escena::tipo_escena EscenaMenu::comprobarInputs() {

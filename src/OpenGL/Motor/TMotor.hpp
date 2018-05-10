@@ -28,32 +28,31 @@
 
 class TMotor {
 public:
-	static TMotor &instancia();
-	TMotor();
-	void initDebugWindow();
-	void closeDebugWindow();
-	void resizeScreen(int width, int height);
-	void close();
+	//INSTANCIA DEL MOTOR
+	static TMotor &instancia(); 
 
-	//obj3D *newCameraNode(glm::vec3 traslation, const char * name, const char* parentNode);
-	//obj3D *newLightNode(glm::vec3 traslation, const char * name, glm::vec4 dir, float att, float corte, const char* parentNode);
-	//TNodo *newMeshNode(glm::vec3 traslation, const char * name, const char * path);
-	obj3D *newCameraNode(const char * name, const char* parentNode);
+	void resizeScreen(int w, int h);
 
-	//cameraThird * newCamera3ThPerson(const char * name, const char * parentName);
-	TNodo * createAnimationNode(TNodo * padre, TAnimacion * mesh, const char * name);
-	obj3D *newLightNode(const char * name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode);
-	obj3D * newAnimation(const char * name, const char * path, const char * parentNode, int framesIni, int framesFin);
-	TAnimacion * createAnimation(const char * path, int framesIni, int framesFin);
-	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode, bool sta);
-	void precarga(const char * modelo);
+	//METODOS DE USO DEL MOTOR
+	void getInputs(); //Control de inputs
+	void close(); //Cierre del motor
+	void toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw); //Convertir de quaternions a grados
+	void initDebugWindow(); //|
+	void closeDebugWindow();//|inicializacion y cierre de IMGUI 
 
-	void newHud(const char* n);
-	billboard *newBillboard(obj3D *o);
-	particleSystem *newParticleSystem();
-	//animaciones y malla
+	//CREACION DE OBJETOS
+	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode, bool sta); //Nuevo Objeto 3D
+	obj3D *newCameraNode(const char * name, const char* parentNode); //Nueva Camara
+	obj3D *newLightNode(const char * name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode); //Nueva Luz
+	void newHud(const char* n); //Nuevo HUD-Menu
+	billboard *newBillboard(obj3D *o); //Nuevo Billboard
+	particleSystem *newParticleSystem(); //Nuevo Sistema de Particulas
+
+	//CREACION DE ANIMACIONES
 	TNodo * createStaticMeshNode(TNodo * padre, const char * path, const char * name);
-	//float *toEuler(double pich, double yaw, double roll);
+	TNodo * createAnimationNode(TNodo * padre, TAnimacion * mesh, const char * name);
+	TAnimacion * createAnimation(const char * path, int framesIni, int framesFin);
+	obj3D *newAnimation(const char * name, const char * path, const char * parentNode, int framesIni, int framesFin);
 
 	// METODOS GET
 	GLFWwindow *getVentana();
@@ -88,6 +87,8 @@ public:
 	void setDebugBullet(bool b);
 	void setVerticesDebug(float a, float b, float c, float x, float y, float z);
 	void aumentarPantallaPartida();
+	void setShaderActive(const char* s);
+	void setSkyBox();
 
 	// DIBUJADO
 	void clean(int tipo, int split);
@@ -95,10 +96,14 @@ public:
 	void drawCamera();
 	void drawLight(Shader *s);
 
-	void toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw);
-
 protected:
-	TNodo * scene; //Nodo raiz
+	//Ventana de GLFW donde se renderiza el motor
+	GLFWwindow *ventana;
+	int screenHEIGHT; //Alto de la ventana
+	int screenWIDTH; //Ancho de la ventana
+
+	//Nodo Raiz del arbol de la escena
+	TNodo * scene;
 
 	//Shaders
 	Shader *shader; // Shader que se usa en el motor en la parte 3D
@@ -119,16 +124,16 @@ protected:
 	const char* shaderName;
 
 	//Camaras
-	std::vector<TNodo *> cameras;   //punteros que guardan la direccion de las camaras, para actualizarlas segun registro (nombre)
-	TNodo *activeCamera;       // Camara activa del vector
-	glm::mat4 v;  //Matriz view de la camara activa
+	std::vector<TNodo *> cameras; //Vector que guarda las diferentes camaras creadas en el motor
+	TNodo *activeCamera; // Camara activa del vector
+	glm::mat4 v; //Matriz view de la camara activa
 
 	//Luces
 	std::vector <TNodo *> lights;
 	std::vector <TNodo *> activeLights;
 
 	//Hud
-	std::vector <hud*> HUDs; //Vector que guarda los diferentes huds del juego
+	std::vector <hud*> HUDs; //Vector que guarda los diferentes huds-menus del motor
 	hud *activeHud; //Hud activo en cada momento
 
 	//Sonido
@@ -139,6 +144,7 @@ protected:
 
 	//Debug Bullet
 	std::vector <GLfloat> vertices; //Array de vertices para los puntos de las lineas
+	bool debugBullet = false; //Booleano para controlar si el debug de bullet esta activado o no
 
 	//Billboards
 	std::vector <billboard *> billboards; //Array de los diferentes billboards utilizados en el motor
@@ -147,32 +153,27 @@ protected:
 	std::vector <particleSystem *> particleSystems; //Array con las diferentes particulas usadas en el motor
 
 	//Objetos
+	GLuint contID; //Numero de objetos en el motor en cada momento
+	TGestorRecursos *gestorRecursos; //Gestor de recursos utilizado para crear las distintas mallas, texturas y materiales de los objetos
 	std::vector <obj3D *> notShadowObjects; //Array que contendra los objetos del mundo que no deben proyectar sombras (Mapa, elementos...)
 
 	//Deferred shading
 	GLuint defBuffer; //Buffer que contendra todas las texturas con las posicion, normales y colores para renderizar posterioremente mediante deferred shading
 	GLuint defPosition, defNormal, defDiffuseSpecular; //Cada una de las texturas que contendran la informacion anterior
 
-	bool renderDebug;
-	bool debugBullet = false;
-	TGestorRecursos *gestorRecursos;
-	GLFWwindow *ventana;
-	int screenHEIGHT;
-	int screenWIDTH;
-
+	//IMGUI
+	bool renderDebug; //Booleano para controlar el renderizado de las ventanas de IMGUI
+	
 	int numPantallas;
-
-	GLuint contID;
 
 	// ----------------------
 	//  METODOS PRIVADOS
 	// ----------------------
-
+	// Constructor del Motor
+	TMotor();
 	// Malla
 	TMalla  *createMesh(const char *fich, bool sta);
-	// Nodo
 	TNodo * createMeshNode(TNodo * padre, TMalla * mesh, const char * name);
-	
 	// Transformacion
 	TTransform * createTransformation();
 	TNodo   * createTransformationNode(TNodo * padre, TTransform * transf, const char* name);

@@ -833,9 +833,17 @@ void Corredor::comprobarInmunidad() {
 		estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::INMUNIDAD);
 		resetFuerzas();
 		CuerpoColisionChasis->setCollisionFlags(CuerpoColisionChasis->getCollisionFlags() | btCollisionObject::CO_GHOST_OBJECT);
+		CuerpoColisionRueda1->setCollisionFlags(CuerpoColisionRueda1->getCollisionFlags() | btCollisionObject::CO_GHOST_OBJECT);
+		CuerpoColisionRueda2->setCollisionFlags(CuerpoColisionRueda2->getCollisionFlags() | btCollisionObject::CO_GHOST_OBJECT);
+		CuerpoColisionRueda3->setCollisionFlags(CuerpoColisionRueda3->getCollisionFlags() | btCollisionObject::CO_GHOST_OBJECT);
+		CuerpoColisionRueda4->setCollisionFlags(CuerpoColisionRueda4->getCollisionFlags() | btCollisionObject::CO_GHOST_OBJECT);
 		Timer *time = Timer::getInstancia();
 		if (time->getTimer() - timerInmunidad >= tiempoInmunidad) {
-			CuerpoColisionChasis->setCollisionFlags(0);
+		CuerpoColisionChasis->setCollisionFlags(0);
+		CuerpoColisionRueda1->setCollisionFlags(0);
+		CuerpoColisionRueda2->setCollisionFlags(0);
+		CuerpoColisionRueda3->setCollisionFlags(0);
+		CuerpoColisionRueda4->setCollisionFlags(0);
 			inmunidad = false;
 			estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::NORMAL);
 		}

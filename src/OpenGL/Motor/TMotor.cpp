@@ -6,52 +6,61 @@ TMotor &TMotor::instancia() {
 }
 
 TMotor::TMotor() {
-	//Inicializar  libreria GLFW
+
+	//Inicializar libreria GLFW
 	if (glfwInit() != GLFW_TRUE) {
 		std::cout << "(TMotor::TMotor()) Error inicializando la libreria GLFW" << std::endl;
 	}
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // Version maxima de opengl
+
+	//Parametros de GLFW
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); // Version minima de opengl
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // Version maxima de opengl
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //Se usa la version Core de OpenGL
 
 	// CREACION OBJETO VENTANA PARA USAR LAS FUNCIONES DE GLFW
-	//ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", glfwGetPrimaryMonitor(), NULL);
 	ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", NULL, NULL);
 
-	glfwGetFramebufferSize(ventana, &screenWIDTH, &screenHEIGHT);	//almacena las dimensiones de la ventana en las variables screen
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//Almacena las dimensiones de la ventana en las variables screen
+	glfwGetFramebufferSize(ventana, &screenWIDTH, &screenHEIGHT);	
 	
+	//Pruebas para el Antialiasing
 	//glEnable(GL_MULTISAMPLE_ARB); // Antialiasing MSAA
 	//glEnable(GL_MULTISAMPLE); // Antialiasing Simple
 	//glEnable(GL_POLYGON_SMOOTH); // Difuminar dientes de sierra
 
+	//Si la ventana no se ha creado correctamente, se cierra GLFW y se muestra un error por terminal
 	if (!ventana) {
 		glfwTerminate();
 		std::cout << "(TMotor::TMotor()) Error creando la ventana" << std::endl;
 	}
 
-	glfwMakeContextCurrent(ventana);					//hacer ventana = actual
-	glViewport(0.0f, 0.0f, screenWIDTH, screenHEIGHT);	//especifica la parte de la pantalla donde openGL va a dibujar y convierte tams normalizados a px
+	//Hacer la ventana creada como actual
+	glfwMakeContextCurrent(ventana);		
+	//Especificar el viewport usado por OpenGL			
+	glViewport(0.0f, 0.0f, screenWIDTH, screenHEIGHT);	
 
+	//Se inicializa GLEW con los indices a las distintas funciones de OpenGL
 	glewExperimental = true;
+	//Si no se inicia bien, se muestra un error y se termina la ejecucion
 	if (glewInit() != GLEW_OK) {
 		cout << "(TMotor::TMotor()) ERROR EN GLEW\n";
 		return;
 	}
 
+	//Se inicializan algunos aspectos necesarios del motor
 	contID = 0; //inicializacion de los id's de obj3D
 	gestorRecursos = new TGestorRecursos(); // Inicializacion del gestor de recursos
-	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena) 
+	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena)
 
+	//Se inicializa el gestor de sonidos
+	gestorSonido = new GestorSonido();
+	gestorSonido->setListenerData();
+
+	//Se inicializa el gestor de imagenes
+	TGestorImagenes::getInstacia();
+
+	//Se inicializa IMGUI
 	initDebugWindow();
-
-	//Inicializamos el skybox que usara el motor
-	skybox = new Skybox();
-
-	shaderName = "shaderCartoon"; //Shader que se usa por defecto
 
 	//Creamos los distintos shaders que se van a usar para algun aspecto del motor
 	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
@@ -70,11 +79,8 @@ TMotor::TMotor() {
 	shaderDeferred = new Shader("assets/shaders/shaderDeferred/deferredVertexShader.txt", "assets/shaders/shaderDeferred/deferredFragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 
-	//Setamos el buffer y las texturas que guardaran los datos de posicion, normales y color para el deferred shading
+	//Seteamos el buffer y las texturas que guardaran los datos de posicion, normales y color para el deferred shading
 	setDeferredBuffers();
-
-	gestorSonido = new GestorSonido();
-	gestorSonido->setListenerData();
 
 	numPantallas = 1;
 }
@@ -106,8 +112,10 @@ void TMotor::closeDebugWindow(){
 void TMotor::resizeScreen(int w, int h) {
 	screenWIDTH = w;
 	screenHEIGHT = h;
-	GLint a = 0;
-	glViewport(a, a, screenWIDTH, screenHEIGHT);	//especifica el tam de la ventana de opengl
+}
+
+void TMotor::getInputs(){
+	glfwPollEvents();
 }
 
 void TMotor::close() {
@@ -181,6 +189,14 @@ void TMotor::setVerticesDebug(float a, float b, float c, float x, float y, float
 void TMotor::setActiveHud(const char* n) {
 	hud* h = getHud(n); //Obtenemos el hud a partir del nombre
 	activeHud = h; //Lo activamos
+}
+//Funcion para establecer el shader que se va a usar
+void TMotor::setShaderActive(const char* s){
+	shaderName = s;
+}
+//Funcion para inicializar el skybox
+void TMotor::setSkyBox(){
+	skybox = new Skybox();
 }
 
 obj3D* TMotor::getObjActiveCamera() {
@@ -289,14 +305,6 @@ obj3D *TMotor::newAnimation(const char *name, const char *path, const char* pare
 
 	TAnimacion *anim = TMotor::instancia().createAnimation(path, framesIni, framesFin);
 	TNodo  *nodo = TMotor::instancia().createAnimationNode(traslationNodeMesh, anim, name);
-	//if (strcmp(name, "mapa") == 0) {
-	//	objMapa = new obj3D(nodo, name, contID);
-	//	return objMapa;
-	//}
-	//if (strcmp(name, "elementos") == 0) {
-	//	objElementos = new obj3D(nodo, name, contID);
-	//	return objElementos;
-	//}
 
 	contID++;
 	return new obj3D(nodo, name, contID);
@@ -354,11 +362,6 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 	contID++;
 	return new obj3D(nodo, name, contID);
 	
-}
- 
-
-void TMotor::precarga(const char* modelo) {
-	//gestorRecursos->loadMesh(modelo);
 }
 
 // -------------------------------
@@ -859,6 +862,8 @@ void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float
 }
 
 // --- BILLBOARD ---
+
+//Funcion que crea un nuevo billboard para un objeto
 billboard *TMotor::newBillboard(obj3D *o){
 	//Creamos el nuevo billboard con su nombre
 	billboard* b = new billboard(o);
@@ -869,6 +874,8 @@ billboard *TMotor::newBillboard(obj3D *o){
 }
 
 // --- PARTICLE SYSTEMS ---
+
+//Funcion que crea un nuevo sistema de particulas
 particleSystem *TMotor::newParticleSystem(){
 	//Creamos el nuevo billboard con su nombre
 	particleSystem *p = new particleSystem();
@@ -879,6 +886,8 @@ particleSystem *TMotor::newParticleSystem(){
 }
 
 // --- DEFERRED SHADING ---
+
+//Funcion que setea el buffer y texturas necesarias
 void TMotor::setDeferredBuffers(){
 	//Creamos y enlazamos el buffer del deferred shading
 	glGenFramebuffers(1, &defBuffer);
@@ -919,3 +928,5 @@ void TMotor::setDeferredBuffers(){
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	
 }
+
+

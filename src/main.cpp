@@ -7,14 +7,19 @@
 
 //Callback para el redimensionamiento de la pantalla
 void resize_callback(GLFWwindow* window, int width, int height);
+
+//Main del juego
 int main(int argc, char* argv[]) {
 
+	//Se inicializa el motor
 	TMotor::instancia();
-	//GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
-	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
 
-	//Creamos el gestor de imagenes para el HUD
-	TGestorImagenes::getInstacia();
+	//Parametros del motor
+	TMotor::instancia().setShaderActive("shaderCartoon"); //Tipo de shader a usar
+	TMotor::instancia().setSkyBox(); //Queremos skybox
+
+	//Empezamos en el menu del juego
+	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
 
 	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
 	cam->translate(glm::vec3(0.0f, 4.0f, 15.0f));
@@ -28,58 +33,19 @@ int main(int argc, char* argv[]) {
 	// -----------------------------//
 	//	GAME LOOP
 	// -----------------------------//
+	//Escena actual = MENU
 	Escena::tipo_escena tipoActual = GestorEscena::instancia().getEscenaActiva().getTipoEscena();
-	int tipo = 0;
+	//Mientras la escena sea distinta a SALIR, no se sale del loop del juego
 	while (tipoActual != Escena::tipo_escena::SALIR) {
-		if (strcmp(activeCamera->getName() , TMotor::instancia().getActiveCamera()->getName())) {
-			 activeCamera = TMotor::instancia().getObjActiveCamera();
-		}
-		//activeCamera = TMotor::instancia().newCameraNode(TMotor::instancia().getActiveCamera()->getName(), TMotor::instancia().getActiveCamera()->getPadre()->getName());
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_I) == GLFW_PRESS) {
-			 activeCamera->translate(glm::vec3(0, 0, -.4f));
-		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_K) == GLFW_PRESS) {
-			activeCamera->translate(glm::vec3(0, 0, .4f));
-		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_J) == GLFW_PRESS) {
-			activeCamera->translate(glm::vec3(-.4f, 0, 0));
-		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L) == GLFW_PRESS) {
-		activeCamera->translate(glm::vec3(.4f, 0, 0));
-		}
-
-		
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS) {
-			activeCamera->rotate(glm::vec3(1, 0, 0), .5f);
-		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS) {
-			 activeCamera->rotate(glm::vec3(1, 0, 0), -.5f);
-		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
-			activeCamera->rotate(glm::vec3(0, 1, 0), -1);
-			
-		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS) {
-			 activeCamera->rotate(glm::vec3(0, 1, 0), 1);
-		}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_C) == GLFW_PRESS) {
-			TMotor::instancia().setActiveCamera(TMotor::instancia().getNode("camara_libre"));
-		}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_X) == GLFW_PRESS) {
-			TMotor::instancia().setActiveCamera(TMotor::instancia().getNode("camara_jugador3apersona"));
-		}
-		tipo = GestorEscena::instancia().getEscenaActiva().getTipoEscena();
-		
-		TMotor::instancia().draw(tipo);
+		//Se hace el update de cada escena, que incluye el dibujado de la misma
 		tipoActual = GestorEscena::instancia().update();
-		
-//		activeCamera = TMotor::instancia().newCameraNode(TMotor::instancia().getActiveCamera()->getName(), TMotor::instancia().getActiveCamera()->getPadre()->getName());
-		glfwPollEvents(); // Comprobacion de eventos (Teclado, raton, joystick)
+		//Se llama a la comprobacion de eventos del motor
+		TMotor::instancia().getInputs();
 	}
-	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
-	TMotor::instancia().close();
-
-	cout << "FIN DE JUEGO\n";
-	return 0;
+	//Si el usuario quiere salir del juego...
+	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena()); //Se borra la ultima escena
+	TMotor::instancia().close(); //Se cierra correctamente el motor
+	return 0; //Se sale del programa
 }
 
 //Manejador para el evento de redimensionamiento de la pantalla

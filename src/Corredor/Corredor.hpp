@@ -24,7 +24,7 @@ class Corredor : public RakNet::NetworkIDObject
 {
 public:
 	typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
-	typedef enum { PARADO, GIRODERINI, GIRODERFIN, GIROIZQINI, GIROIZQFIN,HABILIDAD} movimiento_jugador;
+	typedef enum { PARADO, GIRODERINI, GIRODERFIN, GIROIZQINI, GIROIZQFIN,HABILIDAD,LANZAROBJETO,VACILE} movimiento_jugador;
 	Corredor(btVector3 pos, tipo_jugador tipo);
 
 	void InicializarFisicas();
@@ -248,8 +248,9 @@ protected:
 
 	//Animaciones
 
-	TNodo *parado;
+	TNodo *vacile;
 	TNodo *giroDerIni;
+	TNodo *lanzarObjeto;
 	TNodo *giroDerFin;
 	TNodo *giroIzqIni;
 	TNodo *giroIzqFin;
@@ -283,6 +284,8 @@ protected:
 	TNodo * getGiroIzqFin();
 	TNodo * getHabilidadAnim();
 	TNodo * getAnimQuieto();
+	TNodo * getLanzarObjeto();
+	TNodo * getVacile();
 
 
 

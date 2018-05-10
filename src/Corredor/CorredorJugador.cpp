@@ -9,7 +9,9 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 	giroIzq = false;
 	//control de animaciones
 	animacionPrevia = getAnimQuieto();
-	iniciarAnimacion(PARADO, animacionPrevia,NULL);
+	iniciarAnimacion(VACILE, animacionPrevia,NULL);
+	animacionPrevia = getVacile();
+
 }
 
 /**
@@ -20,10 +22,7 @@ void CorredorJugador::movimiento() {
 
 	bool comprobadorMovimiento = false;
 	
-	//if (!comprobadorMovimiento == false) {
-		/*animacion del personaje quieto*/
-		//iniciarAnimacion(PARADO, animacionPrevia);
-	//}
+
 
 	//Comprobador de de mando y recoleccion de inputs
 	bool mandoConectado = false;
@@ -188,6 +187,8 @@ void CorredorJugador::actualizarItem() {
 			if (client->getConnected())
 				client->PlayerThrowObject();
 			//Llama a la funcion de la clase padre
+			iniciarAnimacion(LANZAROBJETO, animacionPrevia, NULL);
+			animacionPrevia = getLanzarObjeto();
 			usarObjetos();
 		}
 	}

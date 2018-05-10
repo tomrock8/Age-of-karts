@@ -89,7 +89,9 @@ EscenaLobby::~EscenaLobby() {
 }
 
 void EscenaLobby::init() {}
-void EscenaLobby::dibujar() {}
+void EscenaLobby::dibujar() {
+	TMotor::instancia().draw(getTipoEscena());
+}
 void EscenaLobby::limpiar() {
 	TMotor::instancia().closeDebugWindow();
 }

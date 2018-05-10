@@ -16,6 +16,8 @@ GestorEscena::GestorEscena() {
 
 Escena::tipo_escena GestorEscena::update() {
 	
+	//Se comprueban los inputs de la escena activa
+	cambioEscena = escenaActiva->comprobarInputs();
 
 /*	
 	tiempoActual = clock();
@@ -56,13 +58,13 @@ if(tiempo-tiempoAnterior ==1){
 */
 
 	if (cambioEscena == escenaActiva->getTipoEscena()) {
-		cambioEscena = escenaActiva->comprobarInputs();
+		//Se actualiza la escena
 		escenaActiva->update();
+		//Y se dibuja la escena
 		escenaActiva->dibujar();
 	}
-	else {
+	else { //La escena ha cambiado a otra
 		if (cambioEscena != Escena::tipo_escena::SALIR)
-			
 			cambiaEscena(cambioEscena);
 
 			//tiempoActual=0;

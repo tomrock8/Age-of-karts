@@ -53,7 +53,11 @@ void cameraThird::lookAt(glm::vec3 posicion) {
 	static_cast<TTransform*>(camara->getNode()->getPadre()->getEntidad())->setMatriz(lookAtCamara);
 
 }
+void cameraThird::setPositionStatic(glm::vec3 posicion){
 
+camara->setPosition(posicion.x,posicion.y,posicion.z);
+
+}
 void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 direccion) {
 
 	float zoom = 15;

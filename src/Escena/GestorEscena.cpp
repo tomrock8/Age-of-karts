@@ -40,7 +40,7 @@ Escena::tipo_escena GestorEscena::update() {
 	//	cout<<timediff_sec <<endl;
 		tiempoRefresco = clock();
 		*/
-		cambioEscena = escenaActiva->comprobarInputs();
+		// cambioEscena = escenaActiva->comprobarInputs();
 		/*
 		escenaActiva->update();
 		//cont++;
@@ -64,6 +64,7 @@ if(tiempo-tiempoAnterior ==1){
 		if (cambioEscena != Escena::tipo_escena::SALIR)
 			
 			cambiaEscena(cambioEscena);
+
 			//tiempoActual=0;
 			//tiempoRefresco=0;
 	}
@@ -76,6 +77,7 @@ if(tiempo-tiempoAnterior ==1){
 bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 	Escena *anterior = escenaActiva; // Guardar escena anterior para tratar con ella si es necesario
 	std::string ipConexion = "";
+	std::vector<Corredor::tipo_jugador> jugadores;
 	
 	if (anterior) { // Hay una escena activa actualmente
 		if (anterior->getTipoEscena() == Escena::tipo_escena::LOBBY && tipo == Escena::tipo_escena::ONLINE) {
@@ -91,6 +93,11 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 			cout <<"De menu a lobby: "<< ipConexion << "\n";
 		}
 
+		if (tipo == Escena::tipo_escena::PODIO) {
+			ipConexion = static_cast<EscenaJuego*>(anterior)->getIpConexion();
+			jugadores = static_cast<EscenaJuego*>(anterior)->getJugadores();
+			cout <<"De menu a lobby: "<< ipConexion << "\n";
+		}
 
 		escenaActiva->limpiar();
 		escenaActiva = nullptr; // Desasignamos la escena activa
@@ -98,7 +105,7 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 	}
 
 	// No hay una escena activa, de manera que se crea una nueva
-	return nuevaEscena(tipo, ipConexion);
+	return nuevaEscena(tipo, ipConexion,jugadores);
 }
 
 
@@ -145,7 +152,7 @@ bool GestorEscena::agregaEscena(Escena *escena) {
 	return false;
 }
 
-bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion) {
+bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion,std::vector<Corredor::tipo_jugador> jugadores) {
 	// Crea una escena del tipo especificado
 	// Agregar la escena al array
 
@@ -198,6 +205,15 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion)
 		cambioEscena = Escena::tipo_escena::OPCIONES;
 
 		return true;
+	
+	case Escena::tipo_escena::PODIO:
+		escenaActiva = new EscenaPodio(Escena::tipo_escena::PODIO,jugadores);
+		agregaEscena(escenaActiva);
+		cambioEscena = Escena::tipo_escena::PODIO;
+
+		return true;
+
+
 	}
 
 	return false;
@@ -244,6 +260,12 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 		return true;
 	}
 
+	if (tipo == Escena::tipo_escena::PODIO) {
+		EscenaLobby *e = static_cast<EscenaLobby *>(escenas[indice]);// Convertimos la escena en su tipo
+		delete e; // Eliminamos la escena que hemos recogido del array
+		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
+		return true;
+	}
 
 
 	return false;

@@ -6,6 +6,7 @@
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;
 	ipConexion = "";
+
 	TMotor::instancia().newHud("OnGameHUD");
 	TMotor::instancia().getActiveHud()->addElement(0.2f, 0.2f, "puesto", "assets/HUD/juego/puesto_6.png");
 	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
@@ -438,7 +439,7 @@ void EscenaJuego::renderDebug() {
 
 void EscenaJuego::limpiar() {
 	muestraDebug = false;
-	TMotor::instancia().closeDebugWindow();
+	//TMotor::instancia().closeDebugWindow();
 }
 
 void EscenaJuego::update() {
@@ -623,7 +624,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 			client->FinalizarCarrera();
 		}
 		else if (tipoEscena != Escena::tipo_escena::ONLINE) {
-			return Escena::tipo_escena::MENU;
+			return Escena::tipo_escena::PODIO;
 		}
 	}
 	if (tipoEscena == Escena::tipo_escena::ONLINE && !client->getStarted()) {
@@ -889,4 +890,34 @@ void EscenaJuego::debugPlot(int j,float k,std::string str){		//Funcion que sirve
 	ImGui::PlotLines(str.c_str(), vec, IM_ARRAYSIZE(vec),0,(to_string(vec2[9])).c_str());
 	
 	
+}
+
+
+std::vector<Corredor::tipo_jugador> EscenaJuego::getJugadores(){
+
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	std::vector<Corredor*> pj = jugadores->getJugadores();
+	std::vector<Corredor::tipo_jugador> tipoJugadores;
+
+	
+
+	for(int i=0;i<pj.size();i++){
+
+		if(tipoJugadores.size() == 0){
+			if(pj.at(i)->getPosicionCarrera()==1){
+				tipoJugadores.push_back(pj.at(i)->getTipoJugador());
+				i=0;			
+			}
+		}if(tipoJugadores.size() == 1){
+			if(pj.at(i)->getPosicionCarrera()==2){
+				tipoJugadores.push_back(pj.at(i)->getTipoJugador());
+				i=0;			
+			}
+		}if(tipoJugadores.size() == 2){
+			if(pj.at(i)->getPosicionCarrera()==3){
+				tipoJugadores.push_back(pj.at(i)->getTipoJugador());	
+			}
+		}
+	}
+	return tipoJugadores;
 }

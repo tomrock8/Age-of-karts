@@ -6,7 +6,7 @@
 #include "TMotor.hpp"
 class Escena {
 public:
-	typedef enum { MENU, CARRERA, ONLINE, CARGA, LOBBY, OPCIONES, CREDITOS, SALIR } tipo_escena; // Definicion de los diferentes tipos de escenas
+	typedef enum { MENU, CARRERA, ONLINE, CARGA, LOBBY, OPCIONES, CREDITOS, SALIR, PODIO } tipo_escena; // Definicion de los diferentes tipos de escenas
 	static const int nTipos = 6; // Numero de tipos de escenas que pueden haber
 
 	typedef enum { CAMBIO, CORRIENDO, CARGANDO } estado_escena; // Definicion del estado actual de la escena

@@ -16,6 +16,7 @@ public:
 
 	void setPosition(glm::vec3 posicion,glm::vec3 rotacion,btVector3 direccion);
 	void lookAt(glm::vec3 posicion);
+	void setPositionStatic(glm::vec3 posicion);
 	void comprobarInputs();
 	btRigidBody * initializePhysics();
 	

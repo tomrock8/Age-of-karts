@@ -1,0 +1,28 @@
+# Blender MTL File: 'vikingoKartBase.blend'
+# Material Count: 2
+
+newmtl KartVikingoMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump kartVik_normal.png
+map_Kd kartVik_diffuse.png
+map_Ks kartVik_specular.png
+
+newmtl VikingoMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump vikingo_normal.png
+map_Kd vikingo_diffuse.png
+map_Ks vikingo_specular.png

@@ -8,6 +8,7 @@
 #include "EscenaLobby.hpp"
 #include "EscenaCreditos.hpp"
 #include "EscenaOpciones.hpp"
+#include "EscenaPodio.hpp"
 #include <iostream>
 
 class GestorEscena {
@@ -49,7 +50,7 @@ private:
 	bool agregaEscena(Escena *escena); // Agrega una escena al gestor
 	int indiceEscena(Escena::tipo_escena tipo); // Devuelve el indice de la escena en el array (-1 si no existe)
 	int indiceVacio(); // Devuelve la primera posicion donde se pueda guardar una escena nueva
-	bool nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion); // Metodo para crear una nueva escena
+	bool nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion,std::vector<Corredor::tipo_jugador> jugadores); // Metodo para crear una nueva escena
 };
 
 #endif /* GESTORESCENA_H */

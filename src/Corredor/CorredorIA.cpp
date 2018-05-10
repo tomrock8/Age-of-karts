@@ -46,6 +46,12 @@ CorredorIA::CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(po
 	pertenenciaVelocidadAlta = 0;
 	valorGiroFuerte = 0.18;
 
+	//control de animaciones
+	animacionPrevia = getAnimQuieto();
+	iniciarAnimacion(VACILE, animacionPrevia,NULL);
+	animacionPrevia = getVacile();
+	giroDer = false;
+	giroIzq = false;
 
 
 	arbolconduccion = new ArbolDecision();
@@ -319,54 +325,62 @@ void CorredorIA::movimiento()
 
 	case NADA1:
 		acelerar();
+		//finAnimacion();
 		break;
 
 	case ACELERAR: //1
 		acelerar();
 		vehiculo->setSteeringValue(0, 0);
 		vehiculo->setSteeringValue(0, 1);
+		//finAnimacion();
 		break;
 
 	case FRENAR: //2
 		frenar();
+		//finAnimacion();
 		break;
 
 	case ACELERARGIRARDERECHA://3
 		acelerar();
 		girarIzquierda();
-	
+		animacionIzquierda();
 		break;
 
 	case ACELERARGIRARIZQUIERDA://4
 		acelerar();
-			girarDerecha();
+		girarDerecha();
+		animacionDerecha();
 		break;
 
 	case ACELERARGIRARFUERTEDERECHA://5
 		acelerar();
 		vehiculo->setSteeringValue(valorGiroFuerte, 0);
 		vehiculo->setSteeringValue(valorGiroFuerte, 1);
+		animacionIzquierda();
 		break;
 
 	case ACELERARGIRARFUERTEIZQUIERDA://6
 		acelerar();
 		vehiculo->setSteeringValue(-valorGiroFuerte, 0);
 		vehiculo->setSteeringValue(-valorGiroFuerte, 1);
+		animacionDerecha();
 		break;
 
 	case FRENARGIRARFUERTEDERECHA://7
 		desacelerar();
 		vehiculo->setSteeringValue(valorGiroFuerte, 0);
 		vehiculo->setSteeringValue(valorGiroFuerte, 1);
+		animacionIzquierda();
 		break;
 
 	case FRENARGIRARFUERTEIZQUIERDA://8
 		desacelerar();
 		vehiculo->setSteeringValue(-valorGiroFuerte, 0);
 		vehiculo->setSteeringValue(-valorGiroFuerte, 1);
+		animacionDerecha();
 		break;
 	}
-
+	finAnimacion();
 	reposicionar();
 }
 
@@ -1277,4 +1291,30 @@ void CorredorIA::debugIA() {
 
 std::string CorredorIA::getDebugIA(){
 	return texto;
+}
+
+
+void CorredorIA::animacionIzquierda(){
+		iniciarAnimacion(GIROIZQINI, animacionPrevia, getGiroIzqFin());
+		//animacionPrevia = getGiroIzqIni();
+		giroIzq = true;
+}
+void CorredorIA::animacionDerecha(){
+		iniciarAnimacion(GIRODERINI, animacionPrevia, getGiroDerFin());
+		
+		giroDer = true;
+}
+void CorredorIA::finAnimacion(){
+	if (giroDer) {
+	
+		iniciarAnimacion(GIRODERFIN, animacionPrevia,getGiroDerIni());
+		animacionPrevia = getGiroDerFin();
+		giroDer = false;
+	}
+	if (giroIzq) {
+	
+		iniciarAnimacion(GIROIZQFIN, animacionPrevia, getGiroIzqIni());
+		animacionPrevia = getGiroIzqFin();
+		giroIzq = false;
+	}
 }

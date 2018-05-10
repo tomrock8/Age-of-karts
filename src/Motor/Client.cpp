@@ -649,8 +649,6 @@ int Client::ReceivePackets() {
 				float *ori = new float[3];
 				for (int i = 0; i < players.size(); i++) {
 					bsIn.Read(id);			//CONTROLPLAYER
-					std::cout << "i. " << i << " id: " << id << std::endl;
-					id = i;
 					bsIn.Read(pos[0]); //POSICION ACTUAL
 					bsIn.Read(pos[1]);	//
 					bsIn.Read(pos[2]);	//

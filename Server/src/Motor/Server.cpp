@@ -830,6 +830,7 @@ void Server::refreshServer()
 		bsOut.Write(estados->getEstadoCarrera());
 		bsOut.Write(estados->getEstadoInmunidad());
 		bsOut.Write(estados->getEstadoHabilidad());
+		bsOut.Write(players.at(i)->getLimite());
 
     }
     //std::cout << "Control: " << controlPlayer << std::endl;

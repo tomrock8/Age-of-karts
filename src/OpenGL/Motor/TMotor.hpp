@@ -34,6 +34,7 @@ public:
 	void resizeScreen(int w, int h);
 
 	//METODOS DE USO DEL MOTOR
+	void swapBuffers(); //Intercambiar buffers de dibujado de GLFW
 	void getInputs(); //Control de inputs
 	void close(); //Cierre del motor
 	void toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw); //Convertir de quaternions a grados

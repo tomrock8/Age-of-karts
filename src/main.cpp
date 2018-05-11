@@ -20,15 +20,9 @@ int main(int argc, char* argv[]) {
 
 	//Empezamos en el menu del juego
 	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);
-
-	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
-	cam->translate(glm::vec3(0.0f, 4.0f, 15.0f));
 	
 	//Evento de glfw para redimensionar la pantalla
 	glfwSetFramebufferSizeCallback(TMotor::instancia().getVentana(), resize_callback);
-
-	TMotor::instancia().setActiveCamera(TMotor::instancia().getNode("camara_libre"));
-	obj3D *activeCamera = TMotor::instancia().getObjActiveCamera();
 
 	// -----------------------------//
 	//	GAME LOOP

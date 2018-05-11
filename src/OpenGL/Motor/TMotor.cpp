@@ -97,6 +97,12 @@ TMotor::TMotor() {
 //  M E T O D O S   D E   U S O   D E L   M O T O R
 // -------------------------------------------------
 
+//Funcion para cambiar los buffers de dibujado de GLFW
+void TMotor::swapBuffers(){
+	//Se intercambian los dos buffers (delantero y trasero)
+	glfwSwapBuffers(TMotor::instancia().getVentana());
+}
+
 //Funcion para el control de inputs del motor mediante GLFW
 void TMotor::getInputs(){
 	glfwPollEvents();
@@ -104,7 +110,7 @@ void TMotor::getInputs(){
 
 //Funcion que cierra correctamente el motor
 void TMotor::close() {
-	//Se termina la libreria IMGUI
+ 	//Se termina la libreria IMGUI
 	ImGui_ImplGlfwGL3_Shutdown();
 	ImGui::DestroyContext();
 	//Se termina GLFW, destruyendo la ventana creada
@@ -464,7 +470,7 @@ void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; }
 void TMotor::setActiveLight(TNodo *light) { activeLights.push_back(light); }
 void TMotor::setRenderDebug(bool renderDebug) { this->renderDebug = renderDebug; }
 void TMotor::setDebugBullet(bool b){ debugBullet = b; }
-//Funcion que recibe dos puntos para dibujar una linea y los mete en el array de vertices para el debug
+//Funcion que recibe dos puntos para dibujar una linea y los mete en el array de vertices para el debug de Bullet
 void TMotor::setVerticesDebug(float a, float b, float c, float x, float y, float z){
 	vertices.push_back(a);
 	vertices.push_back(b);
@@ -575,8 +581,7 @@ void TMotor::draw(int tipo) {
 		drawIMGUI();
 	}
 	
-	//Se intercambian los dos buffers (delantero y trasero)
-	glfwSwapBuffers(TMotor::instancia().getVentana());
+	swapBuffers();
 }
 
 // ---- DIBUJADO DE LA CAMARA ACTIVA ---- 

@@ -90,7 +90,14 @@ EscenaLobby::~EscenaLobby() {
 
 void EscenaLobby::init() {}
 void EscenaLobby::dibujar() {
-	TMotor::instancia().draw(getTipoEscena());
+	//Limpiamos el dibujado anterior asignando un color de fondo
+	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);
+	//Establecemos la zona de renderizado
+	TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
+	//Dibujamos el menu 
+	TMotor::instancia().drawHudMenus();
+	//Dibujamos IMGUI
+	TMotor::instancia().drawIMGUI();
 }
 void EscenaLobby::limpiar() {
 	TMotor::instancia().closeDebugWindow();

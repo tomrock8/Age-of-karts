@@ -260,10 +260,27 @@ void EscenaJuego::dibujar() {
 			}
 		}
 	}
-
 	
+	//Limpiamos el dibujado anterior asignando un color de fondo
+	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);
+	//Establecemos la zona de renderizado
+	TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
+	//Especificamos la camara activa
+	TMotor::instancia().setActiveCamera(TMotor::instancia().getActiveCamera());
+	//Dibujamos el skybox
+	TMotor::instancia().drawSkybox();
+	//Dibujamos los objetos 3D creados en la escena
+	TMotor::instancia().draw();
+	//Dibujamos las particulas
+	TMotor::instancia().drawParticles();
+	//Dibujamos los billboards
+	TMotor::instancia().drawBillboards();
+	//Dibujamos el menu 
+	TMotor::instancia().drawHudMenus();
+	//Dibujamos IMGUI
+	TMotor::instancia().drawIMGUI();
+
 	renderDebug();
-	TMotor::instancia().draw(getTipoEscena());
 }
 
 void EscenaJuego::renderDebug() {

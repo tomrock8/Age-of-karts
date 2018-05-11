@@ -111,11 +111,10 @@ void TMotor::getInputs(){
 //Funcion que cierra correctamente el motor
 void TMotor::close() {
  	//Se termina la libreria IMGUI
-	ImGui_ImplGlfwGL3_Shutdown();
-	ImGui::DestroyContext();
-	//Se termina GLFW, destruyendo la ventana creada
-	glfwTerminate();									
-	glfwDestroyWindow(TMotor::instancia().getVentana());
+	//ImGui_ImplGlfwGL3_Shutdown();
+	//ImGui::DestroyContext();
+	//Se termina GLFW
+	//glfwTerminate();					
 	//Se eliminan distintos elementos usados por el motor
 	delete gestorRecursos; //Gestor de recursos
 	delete gestorSonido; //Gestor de sonidos
@@ -131,6 +130,7 @@ void TMotor::close() {
 	for (int i = 0; i < particleSystems.size(); i++) {
 		delete particleSystems[i];
 	}
+	
 }
 
 //Funcion que transforma quaternions a grados
@@ -466,7 +466,7 @@ TGestorRecursos *TMotor::getGR() { return gestorRecursos;}
 //  M E T O D O S   S E T
 // ------------------------
 
-void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; }
+void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; drawCamera(); }
 void TMotor::setActiveLight(TNodo *light) { activeLights.push_back(light); }
 void TMotor::setRenderDebug(bool renderDebug) { this->renderDebug = renderDebug; }
 void TMotor::setDebugBullet(bool b){ debugBullet = b; }
@@ -542,46 +542,17 @@ void TMotor::clean(float r, float g, float b, float a) {
 }
 
 // ---- DIBUJADO DEL ARBOL DE LA ESCENA ---- 
-void TMotor::draw(int tipo) {
-	for(int pantallas = 1; pantallas <= numPantallas; pantallas++){
-		if (tipo == 1 || tipo == 2) {
-			clean(0.16f, 0.533f, 0.698f, 0.0f);//Se llama a la funcion para limpiar los buffers de OpenGL
-			setViewport(0,0,screenWIDTH, screenHEIGHT);
-			//Antes de llamar a ningun dibujado, calculamos la viewMatrix de la camara activa
-			//setActiveCamera(cameras.at(pantallas));
-			
-			drawCamera();
-
-			drawSkybox();
-
-			//Si el shader deferred esta activado...
-			if (strcmp(shaderName, "shaderDeferred") == 0){
-				usingShaderDeferred();
-			}
-
-			//Si el shader cartoon esta activado...
-			if (strcmp(shaderName, "shaderCartoon") == 0){
-				usingShaderCartoon();
-			}
-
-			drawDebugBullet();
-			
-			//drawProjectedShadows();
-
-			drawParticles();
-
-			drawBillboards();
-
-		}else{
-			clean(0.16f, 0.533f, 0.698f, 0.0f);
-		}
-
-		drawHudMenus();
-
-		drawIMGUI();
+//Funcion que dibuje los objetos 3D creados en el motor con el estilo que hayas definido
+void TMotor::draw() {
+	//Si el shader deferred esta activado...
+	if (strcmp(shaderName, "shaderDeferred") == 0){
+		usingShaderDeferred();
 	}
-	
-	swapBuffers();
+
+	//Si el shader cartoon esta activado...
+	if (strcmp(shaderName, "shaderCartoon") == 0){
+		usingShaderCartoon();
+	}
 }
 
 // ---- DIBUJADO DE LA CAMARA ACTIVA ---- 

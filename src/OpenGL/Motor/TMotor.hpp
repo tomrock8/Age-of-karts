@@ -94,7 +94,7 @@ public:
 
 	// DIBUJADO
 	void clean(float r, float g, float b, float a);
-	void draw(int tipo);
+	void draw();
 	void drawCamera();
 	void drawLight(Shader *s);
 	void drawSkybox();

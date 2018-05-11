@@ -37,6 +37,7 @@ private:
 	void debugPlot(int j,float k,std::string str);
 	void updateHUD();
 	
+	int numPantallas; //Numero de mandos conectados
 
 	bool debug;
 

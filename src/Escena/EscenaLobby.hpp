@@ -45,17 +45,13 @@ private:
 	bool pressed;
 	bool firstInit;
 	Timer *time;
-	//IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
-	//stringw texto; // Texto a mostrar en pantalla
-	//stringw texto2;
-	//IGUIStaticText *textoUI; // Nodo de irrlicht
-	//ITexture* logoAOK; // Textura del logo del juego
 	bool selection;
 	bool offline;
 	bool end;
 	std::string iphost;
 	std::string connecting;
 	std::string *infoLobby;
+	int numPantallas; //Numero de mandos conectados
 };
 
 #endif /* ESCENALOBBY_H */

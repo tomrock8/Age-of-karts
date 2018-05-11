@@ -89,8 +89,6 @@ TMotor::TMotor() {
 
 	//Seteamos el buffer y las texturas que guardaran los datos de posicion, normales y color para el deferred shading
 	setDeferredBuffers();
-
-	numPantallas = 1;
 }
 
 // -------------------------------------------------
@@ -445,7 +443,6 @@ Shader *TMotor::getShaderDebug() { return shaderDebug; }
 Shader *TMotor::getShaderSilhouette() { return shaderSilhouette; }
 GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
 glm::mat4 TMotor::getV() { return v;}
-int TMotor::getNumPantallas() {return numPantallas;}
 //Funcion que devuelve un hud a partir del nombre
 hud* TMotor::getHud(const char* n) {
 	hud* h = NULL;
@@ -461,6 +458,10 @@ hud* TMotor::getHud(const char* n) {
 //Funcion para devolver el hud activo
 hud* TMotor::getActiveHud() { return activeHud;}
 TGestorRecursos *TMotor::getGR() { return gestorRecursos;}
+//Funcion qude devuelve una camara del array a partir de su posicion en el mismo
+TNodo *TMotor::getCameraByIndex(int i){
+	return cameras.at(i);
+}
 
 // ------------------------
 //  M E T O D O S   S E T
@@ -502,26 +503,7 @@ obj3D* TMotor::getObjActiveCamera() {
 //Funcion para establecer el viewport (porcion de la pantalla) que se va a renderizar
 void TMotor::setViewport(int x, int y, int width, int height){
 	glViewport(x,y,width,height);
-	/*	//Establecemos el tamaño del viewport
-	if ((tipo == 1 || tipo == 2) && numPantallas > 1){
-		if(split == 1)
-			glViewport(0, screenHEIGHT/2, screenWIDTH/2, screenHEIGHT/2);
-		else if(split == 2)
-			glViewport(screenWIDTH/2, screenHEIGHT/2, screenWIDTH/2, screenHEIGHT/2);
-		else if(split == 3)
-			glViewport(0, 0, screenWIDTH/2, screenHEIGHT/2);
-		else if(split == 4)
-			glViewport(screenWIDTH/2, 0, screenWIDTH/2, screenHEIGHT/2);
-	}else {
-		glViewport(0, 0, screenWIDTH, screenHEIGHT);
-	}*/
 } 
-
-
-
-void TMotor::aumentarPantallaPartida(){
-	numPantallas ++;
-}
 
 //------------------------------
 // D I B U J A D O

@@ -78,7 +78,7 @@ public:
 	TGestorRecursos *getGR();
 	bool getRenderDebug();
 	GestorSonido *getGestorSonido();
-	int getNumPantallas();
+	TNodo *getCameraByIndex(int i);
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
@@ -87,7 +87,6 @@ public:
 	void setRenderDebug(bool renderDebug);
 	void setDebugBullet(bool b);
 	void setVerticesDebug(float a, float b, float c, float x, float y, float z);
-	void aumentarPantallaPartida();
 	void setShaderActive(const char* s);
 	void setSkyBox();
 	void setViewport(int x, int y, int width, int height);
@@ -178,8 +177,6 @@ protected:
 
 	//IMGUI
 	bool renderDebug; //Booleano para controlar el renderizado de las ventanas de IMGUI
-	
-	int numPantallas;
 
 	// ----------------------
 	//  METODOS PRIVADOS

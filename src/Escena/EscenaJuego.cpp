@@ -85,6 +85,15 @@ void EscenaJuego::init() {
 		controlPlayer = 0;
 	}
 
+	//Numero de mandos conectados
+	numPantallas = 1;
+	for(int mandos = 1; mandos < 4; mandos++){
+		if(glfwJoystickPresent(mandos) == 1){
+			std::cout << "Mando " << mandos << " detectado!" << std::endl;
+			numPantallas++;
+		}
+	}
+
 	// Gravedad
 	gravedad = -10.0f;
 	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
@@ -182,7 +191,7 @@ void EscenaJuego::init() {
 	//	CAMARA
 	//-----------------------------
 	cameraThird *cameraAux;
-	for(int x = 0; x < TMotor::instancia().getNumPantallas(); x++){
+	for(int x = 0; x < numPantallas; x++){
 		cameraAux = new cameraThird("camara_jugador3apersona", "escena_raiz");
 		camera.push_back(cameraAux);
 	}
@@ -261,9 +270,42 @@ void EscenaJuego::dibujar() {
 		}
 	}
 
-	
+	//Limpiamos el dibujado anterior asignando un color de fondo
+	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);
+	for (int i = 0; i < numPantallas; i++){
+		//Establecemos la zona de renderizado
+		if (numPantallas > 1){
+			if (i == 0){
+				TMotor::instancia().setViewport(0, TMotor::instancia().getHeight()/2, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Arriba-izquierda
+			}else if (i == 1){
+				TMotor::instancia().setViewport(TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Arriba-derecha
+			}else if (i == 2){
+				TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Abajo-izquierda				
+			}else{
+				TMotor::instancia().setViewport(TMotor::instancia().getWidth()/2, 0, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Abajo-derecha				
+			}
+		}else{
+			TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
+		}
+		//Especificamos la camara activa
+		TMotor::instancia().setActiveCamera(TMotor::instancia().getCameraByIndex(i));
+		//Dibujamos el skybox
+		TMotor::instancia().drawSkybox();
+		//Dibujamos los objetos 3D creados en la escena
+		TMotor::instancia().draw();
+		//Dibujamos el debug de bullet
+		TMotor::instancia().drawDebugBullet();
+		//Dibujamos las particulas
+		TMotor::instancia().drawParticles();
+		//Dibujamos los billboards
+		TMotor::instancia().drawBillboards();
+		//Dibujamos el menu 
+		TMotor::instancia().drawHudMenus();
+		//Dibujamos IMGUI
+		TMotor::instancia().drawIMGUI();
+	}
+
 	renderDebug();
-	TMotor::instancia().draw(getTipoEscena());
 }
 
 void EscenaJuego::renderDebug() {
@@ -597,7 +639,7 @@ void EscenaJuego::update() {
 
 	pj = jugadores->getJugadores();
 	
-	for(int x = 0; x < TMotor::instancia().getNumPantallas(); x++){
+	for(int x = 0; x < numPantallas; x++){
 		if(pj.at(controlPlayer+x)->getEstados()->getEstadoInmunidad() != EstadosJugador::estado_inmunidad::INMUNIDAD){
 			camera.at(x)->setPosition(pj.at(controlPlayer+x)->getNodo()->getPosition(), pj.at(controlPlayer+x)->getNodo()->getRotation(), pj.at(controlPlayer+x)->getVectorDireccion());		
 			camera.at(x)->lookAt(pj.at(controlPlayer+x)->getNodo()->getPosition());

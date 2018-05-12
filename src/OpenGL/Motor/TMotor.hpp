@@ -78,7 +78,7 @@ public:
 	TGestorRecursos *getGR();
 	bool getRenderDebug();
 	GestorSonido *getGestorSonido();
-	int getNumPantallas();
+	TNodo *getCameraByIndex(int i);
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
@@ -87,14 +87,13 @@ public:
 	void setRenderDebug(bool renderDebug);
 	void setDebugBullet(bool b);
 	void setVerticesDebug(float a, float b, float c, float x, float y, float z);
-	void aumentarPantallaPartida();
 	void setShaderActive(const char* s);
 	void setSkyBox();
 	void setViewport(int x, int y, int width, int height);
 
 	// DIBUJADO
 	void clean(float r, float g, float b, float a);
-	void draw(int tipo);
+	void draw();
 	void drawCamera();
 	void drawLight(Shader *s);
 	void drawSkybox();
@@ -160,6 +159,7 @@ protected:
 	//Debug Bullet
 	std::vector <GLfloat> vertices; //Array de vertices para los puntos de las lineas
 	bool debugBullet = false; //Booleano para controlar si el debug de bullet esta activado o no
+	GLuint debugBulletVAO, debugBulletVBO; //Buffers para guardar las lineas del debug
 
 	//Billboards
 	std::vector <billboard *> billboards; //Array de los diferentes billboards utilizados en el motor
@@ -178,8 +178,6 @@ protected:
 
 	//IMGUI
 	bool renderDebug; //Booleano para controlar el renderizado de las ventanas de IMGUI
-	
-	int numPantallas;
 
 	// ----------------------
 	//  METODOS PRIVADOS
@@ -198,6 +196,8 @@ protected:
 	// Luz
 	TLuz    *createLight();
 	TNodo   *createLightNode(TNodo * padre, TLuz * luz, const char* name);
+	// Debug Bullet
+	void initializeBuffersDebugBullet();
 	//Deferred shading
 	void setDeferredBuffers();
 };

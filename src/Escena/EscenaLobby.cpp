@@ -4,6 +4,7 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	end = false;
 	nElementos = 0;
 	nElementos2 = 0;
+	numPantallas = 1;
 	count = 3;
 	iphost = "";
 	ipConexion = ipC;
@@ -49,11 +50,11 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 		for(int mandos = 1; mandos < 4; mandos++){
 			if(glfwJoystickPresent(mandos) == 1){
 				std::cout << "Mando " << mandos << " detectado!" << std::endl;
-				TMotor::instancia().aumentarPantallaPartida();
+				numPantallas++;
 			}
 		}
 		for(int numClientes = 0; numClientes < 4; numClientes++){
-			if(numClientes < TMotor::instancia().getNumPantallas())
+			if(numClientes < numPantallas)
 				client->setArrayClients("", numClientes, false, true, -1);
 			else
 				client->setArrayClients("", numClientes, true, false, -1);		
@@ -90,7 +91,14 @@ EscenaLobby::~EscenaLobby() {
 
 void EscenaLobby::init() {}
 void EscenaLobby::dibujar() {
-	TMotor::instancia().draw(getTipoEscena());
+	//Limpiamos el dibujado anterior asignando un color de fondo
+	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);
+	//Establecemos la zona de renderizado
+	TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
+	//Dibujamos el menu 
+	TMotor::instancia().drawHudMenus();
+	//Dibujamos IMGUI
+	TMotor::instancia().drawIMGUI();
 }
 void EscenaLobby::limpiar() {
 	TMotor::instancia().closeDebugWindow();
@@ -298,7 +306,7 @@ void EscenaLobby::mostrarInfoLobbyPropia() {
 	else {
 		id_player = client->getControlPlayer();
 	}
-	infoLobby->append("\nNumero de mandos conectados: " + to_string(TMotor::instancia().getNumPantallas()));
+	infoLobby->append("\nNumero de mandos conectados: " + to_string(numPantallas));
 	infoLobby->append("\nNumber of players: ");
 
 	infoLobby->append(to_string(clientes.size()));

@@ -35,6 +35,8 @@ int main(int argc, char* argv[]) {
 		tipoActual = GestorEscena::instancia().update();
 		//Se llama a la comprobacion de eventos del motor
 		TMotor::instancia().getInputs();
+		//Intercambiamos buffers
+		TMotor::instancia().swapBuffers();
 	}
 	//Si el usuario quiere salir del juego...
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena()); //Se borra la ultima escena

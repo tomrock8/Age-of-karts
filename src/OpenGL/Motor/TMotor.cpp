@@ -87,10 +87,11 @@ TMotor::TMotor() {
 	shaderDeferred = new Shader("assets/shaders/shaderDeferred/deferredVertexShader.txt", "assets/shaders/shaderDeferred/deferredFragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 
+	//Inicializamos los buffers para el debug de Bullet
+	initializeBuffersDebugBullet();
+	
 	//Seteamos el buffer y las texturas que guardaran los datos de posicion, normales y color para el deferred shading
 	setDeferredBuffers();
-
-	numPantallas = 1;
 }
 
 // -------------------------------------------------
@@ -111,11 +112,10 @@ void TMotor::getInputs(){
 //Funcion que cierra correctamente el motor
 void TMotor::close() {
  	//Se termina la libreria IMGUI
-	ImGui_ImplGlfwGL3_Shutdown();
-	ImGui::DestroyContext();
-	//Se termina GLFW, destruyendo la ventana creada
-	glfwTerminate();									
-	glfwDestroyWindow(TMotor::instancia().getVentana());
+	//ImGui_ImplGlfwGL3_Shutdown();
+	//ImGui::DestroyContext();
+	//Se termina GLFW
+	//glfwTerminate();					
 	//Se eliminan distintos elementos usados por el motor
 	delete gestorRecursos; //Gestor de recursos
 	delete gestorSonido; //Gestor de sonidos
@@ -131,6 +131,7 @@ void TMotor::close() {
 	for (int i = 0; i < particleSystems.size(); i++) {
 		delete particleSystems[i];
 	}
+	
 }
 
 //Funcion que transforma quaternions a grados
@@ -445,7 +446,6 @@ Shader *TMotor::getShaderDebug() { return shaderDebug; }
 Shader *TMotor::getShaderSilhouette() { return shaderSilhouette; }
 GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
 glm::mat4 TMotor::getV() { return v;}
-int TMotor::getNumPantallas() {return numPantallas;}
 //Funcion que devuelve un hud a partir del nombre
 hud* TMotor::getHud(const char* n) {
 	hud* h = NULL;
@@ -461,12 +461,16 @@ hud* TMotor::getHud(const char* n) {
 //Funcion para devolver el hud activo
 hud* TMotor::getActiveHud() { return activeHud;}
 TGestorRecursos *TMotor::getGR() { return gestorRecursos;}
+//Funcion qude devuelve una camara del array a partir de su posicion en el mismo
+TNodo *TMotor::getCameraByIndex(int i){
+	return cameras.at(i);
+}
 
 // ------------------------
 //  M E T O D O S   S E T
 // ------------------------
 
-void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; }
+void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; drawCamera(); }
 void TMotor::setActiveLight(TNodo *light) { activeLights.push_back(light); }
 void TMotor::setRenderDebug(bool renderDebug) { this->renderDebug = renderDebug; }
 void TMotor::setDebugBullet(bool b){ debugBullet = b; }
@@ -502,26 +506,7 @@ obj3D* TMotor::getObjActiveCamera() {
 //Funcion para establecer el viewport (porcion de la pantalla) que se va a renderizar
 void TMotor::setViewport(int x, int y, int width, int height){
 	glViewport(x,y,width,height);
-	/*	//Establecemos el tamaño del viewport
-	if ((tipo == 1 || tipo == 2) && numPantallas > 1){
-		if(split == 1)
-			glViewport(0, screenHEIGHT/2, screenWIDTH/2, screenHEIGHT/2);
-		else if(split == 2)
-			glViewport(screenWIDTH/2, screenHEIGHT/2, screenWIDTH/2, screenHEIGHT/2);
-		else if(split == 3)
-			glViewport(0, 0, screenWIDTH/2, screenHEIGHT/2);
-		else if(split == 4)
-			glViewport(screenWIDTH/2, 0, screenWIDTH/2, screenHEIGHT/2);
-	}else {
-		glViewport(0, 0, screenWIDTH, screenHEIGHT);
-	}*/
 } 
-
-
-
-void TMotor::aumentarPantallaPartida(){
-	numPantallas ++;
-}
 
 //------------------------------
 // D I B U J A D O
@@ -542,46 +527,17 @@ void TMotor::clean(float r, float g, float b, float a) {
 }
 
 // ---- DIBUJADO DEL ARBOL DE LA ESCENA ---- 
-void TMotor::draw(int tipo) {
-	for(int pantallas = 1; pantallas <= numPantallas; pantallas++){
-		if (tipo == 1 || tipo == 2) {
-			clean(0.16f, 0.533f, 0.698f, 0.0f);//Se llama a la funcion para limpiar los buffers de OpenGL
-			setViewport(0,0,screenWIDTH, screenHEIGHT);
-			//Antes de llamar a ningun dibujado, calculamos la viewMatrix de la camara activa
-			//setActiveCamera(cameras.at(pantallas));
-			
-			drawCamera();
-
-			drawSkybox();
-
-			//Si el shader deferred esta activado...
-			if (strcmp(shaderName, "shaderDeferred") == 0){
-				usingShaderDeferred();
-			}
-
-			//Si el shader cartoon esta activado...
-			if (strcmp(shaderName, "shaderCartoon") == 0){
-				usingShaderCartoon();
-			}
-
-			drawDebugBullet();
-			
-			//drawProjectedShadows();
-
-			drawParticles();
-
-			drawBillboards();
-
-		}else{
-			clean(0.16f, 0.533f, 0.698f, 0.0f);
-		}
-
-		drawHudMenus();
-
-		drawIMGUI();
+//Funcion que dibuje los objetos 3D creados en el motor con el estilo que hayas definido
+void TMotor::draw() {
+	//Si el shader deferred esta activado...
+	if (strcmp(shaderName, "shaderDeferred") == 0){
+		usingShaderDeferred();
 	}
-	
-	swapBuffers();
+
+	//Si el shader cartoon esta activado...
+	if (strcmp(shaderName, "shaderCartoon") == 0){
+		usingShaderCartoon();
+	}
 }
 
 // ---- DIBUJADO DE LA CAMARA ACTIVA ---- 
@@ -737,7 +693,6 @@ void TMotor::drawProjectedShadows(){
 // ---- DIBUJADO DEL SHADOW MAPPING ----
 //Funcion que realiza los calculos necesarios para el dibujado de las sombras mediante la tecnica del shadow mapping
 void TMotor::drawMappingShadows(){
-		/*
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
 	if (lights.size() > 0) {
 		for (int i = 0; i < lights.size(); i++) {
@@ -760,21 +715,16 @@ void TMotor::drawMappingShadows(){
 			}
 		}
 	}
-	*/
 }
 
 // ---- DIBUJADO DEL DEBUG DE BULLET ----
 //Funcion que dibuja los elementos (cajas de colision, fisicas...) de Bullet para su debugeo
 void TMotor::drawDebugBullet(){
 	if (debugBullet && vertices.size() > 0){ //Si el debug de bullet esta activado
-		//Creamos los buffers de OpenGl necesarios
-		unsigned int VAO, VBO;
-		glGenVertexArrays(1, &VAO);
-		glGenBuffers(1, &VBO);
 		//Activamos el VAO
-		glBindVertexArray(VAO);
+		glBindVertexArray(debugBulletVAO);
 		//Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, debugBulletVBO);
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), 0);
 		glEnableVertexAttribArray(0);
@@ -915,6 +865,17 @@ void TMotor::usingShaderDeferred(){
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
+}
+
+//---------------------------------
+// D E B U G   B U L L E T
+//---------------------------------
+
+//Funcion que inicializa los buffers que usara el debug para guardar y pasar los datos de las lineas de Bullet
+void TMotor::initializeBuffersDebugBullet(){
+	//Creamos los buffers de OpenGl
+	glGenVertexArrays(1, &debugBulletVAO);
+	glGenBuffers(1, &debugBulletVBO);
 }
 
 //---------------------------------

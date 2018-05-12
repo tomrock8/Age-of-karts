@@ -9,7 +9,7 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 	giroIzq = false;
 	//control de animaciones
 	animacionPrevia = getAnimQuieto();
-	iniciarAnimacion(VACILE, animacionPrevia,NULL);
+	iniciarAnimacion(PARADO, animacionPrevia,NULL);
 	animacionPrevia = getVacile();
 
 }
@@ -199,7 +199,7 @@ void CorredorJugador::actualizarItem() {
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[2])) {
 		iniciarAnimacion(HABILIDAD, animacionPrevia,NULL);
-		animacionPrevia = getHabilidadAnim();
+		//animacionPrevia = getHabilidadAnim();
 		lanzarHabilidad();
 	}
 	

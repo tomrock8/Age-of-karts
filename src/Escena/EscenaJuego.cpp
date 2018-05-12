@@ -293,6 +293,8 @@ void EscenaJuego::dibujar() {
 		TMotor::instancia().drawSkybox();
 		//Dibujamos los objetos 3D creados en la escena
 		TMotor::instancia().draw();
+		//Dibujamos el debug de bullet
+		TMotor::instancia().drawDebugBullet();
 		//Dibujamos las particulas
 		TMotor::instancia().drawParticles();
 		//Dibujamos los billboards

@@ -159,6 +159,7 @@ protected:
 	//Debug Bullet
 	std::vector <GLfloat> vertices; //Array de vertices para los puntos de las lineas
 	bool debugBullet = false; //Booleano para controlar si el debug de bullet esta activado o no
+	GLuint debugBulletVAO, debugBulletVBO; //Buffers para guardar las lineas del debug
 
 	//Billboards
 	std::vector <billboard *> billboards; //Array de los diferentes billboards utilizados en el motor
@@ -195,6 +196,8 @@ protected:
 	// Luz
 	TLuz    *createLight();
 	TNodo   *createLightNode(TNodo * padre, TLuz * luz, const char* name);
+	// Debug Bullet
+	void initializeBuffersDebugBullet();
 	//Deferred shading
 	void setDeferredBuffers();
 };

@@ -87,6 +87,9 @@ TMotor::TMotor() {
 	shaderDeferred = new Shader("assets/shaders/shaderDeferred/deferredVertexShader.txt", "assets/shaders/shaderDeferred/deferredFragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 
+	//Inicializamos los buffers para el debug de Bullet
+	initializeBuffersDebugBullet();
+	
 	//Seteamos el buffer y las texturas que guardaran los datos de posicion, normales y color para el deferred shading
 	setDeferredBuffers();
 }
@@ -690,7 +693,6 @@ void TMotor::drawProjectedShadows(){
 // ---- DIBUJADO DEL SHADOW MAPPING ----
 //Funcion que realiza los calculos necesarios para el dibujado de las sombras mediante la tecnica del shadow mapping
 void TMotor::drawMappingShadows(){
-		/*
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
 	if (lights.size() > 0) {
 		for (int i = 0; i < lights.size(); i++) {
@@ -713,21 +715,16 @@ void TMotor::drawMappingShadows(){
 			}
 		}
 	}
-	*/
 }
 
 // ---- DIBUJADO DEL DEBUG DE BULLET ----
 //Funcion que dibuja los elementos (cajas de colision, fisicas...) de Bullet para su debugeo
 void TMotor::drawDebugBullet(){
 	if (debugBullet && vertices.size() > 0){ //Si el debug de bullet esta activado
-		//Creamos los buffers de OpenGl necesarios
-		unsigned int VAO, VBO;
-		glGenVertexArrays(1, &VAO);
-		glGenBuffers(1, &VBO);
 		//Activamos el VAO
-		glBindVertexArray(VAO);
+		glBindVertexArray(debugBulletVAO);
 		//Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBindBuffer(GL_ARRAY_BUFFER, debugBulletVBO);
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), 0);
 		glEnableVertexAttribArray(0);
@@ -868,6 +865,17 @@ void TMotor::usingShaderDeferred(){
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
+}
+
+//---------------------------------
+// D E B U G   B U L L E T
+//---------------------------------
+
+//Funcion que inicializa los buffers que usara el debug para guardar y pasar los datos de las lineas de Bullet
+void TMotor::initializeBuffersDebugBullet(){
+	//Creamos los buffers de OpenGl
+	glGenVertexArrays(1, &debugBulletVAO);
+	glGenBuffers(1, &debugBulletVBO);
 }
 
 //---------------------------------

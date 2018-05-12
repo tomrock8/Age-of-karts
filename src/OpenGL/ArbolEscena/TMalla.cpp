@@ -2,9 +2,14 @@
 #include "TMotor.hpp"
 
 TMalla::TMalla(std::vector <mesh *> m) {
-	//los vertices e indices son punteros a Trecurso malla 7
+	//Los vertices e indices son punteros a TRecursoMalla 
 	malla = m;
 	visible = true;
+	//Creamos un bounding box por cada TRecursoMalla
+	for (int i = 0; i < malla.size(); i++){
+		boundingBox *b = new boundingBox(malla.at(i)->getMesh()->getCenter(), malla.at(i)->getMesh()->getSize());
+		bBoxes.push_back(b);
+	}
 }
 
 // METODOS GET
@@ -13,6 +18,7 @@ bool TMalla::isVisible() { return visible; }
 // METODOS SET
 void TMalla::setVisible(bool visible) { this->visible = visible; }
 
+// DIBUJADO
 void TMalla::beginDraw(Shader *shader) {// Depende del tipo de entidad
 	/* Llamar al metodo de dibujado del recurso que se encarga del dibujado
 	en OpenGL de los poligonos a partir de los vertices, las normales y

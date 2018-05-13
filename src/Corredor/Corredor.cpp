@@ -191,10 +191,20 @@ void Corredor::setParametros() {
 
 	//cambiar parametros en funcion del tipo
 	int num = 0;
+	cuboNodo = TMotor::instancia().newMeshNode("Jugador", " ", "escena_raiz", false);
 	switch (tipojugador) {
 	case GLADIADOR:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", objeto, "escena_raiz", false);
+		
 		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
+		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Gladiador/giroDer/GladiGiroDer_000538.obj", "quieto");
+		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroDer/GladiGiroDer_000", 538, 555), "GiroDerIni");
+		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroDer/GladiGiroDer_000", 555, 563), "GiroDerFin");
+		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroIzq/GladiGiroIzq_000", 538, 555), "GiroIzqIni");
+		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroIzq/GladiGiroIzq_000", 555, 563), "GiroIzqFin");
+		vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Vacile/gladiVacile_000", 505, 591), "Vacile");
+		lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Lanzamiento/GladiLanzamiento_000", 517, 530), "LanzarObj");
+		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Habilidad/GladiHabilidad_000", 517, 540), "Habilidad");
+		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Habilidad/GladiHabilidad_000", 517, 540), "Habilidad");
 
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(3800);
@@ -215,7 +225,6 @@ void Corredor::setParametros() {
 	case PIRATA:
 
 
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", " ", "escena_raiz", false);
 		/* Nodos de animacion */
 
 		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "quieto");
@@ -249,7 +258,7 @@ void Corredor::setParametros() {
 		num = 2;
 		break;
 	case VIKINGO:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", " ", "escena_raiz", false);
+	
 		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000534.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000", 534, 555), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000", 555, 566), "GiroDerFin");
@@ -276,15 +285,15 @@ void Corredor::setParametros() {
 		num = 3;
 		break;
 	case CHINO:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador", " ", "escena_raiz", false);
+		
 		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Chino/giroDer/ChinoGiroDer_000179.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroDer/ChinoGiroDer_000", 179, 190), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroDer/ChinoGiroDer_000", 190, 201), "GiroDerFin");
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroIzq/ChinoGiroIzq_000", 179, 190), "GiroIzqIni");
 		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroIzq/ChinoGiroIzq_000", 190, 201), "GiroIzqFin");
-		//vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Vacile/Chinovacile_000", 223, 291), "Vacile");
+		vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Vacile/Chinovacile_000", 223, 291), "Vacile");
 		lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Lanzamiento/ChinoLanzamiento_000", 648, 662), "LanzarObj");
-		//animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Habilidad/ChinoHabilidad_000", 216, 259), "Habilidad");
+		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Habilidad/ChinoHabilidad_000", 216, 259), "Habilidad");
 
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
@@ -1645,11 +1654,7 @@ void Corredor::iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *prev
 	if (mov != movimiento_jugador::PARADO) {
 		static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
 	}
-	//else {
-	//	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
-	//	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->ResetAnimation();
-	//
-	//}
+	
 
 	switch (mov) {
 	case movimiento_jugador::PARADO:

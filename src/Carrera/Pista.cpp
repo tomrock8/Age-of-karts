@@ -193,6 +193,7 @@ void Pista::loadPirateMapElements() {
 	std::string pX, pY, pZ,num;
 	float posX, posY, posZ;
 	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/elementos.obj", "escena_raiz", false);
+	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/Turbos.obj", "escena_raiz", false);
 	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/parrilla.obj", "escena_raiz", false);
 	//lectura de las palmeras y su creacion 
 	/*

@@ -71,7 +71,7 @@ public:
 	Shader *getShaderDirectionalDepth();
 	Shader *getShaderPointDepth();
 	Shader *getShaderSkybox();
-	Shader *getShaderDebug();
+	Shader *getShaderDebugBbox();
 	Shader *getShaderSilhouette();
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
@@ -125,7 +125,7 @@ protected:
 	Shader *shaderDirectionalDepth; //Shader para el calculo de las sombras de las luces dirigidas
 	Shader *shaderPointDepth; //Shader para el calculo de las sombras de las luces puntuales
 	Shader *shaderSkybox; //Shader para el dibujado del skybox
-	Shader *shaderDebug; //Shader para el modo debug de Bullet
+	Shader *shaderDebugBbox; //Shader para el modo debug de Bullet
 	Shader *shaderCartoon; //Shader para el efecto cartoon
 	Shader *shaderSilhouette; //Shader para crear el contorno de los objetos en el efecto cartoon
 	Shader *shaderBillboard; //Shader para dibujar los diferentes billboards 

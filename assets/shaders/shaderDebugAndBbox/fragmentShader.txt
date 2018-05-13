@@ -3,8 +3,11 @@
 
 //Color final de la linea
 out vec4 fragColor;
+
+//Color de dibujado de las lineas
+uniform vec3 color;
  
 void main (void) {
     //Asignamos a cada linea un color rojo
-    fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    fragColor = vec4(color, 1.0);
 }

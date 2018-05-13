@@ -78,7 +78,7 @@ TMotor::TMotor() {
 	shaderPointDepth = new Shader("assets/shaders/shaderDepth/shaderLuzPuntual/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzPuntual/fragmentShader.txt"
 		, "assets/shaders/shaderDepth/shaderLuzPuntual/geometryShader.txt");
 	shaderSkybox = new Shader("assets/shaders/shaderSkybox/vertexShader.txt", "assets/shaders/shaderSkybox/fragmentShader.txt", nullptr);
-	shaderDebug = new Shader("assets/shaders/shaderDebug/vertexShader.txt", "assets/shaders/shaderDebug/fragmentShader.txt", nullptr);
+	shaderDebugBbox = new Shader("assets/shaders/shaderDebugAndBbox/vertexShader.txt", "assets/shaders/shaderDebugAndBbox/fragmentShader.txt", nullptr);
 	shaderCartoon = new Shader("assets/shaders/shaderCartoon/vertexShader.txt", "assets/shaders/shaderCartoon/fragmentShader.txt", nullptr);
 	shaderSilhouette = new Shader("assets/shaders/shaderSilhouette/vertexShader.txt", "assets/shaders/shaderSilhouette/fragmentShader.txt", nullptr);
 	shaderBillboard = new Shader("assets/shaders/shaderBillboard/vertexShader.txt", "assets/shaders/shaderBillboard/fragmentShader.txt", nullptr);
@@ -442,7 +442,7 @@ Shader *TMotor::getShaderProjectedShadows() { return shaderProjectedShadows; }
 Shader *TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
 Shader *TMotor::getShaderPointDepth() { return shaderPointDepth; }
 Shader *TMotor::getShaderSkybox() { return shaderSkybox; }
-Shader *TMotor::getShaderDebug() { return shaderDebug; }
+Shader *TMotor::getShaderDebugBbox() { return shaderDebugBbox; }
 Shader *TMotor::getShaderSilhouette() { return shaderSilhouette; }
 GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
 glm::mat4 TMotor::getV() { return v;}
@@ -729,11 +729,13 @@ void TMotor::drawDebugBullet(){
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), 0);
 		glEnableVertexAttribArray(0);
 		//Activamos el shader del debug
-		shaderDebug->use();
+		shaderDebugBbox->use();
 		//Creamos y le pasamos la matriz mvp al shader
 		glm::mat4 model;
 		glm::mat4 mvp = activeCamera->getEntidad()->getProjectionMatrix() * v * model;
-		shaderDebug->setMat4("mvp", mvp);
+		shaderDebugBbox->setMat4("mvp", mvp);
+		//Dibujamos las lineas del debug de rojo
+		shaderDebugBbox->setVec3("color", glm::vec3(1.0, 0.0, 0.0));
 		//Establecemos el ancho de las lineas
 		glLineWidth(3.0f);
 		//Llamamos al dibujado de las distintas lineas

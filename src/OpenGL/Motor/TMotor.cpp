@@ -445,7 +445,7 @@ Shader *TMotor::getShaderSkybox() { return shaderSkybox; }
 Shader *TMotor::getShaderDebugBbox() { return shaderDebugBbox; }
 Shader *TMotor::getShaderSilhouette() { return shaderSilhouette; }
 GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
-glm::mat4 TMotor::getV() { return v;}
+glm::mat4 TMotor::getActiveViewMatrix() { return activeViewMatrix;}
 //Funcion que devuelve un hud a partir del nombre
 hud* TMotor::getHud(const char* n) {
 	hud* h = NULL;
@@ -561,7 +561,7 @@ void TMotor::drawCamera() {
 	}
 
 	//Guardamos la viewMatrix para calcular despues la MVP de cada objeto
-	v = glm::inverse(viewMatrix);
+	activeViewMatrix = glm::inverse(viewMatrix);
 }
 
 // ---- DIBUJADO DE LAS LUCES ---- 
@@ -669,7 +669,7 @@ void TMotor::drawProjectedShadows(){
 		for (int i = 0; i < lights.size(); i++) {
 			if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
 				//Le pasamos al shader la matriz view
-				shaderProjectedShadows->setMat4("view", v);
+				shaderProjectedShadows->setMat4("view", activeViewMatrix);
 				//Le pasamos la matriz proyeccion de la luz (perspectiva)
 				glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 300.0f);
 				shaderProjectedShadows->setMat4("projectionLight", projectionLight);
@@ -732,7 +732,7 @@ void TMotor::drawDebugBullet(){
 		shaderDebugBbox->use();
 		//Creamos y le pasamos la matriz mvp al shader
 		glm::mat4 model;
-		glm::mat4 mvp = activeCamera->getEntidad()->getProjectionMatrix() * v * model;
+		glm::mat4 mvp = activeCamera->getEntidad()->getProjectionMatrix() * activeViewMatrix * model;
 		shaderDebugBbox->setMat4("mvp", mvp);
 		//Dibujamos las lineas del debug de rojo
 		shaderDebugBbox->setVec3("color", glm::vec3(1.0, 0.0, 0.0));
@@ -762,7 +762,7 @@ void TMotor::usingShaderCartoon(){
 	shaderCartoon->use();
 	//Calcular posicion de la camara y pasarsela al fragment shader
 	glm::vec4 defaultVector(0, 0, 0, 1);
-	glm::vec4 posC = v * defaultVector;
+	glm::vec4 posC = activeViewMatrix * defaultVector;
 	shaderCartoon->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
 	//Establecemos los datos de las distintas luces
 	drawLight(shaderCartoon);
@@ -844,7 +844,7 @@ void TMotor::usingShaderDeferred(){
 	drawLight(shaderDeferred);
 	//Calcular posicion de la camara y pasarsela al fragment shader
 	glm::vec4 defaultVector(0, 0, 0, 1);
-	glm::vec4 posC = v * defaultVector;
+	glm::vec4 posC = activeViewMatrix * defaultVector;
 	shaderDeferred->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
 	unsigned int quadVAO, quadVBO;
 	float quadVertices[] = {

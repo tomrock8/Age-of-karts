@@ -173,15 +173,15 @@ void particleSystem::draw(Shader *s){
     s->setInt("image", 0);
 
     //Calculamos la matriz viewProjection y se la pasamos al shader
-    glm::mat4 vp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getV();
+    glm::mat4 vp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getActiveViewMatrix();
     s->setMat4("vp", vp);
 
     //Calculamos el vector derecha de la camara y se lo pasamos al shader
-    glm::vec3 cR = glm::vec3(TMotor::instancia().getV()[0][0], TMotor::instancia().getV()[1][0], TMotor::instancia().getV()[2][0]);
+    glm::vec3 cR = glm::vec3(TMotor::instancia().getActiveViewMatrix()[0][0], TMotor::instancia().getActiveViewMatrix()[1][0], TMotor::instancia().getActiveViewMatrix()[2][0]);
     s->setVec3("camRight", cR);
 
     //Calculamos el vector arriba de la camara y se lo pasamos al shader
-    glm::vec3 cU = glm::vec3(TMotor::instancia().getV()[0][1], TMotor::instancia().getV()[1][1], TMotor::instancia().getV()[2][1]);
+    glm::vec3 cU = glm::vec3(TMotor::instancia().getActiveViewMatrix()[0][1], TMotor::instancia().getActiveViewMatrix()[1][1], TMotor::instancia().getActiveViewMatrix()[2][1]);
     s->setVec3("camUp", cU);
 
     //Le pasamos el color de las particulas al shader

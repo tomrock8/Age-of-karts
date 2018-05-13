@@ -61,7 +61,7 @@ public:
 	GLfloat getHeight();
 	TNodo *getSceneNode();
 	TNodo *getActiveCamera();
-	glm::mat4 getV();
+	glm::mat4 getActiveViewMatrix();
 	obj3D *getObjActiveCamera();
 	hud *getHud(const char* n);
 	hud *getActiveHud();
@@ -139,7 +139,7 @@ protected:
 	//Camaras
 	std::vector<TNodo *> cameras; //Vector que guarda las diferentes camaras creadas en el motor
 	TNodo *activeCamera; // Camara activa del vector
-	glm::mat4 v; //Matriz view de la camara activa
+	glm::mat4 activeViewMatrix; //Matriz view de la camara activa
 
 	//Luces
 	std::vector <TNodo *> lights;

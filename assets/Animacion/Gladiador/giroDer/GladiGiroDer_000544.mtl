@@ -1,0 +1,54 @@
+# Blender MTL File: 'Giro.blend'
+# Material Count: 4
+
+newmtl ChasisMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump kartVikingo_normal.png
+map_Kd kartVikingoChasis_diffuse.png
+map_Ks kartVikingo_specular.png
+
+newmtl GladiMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump kartVikingo_normal.png
+map_Kd Gladiator_difuse.png
+map_Ks Gladiator_specular.png
+
+newmtl TubosMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump kartVikingoTubos_normal.png
+map_Kd kartVikingoTubos_diffuse.png
+map_Ks kartVikingoTubos_specular.png
+
+newmtl VolanteMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump kartVikingoAsientos_normal.png
+map_Kd kartVikingoAsientos_Diffuse.png
+map_Ks kartVikingoAsientos_specular.png

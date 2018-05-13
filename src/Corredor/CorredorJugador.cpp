@@ -199,7 +199,7 @@ void CorredorJugador::actualizarItem() {
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[2])) {
 		iniciarAnimacion(HABILIDAD, animacionPrevia,NULL);
-		//animacionPrevia = getHabilidadAnim();
+		animacionPrevia = getHabilidadAnim();
 		lanzarHabilidad();
 	}
 	

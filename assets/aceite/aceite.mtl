@@ -1,7 +1,7 @@
-# Blender MTL File: 'None'
+# Blender MTL File: 'aceite_text.blend'
 # Material Count: 1
 
-newmtl aceiteMAT
+newmtl mat_aceite
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -10,6 +10,6 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump aceite_normal.png
-map_Kd aceite_diffuse.png
-map_Ks aceite_specular.png
+map_Bump mat_aceite_Normal_OpenGL.png
+map_Kd mat_aceite_Base_Color.png
+map_Ks mat_aceite_Height.png

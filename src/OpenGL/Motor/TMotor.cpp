@@ -507,6 +507,10 @@ void TMotor::setSkyBox(){
 void TMotor::setBoundingBoxes(bool b){
 	boundingBoxes = b;
 }
+//Funcion para activar/desactivar el face culling
+void TMotor::setFaceCulling(bool b){
+	faceCulling = b;
+}
 obj3D* TMotor::getObjActiveCamera() {
 	if (cameras.size() > 0)
 		return new obj3D(activeCamera, activeCamera->getName(), 99);
@@ -529,7 +533,7 @@ void TMotor::clean(float r, float g, float b, float a) {
 	//Limpiamos los buffers de color y profundidad
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//Activamos el z-buffer
-	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST); 
 	//Activamos la transparencia
 	glEnable(GL_BLEND);
 	//Como cada uno de los canales rgba es calculado/computado
@@ -539,6 +543,12 @@ void TMotor::clean(float r, float g, float b, float a) {
 // ---- DIBUJADO DEL ARBOL DE LA ESCENA ---- 
 //Funcion que dibuje los objetos 3D creados en el motor con el estilo que hayas definido
 void TMotor::draw() {
+	if ( faceCulling == true ){
+		//Activamos el Face Culling (Si esta activado)
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK); //No dibujamos las caras traseras de los objetos
+	}
+
 	//Si el shader deferred esta activado...
 	if (strcmp(shaderName, "shaderDeferred") == 0){
 		usingShaderDeferred();
@@ -548,6 +558,9 @@ void TMotor::draw() {
 	if (strcmp(shaderName, "shaderCartoon") == 0){
 		usingShaderCartoon();
 	}
+
+	//Desactivamos el Face Culling para que no afecte al resto de elementos dibujados
+	glDisable(GL_CULL_FACE);
 }
 
 // ---- DIBUJADO DE LA CAMARA ACTIVA ---- 

@@ -92,6 +92,7 @@ public:
 	void setShaderActive(const char* s);
 	void setSkyBox();
 	void setBoundingBoxes(bool b);
+	void setFaceCulling(bool b);
 	void setViewport(int x, int y, int width, int height);
 
 	// DIBUJADO
@@ -182,6 +183,9 @@ protected:
 
 	//IMGUI
 	bool renderDebug; //Booleano para controlar el renderizado de las ventanas de IMGUI
+
+	//Face Culling
+	bool faceCulling = true; //Face Culling activado por defecto
 
 	// ----------------------
 	//  METODOS PRIVADOS

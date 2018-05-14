@@ -30,6 +30,8 @@ EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo
 	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
 	TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_1_3.png");
 	TMotor::instancia().getActiveHud()->traslateElement("vueltas", -0.83f, 0.68f);
+	TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "objeto", "assets/HUD/juego/objetos/vacio.png");
+	TMotor::instancia().getActiveHud()->traslateElement("objeto",  0.75f, 0.75f);
 
 	puesto = 6;
 	vueltas = 1;
@@ -503,7 +505,7 @@ void EscenaJuego::update() {
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 
 
-	
+
 	if (t->getTimer() <= 4 && t->getTimer() >= 1) {
 		if (t->getTimer() == 1) {
 			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtras3.png");
@@ -812,11 +814,15 @@ void EscenaJuego::updateHUD() {
 
 	//UPDATE OBJETOS
 
+	std::cout << "Objetos\n";
+
 	if (pj.at(controlPlayer)->getTipoObj() != objeto || pj.at(controlPlayer)->getTipoObj() ==8) {
 		objeto = pj.at(controlPlayer)->getTipoObj();
 		switch (pj.at(controlPlayer)->getTipoObj()) {
 		case 0:
+			std::cout << "Vacio\n";
 			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vacio.png");
+			std::cout << "Fin vacio\n";
 			break;
 		case 1:
 			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/flecha.png");
@@ -850,6 +856,8 @@ void EscenaJuego::updateHUD() {
 			break;
 		}
 	}
+
+	std::cout << "Final hud\n";
 }
 
 void EscenaJuego::debugRageIA(int k){		//Funcion que sirve para dibujar el nivel de enfado de la IA en una grafica (k=id jugador)

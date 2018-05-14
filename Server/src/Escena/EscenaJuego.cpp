@@ -490,7 +490,7 @@ void EscenaJuego::update() {
 				float timediff_sec = tiempoActual - tiempoRefresco;
 
 				if (timediff_sec >= 0.01) {
-					cout<<"REFRESCO\n";
+					//cout<<"REFRESCO\n";
 					Server::getInstancia()->refreshServer();
 					tiempoRefresco = glfwGetTime();
 				}

@@ -217,6 +217,8 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 				}
 			}
 			else if (optionMenu == 1) {
+				ipConexion = "offline_split";
+				return Escena::tipo_escena::LOBBY;
 				cout << "PANTALLA PARTIDA\n";
 			}
 		}

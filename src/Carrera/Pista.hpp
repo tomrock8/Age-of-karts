@@ -20,9 +20,11 @@ public:
 	
 
 	// METODOS SET
-	void setMapa(const char* name);
+	void setMapa();
 	void setItems(std::vector<Item *> itemMetodo);
 	void setArrayCaja(std::vector<Caja*> caja);
+	void setNumVueltas(int n);
+	void setNombreMapa(const char *name);
 
 	// METODOS GET
 	static Pista *getInstancia();
@@ -37,6 +39,7 @@ public:
 	std::vector<glm::vec3> getParrilla();
 	Turbo* getTurbo();
 	Turbo* getTurbo(int id);
+	int getNumVueltas();
 	
 	
 
@@ -59,6 +62,7 @@ private:
 	const char *nameMap;
 	const char *path;
 	const char *wayPoints;
+	int vueltas;
 };
 
 #endif /* PISTA_H */

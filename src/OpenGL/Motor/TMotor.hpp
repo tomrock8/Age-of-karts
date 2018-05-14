@@ -41,6 +41,7 @@ public:
 	void initDebugWindow(); //|
 	void closeDebugWindow();//|inicializacion y cierre de IMGUI 
 	void cleanHUD(); //Limpieza de HUDs
+	void nuevaEscenaRaiz();
 
 	//CREACION DE OBJETOS
 	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode, bool sta); //Nuevo Objeto 3D
@@ -92,6 +93,7 @@ public:
 	void setShaderActive(const char* s);
 	void setSkyBox();
 	void setBoundingBoxes(bool b);
+	void setFaceCulling(bool b);
 	void setViewport(int x, int y, int width, int height);
 
 	// DIBUJADO
@@ -182,6 +184,9 @@ protected:
 
 	//IMGUI
 	bool renderDebug; //Booleano para controlar el renderizado de las ventanas de IMGUI
+
+	//Face Culling
+	bool faceCulling = true; //Face Culling activado por defecto
 
 	// ----------------------
 	//  METODOS PRIVADOS

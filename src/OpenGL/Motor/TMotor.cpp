@@ -58,7 +58,7 @@ TMotor::TMotor() {
 	//Se inicializan algunos aspectos necesarios del motor
 	contID = 0; //inicializacion de los id's de obj3D
 	gestorRecursos = new TGestorRecursos(); // Inicializacion del gestor de recursos
-	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena)
+	nuevaEscenaRaiz();
 
 	//Se inicializa el gestor de sonidos
 	gestorSonido = new GestorSonido();
@@ -107,6 +107,10 @@ void TMotor::swapBuffers(){
 //Funcion para el control de inputs del motor mediante GLFW
 void TMotor::getInputs(){
 	glfwPollEvents();
+}
+
+void TMotor::nuevaEscenaRaiz(){
+	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena)
 }
 
 //Funcion que cierra correctamente el motor
@@ -507,6 +511,10 @@ void TMotor::setSkyBox(){
 void TMotor::setBoundingBoxes(bool b){
 	boundingBoxes = b;
 }
+//Funcion para activar/desactivar el face culling
+void TMotor::setFaceCulling(bool b){
+	faceCulling = b;
+}
 obj3D* TMotor::getObjActiveCamera() {
 	if (cameras.size() > 0)
 		return new obj3D(activeCamera, activeCamera->getName(), 99);
@@ -529,7 +537,7 @@ void TMotor::clean(float r, float g, float b, float a) {
 	//Limpiamos los buffers de color y profundidad
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//Activamos el z-buffer
-	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST); 
 	//Activamos la transparencia
 	glEnable(GL_BLEND);
 	//Como cada uno de los canales rgba es calculado/computado
@@ -539,6 +547,12 @@ void TMotor::clean(float r, float g, float b, float a) {
 // ---- DIBUJADO DEL ARBOL DE LA ESCENA ---- 
 //Funcion que dibuje los objetos 3D creados en el motor con el estilo que hayas definido
 void TMotor::draw() {
+	if ( faceCulling == true ){
+		//Activamos el Face Culling (Si esta activado)
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK); //No dibujamos las caras traseras de los objetos
+	}
+
 	//Si el shader deferred esta activado...
 	if (strcmp(shaderName, "shaderDeferred") == 0){
 		usingShaderDeferred();
@@ -548,6 +562,9 @@ void TMotor::draw() {
 	if (strcmp(shaderName, "shaderCartoon") == 0){
 		usingShaderCartoon();
 	}
+
+	//Desactivamos el Face Culling para que no afecte al resto de elementos dibujados
+	glDisable(GL_CULL_FACE);
 }
 
 // ---- DIBUJADO DE LA CAMARA ACTIVA ---- 

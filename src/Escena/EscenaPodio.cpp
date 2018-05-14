@@ -17,22 +17,22 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo,std::vector<Corredor::tipo_jug
 
          cout<<"Posicion de jugador seteada"<<endl;
         
-        cout<<"El PRIMERO ES EL PIRATA"<<endl;   
+        cout<<"PIRATA"<<endl;   
             break;
 
             case Corredor::tipo_jugador::VIKINGO:
         //personajes.at(i) = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Vikingo/vikingoConIzq.obj", "escena_raiz", false); 
-        cout<<"El PRIMERO ES EL VIKINGO"<<endl;     
+        cout<<"VIKINGO"<<endl;     
             break;
 
             case Corredor::tipo_jugador::GLADIADOR:
         //personajes.at(i) = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Vikingo/vikingoConIzq.obj", "escena_raiz", false);  
-        cout<<"El PRIMERO ES EL GLADIADOR"<<endl;     
+        cout<<"GLADIADOR"<<endl;     
             break;
 
             case Corredor::tipo_jugador::CHINO:
         //personajes.at(i) = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Vikingo/vikingoConIzq.obj", "escena_raiz", false);  
-        cout<<"El PRIMERO ES EL CHINO"<<endl;     
+        cout<<"CHINO"<<endl;     
             break;
 
             default:
@@ -46,7 +46,7 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo,std::vector<Corredor::tipo_jug
    
     camera = new cameraThird("camara_jugador3apersona","escena_raiz");
     camera->setPositionStatic(glm::vec3(0,5,10));
-    cout<<"Posicion de jugador seteada"<<endl;
+    cout<<"Posicion de camara seteada"<<endl;
     
     
 /*
@@ -64,10 +64,10 @@ EscenaPodio::~EscenaPodio(){
 
 Escena::tipo_escena EscenaPodio::comprobarInputs(){
 
-cout<<"estoy comprobando el input"<<endl;
+//cout<<"estoy comprobando el input"<<endl;
 
-camera->lookAt(glm::vec3(0,0,0));
-cout<<"lookAT"<<endl;
+
+//cout<<"lookAT"<<endl;
 
 return Escena::tipo_escena::PODIO;
 
@@ -86,5 +86,5 @@ void EscenaPodio::limpiar() {
 }
 
 void EscenaPodio::update() {
-
+camera->lookAt(glm::vec3(0,0,0));
 }

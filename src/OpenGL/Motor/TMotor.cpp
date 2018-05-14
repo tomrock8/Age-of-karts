@@ -446,6 +446,7 @@ Shader *TMotor::getShaderDebugBbox() { return shaderDebugBbox; }
 Shader *TMotor::getShaderSilhouette() { return shaderSilhouette; }
 GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
 glm::mat4 TMotor::getActiveViewMatrix() { return activeViewMatrix;}
+bool TMotor::getBoundingBoxes() { return boundingBoxes; }
 //Funcion que devuelve un hud a partir del nombre
 hud* TMotor::getHud(const char* n) {
 	hud* h = NULL;
@@ -496,6 +497,10 @@ void TMotor::setShaderActive(const char* s){
 void TMotor::setSkyBox(){
 	skybox = new Skybox();
 	skyboxActive = true;
+}
+//Funcion para establecer el dibujado o no de bounding boxes
+void TMotor::setBoundingBoxes(bool b){
+	boundingBoxes = b;
 }
 obj3D* TMotor::getObjActiveCamera() {
 	if (cameras.size() > 0)

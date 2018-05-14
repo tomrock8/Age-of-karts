@@ -8,14 +8,14 @@ class boundingBox {
         boundingBox(glm::vec3 p, glm::vec3 s); //Constructor
         ~boundingBox(); //Destructor
 
-        void draw(glm::vec3 posMesh); //Dibujado
+        void draw(glm::mat4 modelMatrixObject); //Dibujado
 
     private:
         // --- VARIABLES ---
         glm::vec3 positionBbox; //Posicion del bounding box = centro de la malla que engloba
         glm::vec3 sizeBbox; //Tamanyo del bounding box = tamanyo de la malla que engloba
 
-        GLuint VAO, VBO; //Buffers de OpenGL para guardar los datos del bounding box
+        GLuint VAO, EBO, VBO; //Buffers de OpenGL para guardar los datos del bounding box
 
         // --- FUNCIONES ---
         void setBuffersOpenGL(); 

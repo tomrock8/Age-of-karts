@@ -6,9 +6,11 @@ TMalla::TMalla(std::vector <mesh *> m) {
 	malla = m;
 	visible = true;
 	//Creamos un bounding box por cada TRecursoMalla
-	for (int i = 0; i < malla.size(); i++){
-		boundingBox *b = new boundingBox(malla.at(i)->getMesh()->getCenter(), malla.at(i)->getMesh()->getSize());
-		bBoxes.push_back(b);
+	if (TMotor::instancia().getBoundingBoxes() == true){
+		for (int i = 0; i < malla.size(); i++){
+			boundingBox *b = new boundingBox(malla.at(i)->getMesh()->getCenter(), malla.at(i)->getMesh()->getSize());
+			bBoxes.push_back(b);
+		}
 	}
 }
 
@@ -51,7 +53,9 @@ void TMalla::draw(Shader *shader) {
 		malla.at(i)->getMesh()->draw();
 
 		//Se llama al dibujado del bounding box
-		//bBoxes.at(i)->draw(glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]));
+		if (TMotor::instancia().getBoundingBoxes() == true){
+			if (malla.size() != 2) bBoxes.at(i)->draw(modelMatrix);
+		}
 
 		if (malla.at(i)->getText()->getNombre() != NULL) {
 			//Desactivamos las texturas usadas
@@ -61,6 +65,7 @@ void TMalla::draw(Shader *shader) {
 		//Desacivamos el buffer VAO antes del dibujado de la siguiente malla
 		malla.at(i)->getMesh()->disableVAO();
 	}
+
 }
 
 void TMalla::endDraw() {}

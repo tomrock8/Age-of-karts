@@ -77,6 +77,7 @@ public:
 	TNodo *getNode(const char * nombre);
 	TGestorRecursos *getGR();
 	bool getRenderDebug();
+	bool getBoundingBoxes();
 	GestorSonido *getGestorSonido();
 	TNodo *getCameraByIndex(int i);
 
@@ -89,6 +90,7 @@ public:
 	void setVerticesDebug(float a, float b, float c, float x, float y, float z);
 	void setShaderActive(const char* s);
 	void setSkyBox();
+	void setBoundingBoxes(bool b);
 	void setViewport(int x, int y, int width, int height);
 
 	// DIBUJADO
@@ -171,6 +173,7 @@ protected:
 	GLuint contID; //Numero de objetos en el motor en cada momento
 	TGestorRecursos *gestorRecursos; //Gestor de recursos utilizado para crear las distintas mallas, texturas y materiales de los objetos
 	std::vector <obj3D *> notShadowObjects; //Array que contendra los objetos del mundo que no deben proyectar sombras (Mapa, elementos...)
+	bool boundingBoxes = false; //Booleano para activar/desactivar los bounding boxes de los objetos
 
 	//Deferred shading
 	GLuint defBuffer; //Buffer que contendra todas las texturas con las posicion, normales y colores para renderizar posterioremente mediante deferred shading

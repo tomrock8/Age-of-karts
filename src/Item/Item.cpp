@@ -191,6 +191,7 @@ void Item::comprobarAltura(float altura) {
 
 		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++)
 		{
+			if(i<RayCast1.m_hitFractions.size()-1){
 					indiceAltura=RayCast1.m_hitFractions[i];
 					
 					if(RayCast1.m_hitFractions[i]< altura){
@@ -205,6 +206,7 @@ void Item::comprobarAltura(float altura) {
 				bajar = true;
 
 			}
+		}
 		}
 	}
 

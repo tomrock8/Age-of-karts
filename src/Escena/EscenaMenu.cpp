@@ -87,6 +87,7 @@ void EscenaMenu::initHud() {
 EscenaMenu::~EscenaMenu() {
 	cout << "Destructor ESCENA MENU. Entro.";
 	limpiar();
+	TMotor::instancia().cleanHUD();
 	delete fuenteMenu;
 	delete fuenteOpcion;
 	cout << "Salgo.\n";

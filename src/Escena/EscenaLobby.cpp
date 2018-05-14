@@ -99,6 +99,7 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 EscenaLobby::~EscenaLobby() {
 	cout << "\nDestructor ESCENA LOBBY. Entro.";
 	limpiar();
+	TMotor::instancia().cleanHUD();
 	cout << "Salgo.\n";
 }
 

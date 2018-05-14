@@ -108,7 +108,8 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	Pista::getInstancia()->setMapa("pirata");
+	
+	Pista::getInstancia()->setMapa();
 	
 	//-----------------------------
 	//	JUGADORES
@@ -186,7 +187,7 @@ void EscenaJuego::init() {
 
 	jugadores->setJugadores(pj);
 	gc = new GestorCarrera();
-
+	gc->setVueltas(Pista::getInstancia()->getNumVueltas());
 	//-----------------------------
 	//	CAMARA
 	//-----------------------------
@@ -481,7 +482,7 @@ void EscenaJuego::renderDebug() {
 
 void EscenaJuego::limpiar() {
 	muestraDebug = false;
-	//TMotor::instancia().closeDebugWindow();
+	TMotor::instancia().closeDebugWindow();
 }
 
 void EscenaJuego::update() {

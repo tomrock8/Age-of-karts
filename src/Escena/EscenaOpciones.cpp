@@ -3,7 +3,7 @@
 EscenaOpciones::EscenaOpciones(Escena::tipo_escena tipo) : Escena(tipo) {
 	end = false;
 	TMotor::instancia().newHud("LobbyHUD");
-	TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "comenzarPartida", "assets/HUD/LobbyMenu/empezar.png");
+	//TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "comenzarPartida", "assets/HUD/LobbyMenu/empezar.png");
 	TMotor::instancia().initDebugWindow();
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf", 30.0f);

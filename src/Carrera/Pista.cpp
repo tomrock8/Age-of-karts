@@ -39,16 +39,16 @@ Pista *Pista::getInstancia() {
 }
 
 
-void Pista::setMapa(const char* name) {
-
+void Pista::setMapa() {
 //void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints) {
-	if(strcmp(name,"pirata")==0){
-		nameMap = "pirata";
+	if(strcmp(nameMap,"pirata")==0){
 		path = "assets/MapaPirata/mapaPirata.obj";
 		wayPoints = "assets/MapaPirata/wp.obj";
 		loadPirateMapElements();
+	}else if(strcmp(nameMap,"gladiador")==0){
+		//Cargar mapa gladiador
 	}
-	if (name != NULL) {
+	if (nameMap != NULL) {
 		createMap(path);
 		loadWaypoints(wayPoints);
 		
@@ -218,7 +218,12 @@ void Pista::loadPirateMapElements() {
 	aux = NULL;
 */
 }
-
+void Pista::setNumVueltas(int n){
+	vueltas=n;
+}
+void Pista::setNombreMapa(const char *name){
+	nameMap=name;
+}
 void Pista::setItems(std::vector<Item *> itemMetodo) {
 	Items = itemMetodo;
 }
@@ -265,4 +270,7 @@ Turbo *Pista::getTurbo(int id) {
 
 int Pista::getTamArrayWaypoints() {
 	return tamWaypoints;
+}
+int Pista::getNumVueltas(){
+	return vueltas;
 }

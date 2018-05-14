@@ -1,6 +1,6 @@
 #include "Habilidad.hpp"
 
-Habilidad::Habilidad(int tipo, obj3D* n, btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
+Habilidad::Habilidad(int tipo, btRigidBody* n, btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
 	float alturaLanzamiento, int idNodo) : Item(posicion, escala, masa, tiempoDesctruccion, fcolision, tamanyoNodo, radio, alturaLanzamiento, idNodo) {
 	//almacenamos tipo de habilidad
 	tipoHabilidad = tipo;
@@ -80,14 +80,16 @@ void Habilidad::movimiento() {
 
 	case 2: // VIKINGO
 		
+
+
 		giro = 15;
-		trans.setOrigin(btVector3(NodoVehiculo->getPosition().x + orientacion.getX() * 15, NodoVehiculo->getPosition().y, NodoVehiculo->getPosition().z + orientacion.getZ() * 15));
+		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX() + orientacion.getX() * 15, NodoVehiculo->getCenterOfMassPosition ().getY()+5, NodoVehiculo->getCenterOfMassPosition().getZ() + orientacion.getZ() * 15));
 
 		orientacion = orientacion.rotate(btVector3(0, 1, 0), giro * PI / 180);
-		nodo->setRotation(nodo->getRotation().x, cont, nodo->getRotation().x);
-		quaternion.setEulerZYX(0, nodo->getRotation().y * PI / 180, 0);
+		//nodo->setRotation(nodo->getRotation().x, cont, nodo->getRotation().z);
+		//quaternion.setEulerZYX(0, nodo->getRotation().y * PI / 180, 0);
 
-		trans.setRotation(quaternion);
+		trans.setRotation(NodoVehiculo->getCenterOfMassTransform().getRotation());
 
 		rigidBody->setCenterOfMassTransform(trans);
 		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 100000, 0, orientacion.getZ() * 100000));
@@ -102,14 +104,13 @@ void Habilidad::movimiento() {
 
 	case 3: // GLADIADOR
 
-		//nodo->setPosition(NodoVehiculo->getPosition().x,NodoVehiculo->getPosition().y+2,NodoVehiculo->getPosition().z);
+		nodo->setPosition(NodoVehiculo->getCenterOfMassPosition().getX(),NodoVehiculo->getCenterOfMassPosition().getY(),NodoVehiculo->getCenterOfMassPosition().getZ());
 		
 		if(nodo->getScale().x<=10)
 		nodo->setScale(nodo->getScale().x +1,nodo->getScale().x,nodo->getScale().x +1);
 
-		trans.setOrigin(btVector3(NodoVehiculo->getPosition().x, NodoVehiculo->getPosition().y - cont2 + 2, NodoVehiculo->getPosition().z));
-		quaternion.setEulerZYX(NodoVehiculo->getRotation().x * PI / 180, NodoVehiculo->getRotation().y * PI / 180, NodoVehiculo->getRotation().z * PI / 180);
-		trans.setRotation(quaternion);
+		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY()+ 2, NodoVehiculo->getCenterOfMassPosition().getZ()));
+		trans.setRotation(NodoVehiculo->getCenterOfMassTransform().getRotation());
 		rigidBody->setCenterOfMassTransform(trans);
 		
 		if (cont2 != 0)
@@ -118,9 +119,9 @@ void Habilidad::movimiento() {
 		break;
 
 	case 4: //CHINICO
-		trans.setOrigin(btVector3(NodoVehiculo->getPosition().x, NodoVehiculo->getPosition().y + 2, NodoVehiculo->getPosition().z));
-		quaternion.setEulerZYX(NodoVehiculo->getRotation().x * PI / 180, NodoVehiculo->getRotation().y * PI / 180, NodoVehiculo->getRotation().z * PI / 180);
-		trans.setRotation(quaternion);
+		nodo->setPosition(NodoVehiculo->getCenterOfMassPosition().getX(),NodoVehiculo->getCenterOfMassPosition().getY(),NodoVehiculo->getCenterOfMassPosition().getZ());
+		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY() + 2, NodoVehiculo->getCenterOfMassPosition().getZ()));
+		trans.setRotation(NodoVehiculo->getCenterOfMassTransform().getRotation());
 		rigidBody->setCenterOfMassTransform(trans);
 
 		break;

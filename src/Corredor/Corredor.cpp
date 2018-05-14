@@ -71,7 +71,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	//VALORES POR DEFECTO
 	FuerzaGiro = btScalar(0.1); //manejo a la hora de girar
-	Masa = btScalar(450);
+	Masa = btScalar(600);
 	FuerzaMaxima = btScalar(400); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 	Fuerza = FuerzaMaxima;
 	indiceGiroAlto = btScalar(0.4);
@@ -1033,7 +1033,7 @@ void Corredor::usarObjetos() {
 			tiempoDestruccion = 30;
 			posicion = btVector3(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 			posicion.setY(posicion.getY() + alt);
-			Escudo *escudo = new Escudo(cuboNodo, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
+			Escudo *escudo = new Escudo(CuerpoColisionChasis, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
 			escudo->setLanzado(true);
 			items.push_back(escudo);
 			soltarItem();
@@ -1518,7 +1518,7 @@ void Corredor::lanzarHabilidad() {
 			alt = 10;
 
 			posicion.setY(posicion.getY() + alt);
-			habilidadJugador = new Habilidad(1, cuboNodo, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
+			habilidadJugador = new Habilidad(1, CuerpoColisionChasis, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
 			habilidadJugador->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 			habilidadJugador->setLanzado(true);
 
@@ -1531,15 +1531,15 @@ void Corredor::lanzarHabilidad() {
 			alt = 2;
 
 			posicion.setY(posicion.getY() + alt);
-			habilidadJugador = new Habilidad(2, cuboNodo, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
+			habilidadJugador = new Habilidad(2, CuerpoColisionChasis, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
 			habilidadJugador->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 			habilidadJugador->setLanzado(true);
 			break;
 
 		case GLADIADOR:
-			escala = btVector3(20, 2, 20);
+			escala = btVector3(30, 2, 30);
 			tiempoDestruccion = 3;
-			habilidadJugador = new Habilidad(3, cuboNodo, posicion, escala, masa, tiempoDestruccion, CILINDRO, tamanyoNodo, radio, alt, cuboNodo->getID());
+			habilidadJugador = new Habilidad(3, CuerpoColisionChasis, posicion, escala, masa, tiempoDestruccion, CILINDRO, tamanyoNodo, radio, alt, cuboNodo->getID());
 			habilidadJugador->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 			habilidadJugador->setLanzado(true);
 			break;
@@ -1552,7 +1552,7 @@ void Corredor::lanzarHabilidad() {
 			alt = 2;
 
 			posicion.setY(posicion.getY() + alt);
-			habilidadJugador = new Habilidad(4, cuboNodo, posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
+			habilidadJugador = new Habilidad(4, CuerpoColisionChasis, posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
 			habilidadJugador->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 			habilidadJugador->setLanzado(true);
 			setTurbo(true, true, FuerzaMaxima * 2, tiempoDestruccion / 3.6);

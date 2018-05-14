@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 	//Parametros del motor
 	TMotor::instancia().setShaderActive("shaderCartoon"); //Tipo de shader a usar
 	TMotor::instancia().setSkyBox(); //Queremos skybox
-	TMotor::instancia().setBoundingBoxes(false); //Queremos bounding boxes
+	TMotor::instancia().setBoundingBoxes(true); //Queremos bounding boxes
 
 	//Empezamos en el menu del juego
 	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::MENU);

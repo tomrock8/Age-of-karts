@@ -183,6 +183,11 @@ void TMotor::closeDebugWindow(){
 	setRenderDebug(false);
 }
 
+//Funcion que limpia el array de HUDs del motor
+void TMotor::cleanHUD(){
+	HUDs.clear();
+}
+
 void TMotor::resizeScreen(int w, int h) {
 	screenWIDTH = w;
 	screenHEIGHT = h;

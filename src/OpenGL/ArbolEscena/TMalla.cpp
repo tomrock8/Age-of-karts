@@ -54,7 +54,7 @@ void TMalla::draw(Shader *shader) {
 
 		//Se llama al dibujado del bounding box
 		if (TMotor::instancia().getBoundingBoxes() == true){
-			if (malla.size() != 2) bBoxes.at(i)->draw(modelMatrix);
+			if (malla.size() != 2 && malla.size() != 4 && malla.size() != 5) bBoxes.at(i)->draw(modelMatrix);
 		}
 
 		if (malla.at(i)->getText()->getNombre() != NULL) {

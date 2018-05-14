@@ -41,6 +41,7 @@ public:
 	void initDebugWindow(); //|
 	void closeDebugWindow();//|inicializacion y cierre de IMGUI 
 	void cleanHUD(); //Limpieza de HUDs
+	void nuevaEscenaRaiz();
 
 	//CREACION DE OBJETOS
 	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode, bool sta); //Nuevo Objeto 3D

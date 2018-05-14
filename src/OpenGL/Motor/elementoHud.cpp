@@ -8,6 +8,8 @@ elementoHud::elementoHud(float w, float h, const char* n, const char* p){
     name = n; 
     path = p; 
     color = glm::vec4(0.f, 0.f, 0.f, 0.f);
+    transparency = false;
+    transLevel = 0.6; //Por defecto
 
     //Inicializamos y creamos el elemento del hud
     setData();
@@ -22,6 +24,8 @@ elementoHud::elementoHud(float w, float h, const char* n, glm::vec4 c){
     name = n; 
     path = ""; 
     color = c;
+    transparency = false;
+    transLevel = 0.6; //Por defecto
 
     //Inicializamos y creamos el elemento del hud
     setData();
@@ -101,6 +105,8 @@ void elementoHud::draw(Shader *shader){
     shader->setInt("ourTexture", 0);
     shader->setMat4("model", model);
     shader->setVec4("ourColor", color);
+    shader->setBool("transparency", transparency);
+    shader->setFloat("transparencyLevel", transLevel);
 
     //Enlazamos el VAO que antes hemos rellenado
     glBindVertexArray(VAO);
@@ -143,4 +149,12 @@ void elementoHud::cambiarTextura(const char* p){
 void elementoHud::cambiarColor(glm::vec4 c){
     //Asignar el nuevo color
     color = c;
+}
+
+//Funcion para cambiar la transparencia del elemento
+void elementoHud::cambiarTransparencia(bool t, float l){
+    //Asignamos si el elemento sera transparente o no
+    transparency = t;
+    //Asignamos el nivel de transparencia en caso de que si lo sea
+    transLevel = l;
 }

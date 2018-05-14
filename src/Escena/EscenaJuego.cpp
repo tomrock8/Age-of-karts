@@ -6,6 +6,7 @@
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;
 	ipConexion = "";
+
 	TMotor::instancia().newHud("OnGameHUD");
 	TMotor::instancia().getActiveHud()->addElement(0.2f, 0.2f, "puesto", "assets/HUD/juego/puesto_6.png");
 	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
@@ -97,6 +98,15 @@ void EscenaJuego::init() {
 		controlPlayer = 0;
 	}
 
+	//Numero de mandos conectados
+	numPantallas = 1;
+	for(int mandos = 1; mandos < 4; mandos++){
+		if(glfwJoystickPresent(mandos) == 1){
+			std::cout << "Mando " << mandos << " detectado!" << std::endl;
+			numPantallas++;
+		}
+	}
+
 	// Gravedad
 	gravedad = -10.0f;
 	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
@@ -111,10 +121,9 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	Pista::getInstancia()->setMapa("pirata");
-	//TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/elementos.obj", "escena_raiz", false);
-	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
-
+	
+	Pista::getInstancia()->setMapa();
+	
 	//-----------------------------
 	//	JUGADORES
 	//-----------------------------
@@ -191,11 +200,15 @@ void EscenaJuego::init() {
 
 	jugadores->setJugadores(pj);
 	gc = new GestorCarrera();
-
+	gc->setVueltas(Pista::getInstancia()->getNumVueltas());
 	//-----------------------------
 	//	CAMARA
 	//-----------------------------
-	camera = new cameraThird("camara_jugador3apersona", "escena_raiz");
+	cameraThird *cameraAux;
+	for(int x = 0; x < numPantallas; x++){
+		cameraAux = new cameraThird("camara_jugador3apersona", "escena_raiz");
+		camera.push_back(cameraAux);
+	}
 
 	//-----------------------------
 	//	GESTOR COLISIONES
@@ -271,8 +284,42 @@ void EscenaJuego::dibujar() {
 		}
 	}
 
+	//Limpiamos el dibujado anterior asignando un color de fondo
+	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);
+	for (int i = 0; i < numPantallas; i++){
+		//Establecemos la zona de renderizado
+		if (numPantallas > 1){
+			if (i == 0){
+				TMotor::instancia().setViewport(0, TMotor::instancia().getHeight()/2, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Arriba-izquierda
+			}else if (i == 1){
+				TMotor::instancia().setViewport(TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Arriba-derecha
+			}else if (i == 2){
+				TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Abajo-izquierda				
+			}else{
+				TMotor::instancia().setViewport(TMotor::instancia().getWidth()/2, 0, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Abajo-derecha				
+			}
+		}else{
+			TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
+		}
+		//Especificamos la camara activa
+		TMotor::instancia().setActiveCamera(TMotor::instancia().getCameraByIndex(i));
+		//Dibujamos el skybox
+		TMotor::instancia().drawSkybox();
+		//Dibujamos los objetos 3D creados en la escena
+		TMotor::instancia().draw();
+		//Dibujamos el debug de bullet
+		TMotor::instancia().drawDebugBullet();
+		//Dibujamos las particulas
+		TMotor::instancia().drawParticles();
+		//Dibujamos los billboards
+		TMotor::instancia().drawBillboards();
+		//Dibujamos el menu 
+		TMotor::instancia().drawHudMenus();
+		//Dibujamos IMGUI
+		TMotor::instancia().drawIMGUI();
+	}
 
-		renderDebug();
+	renderDebug();
 }
 
 void EscenaJuego::renderDebug() {
@@ -605,33 +652,13 @@ void EscenaJuego::update() {
 
 
 	pj = jugadores->getJugadores();
-
-	if(pj.at(controlPlayer)->getEstados()->getEstadoInmunidad() != EstadosJugador::estado_inmunidad::INMUNIDAD)
-	camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition(), pj.at(controlPlayer)->getNodo()->getRotation(), pj.at(controlPlayer)->getVectorDireccion());
 	
-	camera->lookAt(pj.at(controlPlayer)->getNodo()->getPosition());
-	/*
-		float distanciaX = -20;
-		float posX = pj.at(controlPlayer)->getVectorDireccion().getX()*distanciaX;
-		float posZ = pj.at(controlPlayer)->getVectorDireccion().getZ()*distanciaX;
-
-		camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition().x - posX, 0, pj.at(controlPlayer)->getNodo()->getPosition().z - posZ);
-		camera->setRotation(glm::vec3(0, 1, 0), 180);
-		switch(tipoCamara){
-			case 0:		//Camara 3a persona fija
-				camara->moveCamera(pj.at(controlPlayer));
-			break;
-			case 1:		//Camara 3a persona libre
-				camara->moveCameraControl(pj.at(controlPlayer));
-			break;
-			case 2:		//Camara 1a persona
-				camara->movefpsCamera(pj.at(controlPlayer));
-			break;
-			case 3:
-				camara->moveCameraControlPointer(pj.at(controlPlayer));
-
-		}*/
-
+	for(int x = 0; x < numPantallas; x++){
+		if(pj.at(controlPlayer+x)->getEstados()->getEstadoInmunidad() != EstadosJugador::estado_inmunidad::INMUNIDAD){
+			camera.at(x)->setPosition(pj.at(controlPlayer+x)->getNodo()->getPosition(), pj.at(controlPlayer+x)->getNodo()->getRotation(), pj.at(controlPlayer+x)->getVectorDireccion());		
+			camera.at(x)->lookAt(pj.at(controlPlayer+x)->getNodo()->getPosition());
+		}
+	}
 
 }
 
@@ -653,7 +680,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 			client->FinalizarCarrera();
 		}
 		else if (tipoEscena != Escena::tipo_escena::ONLINE) {
-			return Escena::tipo_escena::MENU;
+			return Escena::tipo_escena::PODIO;
 		}
 	}
 	if (tipoEscena == Escena::tipo_escena::ONLINE && !client->getStarted()) {
@@ -925,4 +952,34 @@ void EscenaJuego::debugPlot(int j,float k,std::string str){		//Funcion que sirve
 	ImGui::PlotLines(str.c_str(), vec, IM_ARRAYSIZE(vec),0,(to_string(vec2[9])).c_str());
 	
 	
+}
+
+
+std::vector<Corredor::tipo_jugador> EscenaJuego::getJugadores(){
+
+	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	std::vector<Corredor*> pj = jugadores->getJugadores();
+	std::vector<Corredor::tipo_jugador> tipoJugadores;
+
+	
+
+	for(int i=0;i<pj.size();i++){
+
+		if(tipoJugadores.size() == 0){
+			if(pj.at(i)->getPosicionCarrera()==1){
+				tipoJugadores.push_back(pj.at(i)->getTipoJugador());
+				i=0;			
+			}
+		}if(tipoJugadores.size() == 1){
+			if(pj.at(i)->getPosicionCarrera()==2){
+				tipoJugadores.push_back(pj.at(i)->getTipoJugador());
+				i=0;			
+			}
+		}if(tipoJugadores.size() == 2){
+			if(pj.at(i)->getPosicionCarrera()==3){
+				tipoJugadores.push_back(pj.at(i)->getTipoJugador());	
+			}
+		}
+	}
+	return tipoJugadores;
 }

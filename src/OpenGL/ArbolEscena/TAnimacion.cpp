@@ -3,7 +3,7 @@
 
 TAnimacion::TAnimacion(std::vector<TMalla *> frames) {
 	TAnimacion(frames, 0, frames.size());
-	visible = true;
+	visible = false;
 	isPlaying = false;
 }
 
@@ -14,12 +14,10 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFra
 	totalFrames = frames.size();
 	setFirstFrame(firstFrame);
 	setLastFrame(lastFrame);
-
 	actualFrame = this->firstFrame;
 	framesPerSecond = 60; // Valor que se recoge de blender
-	setVisible(true);
-	setLoopPlay(false);
-	lastFramePlayed = Timer::getInstancia()->getTimer(); // Inicializamos el tiempo utlimo
+	setVisible(false);
+	
 }
 
 TAnimacion::~TAnimacion() {
@@ -31,33 +29,38 @@ TAnimacion::~TAnimacion() {
 	frames.clear();
 }
 
- void TAnimacion::beginDraw(Shader *shader) {
-	if (visible && isPlaying)
-		draw(shader);
+void TAnimacion::beginDraw(Shader *shader) {
+	if (visible) draw(shader);
 }
 
 
 void TAnimacion::draw(Shader *shader) {
 	// Reproducir el frame actual
-	frames.at(actualFrame)->draw(shader);
+	if (isPlaying) {
+		//cout << "animando con el frame: " << actualFrame << endl;
+		frames.at(actualFrame)->draw(shader);
 
-	// Comprobar si hay que cambiar de frame
-	int framesInSeconds = framesPerSecond;
-	//if (Timer::getInstancia()->getTimer() / framesInSeconds > 0) {
-		// Aumentar el frame actual si no es el ultimo si le toca
-		if (actualFrame < totalFrames -1) {
+		// Comprobar si hay que cambiar de frame
+		//int framesInSeconds = framesPerSecond;
+		//if (Timer::getInstancia()->getTimer() / framesInSeconds > 0) {
+			// Aumentar el frame actual si no es el ultimo si le toca
+		if (actualFrame < totalFrames - 1) {
 			actualFrame++;
 		}
-		else {
+		//else {
 			// Si el frame actual es el ultimo && loop => frame actual = primero
-			if (loopPlay) {
-				actualFrame = firstFrame;
-			}
-		}
-	//}
+			//actualFrame = firstFrame;
+			//isPlaying = false;
+		//}
+		
+	}
+	if (!isPlaying) {
+		setVisible(false);
+		actualFrame = firstFrame;
+	}
 
 	// Guardar el tiempo ultimo de reproduccion    
-	lastFramePlayed = Timer::getInstancia()->getTimer();
+	//lastFramePlayed = Timer::getInstancia()->getTimer();
 }
 
 
@@ -80,9 +83,7 @@ void TAnimacion::setLastFrame(int lastFrame) {
 		this->lastFrame = static_cast<unsigned short>(frames.size());
 }
 
-void TAnimacion::setLoopPlay(bool loopPlay) {
-	this->loopPlay = loopPlay;
-}
+
 
 void TAnimacion::setVisible(bool visible) {
 	this->visible = visible;
@@ -102,4 +103,11 @@ int TAnimacion::getTotalFrames() {
 }
 void TAnimacion::setPlaying(bool s) {
 	isPlaying = s;
+}
+bool TAnimacion::setPlaying() {
+	return isPlaying;
+}
+void TAnimacion::ResetAnimation() {
+	actualFrame = firstFrame;
+	isPlaying = true;
 }

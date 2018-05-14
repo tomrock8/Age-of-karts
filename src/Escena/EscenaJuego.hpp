@@ -20,7 +20,7 @@ public:
 	virtual void limpiar() override;
 	virtual void update() override;
 	Escena::tipo_escena comprobarInputs();
-
+	std::vector<Corredor::tipo_jugador> getJugadores();
 	// METODOS GET
 	std::string getIpConexion();
 
@@ -37,12 +37,14 @@ private:
 	void debugPlot(int j,float k,std::string str);
 	void updateHUD();
 	
+	int numPantallas; //Numero de mandos conectados
+
 	bool debug;
 
 	DebugDraw *debugDraw;
 
 	int controlPlayer;
-	cameraThird *camera;
+	std::vector<cameraThird *> camera;
 	int tipoCamara;
 	bool cambioCamara;
 	GestorColisiones *colisiones;

@@ -138,7 +138,7 @@ void Skybox::drawSkyBox(){
     //Lo escalamos para que englobe totalmente al mapa
     model = glm::scale(model, glm::vec3(5000, 5000, 5000));
     //Calculamos la matriz mvp a partir de la projection y view de la camara activa
-	glm::mat4 mvp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getV() * model;
+	glm::mat4 mvp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getActiveViewMatrix() * model;
 
     //Pasamos los datos necesarios al shader 
     TMotor::instancia().getShaderSkybox()->setMat4("mvp", mvp); //Matriz mvp

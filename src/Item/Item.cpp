@@ -18,7 +18,8 @@ Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesc
 	subir=false;
 	bajar=false;
 	indiceAltura=0;
-	diferencia = 0.03;
+	diferencia = 0.035;
+	alturaItem=0;
 }
 
 Item::~Item() {
@@ -150,16 +151,13 @@ void Item::ajustarAltura() {
 	
 
 	if(subir){
-		altura= (0.1 - indiceAltura)/diferencia;
+		altura= (alturaItem - indiceAltura)/diferencia;
 		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()+altura,posObj.getOrigin().getZ()));
 	}else if(bajar){
-		altura=(indiceAltura - 0.1)/diferencia;
+		altura=(indiceAltura - alturaItem)/diferencia;
 		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()-altura,posObj.getOrigin().getZ()));
 	}
-	else if (bajar) {
-		altura = (indiceAltura - 0.1) / diferencia;
-		posObj.setOrigin(btVector3(posObj.getOrigin().getX(), posObj.getOrigin().getY() - altura, posObj.getOrigin().getZ()));
-	}
+	
 
 	rigidBody->setCenterOfMassTransform(posObj);
 
@@ -171,6 +169,7 @@ void Item::ajustarAltura() {
 
 void Item::comprobarAltura(float altura) {
 
+	alturaItem=altura;
 	MotorFisicas *mun = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = mun->getMundo();
 	mundo->updateAabbs();
@@ -192,6 +191,7 @@ void Item::comprobarAltura(float altura) {
 
 		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++)
 		{
+			if(i<RayCast1.m_hitFractions.size()-1){
 					indiceAltura=RayCast1.m_hitFractions[i];
 					
 					if(RayCast1.m_hitFractions[i]< altura){
@@ -206,6 +206,7 @@ void Item::comprobarAltura(float altura) {
 				bajar = true;
 
 			}
+		}
 		}
 	}
 

@@ -66,7 +66,7 @@ void billboard::draw(Shader* s){
     s->setInt("image", 0);
 
     //Calculamos la matriz viewProjection y se la pasamos al shader
-    glm::mat4 vp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getV();
+    glm::mat4 vp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getActiveViewMatrix();
     s->setMat4("vp", vp);
     //Le pasamos la posicion del objeto sobre el que se situara el billboard
     s->setVec3("objPosition", elemento->getPosition());

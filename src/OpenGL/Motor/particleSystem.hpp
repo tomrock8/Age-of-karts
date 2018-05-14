@@ -9,7 +9,6 @@ struct Particula{
     glm::vec3 position, velocity; //Posicion y velocidad de la particular
     float size; //Tamaño de la particular en coordenadas del mundo, no de pantalla
     float life; //Vida de la particular, se utiliza para que las particulas vayan creandose y muriendo continuamente
-    float distanceToCamera; //Distancia de la particula a la camara
 
     //Constructor para definir una particula
     Particula(){
@@ -17,14 +16,6 @@ struct Particula{
         velocity = glm::vec3(0.f);
         size = 0.65f;
         life = 0.0f;
-        distanceToCamera = 0.0f;
-    }
-
-    bool operator()(Particula that){
-        // Sort in reverse order : far particles drawn first.
-        cout << "pollas" << endl;
-        //return this->distanceToCamera > that.distanceToCamera;
-        return false;
     }
 };
 
@@ -65,7 +56,6 @@ class particleSystem
         int findLastDeadParticle();
         void rebirthParticle(Particula *p);
         void update();
-        void sortParticles();
 };
 
 #endif

@@ -1,7 +1,7 @@
 #include "Escudo.hpp"
 
 
-Escudo::Escudo(obj3D* n, btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
+Escudo::Escudo(btRigidBody* n, btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
 	float alturaLanzamiento, int idNodo) : Item(posicion, escala, masa, tiempoDesctruccion, fcolision, tamanyoNodo, radio, alturaLanzamiento, idNodo) {
 	// -----------------------------
 	//  PREPARAR LA VENTANA
@@ -34,13 +34,11 @@ void Escudo::updateHijos() {
 }
 
 void Escudo::movimiento() {
-	nodo->setPosition(NodoVehiculo->getPosition().x, NodoVehiculo->getPosition().y, NodoVehiculo->getPosition().z);
-	nodo->setRotation(NodoVehiculo->getRotation().x, NodoVehiculo->getRotation().y, NodoVehiculo->getRotation().z);
+	float altura = 2;
+	nodo->setPosition(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY()+altura, NodoVehiculo->getCenterOfMassPosition().getZ());
 	btTransform trans;
-	btQuaternion quaternion;
-	trans.setOrigin(btVector3(NodoVehiculo->getPosition().x, NodoVehiculo->getPosition().y , NodoVehiculo->getPosition().z));
-	quaternion.setEulerZYX(NodoVehiculo->getRotation().x * PI / 180, NodoVehiculo->getRotation().y * PI / 180, NodoVehiculo->getRotation().z * PI / 180);
-	trans.setRotation(quaternion);
+	trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY()+altura , NodoVehiculo->getCenterOfMassPosition().getZ()));
+	trans.setRotation(NodoVehiculo->getCenterOfMassTransform().getRotation());
 	rigidBody->setCenterOfMassTransform(trans);
 }
 

@@ -6,7 +6,7 @@ TRecursoMalla::TRecursoMalla(aiMesh *mesh, const char* nombre) {
 	setNombre(nombre);
 	for (GLuint i = 0; i < mesh->mNumVertices; i++) {
 		
-		//obtener la posicion de cada vertices
+		//obtener la posicion de cada vertice
 		aiVector3D pos = mesh->mVertices[i];
 		saveVectorPosition(glm::vec3(pos.x, pos.y, pos.z));
 		//Obtener la posicion de las texturas
@@ -44,6 +44,9 @@ TRecursoMalla::TRecursoMalla(aiMesh *mesh, const char* nombre) {
 		saveVectorIndices(mesh->mFaces[i].mIndices[2]);
 	}
 
+	//Por ultimo, calculamos el tamanyo y centro de la malla (necesarios para los bounding boxes)
+	calculateSizeAndCenter();
+
 	//cout << "TRecursoMalla (47) : Tengo " << faces.size() << " caras" << endl;
 	//for (GLuint i = 0; i < mesh->mNumFaces; i++) {// las caras estan compuestas por 3 vertices, forman un triangulo
 	//	faces.push_back(glm::ivec3(mesh->mFaces[i].mIndices[0], mesh->mFaces[i].mIndices[1], mesh->mFaces[i].mIndices[2]));
@@ -61,18 +64,28 @@ void TRecursoMalla::setFaces(std::vector<unsigned short> indices) {
 	//}
 }
 TRecursoMalla::~TRecursoMalla() {
-	//delete &VAO;
-	//delete buffer;
-	
+	//Eliminamos los buffers creados mediante OpenGL
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(6, buffer);
 }
 
-void TRecursoMalla::activeVAO() { glBindVertexArray(VAO); }
+void TRecursoMalla::activeVAO() {glBindVertexArray(VAO); }
 void TRecursoMalla::disableVAO() { glBindVertexArray(0); }
 
 // METODOS GET
 const char *TRecursoMalla::getNombre() { return nombre->c_str(); }
+glm::vec3 TRecursoMalla::getSize() { return sizeMalla; }
+glm::vec3 TRecursoMalla::getCenter() { return centerMalla; }
+std::vector<glm::ivec3> TRecursoMalla::getFaces() {
+	return faces;
+}
+std::vector<unsigned short> TRecursoMalla::getIndices()
+{
+	return indices;
+}
+std::vector<glm::vec3> TRecursoMalla::getVertex() {
+	return vertex;
+}
 
 // METODOS SET
 void TRecursoMalla::setNombre(const char *s) { 
@@ -96,7 +109,7 @@ void TRecursoMalla::inicializar() {	//buffers de datos adaptados a los que manej
 	glBufferData(GL_ARRAY_BUFFER, vertex.size() * sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 	glEnableVertexAttribArray(0);
-	//Buffers de Texturas
+	//Buffers de texturas
 	glBindBuffer(GL_ARRAY_BUFFER, buffer[1]);
 	glBufferData(GL_ARRAY_BUFFER, uv.size() * sizeof(glm::vec2), &uv[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL);
@@ -138,19 +151,49 @@ void TRecursoMalla::reserveVectorArrays(GLuint mNumVertices) {
 	bitangents.reserve(mNumVertices);
 
 }
+
 void TRecursoMalla::saveVectorTangentes(glm::vec3 m) { tangents.push_back(m); }
 void TRecursoMalla::saveVectorBitangentes(glm::vec3 m) { bitangents.push_back(m); }
 void TRecursoMalla::saveVectorPosition(glm::vec3 m) { vertex.push_back(m); }
 void TRecursoMalla::saveVectorUV(glm::vec2 m) { uv.push_back(m); }
 void TRecursoMalla::saveVectorNormal(glm::vec3 m) { normal.push_back(m); }
 void TRecursoMalla::saveVectorIndices(GLuint m) { indices.push_back(m); }
-std::vector<glm::ivec3> TRecursoMalla::getFaces() {
-	return faces;
-}
-std::vector<unsigned short> TRecursoMalla::getIndices()
-{
-	return indices;
-}
-std::vector<glm::vec3> TRecursoMalla::getVertex() {
-	return vertex;
+
+// ------------------------------------------
+//	Calculo del tamanyo y centro de la malla
+// ------------------------------------------
+
+void TRecursoMalla::calculateSizeAndCenter(){
+
+	float min_x, max_x; //Minima y maxima coordenada de la malla en el eje x
+	float min_y, max_y; //Minima y maxima coordenada de la malla en el eje y
+	float min_z, max_z; //Minima y maxima coordenada de la malla en el eje z
+
+	//Igualamos cada eje al valor del primer vertice guardado de la malla
+	min_x = max_x = vertex.at(0)[0];
+	min_y = max_y = vertex.at(0)[1];
+	min_z = max_z = vertex.at(0)[2];
+
+	//Recorremos todos los vertices de la malla
+	for (int i = 0; i < vertex.size(); i++){
+		//Si la coordenada x es menor que la que tenemos guardada, la sustituimos
+		if (min_x > vertex.at(i)[0]) min_x = vertex.at(i)[0];
+		//Si la coordenada x es mayor que la que tenemos guardada, la sustituimos
+		if (max_x < vertex.at(i)[0]) max_x = vertex.at(i)[0];
+		//Si la coordenada y es menor que la que tenemos guardada, la sustituimos
+		if (min_y > vertex.at(i)[1]) min_y = vertex.at(i)[1];
+		//Si la coordenada y es mayor que la que tenemos guardada, la sustituimos
+		if (max_y < vertex.at(i)[1]) max_y = vertex.at(i)[1];
+		//Si la coordenada z es menor que la que tenemos guardada, la sustituimos
+		if (min_z > vertex.at(i)[2]) min_z = vertex.at(i)[2];
+		//Si la coordenada z es mayor que la que tenemos guardada, la sustituimos
+		if (max_z < vertex.at(i)[2]) max_z = vertex.at(i)[2];
+	}
+
+	//Una vez obtenidas la maxima y minima coordenada de la malla en cada eje, podemos calcular su tamanyo y centro
+	// TAMANYO = maxima coordenada en un eje - minima coordenada en ese mismo eje
+	// CENTRO = maxima coordenada en un eje + minima coordenada en ese mismo eje, y posteriormente dividido entre 2
+	//Guardamos los datos en los arrays que hemos definido para ello
+	sizeMalla = glm::vec3(max_x - min_x, max_y - min_y, max_z - min_z);
+	centerMalla = glm::vec3((max_x + min_x)/2, (max_y + min_y)/2, (max_z + min_z)/2);
 }

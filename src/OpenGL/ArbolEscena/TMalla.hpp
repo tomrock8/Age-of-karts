@@ -4,6 +4,7 @@
 #include <vector>
 #include "TEntidad.hpp"
 #include "mesh.hpp"
+#include "boundingBox.hpp"
 
 using namespace std;
 
@@ -12,10 +13,7 @@ class TMalla : public TEntidad
 public:
 	TMalla(std::vector<mesh *> m);
 
-	// METODOS GET
-	//TRecursoMalla *getMalla();
-	//TRecursoMaterial *getMaterial();
-	//TRecursoTextura *getTextures();
+	// VISIBILIDAD DEL OBJETO
 	bool isVisible();
 	void setVisible(bool visible);
 
@@ -25,7 +23,9 @@ public:
 	void draw(Shader *shader);
 
 private:
-	std::vector<mesh *> malla;
-	bool visible;
+	// --- VARIABLES ---
+	std::vector<mesh *> malla; //Vector de mallas
+	bool visible; //Visibilidad de la malla
+	std::vector<boundingBox *> bBoxes; //Vector de bounding boxes de la malla
 };
 #endif

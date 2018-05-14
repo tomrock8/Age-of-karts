@@ -19,10 +19,17 @@ public:
 	virtual void update() override;
 	void updateLobbyOnline();
 	void debugClientInfo();
+	void crearFicheroIP();
 	void mostrarInfoLobby(int indice);
+	void mostrarInfoLobbyPropia();
 	Escena::tipo_escena comprobarInputs();
 	void mostrarTipoPersonaje(int i);
 	int character_callback(GLFWwindow *window, unsigned int codepoint);
+	void movimientoVertical(bool interno);
+	void movimientoHorizontal(int k,bool dcha);
+	void actualizarSelector();
+	void iniciarCarrera();
+	void crearHUD();
 	// METODOS GET
 	std::string getIpConexion();
 
@@ -36,6 +43,7 @@ private:
 	std::string ipConexion;
 	Client *client;
 	bool iniciar;
+	bool empiezaCarrera;
 	bool iniciado;
 	bool conectado;
 	bool lanzado;
@@ -43,14 +51,17 @@ private:
 	bool pressed;
 	bool firstInit;
 	Timer *time;
-	//IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
-	//stringw texto; // Texto a mostrar en pantalla
-	//stringw texto2;
-	//IGUIStaticText *textoUI; // Nodo de irrlicht
-	//ITexture* logoAOK; // Textura del logo del juego
-	bool selection;
+	int laps;
+
+	bool selection_online;
 	bool offline;
+	bool offline_split;
 	bool end;
+	bool show_config;
+	int index;
+	int index_interno;
+	bool index_selected;
+	int index_mapa;
 	std::string iphost;
 	std::string connecting;
 	std::string *infoLobby;

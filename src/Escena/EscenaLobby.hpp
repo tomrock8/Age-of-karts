@@ -52,11 +52,7 @@ private:
 	bool firstInit;
 	Timer *time;
 	int laps;
-	//IGUIFont * fuente; // Fuente del texto a mostrar (irrlicht)
-	//stringw texto; // Texto a mostrar en pantalla
-	//stringw texto2;
-	//IGUIStaticText *textoUI; // Nodo de irrlicht
-	//ITexture* logoAOK; // Textura del logo del juego
+
 	bool selection_online;
 	bool offline;
 	bool offline_split;

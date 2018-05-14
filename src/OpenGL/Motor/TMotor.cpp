@@ -58,7 +58,7 @@ TMotor::TMotor() {
 	//Se inicializan algunos aspectos necesarios del motor
 	contID = 0; //inicializacion de los id's de obj3D
 	gestorRecursos = new TGestorRecursos(); // Inicializacion del gestor de recursos
-	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena)
+	nuevaEscenaRaiz();
 
 	//Se inicializa el gestor de sonidos
 	gestorSonido = new GestorSonido();
@@ -107,6 +107,10 @@ void TMotor::swapBuffers(){
 //Funcion para el control de inputs del motor mediante GLFW
 void TMotor::getInputs(){
 	glfwPollEvents();
+}
+
+void TMotor::nuevaEscenaRaiz(){
+	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena)
 }
 
 //Funcion que cierra correctamente el motor

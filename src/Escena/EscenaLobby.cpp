@@ -429,6 +429,7 @@ void EscenaLobby::mostrarInfoLobbyPropia() {
 			if (!offline || offline_split && clientes.at(c).corredorJugador==true){
 				if (c==0){
 					TMotor::instancia().getActiveHud()->changeTextureElement("player1", "assets/HUD/LobbyMenu/player1_notready.png");
+					TMotor::instancia().getActiveHud()->changeTextureElement("ReadyButton", "assets/HUD/LobbyMenu/ready.png");
 				}else if (c==1){
 					TMotor::instancia().getActiveHud()->changeTextureElement("player2", "assets/HUD/LobbyMenu/player2_notready.png");
 				}else if (c==2){
@@ -699,16 +700,25 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	}
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_4) == GLFW_PRESS && !selection_online) {
 		if (!pressed) {
-			/*std::vector<structClientes> clientes = client->getClientes();
-			for (int l=clientes.size()-1;l>=0;l--){
+			std::string str;
+			std::vector<structClientes> clientes = client->getClientes();
+			for (int l=clientes.size()-1;l>0;l--){
 				if (clientes.at(l).corredorJugador==true){
 					client->BorrarCliente(l);
+					if (l==1){
+						str="jugador2";
+					}else if(l==2){
+						str="jugador3";
+					}else if(l==3){
+						str="jugador4";
+					}
+					TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vacia.png");
 					if (count > 0) {
 						count--;
 					}
 					break;
 				}
-			}*/
+			}
 			pressed = true;
 		}
 	}	

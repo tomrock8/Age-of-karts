@@ -1,21 +1,47 @@
 #include "TNodo.hpp"
-
+#include "TMotor.hpp"
 TNodo::TNodo(const char* n) {
 	name = new std::string(n);
+	
 }
 
 TNodo::~TNodo() {
-	//delete entidad;
-	delete padre;
 	//Borrado de hijos
+
+	if(hijos.size()>0){
+
+		//cout<<"tengo hijos::::"<<hijos.size() <<endl;
 	for (GLuint i = 0; i < hijos.size(); i++) {
-		delete(hijos.at(i));
+		//cout<<"intentando borrar:::"<<i<<endl;
+		delete hijos.at(i);
+		
 	}
+		if(this != TMotor::instancia().getSceneNode()){
+			hijos.clear();
+			delete entidad;
+			delete name;
+			//delete this;
+			//cout<<"Borro nodo"<<endl;
+		}
+
+	}else{
+		if(this != TMotor::instancia().getSceneNode()){
+			//cout<<"no tengo ningun hijo"<<endl;	
+			delete entidad;
+			delete name;	
+			//delete this;
+			//cout<<"Borro nodo"<<endl;	
+		}
+			
+	}
+
 }
 
 // MANEJO DE HIJOS
 int TNodo::addHijo(TNodo *n) {//1 == ha agregado hijos
 	hijos.push_back(n);
+
+
 	return 1;
 }
 
@@ -69,6 +95,13 @@ TNodo *TNodo::getNode(const char* nombre) {
 	return nullptr;
 }
 
+
+std::vector<TNodo *>TNodo::getHijos(){
+
+	return hijos;
+}
+
+
 //----------------------------
 // DIBUJADO DEL LOS NODOS
 //	RECORRIDO EN PREORDEN
@@ -92,3 +125,5 @@ void TNodo::draw(Shader *shader) {
 		}
 	}
 }
+
+

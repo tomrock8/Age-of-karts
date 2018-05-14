@@ -7,6 +7,7 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;
 	ipConexion = "";
 
+	
 	TMotor::instancia().newHud("OnGameHUD");
 	TMotor::instancia().getActiveHud()->addElement(0.2f, 0.2f, "puesto", "assets/HUD/juego/puesto_6.png");
 	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
@@ -15,6 +16,8 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "objeto", "assets/HUD/juego/objetos/vacio.png");
 	TMotor::instancia().getActiveHud()->traslateElement("objeto",  0.75f, 0.75f);
 	
+
+
 	objeto = 0;
 	puesto = 6;
 	vueltas = 1;
@@ -36,12 +39,15 @@ EscenaJuego::~EscenaJuego() {
 	delete MotorFisicas::getInstancia();
 	delete GestorJugadores::getInstancia();
 	delete Pista::getInstancia();
+	TMotor::instancia().cleanHUD();
 	delete fuenteCarrera;
 	delete fuenteCountDown;
 	cout << "Destructor de Escena JUEGO. Salgo" << endl;
 }
 
 void EscenaJuego::init() {
+
+
 
 	// LUCES PUNTUALES
 	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, true, "escena_raiz");
@@ -108,7 +114,7 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	
+
 	Pista::getInstancia()->setMapa();
 	
 	//-----------------------------

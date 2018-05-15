@@ -65,6 +65,7 @@ private:
 	std::string iphost;
 	std::string connecting;
 	std::string *infoLobby;
+	int numPantallas;
 };
 
 #endif /* ESCENALOBBY_H */

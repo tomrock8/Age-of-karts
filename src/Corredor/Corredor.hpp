@@ -253,11 +253,11 @@ protected:
 
 	//TNodo *vacile;
 	TNodo *giroDerIni;
-	TNodo *lanzarObjeto;
+	//TNodo *lanzarObjeto;
 	TNodo *giroDerFin;
 	TNodo *giroIzqIni;
 	TNodo *giroIzqFin;
-	TNodo *animHabilidad;
+	//TNodo *animHabilidad;
 	TNodo *quieto;
 
 
@@ -285,9 +285,9 @@ protected:
 	TNodo * getGiroDerFin();
 	TNodo * getGiroIzqIni();
 	TNodo * getGiroIzqFin();
-	TNodo * getHabilidadAnim();
+	//TNodo * getHabilidadAnim();
 	TNodo * getAnimQuieto();
-	TNodo * getLanzarObjeto();
+	//TNodo * getLanzarObjeto();
 	//TNodo * getVacile();
 
 

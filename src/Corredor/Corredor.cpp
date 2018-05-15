@@ -202,8 +202,8 @@ void Corredor::setParametros() {
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroIzq/GladiGiroIzq_000", 538, 555), "GiroIzqIni");
 		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroIzq/GladiGiroIzq_000", 555, 563), "GiroIzqFin");
 		//vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Vacile/gladiVacile_000", 505, 591), "Vacile");
-		lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Lanzamiento/GladiLanzamiento_000", 517, 530), "LanzarObj");
-		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Habilidad/GladiHabilidad_000", 517, 540), "Habilidad");
+		//lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Lanzamiento/GladiLanzamiento_000", 517, 530), "LanzarObj");
+		//animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Habilidad/GladiHabilidad_000", 517, 540), "Habilidad");
 
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(3800);
@@ -227,12 +227,12 @@ void Corredor::setParametros() {
 		/* Nodos de animacion */
 
 		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "quieto");
-		lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/LanzamientoOBJ/pirataLanzamiento_000", 639, 652), "LanzarObj");
+		//lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/LanzamientoOBJ/pirataLanzamiento_000", 639, 652), "LanzarObj");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 162, 176), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 176, 187), "GiroDerFin");
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroIzq/pirataGiroIzq_000", 162, 176), "GiroIzqIni");
 		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroIzq/pirataGiroIzq_000", 176, 187), "GiroIzqFin");
-		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Habilidad/PirataHabilidad_000", 165, 202), "Habilidad");
+		//animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Habilidad/PirataHabilidad_000", 165, 202), "Habilidad");
 		//vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Vacile/VacilePirata_000", 500, 551), "Vacile");
 
 
@@ -260,8 +260,8 @@ void Corredor::setParametros() {
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroIzq/vikingoGiroIzq_000", 534, 555), "GiroIzqIni");
 		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroIzq/vikingoGiroIzq_000", 555, 566), "GiroIzqFin");
 		//vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Vacile/vikingoVacile_000", 432, 481), "Vacile");
-		lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Lanzamiento/vikingoLanzamiento_000", 516, 530), "LanzarObj");
-		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Habilidad/vikingoKartHabilidad_000", 499, 515), "Habilidad");
+		//lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Lanzamiento/vikingoLanzamiento_000", 516, 530), "LanzarObj");
+		//animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Habilidad/vikingoKartHabilidad_000", 499, 515), "Habilidad");
 
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(3600); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
@@ -287,8 +287,8 @@ void Corredor::setParametros() {
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroIzq/ChinoGiroIzq_000", 179, 190), "GiroIzqIni");
 		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroIzq/ChinoGiroIzq_000", 190, 201), "GiroIzqFin");
 		//vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Vacile/Chinovacile_000", 223, 291), "Vacile");
-		lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Lanzamiento/ChinoLanzamiento_000", 648, 662), "LanzarObj");
-		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Habilidad/ChinoHabilidad_000", 216, 259), "Habilidad");
+		//lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Lanzamiento/ChinoLanzamiento_000", 648, 662), "LanzarObj");
+		//animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Habilidad/ChinoHabilidad_000", 216, 259), "Habilidad");
 
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4000); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
@@ -1615,16 +1615,17 @@ TNodo *Corredor::getGiroIzqIni() {
 TNodo *Corredor::getGiroIzqFin() {
 	return giroIzqFin;
 }
+/*
 TNodo *Corredor::getHabilidadAnim() {
 	return animHabilidad;
-}
+}*/
 TNodo *Corredor::getAnimQuieto() {
 	static_cast<TMalla*>(quieto->getEntidad())->setVisible(true);
 	return quieto;
-}
+}/*
 TNodo *Corredor::getLanzarObjeto() {
 	return lanzarObjeto;
-}
+}*/
 /*TNodo *Corredor::getVacile() {
 	return vacile;
 }
@@ -1666,14 +1667,14 @@ void Corredor::iniciarAnimacion(movimiento_jugador mov, TNodo* previo, TNodo *pr
 	case movimiento_jugador::GIROIZQFIN:
 		cuboNodo->setNode(giroIzqFin);
 		break;
-	case movimiento_jugador::HABILIDAD:
+	/*case movimiento_jugador::HABILIDAD:
 		cuboNodo->setNode(animHabilidad);
 		break;
 
 	case movimiento_jugador::LANZAROBJETO:
 		cuboNodo->setNode(lanzarObjeto);
 		break;
-		/*case movimiento_jugador::VACILE:
+	case movimiento_jugador::VACILE:
 			cuboNodo->setNode(vacile);
 			break;
 		*/

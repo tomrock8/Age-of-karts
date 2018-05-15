@@ -28,12 +28,12 @@ void CorredorJugador::movimiento() {
 	bool mandoConectado = false;
 	const unsigned char *buttons = nullptr;
 	const float *axes = nullptr;
-	if (1 == glfwJoystickPresent(id+1)) {
+	if (1 == glfwJoystickPresent(id)) {
 		mandoConectado = true;
 		int buttonCount;
-		buttons = glfwGetJoystickButtons(id+1, &buttonCount);
+		buttons = glfwGetJoystickButtons(id, &buttonCount);
 		int axesCount;
-		axes = glfwGetJoystickAxes(id+1, &axesCount);
+		axes = glfwGetJoystickAxes(id, &axesCount);
 		//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
 	}
 
@@ -169,11 +169,11 @@ void CorredorJugador::actualizarItem() {
 	//Comprobador de de mando y recoleccion de inputs
 	bool mandoConectado = false;
 	const unsigned char *buttons = nullptr;
-	if (1 == glfwJoystickPresent(id+1))
+	if (1 == glfwJoystickPresent(id))
 	{
 		mandoConectado = true;
 		int buttonCount;
-		buttons = glfwGetJoystickButtons(id+1, &buttonCount);
+		buttons = glfwGetJoystickButtons(id, &buttonCount);
 		//  || (mandoConectado && GLFW_PRESS == buttons[12]) 
 	}
 
@@ -187,8 +187,8 @@ void CorredorJugador::actualizarItem() {
 			if (client->getConnected())
 				client->PlayerThrowObject();
 			//Llama a la funcion de la clase padre
-			iniciarAnimacion(LANZAROBJETO, animacionPrevia, NULL);
-			animacionPrevia = getLanzarObjeto();
+		/*	iniciarAnimacion(LANZAROBJETO, animacionPrevia, NULL);
+			animacionPrevia = getLanzarObjeto();*/
 			usarObjetos();
 		}
 	}
@@ -198,8 +198,8 @@ void CorredorJugador::actualizarItem() {
 		}
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[2])) {
-		iniciarAnimacion(HABILIDAD, animacionPrevia,NULL);
-		animacionPrevia = getHabilidadAnim();
+		/*iniciarAnimacion(HABILIDAD, animacionPrevia,NULL);
+		animacionPrevia = getHabilidadAnim();*/
 		lanzarHabilidad();
 	}
 	

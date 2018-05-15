@@ -17,20 +17,28 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFra
 	actualFrame = this->firstFrame;
 	framesPerSecond = 60; // Valor que se recoge de blender
 	setVisible(false);
-	
 }
 
 TAnimacion::~TAnimacion() {
+	std::cout << "Destructor de TAnimacion\n";
+
+	// Parar de reproducir
+	setPlaying(false);
+
+	// Ocultar para que no se renderice mas
+	setVisible(false);
+
 	// Eliminacion de todos los frames del array
 	for (int i = 0; i < frames.size(); i++) {
-		TMalla *a = frames.at(i);
-		delete a;
+		delete frames.at(i);
 	}
+	// Limpiar el vector de frames
 	frames.clear();
 }
 
 void TAnimacion::beginDraw(Shader *shader) {
-	if (visible) draw(shader);
+	if (visible)
+		draw(shader);
 }
 
 
@@ -47,12 +55,6 @@ void TAnimacion::draw(Shader *shader) {
 		if (actualFrame < totalFrames - 1) {
 			actualFrame++;
 		}
-		//else {
-			// Si el frame actual es el ultimo && loop => frame actual = primero
-			//actualFrame = firstFrame;
-			//isPlaying = false;
-		//}
-		
 	}
 	if (!isPlaying) {
 		setVisible(false);

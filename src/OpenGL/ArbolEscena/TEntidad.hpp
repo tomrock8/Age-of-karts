@@ -8,7 +8,7 @@
 class TEntidad {
 public:
 	TEntidad() {};
-	~TEntidad() {};
+	virtual ~TEntidad();
 
 	// METODOS SET
 	void setModelMatrix(glm::mat4 modelMatrix);

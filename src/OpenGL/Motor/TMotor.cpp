@@ -30,8 +30,8 @@ TMotor::TMotor() {
 	ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", NULL, NULL);
 
 	//Almacena las dimensiones de la ventana en las variables screen
-	glfwGetFramebufferSize(ventana, &screenWIDTH, &screenHEIGHT);	
-	
+	glfwGetFramebufferSize(ventana, &screenWIDTH, &screenHEIGHT);
+
 	//Activamos el Anti-aliasing por defecto
 	glEnable(GL_MULTISAMPLE); //Anti-aliasing MSAA
 
@@ -42,9 +42,9 @@ TMotor::TMotor() {
 	}
 
 	//Hacer la ventana creada como actual
-	glfwMakeContextCurrent(ventana);		
+	glfwMakeContextCurrent(ventana);
 	//Especificar el viewport usado por OpenGL			
-	glViewport(0.0f, 0.0f, screenWIDTH, screenHEIGHT);	
+	glViewport(0.0f, 0.0f, screenWIDTH, screenHEIGHT);
 
 	//Se inicializa GLEW con los indices a las distintas funciones de OpenGL
 	glewExperimental = true;
@@ -88,7 +88,7 @@ TMotor::TMotor() {
 
 	//Inicializamos los buffers para el debug de Bullet
 	initializeBuffersDebugBullet();
-	
+
 	//Seteamos el buffer y las texturas que guardaran los datos de posicion, normales y color para el deferred shading
 	setDeferredBuffers();
 }
@@ -98,23 +98,23 @@ TMotor::TMotor() {
 // -------------------------------------------------
 
 //Funcion para cambiar los buffers de dibujado de GLFW
-void TMotor::swapBuffers(){
+void TMotor::swapBuffers() {
 	//Se intercambian los dos buffers (delantero y trasero)
 	glfwSwapBuffers(TMotor::instancia().getVentana());
 }
 
 //Funcion para el control de inputs del motor mediante GLFW
-void TMotor::getInputs(){
+void TMotor::getInputs() {
 	glfwPollEvents();
 }
 
-void TMotor::nuevaEscenaRaiz(){
+void TMotor::nuevaEscenaRaiz() {
 	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena)
 }
 
 //Funcion que cierra correctamente el motor
 void TMotor::close() {
- 	//Se termina la libreria IMGUI
+	//Se termina la libreria IMGUI
 	//ImGui_ImplGlfwGL3_Shutdown();
 	//ImGui::DestroyContext();
 	//Se termina GLFW
@@ -134,11 +134,11 @@ void TMotor::close() {
 	for (int i = 0; i < particleSystems.size(); i++) {
 		delete particleSystems[i];
 	}
-	
+
 }
 
 //Funcion que transforma quaternions a grados
-void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw){
+void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw) {
 
 	//Se calcula la rotacion en el eje x = ROLL
 	double sinr = +2.0 * (w * x + y * z);
@@ -162,9 +162,9 @@ void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float
 }
 
 //Funcion que inicializa la libreria IMGUI y crea nuevas ventanas
-void TMotor::initDebugWindow(){
+void TMotor::initDebugWindow() {
 	renderDebug = true;
-	
+
 	if (ImGui::GetCurrentContext() == NULL) {
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO();
@@ -178,7 +178,7 @@ void TMotor::initDebugWindow(){
 }
 
 //Funcion que destruye una ventana creada mediante IMGUI
-void TMotor::closeDebugWindow(){
+void TMotor::closeDebugWindow() {
 	if (ImGui::GetCurrentContext() != NULL) {
 		ImGui_ImplGlfwGL3_Shutdown();
 		ImGui::DestroyContext();
@@ -187,8 +187,12 @@ void TMotor::closeDebugWindow(){
 }
 
 //Funcion que limpia el array de HUDs del motor
-void TMotor::cleanHUD(){
+void TMotor::cleanHUD() {
 	HUDs.clear();
+}
+
+void TMotor::cleanScene() {
+	cameras.clear();
 }
 
 void TMotor::resizeScreen(int w, int h) {
@@ -220,7 +224,7 @@ obj3D *TMotor::newCameraNode(const char *name, const char* parentNode) {
 	TNodo *nodo = createCamNode(traslacionNodo, camara, name);
 	contID++;
 	return new obj3D(nodo, name, contID);
-	
+
 }
 
 // ---- LUCES ----
@@ -270,7 +274,7 @@ obj3D *TMotor::newAnimation(const char *name, const char *path, const char* pare
 }
 
 // ---- OBJETOS 3D ----
-obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode,bool sta) {
+obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode, bool sta) {
 	// E S C A L A D O
 	string *nameEsc = new string("escalado_" + (string)name);
 	TTransform *scaleMesh = createTransformation();
@@ -289,13 +293,13 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 	TNodo *traslationNodeMesh = createTransformationNode(rotationNodeMesh, traslationMesh, nameTras->c_str());
 
 	// N O D O
-	TMalla *malla = TMotor::instancia().createMesh(path,sta);
+	TMalla *malla = TMotor::instancia().createMesh(path, sta);
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
 
-	if (strcmp(name, "mapa") == 0 || strcmp(name, "elementos") == 0){
-	obj3D *obj = new obj3D(nodo, name, contID);
-	notShadowObjects.push_back(obj);
-	return obj;
+	if (strcmp(name, "mapa") == 0 || strcmp(name, "elementos") == 0) {
+		obj3D *obj = new obj3D(nodo, name, contID);
+		notShadowObjects.push_back(obj);
+		return obj;
 	}
 
 	contID++;
@@ -313,7 +317,7 @@ void TMotor::newHud(const char* n) {
 }
 
 // --- BILLBOARDS ---
-billboard *TMotor::newBillboard(obj3D *o){
+billboard *TMotor::newBillboard(obj3D *o) {
 	//Creamos el nuevo billboard con su nombre
 	billboard* b = new billboard(o);
 	//Lo añadimos al array de billboards
@@ -323,7 +327,7 @@ billboard *TMotor::newBillboard(obj3D *o){
 }
 
 // --- SISTEMAS DE PARTICULAS ---
-particleSystem *TMotor::newParticleSystem(){
+particleSystem *TMotor::newParticleSystem() {
 	//Creamos el nuevo billboard con su nombre
 	particleSystem *p = new particleSystem();
 	//Lo añadimos al array de billboards
@@ -337,8 +341,8 @@ particleSystem *TMotor::newParticleSystem(){
 // M A L L A S
 // -------------------------------
 
-TMalla *TMotor::createMesh(const char *fich,bool sta) {
-	return new TMalla(gestorRecursos->loadMesh(fich,sta,false));
+TMalla *TMotor::createMesh(const char *fich, bool sta) {
+	return new TMalla(gestorRecursos->loadMesh(fich, sta, false));
 }
 
 TNodo  *TMotor::createMeshNode(TNodo *padre, TMalla *mesh, const char* name) {
@@ -355,7 +359,7 @@ TNodo  *TMotor::createStaticMeshNode(TNodo*padre, const char* path, const char* 
 	nodo->setEntidad(createMesh(path, false));
 	padre->addHijo(nodo);
 	return nodo;
-	
+
 }
 
 //---------------------------------------------
@@ -428,9 +432,9 @@ TAnimacion *TMotor::createAnimation(const char *path, int framesIni, int framesF
 		string ruta = path;
 		ruta += to_string(i);
 		ruta += obj;
-		animation.push_back(new TMalla(gestorRecursos->loadMesh(ruta.c_str(), false,true)));
+		animation.push_back(new TMalla(gestorRecursos->loadMesh(ruta.c_str(), false, true)));
 	}
-	return new TAnimacion(animation,framesIni, framesFin);
+	return new TAnimacion(animation, framesIni, framesFin);
 }
 
 // ------------------------
@@ -453,7 +457,7 @@ Shader *TMotor::getShaderSkybox() { return shaderSkybox; }
 Shader *TMotor::getShaderDebugBbox() { return shaderDebugBbox; }
 Shader *TMotor::getShaderSilhouette() { return shaderSilhouette; }
 GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
-glm::mat4 TMotor::getActiveViewMatrix() { return activeViewMatrix;}
+glm::mat4 TMotor::getActiveViewMatrix() { return activeViewMatrix; }
 bool TMotor::getBoundingBoxes() { return boundingBoxes; }
 //Funcion que devuelve un hud a partir del nombre
 hud* TMotor::getHud(const char* n) {
@@ -468,10 +472,10 @@ hud* TMotor::getHud(const char* n) {
 	return h;
 }
 //Funcion para devolver el hud activo
-hud* TMotor::getActiveHud() { return activeHud;}
-TGestorRecursos *TMotor::getGR() { return gestorRecursos;}
+hud* TMotor::getActiveHud() { return activeHud; }
+TGestorRecursos *TMotor::getGR() { return gestorRecursos; }
 //Funcion qude devuelve una camara del array a partir de su posicion en el mismo
-TNodo *TMotor::getCameraByIndex(int i){
+TNodo *TMotor::getCameraByIndex(int i) {
 	return cameras.at(i);
 }
 
@@ -482,9 +486,9 @@ TNodo *TMotor::getCameraByIndex(int i){
 void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; drawCamera(); }
 void TMotor::setActiveLight(TNodo *light) { activeLights.push_back(light); }
 void TMotor::setRenderDebug(bool renderDebug) { this->renderDebug = renderDebug; }
-void TMotor::setDebugBullet(bool b){ debugBullet = b; }
+void TMotor::setDebugBullet(bool b) { debugBullet = b; }
 //Funcion que recibe dos puntos para dibujar una linea y los mete en el array de vertices para el debug de Bullet
-void TMotor::setVerticesDebug(float a, float b, float c, float x, float y, float z){
+void TMotor::setVerticesDebug(float a, float b, float c, float x, float y, float z) {
 	vertices.push_back(a);
 	vertices.push_back(b);
 	vertices.push_back(c);
@@ -498,27 +502,28 @@ void TMotor::setActiveHud(const char* n) {
 	activeHud = h; //Lo activamos
 }
 //Funcion para establecer el shader que se va a usar
-void TMotor::setShaderActive(const char* s){
+void TMotor::setShaderActive(const char* s) {
 	shaderName = s;
 }
 //Funcion para inicializar el skybox
-void TMotor::setSkyBox(){
+void TMotor::setSkyBox() {
 	skybox = new Skybox();
 	skyboxActive = true;
 }
 //Funcion para establecer el dibujado o no de bounding boxes
-void TMotor::setBoundingBoxes(bool b){
+void TMotor::setBoundingBoxes(bool b) {
 	boundingBoxes = b;
 }
 //Funcion para activar/desactivar el face culling
-void TMotor::setFaceCulling(bool b){
+void TMotor::setFaceCulling(bool b) {
 	faceCulling = b;
 }
 //Funcion para activar/desactivar el anti-aliasing
 void TMotor::setAntialiasing(bool b){
 	if ( b == true ){
 		glEnable(GL_MULTISAMPLE);
-	}else{
+	}
+	else {
 		glDisable(GL_MULTISAMPLE);
 	}
 }
@@ -538,9 +543,9 @@ obj3D* TMotor::getObjActiveCamera() {
 	return NULL;
 }
 //Funcion para establecer el viewport (porcion de la pantalla) que se va a renderizar
-void TMotor::setViewport(int x, int y, int width, int height){
-	glViewport(x,y,width,height);
-} 
+void TMotor::setViewport(int x, int y, int width, int height) {
+	glViewport(x, y, width, height);
+}
 
 //------------------------------
 // D I B U J A D O
@@ -549,11 +554,11 @@ void TMotor::setViewport(int x, int y, int width, int height){
 // ---- LIMPIEZA PRE-DIBUJADO ---- 
 void TMotor::clean(float r, float g, float b, float a) {
 	//Establecer el nuevo color de fondo
-	glClearColor(r,g,b,a);
+	glClearColor(r, g, b, a);
 	//Limpiamos los buffers de color y profundidad
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//Activamos el z-buffer
-	glEnable(GL_DEPTH_TEST); 
+	glEnable(GL_DEPTH_TEST);
 	//Activamos la transparencia
 	glEnable(GL_BLEND);
 	//Como cada uno de los canales rgba es calculado/computado
@@ -563,19 +568,19 @@ void TMotor::clean(float r, float g, float b, float a) {
 // ---- DIBUJADO DEL ARBOL DE LA ESCENA ---- 
 //Funcion que dibuje los objetos 3D creados en el motor con el estilo que hayas definido
 void TMotor::draw() {
-	if ( faceCulling == true ){
+	if (faceCulling == true) {
 		//Activamos el Face Culling (Si esta activado)
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK); //No dibujamos las caras traseras de los objetos
 	}
 
 	//Si el shader deferred esta activado...
-	if (strcmp(shaderName, "shaderDeferred") == 0){
+	if (strcmp(shaderName, "shaderDeferred") == 0) {
 		usingShaderDeferred();
 	}
 
 	//Si el shader cartoon esta activado...
-	if (strcmp(shaderName, "shaderCartoon") == 0){
+	if (strcmp(shaderName, "shaderCartoon") == 0) {
 		usingShaderCartoon();
 	}
 
@@ -640,18 +645,18 @@ void TMotor::drawLight(Shader *s) {
 
 // ---- DIBUJADO DEL SKYBOX ---- 
 //Funcion que dibuja el skybox del motor, si este esta activado
-void TMotor::drawSkybox(){
-	if (skyboxActive == true){
-			//Activamos el shader especifico del skybox
-			shaderSkybox->use(); 
-			//Llamamos al metodo de dibujado del skybox
-			skybox->drawSkyBox();
+void TMotor::drawSkybox() {
+	if (skyboxActive == true) {
+		//Activamos el shader especifico del skybox
+		shaderSkybox->use();
+		//Llamamos al metodo de dibujado del skybox
+		skybox->drawSkyBox();
 	}
 }
 
 // ---- DIBUJADO DEL HUDs Y MENUS ----
 //Funcion que dibuja el hud activo 
-void TMotor::drawHudMenus(){
+void TMotor::drawHudMenus() {
 	//Desactivamos el z-buffer, queremos dibujarlo encima de todo
 	glDisable(GL_DEPTH_TEST);
 	//Se activa el shader para el dibujado del HUD
@@ -664,7 +669,7 @@ void TMotor::drawHudMenus(){
 
 // ---- DIBUJADO DE LAS VENTANAS DE IMGUI ----
 //Funcion que dibuja las ventanas creadas mediante la libreria IMGUI
-void TMotor::drawIMGUI(){
+void TMotor::drawIMGUI() {
 	if (renderDebug) {
 		if (ImGui::GetFrameCount() > 0) {
 			ImGui::Render();
@@ -675,13 +680,13 @@ void TMotor::drawIMGUI(){
 
 // ---- DIBUJADO DE LOS BILLBOARDS ----
 //Funcion que dibuja los billboards del motor
-void TMotor::drawBillboards(){
+void TMotor::drawBillboards() {
 	//Desactivamos el z-buffer, queremos dibujarlo encima de todo
 	glDisable(GL_DEPTH_TEST);
 	//Activamos el shader para el dibujado de los billboards
 	shaderBillboard->use();
 	//Recorremos los diferentes billboards y los dibujamos
-	for (int i = 1; i < billboards.size(); i++){
+	for (int i = 1; i < billboards.size(); i++) {
 		billboards.at(i)->draw(shaderBillboard);
 	}
 	//Reactivamos el z-buffer, para controlar la profundidad
@@ -690,11 +695,11 @@ void TMotor::drawBillboards(){
 
 // ---- DIBUJADO DE LOS SISTEMAS DE PARTICULAS ----
 //Funcion que dibuja los distintos sistemas de particulas presentes en el motor
-void TMotor::drawParticles(){
+void TMotor::drawParticles() {
 	//Activamos el shader para el dibujado de las particulas
 	shaderParticles->use();
 	//Recorremos los diferentes sistemas y los dibujamos
-	for (int i = 0; i < particleSystems.size(); i++){
+	for (int i = 0; i < particleSystems.size(); i++) {
 		particleSystems.at(i)->draw(shaderParticles);
 	}
 }
@@ -737,11 +742,11 @@ void TMotor::drawProjectedShadows(){
 
 // ---- DIBUJADO DEL SHADOW MAPPING ----
 //Funcion que realiza los calculos necesarios para el dibujado de las sombras mediante la tecnica del shadow mapping
-void TMotor::drawMappingShadows(){
+void TMotor::drawMappingShadows() {
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
 	if (lights.size() > 0) {
 		for (int i = 0; i < lights.size(); i++) {
-			if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
+			if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true) {
 				static_cast<TLuz *>(lights[i]->getEntidad())->renderMap();
 				glEnable(GL_CULL_FACE); //Activamos el face culling
 				//Para evitar el efecto del peter panning. Debido a la utilizacion de un bias (rango), se pueden producir fallos 
@@ -764,14 +769,14 @@ void TMotor::drawMappingShadows(){
 
 // ---- DIBUJADO DEL DEBUG DE BULLET ----
 //Funcion que dibuja los elementos (cajas de colision, fisicas...) de Bullet para su debugeo
-void TMotor::drawDebugBullet(){
-	if (debugBullet && vertices.size() > 0){ //Si el debug de bullet esta activado
+void TMotor::drawDebugBullet() {
+	if (debugBullet && vertices.size() > 0) { //Si el debug de bullet esta activado
 		//Activamos el VAO
 		glBindVertexArray(debugBulletVAO);
 		//Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
 		glBindBuffer(GL_ARRAY_BUFFER, debugBulletVBO);
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), 0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 		glEnableVertexAttribArray(0);
 		//Activamos el shader del debug
 		shaderDebugBbox->use();
@@ -799,10 +804,10 @@ void TMotor::drawDebugBullet(){
 
 // ---- SHADER CARTOON ----
 //Funcion que renderiza la escena aplicandole un estilo cartoon
-void TMotor::usingShaderCartoon(){
-					
+void TMotor::usingShaderCartoon() {
+
 	//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas con un estilo cartoon
-	
+
 	//Se activa el shader para el renderizado 3D
 	shaderCartoon->use();
 	//Calcular posicion de la camara y pasarsela al fragment shader
@@ -815,7 +820,7 @@ void TMotor::usingShaderCartoon(){
 	//Establecemos los datos de las distintas luces
 	drawLight(shaderCartoon);
 	//Si el debug de bullet no esta activo
-	if (!debugBullet){
+	if (!debugBullet) {
 		//Activamos el glPolygonOffset = a cada fragmento de los objetos se le añade una pequeña profundidad antes de realizar los calculos del z-buffer
 		glEnable(GL_POLYGON_OFFSET_FILL);
 		//Profundidad que se le añade
@@ -823,19 +828,19 @@ void TMotor::usingShaderCartoon(){
 		//Corte maximo de profundidad
 		float line_offset_unit = -35.f;
 		//Especificamos los valores anteriores a OpenGL
-		glPolygonOffset( line_offset_slope, line_offset_unit );
+		glPolygonOffset(line_offset_slope, line_offset_unit);
 	}
 	//Dibujamos los distintos nodos del arbol
 	scene->draw(shaderCartoon);
 
 	//2º RENDERIZADO = se renderizan los objetos en modo wireframe (solo las caras ocultas) para crear la silueta de los mismos
-	
+
 	//Se activa el shader para el renderizado 3D
 	shaderSilhouette->use();
 	//Desactivamos el offset anterior
-	glDisable( GL_POLYGON_OFFSET_FILL );  
+	glDisable(GL_POLYGON_OFFSET_FILL);
 	//Establecemos el dibujado del poligono en modo linea
-	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//Activamos el cull face
 	glEnable(GL_CULL_FACE);
 	//Activamos el suavizado de las lineas
@@ -852,14 +857,14 @@ void TMotor::usingShaderCartoon(){
 	//Dibujamos los distintos nodos del arbol
 	scene->draw(shaderSilhouette);
 	//Volvemos al modo de dibujado normal de los poligonos
-	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	//Desactivamos el cull face
 	glDisable(GL_CULL_FACE);
 }
 
 // ---- SHADER DEFERRED ----
 //Funcion que renderiza usando un shader deferred
-void TMotor::usingShaderDeferred(){
+void TMotor::usingShaderDeferred() {
 	glDisable(GL_BLEND);
 	//1º DIBUJADO = se guardan los datos de posicion, normales y color de los distintos objetos en el buffer mediante las texturas
 
@@ -883,15 +888,15 @@ void TMotor::usingShaderDeferred(){
 	//Se activan las texturas con los datos de los objetos y se le pasan al shader
 	//POSICION
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, defPosition); 
+	glBindTexture(GL_TEXTURE_2D, defPosition);
 	glUniform1i(glGetUniformLocation(shaderDeferred->ID, "texture_position"), 0);
 	//NORMALES
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, defNormal); 
+	glBindTexture(GL_TEXTURE_2D, defNormal);
 	glUniform1i(glGetUniformLocation(shaderDeferred->ID, "texture_normal"), 1);
 	//COLOR DIFUSO Y BRILLO
 	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, defDiffuseSpecular);	
+	glBindTexture(GL_TEXTURE_2D, defDiffuseSpecular);
 	glUniform1i(glGetUniformLocation(shaderDeferred->ID, "texture_diffuseSpecular"), 2);
 	//Establecemos los datos de las distintas luces
 	drawLight(shaderDeferred);
@@ -927,7 +932,7 @@ void TMotor::usingShaderDeferred(){
 //---------------------------------
 
 //Funcion que inicializa los buffers que usara el debug para guardar y pasar los datos de las lineas de Bullet
-void TMotor::initializeBuffersDebugBullet(){
+void TMotor::initializeBuffersDebugBullet() {
 	//Creamos los buffers de OpenGl
 	glGenVertexArrays(1, &debugBulletVAO);
 	glGenBuffers(1, &debugBulletVBO);
@@ -938,7 +943,7 @@ void TMotor::initializeBuffersDebugBullet(){
 //---------------------------------
 
 //Funcion que setea el buffer y texturas necesarias
-void TMotor::setDeferredBuffers(){
+void TMotor::setDeferredBuffers() {
 	//Creamos y enlazamos el buffer del deferred shading
 	glGenFramebuffers(1, &defBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, defBuffer);
@@ -962,7 +967,7 @@ void TMotor::setDeferredBuffers(){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //|
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); //| Parametros de la textura
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, defNormal, 0); //Adjuntamos la textura al frambuffer definido
- 
+
 	// --- TEXTURA DE COLOR ---
 	glBindTexture(GL_TEXTURE_2D, defDiffuseSpecular); //Decimos que se trata de una textura 2D
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, screenWIDTH, screenHEIGHT, 0, GL_RGBA, GL_FLOAT, NULL); //Utilizamos una textura de 8 bits de precision
@@ -971,8 +976,8 @@ void TMotor::setDeferredBuffers(){
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, defDiffuseSpecular, 0); //Adjuntamos la textura al frambuffer definido
 
 	//Le decimos a OpenGL las texturas adjuntas que va a utilizar para renderizar en el buffer
-	GLenum textAdjuntas[3] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
-	glDrawBuffers(3,textAdjuntas);
+	GLenum textAdjuntas[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+	glDrawBuffers(3, textAdjuntas);
 
 	//Desenlazamos el buffer hasta el dibujado
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

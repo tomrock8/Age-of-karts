@@ -15,15 +15,19 @@ class Caja
 {
 public:
 	Caja(btVector3 posicionCaja);
+	~Caja();
+	void romper(Corredor *pj1Col);
+	void comprobarRespawn();
+	void Delete();
 	btRigidBody *inicializarFisicas();
+
 	obj3D *getNodo();
 	btRigidBody *getRigidBody();
 	const char *getNombre();
 	int getID();
-	void romper(Corredor *pj1Col);
-	void comprobarRespawn();
-	void Delete();
-	~Caja();
+
+	
+
 
 private:
 

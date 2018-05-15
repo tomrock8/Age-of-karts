@@ -194,16 +194,15 @@ void Corredor::setParametros() {
 	cuboNodo = TMotor::instancia().newMeshNode("Jugador", " ", "escena_raiz", false);
 	switch (tipojugador) {
 	case GLADIADOR:
-		
+
 		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
 		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Gladiador/giroDer/GladiGiroDer_000538.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroDer/GladiGiroDer_000", 538, 555), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroDer/GladiGiroDer_000", 555, 563), "GiroDerFin");
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroIzq/GladiGiroIzq_000", 538, 555), "GiroIzqIni");
 		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroIzq/GladiGiroIzq_000", 555, 563), "GiroIzqFin");
-		vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Vacile/gladiVacile_000", 505, 591), "Vacile");
+		//vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Vacile/gladiVacile_000", 505, 591), "Vacile");
 		lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Lanzamiento/GladiLanzamiento_000", 517, 530), "LanzarObj");
-		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Habilidad/GladiHabilidad_000", 517, 540), "Habilidad");
 		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Habilidad/GladiHabilidad_000", 517, 540), "Habilidad");
 
 		//----ACELERACION-----
@@ -234,13 +233,9 @@ void Corredor::setParametros() {
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroIzq/pirataGiroIzq_000", 162, 176), "GiroIzqIni");
 		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroIzq/pirataGiroIzq_000", 176, 187), "GiroIzqFin");
 		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Habilidad/PirataHabilidad_000", 165, 202), "Habilidad");
-		vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Vacile/VacilePirata_000", 500, 551), "Vacile");
+		//vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Vacile/VacilePirata_000", 500, 551), "Vacile");
 
-		//static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
-		static_cast<TAnimacion*>(giroDerIni->getEntidad())->setVisible(false);
-		static_cast<TAnimacion*>(giroDerFin->getEntidad())->setVisible(false);
-		static_cast<TAnimacion*>(giroDerIni->getEntidad())->setVisible(false);
-		//cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Pirata/PirataConducion.obj", "escena_raiz", false);
+
 		//----ACELERACION-----
 		FuerzaMaxima = btScalar(4200); // valor a cambiar para la aceleracion del pj , a mas valor antes llega a vmax
 		Fuerza = FuerzaMaxima;
@@ -258,13 +253,13 @@ void Corredor::setParametros() {
 		num = 2;
 		break;
 	case VIKINGO:
-	
+
 		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000534.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000", 534, 555), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000", 555, 566), "GiroDerFin");
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroIzq/vikingoGiroIzq_000", 534, 555), "GiroIzqIni");
 		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroIzq/vikingoGiroIzq_000", 555, 566), "GiroIzqFin");
-		vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Vacile/vikingoVacile_000", 432, 481), "Vacile");
+		//vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Vacile/vikingoVacile_000", 432, 481), "Vacile");
 		lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Lanzamiento/vikingoLanzamiento_000", 516, 530), "LanzarObj");
 		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Habilidad/vikingoKartHabilidad_000", 499, 515), "Habilidad");
 
@@ -285,13 +280,13 @@ void Corredor::setParametros() {
 		num = 3;
 		break;
 	case CHINO:
-		
+
 		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Chino/giroDer/ChinoGiroDer_000179.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroDer/ChinoGiroDer_000", 179, 190), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroDer/ChinoGiroDer_000", 190, 201), "GiroDerFin");
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroIzq/ChinoGiroIzq_000", 179, 190), "GiroIzqIni");
 		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroIzq/ChinoGiroIzq_000", 190, 201), "GiroIzqFin");
-		vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Vacile/Chinovacile_000", 223, 291), "Vacile");
+		//vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Vacile/Chinovacile_000", 223, 291), "Vacile");
 		lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Lanzamiento/ChinoLanzamiento_000", 648, 662), "LanzarObj");
 		animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Habilidad/ChinoHabilidad_000", 216, 259), "Habilidad");
 
@@ -876,11 +871,11 @@ void Corredor::comprobarInmunidad() {
 		CuerpoColisionRueda4->setCollisionFlags(CuerpoColisionRueda4->getCollisionFlags() | btCollisionObject::CO_GHOST_OBJECT);
 		Timer *time = Timer::getInstancia();
 		if (time->getTimer() - timerInmunidad >= tiempoInmunidad) {
-		CuerpoColisionChasis->setCollisionFlags(0);
-		CuerpoColisionRueda1->setCollisionFlags(0);
-		CuerpoColisionRueda2->setCollisionFlags(0);
-		CuerpoColisionRueda3->setCollisionFlags(0);
-		CuerpoColisionRueda4->setCollisionFlags(0);
+			CuerpoColisionChasis->setCollisionFlags(0);
+			CuerpoColisionRueda1->setCollisionFlags(0);
+			CuerpoColisionRueda2->setCollisionFlags(0);
+			CuerpoColisionRueda3->setCollisionFlags(0);
+			CuerpoColisionRueda4->setCollisionFlags(0);
 			inmunidad = false;
 			estado->setEstadoInmunidad(EstadosJugador::estado_inmunidad::NORMAL);
 		}
@@ -1630,22 +1625,21 @@ TNodo *Corredor::getAnimQuieto() {
 TNodo *Corredor::getLanzarObjeto() {
 	return lanzarObjeto;
 }
-TNodo *Corredor::getVacile() {
+/*TNodo *Corredor::getVacile() {
 	return vacile;
 }
+*/
 /*Metodo para cambiar entre animaciones cuando se pulsan los botones
 mov = ESTADO DE LA ANIMACION
 Previo = ANIMACION ANTERIOR A LA SOLICITADA, se parara y se deja de dibujar
 previoGIRO =  animacion solo para los giros, en caso de existir las para. (necesario para controlar la animacion de los giros)
 */
-void Corredor::iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *previoGiro) {
+void Corredor::iniciarAnimacion(movimiento_jugador mov, TNodo* previo, TNodo *previoGiro) {
 	if (previo != NULL) {
-
-	
-	static_cast<TAnimacion*>(previo->getEntidad())->setVisible(false);
-	static_cast<TAnimacion*>(previo->getEntidad())->ResetAnimation();
+		static_cast<TAnimacion*>(previo->getEntidad())->setVisible(false);
+		static_cast<TAnimacion*>(previo->getEntidad())->ResetAnimation();
 	}
-	
+
 	if (previoGiro != NULL) {
 		static_cast<TAnimacion*>(previoGiro->getEntidad())->setVisible(false);
 		static_cast<TAnimacion*>(previoGiro->getEntidad())->ResetAnimation();
@@ -1654,7 +1648,7 @@ void Corredor::iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *prev
 	if (mov != movimiento_jugador::PARADO) {
 		static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
 	}
-	
+
 
 	switch (mov) {
 	case movimiento_jugador::PARADO:
@@ -1675,14 +1669,15 @@ void Corredor::iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *prev
 	case movimiento_jugador::HABILIDAD:
 		cuboNodo->setNode(animHabilidad);
 		break;
-	
+
 	case movimiento_jugador::LANZAROBJETO:
 		cuboNodo->setNode(lanzarObjeto);
 		break;
-	case movimiento_jugador::VACILE:
-		cuboNodo->setNode(vacile);
-		break;
-}
+		/*case movimiento_jugador::VACILE:
+			cuboNodo->setNode(vacile);
+			break;
+		*/
+	}
 	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(true);
 	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setPlaying(true);
 	/*
@@ -1711,14 +1706,14 @@ Corredor::~Corredor() {
 	delete fuenteFrenos;
 	delete vehiculo;
 	delete cuboNodo;
-/*	delete vacile;
-	delete giroDerIni;
-	delete lanzarObjeto;
-	delete giroDerFin;
-	delete giroIzqIni;
-	delete giroIzqFin;
-	delete animHabilidad;
-	delete quieto;*/
+	/*	delete vacile;
+		delete giroDerIni;
+		delete lanzarObjeto;
+		delete giroDerFin;
+		delete giroIzqIni;
+		delete giroIzqFin;
+		delete animHabilidad;
+		delete quieto;*/
 
 
 	cout << "SALGO DESTRUCTOR CORREDOR\n";

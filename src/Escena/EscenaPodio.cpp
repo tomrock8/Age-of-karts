@@ -17,22 +17,22 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo,std::vector<Corredor::tipo_jug
 
          cout<<"Posicion de jugador seteada"<<endl;
         
-        cout<<"PIRATA"<<endl;   
+        cout<<"El PRIMERO ES EL PIRATA"<<endl;   
             break;
 
             case Corredor::tipo_jugador::VIKINGO:
         //personajes.at(i) = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Vikingo/vikingoConIzq.obj", "escena_raiz", false); 
-        cout<<"VIKINGO"<<endl;     
+        cout<<"El PRIMERO ES EL VIKINGO"<<endl;     
             break;
 
             case Corredor::tipo_jugador::GLADIADOR:
         //personajes.at(i) = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Vikingo/vikingoConIzq.obj", "escena_raiz", false);  
-        cout<<"GLADIADOR"<<endl;     
+        cout<<"El PRIMERO ES EL GLADIADOR"<<endl;     
             break;
 
             case Corredor::tipo_jugador::CHINO:
         //personajes.at(i) = TMotor::instancia().newMeshNode("Jugador", "assets/Karts/Vikingo/vikingoConIzq.obj", "escena_raiz", false);  
-        cout<<"CHINO"<<endl;     
+        cout<<"El PRIMERO ES EL CHINO"<<endl;     
             break;
 
             default:
@@ -43,18 +43,13 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo,std::vector<Corredor::tipo_jug
 
     }
 
-   
-    camera = new cameraThird("camara_jugador3apersona","escena_raiz");
-    camera->setPositionStatic(glm::vec3(0,5,10));
-    cout<<"Posicion de camara seteada"<<endl;
+	
+
+
+    cout<<"Posicion de jugador seteada"<<endl;
     
-    
-/*
-    //-----------------------------
-	//	ESCENARIO MAPA
-	//-----------------------------
-	podio = TMotor::instancia().newMeshNode("podio", objeto, "escena_raiz", false);
-*/
+       
+	init();
 
 }
 
@@ -66,7 +61,7 @@ Escena::tipo_escena EscenaPodio::comprobarInputs(){
 
 //cout<<"estoy comprobando el input"<<endl;
 
-
+camera->lookAt(glm::vec3(0,0,0));
 //cout<<"lookAT"<<endl;
 
 return Escena::tipo_escena::PODIO;
@@ -74,10 +69,31 @@ return Escena::tipo_escena::PODIO;
 }
 
 void EscenaPodio::init() {
+	// LUCES PUNTUALES
+	luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, true, "escena_raiz");
+	luzPuntual_0->translate(glm::vec3(100.0f, 700.0f, 0.0f));
 
+	luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
+	luzPuntual_1->translate(glm::vec3(0.0f, 1500.0f, 0.0f));
+
+	luzPuntual_2 = TMotor::instancia().newLightNode("light_2", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
+	luzPuntual_2->translate(glm::vec3(-150.0f, 12.0f, -300.0f));
+
+	luzPuntual_3 = TMotor::instancia().newLightNode("light_3", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
+	luzPuntual_3->translate(glm::vec3(0.0f, 12.0f, 300.0f));
+	//-----------------------------
+	//	ESCENARIO MAPA
+	//-----------------------------
+	podio = TMotor::instancia().newMeshNode("podio", "assets/MapaCelebracion/victoria.obj", "escena_raiz", false);
+	camera = new cameraThird("camara_jugador3apersonaPodio", "escena_raiz");
+	camera->setPositionStatic(glm::vec3(0, 5, -40));
+	camera->setRotation(glm::vec3(0, 1, 0), 180);
+	
 }
 
 void EscenaPodio::dibujar() {
+	cout << "dibujando el podio" << endl;
+	TMotor::instancia().draw();
 
 }
 
@@ -86,5 +102,5 @@ void EscenaPodio::limpiar() {
 }
 
 void EscenaPodio::update() {
-camera->lookAt(glm::vec3(0,0,0));
+
 }

@@ -10,7 +10,7 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 	//control de animaciones
 	animacionPrevia = getAnimQuieto();
 	iniciarAnimacion(PARADO, animacionPrevia,NULL);
-	animacionPrevia = getVacile();
+
 
 }
 

@@ -10,17 +10,17 @@ class TAnimacion : public TEntidad
 public:
 	TAnimacion(std::vector<TMalla *> frames);
 	TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFrame);
-	~TAnimacion();
+	~TAnimacion() override;
+	void ResetAnimation();
 
 	// METODOS GET
 	int getActualFrame();
 	int getTotalFrames();
-	void setPlaying(bool s);
-	bool setPlaying();
-	void ResetAnimation();
 	bool isVisible();
 
 	//METODOS SET
+	void setPlaying(bool s);
+	bool setPlaying();
 	void setFirstFrame(int firstFrame);
 	void setLastFrame(int lastFrame);
 	void setVisible(bool visible);
@@ -42,7 +42,6 @@ private:
 	unsigned short lastFrame; // Ultimo frame a reproducir
 
 	bool visible; // Indicador para dibujar
-	//bool loopPlay; // Indicador para reiniciar la animacion
 	bool isPlaying; //Indicador para empezar a dibujar
 	bool endAnimation; //controlar que no entre en bucle
 };

@@ -11,33 +11,33 @@ Habilidad::Habilidad(int tipo, btRigidBody* n, btVector3 posicion, btVector3 esc
 	switch (tipoHabilidad) {
 
 	case 1:
-		nodo = TMotor::instancia().newMeshNode("HabilidadPirata", strEscudo, "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadPirata", strEscudo, "escena_raiz", false);
 		nombre = "HabilidadPirata";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadPirata");
 		break;
 
 	case 2:
-		nodo = TMotor::instancia().newMeshNode("HabilidadVikingo", strEscudo, "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadVikingo", strEscudo, "escena_raiz", false);
 		nombre = "HabilidadVikingo";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadVikingo");
 		break;
 
 	case 3:
-		nodo = TMotor::instancia().newMeshNode("HabilidadGladiador", strEscudo, "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadGladiador", strEscudo, "escena_raiz", false);
 		nombre = "HabilidadGladiador";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadGladiador");
 		break;
 
 	case 4:
-		nodo = TMotor::instancia().newMeshNode("HabilidadChino", strEscudo, "escena_raiz",false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadChino", strEscudo, "escena_raiz", false);
 		nombre = "HabilidadChino";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadChino");
 		break;
 
 	}
-	
+
 	nodo->setScale(tamanyoNodo.getX(), tamanyoNodo.getY(), tamanyoNodo.getZ());
-	
+
 	id = nodo->getID();
 	nodo->setName(nombre);
 
@@ -46,12 +46,12 @@ Habilidad::Habilidad(int tipo, btRigidBody* n, btVector3 posicion, btVector3 esc
 	if (tipoHabilidad == 4 || tipoHabilidad == 2 || tipoHabilidad == 3) {
 		rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 		//rigidBody->setGravity(btVector3(0, 0, 0));
-		
+
 	}
 
 }
 
-void Habilidad::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) {
+void Habilidad::lanzarItem(int direccion, btVector3 orientacion, btTransform objeto) {
 	this->orientacion = orientacion;
 
 	if (tipoHabilidad == 1) { // PIRATA
@@ -79,11 +79,11 @@ void Habilidad::movimiento() {
 
 
 	case 2: // VIKINGO
-		
+
 
 
 		giro = 15;
-		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX() + orientacion.getX() * 15, NodoVehiculo->getCenterOfMassPosition ().getY()+5, NodoVehiculo->getCenterOfMassPosition().getZ() + orientacion.getZ() * 15));
+		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX() + orientacion.getX() * 15, NodoVehiculo->getCenterOfMassPosition().getY() + 5, NodoVehiculo->getCenterOfMassPosition().getZ() + orientacion.getZ() * 15));
 
 		orientacion = orientacion.rotate(btVector3(0, 1, 0), giro * PI / 180);
 		//nodo->setRotation(nodo->getRotation().x, cont, nodo->getRotation().z);
@@ -104,22 +104,22 @@ void Habilidad::movimiento() {
 
 	case 3: // GLADIADOR
 
-		nodo->setPosition(NodoVehiculo->getCenterOfMassPosition().getX(),NodoVehiculo->getCenterOfMassPosition().getY(),NodoVehiculo->getCenterOfMassPosition().getZ());
-		
-		if(nodo->getScale().x<=10)
-		nodo->setScale(nodo->getScale().x +1,nodo->getScale().x,nodo->getScale().x +1);
+		nodo->setPosition(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY(), NodoVehiculo->getCenterOfMassPosition().getZ());
 
-		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY()+ 2, NodoVehiculo->getCenterOfMassPosition().getZ()));
+		if (nodo->getScale().x <= 10)
+			nodo->setScale(nodo->getScale().x + 1, nodo->getScale().x, nodo->getScale().x + 1);
+
+		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY() + 2, NodoVehiculo->getCenterOfMassPosition().getZ()));
 		trans.setRotation(NodoVehiculo->getCenterOfMassTransform().getRotation());
 		rigidBody->setCenterOfMassTransform(trans);
-		
+
 		if (cont2 != 0)
 			cont2--;
 
 		break;
 
 	case 4: //CHINICO
-		nodo->setPosition(NodoVehiculo->getCenterOfMassPosition().getX(),NodoVehiculo->getCenterOfMassPosition().getY(),NodoVehiculo->getCenterOfMassPosition().getZ());
+		nodo->setPosition(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY(), NodoVehiculo->getCenterOfMassPosition().getZ());
 		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY() + 2, NodoVehiculo->getCenterOfMassPosition().getZ()));
 		trans.setRotation(NodoVehiculo->getCenterOfMassTransform().getRotation());
 		rigidBody->setCenterOfMassTransform(trans);

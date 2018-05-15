@@ -17,7 +17,7 @@ public:
 	// CARGA MAPA
 	void loadWaypoints(const char *waypoints);
 	void loadPirateMapElements();
-	
+
 
 	// METODOS SET
 	void setMapa();
@@ -28,8 +28,8 @@ public:
 
 	// METODOS GET
 	static Pista *getInstancia();
-	
-	int getTamCajas(); 
+
+	int getTamCajas();
 	int getTamArrayWaypoints();
 
 	std::vector<Item *> getItems();
@@ -40,8 +40,8 @@ public:
 	Turbo* getTurbo();
 	Turbo* getTurbo(int id);
 	int getNumVueltas();
-	
-	
+
+
 
 private:
 	Pista(void);

@@ -4,6 +4,10 @@ TTransform::TTransform() {//la inicializacion sera la de identidad
 	identidad();
 }
 
+TTransform::~TTransform(){
+	std::cout << "Destructor de TTransform\n";
+}
+
 // GESTIONAR LA MATRIZ
 void TTransform::cargar(glm::mat4 mat) { matriz = mat; }
 glm::mat4 TTransform::getMatriz() { return matriz; }

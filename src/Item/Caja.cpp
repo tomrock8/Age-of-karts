@@ -7,7 +7,7 @@ Caja::Caja(btVector3 posicionCaja) {
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	//nodo = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/caja.obj"));
-	nodo = TMotor::instancia().newMeshNode("Caja", "assets/caja/caja.obj", "escena_raiz",false);
+	nodo = TMotor::instancia().newMeshNode("Caja", "assets/caja/caja.obj", "escena_raiz", false);
 	nombre = "Caja";
 	GestorIDs::instancia().setIdentifier(nodo, nombre);
 	id = GestorIDs::instancia().getIDLibre() - 1;
@@ -36,8 +36,7 @@ Caja::Caja(btVector3 posicionCaja) {
 	posicionFuente[2] = posicion.getZ();
 }
 
-btRigidBody *Caja::inicializarFisicas()
-{
+btRigidBody *Caja::inicializarFisicas() {
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
@@ -83,8 +82,7 @@ void Caja::romper(Corredor *pj1Col) {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	for (int i = 0; i < objetos.size(); i++)
-	{
+	for (int i = 0; i < objetos.size(); i++) {
 		obj3D *nodoActual = static_cast<obj3D *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
 		if (nodoActual->getID() == id) {
 			btRigidBody *Object = objetos.at(i);
@@ -114,13 +112,8 @@ void Caja::Delete() {
 	for (int i = 0; i < objetos.size(); i++) {
 		obj3D *nodoActual = static_cast<obj3D *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
 		if (nodoActual->getID() == id) {
-
 			btRigidBody *Object = objetos.at(i);
-
-			// Delete irrlicht node
 			obj3D *Node = static_cast<obj3D *>(Object->getUserPointer());
-
-			//Node->remove();
 
 			// Remove the object from the world
 			mundo->removeRigidBody(Object);

@@ -1,47 +1,33 @@
 #include "TNodo.hpp"
 #include "TMotor.hpp"
+
 TNodo::TNodo(const char* n) {
 	name = new std::string(n);
-	
 }
 
 TNodo::~TNodo() {
+	std::cout << "Destructor de TNodo: " << *name << "\n";
+
+	if (strcmp(name->c_str(), "quieto") == 0) {
+		cout << "EXPLOSION\n";
+	}
+
 	//Borrado de hijos
-
-	if(hijos.size()>0){
-
-		//cout<<"tengo hijos::::"<<hijos.size() <<endl;
-	for (GLuint i = 0; i < hijos.size(); i++) {
-		//cout<<"intentando borrar:::"<<i<<endl;
-		delete hijos.at(i);
-		
-	}
-		if(this != TMotor::instancia().getSceneNode()){
-			hijos.clear();
-			delete entidad;
-			delete name;
-			//delete this;
-			//cout<<"Borro nodo"<<endl;
+	if (hijos.size() > 0) {
+		for (GLuint i = 0; i < hijos.size(); i++) {
+			delete hijos.at(i);
 		}
-
-	}else{
-		if(this != TMotor::instancia().getSceneNode()){
-			//cout<<"no tengo ningun hijo"<<endl;	
-			delete entidad;
-			delete name;	
-			//delete this;
-			//cout<<"Borro nodo"<<endl;	
-		}
-			
+		hijos.clear();
 	}
 
+	delete name;
+
+	//delete entidad;
 }
 
 // MANEJO DE HIJOS
 int TNodo::addHijo(TNodo *n) {//1 == ha agregado hijos
 	hijos.push_back(n);
-
-
 	return 1;
 }
 
@@ -60,13 +46,10 @@ int TNodo::remHijo(TNodo*n) {//1 == ha borrado hijos
 //-----------------
 void TNodo::setPadre(TNodo *p) { padre = p; }
 void TNodo::setName(const char*n) { name = new std::string(n); }
-
-bool TNodo::setEntidad(TEntidad *n) {
+void TNodo::setEntidad(TEntidad *n) {
 	if (n != NULL) {
 		entidad = n;
-		return true;
 	}
-	else return false;
 }
 
 //-----------------
@@ -96,7 +79,7 @@ TNodo *TNodo::getNode(const char* nombre) {
 }
 
 
-std::vector<TNodo *>TNodo::getHijos(){
+std::vector<TNodo *>TNodo::getHijos() {
 
 	return hijos;
 }

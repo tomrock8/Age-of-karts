@@ -9,7 +9,7 @@ class TCamara : public TEntidad
 {
 public:
 	TCamara();
-	~TCamara();
+	~TCamara() override;
 
 	// METODOS GET
 	bool getActive();

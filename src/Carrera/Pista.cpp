@@ -13,7 +13,7 @@ Pista::~Pista() {
 	}
 	arrayWaypoints.clear();
 	//delete arrayWaypoints;
-	
+
 	//destroy cajas
 	for (int i = 0; i < tamCajas; i++) {
 		delete arrayCajas.at(i);
@@ -40,18 +40,19 @@ Pista *Pista::getInstancia() {
 
 
 void Pista::setMapa() {
-//void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints) {
-	if(strcmp(nameMap,"pirata")==0){
+	//void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints) {
+	if (strcmp(nameMap, "pirata") == 0) {
 		path = "assets/MapaPirata/mapaPirata.obj";
 		wayPoints = "assets/MapaPirata/wp.obj";
 		loadPirateMapElements();
-	}else if(strcmp(nameMap,"gladiador")==0){
+	}
+	else if (strcmp(nameMap, "gladiador") == 0) {
 		//Cargar mapa gladiador
 	}
 	if (nameMap != NULL) {
 		createMap(path);
 		loadWaypoints(wayPoints);
-		
+
 	}
 
 }
@@ -87,7 +88,7 @@ void Pista::loadWaypoints(const char* waypoints) {
 		//arrayCajas.resize(stoi(tamanyoArrayCajas));
 
 		while (!myfile.eof()) {
-			
+
 			getline(myfile, tipo, ' ');//caja turbo o waypoint
 			tipoObj = stoi(tipo);
 			if (tipoObj != 0) {
@@ -171,26 +172,22 @@ void Pista::loadWaypoints(const char* waypoints) {
 			}
 			if (tipoObj == 3) {//POSICION PARRILLA
 				parrilla.push_back(glm::vec3(stof(pX), stof(pY), stof(pZ)));
-			
+
 			}
 			//cout << line << endl;
 		}
 
 		myfile.close();
-
-
 	}
 	else {
 		cout << "Error abriendo archivo";
 	}
 }
-std::vector<Item *> Pista::getItems() {
-	return Items;
-}
+
 
 void Pista::loadPirateMapElements() {
 	TNodo *aux = NULL;
-	std::string pX, pY, pZ,num;
+	std::string pX, pY, pZ, num;
 	float posX, posY, posZ;
 	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/elementos.obj", "escena_raiz", false);
 	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/Turbos.obj", "escena_raiz", false);
@@ -208,45 +205,29 @@ void Pista::loadPirateMapElements() {
 			getline(myfile, pY, ' ');
 			getline(myfile, pZ, ' ');
 			std::string palm2 = palm + to_string(i);
-		
+
 			palmeras.push_back( TMotor::instancia().newMeshNode(palm2.c_str(), "assets/MapaPirata/palmeras1.obj", "escena_raiz", false));
 			palmeras.at(i)->setPosition(stof(pX), stof(pY), stof(pZ));
 			i++;
 		}
-	
+
 	myfile.close();
 	aux = NULL;
 */
 }
-void Pista::setNumVueltas(int n){
-	vueltas=n;
-}
-void Pista::setNombreMapa(const char *name){
-	nameMap=name;
-}
-void Pista::setItems(std::vector<Item *> itemMetodo) {
-	Items = itemMetodo;
-}
-std::vector<Waypoint*> Pista::getArrayWaypoints() {
-	return arrayWaypoints;
-}
-std::vector<Caja*> Pista::getArrayCaja() {
-	return arrayCajas;
-}
-std::vector<glm::vec3> Pista::getParrilla() {
-	return parrilla;
-}
-int Pista::getTamCajas() {
-	return tamCajas;
-}
 
-void Pista::setArrayCaja(std::vector<Caja*> cajas) {
-	arrayCajas = cajas;
-}
-
-std::vector<Turbo*>Pista::getArrayTurbo() {
-	return arrayTurbos;
-}
+std::vector<Item *> Pista::getItems() { return Items; }
+void Pista::setNumVueltas(int n) { vueltas = n; }
+void Pista::setNombreMapa(const char *name) { nameMap = name; }
+void Pista::setItems(std::vector<Item *> itemMetodo) { Items = itemMetodo; }
+std::vector<Waypoint*> Pista::getArrayWaypoints() { return arrayWaypoints; }
+std::vector<Caja*> Pista::getArrayCaja() { return arrayCajas; }
+std::vector<glm::vec3> Pista::getParrilla() { return parrilla; }
+int Pista::getTamCajas() { return tamCajas; }
+void Pista::setArrayCaja(std::vector<Caja*> cajas) { arrayCajas = cajas; }
+std::vector<Turbo*>Pista::getArrayTurbo() { return arrayTurbos; }
+int Pista::getTamArrayWaypoints() { return tamWaypoints; }
+int Pista::getNumVueltas() { return vueltas; }
 
 Turbo *Pista::getTurbo() {
 	for (int i = 0; i < tamTurbos; i++) {
@@ -266,11 +247,4 @@ Turbo *Pista::getTurbo(int id) {
 	}
 
 	return NULL;
-}
-
-int Pista::getTamArrayWaypoints() {
-	return tamWaypoints;
-}
-int Pista::getNumVueltas(){
-	return vueltas;
 }

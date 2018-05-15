@@ -24,16 +24,12 @@ TMotor::TMotor() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); // Version minima de opengl
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // Version maxima de opengl
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //Se usa la version Core de OpenGL
-	glfwWindowHint(GLFW_SAMPLES, 4); //Le decimos a GLFW que queremos usar un buffer de supermuestreo en vez del de por defecto
 
 	// CREACION OBJETO VENTANA PARA USAR LAS FUNCIONES DE GLFW
 	ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", NULL, NULL);
 
 	//Almacena las dimensiones de la ventana en las variables screen
 	glfwGetFramebufferSize(ventana, &screenWIDTH, &screenHEIGHT);
-
-	//Activamos el Anti-aliasing por defecto
-	glEnable(GL_MULTISAMPLE); //Anti-aliasing MSAA
 
 	//Si la ventana no se ha creado correctamente, se cierra GLFW y se muestra un error por terminal
 	if (!ventana) {

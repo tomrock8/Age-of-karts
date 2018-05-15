@@ -10,9 +10,16 @@ layout (location = 4) in vec3 aBitangents; //Bitangentes
 
 //Uniform para la matriz MVP
 uniform mat4 mvp;
+uniform mat4 model;
+
+//Variables de salida al Fragment shader
+out vec3 worldPos;
 
 void main()
 {
+    //Posicion de vertice por las transfomaciones de la malla (matriz model)
+    worldPos = vec3(model * vec4(aPos, 1.0));
+
     //Calcular posicion final del pixel a partir de la multiplicacion de la MVP por la posicion del  vertice
     gl_Position = mvp * vec4(aPos, 1.0);
 }

@@ -19,21 +19,19 @@ TMalla::~TMalla() {
 	visible = false; // Ocultar para no dibujar mas
 
 	// Eliminar los punteros del vector
+	if (malla.size() > 0) {
+		for (int i = 0; i < malla.size(); i++) {
+			delete malla.at(i);
+		}
+		malla.clear(); // Vaciar el vector
+	}
 
 	if (TMotor::instancia().getBoundingBoxes() && bBoxes.size() > 0) {
 		for (int i = 0; i < bBoxes.size(); i++) {
 			delete bBoxes.at(i);
 		}
+		bBoxes.clear(); 
 	}
-	bBoxes.clear(); // Vaciar el vector
-
-
-	if (malla.size() > 0) {
-		for (int i = 0; i < malla.size(); i++) {
-			delete malla.at(i);
-		}
-	}
-	malla.clear();
 }
 
 // METODOS GET

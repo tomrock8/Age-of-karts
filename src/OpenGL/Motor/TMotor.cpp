@@ -518,13 +518,23 @@ void TMotor::setBoundingBoxes(bool b) {
 void TMotor::setFaceCulling(bool b) {
 	faceCulling = b;
 }
-void TMotor::setAntialiasing(bool b) {
-	if (b == true) {
+//Funcion para activar/desactivar el anti-aliasing
+void TMotor::setAntialiasing(bool b){
+	if ( b == true ){
 		glEnable(GL_MULTISAMPLE);
 	}
 	else {
 		glDisable(GL_MULTISAMPLE);
 	}
+}
+//Funcion para activar/desactivar el clipping personalizado
+void TMotor::setPersonalisedClipping(bool b, float f){
+	personalisedClipping = b;
+	levelOfClipping = f; //Nivel de clipping
+}
+//Funcion para activar/desactivar las sombras
+void TMotor::setShadows(bool b){
+	shadows = b;
 }
 obj3D* TMotor::getObjActiveCamera() {
 	if (cameras.size() > 0)
@@ -696,35 +706,37 @@ void TMotor::drawParticles() {
 
 // ---- DIBUJADO DE LAS SOMBRAS PROYECTADAS ----
 //Funcion que dibuja las sombras de los objetos a partir de la tecnica de las sombras proyectadas
-void TMotor::drawProjectedShadows() {
-	//No dibujamos aquellos elementos que no queremos que proyecten sombras
-	for (int i = 0; i < notShadowObjects.size(); i++) {
-		notShadowObjects.at(i)->setVisible(false);
-	}
-	//Activamos el shader especifico para dibujar las sombras proyectadas
-	shaderProjectedShadows->use();
-	if (lights.size() > 0) {
-		for (int i = 0; i < lights.size(); i++) {
-			if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true) {
-				//Le pasamos al shader la matriz view
-				shaderProjectedShadows->setMat4("view", activeViewMatrix);
-				//Le pasamos la matriz proyeccion de la luz (perspectiva)
-				glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 300.0f);
-				shaderProjectedShadows->setMat4("projectionLight", projectionLight);
-				//Le pasamos la posicion de la luz al shader
-				shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());
-				shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz *>(lights[i]->getEntidad())->getDirection());
-				glm::mat4 sc;
-				sc = scale(sc, glm::vec3(1, 0.01, 1));
-				shaderProjectedShadows->setMat4("scale", sc);
-				//Dibujamos la escena con el shader de sombras proyectadas
-				scene->draw(shaderProjectedShadows);
+void TMotor::drawProjectedShadows(){
+	if ( shadows == true){ //Si las sombras estan activadas...
+		//No dibujamos aquellos elementos que no queremos que proyecten sombras
+		for (int i = 0; i < notShadowObjects.size(); i++){
+			notShadowObjects.at(i)->setVisible(false);
+		}
+		//Activamos el shader especifico para dibujar las sombras proyectadas
+		shaderProjectedShadows->use();
+		if (lights.size() > 0) {
+			for (int i = 0; i < lights.size(); i++) {
+				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
+					//Le pasamos al shader la matriz view
+					shaderProjectedShadows->setMat4("view", activeViewMatrix);
+					//Le pasamos la matriz proyeccion de la luz (perspectiva)
+					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 300.0f);
+					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
+					//Le pasamos la posicion de la luz al shader
+					shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());
+					shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz *>(lights[i]->getEntidad())->getDirection());
+					glm::mat4 sc;
+					sc = scale(sc, glm::vec3(1,0.01,1));
+					shaderProjectedShadows->setMat4("scale", sc);
+					//Dibujamos la escena con el shader de sombras proyectadas
+					scene->draw(shaderProjectedShadows);
+				}
 			}
 		}
-	}
-	//Reactivamos el dibujado de los elementos 
-	for (int i = 0; i < notShadowObjects.size(); i++) {
-		notShadowObjects.at(i)->setVisible(true);
+		//Reactivamos el dibujado de los elementos 
+		for (int i = 0; i < notShadowObjects.size(); i++){
+			notShadowObjects.at(i)->setVisible(true);
+		}
 	}
 }
 
@@ -800,8 +812,11 @@ void TMotor::usingShaderCartoon() {
 	shaderCartoon->use();
 	//Calcular posicion de la camara y pasarsela al fragment shader
 	glm::vec4 defaultVector(0, 0, 0, 1);
-	glm::vec4 posC = activeViewMatrix * defaultVector;
+	glm::vec4 posC = glm::inverse(activeViewMatrix) * defaultVector;
 	shaderCartoon->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
+	//Le pasamos al shader si el clipping esta o no activado y el nivel de clipping
+	shaderCartoon->setBool("pClipping", personalisedClipping);
+	shaderCartoon->setFloat("levelOfClipping", levelOfClipping);
 	//Establecemos los datos de las distintas luces
 	drawLight(shaderCartoon);
 	//Si el debug de bullet no esta activo
@@ -830,10 +845,15 @@ void TMotor::usingShaderCartoon() {
 	glEnable(GL_CULL_FACE);
 	//Activamos el suavizado de las lineas
 	glEnable(GL_LINE_SMOOTH);
-	//Especificamos que solo queremos dibujar las caras ocultas
+	//Especificamos que solo queremos ocultar las caras frontales
 	glCullFace(GL_FRONT);
 	//Aumentamos el grosor de las lineas
 	glLineWidth(4.50f);
+	//Pasamos la posicion de la camara al shader para las operaciones de clipping
+	shaderSilhouette->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
+	//Le pasamos al shader si el clipping esta o no activado y el nivel de clipping
+	shaderSilhouette->setBool("pClipping", personalisedClipping);
+	shaderSilhouette->setFloat("levelOfClipping", levelOfClipping);
 	//Dibujamos los distintos nodos del arbol
 	scene->draw(shaderSilhouette);
 	//Volvemos al modo de dibujado normal de los poligonos

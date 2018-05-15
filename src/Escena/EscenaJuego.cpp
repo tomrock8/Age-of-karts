@@ -329,7 +329,10 @@ void EscenaJuego::dibujar() {
 		//Dibujamos el skybox
 		TMotor::instancia().drawSkybox();
 		//Dibujamos los objetos 3D creados en la escena
+		TMotor::instancia().drawProjectedShadows();
 		TMotor::instancia().draw();
+		//Dibujamos las sombras de los objetos
+		//TMotor::instancia().drawProjectedShadows();
 		//Dibujamos el debug de bullet
 		TMotor::instancia().drawDebugBullet();
 		//Dibujamos las particulas

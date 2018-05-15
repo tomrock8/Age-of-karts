@@ -25,7 +25,13 @@ private:
 	bool end;
 
 	//Booleanos para las opciones
-	bool msaa = true;
+	bool personalisedGraphics = false; //Graficos personalizados
+	bool msaa = false; //Anti-aliasing
+	bool shadows = false; //Sombras
+	bool faceCulling = true; //Face Culling
+	bool clipping = true; //Clipping
+	float levelOfClipping = 750; //Nivel de Clipping
+
 };
 
 #endif /* ESCENAOPCIONES_H */

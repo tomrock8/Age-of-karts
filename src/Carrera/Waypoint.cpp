@@ -53,7 +53,11 @@ void Waypoint::inicializarFisicas() {
 	bullet->setObjetos(objetos);
 
 }
-
+Waypoint::~Waypoint() {
+	cout << "delete waypoint\n" << endl;
+	siguiente = nullptr;
+	delete waypoint;
+}
 
 // MEtodos SET
 void Waypoint::setPosicion(float x, float y, float z) {
@@ -76,46 +80,16 @@ btVector3 Waypoint::getPosicion() {
 btVector3 Waypoint::getRotation() {
 	return btVector3(waypoint->getRotation().x, waypoint->getRotation().y, waypoint->getRotation().z);
 }
-Waypoint *Waypoint::getNextWaypoint() {
-	return siguiente;
-}
 
-obj3D *Waypoint::getWaypoint() {
-	return waypoint;
-}
-int Waypoint::getID() {
-	return id;
-}
-
-Waypoint::~Waypoint() {
-	cout << "ENTRO DELETE WAYPOINT " << endl;
-	siguiente = nullptr;
-	cout << " SALGO DELETE WAYPOINT \n" << endl;
-}
-void Waypoint::setVector1(btVector3 p) {
-	vector1 = p;
-}
-void Waypoint::setVector2(btVector3 p2) {
-	vector2 = p2;
-}
-void Waypoint::setVector3(btVector3 p3) {
-	vector3 = p3;
-}
-void Waypoint::setVector4(btVector3 p4) {
-	vector4 = p4;
-}
-btVector3 Waypoint::getVector1() {
-	return vector1;
-}
-btVector3 Waypoint::getVector2() {
-	return vector2;
-}
-btVector3 Waypoint::getVector3() {
-	return vector3;
-}
-btVector3 Waypoint::getVector4() {
-	return vector4;
-}
-void Waypoint::setID(int i) {
-	id = i;
-}
+Waypoint *Waypoint::getNextWaypoint() { return siguiente; }
+obj3D *Waypoint::getWaypoint() { return waypoint; }
+int Waypoint::getID() { return id; }
+void Waypoint::setVector1(btVector3 p) { vector1 = p; }
+void Waypoint::setVector2(btVector3 p2) { vector2 = p2; }
+void Waypoint::setVector3(btVector3 p3) { vector3 = p3; }
+void Waypoint::setVector4(btVector3 p4) { vector4 = p4; }
+btVector3 Waypoint::getVector1() { return vector1; }
+btVector3 Waypoint::getVector2() { return vector2; }
+btVector3 Waypoint::getVector3() { return vector3; }
+btVector3 Waypoint::getVector4() { return vector4; }
+void Waypoint::setID(int i) { id = i; }

@@ -41,6 +41,7 @@ public:
 	void initDebugWindow(); //|
 	void closeDebugWindow();//|inicializacion y cierre de IMGUI 
 	void cleanHUD(); //Limpieza de HUDs
+	void cleanScene();
 	void nuevaEscenaRaiz();
 
 	//CREACION DE OBJETOS
@@ -78,7 +79,6 @@ public:
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
 	TGestorRecursos *getGR();
-	bool getRenderDebug();
 	bool getBoundingBoxes();
 	GestorSonido *getGestorSonido();
 	TNodo *getCameraByIndex(int i);

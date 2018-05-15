@@ -6,12 +6,34 @@ TMalla::TMalla(std::vector <mesh *> m) {
 	malla = m;
 	visible = true;
 	//Creamos un bounding box por cada TRecursoMalla
-	if (TMotor::instancia().getBoundingBoxes() == true){
-		for (int i = 0; i < malla.size(); i++){
+	if (TMotor::instancia().getBoundingBoxes() == true) {
+		for (int i = 0; i < malla.size(); i++) {
 			boundingBox *b = new boundingBox(malla.at(i)->getMesh()->getCenter(), malla.at(i)->getMesh()->getSize());
 			bBoxes.push_back(b);
 		}
 	}
+}
+
+TMalla::~TMalla() {
+	std::cout << "Destructor de TMalla\n";
+	visible = false; // Ocultar para no dibujar mas
+
+	// Eliminar los punteros del vector
+
+	if (TMotor::instancia().getBoundingBoxes() && bBoxes.size() > 0) {
+		for (int i = 0; i < bBoxes.size(); i++) {
+			delete bBoxes.at(i);
+		}
+	}
+	bBoxes.clear(); // Vaciar el vector
+
+
+	if (malla.size() > 0) {
+		for (int i = 0; i < malla.size(); i++) {
+			delete malla.at(i);
+		}
+	}
+	malla.clear();
 }
 
 // METODOS GET
@@ -53,7 +75,7 @@ void TMalla::draw(Shader *shader) {
 		malla.at(i)->getMesh()->draw();
 
 		//Se llama al dibujado del bounding box
-		if (TMotor::instancia().getBoundingBoxes() == true){
+		if (TMotor::instancia().getBoundingBoxes() == true) {
 			if (malla.size() != 2 && malla.size() != 4 && malla.size() != 5) bBoxes.at(i)->draw(modelMatrix);
 		}
 

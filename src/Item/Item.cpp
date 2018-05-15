@@ -15,18 +15,18 @@ Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesc
 	this->alturaLanzamiento = alturaLanzamiento;
 	orientacionItem = btVector3(1, 0, 0);
 
-	subir=false;
-	bajar=false;
-	indiceAltura=0;
+	subir = false;
+	bajar = false;
+	indiceAltura = 0;
 	diferencia = 0.035;
-	alturaItem=0;
+	alturaItem = 0;
 }
 
 Item::~Item() {
 	delete nodo;
 }
 
-void Item::inicializarFisicas(){
+void Item::inicializarFisicas() {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
@@ -107,15 +107,15 @@ bool Item::update() {
 
 void Item::Delete() {
 	// NO VA A FUNCIONAR!!!!
-	
+
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	for (int i = 0; i < objetos.size(); i++) {
 		obj3D *nodoActual = static_cast<obj3D *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
-		if (nodoActual->getID() == id && strcmp(nodoActual->getName(),"rueda1")!=0 && strcmp(nodoActual->getName(),"rueda2")!=0 && strcmp(nodoActual->getName(),"rueda3")!=0
-		&& strcmp(nodoActual->getName(),"rueda4")!=0) {
+		if (nodoActual->getID() == id && strcmp(nodoActual->getName(), "rueda1") != 0 && strcmp(nodoActual->getName(), "rueda2") != 0 && strcmp(nodoActual->getName(), "rueda3") != 0
+			&& strcmp(nodoActual->getName(), "rueda4") != 0) {
 			btRigidBody *Object = objetos.at(i);
 
 			// Delete node
@@ -146,18 +146,19 @@ void Item::Delete() {
 //COmprobar distancias con el suelo
 void Item::ajustarAltura() {
 
-	btTransform posObj= rigidBody->getCenterOfMassTransform();
-	float altura= 0;
-	
+	btTransform posObj = rigidBody->getCenterOfMassTransform();
+	float altura = 0;
 
-	if(subir){
-		altura= (alturaItem - indiceAltura)/diferencia;
-		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()+altura,posObj.getOrigin().getZ()));
-	}else if(bajar){
-		altura=(indiceAltura - alturaItem)/diferencia;
-		posObj.setOrigin(btVector3(posObj.getOrigin().getX(),posObj.getOrigin().getY()-altura,posObj.getOrigin().getZ()));
+
+	if (subir) {
+		altura = (alturaItem - indiceAltura) / diferencia;
+		posObj.setOrigin(btVector3(posObj.getOrigin().getX(), posObj.getOrigin().getY() + altura, posObj.getOrigin().getZ()));
 	}
-	
+	else if (bajar) {
+		altura = (indiceAltura - alturaItem) / diferencia;
+		posObj.setOrigin(btVector3(posObj.getOrigin().getX(), posObj.getOrigin().getY() - altura, posObj.getOrigin().getZ()));
+	}
+
 
 	rigidBody->setCenterOfMassTransform(posObj);
 
@@ -169,7 +170,7 @@ void Item::ajustarAltura() {
 
 void Item::comprobarAltura(float altura) {
 
-	alturaItem=altura;
+	alturaItem = altura;
 	MotorFisicas *mun = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = mun->getMundo();
 	mundo->updateAabbs();
@@ -191,22 +192,22 @@ void Item::comprobarAltura(float altura) {
 
 		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++)
 		{
-			if(i<RayCast1.m_hitFractions.size()-1){
-					indiceAltura=RayCast1.m_hitFractions[i];
-					
-					if(RayCast1.m_hitFractions[i]< altura){
-					subir=true;
-							
-					}
-					if(RayCast1.m_hitFractions[i]> altura){
+			if (i < RayCast1.m_hitFractions.size() - 1) {
+				indiceAltura = RayCast1.m_hitFractions[i];
 
+				if (RayCast1.m_hitFractions[i] < altura) {
+					subir = true;
+
+				}
+				if (RayCast1.m_hitFractions[i] > altura) {
+
+				}
+				if (RayCast1.m_hitFractions[i] > altura) {
+
+					bajar = true;
+
+				}
 			}
-			if (RayCast1.m_hitFractions[i] > altura) {
-
-				bajar = true;
-
-			}
-		}
 		}
 	}
 

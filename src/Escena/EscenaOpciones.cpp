@@ -61,30 +61,83 @@ void EscenaOpciones::update() {
 		| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard
 		| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal)) {
 
-		if (display_w < 1000) {
-			ImGui::SetWindowFontScale(0.5f);
-		}
-		else {
+		ImGui::SameLine(TMotor::instancia().getWidth()/2.75);
+		ImGui::SetWindowFontScale(2.0f);
+		if (display_w < 1250) {
 			ImGui::SetWindowFontScale(1.0f);
 		}
+		ImGui::Text("OPTIONS");
+		ImGui::Text("");
+		ImGui::SameLine(TMotor::instancia().getWidth()/2.75);
+		ImGui::Text("-------");
 
-		ImGui::Text("Opciones");
-
-		ImGui::Text("\nSonido\n");
+		ImGui::SetWindowFontScale(1.25f);
+		if (display_w < 1250) {
+			ImGui::SetWindowFontScale(0.75f);
+		}
+		ImGui::Text("\n* Sound *\n");
 		ImGui::SliderFloat("General", &volGen, 0.0f, 1.0f);
-		ImGui::SliderFloat("Musica", &volMus, 0.0f, 1.0f);
-		ImGui::SliderFloat("Efectos", &volEfe, 0.0f, 1.0f);
-		ImGui::Text("Pulsa W para probar los efectos\n");
+		ImGui::SliderFloat("Music", &volMus, 0.0f, 1.0f);
+		ImGui::SliderFloat("FX", &volEfe, 0.0f, 1.0f);
+		ImGui::SetWindowFontScale(1.00f);
+		if (display_w < 1250) {
+			ImGui::SetWindowFontScale(0.5f);
+		}
+		ImGui::Text("Press W to play sound\n");
 
 		TMotor::instancia().getGestorSonido()->ajustarVolumen(volGen, volMus, volEfe);
 
-		ImGui::Text("\nGraficos\n");
-		static bool detalleMinimo = false;
-		static bool sombreado = false;
-		ImGui::Checkbox("Detalle Minimo", &detalleMinimo);
-		ImGui::Checkbox("Sombras", &sombreado);
-		ImGui::Checkbox("Anti-Aliasing", &msaa);
+		ImGui::SetWindowFontScale(1.25f);
+		if (display_w < 1250) {
+			ImGui::SetWindowFontScale(0.75f);
+		}
+		ImGui::Text("\n* Graphics *\n");
+		ImGui::SetWindowFontScale(1.00f);
+		if (display_w < 1250) {
+			ImGui::SetWindowFontScale(0.5f);
+		}
+		const char* listbox_items[] = { "Low", "Medium", "High"};
+		static int listbox_item_current = 0;
+		if (personalisedGraphics == false){
+			ImGui::ListBox("Graphic Level", &listbox_item_current, listbox_items, IM_ARRAYSIZE(listbox_items), 3);
+		}
+		ImGui::Checkbox("Personalised Graphics", &personalisedGraphics);
+		if (personalisedGraphics == true){
+			ImGui::Text("");
+			ImGui::Checkbox("Shadows", &shadows);
+			ImGui::Checkbox("Anti-Aliasing", &msaa);
+			ImGui::Checkbox("Face Culling", &faceCulling);
+			ImGui::Checkbox("Clipping", &clipping);
+		}
+
+		//Ajustamos los parametros graficos del motor en funcion del nivel grafico seleccionado
+		if (personalisedGraphics == false){
+			if (listbox_item_current == 0){
+				shadows = false; //No hay sombras
+				msaa = false; //Sin MSAA
+				faceCulling = true; //Con Face Culling
+				clipping = true; //Con clipping
+				levelOfClipping = 750; //Nivel de clipping = 750
+			} else if (listbox_item_current == 1){
+				shadows = true; //Hay sombras
+				msaa = false; //Sin MSAA
+				faceCulling = true; //Con Face Culling
+				clipping = true; //Con clipping
+				levelOfClipping = 1000; //Nivel de clipping = 1000
+			} else {
+				shadows = true; //No hay sombras
+				msaa = true; //Con MSAA
+				faceCulling = false; //Sin Face Culling
+				clipping = false; //Con clipping
+				levelOfClipping = 0; //Nivel de clipping = 750
+			}
+		}
+		
+		//Modificamos los parametros graficos del motor
+		TMotor::instancia().setShadows(shadows);
 		TMotor::instancia().setAntialiasing(msaa);
+		TMotor::instancia().setFaceCulling(faceCulling);
+		TMotor::instancia().setPersonalisedClipping(clipping, levelOfClipping);
 	}
 
 	ImGui::End();

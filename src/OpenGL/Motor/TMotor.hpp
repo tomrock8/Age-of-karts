@@ -95,7 +95,10 @@ public:
 	void setBoundingBoxes(bool b);
 	void setFaceCulling(bool b);
 	void setAntialiasing(bool b);
+	void setPersonalisedClipping(bool b, float f);
+	void setShadows(bool b);
 	void setViewport(int x, int y, int width, int height);
+	void setGraphicLevel(int i);
 
 	// DIBUJADO
 	void clean(float r, float g, float b, float a);
@@ -188,6 +191,9 @@ protected:
 
 	//Booleanos para la activacion/desactivacion de las optimizaciones del motor
 	bool faceCulling = true; //FACE CULLING activado por defecto
+	bool personalisedClipping = true; //CLIPPING personalizado que dibuja en funcion de la distancia del objeto a la camara
+	float levelOfClipping = 750.0f; //Distancia maxima entre la camara y objeto a partir de la cual se deja de dibujar este ultimo
+	bool shadows = false; //Sombras
 
 	// ----------------------
 	//  METODOS PRIVADOS

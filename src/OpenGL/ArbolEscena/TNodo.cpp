@@ -3,10 +3,13 @@
 
 TNodo::TNodo(const char* n) {
 	name = new std::string(n);
+	entidad = nullptr;
+	padre = nullptr;
 }
 
 TNodo::~TNodo() {
 	std::cout << "Destructor de TNodo: " << *name << "\n";
+	padre = nullptr; // Eliminamos el enlace con el padre
 
 	if (strcmp(name->c_str(), "quieto") == 0) {
 		cout << "EXPLOSION\n";
@@ -19,10 +22,10 @@ TNodo::~TNodo() {
 		}
 		hijos.clear();
 	}
-
 	delete name;
 
-	//delete entidad;
+	//if (entidad)	delete entidad;
+	
 }
 
 // MANEJO DE HIJOS

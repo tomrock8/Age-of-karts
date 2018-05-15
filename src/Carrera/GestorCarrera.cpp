@@ -108,6 +108,8 @@ int GestorCarrera::getCorredorIndexOriginal(int n) {
 
 void GestorCarrera::setVueltas(int i) {
 	vueltas = i;
+	for (int j = 0; j < jugadores->getNumJugadores(); j++)
+	pj1.at(j)->setMaxVueltas(vueltas);
 }
 
 int GestorCarrera::getVueltas() {

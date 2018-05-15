@@ -11,7 +11,13 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	TMotor::instancia().newHud("OnGameHUD");
 	TMotor::instancia().getActiveHud()->addElement(0.2f, 0.2f, "puesto", "assets/HUD/juego/puesto_6.png");
 	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
-	TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_1_3.png");
+	if (Pista::getInstancia()->getNumVueltas()==3){
+		TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_1_3.png");
+	}else if (Pista::getInstancia()->getNumVueltas()==2){
+		TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_1_2.png");
+	}else{
+		TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_1_1.png");
+	}
 	TMotor::instancia().getActiveHud()->traslateElement("vueltas", -0.83f, 0.68f);
 	TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "objeto", "assets/HUD/juego/objetos/vacio.png");
 	TMotor::instancia().getActiveHud()->traslateElement("objeto",  0.75f, 0.75f);
@@ -476,7 +482,7 @@ void EscenaJuego::renderDebug() {
 			| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
 			| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard 
 			| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal);
-			if (vueltas<=3){
+			if (vueltas<=Pista::getInstancia()->getNumVueltas()){
 				ImGui::Text("Tiempo vuelta: ");
 				ImGui::Text(to_string(jugador->getTiempoVuelta()).c_str());
 			}else{
@@ -777,11 +783,11 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 	}else{
 
 		if(strcmp(Node->getName(), "rueda1") == 0 && strcmp(Node->getName(), "rueda2") == 0 && strcmp(Node->getName(), "rueda3") == 0 &&
-		strcmp(Node->getName(), "rueda4") == 0){
+			strcmp(Node->getName(), "rueda4") == 0){
 
 		}else{
 		
-		Node->setPosition((float)Point[0], (float)Point[1], (float)Point[2]);
+			Node->setPosition((float)Point[0], (float)Point[1], (float)Point[2]);
 
 		}
 
@@ -832,16 +838,33 @@ void EscenaJuego::updateHUD() {
 	//UPDATE VUELTAS
 	if (pj.at(controlPlayer)->getVueltas() != vueltas) {
 		vueltas = pj.at(controlPlayer)->getVueltas();
-		switch (pj.at(controlPlayer)->getVueltas()) {
-		case 1:
-			TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_1_3.png");
-			break;
-		case 2:
-			TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_2_3.png");
-			break;
-		case 3:
-			TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_3_3.png");
-			break;
+		if (Pista::getInstancia()->getNumVueltas()==3){
+			switch (pj.at(controlPlayer)->getVueltas()) {
+			case 1:
+				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_1_3.png");
+				break;
+			case 2:
+				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_2_3.png");
+				break;
+			case 3:
+				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_3_3.png");
+				break;
+			}
+		}else if (Pista::getInstancia()->getNumVueltas()==2){
+			switch (pj.at(controlPlayer)->getVueltas()) {
+			case 1:
+				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_1_2.png");
+				break;
+			case 2:
+				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_2_2.png");
+				break;
+			}
+		}else if (Pista::getInstancia()->getNumVueltas()==1){
+			switch (pj.at(controlPlayer)->getVueltas()) {
+			case 1:
+				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_1_1.png");
+				break;
+			}
 		}
 	}
 

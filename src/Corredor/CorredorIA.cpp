@@ -48,8 +48,7 @@ CorredorIA::CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(po
 
 	//control de animaciones
 	animacionPrevia = getAnimQuieto();
-	iniciarAnimacion(VACILE, animacionPrevia,NULL);
-	animacionPrevia = getVacile();
+	iniciarAnimacion(PARADO, animacionPrevia,NULL);
 	giroDer = false;
 	giroIzq = false;
 

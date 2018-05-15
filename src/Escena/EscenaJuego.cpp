@@ -36,12 +36,29 @@ EscenaJuego::~EscenaJuego() {
 	//-----------DESTRUCTORES-----------//
 	//----------------------------------//
 	limpiar();
-	delete MotorFisicas::getInstancia();
-	delete GestorJugadores::getInstancia();
-	delete Pista::getInstancia();
+
+	
 	TMotor::instancia().cleanHUD();
 	delete fuenteCarrera;
 	delete fuenteCountDown;
+	//delete luces
+	delete luzPuntual_0;
+	delete luzPuntual_1;
+	delete luzPuntual_2;
+	delete luzPuntual_3;
+	//delete camaras
+	for (int i = 0; i < camera.size(); i++) {
+		delete camera.at(i);
+	}
+	camera.clear();
+	
+
+	delete Pista::getInstancia();
+	delete MotorFisicas::getInstancia();
+	delete GestorJugadores::getInstancia();
+	
+	
+	
 	cout << "Destructor de Escena JUEGO. Salgo" << endl;
 }
 
@@ -50,16 +67,16 @@ void EscenaJuego::init() {
 
 
 	// LUCES PUNTUALES
-	obj3D * luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, true, "escena_raiz");
+	luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, true, "escena_raiz");
 	luzPuntual_0->translate(glm::vec3(100.0f, 700.0f, 0.0f));
 
-	obj3D * luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
+	luzPuntual_1 = TMotor::instancia().newLightNode("light_1", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
 	luzPuntual_1->translate(glm::vec3(0.0f, 1500.0f, 0.0f));
 
-	obj3D * luzPuntual_2 = TMotor::instancia().newLightNode("light_2", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
+	luzPuntual_2 = TMotor::instancia().newLightNode("light_2", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
 	luzPuntual_2->translate(glm::vec3(-150.0f, 12.0f, -300.0f));
 
-	obj3D * luzPuntual_3 = TMotor::instancia().newLightNode("light_3", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
+	luzPuntual_3 = TMotor::instancia().newLightNode("light_3", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
 	luzPuntual_3->translate(glm::vec3(0.0f, 12.0f, 300.0f));
 
 	//LUCES DIRIGIDAS
@@ -121,9 +138,8 @@ void EscenaJuego::init() {
 	//	JUGADORES
 	//-----------------------------
 	//Posicion del nodo y el bloque de colisiones centralizado:
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
-	Corredor* jugador;
+	pj = GestorJugadores::getInstancia()->getJugadores();
+	
 
 	btVector3 pos2[6];
 	pos2[0].setX(Pista::getInstancia()->getParrilla().at(5).x);
@@ -184,23 +200,23 @@ void EscenaJuego::init() {
 		}
 		jugador->setID(i);
 		pj.push_back(jugador);
-		jugadores->aumentarJugadores();
+	
+		GestorJugadores::getInstancia()->aumentarJugadores();
 	}
 
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		client->setNetloaded(true);
 	}
-
-	jugadores->setJugadores(pj);
+	
+	GestorJugadores::getInstancia()->setJugadores(pj);
 	gc = new GestorCarrera();
 	gc->setVueltas(Pista::getInstancia()->getNumVueltas());
 	//-----------------------------
 	//	CAMARA
 	//-----------------------------
-	cameraThird *cameraAux;
+	
 	for(int x = 0; x < numPantallas; x++){
-		cameraAux = new cameraThird("camara_jugador3apersona", "escena_raiz");
-		camera.push_back(cameraAux);
+		camera.push_back(new cameraThird("camara_jugador3apersona", "escena_raiz"));
 	}
 
 	//-----------------------------
@@ -248,8 +264,8 @@ void EscenaJuego::init() {
 }
 
 void EscenaJuego::dibujar() {
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
+	
+	pj = GestorJugadores::getInstancia()->getJugadores();
 	//static_cast<TAnimacion*>(pj.at(0)->getNodo()->getNode()->getEntidad())->draw(TMotor::instancia());
 	//------- RENDER ----------
 	if (debug) {
@@ -320,7 +336,7 @@ void EscenaJuego::renderDebug() {
 	// -------- IMGUI ---------------
 	// ------------------------------
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	Corredor *jugador = GestorJugadores::getInstancia()->getJugadores().at(controlPlayer);
+	jugador = GestorJugadores::getInstancia()->getJugadores().at(controlPlayer);
 	
 	// Mostrar ventanas
 
@@ -412,7 +428,7 @@ void EscenaJuego::renderDebug() {
 			}
 			
 			if (muestraDebugIA){
-				std::vector<Corredor*> pj = GestorJugadores::getInstancia()->getJugadores();
+				pj = GestorJugadores::getInstancia()->getJugadores();
 				ImGui::Begin("Datos del Corredor IA", &muestraDebugIA);
 				for (int i = 0; i < pj.size(); i++) {
 					if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
@@ -494,8 +510,7 @@ void EscenaJuego::limpiar() {
 void EscenaJuego::update() {
 	Pista *pistaca = Pista::getInstancia();
 	std::vector<Item *> items = pistaca->getItems();
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
+	pj = GestorJugadores::getInstancia()->getJugadores();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client->ReceivePackets();
@@ -582,7 +597,7 @@ void EscenaJuego::update() {
 
 	if (t->getTimer() < 8 && t->getTimer() >= 5) {
 		TMotor::instancia().getActiveHud()->deleteElement("cuentaAtras");
-		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+		for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
 			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
 		}
 		if (t->getTimer() >= 5 && t->getTimer() < 6)
@@ -594,8 +609,8 @@ void EscenaJuego::update() {
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		//pj.at(controlPlayer)->update();
 		updateHUD();
-		if (jugadores->getNumJugadores() > 0) {
-			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+		if (GestorJugadores::getInstancia()->getNumJugadores() > 0) {
+			for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
 				pj.at(i)->update();
 				if (strcmp(pj.at(i)->getNodo()->getName(), "JugadorIA") == 0) {
 					CorredorIA *IA = static_cast<CorredorIA *>(pj.at(i));
@@ -613,9 +628,9 @@ void EscenaJuego::update() {
 		updateHUD();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
-		if (jugadores->getNumJugadores() != 0)
+		if (GestorJugadores::getInstancia()->getNumJugadores() != 0)
 			client->aumentarTimestamp();
-		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
+		for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
 			pj.at(i)->update();
 		}
 
@@ -623,7 +638,7 @@ void EscenaJuego::update() {
 		//if (jugadores->getNumJugadores() != 0)
 			//textoDebug->agregar(pj.at(controlPlayer)->toString());
 
-		if (jugadores->getNumJugadores() != 0) {
+		if (GestorJugadores::getInstancia()->getNumJugadores() != 0) {
 			float tiempoActual = glfwGetTime();
 			float timediff_sec = tiempoActual - tiempoRefresco;
 
@@ -636,15 +651,15 @@ void EscenaJuego::update() {
 		}
 	}
 
-	if (jugadores->getNumJugadores() != 0)
+	if (GestorJugadores::getInstancia()->getNumJugadores() != 0)
 		if (gc->update())
 			fin_carrera = true;
 
 
-	jugadores->setJugadores(pj);
+	GestorJugadores::getInstancia()->setJugadores(pj);
 
 
-	pj = jugadores->getJugadores();
+	pj = GestorJugadores::getInstancia()->getJugadores();
 	
 	for(int x = 0; x < numPantallas; x++){
 		if(pj.at(controlPlayer+x)->getEstados()->getEstadoInmunidad() != EstadosJugador::estado_inmunidad::INMUNIDAD){
@@ -656,8 +671,7 @@ void EscenaJuego::update() {
 }
 
 Escena::tipo_escena EscenaJuego::comprobarInputs() {
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
+	pj = GestorJugadores::getInstancia()->getJugadores();
 	btVector3 pos(-10, 0, 310);
 	int i = 0;
 	if (tipoEscena == Escena::tipo_escena::ONLINE)
@@ -669,7 +683,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 			for (int i = 0; i < pj.size(); i++) {
 				pj.at(i)->setVueltas(1);
 			}
-			jugadores->setJugadores(pj);
+			GestorJugadores::getInstancia()->setJugadores(pj);
 			client->FinalizarCarrera();
 		}
 		else if (tipoEscena != Escena::tipo_escena::ONLINE) {
@@ -788,8 +802,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 std::string EscenaJuego::getIpConexion() { return ipConexion; }
 
 void EscenaJuego::updateHUD() {
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
+	pj = GestorJugadores::getInstancia()->getJugadores();
 
 	//UPDATE PUESTO
 	if (pj.at(controlPlayer)->getPosicionCarrera() != puesto) {
@@ -876,8 +889,7 @@ void EscenaJuego::updateHUD() {
 
 void EscenaJuego::debugRageIA(int k){		//Funcion que sirve para dibujar el nivel de enfado de la IA en una grafica (k=id jugador)
 
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
+	pj = GestorJugadores::getInstancia()->getJugadores();
 	static std::vector<std::vector<float>> rage;
 	rage.resize(6);
 	rage.at(k).resize(100);
@@ -943,9 +955,7 @@ void EscenaJuego::debugPlot(int j,float k,std::string str){		//Funcion que sirve
 
 
 std::vector<Corredor::tipo_jugador> EscenaJuego::getJugadores(){
-
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
+	pj = GestorJugadores::getInstancia()->getJugadores();
 	std::vector<Corredor::tipo_jugador> tipoJugadores;
 
 	

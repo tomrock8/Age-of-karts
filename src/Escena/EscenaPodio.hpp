@@ -20,8 +20,13 @@ public:
 private:
 
     std::vector<obj3D*> personajes;
-    //obj3D *Podio;
+    obj3D *podio;
     cameraThird *camera;
+	//Luces
+	obj3D * luzPuntual_0;
+	obj3D * luzPuntual_1;
+	obj3D * luzPuntual_2;
+	obj3D * luzPuntual_3;
 
 };
 

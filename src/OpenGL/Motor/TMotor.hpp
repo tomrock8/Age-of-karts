@@ -94,6 +94,7 @@ public:
 	void setSkyBox();
 	void setBoundingBoxes(bool b);
 	void setFaceCulling(bool b);
+	void setAntialiasing(bool b);
 	void setViewport(int x, int y, int width, int height);
 
 	// DIBUJADO
@@ -185,8 +186,8 @@ protected:
 	//IMGUI
 	bool renderDebug; //Booleano para controlar el renderizado de las ventanas de IMGUI
 
-	//Face Culling
-	bool faceCulling = true; //Face Culling activado por defecto
+	//Booleanos para la activacion/desactivacion de las optimizaciones del motor
+	bool faceCulling = true; //FACE CULLING activado por defecto
 
 	// ----------------------
 	//  METODOS PRIVADOS

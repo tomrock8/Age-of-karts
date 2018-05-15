@@ -24,6 +24,8 @@ public:
 private:
 	bool end;
 
+	//Booleanos para las opciones
+	bool msaa = true;
 };
 
 #endif /* ESCENAOPCIONES_H */

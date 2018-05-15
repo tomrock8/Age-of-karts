@@ -83,6 +83,8 @@ void EscenaOpciones::update() {
 		static bool sombreado = false;
 		ImGui::Checkbox("Detalle Minimo", &detalleMinimo);
 		ImGui::Checkbox("Sombras", &sombreado);
+		ImGui::Checkbox("Anti-Aliasing", &msaa);
+		TMotor::instancia().setAntialiasing(msaa);
 	}
 
 	ImGui::End();

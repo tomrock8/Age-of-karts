@@ -525,79 +525,76 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a imagen (tipo
 	std::string str2;
 	int check=-1;
 	float inc=-0.63f;
-	if (client->getClientes().at(i).corredorJugador){
-		if (offline && !offline_split && i==0){
-			check=0;
-			str="jugador1";
-		}else if (offline_split || !offline){
-			check=1;	
-			switch (i){
-				case 0:
-					str="jugador1";
-					str2="habilidades";
-				break;
-				case 1:
-					str="jugador2";
-					str2="habilidades2";
-					inc=-0.18;
-					TMotor::instancia().getActiveHud()->traslateElement("Arrow3", -0.42f, 0.1f);
-					TMotor::instancia().getActiveHud()->traslateElement("Arrow4", -0.34f, 0.1f);
-					TMotor::instancia().getActiveHud()->traslateElement("jugador2", -0.39f, 0.32f);
-				break;
-				case 2:
-					str="jugador3";
-					str2="habilidades3";
-					inc=0.27;
-					TMotor::instancia().getActiveHud()->traslateElement("Arrow5", 0.03f, 0.1f);
-					TMotor::instancia().getActiveHud()->traslateElement("Arrow6", 0.11f, 0.1f);
-					TMotor::instancia().getActiveHud()->traslateElement("jugador3",0.06f, 0.32f);
-				break;
-				case 3:
-					str="jugador4";
-					str2="habilidades4";
-					inc=0.72;
-					TMotor::instancia().getActiveHud()->traslateElement("Arrow7", 0.48f, 0.1f);
-					TMotor::instancia().getActiveHud()->traslateElement("Arrow8", 0.56f, 0.1f);
-					TMotor::instancia().getActiveHud()->traslateElement("jugador4", 0.51f, 0.32f);
-				break;
-			}
-	
-	
-			if (check==0){
-				TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vacia.png");
-				if (client->getClientes().at(i).tipoCorredor == 0){
-					TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_gladiador.png");
-					TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades4.png");
-				}else if (client->getClientes().at(i).tipoCorredor == 1){
-					TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_pirata.png");
-					TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades2.png");
-				}else if (client->getClientes().at(i).tipoCorredor == 2){
-					TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vikingo.png");
-					TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades3.png");
-				}else if (client->getClientes().at(i).tipoCorredor == 3){
-					TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_chino.png");
-					TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades1.png");
-				}
-			}else if (check==1){
-				TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vacia.png");
-				
-				if (client->getClientes().at(i).tipoCorredor == 0){
-					TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_gladiador.png");
-					TMotor::instancia().getActiveHud()->changeTextureElement(str2.c_str(), "assets/HUD/LobbyMenu/habilidades_gladiador.png");
-				}else if (client->getClientes().at(i).tipoCorredor == 1){
-					TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_pirata.png");
-					TMotor::instancia().getActiveHud()->changeTextureElement(str2.c_str(), "assets/HUD/LobbyMenu/habilidades_pirata.png");
-				}else if (client->getClientes().at(i).tipoCorredor == 2){
-					TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vikingo.png");
-					TMotor::instancia().getActiveHud()->changeTextureElement(str2.c_str(), "assets/HUD/LobbyMenu/habilidades_vikingo.png");
-				}else if (client->getClientes().at(i).tipoCorredor == 3){
-					TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_chino.png");
-					TMotor::instancia().getActiveHud()->changeTextureElement(str2.c_str(), "assets/HUD/LobbyMenu/habilidades_chino.png");
-				}
-				TMotor::instancia().getActiveHud()->scaleElement(str.c_str(),1.0f, 1.0f);
-				TMotor::instancia().getActiveHud()->traslateElement(str2.c_str(), inc, 0.26f);
-			}
+	if (offline && !offline_split && i==0){
+		check=0;
+		str="jugador1";
+	}else if (offline_split && client->getClientes().at(i).corredorJugador || !offline){
+		check=1;	
+		switch (i){
+			case 0:
+				str="jugador1";
+				str2="habilidades";
+			break;
+			case 1:
+				str="jugador2";
+				str2="habilidades2";
+				inc=-0.18;
+				TMotor::instancia().getActiveHud()->traslateElement("Arrow3", -0.42f, 0.1f);
+				TMotor::instancia().getActiveHud()->traslateElement("Arrow4", -0.34f, 0.1f);
+				TMotor::instancia().getActiveHud()->traslateElement("jugador2", -0.39f, 0.32f);
+			break;
+			case 2:
+				str="jugador3";
+				str2="habilidades3";
+				inc=0.27;
+				TMotor::instancia().getActiveHud()->traslateElement("Arrow5", 0.03f, 0.1f);
+				TMotor::instancia().getActiveHud()->traslateElement("Arrow6", 0.11f, 0.1f);
+				TMotor::instancia().getActiveHud()->traslateElement("jugador3",0.06f, 0.32f);
+			break;
+			case 3:
+				str="jugador4";
+				str2="habilidades4";
+				inc=0.72;
+				TMotor::instancia().getActiveHud()->traslateElement("Arrow7", 0.48f, 0.1f);
+				TMotor::instancia().getActiveHud()->traslateElement("Arrow8", 0.56f, 0.1f);
+				TMotor::instancia().getActiveHud()->traslateElement("jugador4", 0.51f, 0.32f);
+			break;
 		}
+	}
+
+	if (check==0){
+		TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vacia.png");
+		if (client->getClientes().at(i).tipoCorredor == 0){
+			TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_gladiador.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades4.png");
+		}else if (client->getClientes().at(i).tipoCorredor == 1){
+			TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_pirata.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades2.png");
+		}else if (client->getClientes().at(i).tipoCorredor == 2){
+			TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vikingo.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades3.png");
+		}else if (client->getClientes().at(i).tipoCorredor == 3){
+			TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_chino.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement("habilidades", "assets/HUD/LobbyMenu/habilidades1.png");
+		}
+	}else if (check==1){
+		TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vacia.png");
+		
+		if (client->getClientes().at(i).tipoCorredor == 0){
+			TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_gladiador.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(str2.c_str(), "assets/HUD/LobbyMenu/habilidades_gladiador.png");
+		}else if (client->getClientes().at(i).tipoCorredor == 1){
+			TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_pirata.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(str2.c_str(), "assets/HUD/LobbyMenu/habilidades_pirata.png");
+		}else if (client->getClientes().at(i).tipoCorredor == 2){
+			TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_vikingo.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(str2.c_str(), "assets/HUD/LobbyMenu/habilidades_vikingo.png");
+		}else if (client->getClientes().at(i).tipoCorredor == 3){
+			TMotor::instancia().getActiveHud()->changeTextureElement(str.c_str(), "assets/HUD/LobbyMenu/seleccion_chino.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(str2.c_str(), "assets/HUD/LobbyMenu/habilidades_chino.png");
+		}
+		TMotor::instancia().getActiveHud()->scaleElement(str.c_str(),1.0f, 1.0f);
+		TMotor::instancia().getActiveHud()->traslateElement(str2.c_str(), inc, 0.26f);	
 	} 
 }
 
@@ -845,6 +842,7 @@ void EscenaLobby::movimientoHorizontal(int k,bool dcha){
 				if (offline) {
 					std::vector<structClientes> clientes = client->getClientes();
 					int k = count;
+
 					if (clientes.at(k).tipoCorredor == 0) {
 						client->setArrayClients(clientes.at(k).ip, 3, clientes.at(k).ready, clientes.at(k).corredorJugador, k);
 					}
@@ -860,6 +858,7 @@ void EscenaLobby::movimientoHorizontal(int k,bool dcha){
 				if (offline) {
 					std::vector<structClientes> clientes = client->getClientes();
 					int k = count;
+					
 					if (clientes.at(k).tipoCorredor == 3) {
 						client->setArrayClients(clientes.at(k).ip, 0, clientes.at(k).ready, clientes.at(k).corredorJugador, k);
 					}

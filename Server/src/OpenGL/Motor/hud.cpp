@@ -81,6 +81,12 @@ void hud::changeColorElement(const char* n, glm::vec4 c) {
 	getElement(n)->cambiarColor(c);
 }
 
+//Funcion para cambiar la transparencia de un elemento a partir de un booleano y un nivel de transparencia
+void hud::changeTransparencyElement(const char* n, bool t, float l) {
+	//Cambiamos el color del elemento
+	getElement(n)->cambiarTransparencia(t,l);
+}
+
 //Funcion que devuelve un elemento a partir de su nombre
 elementoHud* hud::getElement(const char* n) {
 	elementoHud* e = NULL;

@@ -24,6 +24,10 @@ private:
 	bool comprobadorMovimiento;
 	bool pressed;
 	//Item *actualizarItem(int &id, btDiscreteDynamicsWorld *mundo, core::list<btRigidBody *> objetos);
+	//controlador para las animaciones
+	bool giroDer;
+	bool giroIzq;
+	TNodo *animacionPrevia;
 };
 
 #endif /* CORREDORJUGADOR_H */

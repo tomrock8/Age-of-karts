@@ -7,7 +7,6 @@
 #include <string>
 
 #define MAX_CLIENTS 4
-#define MAX_PLAYERS 6
 
 struct structPrediccion{
 	int timeStamp;
@@ -15,7 +14,7 @@ struct structPrediccion{
 	float rotacion[3];
 };
 
-struct structClientes{
+struct structClients{
     std::string ip;
     int tipoCorredor;
     bool ready;
@@ -59,7 +58,7 @@ class Server
         bool started;
         std::vector<int> arrayReady;
         std::vector<int> arrayTipoCorredor;
-        std::vector<structClientes> clientes;
+        std::vector<structClients> clientes;
         std::vector<structPaquetes> paquetes;
 
         unsigned char GetPacketIdentifier(RakNet::Packet *p);

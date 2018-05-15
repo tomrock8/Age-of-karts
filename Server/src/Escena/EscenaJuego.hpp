@@ -37,6 +37,8 @@ private:
 	void debugPlot(int j,float k,std::string str);
 	void updateHUD();
 	
+	int numPantallas;
+
 	bool debug;
 
 	DebugDraw *debugDraw;

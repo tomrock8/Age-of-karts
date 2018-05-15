@@ -37,6 +37,9 @@ public:
 	bool getDebugFisicas();
 	void debugIA();
 	std::string getDebugIA();
+	void animacionIzquierda();
+	void animacionDerecha();
+	void finAnimacion();
 
 private:
 
@@ -70,6 +73,11 @@ private:
 	int timerRecolocar;
 	std::string texto;
 	float valorGiroFuerte;
+
+
+	bool giroDer;
+	bool giroIzq;
+	TNodo *animacionPrevia;
 };
 
 #endif /* CORREDORIA_H */

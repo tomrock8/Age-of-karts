@@ -180,7 +180,7 @@ void Server::ReceivePackets()
 		RakNet::RakString paramRakString;
 		std::string paramString;
 			
-		structClientes client;	
+		structClients client;	
 		
 		CorredorRed *jugador;
 		

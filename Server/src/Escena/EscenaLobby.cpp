@@ -1,4 +1,5 @@
 #include "EscenaLobby.hpp"
+#include "Pista.hpp"
 
 EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tipo) {
 	infoLobby= new std::string("");
@@ -22,11 +23,14 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	}
 
 	TMotor::instancia().newHud("LobbyHUD");
-	TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "comenzarPartida", "assets/HUD/LobbyMenu/empezar.png");
 	TMotor::instancia().initDebugWindow();
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
 	ImGui::StyleColorsLight(); 
+
+
+	
+	Pista::getInstancia()->setNombreMapa("pirata");
 	
 }
 
@@ -37,7 +41,24 @@ EscenaLobby::~EscenaLobby() {
 }
 
 void EscenaLobby::init() {}
-void EscenaLobby::dibujar() {}
+void EscenaLobby::dibujar() {
+	
+	  //Limpiamos el dibujado anterior asignando un color de fondo
+ 
+  TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);
+ 
+  //Establecemos la zona de renderizado
+ 
+  TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
+ 
+  //Dibujamos el menu 
+ 
+  TMotor::instancia().drawHudMenus();
+ 
+  //Dibujamos IMGUI
+ 
+  TMotor::instancia().drawIMGUI();
+}
 void EscenaLobby::limpiar() {
 	//TMotor::instancia().closeDebugWindow();
 }

@@ -37,22 +37,18 @@ public:
 	virtual void setNombre(const char *s) override;
 
 	// METODOS GET
-	//vector<vertex> *getVertices();
-	//vector<GLuint> *getIndices();
 	virtual const char *getNombre() override;
 	std::vector<glm::vec3> getVertex();
 	std::vector<glm::ivec3> getFaces();
 	std::vector<unsigned short> getIndices();
-
-
+	glm::vec3 getSize();
+	glm::vec3 getCenter();
 
 	// DIBUJADO
 	void draw();
 	void inicializar();
 
 private:
-	//std::vector<vertex> vertices;
-	//std::vector<GLuint> indices;
 	//-------------------------------------------------//
 	//--vectores para almacenar los datos de la malla--//
 	//-------------------------------------------------//
@@ -63,10 +59,14 @@ private:
 	std::vector<glm::vec3> bitangents; //bitangentes |necesarios para los mapas de normales 
 	std::vector<unsigned short> indices;
 	std::vector<glm::ivec3> faces;
-	GLuint buffer[6];  // buffer para almacenar los datos de la malla y pasarselos a los shaders 
-	//variables de renderizado
-	GLuint VAO;// Vertex Array Object*/
-	//GLuint VBO;//|
-	//GLuint EBO;//|Vertex Buffer Object
+
+	//Buffers de OpenGL
+	GLuint VAO; //Vertex Array Object
+	GLuint buffer[6]; //Buffers para almacenar los datos de la malla y pasarselos a los shaders 
+
+	//Atributos de la malla
+	glm::vec3 sizeMalla; //Vector con el tamanyo en cada eje de la malla
+	glm::vec3 centerMalla; //Vector que contiene el punto central de la malla
+	void calculateSizeAndCenter(); //Funcion para calcular el tamanyo y el centro de la malla
 };
 #endif

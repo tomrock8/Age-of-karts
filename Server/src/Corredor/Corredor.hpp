@@ -24,6 +24,7 @@ class Corredor : public RakNet::NetworkIDObject
 {
 public:
 	typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
+	typedef enum { PARADO, GIRODERINI, GIRODERFIN, GIROIZQINI, GIROIZQFIN,HABILIDAD,LANZAROBJETO,VACILE} movimiento_jugador;
 	Corredor(btVector3 pos, tipo_jugador tipo);
 
 	void InicializarFisicas();
@@ -116,9 +117,10 @@ public:
 	void usarObjetos();
 	void lanzarHabilidad();
 
-	TNodo * getGiroDer();
-
 	std::string toString();
+
+	//movimiento de animaciones
+	void iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *previoGiro);
 
 protected:
 	obj3D * cuboNodo;
@@ -246,11 +248,16 @@ protected:
 
 
 	//Animaciones
-	//obj3D *GiroDerIni;
-	//obj3D *GiroDerFin;
-	TNodo *parado;
-	TNodo *GiroDerIni;
-	TNodo *GiroDerFin;
+
+	TNodo *vacile;
+	TNodo *giroDerIni;
+	TNodo *lanzarObjeto;
+	TNodo *giroDerFin;
+	TNodo *giroIzqIni;
+	TNodo *giroIzqFin;
+	TNodo *animHabilidad;
+	TNodo *quieto;
+
 
 
 
@@ -271,10 +278,20 @@ protected:
 	// UPDATES
 	void actualizarRuedas();
 	void updateVectorDireccion();
+	
+	TNodo * getGiroDerIni();
+	TNodo * getGiroDerFin();
+	TNodo * getGiroIzqIni();
+	TNodo * getGiroIzqFin();
+	TNodo * getHabilidadAnim();
+	TNodo * getAnimQuieto();
+	TNodo * getLanzarObjeto();
+	TNodo * getVacile();
 
 
-	void setActiveObj3D(TNodo * obj);
 
 };
 
 #endif /* CORREDOR_H */
+
+

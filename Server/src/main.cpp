@@ -10,20 +10,16 @@ void resize_callback(GLFWwindow* window, int width, int height);
 int main(int argc, char* argv[]) {
 
 	TMotor::instancia();
-	//GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::CARRERA);
+	
+	//Parametros del motor
+	TMotor::instancia().setShaderActive("shaderCartoon"); //Tipo de shader a usar
+	TMotor::instancia().setSkyBox(); //Queremos skybox
+	TMotor::instancia().setBoundingBoxes(false); //Queremos bounding boxes
+
 	GestorEscena::instancia().cambiaEscena(Escena::tipo_escena::LOBBY);
 
-	//Creamos el gestor de imagenes para el HUD
-	TGestorImagenes::getInstacia();
-
-	obj3D *cam = TMotor::instancia().newCameraNode("camara_libre", "escena_raiz");
-	cam->translate(glm::vec3(0.0f, 4.0f, 15.0f));
-	
 	//Evento de glfw para redimensionar la pantalla
 	glfwSetFramebufferSizeCallback(TMotor::instancia().getVentana(), resize_callback);
-
-	TMotor::instancia().setActiveCamera(TMotor::instancia().getNode("camara_libre"));
-	obj3D *activeCamera = TMotor::instancia().getObjActiveCamera();
 
 	Server::getInstancia()->CreateServerInterface();
 	Server::getInstancia()->ServerStartup();
@@ -34,16 +30,12 @@ int main(int argc, char* argv[]) {
 	Escena::tipo_escena tipoActual = GestorEscena::instancia().getEscenaActiva().getTipoEscena();
 	int tipo = 0;
 	while (tipoActual != Escena::tipo_escena::SALIR) {
-		if (strcmp(activeCamera->getName() , TMotor::instancia().getActiveCamera()->getName())) {
-			 activeCamera = TMotor::instancia().getObjActiveCamera();
-		}
-
-		tipo = GestorEscena::instancia().getEscenaActiva().getTipoEscena();
-		
-		TMotor::instancia().draw(tipo);
+		//Se hace el update de cada escena, que incluye el dibujado de la misma
 		tipoActual = GestorEscena::instancia().update();
-		
-		glfwPollEvents(); // Comprobacion de eventos (Teclado, raton, joystick)
+		//Se llama a la comprobacion de eventos del motor
+		TMotor::instancia().getInputs();
+		//Intercambiamos buffers
+		TMotor::instancia().swapBuffers();
 	}
 	GestorEscena::instancia().borraEscena(GestorEscena::instancia().getEscenaActiva().getTipoEscena());
 	Server::getInstancia()->ShutDownServer();

@@ -86,12 +86,15 @@ void EscenaJuego::init() {
 	controlPlayer = 0;
 
 	// Gravedad
-	gravedad = -45.0f;
+	gravedad = -10.0f;
 	MotorFisicas::getInstancia()->getMundo()->setGravity(btVector3(0.0, gravedad, 0.0));
 
 	//----------------------------
 	//	Debug Bullet
 	//----------------------------
+
+std::cout << "Debug \n";
+
 	debugDraw = new DebugDraw(TMotor::instancia().getVentana());
 	debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	MotorFisicas::getInstancia()->getMundo()->setDebugDrawer(debugDraw);
@@ -99,7 +102,10 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	Pista::getInstancia()->setMapa("pirata");
+
+std::cout << "Mapa \n";
+
+	Pista::getInstancia()->setMapa();
 	//TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/elementos.obj", "escena_raiz", false);
 	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 
@@ -107,6 +113,9 @@ void EscenaJuego::init() {
 	//	JUGADORES
 	//-----------------------------
 	//Posicion del nodo y el bloque de colisiones centralizado:
+
+std::cout << "Jugadores\n";
+
 	Corredor* jugador;
 
 	btVector3 pos2[6];
@@ -129,7 +138,13 @@ void EscenaJuego::init() {
 	pos2[5].setY(Pista::getInstancia()->getParrilla().at(5).y);
 	pos2[5].setZ(Pista::getInstancia()->getParrilla().at(5).z);
 
+std::cout << "Entro en raceStart\n";
+
 	Server::getInstancia()->RaceStart();
+
+std::cout << "Salgo de raceStart\n";
+
+	numPantallas = GestorJugadores::getInstancia()->getNumJugadores();
 
 	std::cout << "Jugadores creados\n";
 
@@ -165,8 +180,7 @@ void EscenaJuego::init() {
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontDefault();
 	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	if (jugadores->getJugadores().size()>0)
+	if (GestorJugadores::getInstancia()->getJugadores().size()>0)
 		Server::getInstancia()->setStarted(false);
 	std::cout << "salgo del init\n";
 }
@@ -199,6 +213,41 @@ void EscenaJuego::dibujar() {
 				}
 			}
 		}
+	}
+
+	//Limpiamos el dibujado anterior asignando un color de fondo
+	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);
+	for (int i = 0; i < numPantallas; i++){
+		//Establecemos la zona de renderizado
+		if (numPantallas > 1){
+			if (i == 0){
+				TMotor::instancia().setViewport(0, TMotor::instancia().getHeight()/2, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Arriba-izquierda
+			}else if (i == 1){
+				TMotor::instancia().setViewport(TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Arriba-derecha
+			}else if (i == 2){
+				TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Abajo-izquierda				
+			}else{
+				TMotor::instancia().setViewport(TMotor::instancia().getWidth()/2, 0, TMotor::instancia().getWidth()/2, TMotor::instancia().getHeight()/2); //Abajo-derecha				
+			}
+		}else{
+			TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
+		}
+		//Especificamos la camara activa
+		TMotor::instancia().setActiveCamera(TMotor::instancia().getCameraByIndex(i));
+		//Dibujamos el skybox
+		TMotor::instancia().drawSkybox();
+		//Dibujamos los objetos 3D creados en la escena
+		TMotor::instancia().draw();
+		//Dibujamos el debug de bullet
+		TMotor::instancia().drawDebugBullet();
+		//Dibujamos las particulas
+		TMotor::instancia().drawParticles();
+		//Dibujamos los billboards
+		TMotor::instancia().drawBillboards();
+		//Dibujamos el menu 
+		TMotor::instancia().drawHudMenus();
+		//Dibujamos IMGUI
+		TMotor::instancia().drawIMGUI();
 	}
 
 	//if (tipoEscena != Escena::tipo_escena::ONLINE) 
@@ -415,13 +464,6 @@ void EscenaJuego::update() {
 			}
 		}
 	}
-
-
-	if (fin_carrera) {
-		//cout << "CARRERA FINALIZADA, PULSA F.";
-	}
-	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
-
 
 
 	if (t->getTimer() <= 4 && t->getTimer() >= 1) {

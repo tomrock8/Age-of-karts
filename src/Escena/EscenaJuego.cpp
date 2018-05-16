@@ -121,7 +121,7 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	ESCENARIO MAPA
 	//-----------------------------
-	
+
 	Pista::getInstancia()->setMapa();
 	
 	//-----------------------------
@@ -131,7 +131,7 @@ void EscenaJuego::init() {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	std::vector<Corredor*> pj = jugadores->getJugadores();
 	Corredor* jugador;
-
+	
 	btVector3 pos2[6];
 	pos2[0].setX(Pista::getInstancia()->getParrilla().at(5).x);
 	pos2[0].setY(Pista::getInstancia()->getParrilla().at(5).y);
@@ -155,6 +155,8 @@ void EscenaJuego::init() {
 	client = Client::getInstancia();
 	int numClients = client->getClientes().size();
 	Corredor::tipo_jugador tj;
+
+	std::cout << "Numero de clientes: " << numClients << std::endl;
 
 	for (int i = 0; i < numClients; i++) {
 		if (client->getClientes().at(i).tipoCorredor == 0) {
@@ -184,10 +186,17 @@ void EscenaJuego::init() {
 		}
 		else {
 			if (i == controlPlayer) {
+
+				std::cout << "Creo un corredor jugador\n";
+
 				jugador = new CorredorJugador(pos2[i], tj);
 			}
-			else
+			else{
 				jugador = new CorredorRed(pos2[i], tj);
+
+				std::cout << "Creo corredor RED\n";
+
+			}
 		}
 		jugador->setID(i);
 		pj.push_back(jugador);

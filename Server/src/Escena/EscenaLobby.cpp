@@ -113,8 +113,10 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		return Escena::tipo_escena::SALIR;
 	}
 
-	if(Server::getInstancia()->getStarted())
+	if(Server::getInstancia()->getStarted()){
+		Server::getInstancia()->RaceStartSend();
 		return Escena::tipo_escena::ONLINE;
+	}
 
 	return Escena::tipo_escena::LOBBY;
 }

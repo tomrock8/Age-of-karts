@@ -71,6 +71,7 @@ class Server
         void ServerStartup();
         void ShutDownServer();
         void ReceivePackets();
+        void RaceStartSend();
         void RaceStart();
         void refreshServer();
         int getCommands();

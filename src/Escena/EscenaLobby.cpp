@@ -760,6 +760,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 	if (iniciado)
 		if (client->getStarted()){
+			Pista::getInstancia()->setNombreMapa("pirata");
 			//if (empiezaCarrera)
 			return Escena::tipo_escena::ONLINE;
 		}

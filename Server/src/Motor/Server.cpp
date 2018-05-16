@@ -663,6 +663,13 @@ void Server::ReceivePackets()
     }
 }
 
+void Server::RaceStartSend(){
+	RakNet::BitStream bsOut;
+	typeID = ID_RACE_START;
+	bsOut.Write(typeID);
+	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+}
+
 void Server::RaceStart(){
 	typeID = ID_RACE_START;
 	btVector3 pos2[6];
@@ -684,11 +691,9 @@ void Server::RaceStart(){
 	pos2[5].setX(Pista::getInstancia()->getParrilla().at(5).x);
 	pos2[5].setY(Pista::getInstancia()->getParrilla().at(5).y);
 	pos2[5].setZ(Pista::getInstancia()->getParrilla().at(5).z);
-	RakNet::BitStream bsOut;
 	structPrediccion prediccionAux;
     GestorJugadores *jugadores = GestorJugadores::getInstancia();
 	CorredorRed *jugador;
-	bsOut.Write(typeID);
 	unsigned short numConnections=10;
     RakNet::SystemAddress systems[10];
 	server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
@@ -719,7 +724,6 @@ void Server::RaceStart(){
 		jugadores->aumentarJugadores();
 		std::cout << "Meto jugador\n";
 	}
-	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 	jugadores->setJugadores(players);
 }
 

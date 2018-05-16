@@ -180,7 +180,7 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 	if (!getEscena(tipo)) // Comprobamos que exista la escena en el array
 		return false; // No existe la escena y terminamos
 
-	TMotor::instancia().cleanScene();
+	
 	int indice = indiceEscena(tipo); // Recogemos el indice donde se encuentra el tipo de escena
 
 	if (tipo == Escena::tipo_escena::CARRERA || tipo == Escena::tipo_escena::ONLINE) {
@@ -188,10 +188,8 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 
 		delete e; // Eliminamos la escena que hemos recogido del array
 		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
-
-
-
 		delete TMotor::instancia().getSceneNode(); // Vacia el arbol completo del motor
+		TMotor::instancia().cleanScene();
 		TMotor::instancia().nuevaEscenaRaiz(); // Crea la escena raiz de donde cuelgan todos los nodos
 		return true;
 	}
@@ -201,6 +199,7 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 		delete e; // Eliminamos la escena que hemos recogido del array
 		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
 		delete TMotor::instancia().getSceneNode(); // Vacia el arbol completo del motor
+		TMotor::instancia().cleanScene();
 		TMotor::instancia().nuevaEscenaRaiz(); // Crea la escena raiz de donde cuelgan todos los nodos
 		return true;
 	}
@@ -209,6 +208,7 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 		EscenaCreditos *e = static_cast<EscenaCreditos *>(escenas[indice]);// Convertimos la escena en su tipo
 		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
 		delete TMotor::instancia().getSceneNode(); // Vacia el arbol completo del motor
+		TMotor::instancia().cleanScene();
 		TMotor::instancia().nuevaEscenaRaiz(); // Crea la escena raiz de donde cuelgan todos los nodos
 		return true;
 	}
@@ -218,6 +218,7 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 		delete e; // Eliminamos la escena que hemos recogido del array
 		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
 		delete TMotor::instancia().getSceneNode(); // Vacia el arbol completo del motor
+		TMotor::instancia().cleanScene();
 		TMotor::instancia().nuevaEscenaRaiz(); // Crea la escena raiz de donde cuelgan todos los nodos
 		return true;
 	}
@@ -227,6 +228,7 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 		delete e; // Eliminamos la escena que hemos recogido del array
 		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
 		delete TMotor::instancia().getSceneNode(); // Vacia el arbol completo del motor
+		TMotor::instancia().cleanScene();
 		TMotor::instancia().nuevaEscenaRaiz(); // Crea la escena raiz de donde cuelgan todos los nodos
 		return true;
 	}
@@ -236,6 +238,7 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 		delete e; // Eliminamos la escena que hemos recogido del array
 		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
 		delete TMotor::instancia().getSceneNode(); // Vacia el arbol completo del motor
+		TMotor::instancia().cleanScene();
 		TMotor::instancia().nuevaEscenaRaiz(); // Crea la escena raiz de donde cuelgan todos los nodos
 		return true;
 	}

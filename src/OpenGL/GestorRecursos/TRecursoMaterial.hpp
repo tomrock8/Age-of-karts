@@ -19,7 +19,7 @@ class TRecursoMaterial : public TRecurso
 public:
 
 	TRecursoMaterial(const aiMaterial *mat);
-	~TRecursoMaterial();
+	~TRecursoMaterial() override;
 
 	void activeMaterial(Shader *shader);
 

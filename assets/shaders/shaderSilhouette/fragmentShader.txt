@@ -6,8 +6,8 @@ out vec4 FragColor; //Color final del fragmento
 
 //Uniforms
 uniform vec3 posCamera; //Posicion de la camara
-uniform bool pClipping; //Booleano para la activacion/desactivacion del clipping
-uniform float levelOfClipping; //Distancia dentro de la cual se dibujan los objetos
+uniform bool drawingDistance; //Booleano para la activacion/desactivacion de la distancia de dibujado
+uniform float levelOfDrawingDistance; //Distancia dentro de la cual se dibujan los objetos
 
 //Variables de entrada desde el Vertex shader
 in vec3 worldPos;
@@ -15,10 +15,10 @@ in vec3 worldPos;
 void main(){
     // *** Dibujamos la silueta de color negro ***
     
-    //Si el clipping personalizado esta activado...
-    if ( pClipping == true ){
+    //Si la distancia de dibujado esta activada...
+    if ( drawingDistance == true ){
         //Si la distancia entre la camara y el objeto es menor que la predefinida, entonces se dibuja
-        if (abs(length(posCamera - worldPos)) < levelOfClipping){
+        if (abs(length(posCamera - worldPos)) < levelOfDrawingDistance){
             FragColor = vec4(0.0, 0.0, 0.0, 1.0);
         } else{
             //Si no se descarta

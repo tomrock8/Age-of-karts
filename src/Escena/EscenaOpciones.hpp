@@ -29,8 +29,8 @@ private:
 	bool msaa = false; //Anti-aliasing
 	bool shadows = false; //Sombras
 	bool faceCulling = true; //Face Culling
-	bool clipping = true; //Clipping
-	float levelOfClipping = 750; //Nivel de Clipping
+	bool drawingDistance = true; //Distancia de dibujado
+	float levelOfDrawingDistance = 750; //Nivel de Distancia de dibujado
 
 };
 

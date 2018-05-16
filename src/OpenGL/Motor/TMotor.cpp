@@ -523,10 +523,10 @@ void TMotor::setAntialiasing(bool b){
 		glDisable(GL_MULTISAMPLE);
 	}
 }
-//Funcion para activar/desactivar el clipping personalizado
-void TMotor::setPersonalisedClipping(bool b, float f){
-	personalisedClipping = b;
-	levelOfClipping = f; //Nivel de clipping
+//Funcion para activar/desactivar la distancia de dibujado y establecer su nivel
+void TMotor::setDrawingDistance(bool b, float f){
+	drawingDistance = b;
+	levelOfDrawingDistance = f; //Nivel de clipping
 }
 //Funcion para activar/desactivar las sombras
 void TMotor::setShadows(bool b){
@@ -810,9 +810,9 @@ void TMotor::usingShaderCartoon() {
 	glm::vec4 defaultVector(0, 0, 0, 1);
 	glm::vec4 posC = glm::inverse(activeViewMatrix) * defaultVector;
 	shaderCartoon->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
-	//Le pasamos al shader si el clipping esta o no activado y el nivel de clipping
-	shaderCartoon->setBool("pClipping", personalisedClipping);
-	shaderCartoon->setFloat("levelOfClipping", levelOfClipping);
+	//Le pasamos al shader si la distancia de dibujado esta o no activada y el nivel del mismo
+	shaderCartoon->setBool("drawingDistance", drawingDistance);
+	shaderCartoon->setFloat("levelOfDrawingDistance", levelOfDrawingDistance);
 	//Establecemos los datos de las distintas luces
 	drawLight(shaderCartoon);
 	//Si el debug de bullet no esta activo
@@ -847,9 +847,9 @@ void TMotor::usingShaderCartoon() {
 	glLineWidth(4.50f);
 	//Pasamos la posicion de la camara al shader para las operaciones de clipping
 	shaderSilhouette->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
-	//Le pasamos al shader si el clipping esta o no activado y el nivel de clipping
-	shaderSilhouette->setBool("pClipping", personalisedClipping);
-	shaderSilhouette->setFloat("levelOfClipping", levelOfClipping);
+	//Le pasamos al shader si la distancia de dibujado esta o no activada y el nivel del mismo
+	shaderSilhouette->setBool("drawingDistance", drawingDistance);
+	shaderSilhouette->setFloat("levelOfDrawingDistance", levelOfDrawingDistance);
 	//Dibujamos los distintos nodos del arbol
 	scene->draw(shaderSilhouette);
 	//Volvemos al modo de dibujado normal de los poligonos

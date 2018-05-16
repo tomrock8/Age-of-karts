@@ -17,12 +17,12 @@ TMalla::TMalla(std::vector <mesh *> m) {
 }
 
 TMalla::~TMalla() {
-	std::cout << "Destructor de TMalla\n";
+	//std::cout << "Destructor de TMalla\n";
 	visible = false; // Ocultar para no dibujar mas
 	
 	// Eliminar los punteros del vector
 	if (malla.size() > 0) {
-		cout<<"NUMERO DE MESHES PREMO:::"<< malla.size() <<endl;
+		//cout<<"NUMERO DE MESHES PREMO:::"<< malla.size() <<endl;
 		for (int i = 0; i < malla.size(); i++) {
 			delete malla.at(i);
 		}

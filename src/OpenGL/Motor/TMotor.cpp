@@ -168,12 +168,36 @@ void TMotor::cleanHUD() {
 }
 
 void TMotor::cleanScene() {
+	//Billboards
+	if(billboards.size() > 0){
+		for (int i = 0; i < billboards.size(); i++) {
+			delete billboards[i];
+		}
+		billboards.clear();
+	}
+
+	//Sistemas de particulas
+	if(particleSystems.size() > 0){
+		for (int i = 0; i < particleSystems.size(); i++) {
+			delete particleSystems[i];
+		}
+		particleSystems.clear();
+	}
+
+
+	//Hud y Menus
+	if(HUDs.size() > 0){
+		for (int i = 0; i < HUDs.size(); i++) {
+			delete HUDs[i];
+		}
+		HUDs.clear();
+	}
+
+
+
 	cameras.clear();
 	lights.clear();
-	activeLights.clear();
-	HUDs.clear();
-	billboards.clear();
-	particleSystems.clear();
+	activeLights.clear();	
 	notShadowObjects.clear();
 	delete gestorRecursos;
 	gestorRecursos = new TGestorRecursos();

@@ -8,14 +8,15 @@ out vec4 fragColor;
 in vec2 textCoords;
 
 //Uniform
-uniform sampler2D image; //Textura del billboard
+uniform sampler2D image; //Textura de la nube
  
 void main (void) {
-    //Asignamos la textura de cada particula
+    //Asignamos la textura de cada nube
     if (texture(image, textCoords).w > 0.0){
         fragColor = texture(image, textCoords);
     }else{
         //Descartamos el fragmento si la transparencia de la imagen es 0, para que no borre nada de debajo
         discard;
     }
+    //fragColor = texture(image, textCoords);
 }

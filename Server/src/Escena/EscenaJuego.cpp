@@ -144,7 +144,7 @@ std::cout << "Entro en raceStart\n";
 
 std::cout << "Salgo de raceStart\n";
 
-	numPantallas = GestorJugadores::getInstancia()->getNumJugadores();
+	numPantallas = 1;
 
 	std::cout << "Jugadores creados\n";
 

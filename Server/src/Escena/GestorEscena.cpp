@@ -15,57 +15,15 @@ GestorEscena::GestorEscena() {
 }
 
 Escena::tipo_escena GestorEscena::update() {
-	
-
-/*	
-	tiempoActual = clock();
-	clock_t timediff = tiempoActual - tiempoRefresco;
-	float timediff_sec = ((float)timediff) / 100000;
-	
-	Timer *t2 = Timer::getInstancia();
-	float tiempo= t2->getTimer();
-	
-	float retardo1;
-	
-
-	if(escenaActiva->getTipoEscena() == Escena::tipo_escena::CARRERA || escenaActiva->getTipoEscena() == Escena::tipo_escena::ONLINE){
-	retardo1 = retardo*2.5;
-	}else{
-	retardo1 = retardo/2;
-	}
-	
-
-	
-	if (timediff_sec >= retardo1) {
-	//	cout<<timediff_sec <<endl;
-		tiempoRefresco = clock();
-		*/
 		cambioEscena = escenaActiva->comprobarInputs();
-		/*
-		escenaActiva->update();
-		//cont++;
-	}
-
-
-if(tiempo-tiempoAnterior ==1){
-		cout<<cont<<endl;
-		cont=0;
-	}
-
-	//tiempoAnterior=tiempo;
-*/
 
 	if (cambioEscena == escenaActiva->getTipoEscena()) {
-		cambioEscena = escenaActiva->comprobarInputs();
 		escenaActiva->update();
 		escenaActiva->dibujar();
 	}
 	else {
 		if (cambioEscena != Escena::tipo_escena::SALIR)
-			
 			cambiaEscena(cambioEscena);
-			//tiempoActual=0;
-			//tiempoRefresco=0;
 	}
 
 	

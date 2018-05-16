@@ -156,8 +156,6 @@ void EscenaJuego::init() {
 	int numClients = client->getClientes().size();
 	Corredor::tipo_jugador tj;
 
-	std::cout << "Numero de clientes: " << numClients << std::endl;
-
 	for (int i = 0; i < numClients; i++) {
 		if (client->getClientes().at(i).tipoCorredor == 0) {
 			tj = Corredor::tipo_jugador::GLADIADOR;
@@ -186,16 +184,10 @@ void EscenaJuego::init() {
 		}
 		else {
 			if (i == controlPlayer) {
-
-				std::cout << "Creo un corredor jugador\n";
-
 				jugador = new CorredorJugador(pos2[i], tj);
 			}
 			else{
 				jugador = new CorredorRed(pos2[i], tj);
-
-				std::cout << "Creo corredor RED\n";
-
 			}
 		}
 		jugador->setID(i);
@@ -557,7 +549,7 @@ void EscenaJuego::update() {
 	}
 
 
-	
+
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
 
 
@@ -850,15 +842,11 @@ void EscenaJuego::updateHUD() {
 
 	//UPDATE OBJETOS
 
-	std::cout << "Objetos\n";
-
 	if (pj.at(controlPlayer)->getTipoObj() != objeto || pj.at(controlPlayer)->getTipoObj() ==8) {
 		objeto = pj.at(controlPlayer)->getTipoObj();
 		switch (pj.at(controlPlayer)->getTipoObj()) {
 		case 0:
-			std::cout << "Vacio\n";
 			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vacio.png");
-			std::cout << "Fin vacio\n";
 			break;
 		case 1:
 			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/flecha.png");
@@ -892,8 +880,6 @@ void EscenaJuego::updateHUD() {
 			break;
 		}
 	}
-
-	std::cout << "Final hud\n";
 }
 
 void EscenaJuego::debugRageIA(int k){		//Funcion que sirve para dibujar el nivel de enfado de la IA en una grafica (k=id jugador)

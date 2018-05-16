@@ -30,6 +30,7 @@ public:
 	void actualizarSelector();
 	void iniciarCarrera();
 	void crearHUD();
+	void addControllers();
 	// METODOS GET
 	std::string getIpConexion();
 

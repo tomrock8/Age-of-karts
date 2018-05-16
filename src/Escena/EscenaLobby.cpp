@@ -77,48 +77,7 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",28.0f);
 	ImGui::StyleColorsLight(); 
 	
-
-
-	if (offline_split){		
-		numPantallas=1;
-	for(int mandos = 1; mandos < 4; mandos++){
-		if(glfwJoystickPresent(mandos) == 1){
-			std::cout << "Mando " << mandos << " detectado!" << std::endl;
-			numPantallas++;
-		}
-	}
-	if (offline_split && numPantallas>1) {
-		for(int p=0;p<numPantallas-1;p++){
-			int k=0;
-			std::vector<structClientes> clientes = client->getClientes();
-			for (int l=0;l<clientes.size();l++){
-				if (clientes.at(l).corredorJugador==true){
-					k++;
-				}
-			}
-			
-			if (clientes.size()>1){
-				bool checkIA=false;
-				if (k<4){
-					for (int l=0;l<clientes.size();l++){
-						if (clientes.at(l).corredorJugador==false){
-							client->setArrayClients(clientes.at(l).ip, clientes.at(l).tipoCorredor, true, true, l);
-							checkIA=true;
-							break;
-						}
-					}
-					if (!checkIA){
-						if (clientes.size()<6)
-						client->setArrayClients("", 3-p, true, true, -1);
-					}
-				}
-			}else{
-				if (clientes.size()<6 && k<4)
-				client->setArrayClients("", 3-p, true, true, -1);
-			}
-		}
-		}
-	}
+	addControllers();
 }
 
 EscenaLobby::~EscenaLobby() {
@@ -1209,3 +1168,46 @@ void EscenaLobby::crearHUD(){
 }
 
 std::string EscenaLobby::getIpConexion() { return ipConexion; }
+
+void EscenaLobby::addControllers(){
+	if (offline_split){		
+		numPantallas=1;
+		for(int mandos = 1; mandos < 4; mandos++){
+			if(glfwJoystickPresent(mandos) == 1){
+				std::cout << "Mando " << mandos << " detectado!" << std::endl;
+				numPantallas++;
+			}
+		}
+		if (offline_split && numPantallas>1) {
+			for(int p=0;p<numPantallas-1;p++){
+				int k=0;
+				std::vector<structClientes> clientes = client->getClientes();
+				for (int l=0;l<clientes.size();l++){
+					if (clientes.at(l).corredorJugador==true){
+						k++;
+					}
+				}
+				
+				if (clientes.size()>1){
+					bool checkIA=false;
+					if (k<4){
+						for (int l=0;l<clientes.size();l++){
+							if (clientes.at(l).corredorJugador==false){
+								client->setArrayClients(clientes.at(l).ip, clientes.at(l).tipoCorredor, true, true, l);
+								checkIA=true;
+								break;
+							}
+						}
+						if (!checkIA){
+							if (clientes.size()<6)
+							client->setArrayClients("", 3-p, true, true, -1);
+						}
+					}
+				}else{
+					if (clientes.size()<6 && k<4)
+					client->setArrayClients("", 3-p, true, true, -1);
+				}
+			}
+		}
+	}
+}

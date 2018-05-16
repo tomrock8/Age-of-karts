@@ -84,6 +84,8 @@ private:
 	int objeto;
 	int vueltas;
 	int vueltas_aux;
+	int habilidad;
+	float inc_habilidad;
 	float muestra_tiempo;
 
 	//LUCES

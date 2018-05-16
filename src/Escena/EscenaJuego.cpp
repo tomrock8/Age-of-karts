@@ -21,9 +21,14 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	TMotor::instancia().getActiveHud()->traslateElement("vueltas", -0.83f, 0.68f);
 	TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "objeto", "assets/HUD/juego/objetos/vacio.png");
 	TMotor::instancia().getActiveHud()->traslateElement("objeto", 0.75f, 0.75f);
+	TMotor::instancia().getActiveHud()->addElement(0.12f, 0.7f, "habilidad", "assets/HUD/juego/barraHabilidad.png");
+	TMotor::instancia().getActiveHud()->traslateElement("habilidad", 0.8f, -0.5f);
+	TMotor::instancia().getActiveHud()->addElement(0.06f, 0.09f, "indicador_habilidad", "assets/HUD/juego/indicador_habilidad.png");
+	TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f);
 
 
-
+	habilidad=0;
+	inc_habilidad=0;
 	objeto = 0;
 	puesto = 6;
 	vueltas = 1;
@@ -926,6 +931,33 @@ void EscenaJuego::updateHUD() {
 			}
 			break;
 		}
+	}
+
+	//UPDATE INDICADOR HABILIDAD
+	if (pj.at(controlPlayer)->getLimite() != habilidad){
+		if (pj.at(controlPlayer)->getLimite() - habilidad > 0){
+			if (pj.at(controlPlayer)->getLimite()<=100){
+				if (pj.at(controlPlayer)->getLimite() - habilidad == 1){
+					inc_habilidad+=0.0065;
+					TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f+inc_habilidad);
+				}else if (pj.at(controlPlayer)->getLimite() - habilidad == 2){
+					inc_habilidad+=0.013;
+					TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f+inc_habilidad);
+				}else if (pj.at(controlPlayer)->getLimite() - habilidad == 10){
+					inc_habilidad+=0.065;
+					TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f+inc_habilidad);
+					
+				}else if (pj.at(controlPlayer)->getLimite() - habilidad == 20){
+					inc_habilidad+=0.13;
+					TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f+inc_habilidad);
+					
+				}
+			}
+		}else{
+			inc_habilidad=0;
+			TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f);
+		}
+		habilidad=pj.at(controlPlayer)->getLimite();
 	}
 }
 

@@ -169,6 +169,15 @@ void TMotor::cleanHUD() {
 
 void TMotor::cleanScene() {
 	cameras.clear();
+	lights.clear();
+	activeLights.clear();
+	HUDs.clear();
+	billboards.clear();
+	particleSystems.clear();
+	notShadowObjects.clear();
+	delete gestorRecursos;
+	gestorRecursos = new TGestorRecursos();
+
 }
 
 void TMotor::resizeScreen(int w, int h) {

@@ -5,27 +5,36 @@ TNodo::TNodo(const char* n) {
 	name = new std::string(n);
 	entidad = nullptr;
 	padre = nullptr;
+	hijos.clear();
 }
 
 TNodo::~TNodo() {
 	std::cout << "Destructor de TNodo: " << *name << "\n";
 	padre = nullptr; // Eliminamos el enlace con el padre
 
-	if (strcmp(name->c_str(), "quieto") == 0) {
-		cout << "EXPLOSION\n";
-	}
-
+	
 	//Borrado de hijos
 	if (hijos.size() > 0) {
+		cout<<"Numero de HIJOS::::"<<hijos.size()<<endl;
 		for (GLuint i = 0; i < hijos.size(); i++) {
+			cout<<"Soy el hijo::"<< i << "ME voy a intentar borrar BORRO JUEPUTAS"<<endl;
 			delete hijos.at(i);
+			
 		}
 		hijos.clear();
-	}
-	delete name;
-
-	//if (entidad)	delete entidad;
+	}else{
+	cout<<"NO TENGO HIJOS::::"<<endl;
 	
+
+	if (entidad){	
+	cout<<"VOY A BORRAR SU ENTIDAD"<<endl;
+	delete entidad;
+	cout<<"ENTIDAD BORRADA"<<endl;
+	}		
+	delete name;
+	cout<<"ME BORRO"<<endl;
+	}
+
 }
 
 // MANEJO DE HIJOS
@@ -85,6 +94,7 @@ TNodo *TNodo::getNode(const char* nombre) {
 std::vector<TNodo *>TNodo::getHijos() {
 
 	return hijos;
+	
 }
 
 
@@ -95,7 +105,7 @@ std::vector<TNodo *>TNodo::getHijos() {
 void TNodo::draw(Shader *shader) {
 	string n = name->c_str();
 	if (entidad != NULL) {
-		if (n.find("escena") == std::string::npos)
+		//if (n.find("escena") == std::string::npos)
 			getEntidad()->beginDraw(shader);
 	}
 	for (GLuint i = 0; i < hijos.size(); i++) {
@@ -106,9 +116,9 @@ void TNodo::draw(Shader *shader) {
 	// 	 TNodoActual->draw();
 	// }
 	if (entidad != NULL) {
-		if (n.find("escena") == std::string::npos) {
+		//if (n.find("escena") == std::string::npos) {
 			entidad->endDraw();
-		}
+		//}
 	}
 }
 

@@ -5,6 +5,7 @@ TMalla::TMalla(std::vector <mesh *> m) {
 	//Los vertices e indices son punteros a TRecursoMalla 
 	malla = m;
 	visible = true;
+	
 	//Creamos un bounding box por cada TRecursoMalla
 	if (TMotor::instancia().getBoundingBoxes() == true) {
 		for (int i = 0; i < malla.size(); i++) {
@@ -12,14 +13,16 @@ TMalla::TMalla(std::vector <mesh *> m) {
 			bBoxes.push_back(b);
 		}
 	}
+	
 }
 
 TMalla::~TMalla() {
 	std::cout << "Destructor de TMalla\n";
 	visible = false; // Ocultar para no dibujar mas
-
+	
 	// Eliminar los punteros del vector
 	if (malla.size() > 0) {
+		cout<<"NUMERO DE MESHES PREMO:::"<< malla.size() <<endl;
 		for (int i = 0; i < malla.size(); i++) {
 			delete malla.at(i);
 		}
@@ -32,6 +35,7 @@ TMalla::~TMalla() {
 		}
 		bBoxes.clear(); 
 	}
+	
 }
 
 // METODOS GET

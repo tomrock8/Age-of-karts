@@ -191,12 +191,13 @@ void Corredor::setParametros() {
 
 	//cambiar parametros en funcion del tipo
 	int num = 0;
-	cuboNodo = TMotor::instancia().newMeshNode("Jugador", " ", "escena_raiz", false);
+	
 	switch (tipojugador) {
 	case GLADIADOR:
 
 		//cuboNodo->setMaterialTexture(0, Motor3d::instancia().getDriver()->getTexture("assets/textures/red.png"));
-		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Gladiador/giroDer/GladiGiroDer_000538.obj", "quieto");
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Gladiador/giroDer/GladiGiroDer_000538.obj", "escena_raiz", false);
+		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Gladiador/giroDer/GladiGiroDer_000538.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroDer/GladiGiroDer_000", 538, 555), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroDer/GladiGiroDer_000", 555, 563), "GiroDerFin");
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/giroIzq/GladiGiroIzq_000", 538, 555), "GiroIzqIni");
@@ -225,8 +226,9 @@ void Corredor::setParametros() {
 
 
 		/* Nodos de animacion */
-
-		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "quieto");
+		
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "escena_raiz", false);
+		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "quieto");
 		//lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/LanzamientoOBJ/pirataLanzamiento_000", 639, 652), "LanzarObj");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 162, 176), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 176, 187), "GiroDerFin");
@@ -253,8 +255,8 @@ void Corredor::setParametros() {
 		num = 2;
 		break;
 	case VIKINGO:
-
-		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000534.obj", "quieto");
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000534.obj","escena_raiz",false);
+		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000534.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000", 534, 555), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000", 555, 566), "GiroDerFin");
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroIzq/vikingoGiroIzq_000", 534, 555), "GiroIzqIni");
@@ -279,9 +281,11 @@ void Corredor::setParametros() {
 		//-----HABILIDAD-----
 		num = 3;
 		break;
+
 	case CHINO:
 
-		quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Chino/giroDer/ChinoGiroDer_000179.obj", "quieto");
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/Animacion/Chino/giroDer/ChinoGiroDer_000179.obj","escena_raiz",false);
+		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Chino/giroDer/ChinoGiroDer_000179.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroDer/ChinoGiroDer_000", 179, 190), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroDer/ChinoGiroDer_000", 190, 201), "GiroDerFin");
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroIzq/ChinoGiroIzq_000", 179, 190), "GiroIzqIni");
@@ -1646,15 +1650,18 @@ void Corredor::iniciarAnimacion(movimiento_jugador mov, TNodo* previo, TNodo *pr
 		static_cast<TAnimacion*>(previoGiro->getEntidad())->ResetAnimation();
 	}
 
-	if (mov != movimiento_jugador::PARADO) {
+if(previo == NULL){
+	static_cast<TMalla*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
+}
+/*	if (mov != movimiento_jugador::PARADO) {
 		static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
-	}
+	}*/
 
 
 	switch (mov) {
-	case movimiento_jugador::PARADO:
+	/*case movimiento_jugador::PARADO:
 		cuboNodo->setNode(quieto);
-		break;
+		break;*/
 	case movimiento_jugador::GIRODERINI:
 		cuboNodo->setNode(giroDerIni);
 		break;
@@ -1707,6 +1714,37 @@ Corredor::~Corredor() {
 	delete fuenteFrenos;
 	delete vehiculo;
 	delete cuboNodo;
+
+	delete rueda1;
+	delete rueda2;
+	delete rueda3;
+	delete rueda4;
+
+	delete restriccion1;
+	delete restriccion2;
+	delete restriccion3;
+	delete restriccion4;
+
+	nombre=NULL;
+	delete estado;
+	delete RayCastVehiculo;
+	giroDerIni=NULL;
+	//TNodo *lanzarObjeto;
+	giroDerFin=NULL;
+	giroIzqIni=NULL;
+	giroIzqFin=NULL;;
+	//TNodo *animHabilidad;
+	quieto=NULL;
+
+	//BILLBOARD
+	b=NULL;
+
+	//PARTICULAS HUMO
+	p=NULL;
+
+	//delete actual; // Punto Actual
+	//delete siguiente; // Punto Siguiente
+	//delete siguiente_aux; // Punto Siguiente
 	/*	delete vacile;
 		delete giroDerIni;
 		delete lanzarObjeto;

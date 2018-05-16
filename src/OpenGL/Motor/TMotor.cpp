@@ -174,6 +174,9 @@ void TMotor::cleanScene() {
 	billboards.clear();
 	particleSystems.clear();
 	notShadowObjects.clear();
+	delete gestorRecursos;
+	gestorRecursos = new TGestorRecursos();
+
 }
 
 void TMotor::resizeScreen(int w, int h) {

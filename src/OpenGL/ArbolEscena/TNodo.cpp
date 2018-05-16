@@ -94,6 +94,7 @@ TNodo *TNodo::getNode(const char* nombre) {
 std::vector<TNodo *>TNodo::getHijos() {
 
 	return hijos;
+	
 }
 
 
@@ -104,7 +105,7 @@ std::vector<TNodo *>TNodo::getHijos() {
 void TNodo::draw(Shader *shader) {
 	string n = name->c_str();
 	if (entidad != NULL) {
-		if (n.find("escena") == std::string::npos)
+		//if (n.find("escena") == std::string::npos)
 			getEntidad()->beginDraw(shader);
 	}
 	for (GLuint i = 0; i < hijos.size(); i++) {
@@ -115,9 +116,9 @@ void TNodo::draw(Shader *shader) {
 	// 	 TNodoActual->draw();
 	// }
 	if (entidad != NULL) {
-		if (n.find("escena") == std::string::npos) {
+		//if (n.find("escena") == std::string::npos) {
 			entidad->endDraw();
-		}
+		//}
 	}
 }
 

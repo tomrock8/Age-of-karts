@@ -78,7 +78,7 @@ void boundingBox::draw(glm::mat4 modelMatrixObject) {
 	TMotor::instancia().getShaderDebugBbox()->setMat4("mvp", mvp);
 
 	//Vamos a pintar los bounding boxes de azul
-	TMotor::instancia().getShaderDebugBbox()->setVec3("color", glm::vec3(0.0, 0.0, 1.0));
+	TMotor::instancia().getShaderDebugBbox()->setVec4("color", glm::vec4(0.0, 0.0, 1.0, 1.0));
 
 	//Activamos el VAO con los datos de los vertices del bounding box
 	glBindVertexArray(VAO);

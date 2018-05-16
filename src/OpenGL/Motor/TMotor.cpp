@@ -87,6 +87,9 @@ TMotor::TMotor() {
 
 	//Seteamos el buffer y las texturas que guardaran los datos de posicion, normales y color para el deferred shading
 	setDeferredBuffers();
+
+	//Seteamos el buffer para el dibujado del cubo del level of detail
+	setBuffersCube();
 }
 
 // -------------------------------------------------
@@ -130,30 +133,6 @@ void TMotor::close() {
 	for (int i = 0; i < particleSystems.size(); i++) {
 		delete particleSystems[i];
 	}
-
-}
-
-//Funcion que transforma quaternions a grados
-void TMotor::toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw) {
-
-	//Se calcula la rotacion en el eje x = ROLL
-	double sinr = +2.0 * (w * x + y * z);
-	double cosr = +1.0 - 2.0 * (x * x + y * y);
-	roll = atan2(sinr, cosr);
-
-	///Se calcula la rotacion en el eje y = PITCH
-	double sinp = +2.0 * (w * y - z * x);
-	if (fabs(sinp) >= 1)
-		pitch = copysign(M_PI / 2, sinp);
-	else
-		pitch = asin(sinp);
-
-	pitch = -pitch;
-
-	///Se calcula la rotacion en el eje Z = YAW
-	double siny = +2.0 * (w * z + x * y);
-	double cosy = +1.0 - 2.0 * (y * y + z * z);
-	yaw = atan2(siny, cosy);
 
 }
 
@@ -455,6 +434,8 @@ Shader *TMotor::getShaderSilhouette() { return shaderSilhouette; }
 GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
 glm::mat4 TMotor::getActiveViewMatrix() { return activeViewMatrix; }
 bool TMotor::getBoundingBoxes() { return boundingBoxes; }
+float TMotor::getDrawingDistance() { return levelOfDrawingDistance; }
+bool TMotor::getLevelOfDetail() { return levelOfDetail; }
 //Funcion que devuelve un hud a partir del nombre
 hud* TMotor::getHud(const char* n) {
 	hud* h = NULL;
@@ -531,6 +512,10 @@ void TMotor::setDrawingDistance(bool b, float f){
 //Funcion para activar/desactivar las sombras
 void TMotor::setShadows(bool b){
 	shadows = b;
+}
+//Funcion para activar/desactivar el level of detail
+void TMotor::setLevelOfDetail(bool b){
+	levelOfDetail = b;
 }
 obj3D* TMotor::getObjActiveCamera() {
 	if (cameras.size() > 0)
@@ -781,7 +766,7 @@ void TMotor::drawDebugBullet() {
 		glm::mat4 mvp = activeCamera->getEntidad()->getProjectionMatrix() * activeViewMatrix * model;
 		shaderDebugBbox->setMat4("mvp", mvp);
 		//Dibujamos las lineas del debug de rojo
-		shaderDebugBbox->setVec3("color", glm::vec3(1.0, 0.0, 0.0));
+		shaderDebugBbox->setVec4("color", glm::vec4(1.0, 0.0, 0.0, 1.0));
 		//Establecemos el ancho de las lineas
 		glLineWidth(3.0f);
 		//Llamamos al dibujado de las distintas lineas
@@ -979,4 +964,97 @@ void TMotor::setDeferredBuffers() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+//---------------------------------
+// L E V E L   O F   D E T A I L
+//---------------------------------
+
+/* El Level Of Detail no esta completo en su totatildad, solo es una simple muestra. Como los modelos de nuestro juego ya son low-poly, realmente no era algo
+imprescindible para hacerlo funcionar correctamente. Es por eso, que para cumplir con los terminos presupuestados, hemos implementado 
+un level of detail basico, que simplemente, en funcion de la distancia de dibujado seteada en el motor, sustituye las mallas por un simple cubo. Sigue 
+el mismo principio que cualquier Level Of Detail, pero sin usar modelos con menos poligonos de las mallas */
+
+//Funcion que establece los buffers de OpenGL para el dibujado de un cubo
+void TMotor::setBuffersCube(){
+	//Array con la posicion de los vertices del cubo
+	const float vertices_cubo[] = {
+        -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f, 
+         0.5f,  0.5f, -0.5f,  
+         0.5f,  0.5f, -0.5f,  
+        -0.5f,  0.5f, -0.5f,  
+        -0.5f, -0.5f, -0.5f, 
+
+        -0.5f, -0.5f,  0.5f,  
+         0.5f, -0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f, -0.5f,  0.5f,  
+
+        -0.5f,  0.5f,  0.5f,  
+        -0.5f,  0.5f, -0.5f,  
+        -0.5f, -0.5f, -0.5f,  
+        -0.5f, -0.5f, -0.5f,  
+        -0.5f, -0.5f,  0.5f,  
+        -0.5f,  0.5f,  0.5f,  
+
+         0.5f,  0.5f,  0.5f, 
+         0.5f,  0.5f, -0.5f,  
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+
+        -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f,  
+         0.5f, -0.5f,  0.5f,  
+         0.5f, -0.5f,  0.5f,  
+        -0.5f, -0.5f,  0.5f,  
+        -0.5f, -0.5f, -0.5f, 
+
+        -0.5f,  0.5f, -0.5f,  
+         0.5f,  0.5f, -0.5f,  
+         0.5f,  0.5f,  0.5f,  
+         0.5f,  0.5f,  0.5f,  
+        -0.5f,  0.5f,  0.5f,  
+        -0.5f,  0.5f, -0.5f
+    };
+
+	//Establecemos los buffers que pasaran los datos anteriores a los shaders para su dibujado
+    //Creamos un VAO y un VBO
+    glGenVertexArrays(1, &VAO_cube);
+    glGenBuffers(1, &VBO_cube);
+    //Activamos el VAO
+    glBindVertexArray(VAO_cube);
+    //Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_cube);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_cubo), vertices_cubo, GL_STATIC_DRAW);
+    //POSICION
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+    glEnableVertexAttribArray(0);
+    //Desactivamos el VAO hasta que dibujemos
+    glBindVertexArray(0);
+}
+
+//Funcion para dibujar un cubo
+void TMotor::drawCube(glm::mat4 modelMatrixObject, glm::vec3 centerPos){
+	//Activamos el shader debug para el dibujado del cubo (no queremos el mismo shader que para el resto de objetos)
+	shaderDebugBbox->use();
+	//Calculamos la matriz model del cubo
+	glm::mat4 model; //Matriz identidad
+	model = glm::translate(glm::mat4(1), centerPos); //Primero, trasladamos el cubo al centro del objeto
+	model = modelMatrixObject * model; //Y por ultimo, lo traslamos al lugar que ocupa la malla en el mundo
+	//Calculamos la matriz mvp a partir de la projection y view de la camara activa
+	glm::mat4 mvp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getActiveViewMatrix() * model;
+    //Pasamos los datos necesarios al shader 
+    TMotor::instancia().getShaderSkybox()->setMat4("mvp", mvp); //Matriz mvp
+	//Pasamos un color transparente, no queremos pintar los cubos
+	TMotor::instancia().getShaderDebugBbox()->setVec4("color", glm::vec4(0.0, 0.0, 0.0, 0.0));
+    //Activamos el VAO que hemos seteado antes
+    glBindVertexArray(VAO_cube);
+    //Dibujamos el cubo
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    //Desactivamos el VAO
+    glBindVertexArray(0);
+}
 

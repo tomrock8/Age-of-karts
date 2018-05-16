@@ -78,6 +78,7 @@ TMotor::TMotor() {
 	shaderSilhouette = new Shader("assets/shaders/shaderSilhouette/vertexShader.txt", "assets/shaders/shaderSilhouette/fragmentShader.txt", nullptr);
 	shaderBillboard = new Shader("assets/shaders/shaderBillboard/vertexShader.txt", "assets/shaders/shaderBillboard/fragmentShader.txt", nullptr);
 	shaderParticles = new Shader("assets/shaders/shaderParticles/vertexShader.txt", "assets/shaders/shaderParticles/fragmentShader.txt", nullptr);
+	shaderClouds = new Shader("assets/shaders/shaderClouds/vertexShader.txt", "assets/shaders/shaderClouds/fragmentShader.txt", nullptr);
 	shaderGbuffer = new Shader("assets/shaders/shaderDeferred/gBufferVertexShader.txt", "assets/shaders/shaderDeferred/gBufferFragmentShader.txt", nullptr);
 	shaderDeferred = new Shader("assets/shaders/shaderDeferred/deferredVertexShader.txt", "assets/shaders/shaderDeferred/deferredFragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
@@ -320,6 +321,11 @@ particleSystem *TMotor::newParticleSystem() {
 	return p;
 }
 
+// --- NUBES ---
+void TMotor::newClouds(int minW, int maxW, int minH, int maxH, int minL, int maxL, int numC){
+	//Se crea una area de nubes con los parametros especificados
+	nubes = new cloudGenerator(minW, maxW, minH, maxH, minL, maxL, numC);
+}
 
 // -------------------------------
 // M A L L A S
@@ -526,6 +532,10 @@ void TMotor::setShadows(bool b){
 void TMotor::setLevelOfDetail(bool b){
 	levelOfDetail = b;
 }
+//Funcion para activar/desactivar las nubes
+void TMotor::setClouds(bool b){
+	clouds = b;
+}
 obj3D* TMotor::getObjActiveCamera() {
 	if (cameras.size() > 0)
 		return new obj3D(activeCamera, activeCamera->getName(), 99);
@@ -691,6 +701,18 @@ void TMotor::drawParticles() {
 	//Recorremos los diferentes sistemas y los dibujamos
 	for (int i = 0; i < particleSystems.size(); i++) {
 		particleSystems.at(i)->draw(shaderParticles);
+	}
+}
+
+// ---- DIBUJADO DE LAS NUBES ----
+//Funcion que dibuja las nubes del motor
+void TMotor::drawClouds(){
+	//Si las nubes estan activadas, las dibujamos...
+	if ( clouds == true ){
+		//Activamos el shader especifico de las nubes
+		shaderClouds->use();
+		//Dibujamos las nubes
+		nubes->draw(shaderClouds);
 	}
 }
 

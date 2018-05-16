@@ -32,6 +32,7 @@ private:
 	bool drawingDistance = true; //Distancia de dibujado
 	bool levelOfDetail = true; //Level Of Detail
 	float levelOfDrawingDistance = 750; //Nivel de Distancia de dibujado
+	bool clouds = false; //Nubes
 
 };
 

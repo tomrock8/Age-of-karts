@@ -260,6 +260,11 @@ void EscenaJuego::init() {
 	io.Fonts->AddFontDefault();
 	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf", 30.0f);
 
+	//----------------------	
+	// NUBES
+	//----------------------
+	//Creamos un area de nubes entre las posiciones -2000 y 2000 en el ancho y largo y a una altura entre 150 y 300, con 30 nubes
+	TMotor::instancia().newClouds(-2000, 2000, 150, 300, -2000, 2000, 50);
 
 	//-----------------------
 	// OPENAL
@@ -333,6 +338,8 @@ void EscenaJuego::dibujar() {
 		TMotor::instancia().setActiveCamera(TMotor::instancia().getCameraByIndex(i));
 		//Dibujamos el skybox
 		TMotor::instancia().drawSkybox();
+		//Dibujamos las nubes
+		TMotor::instancia().drawClouds();
 		//Dibujamos los objetos 3D creados en la escena
 		TMotor::instancia().drawProjectedShadows();
 		TMotor::instancia().draw();

@@ -35,7 +35,7 @@ private:
 	void renderDebug();
 	void debugRageIA(int k);
 	void debugPlot(int j,float k,std::string str);
-	void updateHUD();
+	void updateHUD(int i);
 	
 	int numPantallas; //Numero de mandos conectados
 

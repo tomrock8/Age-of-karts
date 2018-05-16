@@ -30,6 +30,7 @@ public:
 	void actualizarSelector();
 	void iniciarCarrera();
 	void crearHUD();
+	void addControllers();
 	// METODOS GET
 	std::string getIpConexion();
 
@@ -65,6 +66,7 @@ private:
 	std::string iphost;
 	std::string connecting;
 	std::string *infoLobby;
+	int numPantallas;
 };
 
 #endif /* ESCENALOBBY_H */

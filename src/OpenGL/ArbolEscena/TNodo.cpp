@@ -1,16 +1,40 @@
 #include "TNodo.hpp"
+#include "TMotor.hpp"
 
 TNodo::TNodo(const char* n) {
 	name = new std::string(n);
+	entidad = nullptr;
+	padre = nullptr;
+	hijos.clear();
 }
 
 TNodo::~TNodo() {
-	//delete entidad;
-	delete padre;
+	std::cout << "Destructor de TNodo: " << *name << "\n";
+	padre = nullptr; // Eliminamos el enlace con el padre
+
+	
 	//Borrado de hijos
-	for (GLuint i = 0; i < hijos.size(); i++) {
-		delete(hijos.at(i));
+	if (hijos.size() > 0) {
+		cout<<"Numero de HIJOS::::"<<hijos.size()<<endl;
+		for (GLuint i = 0; i < hijos.size(); i++) {
+			cout<<"Soy el hijo::"<< i << "ME voy a intentar borrar BORRO JUEPUTAS"<<endl;
+			delete hijos.at(i);
+			
+		}
+		hijos.clear();
+	}else{
+	cout<<"NO TENGO HIJOS::::"<<endl;
+	
+
+	if (entidad){	
+	cout<<"VOY A BORRAR SU ENTIDAD"<<endl;
+	delete entidad;
+	cout<<"ENTIDAD BORRADA"<<endl;
+	}		
+	delete name;
+	cout<<"ME BORRO"<<endl;
 	}
+
 }
 
 // MANEJO DE HIJOS
@@ -34,13 +58,10 @@ int TNodo::remHijo(TNodo*n) {//1 == ha borrado hijos
 //-----------------
 void TNodo::setPadre(TNodo *p) { padre = p; }
 void TNodo::setName(const char*n) { name = new std::string(n); }
-
-bool TNodo::setEntidad(TEntidad *n) {
+void TNodo::setEntidad(TEntidad *n) {
 	if (n != NULL) {
 		entidad = n;
-		return true;
 	}
-	else return false;
 }
 
 //-----------------
@@ -69,6 +90,14 @@ TNodo *TNodo::getNode(const char* nombre) {
 	return nullptr;
 }
 
+
+std::vector<TNodo *>TNodo::getHijos() {
+
+	return hijos;
+	
+}
+
+
 //----------------------------
 // DIBUJADO DEL LOS NODOS
 //	RECORRIDO EN PREORDEN
@@ -76,7 +105,7 @@ TNodo *TNodo::getNode(const char* nombre) {
 void TNodo::draw(Shader *shader) {
 	string n = name->c_str();
 	if (entidad != NULL) {
-		if (n.find("escena") == std::string::npos)
+		//if (n.find("escena") == std::string::npos)
 			getEntidad()->beginDraw(shader);
 	}
 	for (GLuint i = 0; i < hijos.size(); i++) {
@@ -87,8 +116,10 @@ void TNodo::draw(Shader *shader) {
 	// 	 TNodoActual->draw();
 	// }
 	if (entidad != NULL) {
-		if (n.find("escena") == std::string::npos) {
+		//if (n.find("escena") == std::string::npos) {
 			entidad->endDraw();
-		}
+		//}
 	}
 }
+
+

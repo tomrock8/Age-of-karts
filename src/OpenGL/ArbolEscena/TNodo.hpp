@@ -25,9 +25,10 @@ public:
 	TNodo *getPadre();
 	TNodo *getNode(const char * nombre);
 	const char *getName();
+	std::vector<TNodo *> getHijos();
 
 	// METODOS SET
-	bool setEntidad(TEntidad *n);
+	void setEntidad(TEntidad *n);
 	void setPadre(TNodo *p);
 	void setName(const char* n);
 

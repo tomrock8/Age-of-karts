@@ -49,6 +49,11 @@ TLuz::TLuz(glm::vec3 ambiente, glm::vec3 difusa, glm::vec3 especular, glm::vec4 
 	}
 }
 
+TLuz::~TLuz(){
+	std::cout << "Destructor de TLuz\n";
+	lightMatrixes.clear(); // Vaciar el vector
+}
+
 // METODOS SET
 void TLuz::setLightPosition(glm::vec3 pos) { lightPosition = pos; }
 void TLuz::setActive(bool active) { this->active = active; }

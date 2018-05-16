@@ -84,7 +84,19 @@ private:
 	int objeto;
 	int vueltas;
 	int vueltas_aux;
+	int habilidad;
+	float inc_habilidad;
 	float muestra_tiempo;
+
+	//LUCES
+	obj3D * luzPuntual_0;
+	obj3D * luzPuntual_1;
+	obj3D * luzPuntual_2;
+	obj3D * luzPuntual_3;
+
+	//corredores
+	std::vector<Corredor*> pj;
+	Corredor* jugador;
 	
 };
 

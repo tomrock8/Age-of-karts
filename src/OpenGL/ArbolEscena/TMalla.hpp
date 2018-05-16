@@ -12,6 +12,7 @@ class TMalla : public TEntidad
 {
 public:
 	TMalla(std::vector<mesh *> m);
+	~TMalla() override;
 
 	// VISIBILIDAD DEL OBJETO
 	bool isVisible();

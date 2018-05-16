@@ -13,7 +13,7 @@ TGestorRecursos::~TGestorRecursos() {
 			delete recursoMallas.at(i);
 		}
 		// Se vacia el vector
-		recursoMallas.erase(recursoMallas.begin(), recursoMallas.begin() + recursoMallas.size());
+		recursoMallas.clear();
 	}
 
 	// Destruimos el vector de materiales
@@ -22,7 +22,7 @@ TGestorRecursos::~TGestorRecursos() {
 			delete recursoMaterials.at(i);
 		}
 		// Se vacia el vector
-		recursoMaterials.erase(recursoMaterials.begin(), recursoMaterials.begin() + recursoMaterials.size());
+		recursoMaterials.clear();
 	}
 
 	// Destruimos el vector de texturas
@@ -31,12 +31,12 @@ TGestorRecursos::~TGestorRecursos() {
 			delete recursoTexturas.at(i);
 		}
 		// Se vacia el vector
-		recursoTexturas.erase(recursoTexturas.begin(), recursoTexturas.begin() + recursoTexturas.size());
+		recursoTexturas.clear();
 	}
 
 	// Se vacia el vector
 	if (objMeshes.size() > 0) {
-		objMeshes.erase(objMeshes.begin(), objMeshes.begin() + objMeshes.size());
+		objMeshes.clear();
 	}
 
 	cout << " SALGO \n";
@@ -47,7 +47,7 @@ std::vector<mesh*> TGestorRecursos::loadMesh(const char *path,bool sta,bool anim
 	//primero limpiamos los vectores de mesh
 	int  i = objMeshes.size();
 	if (objMeshes.size() > 0) {
-		objMeshes.erase(objMeshes.begin(), objMeshes.begin() + i);
+		objMeshes.clear();
 	}
 	statico = sta;
 	Assimp::Importer import;

@@ -1,13 +1,23 @@
 #include "Server.hpp"
 #include <iostream>
 #include "NetworkEnums.hpp"
+#include "CorredorRed.hpp"
+
+Server *Server::instancia = NULL;
 
 #define MAX_PLAYERS 6 //numero maximo de jugadores conectados al servidor
 
+Server *Server::getInstancia() {
+	if (instancia == NULL)
+		instancia = new Server(6);
+
+	return instancia;
+}
 
 //======================================================================
 // Se inicializan los parametros que necesita el servidor para funcionar
 //======================================================================
+
 Server::Server(int maxPlay)
 {
     started = false; //Indica si la carrera ha empezado
@@ -170,7 +180,7 @@ void Server::ReceivePackets()
 		RakNet::RakString paramRakString;
 		std::string paramString;
 			
-		structClientes client;	
+		structClients client;	
 		
 		CorredorRed *jugador;
 		
@@ -392,41 +402,9 @@ void Server::ReceivePackets()
 					break;
 				}
 				if (parambool==false && clientes.size()>0){		//si todos estan listos y ha recorrido el bucle empieza la carrera
-					typeID = ID_RACE_START;
-					bsOut.Write(typeID);
-					numConnections=10;
-					server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
-					id=numConnections;
-					Corredor::tipo_jugador tj;
-					for(int i= 0; i<id; i++){		
-						if (clientes.at(i).tipoCorredor == 0){
-							tj=Corredor::tipo_jugador::GLADIADOR;
-						}else if (clientes.at(i).tipoCorredor == 1){
-							tj=Corredor::tipo_jugador::PIRATA;
-						}else if (clientes.at(i).tipoCorredor == 2){
-							tj=Corredor::tipo_jugador::VIKINGO;
-						}else if (clientes.at(i).tipoCorredor == 3){
-							tj=Corredor::tipo_jugador::CHINO;
-						}
-						std::cout << "Creo jugador \n";
-						jugador = new CorredorRed("assets/coche.obj", pos2[i], tj);
-						jugador->setID(i);
-						players.push_back(jugador);
-						prediccionAux.timeStamp = 0;
-						prediccionAux.posicion[0] = pos2[i].getX();
-						prediccionAux.posicion[1] = pos2[i].getY();
-						prediccionAux.posicion[2] = pos2[i].getZ();
-						prediccionAux.rotacion[0] = pos2[i].getX();
-						prediccionAux.rotacion[1] = pos2[i].getY();
-						prediccionAux.rotacion[2] = pos2[i].getZ();
-						clientes.at(i).prediccion.push_back(prediccionAux);
-						jugadores->aumentarJugadores();
-						std::cout << "Meto jugador\n";
-					}
-					std::cout << "Salgo de crear jugadores\n";
-					started=true;
-					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-				}
+				
+					std::cout << "Cambiamos de escena\n";
+					started=true;}
 			}
 			parambool=false;
 			break;	
@@ -543,17 +521,17 @@ void Server::ReceivePackets()
 							parambool = true;
 						}
 						//std::cout << "Posicion Z: " << paramFloat << "\n";
-						paramFloat = players.at(id)->getNodo()->getRotation().X - clientes.at(id).prediccion.at(i).rotacion[0];
+						paramFloat = players.at(id)->getNodo()->getRotation().x - clientes.at(id).prediccion.at(i).rotacion[0];
 						if(paramFloat > diff || paramFloat < -diff){
 							//std::cout << "Rotacion X\n";
 							parambool = true;
 						}
-						paramFloat = players.at(id)->getNodo()->getRotation().Y - clientes.at(id).prediccion.at(i).rotacion[1];
+						paramFloat = players.at(id)->getNodo()->getRotation().y - clientes.at(id).prediccion.at(i).rotacion[1];
 						if(paramFloat > diff || paramFloat < -diff){
 							//std::cout << "Rotacion Y\n";
 							parambool = true;
 						}
-						paramFloat = players.at(id)->getNodo()->getRotation().Z - clientes.at(id).prediccion.at(i).rotacion[2];
+						paramFloat = players.at(id)->getNodo()->getRotation().z - clientes.at(id).prediccion.at(i).rotacion[2];
 						if(paramFloat > diff || paramFloat < -diff){
 							//std::cout << "Rotacion Z\n";
 							parambool = true;
@@ -575,9 +553,9 @@ void Server::ReceivePackets()
 					bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getX());
 					bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getY());
 					bsOut.Write(players.at(id)->getRigidBody()->getCenterOfMassPosition().getZ());
-					bsOut.Write(players.at(id)->getNodo()->getRotation().X);
-					bsOut.Write(players.at(id)->getNodo()->getRotation().Y);
-					bsOut.Write(players.at(id)->getNodo()->getRotation().Z);
+					bsOut.Write(players.at(id)->getNodo()->getRotation().x);
+					bsOut.Write(players.at(id)->getNodo()->getRotation().y);
+					bsOut.Write(players.at(id)->getNodo()->getRotation().z);
 					server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
 				}
 				
@@ -685,6 +663,70 @@ void Server::ReceivePackets()
     }
 }
 
+void Server::RaceStartSend(){
+	RakNet::BitStream bsOut;
+	typeID = ID_RACE_START;
+	bsOut.Write(typeID);
+	server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+}
+
+void Server::RaceStart(){
+	typeID = ID_RACE_START;
+	btVector3 pos2[6];
+	pos2[0].setX(Pista::getInstancia()->getParrilla().at(0).x);
+	pos2[0].setY(Pista::getInstancia()->getParrilla().at(0).y);
+	pos2[0].setZ(Pista::getInstancia()->getParrilla().at(0).z);
+	pos2[1].setX(Pista::getInstancia()->getParrilla().at(1).x);
+	pos2[1].setY(Pista::getInstancia()->getParrilla().at(1).y);
+	pos2[1].setZ(Pista::getInstancia()->getParrilla().at(1).z);
+	pos2[2].setX(Pista::getInstancia()->getParrilla().at(2).x);
+	pos2[2].setY(Pista::getInstancia()->getParrilla().at(2).y);
+	pos2[2].setZ(Pista::getInstancia()->getParrilla().at(2).z);
+	pos2[3].setX(Pista::getInstancia()->getParrilla().at(3).x);
+	pos2[3].setY(Pista::getInstancia()->getParrilla().at(3).y);
+	pos2[3].setZ(Pista::getInstancia()->getParrilla().at(3).z);
+	pos2[4].setX(Pista::getInstancia()->getParrilla().at(4).x);
+	pos2[4].setY(Pista::getInstancia()->getParrilla().at(4).y);
+	pos2[4].setZ(Pista::getInstancia()->getParrilla().at(4).z);
+	pos2[5].setX(Pista::getInstancia()->getParrilla().at(5).x);
+	pos2[5].setY(Pista::getInstancia()->getParrilla().at(5).y);
+	pos2[5].setZ(Pista::getInstancia()->getParrilla().at(5).z);
+	structPrediccion prediccionAux;
+    GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	CorredorRed *jugador;
+	unsigned short numConnections=10;
+    RakNet::SystemAddress systems[10];
+	server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
+	int id=numConnections;
+	Corredor::tipo_jugador tj;
+	for(int i= 0; i<id; i++){		
+		if (clientes.at(i).tipoCorredor == 0){
+			tj=Corredor::tipo_jugador::GLADIADOR;
+		}else if (clientes.at(i).tipoCorredor == 1){
+			tj=Corredor::tipo_jugador::PIRATA;
+		}else if (clientes.at(i).tipoCorredor == 2){
+			tj=Corredor::tipo_jugador::VIKINGO;
+		}else if (clientes.at(i).tipoCorredor == 3){
+			tj=Corredor::tipo_jugador::CHINO;
+		}
+		std::cout << "Creo jugador \n";
+		jugador = new CorredorRed(pos2[i], tj);
+		jugador->setID(i);
+		players.push_back(jugador);
+		prediccionAux.timeStamp = 0;
+		prediccionAux.posicion[0] = pos2[i].getX();
+		prediccionAux.posicion[1] = pos2[i].getY();
+		prediccionAux.posicion[2] = pos2[i].getZ();
+		prediccionAux.rotacion[0] = pos2[i].getX();
+		prediccionAux.rotacion[1] = pos2[i].getY();
+		prediccionAux.rotacion[2] = pos2[i].getZ();
+		clientes.at(i).prediccion.push_back(prediccionAux);
+		jugadores->aumentarJugadores();
+		std::cout << "Meto jugador\n";
+	}
+	jugadores->setJugadores(players);
+}
+
 //====================================================================================================
 // Metodo encargado de enviar todos los paquetes almacenados
 //====================================================================================================
@@ -779,9 +821,12 @@ void Server::refreshServer()
 		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getX());
 		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getY());
 		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassPosition().getZ());
-		bsOut.Write(players.at(i)->getNodo()->getRotation().X);
-		bsOut.Write(players.at(i)->getNodo()->getRotation().Y);
-		bsOut.Write(players.at(i)->getNodo()->getRotation().Z);
+		bsOut.Write(players.at(i)->getRigidBody()->getCenterOfMassTransform().getRotation());
+		/*
+		bsOut.Write(players.at(i)->getNodo()->getRotation().x);
+		bsOut.Write(players.at(i)->getNodo()->getRotation().y);
+		bsOut.Write(players.at(i)->getNodo()->getRotation().z);
+		*/
 		bsOut.Write(estados->getEstadoMovimiento());
 		bsOut.Write(estados->getDireccionMovimiento());
 		bsOut.Write(estados->getEstadoObjeto());
@@ -789,6 +834,7 @@ void Server::refreshServer()
 		bsOut.Write(estados->getEstadoCarrera());
 		bsOut.Write(estados->getEstadoInmunidad());
 		bsOut.Write(estados->getEstadoHabilidad());
+		bsOut.Write(players.at(i)->getLimite());
 
     }
     //std::cout << "Control: " << controlPlayer << std::endl;
@@ -849,7 +895,7 @@ int Server::getCommands(){
                 GestorJugadores *jugadores = GestorJugadores::getInstancia();
                 players = jugadores->getJugadores();
                 if(objeto < 9 && objeto > -1 && index < jugadores->getNumJugadores() && index > -1){
-                    players[index]->setTipoObj(objeto);
+                    players[index]->setTipoObj((EstadosJugador::estado_objeto)objeto);
                 }else std::cout << "Parametros incorrectos\n";
             }
         }
@@ -956,4 +1002,24 @@ bool Server::getStarted(){
 
 void Server::aumentarTimestamp(){
 	timeStamp++;
+}
+
+std::string Server::getStringClients(){
+	std::string ret = "\n Clientes: \n";
+	for(int i = 0; i < clientes.size(); i++){
+		ret.append(to_string(i) + ": " + clientes.at(i).ip + "\n" + " - Tipo: ");
+		if (clientes.at(i).tipoCorredor == 0)
+			ret.append("GLADIADOR ");
+		else if (clientes.at(i).tipoCorredor == 1)
+			ret.append("PIRATA ");
+		else if (clientes.at(i).tipoCorredor == 2)
+			ret.append("VIKINGO ");
+		else if (clientes.at(i).tipoCorredor == 3)
+			ret.append("GUERRERO CHINO ");
+		if(clientes.at(i).ready)
+			ret.append("\n - LISTO\n");
+		else
+			ret.append("\n - NO LISTO\n");
+	}
+	return ret;
 }

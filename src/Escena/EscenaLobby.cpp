@@ -778,6 +778,8 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 	if (iniciado)
 		if (client->getStarted()){
+			Pista::getInstancia()->setNombreMapa("pirata");
+			Pista::getInstancia()->setNumVueltas(laps);
 			//if (empiezaCarrera)
 			return Escena::tipo_escena::ONLINE;
 		}

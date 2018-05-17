@@ -257,13 +257,15 @@ int Client::ReceivePackets() {
 		//Todas las variables utilizadas en los distintos casos del switch
 		btVector3 pos;
 		float x, y, z;
-		int id;
-		int param;
-		int param2;
+		int id = 0;
+		int param = 0;
+		int param2 = 0;
 		bool reset = false;
 		bool lanzar = false;
 		bool ulti = false;
-		bool parambool;
+		bool parambool = false;
+
+		btQuaternion rotacionBullet;
 
 		RakNet::RakString paramRakString;
 		std::string paramString;
@@ -277,13 +279,13 @@ int Client::ReceivePackets() {
 		case ID_DISCONNECTION_NOTIFICATION:
 			std::cout << "ID_DISCONNECTION_NOTIFICATION de " << p->systemAddress.ToString(true) << std::endl;
 			disconnection = true;
-			packetName="ID_DISCONNECTION_NOTIFICATION";
+			packetName = "ID_DISCONNECTION_NOTIFICATION";
 			break;
 
 			//el cliente ya esta conectado (en caso de realizar un connect)
 		case ID_ALREADY_CONNECTED:
 			std::cout << "ID_ALREADY_CONNECTED\n";
-			packetName="ID_ALREADY_CONNECTED";
+			packetName = "ID_ALREADY_CONNECTED";
 			/*typeID = ID_ALREADY_CONNECTED;
 			bsOut.Write(typeID);
 			client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true); NO ENVIA*/
@@ -301,62 +303,62 @@ int Client::ReceivePackets() {
 			//un nuevo cliente se ha conectado al servidor
 		case ID_NEW_INCOMING_CONNECTION:
 			std::cout << "ID_NEWServer_INCOMING_CONNECTION\n";
-			packetName="ID_NEW_INCOMING_CONNECTION";
+			packetName = "ID_NEW_INCOMING_CONNECTION";
 			break;
 
 			//cliente y servidor no comparten el mismo tipo de protocolo (IPv4-IPv6)
 		case ID_INCOMPATIBLE_PROTOCOL_VERSION:
 			std::cout << "ID_INCOMPATIBLE_PROTOCOL_VERSION\n";
-			packetName="ID_INCOMPATIBLE_PROTOCOL_VERSION";
+			packetName = "ID_INCOMPATIBLE_PROTOCOL_VERSION";
 			break;
 
 		case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 			std::cout << "ID_REMOTE_DISCONNECTION_NOTIFICATION\n";
-			packetName="ID_REMOTE_DISCONNECTION_NOTIFICATION";
+			packetName = "ID_REMOTE_DISCONNECTION_NOTIFICATION";
 			break;
 		case ID_REMOTE_NEW_INCOMING_CONNECTION:
 			std::cout << "ID_REMOTE_NEW_INCOMING_CONNECTION\n";
-			packetName="ID_REMOTE_NEW_INCOMING_CONNECTION";
+			packetName = "ID_REMOTE_NEW_INCOMING_CONNECTION";
 			break;
 
 			//se le notifica al cliente que ha sido expulsado del servidor por x motivos
 		case ID_CONNECTION_BANNED:
-			packetName="ID_CONNECTION_BANNED";
+			packetName = "ID_CONNECTION_BANNED";
 			std::cout << "Has sido baneado del server!\n";
 			return 1;
 			break;
 
 			//la conexion del cliente con el servidor ha fallado
 		case ID_CONNECTION_ATTEMPT_FAILED:
-			packetName="ID_CONNECTION_ATTEMPT_FAILED";
+			packetName = "ID_CONNECTION_ATTEMPT_FAILED";
 			std::cout << "La conexion no ha tenido exito!\n";
 			return 1;
 			break;
 
 			//se ha perdido la conexion con uno de los clientes
 		case ID_CONNECTION_LOST:
-			packetName="ID_CONNECTION_LOST";
+			packetName = "ID_CONNECTION_LOST";
 			std::cout << "ID_CONNECTION_LOST de " << p->systemAddress.ToString(true) << std::endl;
 			return 2;
 			break;
 
 			//se le notifica al cliente que el servidor ya ha alcanzado su numero maximo de usuarios y, por lo tanto, no puede acceder
 		case ID_NO_FREE_INCOMING_CONNECTIONS:
-			packetName="ID_NO_FREE_INCOMING_CONNECTIONS";
+			packetName = "ID_NO_FREE_INCOMING_CONNECTIONS";
 			std::cout << "Lo sentimos, el servidor ya esta lleno\n";
 			return 1;
 			break;
 
 			//el cliente ha proporcionado una contrasenya de acceso incorrecta
 		case ID_INVALID_PASSWORD:
-			packetName="ID_INVALID_PASSWORD";
+			packetName = "ID_INVALID_PASSWORD";
 			std::cout << "Acceso denegado! Introduzca la clave correcta\n";
 			return 1;
 			break;
 
 			//se ha aceptado la conexion con un cliente
 		case ID_CONNECTION_REQUEST_ACCEPTED:
-			packetName="ID_CONNECTION_REQUEST_ACCEPTED";
+			packetName = "ID_CONNECTION_REQUEST_ACCEPTED";
 			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
 			connected = true;
 			controlPlayer = -1;
@@ -365,7 +367,7 @@ int Client::ReceivePackets() {
 
 			//Actualiza los clientes conectados en el servidor para cambiar los datos del lobby
 		case ID_LOAD_CURRENT_CLIENTS:
-			packetName="ID_LOAD_CURRENT_CLIENTS";
+			packetName = "ID_LOAD_CURRENT_CLIENTS";
 			cout << "ID_LOAD_CURRENT_CLIENTS\n";
 			param2 = numClients;
 			clientes.clear();
@@ -405,7 +407,7 @@ int Client::ReceivePackets() {
 
 			//Algun cliente ha cambiado de personaje en el lobby
 		case ID_CHANGE_CHARACTER:
-			packetName="ID_CHANGE_CHARACTER";
+			packetName = "ID_CHANGE_CHARACTER";
 			std::cout << "ID_CHANGE_CHARACTER_CLIENT\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
@@ -431,7 +433,7 @@ int Client::ReceivePackets() {
 
 
 		case ID_READY_CLIENT:
-			packetName="ID_READY_CLIENT";
+			packetName = "ID_READY_CLIENT";
 			//cambiamos el valor de ready en el cliente
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
@@ -448,12 +450,12 @@ int Client::ReceivePackets() {
 
 			//Iniciamos la partida por orden el servidor
 		case ID_RACE_START:
-			packetName="ID_RACE_START";
+			packetName = "ID_RACE_START";
 			cout << "ID_RACE_START\n";
 			started = true;
 			break;
 		case ID_RETURN_LOBBY:
-			packetName="ID_RETURN_LOBBY";
+			packetName = "ID_RETURN_LOBBY";
 			for (int i = 0; i < clientes.size(); i++)
 				clientes.at(i).ready = false;
 
@@ -462,7 +464,7 @@ int Client::ReceivePackets() {
 			break;
 			//Recibimos la pulsacion de teclado de algun cliente
 		case ID_SEND_KEY_PRESS:
-			packetName="ID_SEND_KEY_PRESS";
+			packetName = "ID_SEND_KEY_PRESS";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			bsIn.Read(param);
@@ -491,9 +493,8 @@ int Client::ReceivePackets() {
 			//Caso desactualizado: Spawn de un jugador estando la partida empezada
 			//Podria utilizarse para pruebas del servidor
 		case ID_SPAWN_PLAYER:
-			packetName="ID_SPAWN_PLAYER";
+			packetName = "ID_SPAWN_PLAYER";
 			cout << "ID_SPAWN_PLAYER\n";
-			int id;
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(x);
 			bsIn.Read(y);
@@ -518,7 +519,7 @@ int Client::ReceivePackets() {
 
 			//Caso desactualizado: Cargar los jugadores conectados actualmente a la partida
 		case ID_LOAD_CURRENT_PLAYERS:
-			packetName="ID_LOAD_CURRENT_PLAYERS";
+			packetName = "ID_LOAD_CURRENT_PLAYERS";
 			//std::cout << "YA NO DEBERIA DE ENTRAR AQUI\n";
 			int i;
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -564,7 +565,7 @@ int Client::ReceivePackets() {
 
 			//Actualiza la posicion de los jugadores para evitar la desincronizacion con el servidor
 		case ID_PLAYER_MOVE:
-			packetName="ID_PLAYER_MOVE";
+			packetName = "ID_PLAYER_MOVE";
 			if (started)
 			{
 				float *pos = new float[3];
@@ -586,7 +587,7 @@ int Client::ReceivePackets() {
 
 			//Caso desactualizado: Se comparten los estados del jugador para aplicarlo sobre los corredores ajenos
 		case ID_PLAYER_STATE:
-			packetName="ID_PLAYER_STATE";
+			packetName = "ID_PLAYER_STATE";
 			if (netLoaded)
 			{
 				int estado1, estado2, estado3, estado4;
@@ -608,7 +609,7 @@ int Client::ReceivePackets() {
 
 			// Corregir posicion por orden del server
 		case ID_PLAYER_REFRESH:
-			packetName="ID_PLAYER_REFRESH";
+			packetName = "ID_PLAYER_REFRESH";
 			if (started)
 			{
 				float *pos = new float[3];
@@ -627,10 +628,9 @@ int Client::ReceivePackets() {
 			break;
 			//Caso desactualizado: el corredor con la id lanza el objeto que tenga.
 		case ID_PLAYER_THROW_OBJECT:
-			packetName="ID_PLAYER_THROW_OBJECT";
+			packetName = "ID_PLAYER_THROW_OBJECT";
 			if (netLoaded)
 			{
-				int id;
 
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(id);
@@ -642,47 +642,52 @@ int Client::ReceivePackets() {
 
 			// El servidor manda la posicion de cada uno de los clientes para evitar la desincronizacion
 		case ID_REFRESH_SERVER:
-			packetName="ID_REFRESH_SERVER";
+			packetName = "ID_REFRESH_SERVER";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			if (started) {
 				float *pos = new float[3];
 				float *ori = new float[3];
 				for (int i = 0; i < players.size(); i++) {
-
 					bsIn.Read(id);			//CONTROLPLAYER
 					bsIn.Read(pos[0]); //POSICION ACTUAL
 					bsIn.Read(pos[1]);	//
 					bsIn.Read(pos[2]);	//
+					bsIn.Read(rotacionBullet);
+					/*
 					bsIn.Read(ori[0]);	//ROTACION
 					bsIn.Read(ori[1]);	//
 					bsIn.Read(ori[2]);	//
+					*/
+					if (id < players.size()) {
+						bsIn.Read(param);		//ESTADOS
+						if (i != controlPlayer)
+							players.at(id)->getEstados()->setEstadoMovimiento(param);
+						bsIn.Read(param);		//
+						if (i != controlPlayer)
+							players.at(id)->getEstados()->setDireccionMovimiento(param);
+						bsIn.Read(param);		//
+						if (i != controlPlayer)
+							players.at(id)->getEstados()->setEstadoObjeto(param);
+						bsIn.Read(param);		//
+						if (i != controlPlayer)
+							players.at(id)->getEstados()->setEstadoCoche(param);
+						bsIn.Read(param);		//
+						if (i != controlPlayer)
+							players.at(id)->getEstados()->setEstadoCarrera(param);
+						bsIn.Read(param);		//
+						if (i != controlPlayer)
+							players.at(id)->getEstados()->setEstadoInmunidad(param);
+						bsIn.Read(param);		//
+						if (i != controlPlayer)
+							players.at(id)->getEstados()->setEstadoHabilidad(param);
+						bsIn.Read(param);    //Limite 
+						if (i != controlPlayer)
+							players.at(id)->setLimite(param);
 
-					bsIn.Read(param);		//ESTADOS
-					if (i != controlPlayer)
-						players.at(id)->getEstados()->setEstadoMovimiento(param);
-					bsIn.Read(param);		//
-					if (i != controlPlayer)
-						players.at(id)->getEstados()->setDireccionMovimiento(param);
-					bsIn.Read(param);		//
-					if (i != controlPlayer)
-						players.at(id)->getEstados()->setEstadoObjeto(param);
-					bsIn.Read(param);		//
-					if (i != controlPlayer)
-						players.at(id)->getEstados()->setEstadoCoche(param);
-					bsIn.Read(param);		//
-					if (i != controlPlayer)
-						players.at(id)->getEstados()->setEstadoCarrera(param);
-					bsIn.Read(param);		//
-					if (i != controlPlayer)
-						players.at(id)->getEstados()->setEstadoInmunidad(param);
-					bsIn.Read(param);		//
-					if (i != controlPlayer)
-						players.at(id)->getEstados()->setEstadoHabilidad(param);
-					bsIn.Read(param);    //Limite 
-					if (i != controlPlayer)
-						players.at(id)->setLimite(param);
-
-					players.at(id)->setPosicion(pos, ori);
+						//players.at(id)->setPosicion(pos, ori);
+						//if (players.at(id)->getEstados()->getEstadoCarrera() != EstadosJugador::estado_carrera::PARRILLA);
+						players.at(id)->setPosicionBullet(pos, rotacionBullet);
+					}
 				}
 			}
 
@@ -690,7 +695,7 @@ int Client::ReceivePackets() {
 
 			//Un cliente ha cerrado la aplicacion y manda el mensaje con su ControlPlayer
 		case ID_PLAYER_DISCONNECT:
-			packetName="ID_PLAYER_DISCONNECT";
+			packetName = "ID_PLAYER_DISCONNECT";
 			std::cout << "Jugador desconectado \n";
 			int playerDisconnect;
 
@@ -974,17 +979,19 @@ void Client::PlayerThrowObject() {
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
-std::string Client::getClientStats(int i){	
-	if (i==0){
+std::string Client::getClientStats(int i) {
+	if (i == 0) {
 		return to_string(client->GetAveragePing(client->GetSystemAddressFromIndex(0)));
-	}else if(i==1){
+	}
+	else if (i == 1) {
 		char msj[2048];
-		RakNet::RakNetStatistics* rss=client->GetStatistics(client->GetSystemAddressFromIndex(0));
+		RakNet::RakNetStatistics* rss = client->GetStatistics(client->GetSystemAddressFromIndex(0));
 		StatisticsToString(rss, msj, 2);
-		std::string str=msj;
+		std::string str = msj;
 		return str;
 
-	}else if (i==2){
+	}
+	else if (i == 2) {
 		return packetName;
 	}
 

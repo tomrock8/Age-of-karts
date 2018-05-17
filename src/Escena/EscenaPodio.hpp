@@ -29,6 +29,12 @@ private:
 	//particulas
 	std::vector<particleSystem*> particulas;	
 
+
+	TNodo *animacionPirata;
+	TNodo *animacionVikingo;
+	TNodo *animacionChino;
+	TNodo *animacionGladiador;
+
 };
 
 #endif /* ESCENAPODIO_H */

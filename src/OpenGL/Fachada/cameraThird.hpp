@@ -23,6 +23,7 @@ public:
 	void moveCamera(btRigidBody * pj1, btVector3 dir);
 	void movefpsCamera(btRigidBody * pj1);
 	void moveCameraControl(btRigidBody * pj1);
+	obj3D* getNodo();
 
 	// METODOS GET
 	GLuint getID();

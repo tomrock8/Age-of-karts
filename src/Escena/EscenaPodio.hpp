@@ -19,14 +19,15 @@ public:
 
 private:
 
+	float x,y,z,altura,posxPodio,posyPodio,poszPodio,incremento;
+	bool pulsadoa,pulsadoz,pulsadow,pulsados,pulsadod,pulsadoc,aumento,decremento;
     std::vector<obj3D*> personajes;
     obj3D *podio;
     cameraThird *camera;
 	//Luces
-	obj3D * luzPuntual_0;
-	obj3D * luzPuntual_1;
-	obj3D * luzPuntual_2;
-	obj3D * luzPuntual_3;
+	std::vector<obj3D*> luces;	
+	//particulas
+	std::vector<particleSystem*> particulas;	
 
 };
 

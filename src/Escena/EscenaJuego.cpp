@@ -358,10 +358,9 @@ void EscenaJuego::dibujar() {
 		//Dibujamos las nubes
 		TMotor::instancia().drawClouds();
 		//Dibujamos los objetos 3D creados en la escena
-		TMotor::instancia().drawProjectedShadows();
 		TMotor::instancia().draw();
 		//Dibujamos las sombras de los objetos
-		//TMotor::instancia().drawProjectedShadows();
+		TMotor::instancia().drawProjectedShadows();
 		//Dibujamos el debug de bullet
 		TMotor::instancia().drawDebugBullet();
 		//Dibujamos las particulas
@@ -558,8 +557,6 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
-
-	std::cout << "Entro update\n";
 
 	Pista *pistaca = Pista::getInstancia();
 	std::vector<Item *> items = pistaca->getItems();

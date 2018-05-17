@@ -304,8 +304,9 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 	// N O D O
 	TMalla *malla = TMotor::instancia().createMesh(path, sta);
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
-
-	if (strcmp(name, "mapa") == 0 || strcmp(name, "elementos") == 0) {
+	
+	if (strcmp(name, "mapa") == 0 || strcmp(name, "elementos") == 0 || strcmp(name, "rueda1") == 0 
+		|| strcmp(name, "rueda2") == 0 || strcmp(name, "rueda3") == 0 || strcmp(name, "rueda4") == 0) {
 		obj3D *obj = new obj3D(nodo, name, contID);
 		notShadowObjects.push_back(obj);
 		return obj;
@@ -763,6 +764,7 @@ void TMotor::drawProjectedShadows(){
 					shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz *>(lights[i]->getEntidad())->getDirection());
 					glm::mat4 sc;
 					sc = scale(sc, glm::vec3(1.1,1,1.1));
+					//sc = glm::translate(sc, glm::vec3())
 					shaderProjectedShadows->setMat4("scale", sc);
 					//Dibujamos la escena con el shader de sombras proyectadas
 					scene->draw(shaderProjectedShadows);

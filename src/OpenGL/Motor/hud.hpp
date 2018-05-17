@@ -17,6 +17,7 @@ public:
     const char* getName();
  
     void addElement(float w, float h, const char* n, const char* p); //Añade un elemento con textura al hud
+	elementoHud* addElementHud(float w, float h, const char* n, const char* p); //Añade un elemento con textura al hud
     void addElement(float w, float h, const char* n, glm::vec4 c); //Añade un elemento con color al hud
 	void deleteElement(const char* nombre); // Elimina el elemento del array
 

@@ -4,9 +4,10 @@ Caja::Caja(btVector3 posicionCaja) {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	nodo = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/caja.obj"));
+	//nodo = Motor3d::instancia().getScene()->addMeshSceneNode(Motor3d::instancia().getScene()->getMesh("assets/Objetos/caja.obj"));
+	nodo = TMotor::instancia().newMeshNode("Caja", "assets/caja/caja.obj", "escena_raiz", false);
 	nombre = "Caja";
 	GestorIDs::instancia().setIdentifier(nodo, nombre);
 	id = GestorIDs::instancia().getIDLibre() - 1;
@@ -14,13 +15,11 @@ Caja::Caja(btVector3 posicionCaja) {
 	escala.setX(2);
 	escala.setY(2);
 	escala.setZ(2);
-	nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
+	//nodo->setScale(vector3df(escala.getX(),escala.getY(),escala.getZ()));
 
 	posicion = posicionCaja;
-	nodo->setPosition(vector3df(posicion.getX(),posicion.getY(),posicion.getZ()));
+	nodo->setPosition(posicion.getX(), posicion.getY(), posicion.getZ());
 
-	nodo->setMaterialFlag(EMF_LIGHTING, false);
-	nodo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 
 
 	rigidBody = inicializarFisicas();
@@ -28,10 +27,16 @@ Caja::Caja(btVector3 posicionCaja) {
 	mundo->addRigidBody(rigidBody);
 	objetos.push_back(rigidBody);
 	bullet->setObjetos(objetos);
+
+	fuenteCaja = new AlSource();
+	fuenteCaja->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
+	float *posicionFuente = new float[3];
+	posicionFuente[0] = posicion.getX();
+	posicionFuente[1] = posicion.getY();
+	posicionFuente[2] = posicion.getZ();
 }
 
-btRigidBody *Caja::inicializarFisicas()
-{
+btRigidBody *Caja::inicializarFisicas() {
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
@@ -75,22 +80,23 @@ void Caja::comprobarRespawn() {
 void Caja::romper(Corredor *pj1Col) {
 	Timer *time = Timer::getInstancia();
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	for (int i=0;i<objetos.size();i++)
-	{
-		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
-		if (nodoActual->getID() == id)
-		{
+	for (int i = 0; i < objetos.size(); i++) {
+		obj3D *nodoActual = static_cast<obj3D *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
+		if (nodoActual->getID() == id) {
 			btRigidBody *Object = objetos.at(i);
 
+			fuenteCaja->play(SOUND_CRACK);
+
 			// Delete irrlicht node
-			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
+			obj3D *Node = static_cast<obj3D *>(Object->getUserPointer());
 			Node->setVisible(false);
 			timer = time->getTimer();
 			if (pj1Col->getTipoObj() == 0 && strcmp(pj1Col->getNodo()->getName(), "JugadorRed") != 0) {
-				std::cout<< "Entro al objeto\n";
+				//std::cout<< "Entro al objeto\n";
 				pj1Col->setTipoObj();
+
 			}
 
 			break;
@@ -98,33 +104,28 @@ void Caja::romper(Corredor *pj1Col) {
 	}
 }
 
-void Caja::Delete()
-{
+void Caja::Delete() {
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
-	for (int i=0;i<objetos.size();i++)
-	{
-		ISceneNode *nodoActual = static_cast<ISceneNode *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
-		if (nodoActual->getID() == id)
-		{
-
+	for (int i = 0; i < objetos.size(); i++) {
+		obj3D *nodoActual = static_cast<obj3D *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
+		if (nodoActual->getID() == id) {
 			btRigidBody *Object = objetos.at(i);
-
-			// Delete irrlicht node
-			ISceneNode *Node = static_cast<ISceneNode *>(Object->getUserPointer());
-
-			Node->remove();
+			obj3D *Node = static_cast<obj3D *>(Object->getUserPointer());
 
 			// Remove the object from the world
 			mundo->removeRigidBody(Object);
 
 			// Free memory
+			fuenteCaja->stop(SOUND_CRACK);
+			delete fuenteCaja;
+
 			delete Object->getMotionState();
 			delete Object->getCollisionShape();
 			delete Object;
-			objetos.erase(objetos.begin()+i);
+			objetos.erase(objetos.begin() + i);
 			bullet->setObjetos(objetos);
 
 			break;
@@ -132,24 +133,8 @@ void Caja::Delete()
 	}
 }
 
-Caja::~Caja() {
-	cout << "DESTRUCTOR CAJA: ENTRO ";
-
-	// Los rigid body se borran desde el motor de fisicas
-	// delete rigidBody;
-	
-	cout << " SALGO.\n";
-}
-int Caja::getID(){
-	return id;
-}
-
-IMeshSceneNode *Caja::getNodo() { 
-	return nodo; 
-	}
-  btRigidBody *Caja::getRigidBody() { 
-	  return rigidBody; 
-	  }
-  const char *Caja::getNombre() { 
-	  return nombre; 
-  }
+Caja::~Caja() {}
+int Caja::getID() { return id; }
+obj3D *Caja::getNodo() { return nodo; }
+btRigidBody *Caja::getRigidBody() { return rigidBody; }
+const char *Caja::getNombre() { return nombre; }

@@ -81,6 +81,10 @@ void TMalla::draw(Shader *shader) {
 			shader->setMat4("mvp", mvp);
 			//Pasamos la transpuesta de la inversa de la model matrix al shader para el calculo de las normales
 			shader->setMat4("transInvModel", glm::transpose(glm::inverse(modelMatrix)));
+			//Si estamos dibujando las sombras proyectadas, pasamos tambien el tamanyo de la malla
+			if (strcmp(shader->getName(), "shaderProjectedShadows") == 0){
+				shader->setFloat("heightMesh", malla.at(i)->getMesh()->getSize()[1]);
+			}
 			//Activamos el buffer VAO donde hemos guardado los datos de la malla anteriormente
 			malla.at(i)->getMesh()->activeVAO();
 			if (malla.at(i)->getText()->getNombre() != NULL) {
@@ -95,7 +99,7 @@ void TMalla::draw(Shader *shader) {
 
 			//Se llama al dibujado del bounding box
 			if (TMotor::instancia().getBoundingBoxes() == true) {
-				if (malla.size() != 2 && malla.size() != 4 && malla.size() != 5) bBoxes.at(i)->draw(modelMatrix);
+				bBoxes.at(i)->draw(modelMatrix);
 			}
 
 			if (malla.at(i)->getText()->getNombre() != NULL) {

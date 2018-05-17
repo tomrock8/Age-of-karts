@@ -152,6 +152,7 @@ void elementoHud::cambiarColor(glm::vec4 c){
 }
 
 //Funcion para cambiar la transparencia del elemento
+//0 == totalmente trasparente , 1 == opaco
 void elementoHud::cambiarTransparencia(bool t, float l){
     //Asignamos si el elemento sera transparente o no
     transparency = t;

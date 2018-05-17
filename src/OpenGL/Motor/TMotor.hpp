@@ -206,7 +206,7 @@ protected:
 	bool faceCulling = true; //FACE CULLING activado por defecto
 	bool drawingDistance = true; //Distancia de dibujado de los objetos
 	float levelOfDrawingDistance = 750.0f; //Distancia maxima entre la camara y objeto a partir de la cual se deja de dibujar este ultimo
-	bool shadows = false; //Sombras
+	bool projectedShadows = false; //Sombras desactivadas por defecto
 	bool levelOfDetail = true; //LEVEL OF DETAIL activado por defecto
 	bool clouds = false; //NUBES desactivadas por defecto
 

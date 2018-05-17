@@ -7,7 +7,7 @@
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
-#include "IrrlichtLib.hpp"
+#include "obj3D.hpp"
 
 using namespace std;
 
@@ -16,14 +16,16 @@ class MotorFisicas
 public:
 	//Destructor
 	~MotorFisicas(void);
-	
+
 	// METODOS GET
 	static MotorFisicas *getInstancia();
 	btDynamicsWorld *getMundo();
-	vector<btRigidBody *> getObjetos();
-	
+	std::vector<btRigidBody *> getObjetos();
+	void initializePhysics(TRecursoMalla *m);
+	void saveFilePhysics(const char * name);
+	btCollisionShape  *CreateCollisionShape(const char *name);
 	// METODOS SET
-	void setObjetos(vector<btRigidBody *> objetos);
+	void setObjetos(std::vector<btRigidBody *> objetos);
 
 private:
 	MotorFisicas(void);
@@ -33,12 +35,8 @@ private:
 	btDefaultCollisionConfiguration *confColision;
 	btCollisionDispatcher *dispatcher;
 	btSequentialImpulseConstraintSolver *solver;
-	vector<btRigidBody *> objetos;
+	std::vector<btRigidBody *> objetos;
 	btDynamicsWorld *mundo;
-
-
-
-
 };
 
 #endif /* MOTORFISICAS_H */

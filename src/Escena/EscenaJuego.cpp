@@ -38,7 +38,23 @@ EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 
 EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo) {
 	this->ipConexion = ipConexion;
+	end = false;
 	TMotor::instancia().newHud("OnGameHUD");
+	TMotor::instancia().getActiveHud()->addElement(0.2f, 0.2f, "puesto", "assets/HUD/juego/puesto_6.png");
+	TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
+	TMotor::instancia().getActiveHud()->addElement(0.35f, 0.35f, "vueltas", "assets/HUD/juego/lap_1_3.png");
+	TMotor::instancia().getActiveHud()->traslateElement("vueltas", -0.83f, 0.68f);
+	TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "objeto", "assets/HUD/juego/objetos/vacio.png");
+	TMotor::instancia().getActiveHud()->traslateElement("objeto",  0.75f, 0.75f);
+	TMotor::instancia().getActiveHud()->addElement(0.12f, 0.7f, "habilidad", "assets/HUD/juego/barraHabilidad.png");
+	TMotor::instancia().getActiveHud()->traslateElement("habilidad", 0.8f, -0.5f);
+	TMotor::instancia().getActiveHud()->addElement(0.06f, 0.09f, "indicador_habilidad", "assets/HUD/juego/indicador_habilidad.png");
+	TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f);
+
+	puesto = 6;
+	vueltas = 1;
+	vueltas_aux=1;
+	tipoEscena=tipo;
 	init();
 }
 
@@ -206,8 +222,9 @@ void EscenaJuego::init() {
 			if (i == controlPlayer) {
 				jugador = new CorredorJugador(pos2[i], tj);
 			}
-			else
+			else{
 				jugador = new CorredorRed(pos2[i], tj);
+			}
 		}
 		jugador->setID(i);
 		pj.push_back(jugador);
@@ -264,7 +281,7 @@ void EscenaJuego::init() {
 	// NUBES
 	//----------------------
 	//Creamos un area de nubes entre las posiciones -2000 y 2000 en el ancho y largo y a una altura entre 150 y 300, con 30 nubes
-	//TMotor::instancia().newClouds(-2000, 2000, 150, 300, -2000, 2000, 50);
+	TMotor::instancia().newClouds(-2000, 2000, 150, 300, -2000, 2000, 50);
 
 	//-----------------------
 	// OPENAL
@@ -541,6 +558,9 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
+
+	std::cout << "Entro update\n";
+
 	Pista *pistaca = Pista::getInstancia();
 	std::vector<Item *> items = pistaca->getItems();
 	pj = GestorJugadores::getInstancia()->getJugadores();
@@ -658,7 +678,13 @@ void EscenaJuego::update() {
 		//cout << jugadores->getNumJugadores() << endl;
 		//if (jugadores->getNumJugadores() != 0)
 		pj.at(controlPlayer)->actualizarItem();
+
+	std::cout << "Entro update1\n";
+
 		updateHUD();
+
+	std::cout << "Entro update2\n";
+
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 										  //colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 		if (GestorJugadores::getInstancia()->getNumJugadores() != 0)
@@ -666,6 +692,9 @@ void EscenaJuego::update() {
 		for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
 			pj.at(i)->update();
 		}
+
+
+	std::cout << "Entro update3\n";
 
 		//textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 		//if (jugadores->getNumJugadores() != 0)
@@ -682,6 +711,9 @@ void EscenaJuego::update() {
 			//client->PlayerAction();
 			client->UpdateNetworkKeyboard();
 		}
+
+	std::cout << "Entro update4\n";
+
 	}
 
 	if (GestorJugadores::getInstancia()->getNumJugadores() != 0)

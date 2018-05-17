@@ -602,6 +602,17 @@ void Corredor::setPosicion(float *pos, float *ori) {
 
 }
 
+void Corredor::setPosicionBullet(float *pos, btQuaternion ori) {
+	btVector3 btPos(pos[0], pos[1], pos[2]);
+
+	btTransform trans;
+	trans.setOrigin(btPos);
+	trans.setRotation(ori);
+
+	CuerpoColisionChasis->setCenterOfMassTransform(trans);
+
+}
+
 void Corredor::setPosicionSources() {
 	float *pos = new float[3];
 	pos[0] = cuboNodo->getPosition().x;

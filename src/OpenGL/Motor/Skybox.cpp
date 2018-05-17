@@ -142,7 +142,7 @@ void Skybox::drawSkyBox(){
 
     //Pasamos los datos necesarios al shader 
     TMotor::instancia().getShaderSkybox()->setMat4("mvp", mvp); //Matriz mvp
-	glUniform1i(glGetUniformLocation(TMotor::instancia().getShaderSkybox()->ID, "skybox"), 0); //Cubo de texturas
+	glUniform1i(glGetUniformLocation(TMotor::instancia().getShaderSkybox()->getID(), "skybox"), 0); //Cubo de texturas
     //Activamos el VAO que hemos seteado antes
     glBindVertexArray(VAO);
     //Dibujamos el skybox

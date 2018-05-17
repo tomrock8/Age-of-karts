@@ -31,6 +31,11 @@ TRecursoImagen::TRecursoImagen(const char* img){
 
 }
 
+//Destructor que elimina la texturas de OpenGL de cada recurso imagen
+TRecursoImagen::~TRecursoImagen(){
+    glDeleteTextures(1, &idText);
+}
+
 //====================================
 // METODOS GET
 //====================================

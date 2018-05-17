@@ -3,7 +3,7 @@
 TCamara::TCamara() {}
 TCamara::~TCamara() {
 	setActive(false);
-	std::cout << "Destructor de TCamara\n";
+//	std::cout << "Destructor de TCamara\n";
 }
 
 bool TCamara::getActive() { return active; }

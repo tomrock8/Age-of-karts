@@ -18,6 +18,7 @@
 #include "imgui_impl_glfw_gl3.h"
 #include "billboard.hpp"
 #include "particleSystem.hpp"
+#include "cloudGenerator.hpp"
 
 #ifdef _WIN32
 #define _USE_MATH_DEFINES // for C++  
@@ -50,6 +51,7 @@ public:
 	void newHud(const char* n); //Nuevo HUD-Menu
 	billboard *newBillboard(obj3D *o); //Nuevo Billboard
 	particleSystem *newParticleSystem(); //Nuevo Sistema de Particulas
+	void newClouds(int minW, int maxW, int minH, int maxH, int minL, int maxL, int numC); //Nueva area de nubes
 
 	//CREACION DE ANIMACIONES
 	TNodo * createStaticMeshNode(TNodo * padre, const char * path, const char * name);
@@ -98,6 +100,7 @@ public:
 	void setAntialiasing(bool b);
 	void setDrawingDistance(bool b, float f);
 	void setShadows(bool b);
+	void setClouds(bool b);
 	void setLevelOfDetail(bool b);
 	void setViewport(int x, int y, int width, int height);
 
@@ -111,6 +114,7 @@ public:
 	void drawIMGUI();
 	void drawBillboards();
 	void drawParticles();
+	void drawClouds();
 	void drawProjectedShadows();
 	void drawMappingShadows();
 	void drawDebugBullet();
@@ -141,6 +145,7 @@ protected:
 	Shader *shaderSilhouette; //Shader para crear el contorno de los objetos en el efecto cartoon
 	Shader *shaderBillboard; //Shader para dibujar los diferentes billboards 
 	Shader *shaderParticles; //Shader para el dibujado de las particulas
+	Shader *shaderClouds; //Shader para el dibujado de las nubes
 	Shader *shaderGbuffer; //Shader para renderizar la escena en el buffer que despues se usara en el deferred shading
 	Shader *shaderDeferred; //Shader que renderiza en la pantalla a partir de los datos guardados por el gBuffer
 
@@ -178,6 +183,9 @@ protected:
 	//Particles
 	std::vector <particleSystem *> particleSystems; //Array con las diferentes particulas usadas en el motor
 
+	//Nubes
+	cloudGenerator *nubes; //Sistema de nubes del sistema
+
 	//Objetos
 	GLuint contID; //Numero de objetos en el motor en cada momento
 	TGestorRecursos *gestorRecursos; //Gestor de recursos utilizado para crear las distintas mallas, texturas y materiales de los objetos
@@ -200,6 +208,7 @@ protected:
 	float levelOfDrawingDistance = 750.0f; //Distancia maxima entre la camara y objeto a partir de la cual se deja de dibujar este ultimo
 	bool shadows = false; //Sombras
 	bool levelOfDetail = true; //LEVEL OF DETAIL activado por defecto
+	bool clouds = false; //NUBES desactivadas por defecto
 
 	
 

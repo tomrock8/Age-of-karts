@@ -20,7 +20,7 @@ class TRecursoMalla :public TRecurso
 public:
 	TRecursoMalla(aiMesh *mesh, const char* nombre);
 	void setFaces(std::vector<unsigned short> indices);
-	~TRecursoMalla();
+	~TRecursoMalla() override;
 	void activeVAO(); // Activar el buffer de vertices
 	void disableVAO(); // Desactivar el buffer de vertices
 

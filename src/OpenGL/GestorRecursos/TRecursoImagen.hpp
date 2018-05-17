@@ -13,6 +13,7 @@ class TRecursoImagen
 {
     public:
         TRecursoImagen(const char* img); //Constructor del recurso imagen
+        ~TRecursoImagen(); //Destructor del recurso imagen
 
         //Metodos GET
         unsigned char *getTexture();

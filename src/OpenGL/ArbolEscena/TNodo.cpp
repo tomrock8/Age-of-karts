@@ -9,30 +9,30 @@ TNodo::TNodo(const char* n) {
 }
 
 TNodo::~TNodo() {
-	std::cout << "Destructor de TNodo: " << *name << "\n";
+//	std::cout << "Destructor de TNodo: " << *name << "\n";
 	padre = nullptr; // Eliminamos el enlace con el padre
 
 	
 	//Borrado de hijos
 	if (hijos.size() > 0) {
-		cout<<"Numero de HIJOS::::"<<hijos.size()<<endl;
+//		cout<<"Numero de HIJOS::::"<<hijos.size()<<endl;
 		for (GLuint i = 0; i < hijos.size(); i++) {
-			cout<<"Soy el hijo::"<< i << "ME voy a intentar borrar BORRO JUEPUTAS"<<endl;
+//			cout<<"Soy el hijo::"<< i << "ME voy a intentar borrar BORRO JUEPUTAS"<<endl;
 			delete hijos.at(i);
 			
 		}
 		hijos.clear();
 	}else{
-	cout<<"NO TENGO HIJOS::::"<<endl;
+//	cout<<"NO TENGO HIJOS::::"<<endl;
 	
 
 	if (entidad){	
-	cout<<"VOY A BORRAR SU ENTIDAD"<<endl;
+//	cout<<"VOY A BORRAR SU ENTIDAD"<<endl;
 	delete entidad;
-	cout<<"ENTIDAD BORRADA"<<endl;
+//	cout<<"ENTIDAD BORRADA"<<endl;
 	}		
 	delete name;
-	cout<<"ME BORRO"<<endl;
+//	cout<<"ME BORRO"<<endl;
 	}
 
 }

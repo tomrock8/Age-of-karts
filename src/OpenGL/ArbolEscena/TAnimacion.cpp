@@ -20,7 +20,7 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFra
 }
 
 TAnimacion::~TAnimacion() {
-	std::cout << "Destructor de TAnimacion\n";
+	//std::cout << "Destructor de TAnimacion\n";
 
 	// Parar de reproducir
 	setPlaying(false);

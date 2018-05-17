@@ -125,7 +125,7 @@ void EscenaJuego::init() {
 	for (int mandos = 1; mandos < 4; mandos++) {
 		if (glfwJoystickPresent(mandos) == 1) {
 			std::cout << "Mando " << mandos << " detectado!" << std::endl;
-			TMotor::instancia().newHud("OnGameHUD"+numPantallas);
+			TMotor::instancia().newHud(("OnGameHUD"+to_string(numPantallas)).c_str());
 			TMotor::instancia().getActiveHud()->addElement(0.2f, 0.2f, "puesto", "assets/HUD/juego/puesto_6.png");
 			TMotor::instancia().getActiveHud()->traslateElement("puesto", -0.85f, 0.85f);
 			if (Pista::getInstancia()->getNumVueltas()==3){
@@ -863,6 +863,7 @@ void EscenaJuego::UpdateRender(btRigidBody *TObject) {
 std::string EscenaJuego::getIpConexion() { return ipConexion; }
 
 void EscenaJuego::updateHUD(int i) {
+	cout<<"update\n";
 	if (tipoEscena == Escena::tipo_escena::ONLINE){
 		TMotor::instancia().setActiveHud("OnGameHUD0");
 	}else{
@@ -875,22 +876,22 @@ void EscenaJuego::updateHUD(int i) {
 		puesto = pj.at(i)->getPosicionCarrera();
 		switch (pj.at(i)->getPosicionCarrera()) {
 		case 1:
-			TMotor::instancia().getActiveHud()->changeTextureElement("puesto", "assets/HUD/juego/puesto_1.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("puesto"+to_string(i)).c_str(), "assets/HUD/juego/puesto_1.png");
 			break;
 		case 2:
-			TMotor::instancia().getActiveHud()->changeTextureElement("puesto", "assets/HUD/juego/puesto_2.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("puesto"+to_string(i)).c_str(), "assets/HUD/juego/puesto_2.png");
 			break;
 		case 3:
-			TMotor::instancia().getActiveHud()->changeTextureElement("puesto", "assets/HUD/juego/puesto_3.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("puesto"+to_string(i)).c_str(), "assets/HUD/juego/puesto_3.png");
 			break;
 		case 4:
-			TMotor::instancia().getActiveHud()->changeTextureElement("puesto", "assets/HUD/juego/puesto_4.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("puesto"+to_string(i)).c_str(), "assets/HUD/juego/puesto_4.png");
 			break;
 		case 5:
-			TMotor::instancia().getActiveHud()->changeTextureElement("puesto", "assets/HUD/juego/puesto_5.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("puesto"+to_string(i)).c_str(), "assets/HUD/juego/puesto_5.png");
 			break;
 		case 6:
-			TMotor::instancia().getActiveHud()->changeTextureElement("puesto", "assets/HUD/juego/puesto_6.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("puesto"+to_string(i)).c_str(), "assets/HUD/juego/puesto_6.png");
 			break;
 		}
 	}
@@ -901,28 +902,28 @@ void EscenaJuego::updateHUD(int i) {
 		if (Pista::getInstancia()->getNumVueltas()==3){
 			switch (pj.at(i)->getVueltas()) {
 			case 1:
-				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_1_3.png");
+				TMotor::instancia().getActiveHud()->changeTextureElement(("vueltas"+to_string(i)).c_str(), "assets/HUD/juego/lap_1_3.png");
 				break;
 			case 2:
-				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_2_3.png");
+				TMotor::instancia().getActiveHud()->changeTextureElement(("vueltas"+to_string(i)).c_str(), "assets/HUD/juego/lap_2_3.png");
 				break;
 			case 3:
-				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_3_3.png");
+				TMotor::instancia().getActiveHud()->changeTextureElement(("vueltas"+to_string(i)).c_str(), "assets/HUD/juego/lap_3_3.png");
 				break;
 			}
 		}else if (Pista::getInstancia()->getNumVueltas()==2){
 			switch (pj.at(i)->getVueltas()) {
 			case 1:
-				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_1_2.png");
+				TMotor::instancia().getActiveHud()->changeTextureElement(("vueltas"+to_string(i)).c_str(), "assets/HUD/juego/lap_1_2.png");
 				break;
 			case 2:
-				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_2_2.png");
+				TMotor::instancia().getActiveHud()->changeTextureElement(("vueltas"+to_string(i)).c_str(), "assets/HUD/juego/lap_2_2.png");
 				break;
 			}
 		}else if (Pista::getInstancia()->getNumVueltas()==1){
 			switch (pj.at(i)->getVueltas()) {
 			case 1:
-				TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_1_1.png");
+				TMotor::instancia().getActiveHud()->changeTextureElement(("vueltas"+to_string(i)).c_str(), "assets/HUD/juego/lap_1_1.png");
 				break;
 			}
 		}
@@ -934,38 +935,38 @@ void EscenaJuego::updateHUD(int i) {
 		objeto = pj.at(i)->getTipoObj();
 		switch (pj.at(i)->getTipoObj()) {
 		case 0:
-			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vacio.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("objeto"+to_string(i)).c_str(), "assets/HUD/juego/objetos/vacio.png");
 			break;
 		case 1:
-			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/flecha.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("objeto"+to_string(i)).c_str(), "assets/HUD/juego/objetos/flecha.png");
 			break;
 		case 2:
-			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/caja_falsa2.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("objeto"+to_string(i)).c_str(), "assets/HUD/juego/objetos/caja_falsa2.png");
 			break;
 		case 3:
-			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vino.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("objeto"+to_string(i)).c_str(), "assets/HUD/juego/objetos/vino.png");
 			break;
 		case 4:
-			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/aceite.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("objeto"+to_string(i)).c_str(), "assets/HUD/juego/objetos/aceite.png");
 			break;
 		case 5:
-			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/escudo.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("objeto"+to_string(i)).c_str(), "assets/HUD/juego/objetos/escudo.png");
 			break;
 		case 6:
-			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/flecha3.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("objeto"+to_string(i)).c_str(), "assets/HUD/juego/objetos/flecha3.png");
 			break;
 		case 7:
-			TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/flecha_teledirigida.png");
+			TMotor::instancia().getActiveHud()->changeTextureElement(("objeto"+to_string(i)).c_str(), "assets/HUD/juego/objetos/flecha_teledirigida.png");
 			break;
 		case 8:
 			if (pj.at(i)->getCargador() == 1) {
-				TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vino1.png");
+				TMotor::instancia().getActiveHud()->changeTextureElement(("objeto"+to_string(i)).c_str(), "assets/HUD/juego/objetos/vino1.png");
 			}
 			else if (pj.at(i)->getCargador() == 2) {
-				TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vino2.png");
+				TMotor::instancia().getActiveHud()->changeTextureElement(("objeto"+to_string(i)).c_str(), "assets/HUD/juego/objetos/vino2.png");
 			}
 			else if (pj.at(i)->getCargador() == 3) {
-				TMotor::instancia().getActiveHud()->changeTextureElement("objeto", "assets/HUD/juego/objetos/vino3.png");
+				TMotor::instancia().getActiveHud()->changeTextureElement(("objeto"+to_string(i)).c_str(), "assets/HUD/juego/objetos/vino3.png");
 			}
 			break;
 		}
@@ -977,17 +978,17 @@ void EscenaJuego::updateHUD(int i) {
 			if (pj.at(i)->getLimite()<=100){
 				if (pj.at(i)->getLimite() - habilidad == 1){
 					inc_habilidad+=0.0065;
-					TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f+inc_habilidad);
+					TMotor::instancia().getActiveHud()->traslateElement(("indicador_habilidad"+to_string(i)).c_str(), 0.85f, -0.8f+inc_habilidad);
 				}else if (pj.at(i)->getLimite() - habilidad == 2){
 					inc_habilidad+=0.013;
-					TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f+inc_habilidad);
+					TMotor::instancia().getActiveHud()->traslateElement(("indicador_habilidad"+to_string(i)).c_str(), 0.85f, -0.8f+inc_habilidad);
 				}else if (pj.at(i)->getLimite() - habilidad == 10){
 					inc_habilidad+=0.065;
-					TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f+inc_habilidad);
+					TMotor::instancia().getActiveHud()->traslateElement(("indicador_habilidad"+to_string(i)).c_str(), 0.85f, -0.8f+inc_habilidad);
 					
 				}else if (pj.at(i)->getLimite() - habilidad == 20){
 					inc_habilidad+=0.13;
-					TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f+inc_habilidad);
+					TMotor::instancia().getActiveHud()->traslateElement(("indicador_habilidad"+to_string(i)).c_str(), 0.85f, -0.8f+inc_habilidad);
 					
 				}
 			}

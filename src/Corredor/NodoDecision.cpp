@@ -30,11 +30,11 @@ NodoDecision::~NodoDecision(){
 		}
         //cout<<"TENGO HIJOS BORRADOS"<<endl;
 		NodosHijos.clear();
-        NodoPadre=NULL;
+        NodoPadre=nullptr;
     }else{
         //cout<<"NO TENGO HIJOS"<<endl;
         NodosHijos.clear();
-        NodoPadre=NULL;
+        NodoPadre=nullptr;
     }
 }
 

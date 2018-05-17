@@ -538,7 +538,9 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if (!pressed) {
 			pressed = true;
 			//Si todos estan con la seleccion , se carga el juego
-			if (checkReady) iniciarCarrera();
+			if (checkReady && offline_split) iniciarCarrera();
+			if (offline && !offline_split) iniciarCarrera();
+			if (!offline)iniciarCarrera();
 
 		}
 	}

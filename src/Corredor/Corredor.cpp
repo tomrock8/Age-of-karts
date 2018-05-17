@@ -1736,22 +1736,22 @@ Corredor::~Corredor() {
 	delete restriccion3;
 	delete restriccion4;
 
-	nombre=NULL;
+	nombre=nullptr;
 	delete estado;
 	delete RayCastVehiculo;
-	giroDerIni=NULL;
+	giroDerIni=nullptr;
 	//TNodo *lanzarObjeto;
-	giroDerFin=NULL;
-	giroIzqIni=NULL;
-	giroIzqFin=NULL;;
+	giroDerFin=nullptr;
+	giroIzqIni=nullptr;
+	giroIzqFin=nullptr;;
 	//TNodo *animHabilidad;
-	quieto=NULL;
+	quieto=nullptr;
 
 	//BILLBOARD
-	b=NULL;
+	b=nullptr;
 
 	//PARTICULAS HUMO
-	p=NULL;
+	p=nullptr;
 
 	//delete actual; // Punto Actual
 	//delete siguiente; // Punto Siguiente

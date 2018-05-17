@@ -24,7 +24,7 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 			personajes.at(i)->setPosition(3, 4, 0);
 			}
 			personajes.at(i)->rotate(glm::vec3(0, 1, 0), 180);
-			personajes.at(i->setScale(0.5,0.5,0.5);
+			personajes.at(i)->setScale(0.5,0.5,0.5);
 			animacionPirata = TMotor::instancia().createAnimationNode(personajes.at(i)->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Celebracion/PirataCelebracion_000", 122, 242), "BailePirata");
 			personajes.at(i)->setNode(animacionPirata);
 			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setVisible(true);
@@ -42,7 +42,7 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 			personajes.at(i)->setPosition(3, 4, 0);
 			}
 			personajes.at(i)->rotate(glm::vec3(0, 1, 0), 180);
-			personajes.at(i->setScale(0.5,0.5,0.5);
+			personajes.at(i)->setScale(0.5,0.5,0.5);
 			animacionVikingo = TMotor::instancia().createAnimationNode(personajes.at(i)->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Celebracion/VikingoCelebracion_000", 443, 537), "BaileVikingo");
 			personajes.at(i)->setNode(animacionVikingo);
 			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setVisible(true);
@@ -60,7 +60,7 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 			personajes.at(i)->setPosition(3, 4, 0);
 			}
 			personajes.at(i)->rotate(glm::vec3(0, 1, 0), 180);
-			personajes.at(i->setScale(0.5,0.5,0.5);
+			personajes.at(i)->setScale(0.5,0.5,0.5);
 			animacionGladiador = TMotor::instancia().createAnimationNode(personajes.at(i)->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Celebracion/GladiadorCelebracion_000", 178, 263), "BaileGladiador");
 			personajes.at(i)->setNode(animacionGladiador);
 			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setVisible(true);
@@ -78,7 +78,7 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 			personajes.at(i)->setPosition(3, 4, 0);
 			}
 			personajes.at(i)->rotate(glm::vec3(0, 1, 0), 180);
-			personajes.at(i->setScale(0.5,0.5,0.5);
+			personajes.at(i)->setScale(0.5,0.5,0.5);
 			animacionChino = TMotor::instancia().createAnimationNode(personajes.at(i)->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Celebracion/ChinoCelebracion_000", 228, 317), "BaileChino");
 			personajes.at(i)->setNode(animacionChino);	
 			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setVisible(true);

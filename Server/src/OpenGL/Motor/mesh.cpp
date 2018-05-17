@@ -6,7 +6,7 @@ mesh::mesh() {
 	text = NULL;
 }
 mesh::~mesh() {
-	std::cout << "Destructor de mesh\n";
+	//std::cout << "Destructor de mesh\n";
 	
 }
 

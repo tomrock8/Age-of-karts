@@ -22,7 +22,7 @@ class TRecursoTextura : public TRecurso
 {
 public:
 	TRecursoTextura(const aiMaterial *mat);
-	~TRecursoTextura();
+	~TRecursoTextura() override;
 	void activeTexture(Shader *shader);
 	void disableTexture();
 

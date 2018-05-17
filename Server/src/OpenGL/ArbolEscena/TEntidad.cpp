@@ -7,7 +7,7 @@ glm::mat4 TEntidad::projectionMatrix;
 glm::mat4 TEntidad::MVPmatrix;
 
 TEntidad::~TEntidad(){
-	std::cout << "Destructor de TEntidad. ";
+//	std::cout << "Destructor de TEntidad. ";
 }
 
 void TEntidad::setModelMatrix(glm::mat4 modelMatrix) {

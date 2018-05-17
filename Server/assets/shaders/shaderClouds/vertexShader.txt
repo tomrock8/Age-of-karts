@@ -1,0 +1,27 @@
+//Especificar version de Opengl a utilizar
+#version 330
+ 
+//Recoger los datos de los vertices en los buffers correctamente (segun orden de envio en el programa)
+layout (location = 0) in vec3 aPos; //Posicion
+layout (location = 1) in vec2 aCoords; //Coordenadas de textura
+
+//Uniforms
+uniform mat4 vp; //Matriz View-Projection
+uniform vec3 cloudPosition; //Posicion de la nube
+uniform vec2 sizeCloud; //Tamanyo de la nube
+
+//Variable de salida al fragment
+out vec2 textCoords;
+
+void main() {
+
+    //Pasamos las coordenadas de textura al fragment shader
+    textCoords = aCoords;
+
+    //Calculamos la posicion final de la nube en la pantalla a partir de la matriz view-projection
+    gl_Position = vp * vec4(cloudPosition, 1.0);
+    //Hacemos la division de perspectiva
+    gl_Position /= gl_Position.w;
+    //Conforme mas lejos este el objeto mas grande se hace (para que se vean aun estando muy lejos)
+    gl_Position.xy += aPos.xy * vec2(sizeCloud.x, sizeCloud.y);
+}

@@ -26,9 +26,9 @@ TRecursoMaterial::TRecursoMaterial(const aiMaterial *mat) {
 }
 
 TRecursoMaterial::~TRecursoMaterial() {
-	delete[] color_ambient;
-	delete[] color_diffuse;
-	delete[] color_specular;
+	//delete[] color_ambient;
+	//delete[] color_diffuse;
+	//delete[] color_specular;
 	
 }
 

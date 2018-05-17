@@ -762,7 +762,7 @@ void TMotor::drawProjectedShadows(){
 					shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());
 					shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz *>(lights[i]->getEntidad())->getDirection());
 					glm::mat4 sc;
-					sc = scale(sc, glm::vec3(1,0.01,1));
+					sc = scale(sc, glm::vec3(1.1,1,1.1));
 					shaderProjectedShadows->setMat4("scale", sc);
 					//Dibujamos la escena con el shader de sombras proyectadas
 					scene->draw(shaderProjectedShadows);

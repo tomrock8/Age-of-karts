@@ -93,8 +93,6 @@ void EscenaJuego::init() {
 	//	Debug Bullet
 	//----------------------------
 
-std::cout << "Debug \n";
-
 	debugDraw = new DebugDraw(TMotor::instancia().getVentana());
 	debugDraw->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	MotorFisicas::getInstancia()->getMundo()->setDebugDrawer(debugDraw);
@@ -103,20 +101,12 @@ std::cout << "Debug \n";
 	//	ESCENARIO MAPA
 	//-----------------------------
 
-std::cout << "Mapa \n";
-
 	Pista::getInstancia()->setMapa();
-	//TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/elementos.obj", "escena_raiz", false);
-	//Pista::getInstancia()->setMapa("assets/MapaTesteo/testeo.obj", "assets/MapaTesteo/fisicaTesteo.bullet", "assets/Mapa01/ObjMapa2.0.obj");
 
 	//-----------------------------
 	//	JUGADORES
 	//-----------------------------
 	//Posicion del nodo y el bloque de colisiones centralizado:
-
-std::cout << "Jugadores\n";
-
-	Corredor* jugador;
 
 	btVector3 pos2[6];
 	pos2[0].setX(Pista::getInstancia()->getParrilla().at(0).x);
@@ -138,15 +128,8 @@ std::cout << "Jugadores\n";
 	pos2[5].setY(Pista::getInstancia()->getParrilla().at(5).y);
 	pos2[5].setZ(Pista::getInstancia()->getParrilla().at(5).z);
 
-std::cout << "Entro en raceStart\n";
-
 	Server::getInstancia()->RaceStart();
-
-std::cout << "Salgo de raceStart\n";
-
 	numPantallas = 1;
-
-	std::cout << "Jugadores creados\n";
 
 	gc = new GestorCarrera();
 
@@ -182,38 +165,11 @@ std::cout << "Salgo de raceStart\n";
 	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
 	if (GestorJugadores::getInstancia()->getJugadores().size()>0)
 		Server::getInstancia()->setStarted(false);
-	std::cout << "salgo del init\n";
 }
 
 void EscenaJuego::dibujar() {
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
 
 	//------- RENDER ----------
-	if (debug) {
-		for (int i = 0; i < pj.size(); i++) {
-			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
-				CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
-				AUXILIAR->setDebugFisicas(true);
-				AUXILIAR->ActualizarRaytest();
-			}
-		}
-		MotorFisicas::getInstancia()->getMundo()->debugDrawWorld();
-	}
-	else {
-		for (int i = 0; i < pj.size(); i++) {
-			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
-				CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
-				if (!AUXILIAR->getDebugFisicas()) {
-					i = pj.size();
-				}
-				else {
-					AUXILIAR->setDebugFisicas(false);
-					AUXILIAR->ActualizarRaytest();
-				}
-			}
-		}
-	}
 
 	//Limpiamos el dibujado anterior asignando un color de fondo
 	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);
@@ -349,30 +305,6 @@ void EscenaJuego::renderDebug() {
 					debug_Jugador = false;
 				ImGui::End();
 			}
-
-			if (muestraDebugIA){
-				std::vector<Corredor*> pj = GestorJugadores::getInstancia()->getJugadores();
-				ImGui::Begin("Datos del Corredor IA", &muestraDebugIA);
-				for (int i = 0; i < pj.size(); i++) {
-					if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
-						
-						CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
-						ImGui::Text("--------------");
-						ImGui::Text("IA %i:",i);
-						sr=AUXILIAR->getDebugIA();
-						debugRageIA(i);
-						
-						debugPlot(i,AUXILIAR->getVehiculo()->getCurrentSpeedKmHour(),"Velocidad");
-						sr+=AUXILIAR->toString();
-						ImGui::Text(sr.c_str());
-						
-						
-					}
-				}
-		
-				ImGui::End();
-				sr="";
-			}
 		}
 	
 	
@@ -423,8 +355,6 @@ void EscenaJuego::update() {
 	Server::getInstancia()->ReceivePackets();
 	Pista *pistaca = Pista::getInstancia();
 	std::vector<Item *> items = pistaca->getItems();
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
 
 
 	DeltaTime = glfwGetTime() * 1000 - TimeStamp;
@@ -442,7 +372,7 @@ void EscenaJuego::update() {
 			if (items.at(i)->update()) {
 
 				if (strcmp("Escudo", items.at(i)->getNombre()) == 0) {
-					pj.at(items.at(i)->getIDPadre())->setProteccion(false);
+					GestorJugadores::getInstancia()->getJugadores().at(items.at(i)->getIDPadre())->setProteccion(false);
 				}
 
 				if (strcmp("HabilidadPirata", items.at(i)->getNombre()) == 0
@@ -450,7 +380,7 @@ void EscenaJuego::update() {
 					|| strcmp("HabilidadGladiador", items.at(i)->getNombre()) == 0
 					|| strcmp("HabilidadChino", items.at(i)->getNombre()) == 0)
 				{
-					pj.at(items.at(i)->getIDPadre())->setHabilidad(false);
+					GestorJugadores::getInstancia()->getJugadores().at(items.at(i)->getIDPadre())->setHabilidad(false);
 
 				}
 
@@ -486,52 +416,39 @@ void EscenaJuego::update() {
 
 	if (t->getTimer() >= 5) {
 		TMotor::instancia().getActiveHud()->deleteElement("cuentaAtras");
-		for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
+		for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
+			GestorJugadores::getInstancia()->getJugadores().at(i)->getEstados()->setEstadoCarrera(CARRERA);
 		}
 		if (t->getTimer() >= 5 && t->getTimer() < 6)
 		colisiones->IniciarTimer();
 	}
 
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		pj.at(controlPlayer)->actualizarItem();
+		GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->actualizarItem();
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
-		//pj.at(controlPlayer)->update();
 		updateHUD();
-		if (jugadores->getNumJugadores() > 0) {
-			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-				pj.at(i)->update();
-				if (strcmp(pj.at(i)->getNodo()->getName(), "JugadorIA") == 0) {
-					CorredorIA *IA = static_cast<CorredorIA *>(pj.at(i));
-					IA->updateHijos();
-				}
-
+		if (GestorJugadores::getInstancia()->getNumJugadores() > 0) {
+			for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
+				GestorJugadores::getInstancia()->getJugadores().at(i)->update();
 			}
 		}
-		//textoDebug->agregar(pj.at(0)->toString());
 	}
 	else {
-		if (jugadores->getNumJugadores() > 0){
-			//cout << jugadores->getNumJugadores() << endl;
-			//if (jugadores->getNumJugadores() != 0)
-			pj.at(controlPlayer)->actualizarItem();
+		if (GestorJugadores::getInstancia()->getNumJugadores() > 0){
+			GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->actualizarItem();
 			updateHUD();
 			colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 											//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());//deberia ser asi, pero CORE DUMPED
 			Server::getInstancia()->aumentarTimestamp();
-			for (int i = 0; i < jugadores->getNumJugadores(); i++) {
-				pj.at(i)->update();
+			for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
+				GestorJugadores::getInstancia()->getJugadores().at(i)->update();
 			}
 
-			//textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-			//if (jugadores->getNumJugadores() != 0)
-				//textoDebug->agregar(pj.at(controlPlayer)->toString());
-
-			if (jugadores->getNumJugadores() != 0) {
+			if (GestorJugadores::getInstancia()->getNumJugadores() != 0) {
 				float tiempoActual = glfwGetTime();
 				float timediff_sec = tiempoActual - tiempoRefresco;
 
-				if (timediff_sec >= 0.01) {
+				if (timediff_sec >= 0) {
 					//cout<<"REFRESCO\n";
 					Server::getInstancia()->refreshServer();
 					tiempoRefresco = glfwGetTime();
@@ -540,57 +457,27 @@ void EscenaJuego::update() {
 			}
 		}
 
-		if (jugadores->getNumJugadores() > 0)
+		if (GestorJugadores::getInstancia()->getNumJugadores() > 0)
 			if (gc->update())
 				fin_carrera = true;
 	}
 
-	jugadores->setJugadores(pj);
 
 
-	pj = jugadores->getJugadores();
-
-
-	camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition(), pj.at(controlPlayer)->getNodo()->getRotation(), pj.at(controlPlayer)->getVectorDireccion());
-	camera->lookAt(pj.at(controlPlayer)->getNodo()->getPosition());
-	/*
-		float distanciaX = -20;
-		float posX = pj.at(controlPlayer)->getVectorDireccion().getX()*distanciaX;
-		float posZ = pj.at(controlPlayer)->getVectorDireccion().getZ()*distanciaX;
-
-		camera->setPosition(pj.at(controlPlayer)->getNodo()->getPosition().x - posX, 0, pj.at(controlPlayer)->getNodo()->getPosition().z - posZ);
-		camera->setRotation(glm::vec3(0, 1, 0), 180);
-		switch(tipoCamara){
-			case 0:		//Camara 3a persona fija
-				camara->moveCamera(pj.at(controlPlayer));
-			break;
-			case 1:		//Camara 3a persona libre
-				camara->moveCameraControl(pj.at(controlPlayer));
-			break;
-			case 2:		//Camara 1a persona
-				camara->movefpsCamera(pj.at(controlPlayer));
-			break;
-			case 3:
-				camara->moveCameraControlPointer(pj.at(controlPlayer));
-
-		}*/
-
-
+	camera->setPosition(GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getNodo()->getPosition(), GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getNodo()->getRotation(), GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getVectorDireccion());
+	camera->lookAt(GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getNodo()->getPosition());
 }
 
 Escena::tipo_escena EscenaJuego::comprobarInputs() {
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
 	btVector3 pos(-10, 0, 310);
 	int i = 0;
 
 	//------- ENTRADA TECLADO ----------
 	if (fin_carrera == true && glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_F) == GLFW_PRESS) {
 		if (tipoEscena == Escena::tipo_escena::ONLINE && controlPlayer == 0) {
-			for (int i = 0; i < pj.size(); i++) {
-				pj.at(i)->setVueltas(1);
+			for (int i = 0; i < GestorJugadores::getInstancia()->getJugadores().size(); i++) {
+				GestorJugadores::getInstancia()->getJugadores().at(i)->setVueltas(1);
 			}
-			jugadores->setJugadores(pj);
 			//client->FinalizarCarrera();
 		}
 		else if (tipoEscena != Escena::tipo_escena::ONLINE) {
@@ -615,11 +502,11 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		resetPos[2] = pos.getZ();
 
 		float *resetOri = new float[3];
-		resetOri[0] = pj.at(0)->getNodo()->getRotation().z;
-		resetOri[1] = pj.at(0)->getNodo()->getRotation().y;
-		resetOri[2] = pj.at(0)->getNodo()->getRotation().x;
+		resetOri[0] = GestorJugadores::getInstancia()->getJugadores().at(0)->getNodo()->getRotation().z;
+		resetOri[1] = GestorJugadores::getInstancia()->getJugadores().at(0)->getNodo()->getRotation().y;
+		resetOri[2] = GestorJugadores::getInstancia()->getJugadores().at(0)->getNodo()->getRotation().x;
 
-		pj.at(0)->setPosicion(resetPos, resetOri);
+		GestorJugadores::getInstancia()->getJugadores().at(0)->setPosicion(resetPos, resetOri);
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		end = true;
@@ -701,12 +588,11 @@ std::string EscenaJuego::getIpConexion() { return ipConexion; }
 
 void EscenaJuego::updateHUD() {
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
 
 	//UPDATE PUESTO
-	if (pj.at(controlPlayer)->getPosicionCarrera() != puesto) {
-		puesto = pj.at(controlPlayer)->getPosicionCarrera();
-		switch (pj.at(controlPlayer)->getPosicionCarrera()) {
+	if (GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getPosicionCarrera() != puesto) {
+		puesto = GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getPosicionCarrera();
+		switch (GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getPosicionCarrera()) {
 		case 1:
 			TMotor::instancia().getActiveHud()->changeTextureElement("puesto", "assets/HUD/juego/puesto_1.png");
 			break;
@@ -729,9 +615,9 @@ void EscenaJuego::updateHUD() {
 	}
 
 	//UPDATE VUELTAS
-	if (pj.at(controlPlayer)->getVueltas() != vueltas) {
-		vueltas = pj.at(controlPlayer)->getVueltas();
-		switch (pj.at(controlPlayer)->getVueltas()) {
+	if (GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getVueltas() != vueltas) {
+		vueltas = GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getVueltas();
+		switch (GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getVueltas()) {
 		case 1:
 			TMotor::instancia().getActiveHud()->changeTextureElement("vueltas", "assets/HUD/juego/lap_1_3.png");
 			break;
@@ -748,7 +634,6 @@ void EscenaJuego::updateHUD() {
 void EscenaJuego::debugRageIA(int k){		//Funcion que sirve para dibujar el nivel de enfado de la IA en una grafica (k=id jugador)
 
 	GestorJugadores *jugadores = GestorJugadores::getInstancia();
-	std::vector<Corredor*> pj = jugadores->getJugadores();
 	static std::vector<std::vector<float>> rage;
 	rage.resize(6);
 	rage.at(k).resize(100);
@@ -764,16 +649,16 @@ void EscenaJuego::debugRageIA(int k){		//Funcion que sirve para dibujar el nivel
 	rage.at(k).erase(rage.at(k).begin());
 
 	static float f[6];
-	if (pj.at(k)->getTipoObj()>0){
+	if (GestorJugadores::getInstancia()->getJugadores().at(k)->getTipoObj()>0){
 		f[k]=50;
 	}
-	if (pj.at(k)->getLimite()>=100){
+	if (GestorJugadores::getInstancia()->getJugadores().at(k)->getLimite()>=100){
 		rage.at(k).push_back(100);
 	}else{
-		if (f[k]+pj.at(k)->getLimite()/2>=100){
+		if (f[k]+GestorJugadores::getInstancia()->getJugadores().at(k)->getLimite()/2>=100){
 			rage.at(k).push_back(99);
 		}else{
-			rage.at(k).push_back(f[k]+pj.at(k)->getLimite()/2);
+			rage.at(k).push_back(f[k]+GestorJugadores::getInstancia()->getJugadores().at(k)->getLimite()/2);
 		}
 		
 	}
@@ -785,7 +670,7 @@ void EscenaJuego::debugRageIA(int k){		//Funcion que sirve para dibujar el nivel
 		f[k]-=1;
 	}
 	std::string extra="% ";
-	if (pj.at(k)->getTipoObj()==1 || pj.at(k)->getTipoObj()==6)
+	if (GestorJugadores::getInstancia()->getJugadores().at(k)->getTipoObj()==1 || GestorJugadores::getInstancia()->getJugadores().at(k)->getTipoObj()==6)
 	extra="% - Proyectil preparado";
 	string str="ENFADO ACUMULADO "+to_string(k);
 	ImGui::PlotLines(str.c_str(), vec, IM_ARRAYSIZE(vec),0,(to_string(vec2[99])+extra).c_str(), 0.0f, 100.0f, ImVec2(0,100));

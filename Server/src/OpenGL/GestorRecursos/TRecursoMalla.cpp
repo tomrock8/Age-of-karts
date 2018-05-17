@@ -67,6 +67,14 @@ TRecursoMalla::~TRecursoMalla() {
 	//Eliminamos los buffers creados mediante OpenGL
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(6, buffer);
+	vertex.clear();
+	normal.clear();
+	uv.clear();
+	tangents.clear(); //tangentes     | 
+	bitangents.clear(); //bitangentes |necesarios para los mapas de normales 
+	indices.clear();
+	faces.clear();
+
 }
 
 void TRecursoMalla::activeVAO() {glBindVertexArray(VAO); }

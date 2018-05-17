@@ -52,6 +52,8 @@ uniform sampler2D texture_diffuse; //Textura difusa de la malla
 uniform sampler2D texture_specular; //Textura especular de la malla
 uniform sampler2D texture_normal; //Textura de normales de la malla
 uniform float planoLejano; //Plano lejano de la matriz de proyeccion perspectiva usada para renderizar el cubo de profundidad
+uniform bool drawingDistance; //Booleano para la activacion/desactivacion de la distancia de dibujado
+uniform float levelOfDrawingDistance; //Distancia dentro de la cual se dibujan los objetos
 
 //Niveles para comparar la componente difusa
 const float A = 0.1;
@@ -79,7 +81,18 @@ void main()
         result = vec3(0.0, 0.0, 0.0);
         //Si la luz esta activa, se calcula su influencia sobre el fragmento
         if ( point_lights[i].activa == true){
-            result = calculatePointLight(i);
+            //Si la distancia de dibujado esta activada...
+            if ( drawingDistance == true ){
+                //Si la distancia entre la camara y el objeto es menor que la predefinida, entonces se dibuja
+                if (abs(length(posCamera - fs_in.worldPos)) < levelOfDrawingDistance){
+                    result = calculatePointLight(i);
+                } else{
+                    //Si no se descarta
+                    discard;
+                }
+            } else { //Si no esta activado, calculamos el model de Phong como siempre
+                result = calculatePointLight(i);
+            }
             
         }
         //Luz resultante: ambient+diffuse+specular (se va acumulando)

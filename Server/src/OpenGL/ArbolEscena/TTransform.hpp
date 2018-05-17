@@ -6,7 +6,7 @@
 class TTransform : public TEntidad {
 public:
 	TTransform();
-	~TTransform();
+	~TTransform() override;
 
 	// Gestionar la matriz
 	void cargar(glm::mat4 mat);	//recoge una matriz y la carga

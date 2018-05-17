@@ -8,6 +8,7 @@ class TLuz : public TEntidad {
 public:
 	TLuz();
 	TLuz(glm::vec3 ambiente, glm::vec3 difusa, glm::vec3 especular, glm::vec4 dir, float at, float corte, bool shadow, bool on);
+	~TLuz() override;
 
 	// SOMBRAS
 	void renderMap();

@@ -37,10 +37,11 @@ public:
 	void swapBuffers(); //Intercambiar buffers de dibujado de GLFW
 	void getInputs(); //Control de inputs
 	void close(); //Cierre del motor
-	void toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw); //Convertir de quaternions a grados
 	void initDebugWindow(); //|
 	void closeDebugWindow();//|inicializacion y cierre de IMGUI 
 	void cleanHUD(); //Limpieza de HUDs
+	void cleanScene();
+	void nuevaEscenaRaiz();
 
 	//CREACION DE OBJETOS
 	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode, bool sta); //Nuevo Objeto 3D
@@ -77,10 +78,11 @@ public:
 	std::vector <TNodo *> getActiveLights();
 	TNodo *getNode(const char * nombre);
 	TGestorRecursos *getGR();
-	bool getRenderDebug();
 	bool getBoundingBoxes();
 	GestorSonido *getGestorSonido();
 	TNodo *getCameraByIndex(int i);
+	float getDrawingDistance();
+	bool getLevelOfDetail();
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
@@ -92,6 +94,11 @@ public:
 	void setShaderActive(const char* s);
 	void setSkyBox();
 	void setBoundingBoxes(bool b);
+	void setFaceCulling(bool b);
+	void setAntialiasing(bool b);
+	void setDrawingDistance(bool b, float f);
+	void setShadows(bool b);
+	void setLevelOfDetail(bool b);
 	void setViewport(int x, int y, int width, int height);
 
 	// DIBUJADO
@@ -107,6 +114,7 @@ public:
 	void drawProjectedShadows();
 	void drawMappingShadows();
 	void drawDebugBullet();
+	void drawCube(glm::mat4 modelMatrixObject, glm::vec3 centerPos);
 
 	// DIBUJADO SEGUN SHADER ACTIVO
 	void usingShaderCartoon();
@@ -183,6 +191,18 @@ protected:
 	//IMGUI
 	bool renderDebug; //Booleano para controlar el renderizado de las ventanas de IMGUI
 
+	//Level Of Detail
+	GLuint VAO_cube, VBO_cube; //Buffers para guardar los vertices del cubo
+
+	//Booleanos para la activacion/desactivacion de las optimizaciones del motor
+	bool faceCulling = true; //FACE CULLING activado por defecto
+	bool drawingDistance = true; //Distancia de dibujado de los objetos
+	float levelOfDrawingDistance = 750.0f; //Distancia maxima entre la camara y objeto a partir de la cual se deja de dibujar este ultimo
+	bool shadows = false; //Sombras
+	bool levelOfDetail = true; //LEVEL OF DETAIL activado por defecto
+
+	
+
 	// ----------------------
 	//  METODOS PRIVADOS
 	// ----------------------
@@ -204,4 +224,6 @@ protected:
 	void initializeBuffersDebugBullet();
 	//Deferred shading
 	void setDeferredBuffers();
+	//Level Of Detail
+	void setBuffersCube();
 };

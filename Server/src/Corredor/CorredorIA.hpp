@@ -23,6 +23,7 @@ public:
 	virtual void movimiento() override;
 	virtual void updateHijos() override;
 	virtual void actualizarItem() override;
+	
 	void reposicionar();
 	void calculoAnguloGiro(btVector3 posicion);
 	void ActualizarRaytest();

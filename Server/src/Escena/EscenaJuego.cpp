@@ -448,11 +448,10 @@ void EscenaJuego::update() {
 				float tiempoActual = glfwGetTime();
 				float timediff_sec = tiempoActual - tiempoRefresco;
 
-				if (timediff_sec >= 0) {
-					//cout<<"REFRESCO\n";
+				//if (timediff_sec >= 0) {
 					Server::getInstancia()->refreshServer();
 					tiempoRefresco = glfwGetTime();
-				}
+				//}
 
 			}
 		}

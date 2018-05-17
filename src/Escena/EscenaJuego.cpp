@@ -347,6 +347,7 @@ void EscenaJuego::dibujar() {
 		else {
 			TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
 		}
+		updateHUD(i);
 		//Especificamos la camara activa
 		TMotor::instancia().setActiveCamera(TMotor::instancia().getCameraByIndex(i));
 		//Dibujamos el skybox
@@ -366,19 +367,24 @@ void EscenaJuego::dibujar() {
 		TMotor::instancia().drawHudMenus();
 		//Dibujamos IMGUI
 		TMotor::instancia().drawIMGUI();
-	}
-
-	renderDebug();
+		}
+	for (int i=0;numPantallas>i;i++)
+	renderDebug(i);
 }
 
-void EscenaJuego::renderDebug() {
+void EscenaJuego::renderDebug(int i) {
 	// ------------------------------
 	// -------- IMGUI ---------------
 	// ------------------------------
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	jugador = GestorJugadores::getInstancia()->getJugadores().at(controlPlayer);
-	cout<<"estoy en renderdebug\n";
-	TMotor::instancia().setActiveHud("OnGameHUD0");
+
+	
+	if (tipoEscena == Escena::tipo_escena::ONLINE){
+		TMotor::instancia().setActiveHud("OnGameHUD0");
+	}else{
+		TMotor::instancia().setActiveHud(("OnGameHUD"+to_string(i)).c_str());
+	}
 
 	// Mostrar ventanas
 
@@ -546,7 +552,7 @@ void EscenaJuego::renderDebug() {
 
 	}
 	ImGui::PopFont();
-	cout<<"salgo de renderdebug\n";
+
 }
 
 void EscenaJuego::limpiar() {
@@ -605,43 +611,47 @@ void EscenaJuego::update() {
 
 
 	//colisiones->ComprobarColisiones(pj1, pistaca->getArrayCaja());
-
-	cout<<"cuenta atras\n";
-	TMotor::instancia().setActiveHud("OnGameHUD0");
-	if (t->getTimer() <= 4 && t->getTimer() >= 1) {
-		if (t->getTimer() == 1) {
-			TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtras3.png");
-			TMotor::instancia().getActiveHud()->traslateElement("cuentaAtras", 0.0f, 0.80f);
-			if (!countDown3) {
-				fuenteCountDown->play(SOUND_OPCION);
-				countDown3 = true;
-			}
+	for (int i=0;i<numPantallas;i++){
+		if (tipoEscena == Escena::tipo_escena::ONLINE){
+			TMotor::instancia().setActiveHud("OnGameHUD0");
+		}else{
+			TMotor::instancia().setActiveHud(("OnGameHUD"+to_string(i)).c_str());
 		}
-		else if (t->getTimer() == 2) {
-			TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtras2.png");
-			if (!countDown2) {
-				fuenteCountDown->play(SOUND_OPCION);
-				countDown2 = true;
+		if (t->getTimer() <= 4 && t->getTimer() >= 1) {
+			if (t->getTimer() == 1) {
+				TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtras3.png");
+				TMotor::instancia().getActiveHud()->traslateElement("cuentaAtras", 0.0f, 0.80f);
+				if (!countDown3) {
+					fuenteCountDown->play(SOUND_OPCION);
+					countDown3 = true;
+				}
 			}
-		}
-		else if (t->getTimer() == 3) {
-			TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtras1.png");
-			if (!countDown1) {
-				fuenteCountDown->play(SOUND_OPCION);
-				countDown1 = true;
+			else if (t->getTimer() == 2) {
+				TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtras2.png");
+				if (!countDown2) {
+					fuenteCountDown->play(SOUND_OPCION);
+					countDown2 = true;
+				}
 			}
-		}
-		else if (t->getTimer() == 4) {
-			TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtrasGo.png");
-			if (!countDownGo) {
-				countDownGo = true;
-				fuenteCountDown->stop(SOUND_OPCION);
-				fuenteCountDown->setPitch(2.f);
-				fuenteCountDown->play(SOUND_OPCION);
+			else if (t->getTimer() == 3) {
+				TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtras1.png");
+				if (!countDown1) {
+					fuenteCountDown->play(SOUND_OPCION);
+					countDown1 = true;
+				}
+			}
+			else if (t->getTimer() == 4) {
+				TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtrasGo.png");
+				if (!countDownGo) {
+					countDownGo = true;
+					fuenteCountDown->stop(SOUND_OPCION);
+					fuenteCountDown->setPitch(2.f);
+					fuenteCountDown->play(SOUND_OPCION);
+				}
 			}
 		}
 	}
-cout<<"cuenta atras2\n";
+
 	if (t->getTimer() < 8 && t->getTimer() >= 5) {
 		TMotor::instancia().getActiveHud()->deleteElement("cuentaAtras");
 		for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
@@ -650,14 +660,15 @@ cout<<"cuenta atras2\n";
 		if (t->getTimer() >= 5 && t->getTimer() < 6)
 			colisiones->IniciarTimer();
 	}
-cout<<"saglo cuenta atras\n";
+
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
-		pj.at(controlPlayer)->actualizarItem();
+		
 		colisiones->ComprobarColisiones();//esto deberia sobrar, puesto que las cajas ya no estan aqui, si no en pista
 		//pj.at(controlPlayer)->update();
 		
 		if (GestorJugadores::getInstancia()->getNumJugadores() > 0) {
 			for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
+				pj.at(i)->actualizarItem();
 				pj.at(i)->update();
 				if (strcmp(pj.at(i)->getNodo()->getName(), "JugadorIA") == 0) {
 					CorredorIA *IA = static_cast<CorredorIA *>(pj.at(i));
@@ -665,12 +676,7 @@ cout<<"saglo cuenta atras\n";
 					
 				}
 			}
-			
-			for (int i=0;numPantallas>i;i++){
-				cout<<"vo a entrar en update hud\n";
-			updateHUD(i);
-			}
-			cout<<"he salido bien del hud\n";
+	
 			
 		}
 		//textoDebug->agregar(pj.at(0)->toString());
@@ -704,7 +710,6 @@ cout<<"saglo cuenta atras\n";
 			client->UpdateNetworkKeyboard();
 		}
 	}
-	cout<<"hello\n";
 	if (GestorJugadores::getInstancia()->getNumJugadores() != 0)
 		if (gc->update())
 			fin_carrera = true;
@@ -712,7 +717,7 @@ cout<<"saglo cuenta atras\n";
 
 	GestorJugadores::getInstancia()->setJugadores(pj);
 
-	cout<<"hello1\n";
+	
 	pj = GestorJugadores::getInstancia()->getJugadores();
 
 	for (int x = 0; x < numPantallas; x++) {
@@ -721,7 +726,7 @@ cout<<"saglo cuenta atras\n";
 			camera.at(x)->lookAt(pj.at(controlPlayer + x)->getNodo()->getPosition());
 		}
 	}
-	cout<<"hello2\n";
+	
 }
 
 Escena::tipo_escena EscenaJuego::comprobarInputs() {
@@ -861,7 +866,7 @@ void EscenaJuego::updateHUD(int i) {
 	if (tipoEscena == Escena::tipo_escena::ONLINE){
 		TMotor::instancia().setActiveHud("OnGameHUD0");
 	}else{
-		TMotor::instancia().setActiveHud("OnGameHUD"+i);
+		TMotor::instancia().setActiveHud(("OnGameHUD"+to_string(i)).c_str());
 	}
 	pj = GestorJugadores::getInstancia()->getJugadores();
 

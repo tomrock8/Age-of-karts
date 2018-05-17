@@ -12,6 +12,7 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	show_config=true;
 	empiezaCarrera=false;
 	end = false;
+	checkfocus=true;
 	infoLobby= new std::string("");
 	time = Timer::getInstancia();
 
@@ -167,6 +168,10 @@ void EscenaLobby::update() {
 						ImGui::Text("Connection failed! \nTry to introduce the IP again to start an online race: ");
 					}
 					ImGui::InputInt4("Introduce IP", vec4a);
+					if (checkfocus){
+					ImGui::SetKeyboardFocusHere();
+					checkfocus=false;
+					}
 				}else{
 					if (ImGui::Button("Start with 127.0.0.1")){
 						selection_online = false;
@@ -205,8 +210,9 @@ void EscenaLobby::update() {
 						infoLobby->clear();
 						infoLobby->append("ONLINE!\n");
 						infoLobby->append("Connection stablished!\n"); 
+						crearFicheroIP();
 					}
-					crearFicheroIP();
+					
 					ImGui::End();
 			}
 

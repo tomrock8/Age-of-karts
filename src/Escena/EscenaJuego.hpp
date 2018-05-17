@@ -32,7 +32,7 @@ private:
 
 	void UpdatePhysics(unsigned int TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
-	void renderDebug();
+	void renderDebug(int i);
 	void debugRageIA(int k);
 	void debugPlot(int j,float k,std::string str);
 	void updateHUD(int i);

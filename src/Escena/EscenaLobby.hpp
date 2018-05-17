@@ -54,6 +54,7 @@ private:
 	Timer *time;
 	int laps;
 
+	bool checkfocus;
 	bool selection_online;
 	bool offline;
 	bool offline_split;

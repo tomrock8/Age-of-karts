@@ -1,0 +1,41 @@
+# Blender MTL File: 'mapa4.0.blend'
+# Material Count: 3
+
+newmtl CarreteraMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas/MapaPirataCarretera_normal.png
+map_Kd texturas/MapaPirataCarretera_diffusa.png
+map_Ks texturas/MapaPirataCarretera_specular.png
+
+newmtl GardioBannerMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texturas/BannerGardiot_diffuse.png
+map_Bump texturas/BannerGardiot_Normal.png
+map_Ks texturas/BannerGardiot_Specular.png
+
+newmtl montanaMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texturas/terrain_diffuse.png
+map_Bump texturas/terrain_normal.png
+map_Ks texturas/terrain_specular.png

@@ -1,0 +1,27 @@
+//Especificar version de Opengl a utilizar
+#version 330
+ 
+//Recoger los datos de los vertices en los buffers correctamente (segun orden de envio en el programa)
+layout (location = 0) in vec3 aVertex; //Vertices
+layout (location = 1) in vec2 aCoords; //Coordenada de textura
+layout (location = 2) in vec4 aPos; //Posicion y tamanyo
+
+//Variables de salida al Fragment shader
+out vec2 textCoords;
+
+//Uniform para la matriz mvp
+uniform mat4 vp;
+uniform vec3 camRight;
+uniform vec3 camUp;
+ 
+void main() {
+    //Recogemos los vertices de cada particula
+    vec3 particlePosition = aPos.xyz;
+ 
+    //Pasamos las coordenadas de textura al fragment shader
+    textCoords = aCoords;
+
+    vec3 pos = particlePosition + camRight * aVertex.x *aPos.w + camUp * aVertex.y * aPos.w;
+    //Calculamos la posicion final de la particula en la pantalla a partir de la matriz view-projection
+    gl_Position = vp * vec4(pos, 1.0);
+}

@@ -3,14 +3,20 @@
 
 #include <iostream>
 #include <vector>
-//#include "CorredorRed.hpp"
-//#include "CorredorJugador.hpp"
+#include "Corredor.hpp"
 #include "GestorJugadores.hpp"
-//#include "NetworkEnums.hpp"
+#include "Escena.hpp"
 
 #define MAX_PLAYERS 10
 
-using namespace std;
+struct structClientes{
+    std::string ip;
+    int tipoCorredor;
+    bool ready;
+	bool corredorJugador;
+};
+
+
 
 class Client
 {
@@ -33,6 +39,9 @@ public:
 	void ChangeCharacter(bool i);
 	int ReceivePackets();
 	void SpawnPlayer();
+	void FinalizarCarrera();
+	void ActualizarClienteConectado();
+	void aumentarTimestamp();
 	
 	//METODOS GET
 	int getControlPlayer();
@@ -40,13 +49,15 @@ public:
 	int getNumPlayers();
 	int getNumClients();
 	int getMaxPlayers();
-	vector<int> getArrayTipoCorredor();
-	vector<int> getArrayReady();
-	int getTipoCorredor(int i);
+	std::vector<structClientes> getClientes();
 	bool getStarted();
+	std::string getClientStats(int i);
 
 	//METODOS SET
 	void setNetloaded(bool b);
+	void setArrayClients(std::string ip,int tipo,bool rdy,bool corredorJ,int nuevo);
+	void BorrarClientes();
+	void BorrarCliente(int i);
 	
 private:
 	Client(int maxPlay);
@@ -57,9 +68,12 @@ private:
 	int numIPs;
 	int maxPlayers;
 	int numClients;
+	int aux;
 	bool netLoaded;
 	bool connected;
+	bool disconnection;
 	unsigned char packetIdentifier;
+	std::string packetName;
 
 	RakNet::SocketDescriptor socketDescriptor;
 	RakNet::NetworkIDManager networkIDManager;
@@ -72,15 +86,17 @@ private:
 	std::string clientPort;
 	std::string serverIP;
 
-	vector<Corredor*> players;
+	std::vector<Corredor*> players;
 	int controlPlayer;
 	int numPlayers;
+	int timeStamp;
 	bool spawned;
 	bool started;
 	bool pressed;
-	vector<int> arrayTipoCorredor;
-	vector<int> arrayReady;
-
+	bool pressed2;
+	bool pressed3;
+	std::vector<structClientes> clientes;
+	
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 
 };

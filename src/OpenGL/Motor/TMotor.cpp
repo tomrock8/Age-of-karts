@@ -66,21 +66,21 @@ TMotor::TMotor() {
 	initDebugWindow();
 
 	//Creamos los distintos shaders que se van a usar para algun aspecto del motor
-	shader = new Shader("assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
-	shaderHUD = new Shader("assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt", nullptr);
-	shaderProjectedShadows = new Shader("assets/shaders/shaderProjectedShadows/vertexShader.txt", "assets/shaders/shaderProjectedShadows/fragmentShader.txt", nullptr);
-	shaderDirectionalDepth = new Shader("assets/shaders/shaderDepth/shaderLuzDirigida/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzDirigida/fragmentShader.txt", nullptr);
-	shaderPointDepth = new Shader("assets/shaders/shaderDepth/shaderLuzPuntual/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzPuntual/fragmentShader.txt"
+	shader = new Shader("shader", "assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
+	shaderHUD = new Shader("shaderHUD", "assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt", nullptr);
+	shaderProjectedShadows = new Shader("shaderProjectedShadows", "assets/shaders/shaderProjectedShadows/vertexShader.txt", "assets/shaders/shaderProjectedShadows/fragmentShader.txt", nullptr);
+	shaderDirectionalDepth = new Shader("shaderDirectionalDepth", "assets/shaders/shaderDepth/shaderLuzDirigida/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzDirigida/fragmentShader.txt", nullptr);
+	shaderPointDepth = new Shader("shaderPointDepth", "assets/shaders/shaderDepth/shaderLuzPuntual/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzPuntual/fragmentShader.txt"
 		, "assets/shaders/shaderDepth/shaderLuzPuntual/geometryShader.txt");
-	shaderSkybox = new Shader("assets/shaders/shaderSkybox/vertexShader.txt", "assets/shaders/shaderSkybox/fragmentShader.txt", nullptr);
-	shaderDebugBbox = new Shader("assets/shaders/shaderDebugAndBbox/vertexShader.txt", "assets/shaders/shaderDebugAndBbox/fragmentShader.txt", nullptr);
-	shaderCartoon = new Shader("assets/shaders/shaderCartoon/vertexShader.txt", "assets/shaders/shaderCartoon/fragmentShader.txt", nullptr);
-	shaderSilhouette = new Shader("assets/shaders/shaderSilhouette/vertexShader.txt", "assets/shaders/shaderSilhouette/fragmentShader.txt", nullptr);
-	shaderBillboard = new Shader("assets/shaders/shaderBillboard/vertexShader.txt", "assets/shaders/shaderBillboard/fragmentShader.txt", nullptr);
-	shaderParticles = new Shader("assets/shaders/shaderParticles/vertexShader.txt", "assets/shaders/shaderParticles/fragmentShader.txt", nullptr);
-	shaderClouds = new Shader("assets/shaders/shaderClouds/vertexShader.txt", "assets/shaders/shaderClouds/fragmentShader.txt", nullptr);
-	shaderGbuffer = new Shader("assets/shaders/shaderDeferred/gBufferVertexShader.txt", "assets/shaders/shaderDeferred/gBufferFragmentShader.txt", nullptr);
-	shaderDeferred = new Shader("assets/shaders/shaderDeferred/deferredVertexShader.txt", "assets/shaders/shaderDeferred/deferredFragmentShader.txt", nullptr);
+	shaderSkybox = new Shader("shaderSkybox", "assets/shaders/shaderSkybox/vertexShader.txt", "assets/shaders/shaderSkybox/fragmentShader.txt", nullptr);
+	shaderDebugBbox = new Shader("shaderDebugBbox", "assets/shaders/shaderDebugAndBbox/vertexShader.txt", "assets/shaders/shaderDebugAndBbox/fragmentShader.txt", nullptr);
+	shaderCartoon = new Shader("shaderCartoon", "assets/shaders/shaderCartoon/vertexShader.txt", "assets/shaders/shaderCartoon/fragmentShader.txt", nullptr);
+	shaderSilhouette = new Shader("shaderSilhouette", "assets/shaders/shaderSilhouette/vertexShader.txt", "assets/shaders/shaderSilhouette/fragmentShader.txt", nullptr);
+	shaderBillboard = new Shader("shaderBillboard", "assets/shaders/shaderBillboard/vertexShader.txt", "assets/shaders/shaderBillboard/fragmentShader.txt", nullptr);
+	shaderParticles = new Shader("shaderParticles", "assets/shaders/shaderParticles/vertexShader.txt", "assets/shaders/shaderParticles/fragmentShader.txt", nullptr);
+	shaderClouds = new Shader("shaderClouds", "assets/shaders/shaderClouds/vertexShader.txt", "assets/shaders/shaderClouds/fragmentShader.txt", nullptr);
+	shaderGbuffer = new Shader("shaderGbuffer", "assets/shaders/shaderDeferred/gBufferVertexShader.txt", "assets/shaders/shaderDeferred/gBufferFragmentShader.txt", nullptr);
+	shaderDeferred = new Shader("shaderDeferred", "assets/shaders/shaderDeferred/deferredVertexShader.txt", "assets/shaders/shaderDeferred/deferredFragmentShader.txt", nullptr);
 	std::cout << "Version OPENGL: " << glGetString(GL_VERSION) << endl;
 
 	//Inicializamos los buffers para el debug de Bullet
@@ -550,7 +550,7 @@ void TMotor::setDrawingDistance(bool b, float f){
 }
 //Funcion para activar/desactivar las sombras
 void TMotor::setShadows(bool b){
-	shadows = b;
+	projectedShadows = b;
 }
 //Funcion para activar/desactivar el level of detail
 void TMotor::setLevelOfDetail(bool b){
@@ -743,7 +743,7 @@ void TMotor::drawClouds(){
 // ---- DIBUJADO DE LAS SOMBRAS PROYECTADAS ----
 //Funcion que dibuja las sombras de los objetos a partir de la tecnica de las sombras proyectadas
 void TMotor::drawProjectedShadows(){
-	if ( shadows == true){ //Si las sombras estan activadas...
+	if ( projectedShadows == true){ //Si las sombras estan activadas...
 		//No dibujamos aquellos elementos que no queremos que proyecten sombras
 		for (int i = 0; i < notShadowObjects.size(); i++){
 			notShadowObjects.at(i)->setVisible(false);
@@ -756,7 +756,7 @@ void TMotor::drawProjectedShadows(){
 					//Le pasamos al shader la matriz view
 					shaderProjectedShadows->setMat4("view", activeViewMatrix);
 					//Le pasamos la matriz proyeccion de la luz (perspectiva)
-					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 300.0f);
+					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.01f, 10000.0f);
 					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
 					//Le pasamos la posicion de la luz al shader
 					shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());
@@ -925,15 +925,15 @@ void TMotor::usingShaderDeferred() {
 	//POSICION
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, defPosition);
-	glUniform1i(glGetUniformLocation(shaderDeferred->ID, "texture_position"), 0);
+	glUniform1i(glGetUniformLocation(shaderDeferred->getID(), "texture_position"), 0);
 	//NORMALES
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, defNormal);
-	glUniform1i(glGetUniformLocation(shaderDeferred->ID, "texture_normal"), 1);
+	glUniform1i(glGetUniformLocation(shaderDeferred->getID(), "texture_normal"), 1);
 	//COLOR DIFUSO Y BRILLO
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, defDiffuseSpecular);
-	glUniform1i(glGetUniformLocation(shaderDeferred->ID, "texture_diffuseSpecular"), 2);
+	glUniform1i(glGetUniformLocation(shaderDeferred->getID(), "texture_diffuseSpecular"), 2);
 	//Establecemos los datos de las distintas luces
 	drawLight(shaderDeferred);
 	//Calcular posicion de la camara y pasarsela al fragment shader

@@ -281,7 +281,7 @@ void EscenaJuego::init() {
 	// NUBES
 	//----------------------
 	//Creamos un area de nubes entre las posiciones -2000 y 2000 en el ancho y largo y a una altura entre 150 y 300, con 30 nubes
-	//TMotor::instancia().newClouds(-2000, 2000, 150, 300, -2000, 2000, 50);
+	TMotor::instancia().newClouds(-2000, 2000, 150, 300, -2000, 2000, 50);
 
 	//-----------------------
 	// OPENAL

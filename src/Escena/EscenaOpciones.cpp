@@ -154,7 +154,7 @@ void EscenaOpciones::update() {
 				levelOfDrawingDistance = 750; //Nivel de distancia de dibujado = 750
 			} else {
 				drawingDistance = false; //Sin distancia de dibujado
-				levelOfDrawingDistance = 0; //Nivel de distancia de dibujado = ninguno
+				levelOfDrawingDistance = 5000; //Nivel de distancia de dibujado = ninguno
 			}
 		}
 		

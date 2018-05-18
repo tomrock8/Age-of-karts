@@ -4,101 +4,72 @@
 EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_jugador> jugadores) : Escena(tipo) {
 
 	camera = new cameraThird("camara_jugador3apersona", "escena_raiz");
-
-
+	//obj3D para las poles
+	primero = TMotor::instancia().newMeshNode("primeraPosicion", " ", "escena_raiz", false); //textura cualquiera pues se eliminara
+	segundo = TMotor::instancia().newMeshNode("segundaPosicion", " ", "escena_raiz", false); //textura cualquiera pues se eliminara
+	tercero = TMotor::instancia().newMeshNode("terceraPosicion", " ", "escena_raiz", false); //textura cualquiera pues se eliminara
+	primero->setPosition(0, 3.83675, 0);
+	segundo->setPosition(-5.06887, 7.40514, 0);
+	tercero->setPosition(5.09683, 7.50068, 0);
+	//comprobaciones de puesto
+	segundoPuesto = false;
+	tercerPuesto = false;
+	//animaciones
+	//padre inicializado a cualquiera , cuando se sepa donde va a ir se le metera el padre correspondiente
 	animacionPirata = nullptr;
 	animacionVikingo = nullptr;
-	animacionChino = nullptr;
 	animacionGladiador = nullptr;
-
+	animacionChino = nullptr;
+	animacionElegida = nullptr;
 	for (int i = 0; i < jugadores.size(); i++) {
-		switch (jugadores.at(i)) {
-		case Corredor::tipo_jugador::PIRATA:
-			personajes.push_back(TMotor::instancia().newMeshNode("Pirata", " ", "escena_raiz", false));
 
-			if (i == 0) {
-				personajes.at(i)->setPosition(0, 5.5, 0);
+		switch (jugadores.at(i)) {//recogemos cual sera la animacion que tocara en caso de que esten en el podio
+		case Corredor::tipo_jugador::PIRATA:
+			if (animacionPirata == nullptr) {
+				animacionPirata = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Pirata/Celebracion/PirataCelebracion_000", 122, 242), "BailePirata");
 			}
-			else if (i == 1) {
-				personajes.at(i)->setPosition(-3, 4, 0);
-			}
-			else if (i == 2) {
-				personajes.at(i)->setPosition(3, 4, 0);
-			}
-			//personajes.at(i)->rotate(glm::vec3(0, 1, 0), 180);
-			personajes.at(i)->setScale(0.5, 0.5, 0.5);
-			animacionPirata = TMotor::instancia().createAnimationNode(personajes.at(i)->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Celebracion/PirataCelebracion_000", 122, 242), "BailePirata");
-			personajes.at(i)->setNode(animacionPirata);
-			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setVisible(true);
-			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setPlaying(true);
-			cout << "El PRIMERO ES EL PIRATA" << endl;
+			animacionElegida = animacionPirata;
 			break;
 
 		case Corredor::tipo_jugador::VIKINGO:
-			personajes.push_back(TMotor::instancia().newMeshNode("Vikingo", " ", "escena_raiz", false));
-			if (i == 0) {
-				personajes.at(i)->setPosition(0, 5.5, 0);
+			if (animacionVikingo == nullptr) {
+				animacionVikingo = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Celebracion/VikingoCelebracion_000", 443, 537), "BaileVikingo");
+
 			}
-			else if (i == 1) {
-				personajes.at(i)->setPosition(-3, 4, 0);
-			}
-			else if (i == 2) {
-				personajes.at(i)->setPosition(3, 4, 0);
-			}
-			//personajes.at(i)->rotate(glm::vec3(0, 1, 0), 180);
-			personajes.at(i)->setScale(0.5, 0.5, 0.5);
-			animacionVikingo = TMotor::instancia().createAnimationNode(personajes.at(i)->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Celebracion/VikingoCelebracion_000", 443, 537), "BaileVikingo");
-			personajes.at(i)->setNode(animacionVikingo);
-			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setVisible(true);
-			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setPlaying(true);
-			cout << "El PRIMERO ES EL VIKINGO" << endl;
+			animacionElegida = animacionVikingo;
 			break;
 
 		case Corredor::tipo_jugador::GLADIADOR:
-			personajes.push_back(TMotor::instancia().newMeshNode("Gladiador", " ", "escena_raiz", false));
-			if (i == 0) {
-				personajes.at(i)->setPosition(0, 5.5, 0);
+			if (animacionGladiador == nullptr) {
+				animacionGladiador = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Celebracion/GladiatorCelebracion_000", 435, 594), "BaileGladiador");
+
 			}
-			else if (i == 1) {
-				personajes.at(i)->setPosition(-3, 4, 0);
-			}
-			else if (i == 2) {
-				personajes.at(i)->setPosition(3, 4, 0);
-			}
-			//personajes.at(i)->rotate(glm::vec3(0, 1, 0), 180);
-			personajes.at(i)->setScale(0.5, 0.5, 0.5);
-			animacionGladiador = TMotor::instancia().createAnimationNode(personajes.at(i)->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Celebracion/GladiadorCelebracion_000", 178, 263), "BaileGladiador");
-			personajes.at(i)->setNode(animacionGladiador);
-			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setVisible(true);
-			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setPlaying(true);
-			cout << "El PRIMERO ES EL GLADIADOR" << endl;
+			animacionElegida = animacionGladiador;
 			break;
 
 		case Corredor::tipo_jugador::CHINO:
-			personajes.push_back(TMotor::instancia().newMeshNode("Chino", " ", "escena_raiz", false));
-			if (i == 0) {
-				personajes.at(i)->setPosition(0, 5.5, 0);
+			if (animacionChino == nullptr) {
+				animacionChino = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Chino/Celebracion/ChinoCelebracion_000", 228, 317), "BaileChino");
 			}
-			else if (i == 1) {
-				personajes.at(i)->setPosition(-3, 4, 0);
-			}
-			else if (i == 2) {
-				personajes.at(i)->setPosition(3, 4, 0);
-			}
-			//personajes.at(i)->rotate(glm::vec3(0, 1, 0), 180);
-			personajes.at(i)->setScale(0.5, 0.5, 0.5);
-			animacionChino = TMotor::instancia().createAnimationNode(personajes.at(i)->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/Celebracion/ChinoCelebracion_000", 228, 317), "BaileChino");
-			personajes.at(i)->setNode(animacionChino);
-			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setVisible(true);
-			static_cast<TAnimacion*>(personajes.at(i)->getNode()->getEntidad())->setPlaying(true); cout << "El PRIMERO ES EL CHINO" << endl;
+			animacionElegida = animacionChino;
 			break;
-
 		default:
 			break;
 		}
-
-
-
+		if (i == 0) {//asignamos el nodo padre en funcion de su posicion y despues le asignamos el nodo a el objeto 
+			TMotor::instancia().addPadre(primero->getNode()->getPadre(), animacionElegida);
+			primero->setNode(animacionElegida);
+		}
+		else if (i == 1) {
+			TMotor::instancia().addPadre(segundo->getNode()->getPadre(), animacionElegida);
+			segundo->setNode(animacionElegida);
+			segundoPuesto = true;
+		}
+		else if (i == 2) {
+			TMotor::instancia().addPadre(tercero->getNode()->getPadre(), animacionElegida);
+			tercero->setNode(animacionElegida);
+			tercerPuesto = true;
+		}
 	}
 
 
@@ -240,7 +211,23 @@ void EscenaPodio::init() {
 	particulas.at(3)->setPosition(glm::vec3(-8.5, 0.2, 10));
 	particulas.at(3)->setSize(0.15f);
 	particulas.at(3)->setType(1);
-	particulas.at(3)->setColor(glm::vec3(1.0, 0.0, 0.0));
+	//activamos animaciones
+	//primero
+	static_cast<TAnimacion*>(primero->getNode()->getEntidad())->setVisible(true);
+	static_cast<TAnimacion*>(primero->getNode()->getEntidad())->setPlaying(true);
+	//segundo
+	if (segundoPuesto) {
+		static_cast<TAnimacion*>(segundo->getNode()->getEntidad())->setVisible(true);
+		static_cast<TAnimacion*>(segundo->getNode()->getEntidad())->setPlaying(true);
+	}
+	//tercero
+	if (tercerPuesto) {
+		static_cast<TAnimacion*>(tercero->getNode()->getEntidad())->setVisible(true);
+		static_cast<TAnimacion*>(tercero->getNode()->getEntidad())->setPlaying(true);
+	}
+
+
+
 
 }
 

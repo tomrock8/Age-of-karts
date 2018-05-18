@@ -192,7 +192,7 @@ TRecursoMaterial *TGestorRecursos::getRecursoMaterial(const char * nombre, const
 		if (nameExt.compare(nameRecMaterial) == 0) {
 			////cout << " he comprobado material y he visto que hay uno igual" << endl;
 			recMaterial = (TRecursoMaterial*)recursoMaterials.at(i);
-			encontrado = false;
+			encontrado = true;
 			return recMaterial;
 		}
 	}

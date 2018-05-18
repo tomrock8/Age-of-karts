@@ -1,8 +1,8 @@
-# Blender MTL File: 'victoria.blend'
+# Blender MTL File: 'mapaCelebracion.blend'
 # Material Count: 4
 
 newmtl PodioMAT
-Ns 96.078431
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.500000 0.500000 0.500000
@@ -15,7 +15,7 @@ map_Bump Podio_normal.png
 map_Ks Podio_specular.png
 
 newmtl VictoriaMAT
-Ns 96.078431
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.500000 0.500000 0.500000
@@ -23,12 +23,12 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump victoria_normal.png
 map_Kd victoria_diffuse.png
+map_Bump victoria_normal.png
 map_Ks victoria_diffuse.png
 
 newmtl baseMAT
-Ns 96.078431
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.500000 0.500000 0.500000
@@ -36,12 +36,12 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump base_normal.png
 map_Kd base_diffuse.png
+map_Bump base_normal.png
 map_Ks base_specular.png
 
 newmtl colMAT
-Ns 96.078431
+Ns 94.117647
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.500000 0.500000 0.500000
@@ -49,6 +49,6 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump col_normal.png
 map_Kd col_difuse.png
+map_Bump col_normal.png
 map_Ks col_specular.png

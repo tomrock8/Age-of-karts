@@ -199,8 +199,8 @@ void TMotor::cleanScene() {
 	lights.clear();
 	activeLights.clear();	
 	notShadowObjects.clear();
-	delete gestorRecursos;
-	gestorRecursos = new TGestorRecursos();
+	//delete gestorRecursos;
+	//gestorRecursos = new TGestorRecursos();
 
 }
 
@@ -431,10 +431,16 @@ TNodo *TMotor::createLightNode(TNodo *padre, TLuz *luz, const char* name) {
 
 TNodo  *TMotor::createAnimationNode(TNodo *padre, TAnimacion *mesh, const char* name) {
 	TNodo *nodo = new TNodo(name);
-	nodo->setPadre(padre);
 	nodo->setEntidad(mesh);
-	padre->addHijo(nodo);
+	if (padre != NULL) {
+		nodo->setPadre(padre);
+		padre->addHijo(nodo);
+	}
 	return nodo;
+}
+void TMotor::addPadre(TNodo *padre, TNodo *hijo) {
+	hijo->setPadre(padre);
+	padre->addHijo(hijo);
 }
 
 TAnimacion *TMotor::createAnimation(const char *path, int framesIni, int framesFin) {

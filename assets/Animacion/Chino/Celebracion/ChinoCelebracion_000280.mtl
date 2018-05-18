@@ -1,4 +1,4 @@
-# Blender MTL File: 'Chino base.blend'
+# Blender MTL File: 'ChinoCelebracion.blend'
 # Material Count: 1
 
 newmtl ChinoMAT
@@ -12,4 +12,4 @@ d 1.000000
 illum 2
 map_Bump Chino_normal.png
 map_Kd Chino_diffuse.png
-map_Ks kartChino_specular.png
+map_Ks Chino_specular.png

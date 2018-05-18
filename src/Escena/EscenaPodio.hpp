@@ -28,12 +28,17 @@ private:
 	std::vector<obj3D*> luces;	
 	//particulas
 	std::vector<particleSystem*> particulas;	
-
+	obj3D *primero;
+	obj3D *segundo;
+	obj3D *tercero;
+	bool segundoPuesto;
+	bool tercerPuesto;
 
 	TNodo *animacionPirata;
 	TNodo *animacionVikingo;
 	TNodo *animacionChino;
 	TNodo *animacionGladiador;
+	TNodo *animacionElegida;
 
 };
 

@@ -15,7 +15,7 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFra
 	setFirstFrame(firstFrame);
 	setLastFrame(lastFrame);
 	actualFrame = this->firstFrame;
-	framesPerSecond = 60; // Valor que se recoge de blender
+	framesPerSecond = 30; // Valor que se recoge de blender
 	setVisible(false);
 }
 

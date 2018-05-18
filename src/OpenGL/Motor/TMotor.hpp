@@ -56,6 +56,7 @@ public:
 	//CREACION DE ANIMACIONES
 	TNodo * createStaticMeshNode(TNodo * padre, const char * path, const char * name);
 	TNodo * createAnimationNode(TNodo * padre, TAnimacion * mesh, const char * name);
+	void addPadre(TNodo * padre, TNodo * hijo);
 	TAnimacion * createAnimation(const char * path, int framesIni, int framesFin);
 	obj3D *newAnimation(const char * name, const char * path, const char * parentNode, int framesIni, int framesFin);
 

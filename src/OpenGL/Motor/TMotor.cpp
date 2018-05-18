@@ -60,7 +60,7 @@ TMotor::TMotor() {
 	gestorSonido->setListenerData();
 
 	//Se inicializa el gestor de imagenes
-	TGestorImagenes::getInstacia();
+	TGestorImagenes::getInstancia();
 
 	//Se inicializa IMGUI
 	initDebugWindow();
@@ -108,6 +108,7 @@ void TMotor::getInputs() {
 	glfwPollEvents();
 }
 
+//Funcion para crear el nodo raiz del arbol de la escena
 void TMotor::nuevaEscenaRaiz() {
 	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena)
 }
@@ -169,7 +170,8 @@ void TMotor::cleanHUD() {
 
 //Funcion para limpiar todos los objetos en cualquier momento
 void TMotor::cleanScene() {
-	//Billboards
+	
+	//Billboards 
 	if(billboards.size() > 0){
 		for (int i = 0; i < billboards.size(); i++) {
 			delete billboards[i];
@@ -185,7 +187,6 @@ void TMotor::cleanScene() {
 		particleSystems.clear();
 	}
 
-
 	//Hud y Menus
 	if(HUDs.size() > 0){
 		for (int i = 0; i < HUDs.size(); i++) {
@@ -195,13 +196,12 @@ void TMotor::cleanScene() {
 	}
 
 
-
 	cameras.clear();
 	lights.clear();
 	activeLights.clear();	
 	notShadowObjects.clear();
-	delete gestorRecursos;
-	gestorRecursos = new TGestorRecursos();
+	//delete gestorRecursos;
+	//gestorRecursos = new TGestorRecursos();
 
 }
 

@@ -65,7 +65,7 @@ EscenaJuego::~EscenaJuego() {
 	limpiar();
 
 
-	TMotor::instancia().cleanScene();
+	TMotor::instancia().cleanHUD();
 	delete fuenteCarrera;
 	delete fuenteCountDown;
 	//delete luces

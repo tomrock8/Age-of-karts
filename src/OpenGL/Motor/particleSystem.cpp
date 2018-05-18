@@ -182,7 +182,7 @@ void particleSystem::draw(Shader *s){
 
     //Activamos la textura 0 y enlazamos la imagen del elemento hud
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, TGestorImagenes::getInstacia()->cargarImagen("assets/smoke.png")->getID());
+    glBindTexture(GL_TEXTURE_2D, TGestorImagenes::getInstancia()->cargarImagen("assets/smoke.png")->getID());
     //Le pasamos la textura al shader
     s->setInt("image", 0);
 

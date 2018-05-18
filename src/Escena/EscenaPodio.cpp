@@ -228,15 +228,19 @@ void EscenaPodio::init() {
 	particulas.at(0)->setPosition(glm::vec3(-8.5, 0.2, -8));
 	particulas.at(0)->setSize(0.15f);
 	particulas.at(0)->setType(1);
+	particulas.at(0)->setColor(glm::vec3(1.0, 0.0, 0.0));
 	particulas.at(1)->setPosition(glm::vec3(10, 0.2, -8));
 	particulas.at(1)->setSize(0.15f);
 	particulas.at(1)->setType(1);
+	particulas.at(1)->setColor(glm::vec3(1.0, 0.0, 0.0));
 	particulas.at(2)->setPosition(glm::vec3(10, 0.2, 10));
 	particulas.at(2)->setSize(0.15f);
 	particulas.at(2)->setType(1);
+	particulas.at(2)->setColor(glm::vec3(1.0, 0.0, 0.0));
 	particulas.at(3)->setPosition(glm::vec3(-8.5, 0.2, 10));
 	particulas.at(3)->setSize(0.15f);
 	particulas.at(3)->setType(1);
+	particulas.at(3)->setColor(glm::vec3(1.0, 0.0, 0.0));
 
 }
 

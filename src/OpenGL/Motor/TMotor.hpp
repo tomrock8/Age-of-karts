@@ -210,8 +210,6 @@ protected:
 	bool levelOfDetail = true; //LEVEL OF DETAIL activado por defecto
 	bool clouds = false; //NUBES desactivadas por defecto
 
-	
-
 	// ----------------------
 	//  METODOS PRIVADOS
 	// ----------------------

@@ -34,6 +34,7 @@ class particleSystem
         void setOrientation(glm::vec3 o);
         void setSize(float s);
         void setColor(glm::vec3 c);
+        void setType(int i);
 
     private:
         // --- VARIABLES ---
@@ -47,6 +48,9 @@ class particleSystem
         glm::vec3 oriParticle; //Orientacion del sistema de particulas
         float sizeParticle; //Tamanyo del sistema de particulas
         glm::vec3 colorParticle; //Color del sistema de particulas
+
+        int typeParticle = 0; //Tipo de sistema de particulas // | 0 == normal | 1 == hacia arriba
+        float reduceLife = 0.1f; //Reduccion a la vida de las particulas en cada iteracion
 
         GLuint VAO, VBO, VBO_position; //Buffers de Opengl
         GLfloat *position_data; //Array de datos de posicion que se rellena en cada iteracion y despues se le pasa al buffer

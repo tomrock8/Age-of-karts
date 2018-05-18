@@ -131,6 +131,19 @@ void particleSystem::setColor(glm::vec3 c){
     colorParticle = c;
 }
 
+//Funcion para setear el tipo de sistema de particulas
+void particleSystem::setType(int i){
+    typeParticle = i;
+    //Modificamos los parametros segun el tipo de sistema definido
+    if ( i == 0){
+        reduceLife = 0.1f;
+        newParticlesPerIteration = 5;
+    } else {
+        reduceLife = 0.02f;
+        newParticlesPerIteration = 6;
+    }
+}
+
 //Funcion que actualiza el contenedor de particulas en cada iteracion para producir el ciclo de vida/muerte de las mismas
 void particleSystem::update(){
     //Primero, añadimos las nuevas particulas de cada iteracion
@@ -143,11 +156,12 @@ void particleSystem::update(){
 
     for (int i = 0; i < numMaxParticles; i++){
         Particula *p = particulas.at(i); //Recogemos la particula del contenedor
-        p->life -= 0.1; //Reducimos su vida
+        p->life -= reduceLife; //Reducimos su vida
 
 
         if (p->life > 0.0f){ //Si aun sigue viva...
             p->size += sizeParticle; //Modificamos el tamaño de la particulas con el tiempo
+            if ( typeParticle == 1) p->position[1] += 0.5; //Si el sistema es de tipo 1, modificamos la 1 de las particulas para que vayan hacia arriba
             //Llenamos los buffers que anteriormente hemos declarado
             // --- POSICION Y TAMANYO ---
             position_data[4*particlesAlive+0] = p->position[0];

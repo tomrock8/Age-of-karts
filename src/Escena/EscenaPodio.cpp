@@ -8,9 +8,12 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 	primero = TMotor::instancia().newMeshNode("primeraPosicion", " ", "escena_raiz", false); //textura cualquiera pues se eliminara
 	segundo = TMotor::instancia().newMeshNode("segundaPosicion", " ", "escena_raiz", false); //textura cualquiera pues se eliminara
 	tercero = TMotor::instancia().newMeshNode("terceraPosicion", " ", "escena_raiz", false); //textura cualquiera pues se eliminara
-	primero->setPosition(0, 3.83675, 0);
-	segundo->setPosition(-5.06887, 7.40514, 0);
-	tercero->setPosition(5.09683, 7.50068, 0);
+	primero->setPosition(0, 6.5, 0);
+	primero->setScale(0.75, 0.75, 0.75);
+	segundo->setPosition(-5.06887, 3.83675, 0);
+	segundo->setScale(0.75, 0.75, 0.75);
+	tercero->setPosition(5.09683, 3.83675, 0);
+	tercero->setScale(0.75, 0.75, 0.75);
 	//comprobaciones de puesto
 	segundoPuesto = false;
 	tercerPuesto = false;
@@ -203,14 +206,17 @@ void EscenaPodio::init() {
 	particulas.at(1)->setPosition(glm::vec3(10, 0.2, -8));
 	particulas.at(1)->setSize(0.15f);
 	particulas.at(1)->setType(1);
-	particulas.at(1)->setColor(glm::vec3(1.0, 0.0, 0.0));
+	particulas.at(1)->setColor(glm::vec3(0.0, 0.0, 1.0));
 	particulas.at(2)->setPosition(glm::vec3(10, 0.2, 10));
 	particulas.at(2)->setSize(0.15f);
 	particulas.at(2)->setType(1);
-	particulas.at(2)->setColor(glm::vec3(1.0, 0.0, 0.0));
+	particulas.at(2)->setColor(glm::vec3(0.0, 1.0, 0.0));
 	particulas.at(3)->setPosition(glm::vec3(-8.5, 0.2, 10));
 	particulas.at(3)->setSize(0.15f);
 	particulas.at(3)->setType(1);
+	particulas.at(3)->setColor(glm::vec3(1.0, 0.5, 0.0));
+
+
 	//activamos animaciones
 	//primero
 	static_cast<TAnimacion*>(primero->getNode()->getEntidad())->setVisible(true);

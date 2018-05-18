@@ -47,8 +47,8 @@ CorredorIA::CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(po
 	valorGiroFuerte = 0.18;
 
 	//control de animaciones
-	animacionPrevia = getAnimQuieto();
-	iniciarAnimacion(PARADO, animacionPrevia,NULL);
+	animacionPrevia = getGiroDerFin();
+	//iniciarAnimacion(PARADO, animacionPrevia,NULL);
 	giroDer = false;
 	giroIzq = false;
 
@@ -1132,10 +1132,8 @@ void CorredorIA::updateHijos() {
 
 void CorredorIA::deleteArbol() {
 
-	arbolconduccion->deleteNodosArbol();
-	delete arbolconduccion;
-	arbolobjetos->deleteNodosArbol();
-	delete arbolobjetos;
+	
+	
 
 }
 
@@ -1144,7 +1142,9 @@ void CorredorIA::actualizarItem() {
 }
 
 CorredorIA::~CorredorIA() {
-
+	cout<<"ENTRO AL DSTRUCTOR IA"<<endl;
+	delete arbolconduccion;
+	delete arbolobjetos;
 }
 
 
@@ -1153,7 +1153,9 @@ void CorredorIA::setDebugFisicas(bool activo) {
 }
 
 bool CorredorIA::getDebugFisicas() {
+	
 	return debugFisicas;
+
 }
 
 

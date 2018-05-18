@@ -9,7 +9,16 @@ ArbolDecision::ArbolDecision(){
 }
 
 ArbolDecision::~ArbolDecision(){
-
+    
+    //cout<<"NUMERO DE NODOS DEL ARBOL"<< arrayNodos.size()<<endl;
+    if(arrayNodos.size()>0){
+	delete arrayNodos.at(0);	
+    //cout<<"HE BORRADO EL ARBOL"<<endl;
+    arrayNodos.clear();
+    NodoRuta=NULL;
+    }else{
+      //  cout<<"out of range"<<endl;
+    }
 }
 
  void ArbolDecision::nuevoNodoDecision(int nodopadre,int idnodo,tipo_nodo tipodecision,tipo_parametro parametro,int valor,bool booleano){
@@ -62,11 +71,11 @@ int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj,int jugador){
     while(!check && cont!=NodoRuta->getHijos().size()){
         
         if(NodoRuta->getHijos().at(cont)->getSalto()){
-            cout<<"COMEPOLLAS1"<<endl;
+            
             for(int i=0 ; i < arrayNodos.size() ; i++){
             if(arrayNodos.at(i)->getid() == NodoRuta->getHijos().at(cont)->getidNodoSalto()){
                 NodoRuta=arrayNodos.at(i);
-                cout<<"COMEPOLLAS"<<endl;
+                
                 return 0;
             }
             
@@ -109,9 +118,5 @@ int ArbolDecision::recorrerArbol(bool arrayboleanos[], int obj,int jugador){
 
 void ArbolDecision::deleteNodosArbol(){
 
-    for(int i=0 ; i< arrayNodos.size();i++){
-
-        delete arrayNodos.at(i);
-
-    }
+    
 }

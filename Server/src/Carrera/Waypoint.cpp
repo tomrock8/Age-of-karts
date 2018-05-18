@@ -1,11 +1,16 @@
 #include "Waypoint.hpp"
+#include "TMotor.hpp"
+#include "MotorFisicas.hpp"
+#include "math.h"
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for C++  
+#endif
 
 Waypoint::Waypoint() {
-	waypoint = Motor3d::instancia().getScene()->addCubeSceneNode(0.1f);
-	waypoint->setMaterialFlag(EMF_LIGHTING, false); //Desactivar iluminacion
-	Motor3d::instancia().getScene()->getMeshManipulator()->setVertexColors(waypoint->getMesh(), SColor(255, 200, 100, 100));
+	waypoint = TMotor::instancia().newMeshNode("Waypoint", "assets/wall/wall.obj", "escena_raiz", false);
+	//waypoint->setPosition(0.0f, -100.0f, -300.0f);
 	waypoint->setVisible(false);
-	waypoint->setScale(vector3df(1500, 150, 05));
+	//waypoint->setScale(vector3df(1500, 150, 05));
 	waypoint->setName("Waypoint");
 	siguiente = NULL; // Referenciar despues con la funcion
 }
@@ -13,21 +18,21 @@ Waypoint::Waypoint() {
 void Waypoint::inicializarFisicas() {
 
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	vector<btRigidBody *> objetos = bullet->getObjetos();
+	std::vector<btRigidBody *> objetos = bullet->getObjetos();
 
 	//posicion origem 
 	btTransform transform;
 	transform.setIdentity();
-	transform.setOrigin(btVector3(waypoint->getPosition().X, waypoint->getPosition().Y, waypoint->getPosition().Z));
+	transform.setOrigin(btVector3(waypoint->getPosition().x, waypoint->getPosition().y, waypoint->getPosition().z));
 	btQuaternion quaternion;
-	quaternion.setEulerZYX(waypoint->getRotation().Z* PI / 180, waypoint->getRotation().Y * PI / 180, waypoint->getRotation().X* PI / 180);
+	quaternion.setEulerZYX(waypoint->getRotation().z* M_PI / 180, waypoint->getRotation().y * M_PI / 180, waypoint->getRotation().x* M_PI / 180);
 	transform.setRotation(quaternion);
 
 	MotionState = new btDefaultMotionState(transform);
 
 	// Create the shape
 
-	Shape = new btBoxShape(btVector3(waypoint->getScale().X*0.05f, waypoint->getScale().Y*0.05f, waypoint->getScale().Z*0.05f));
+	Shape = new btBoxShape(btVector3(950 * 0.05f, 150 * 0.05f, 5 * 0.05f));
 
 	// sin masa
 	btVector3 localInertia;
@@ -48,11 +53,16 @@ void Waypoint::inicializarFisicas() {
 	bullet->setObjetos(objetos);
 
 }
-
+Waypoint::~Waypoint() {
+	cout << "delete waypoint\n" << endl;
+	siguiente = nullptr;
+	delete waypoint;
+}
 
 // MEtodos SET
 void Waypoint::setPosicion(float x, float y, float z) {
-	waypoint->setPosition(vector3df(x, y, z));
+	//waypoint->setPosition(x, y, z);
+	waypoint->setPosition(x, y, z);
 }
 
 void Waypoint::setSiguiente(Waypoint *siguiente) {
@@ -60,44 +70,26 @@ void Waypoint::setSiguiente(Waypoint *siguiente) {
 }
 
 void Waypoint::setOrientacion(float grado) {
-	waypoint->setRotation(vector3df(0.0f, grado, 0.0f));
+	waypoint->setRotation(0.0f, grado, 0.0f);
 }
 
 // Metodos GET
 btVector3 Waypoint::getPosicion() {
-	return btVector3(waypoint->getPosition().X, waypoint->getPosition().Y, waypoint->getPosition().Z);
+	return btVector3(waypoint->getPosition().x, waypoint->getPosition().y, waypoint->getPosition().z);
 }
 btVector3 Waypoint::getRotation() {
-	return btVector3(waypoint->getRotation().X, waypoint->getRotation().Y, waypoint->getRotation().Z);
-}
-Waypoint *Waypoint::getNextWaypoint() {
-	return siguiente;
+	return btVector3(waypoint->getRotation().x, waypoint->getRotation().y, waypoint->getRotation().z);
 }
 
-IMeshSceneNode *Waypoint::getWaypoint() {
-	return waypoint;
-}
-int Waypoint::getID(){
-	return id;
-}
-
-Waypoint::~Waypoint() {
-	cout << "ENTRO DELETE WAYPOINT " <<endl;
-	siguiente = nullptr;
-	cout << " SALGO DELETE WAYPOINT \n" << endl;
-}
-void Waypoint::setVector1(btVector3 p) {
-	vector1 = p;
-}
-void Waypoint::setVector2(btVector3 p2) {
-	vector2 = p2;
-}
-btVector3 Waypoint::getVector1() {
-	return vector1;
-}
-btVector3 Waypoint::getVector2() {
-	return vector2;
-}
-void Waypoint::setID(int i){
-	id=i;
-}
+Waypoint *Waypoint::getNextWaypoint() { return siguiente; }
+obj3D *Waypoint::getWaypoint() { return waypoint; }
+int Waypoint::getID() { return id; }
+void Waypoint::setVector1(btVector3 p) { vector1 = p; }
+void Waypoint::setVector2(btVector3 p2) { vector2 = p2; }
+void Waypoint::setVector3(btVector3 p3) { vector3 = p3; }
+void Waypoint::setVector4(btVector3 p4) { vector4 = p4; }
+btVector3 Waypoint::getVector1() { return vector1; }
+btVector3 Waypoint::getVector2() { return vector2; }
+btVector3 Waypoint::getVector3() { return vector3; }
+btVector3 Waypoint::getVector4() { return vector4; }
+void Waypoint::setID(int i) { id = i; }

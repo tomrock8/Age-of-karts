@@ -8,8 +8,8 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 	giroDer = false;
 	giroIzq = false;
 	//control de animaciones
-	animacionPrevia = getAnimQuieto();
-	iniciarAnimacion(PARADO, animacionPrevia,NULL);
+	animacionPrevia = NULL;
+	/*iniciarAnimacion(PARADO, animacionPrevia,NULL);*/
 
 
 }

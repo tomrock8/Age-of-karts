@@ -125,20 +125,37 @@ void EscenaJuego::init() {
 	vueltas_aux.push_back(1);
 	muestra_tiempo.push_back(0);
 	show_another_window[0]=false;
-	for (int mandos = 1; mandos < 4; mandos++) {
-		if (glfwJoystickPresent(mandos) == 1) {
-			std::cout << "Mando " << mandos << " detectado!" << std::endl;
-			crearHUD(numPantallas);
-			habilidad.push_back(0);
-			inc_habilidad.push_back(0);
-			vueltas.push_back(1);
-			vueltas_aux.push_back(1);
-			show_another_window[numPantallas]=false;
-			muestra_tiempo.push_back(0);
-			numPantallas++;
+	if (tipoEscena != Escena::tipo_escena::ONLINE) {
+		for (int mandos = 1; mandos < 4; mandos++) {
+			if (glfwJoystickPresent(mandos) == 1) {
+				std::cout << "Mando " << mandos << " detectado!" << std::endl;
+				numPantallas++;
+			}
+		}
+		int num_jugadores=0;
+		client = Client::getInstancia();
+		for (int i=0;i<client->getClientes().size();i++){
+			if(client->getClientes().at(i).corredorJugador){
+				num_jugadores++;
+			}
+		}
+		
+		if (numPantallas!=num_jugadores){
+			numPantallas=1;
+			
+		}else{
+			cout<<"peto1\n";
+			for (int i=1;i<numPantallas;i++){
+				crearHUD(i);
+				habilidad.push_back(0);
+				inc_habilidad.push_back(0);
+				vueltas.push_back(1);
+				vueltas_aux.push_back(1);
+				show_another_window[i]=false;
+				muestra_tiempo.push_back(0);
+			}
 		}
 	}
-	
 	
 	// Gravedad
 	gravedad = -10.0f;
@@ -184,7 +201,7 @@ void EscenaJuego::init() {
 	pos2[5].setY(Pista::getInstancia()->getParrilla().at(0).y);
 	pos2[5].setZ(Pista::getInstancia()->getParrilla().at(0).z);
 
-	client = Client::getInstancia();
+	
 	int numClients = client->getClientes().size();
 	Corredor::tipo_jugador tj;
 
@@ -218,8 +235,9 @@ void EscenaJuego::init() {
 			if (i == controlPlayer) {
 				jugador = new CorredorJugador(pos2[i], tj);
 			}
-			else
+			else{
 				jugador = new CorredorRed(pos2[i], tj);
+			}
 		}
 		jugador->setID(i);
 		pj.push_back(jugador);
@@ -271,6 +289,11 @@ void EscenaJuego::init() {
 	io.Fonts->AddFontDefault();
 	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf", 30.0f);
 
+	//----------------------	
+	// NUBES
+	//----------------------
+	//Creamos un area de nubes entre las posiciones -2000 y 2000 en el ancho y largo y a una altura entre 150 y 300, con 30 nubes
+	TMotor::instancia().newClouds(-2000, 2000, 150, 300, -2000, 2000, 50);
 
 	//-----------------------
 	// OPENAL
@@ -345,11 +368,12 @@ void EscenaJuego::dibujar() {
 		TMotor::instancia().setActiveCamera(TMotor::instancia().getCameraByIndex(i));
 		//Dibujamos el skybox
 		TMotor::instancia().drawSkybox();
+		//Dibujamos las nubes
+		TMotor::instancia().drawClouds();
 		//Dibujamos los objetos 3D creados en la escena
-		TMotor::instancia().drawProjectedShadows();
 		TMotor::instancia().draw();
 		//Dibujamos las sombras de los objetos
-		//TMotor::instancia().drawProjectedShadows();
+		TMotor::instancia().drawProjectedShadows();
 		//Dibujamos el debug de bullet
 		TMotor::instancia().drawDebugBullet();
 		//Dibujamos las particulas
@@ -550,6 +574,7 @@ void EscenaJuego::renderDebug(int i) {
 			| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal);
 			if (numPantallas>1)
 			//fontsize
+			cout<<vueltas.at(i)<<" max: "<<Pista::getInstancia()->getNumVueltas();
 			if (vueltas.at(i)<=Pista::getInstancia()->getNumVueltas()){
 				Corredor *pj1=GestorJugadores::getInstancia()->getJugadores().at(i);
 				ImGui::Text("Tiempo vuelta: ");
@@ -585,6 +610,7 @@ void EscenaJuego::limpiar() {
 }
 
 void EscenaJuego::update() {
+
 	Pista *pistaca = Pista::getInstancia();
 	std::vector<Item *> items = pistaca->getItems();
 	pj = GestorJugadores::getInstancia()->getJugadores();
@@ -722,6 +748,9 @@ void EscenaJuego::update() {
 			pj.at(i)->update();
 		}
 
+
+	std::cout << "Entro update3\n";
+
 		//textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 		//if (jugadores->getNumJugadores() != 0)
 			//textoDebug->agregar(pj.at(controlPlayer)->toString());
@@ -737,6 +766,9 @@ void EscenaJuego::update() {
 			//client->PlayerAction();
 			client->UpdateNetworkKeyboard();
 		}
+
+	std::cout << "Entro update4\n";
+
 	}
 	if (GestorJugadores::getInstancia()->getNumJugadores() != 0)
 		if (gc->update())
@@ -806,6 +838,9 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		end = true;
+	}
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_U) == GLFW_PRESS) {
+		return Escena::tipo_escena::PODIO;
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end == true) {
 		if (tipoEscena == Escena::tipo_escena::ONLINE) {

@@ -1,0 +1,54 @@
+# Blender MTL File: 'Chino base.blend'
+# Material Count: 4
+
+newmtl ChasisChinoMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump kartChino_normal.png
+map_Kd kartChino_diffuse.png
+map_Ks kartChino_specular.png
+
+newmtl ChinoMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump Chino_normal.png
+map_Kd Chino_diffuse.png
+map_Ks kartChino_specular.png
+
+newmtl Tubos
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump tuboEscape_normal.png
+map_Kd tuboEscape_diffusa.png
+map_Ks tuboEscape_specular.png
+
+newmtl asientoChinoMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump asiento_normal.png
+map_Kd asiento_diffusa.png
+map_Ks asiento_specular.png

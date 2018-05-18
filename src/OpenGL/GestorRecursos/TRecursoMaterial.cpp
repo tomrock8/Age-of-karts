@@ -26,17 +26,17 @@ TRecursoMaterial::TRecursoMaterial(const aiMaterial *mat) {
 }
 
 TRecursoMaterial::~TRecursoMaterial() {
-	delete[] color_ambient;
-	delete[] color_diffuse;
-	delete[] color_specular;
+	//delete[] color_ambient;
+	//delete[] color_diffuse;
+	//delete[] color_specular;
 	
 }
 
 //PASARLE AL SHADER EL MATERIAL ANTES DEL DIBUJADO
 void TRecursoMaterial::activeMaterial(Shader *shader){
-	shader->setVec4("material.color_ambient", color_ambient[0], color_ambient[1], color_ambient[2], color_ambient[3]);
-	shader->setVec4("material.color_diffuse", color_diffuse[0], color_diffuse[1], color_diffuse[2], color_diffuse[3]);
-	shader->setVec4("material.color_specular", color_specular[0], color_specular[1], color_specular[2], color_specular[3]);
+	shader->setVec4("material.color_ambient", glm::vec4(color_ambient[0], color_ambient[1], color_ambient[2], color_ambient[3]));
+	shader->setVec4("material.color_diffuse", glm::vec4(color_diffuse[0], color_diffuse[1], color_diffuse[2], color_diffuse[3]));
+	shader->setVec4("material.color_specular", glm::vec4(color_specular[0], color_specular[1], color_specular[2], color_specular[3]));
 	shader->setFloat("material.brightness", shiny);
 }
 

@@ -7,7 +7,6 @@
 #include <string>
 
 #define MAX_CLIENTS 4
-#define MAX_PLAYERS 6
 
 struct structPrediccion{
 	int timeStamp;
@@ -15,11 +14,11 @@ struct structPrediccion{
 	float rotacion[3];
 };
 
-struct structClientes{
+struct structClients{
     std::string ip;
     int tipoCorredor;
     bool ready;
-    vector<structPrediccion> prediccion;
+    std::vector<structPrediccion> prediccion;
 };
 
 struct structPaquetes{
@@ -35,6 +34,8 @@ struct structPaquetes{
 class Server
 {
     private:
+        static Server *instancia;
+
         int numSockets;
         int numIPs;
         int maxPlayers;
@@ -47,7 +48,7 @@ class Server
         RakNet::MessageID typeID;
         RakNet::Packet *p;
 
-        vector<Corredor*> players;
+        std::vector<Corredor*> players;
         int controlPlayer;
         int numPlayers;
         bool spawned;
@@ -55,20 +56,23 @@ class Server
         int timeStamp;
 
         bool started;
-        vector<int> arrayReady;
-        vector<int> arrayTipoCorredor;
-        vector<structClientes> clientes;
-        vector<structPaquetes> paquetes;
+        std::vector<int> arrayReady;
+        std::vector<int> arrayTipoCorredor;
+        std::vector<structClients> clientes;
+        std::vector<structPaquetes> paquetes;
 
         unsigned char GetPacketIdentifier(RakNet::Packet *p);
         void DebugServerInfo();
 
     public:
+        static Server *getInstancia();
         Server(int);
         void CreateServerInterface();
         void ServerStartup();
         void ShutDownServer();
         void ReceivePackets();
+        void RaceStartSend();
+        void RaceStart();
         void refreshServer();
         int getCommands();
         void GetConnectionList();
@@ -79,6 +83,8 @@ class Server
         void AddSend(RakNet::BitStream *bitstreamStruct, PacketPriority priority, PacketReliability reliability, int desconocido, RakNet::AddressOrGUID receptor, bool envio);
         void Update();
         void aumentarTimestamp();
+
+        std::string getStringClients();
 
         RakNet::RakPeerInterface *server;
 

@@ -1,13 +1,16 @@
 #include "Shader.hpp"
 
+//------------------------------------------------------------------------------------------------
+// CONSTRUCTOR QUE CREA UN SHADER A PARTIR DE LOS ARCHIVOS DE LOS DISTINTOS SHADERS QUE LO FORMAN
+//------------------------------------------------------------------------------------------------
 
-//CONSTRUCTOR DEL SHADER: RECOGE DE FICHERO Y COMPILA VERTEX Y FRAGMENT
-//SHADER PARA CREAR EL PROGRAMA SHADER QUE SE VA A USAR
-
-Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
+Shader::Shader(const char* n, const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 {
-	//crear el program object
+	//Guardamos el nombre del shader
+	shaderName = n;
+	//Crear el program object
 	program = glCreateProgram();
+
 	//**********************************************************************************
 	//**********************************************************************************
 	// 1. Recuperar el vertex y fragment shader a partir de fichero
@@ -19,21 +22,17 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geo
 	std::ifstream vShaderFile(vertexPath);
 	std::ifstream fShaderFile(fragmentPath);
 
-	// Los ifstream lanzan excepciones en caso de fallo
-	vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-	fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-
 	try
 	{
-		//abrir los archivos
+		//Abrimos los archivos
 		std::stringstream vShaderStream, fShaderStream, gShaderStream;
-		//leer el contenido del buffer de los archivos en los streams
+		//Leemos el contenido de los archivos y lo guardamos en el stream
 		vShaderStream << vShaderFile.rdbuf();
 		fShaderStream << fShaderFile.rdbuf();
-		//cerrar los manejadores de los archivos
+		//Cerramos los manejadores de los archivos
 		vShaderFile.close();
 		fShaderFile.close();
-		//convertir stream a string
+		//Convertimos los streams a strings
 		vertexCode = vShaderStream.str();
 		fragmentCode = fShaderStream.str();
 		//Si tiene geometry shader, lo utilizamos
@@ -46,11 +45,12 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geo
 	}
 	catch (std::ifstream::failure e)
 	{
-		std::cout << "(Shader::Shader) ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+		std::cout << "ERROR: No se han podido leer los archivos del SHADER" << std::endl;
 	}
 
-	const char* vShaderCode = vertexCode.c_str();
-	const char* fShaderCode = fragmentCode.c_str();
+	//Convertimos los strings a const char
+	const char* vertexShaderCode = vertexCode.c_str();
+	const char* fragmentShaderCode = fragmentCode.c_str();
 
 	//**********************************************************************************
 	//**********************************************************************************
@@ -58,158 +58,170 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geo
 	//**********************************************************************************
 	//**********************************************************************************
 
+	int success; //Para almacenar el exito o fracaso de la operacion
+	char infoLog[512]; //para almacenar el error obtenido en caso de fracaso en la creacion de cada shader
+
 	//======================================================================================================
 	//Compilar el VERTEX SHADER recogido antes mediante un objeto shader
 	//======================================================================================================
 
-	unsigned int vertexShader; //para almacenar el shader
-	int success;
-	char infoLog[512];
+	unsigned int vertexShader; //Para almacenar el vertex shader creado
 
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);    //decimos que se trata de un vertex shader
-														//en el momento de crearlo
-	glShaderSource(vertexShader, 1, &vShaderCode, NULL); //adjuntamos el codigo fuente del shader al objeto creado
-	glCompileShader(vertexShader); //compilamos el shader
+	//Le decimos a OpenGL que se trata de un vertex shader
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	//Adjuntamos el codigo del vertex shader que hemos leido anteriormente
+	glShaderSource(vertexShader, 1, &vertexShaderCode, NULL);
+	//Compilamos el vertex shader
+	glCompileShader(vertexShader);
 
-	//comprobacion de errores a la hora del compilado
+	//Funcion que devuelve el resultado de la operacion
 	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+	//En caso de error, recogemos el error y lo mostramos por pantalla
 	if (!success)
 	{
 		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "(Shader::Shader) ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << "ERROR en compilacion de VERTEX SHADER: " << infoLog << std::endl;
 	}
 
 	//======================================================================================================
 	//Compilar el FRAGMENT SHADER recogido antes mediante un objeto shader
 	//======================================================================================================
 
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); //se trata de un fragment shader
-	glShaderSource(fragmentShader, 1, &fShaderCode, NULL);
+	unsigned int fragmentShader; //Para almacenar el fragment shader creado
+
+	//Le decimos a OpenGL que se trata de un fragment shader
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	//Adjuntamos el codigo del fragment shader que hemos leido anteriormente
+	glShaderSource(fragmentShader, 1, &fragmentShaderCode, NULL);
+	//Compilamos el fragment shader
 	glCompileShader(fragmentShader);
 
-	//comprobacion de errores a la hora del compilado
+	//Funcion que devuelve el resultado de la operacion
 	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+	//En caso de error, recogemos el error y lo mostramos por pantalla
 	if (!success)
 	{
 		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "(Shader::Shader) ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << "ERROR en compilacion de FRAGMENT SHADER: " << infoLog << std::endl;
 	}
 
 	//======================================================================================================
-	//Compilar el GEOMETRY SHADER recogido antes mediante un objeto shader (si hay geometru shader)
+	//Compilar el GEOMETRY SHADER recogido antes mediante un objeto shader (si hay geometry shader)
 	//======================================================================================================
 
-	unsigned int geometryShader;
+	unsigned int geometryShader; //Para almacenar el geometry shader creado
 
-	if (geometryPath != nullptr){
+	if (geometryPath != nullptr){ //Si existe geometry shader...
+		//Convertimos el string a char
 		const char* gShaderCode = geometryCode.c_str();
 
-		geometryShader = glCreateShader(GL_GEOMETRY_SHADER); //se trata de un geometry shader
+		//Le decimos a OpenGL que se trata de un geometry shader
+		geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+		//Adjuntamos el codigo del geometry shader que hemos leido anteriormente
 		glShaderSource(geometryShader, 1, &gShaderCode, NULL);
+		//Compilamos el geometry shader
 		glCompileShader(geometryShader);
 
-		//comprobacion de errores a la hora del compilado
+		//Funcion que devuelve el resultado de la operacion
 		glGetShaderiv(geometryShader, GL_COMPILE_STATUS, &success);
 		if (!success)
 		{
+			//En caso de error, recogemos el error y lo mostramos por pantalla
 			glGetShaderInfoLog(geometryShader, 512, NULL, infoLog);
-			std::cout << "(Shader::Shader) ERROR::SHADER::GEOMETRY::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
+			std::cout << "ERROR en compilacion de GEOMTRY SHADER: " << infoLog << std::endl;
+		}
 	}
 
-	//======================================================================================================
-	//Creamos un SHADER PROGRAM linkeando los dos shader anteriores (tras compilarlos) y que usaremos para 
-	//el renderizado
-	//======================================================================================================
+	//******************************************************************************************
+	//******************************************************************************************
+	// 3. Creamos el programa Shader linkeando los shaders que hemos creado en el paso anterior
+	//******************************************************************************************
+	//******************************************************************************************
 
-	ID = glCreateProgram(); // creamos el shader program
-	glAttachShader(ID, vertexShader);    //|adjuntamos ambos shaders
-	glAttachShader(ID, fragmentShader);  //|
+	//Creamos el programa shader guardando su id
+	ID = glCreateProgram();
+	glAttachShader(ID, vertexShader);    //|
+	glAttachShader(ID, fragmentShader);  //|Adjuntamos el vertex y shader fragment
 	if (geometryPath != nullptr){		 // Si hay geometry shader, lo adjuntamos tambien
 		glAttachShader(ID, geometryShader); 
 	}
-	glLinkProgram(ID); //y los linkeamos
+	glLinkProgram(ID); //Linkeamos el shader despues de adjuntar los distintos tipos de shaders
 
-	//comprobacion de errores a la hora del linkeado
+	//Funcion que devuelve el resultado de la operacion
 	glGetProgramiv(ID, GL_LINK_STATUS, &success);
 	if (!success) {
+		//En caso de error, recogemos el error y lo mostramos por pantalla
 		glGetProgramInfoLog(ID, 512, NULL, infoLog);
-		std::cout << "(Shader::Shader) ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+		std::cout << "ERROR en linkeado del SHADER: " << infoLog << std::endl;
 	}
 
-	glDeleteShader(vertexShader);   //|eliminamos los shader objects
-	glDeleteShader(fragmentShader); //|ya no los necesitamos tras linkearlos
-	if (geometryPath != nullptr){	// Si hay geometry shader, lo eliminamos tambien
+	//Una vez linkeados, eliminamos los distintos shaders creados
+	glDeleteShader(vertexShader); 
+	glDeleteShader(fragmentShader);
+	if (geometryPath != nullptr){	
 		glDeleteShader(geometryShader); 
 	}
 }
 
-//USAR EL PROGRAMA SHADER CREADO EN EL CONSTRUCTOR
+//-----------------------------
+// FUNCIONES DE USO DEL SHADER
+//-----------------------------
 
-void Shader::use()
-{
+//Funcion para activar el shader antes de su uso
+void Shader::use(){
 	glUseProgram(ID);
 }
+//Funcion que devuelve la ID del shader
+GLuint Shader::getID(){
+	return ID;
+}
+//Funcion que devuelve el numero de programa del shader
+GLuint Shader::getProgram(){
+	return program;
+}
+//Funcion que devuelve el nombre del shader
+const char* Shader::getName(){
+	return shaderName;
+}
 
-//FUNCIONES PARA ESTABLECER LOS VALORES DE LOS UNIFORM
+//---------------------------------------------
+// FUNCIONES PARA EL PASO DE UNIFORMS AL SHADER
+//---------------------------------------------
 
-void Shader::setBool(const std::string &name, bool value) const
-{
+//Funcion que establece un uniform de tipo boolean
+void Shader::setBool(const std::string &name, bool value) const{
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
-// ------------------------------------------------------------------------
-void Shader::setInt(const std::string &name, int value) const
-{
+//Funcion que establece un uniform de tipo int
+void Shader::setInt(const std::string &name, int value) const{
 	glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
-// ------------------------------------------------------------------------
-void Shader::setFloat(const std::string &name, float value) const
-{
+//Funcion que establece un uniform de tipo float
+void Shader::setFloat(const std::string &name, float value) const{
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
-// ------------------------------------------------------------------------
-void Shader::setVec2(const std::string &name, const glm::vec2 &value) const
-{
+//Funcion que establece un uniform de tipo vec2
+void Shader::setVec2(const std::string &name, const glm::vec2 &value) const{
 	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
-void Shader::setVec2(const std::string &name, float x, float y) const
-{
-	glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
-}
-// ------------------------------------------------------------------------
-void Shader::setVec3(const std::string &name, const glm::vec3 &value) const
-{
+//Funcion que establece un uniform de tipo vec3
+void Shader::setVec3(const std::string &name, const glm::vec3 &value) const{
 	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
-void Shader::setVec3(const std::string &name, float x, float y, float z) const
-{
-	glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
-}
-// ------------------------------------------------------------------------
-void Shader::setVec4(const std::string &name, const glm::vec4 &value) const
-{
+//Funcion que establece un uniform de tipo vec4
+void Shader::setVec4(const std::string &name, const glm::vec4 &value) const{
 	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
-void Shader::setVec4(const std::string &name, float x, float y, float z, float w)
-{
-	glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
-}
-// ------------------------------------------------------------------------
-void Shader::setMat2(const std::string &name, const glm::mat2 &mat) const
-{
+//Funcion que establece un uniform de tipo mat2
+void Shader::setMat2(const std::string &name, const glm::mat2 &mat) const{
 	glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
-// ------------------------------------------------------------------------
-void Shader::setMat3(const std::string &name, const glm::mat3 &mat) const
-{
+//Funcion que establece un uniform de tipo mat2
+void Shader::setMat3(const std::string &name, const glm::mat3 &mat) const{
 	glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
-// ------------------------------------------------------------------------
-void Shader::setMat4(const std::string &name, const glm::mat4 &mat) const {
+//Funcion que establece un uniform de tipo mat2
+void Shader::setMat4(const std::string &name, const glm::mat4 &mat) const{
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
-GLuint Shader::getProgram() {
-	return program;
-}

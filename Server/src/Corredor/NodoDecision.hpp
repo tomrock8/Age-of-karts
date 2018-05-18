@@ -22,11 +22,11 @@ class NodoDecision
     NodoDecision();
     ~NodoDecision();
    
-  void decision(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,tipo_nodo tipoNodo,tipo_parametro parametro,int valor,bool valorb);
-  void accion(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,int accionIA);
-  void salto(vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,int idNodoSalto);
+  void decision(std::vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,tipo_nodo tipoNodo,tipo_parametro parametro,int valor,bool valorb);
+  void accion(std::vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,int accionIA);
+  void salto(std::vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,int idNodoSalto);
   void setHijo(NodoDecision * nodo);
-  vector<NodoDecision*> getHijos();
+  std::vector<NodoDecision*> getHijos();
   bool getDecision();
   int getAccion();
   bool getConsulta(bool arrayboleanos[], int obj,int jugador);   
@@ -40,7 +40,7 @@ class NodoDecision
     
     int idNodo;
     NodoDecision *NodoPadre; 
-    vector<NodoDecision*> NodosHijos;
+    std::vector<NodoDecision*> NodosHijos;
     
     tipo_nodo condiciones;
     int tipoaccion;

@@ -15,12 +15,12 @@ TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFra
 	setFirstFrame(firstFrame);
 	setLastFrame(lastFrame);
 	actualFrame = this->firstFrame;
-	framesPerSecond = 60; // Valor que se recoge de blender
+	framesPerSecond = 30; // Valor que se recoge de blender
 	setVisible(false);
 }
 
 TAnimacion::~TAnimacion() {
-	std::cout << "Destructor de TAnimacion\n";
+	//std::cout << "Destructor de TAnimacion\n";
 
 	// Parar de reproducir
 	setPlaying(false);

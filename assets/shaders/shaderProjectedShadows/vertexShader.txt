@@ -19,7 +19,8 @@ uniform mat4 model; //Model de cada objeto
 uniform mat4 view; //Matriz view de la camara usada en cada momento
 uniform mat4 projectionLight; //Matriz proyeccion de la luz
 uniform vec3 lightPosition; //Posicion de la luz
-uniform mat4 scale;
+uniform mat4 scale; //Factor para escalar la sombra
+uniform float heightMesh; //Alto de la malla
 
 void main()
 {
@@ -28,12 +29,11 @@ void main()
     //Pasamos la posicion de la luz al fragment
     vs_out.lightPosition = lightPosition;
 
-    //Matriz modelo especial para dibujar la sombra
-    
+    //Matriz modelo especial para dibujar la sombra  
     mat4 shadowsModel = model*scale;
-    //Situamos la sombra a la altura 0.1 siempre (el suelo)
-    shadowsModel[3][1] =  shadowsModel[3][1] - 10;
-    //A partir de la posicion de la luz y del vertice, movemos la sombra del objeto para que no este inmediatamente debajo del mismo
+    //Situamos la sombra justo debajo de cada malla
+    shadowsModel[3][1] =  shadowsModel[3][1] - 2.0;
+    //A partir de la posicion de la luz y del ertice, movemos la sombra del objeto para que no este inmediatamente debajo del mismo
     //Cuanta mas distancia entre ellos, mas separada parecera la sombra respecto del objeto que la crea
     // -- Para el eje x --
     if ( shadowsModel[3][0] < lightPosition.x){
@@ -53,5 +53,5 @@ void main()
     }
     //Calculamos la posicion final de cada vertice a partir de las matrices anteriores
     //Le pasamos el valor 0.1 en la posicion y de cada vertice para que dibuje los objetos planos (dando la impresion de una sombra)
-    gl_Position = projectionLight * view * shadowsModel * vec4(aPos.x, aPos.y, aPos.z, 0.8);
+    gl_Position = projectionLight * view * shadowsModel * vec4(aPos.x, 0.01, aPos.z, 1.0);
 }

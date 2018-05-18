@@ -1,0 +1,24 @@
+//Especificar version de Opengl a utilizar
+#version 330
+
+//Color final de la linea
+out vec4 fragColor;
+ 
+//Variable de entrada desde el vertex shader
+in vec2 textCoords;
+
+//Uniform
+uniform sampler2D image; //Textura de cada particula
+uniform vec3 color; //Color de cada particula
+ 
+void main (void) {
+    //Asignamos la textura de cada particula
+    if (texture(image, textCoords).w > 0.0){
+        fragColor = texture(image, textCoords);
+    }else{
+        //Descartamos el fragmento si la transparencia de la imagen es 0, para que no borre nada de debajo
+        discard;
+    }
+    //Despues la multiplicamos por el color
+    fragColor *= vec4(color, 1.0f);
+}

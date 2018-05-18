@@ -20,6 +20,22 @@ tipoaccion=0;
 
 NodoDecision::~NodoDecision(){
 
+   
+    if(NodosHijos.size()>0){
+       // cout<<"TENGO HIJOS:::"<< NodosHijos.size()<<endl;
+        for (int i = 0; i < NodosHijos.size(); i++) {
+			
+			delete NodosHijos.at(i);
+			
+		}
+        //cout<<"TENGO HIJOS BORRADOS"<<endl;
+		NodosHijos.clear();
+        NodoPadre=nullptr;
+    }else{
+        //cout<<"NO TENGO HIJOS"<<endl;
+        NodosHijos.clear();
+        NodoPadre=nullptr;
+    }
 }
 
 void NodoDecision::decision(std::vector<NodoDecision*> &arrayNodos,int nodopadre,int idnodo,tipo_nodo tipodecision,tipo_parametro parametro,int valor,bool valorb){

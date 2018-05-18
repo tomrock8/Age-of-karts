@@ -1,15 +1,13 @@
 #ifndef GESTORIDS_H
 #define GESTORIDS_H
 
-#include "IrrlichtLib.hpp"
-
-using namespace std;
+#include "obj3D.hpp"
 
 class GestorIDs {
 public:
-	void setIdentifier(ISceneNode *nodo, const char *nombre);
+	void setIdentifier(obj3D *nodo, const char *nombre);
 	int getIDLibre();
-        void restartID();
+	void restartID();
 	static GestorIDs &instancia();
 
 private:

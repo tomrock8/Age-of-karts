@@ -110,6 +110,10 @@ void EscenaOpciones::update() {
 			ImGui::Checkbox("Anti-Aliasing", &msaa);
 			ImGui::SameLine();
 			ImGui::Checkbox("Face Culling", &faceCulling);
+			ImGui::SameLine();
+			ImGui::Checkbox("Level Of Detail", &levelOfDetail);
+			ImGui::SameLine();
+			ImGui::Checkbox("Clouds", &clouds);
 			ImGui::Text("Drawing Distance", &drawingDistance);
 			ImGui::ListBox("", &listbox_item_current_2, listbox_items, IM_ARRAYSIZE(listbox_items), 3);
 		}
@@ -120,20 +124,26 @@ void EscenaOpciones::update() {
 				shadows = false; //No hay sombras
 				msaa = false; //Sin MSAA
 				faceCulling = true; //Con Face Culling
+				levelOfDetail = true; //Level Of Detail activado
 				drawingDistance = true; //Con distancia de dibujado
 				levelOfDrawingDistance = 750; //Nivel de distancia de dibujado = 750
+				clouds = false; //Sin nubes
 			} else if (listbox_item_current == 1){
 				shadows = true; //Hay sombras
 				msaa = false; //Sin MSAA
 				faceCulling = true; //Con Face Culling
+				levelOfDetail = true; //Level Of Detail activado
 				drawingDistance = true; //Con distancia de dibujado
 				levelOfDrawingDistance = 1000; //Nivel de distancia de dibujado = 1000
+				clouds = false; //Sin nubes
 			} else {
 				shadows = true; //No hay sombras
 				msaa = true; //Con MSAA
 				faceCulling = false; //Sin Face Culling
+				levelOfDetail = false; //Level Of Detail desactivado
 				drawingDistance = false; //Sin distancia de dibujado
-				levelOfDrawingDistance = 0; //Nivel de distancia de dibujado = ninguno
+				levelOfDrawingDistance = 5000; //Nivel de distancia de dibujado = ninguno
+				clouds = true; //Con nubes
 			}
 		}else{
 			if (listbox_item_current_2 == 0){
@@ -144,7 +154,7 @@ void EscenaOpciones::update() {
 				levelOfDrawingDistance = 750; //Nivel de distancia de dibujado = 750
 			} else {
 				drawingDistance = false; //Sin distancia de dibujado
-				levelOfDrawingDistance = 0; //Nivel de distancia de dibujado = ninguno
+				levelOfDrawingDistance = 5000; //Nivel de distancia de dibujado = ninguno
 			}
 		}
 		
@@ -153,6 +163,8 @@ void EscenaOpciones::update() {
 		TMotor::instancia().setAntialiasing(msaa);
 		TMotor::instancia().setFaceCulling(faceCulling);
 		TMotor::instancia().setDrawingDistance(drawingDistance, levelOfDrawingDistance);
+		TMotor::instancia().setLevelOfDetail(levelOfDetail);
+		TMotor::instancia().setClouds(clouds);
 	}
 
 	ImGui::End();

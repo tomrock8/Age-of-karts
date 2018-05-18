@@ -18,6 +18,7 @@
 #include "imgui_impl_glfw_gl3.h"
 #include "billboard.hpp"
 #include "particleSystem.hpp"
+#include "cloudGenerator.hpp"
 
 #ifdef _WIN32
 #define _USE_MATH_DEFINES // for C++  
@@ -37,7 +38,6 @@ public:
 	void swapBuffers(); //Intercambiar buffers de dibujado de GLFW
 	void getInputs(); //Control de inputs
 	void close(); //Cierre del motor
-	void toEulerAngle(float x, float y, float z, float w, float& roll, float& pitch, float& yaw); //Convertir de quaternions a grados
 	void initDebugWindow(); //|
 	void closeDebugWindow();//|inicializacion y cierre de IMGUI 
 	void cleanHUD(); //Limpieza de HUDs
@@ -51,10 +51,12 @@ public:
 	void newHud(const char* n); //Nuevo HUD-Menu
 	billboard *newBillboard(obj3D *o); //Nuevo Billboard
 	particleSystem *newParticleSystem(); //Nuevo Sistema de Particulas
+	void newClouds(int minW, int maxW, int minH, int maxH, int minL, int maxL, int numC); //Nueva area de nubes
 
 	//CREACION DE ANIMACIONES
 	TNodo * createStaticMeshNode(TNodo * padre, const char * path, const char * name);
 	TNodo * createAnimationNode(TNodo * padre, TAnimacion * mesh, const char * name);
+	void addPadre(TNodo * padre, TNodo * hijo);
 	TAnimacion * createAnimation(const char * path, int framesIni, int framesFin);
 	obj3D *newAnimation(const char * name, const char * path, const char * parentNode, int framesIni, int framesFin);
 
@@ -82,6 +84,8 @@ public:
 	bool getBoundingBoxes();
 	GestorSonido *getGestorSonido();
 	TNodo *getCameraByIndex(int i);
+	float getDrawingDistance();
+	bool getLevelOfDetail();
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
@@ -97,8 +101,9 @@ public:
 	void setAntialiasing(bool b);
 	void setDrawingDistance(bool b, float f);
 	void setShadows(bool b);
+	void setClouds(bool b);
+	void setLevelOfDetail(bool b);
 	void setViewport(int x, int y, int width, int height);
-	void setGraphicLevel(int i);
 
 	// DIBUJADO
 	void clean(float r, float g, float b, float a);
@@ -110,9 +115,11 @@ public:
 	void drawIMGUI();
 	void drawBillboards();
 	void drawParticles();
+	void drawClouds();
 	void drawProjectedShadows();
 	void drawMappingShadows();
 	void drawDebugBullet();
+	void drawCube(glm::mat4 modelMatrixObject, glm::vec3 centerPos);
 
 	// DIBUJADO SEGUN SHADER ACTIVO
 	void usingShaderCartoon();
@@ -139,6 +146,7 @@ protected:
 	Shader *shaderSilhouette; //Shader para crear el contorno de los objetos en el efecto cartoon
 	Shader *shaderBillboard; //Shader para dibujar los diferentes billboards 
 	Shader *shaderParticles; //Shader para el dibujado de las particulas
+	Shader *shaderClouds; //Shader para el dibujado de las nubes
 	Shader *shaderGbuffer; //Shader para renderizar la escena en el buffer que despues se usara en el deferred shading
 	Shader *shaderDeferred; //Shader que renderiza en la pantalla a partir de los datos guardados por el gBuffer
 
@@ -176,6 +184,9 @@ protected:
 	//Particles
 	std::vector <particleSystem *> particleSystems; //Array con las diferentes particulas usadas en el motor
 
+	//Nubes
+	cloudGenerator *nubes; //Sistema de nubes del sistema
+
 	//Objetos
 	GLuint contID; //Numero de objetos en el motor en cada momento
 	TGestorRecursos *gestorRecursos; //Gestor de recursos utilizado para crear las distintas mallas, texturas y materiales de los objetos
@@ -189,11 +200,16 @@ protected:
 	//IMGUI
 	bool renderDebug; //Booleano para controlar el renderizado de las ventanas de IMGUI
 
+	//Level Of Detail
+	GLuint VAO_cube, VBO_cube; //Buffers para guardar los vertices del cubo
+
 	//Booleanos para la activacion/desactivacion de las optimizaciones del motor
 	bool faceCulling = true; //FACE CULLING activado por defecto
 	bool drawingDistance = true; //Distancia de dibujado de los objetos
 	float levelOfDrawingDistance = 750.0f; //Distancia maxima entre la camara y objeto a partir de la cual se deja de dibujar este ultimo
-	bool shadows = false; //Sombras
+	bool projectedShadows = false; //Sombras desactivadas por defecto
+	bool levelOfDetail = true; //LEVEL OF DETAIL activado por defecto
+	bool clouds = false; //NUBES desactivadas por defecto
 
 	// ----------------------
 	//  METODOS PRIVADOS
@@ -216,4 +232,6 @@ protected:
 	void initializeBuffersDebugBullet();
 	//Deferred shading
 	void setDeferredBuffers();
+	//Level Of Detail
+	void setBuffersCube();
 };

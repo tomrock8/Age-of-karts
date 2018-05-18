@@ -3,10 +3,8 @@
 
 #include <cstdlib>
 #include <iostream>
-#include "IrrlichtLib.hpp"
 #include "btBulletDynamicsCommon.h"
 #include "Corredor.hpp"
-#include "Graphics.hpp"
 
 class Camara3persona
 {
@@ -16,13 +14,13 @@ public:
   void moveCamera(Corredor *pj1);
   void movefpsCamera(Corredor *pj1);
   void moveCameraControl(Corredor *pj1);
-  void moveCameraControlServer();
   void moveCameraControlPointer(Corredor *pj1);
+  btRigidBody *inicializarFisicas();
 
 private:
   float direction;
   float zdirection;
-  ICameraSceneNode *camera;
+  //ICameraSceneNode *camera;
   bool fpsActiva;
   float XCamera3;
   float YCamera3;
@@ -30,6 +28,11 @@ private:
   float XCamera1;
   float YCamera1;
   float ZCamera1;
+  float auxX;
+  btDefaultMotionState *MotionState;
+  btCollisionShape *Shape;
+  btRigidBody *rigidBody;
+
 };
 
 #endif /* CAMARA3PERSONA_H */

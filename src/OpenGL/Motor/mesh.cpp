@@ -1,12 +1,13 @@
 #include "mesh.hpp"
 
 mesh::mesh() {
-	meshe = NULL;
-	mat = NULL;
-	text = NULL;
+	meshe = nullptr;
+	mat = nullptr;
+	text = nullptr;
 }
 mesh::~mesh() {
-	std::cout << "Destructor de mesh\n";
+	//std::cout << "Destructor de mesh\n";
+	
 }
 
 void mesh::setMesh(TRecursoMalla *m) {

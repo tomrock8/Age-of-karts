@@ -7,7 +7,7 @@
 #include <string>
 
 
-using namespace std;
+
 
 
 
@@ -27,7 +27,7 @@ class ArbolDecision
   private:
 
   NodoDecision *NodoRuta;
-  vector<NodoDecision*> arrayNodos;
+  std::vector<NodoDecision*> arrayNodos;
 
 };
 

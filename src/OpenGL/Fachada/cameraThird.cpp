@@ -120,6 +120,14 @@ void cameraThird::comprobarInputs(){
 
 
 }
+
+
+obj3D* cameraThird::getNodo(){
+
+	return camara;
+
+}
+
 btRigidBody *cameraThird::initializePhysics() {
 	
 	btVector3 escala(5, 5, 5);

@@ -1,0 +1,80 @@
+# Blender MTL File: 'mapaGladiador4.0.blend'
+# Material Count: 6
+
+newmtl AcueductoMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas/acueducto_normal.png
+map_Kd texturas/acueducto_diffusa.png
+map_Ks texturas/acueducto_specular.png
+
+newmtl ColiseoMAT
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texturas\coliseo_diffuse.png
+map_Bump texturas/coliseo_normal.png
+map_Ks texturas/coliseo_specular.png
+
+newmtl ColumnaMAt
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas/Columna_normal.png
+map_Kd texturas/Columna_diffuse.png
+map_Ks texturas/Columna_specular.png
+
+newmtl SueloMat
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas/suelo_normal.png
+map_Kd texturas/suelo_diffuse.png
+map_Ks texturas/suelo_specular.png
+
+newmtl metaMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas/meta_normal.png
+map_Kd texturas/meta_diffuse.png
+map_Ks texturas/meta_specular.png
+
+newmtl parrillaMAT
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump texturas/parrilla_normal.png
+map_Kd texturas/parrilla_diffuse.png
+map_Ks texturas/parrilla_specular.png

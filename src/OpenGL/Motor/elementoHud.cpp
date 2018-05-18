@@ -96,7 +96,7 @@ void elementoHud::draw(Shader *shader){
 
     //Activamos la textura 0 y enlazamos la imagen del elemento hud
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, TGestorImagenes::getInstacia()->cargarImagen(path)->getID());
+    glBindTexture(GL_TEXTURE_2D, TGestorImagenes::getInstancia()->cargarImagen(path)->getID());
 
     //Calculamos la matriz model del elemento
     glm::mat4 model = tras * rot * esc;
@@ -152,6 +152,7 @@ void elementoHud::cambiarColor(glm::vec4 c){
 }
 
 //Funcion para cambiar la transparencia del elemento
+//0 == totalmente trasparente , 1 == opaco
 void elementoHud::cambiarTransparencia(bool t, float l){
     //Asignamos si el elemento sera transparente o no
     transparency = t;

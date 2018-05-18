@@ -32,8 +32,8 @@ void main()
     //Matriz modelo especial para dibujar la sombra  
     mat4 shadowsModel = model*scale;
     //Situamos la sombra justo debajo de cada malla
-    shadowsModel[3][1] =  shadowsModel[3][1]; /* - (heightMesh/2);*/
-    //A partir de la posicion de la luz y del vertice, movemos la sombra del objeto para que no este inmediatamente debajo del mismo
+    shadowsModel[3][1] =  shadowsModel[3][1] - 2.0;
+    //A partir de la posicion de la luz y del ertice, movemos la sombra del objeto para que no este inmediatamente debajo del mismo
     //Cuanta mas distancia entre ellos, mas separada parecera la sombra respecto del objeto que la crea
     // -- Para el eje x --
     if ( shadowsModel[3][0] < lightPosition.x){

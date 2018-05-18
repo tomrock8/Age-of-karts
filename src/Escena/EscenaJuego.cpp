@@ -65,7 +65,7 @@ EscenaJuego::~EscenaJuego() {
 	limpiar();
 
 
-	TMotor::instancia().cleanHUD();
+	TMotor::instancia().cleanScene();
 	delete fuenteCarrera;
 	delete fuenteCountDown;
 	//delete luces
@@ -781,6 +781,9 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		end = true;
+	}
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_U) == GLFW_PRESS) {
+		return Escena::tipo_escena::PODIO;
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end == true) {
 		if (tipoEscena == Escena::tipo_escena::ONLINE) {

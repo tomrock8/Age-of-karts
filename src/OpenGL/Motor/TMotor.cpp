@@ -167,6 +167,7 @@ void TMotor::cleanHUD() {
 	HUDs.clear();
 }
 
+//Funcion para limpiar todos los objetos en cualquier momento
 void TMotor::cleanScene() {
 	//Billboards
 	if(billboards.size() > 0){

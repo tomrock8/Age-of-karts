@@ -12,7 +12,8 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	show_config = true;
 	empiezaCarrera = false;
 	end = false;
-	infoLobby = new std::string("");
+	checkfocus=true;
+	infoLobby= new std::string("");
 	time = Timer::getInstancia();
 
 	laps = 3;
@@ -173,9 +174,12 @@ void EscenaLobby::update() {
 						ImGui::Text("Connection failed! \nTry to introduce the IP again to start an online race: ");
 					}
 					ImGui::InputInt4("Introduce IP", vec4a);
-				}
-				else {
-					if (ImGui::Button("Start with 127.0.0.1")) {
+					if (checkfocus){
+					ImGui::SetKeyboardFocusHere();
+					checkfocus=false;
+					}
+				}else{
+					if (ImGui::Button("Start with 127.0.0.1")){
 						selection_online = false;
 						iniciar = true;
 						ipConexion = "127.0.0.1";
@@ -213,9 +217,10 @@ void EscenaLobby::update() {
 					if (conectado) {
 						infoLobby->clear();
 						infoLobby->append("ONLINE!\n");
-						infoLobby->append("Connection stablished!\n");
+						infoLobby->append("Connection stablished!\n"); 
+						crearFicheroIP();
 					}
-					crearFicheroIP();
+					
 					ImGui::End();
 			}
 
@@ -892,7 +897,7 @@ void EscenaLobby::movimientoHorizontal(int k, bool dcha) {
 		}
 		else {
 			index_mapa = 1;
-			mapa->cambiarTextura("assets/HUD/LobbyMenu/offline/isla.png");
+			mapa->cambiarTextura("assets/HUD/LobbyMenu/offline/Isla.png");
 		}
 	}
 

@@ -29,13 +29,14 @@ public:
 private:
 
 	std::string ipConexion;
-
+	std::string *chr = new std::string("OnGameHUD");
 	void UpdatePhysics(unsigned int TDeltaTime);
 	void UpdateRender(btRigidBody *TObject);
-	void renderDebug();
+	void renderDebug(int i);
 	void debugRageIA(int k);
 	void debugPlot(int j,float k,std::string str);
-	void updateHUD();
+	void updateHUD(int i);
+	void crearHUD(int i);
 	
 	int numPantallas; //Numero de mandos conectados
 
@@ -68,7 +69,7 @@ private:
 	bool muestraDebug;
 	bool debug_Jugador;
 	bool end;
-	bool show_another_window;
+	bool show_another_window[6];
 	bool muestraDebugIA;
 	std::string sr;
 	
@@ -82,11 +83,11 @@ private:
 
 	int puesto;
 	int objeto;
-	int vueltas;
-	int vueltas_aux;
-	int habilidad;
-	float inc_habilidad;
-	float muestra_tiempo;
+	std::vector<int> vueltas;
+	std::vector<int> vueltas_aux;
+	std::vector<int> habilidad;
+	std::vector<float> inc_habilidad;
+	std::vector<float> muestra_tiempo;
 
 	//LUCES
 	obj3D * luzPuntual_0;

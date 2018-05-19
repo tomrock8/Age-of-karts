@@ -24,9 +24,6 @@
 #define _USE_MATH_DEFINES // for C++  
 #endif
 
-#define WIDTH 1600
-#define HEIGHT 900
-
 class TMotor {
 public:
 	//INSTANCIA DEL MOTOR
@@ -38,6 +35,7 @@ public:
 	void swapBuffers(); //Intercambiar buffers de dibujado de GLFW
 	void getInputs(); //Control de inputs
 	void close(); //Cierre del motor
+	void changeResolution(int w, int h); //Cambiar resolucion de pantalla
 	void initDebugWindow(); //|
 	void closeDebugWindow();//|inicializacion y cierre de IMGUI 
 	void cleanHUD(); //Limpieza de HUDs
@@ -129,8 +127,8 @@ public:
 protected:
 	//Ventana de GLFW donde se renderiza el motor
 	GLFWwindow *ventana;
-	int screenHEIGHT; //Alto de la ventana
-	int screenWIDTH; //Ancho de la ventana
+	int screenHEIGHT = 900; //Alto de la ventana
+	int screenWIDTH = 1600; //Ancho de la ventana
 
 	//Nodo Raiz del arbol de la escena
 	TNodo * scene;

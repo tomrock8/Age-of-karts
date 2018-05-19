@@ -54,12 +54,15 @@ private:
 	bool firstInit;
 	Timer *time;
 	int laps;
-	bool checkReady;
-	bool checkCPU;
+
 	bool selection_online;
 	bool offline;
 	bool offline_split;
 	bool end;
+    	bool checkReady;
+	bool checkCPU;
+
+	bool checkfocus;
 	bool show_config;
 	int index;
 	int index_interno;

@@ -26,7 +26,7 @@ TMotor::TMotor() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //Se usa la version Core de OpenGL
 
 	// CREACION OBJETO VENTANA PARA USAR LAS FUNCIONES DE GLFW
-	ventana = glfwCreateWindow(WIDTH, HEIGHT, "Age of Karts - SocketWar 2017-2018", NULL, NULL);
+	ventana = glfwCreateWindow(screenWIDTH, screenHEIGHT, "Age of Karts - SocketWar 2017-2018", NULL, NULL);
 
 	//Almacena las dimensiones de la ventana en las variables screen
 	glfwGetFramebufferSize(ventana, &screenWIDTH, &screenHEIGHT);
@@ -136,6 +136,15 @@ void TMotor::close() {
 		delete particleSystems[i];
 	}
 
+}
+
+//Funcion para cambiar la resolucion de la pantalla
+void TMotor::changeResolution(int w, int h){
+	//Guardamos el ancho y alto nuevos
+	screenWIDTH = w;
+	screenHEIGHT = h;
+	//Funcion de GLFW para redimensionar la pantalla
+	glfwSetWindowSize(ventana, screenWIDTH, screenHEIGHT);
 }
 
 //Funcion que inicializa la libreria IMGUI y crea nuevas ventanas
@@ -764,7 +773,7 @@ void TMotor::drawProjectedShadows(){
 					//Le pasamos al shader la matriz view
 					shaderProjectedShadows->setMat4("view", activeViewMatrix);
 					//Le pasamos la matriz proyeccion de la luz (perspectiva)
-					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)WIDTH/(float)HEIGHT, 0.01f, 10000.0f);
+					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)screenWIDTH/(float)screenHEIGHT, 0.01f, 10000.0f);
 					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
 					//Le pasamos la posicion de la luz al shader
 					shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());

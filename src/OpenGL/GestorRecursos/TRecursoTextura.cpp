@@ -8,7 +8,8 @@ TRecursoTextura::TRecursoTextura(const aiMaterial *mat) {
 }
 
 TRecursoTextura::~TRecursoTextura() {
-	text = NULL;
+	text = nullptr;
+	delete nombre;
 }
 
 void TRecursoTextura::activeTexture(Shader *shader) {

@@ -31,6 +31,8 @@ public:
 	void setEntidad(TEntidad *n);
 	void setPadre(TNodo *p);
 	void setName(const char* n);
+	void deleteNode();
+	void setArrayHijos(std::vector<TNodo*> miel);
 
 private:
 	TEntidad * entidad; // Entidad del nodo

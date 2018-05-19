@@ -57,6 +57,7 @@ public:
 	void addPadre(TNodo * padre, TNodo * hijo);
 	TAnimacion * createAnimation(const char * path, int framesIni, int framesFin);
 	obj3D *newAnimation(const char * name, const char * path, const char * parentNode, int framesIni, int framesFin);
+	void newGestorRecursos();
 
 	// METODOS GET
 	GLFWwindow *getVentana();

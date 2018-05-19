@@ -112,6 +112,9 @@ void TMotor::getInputs() {
 void TMotor::nuevaEscenaRaiz() {
 	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena)
 }
+void TMotor::newGestorRecursos(){
+	gestorRecursos = new TGestorRecursos();
+}
 
 //Funcion que cierra correctamente el motor
 void TMotor::close() {
@@ -121,6 +124,7 @@ void TMotor::close() {
 	//Se termina GLFW
 	//glfwTerminate();					
 	//Se eliminan distintos elementos usados por el motor
+	delete scene;
 	delete gestorRecursos; //Gestor de recursos
 	delete gestorSonido; //Gestor de sonidos
 	//Hud y Menus
@@ -180,6 +184,9 @@ void TMotor::cleanHUD() {
 //Funcion para limpiar todos los objetos en cualquier momento
 void TMotor::cleanScene() {
 	
+
+	delete scene;
+
 	//Billboards 
 	if(billboards.size() > 0){
 		for (int i = 0; i < billboards.size(); i++) {
@@ -204,13 +211,14 @@ void TMotor::cleanScene() {
 		HUDs.clear();
 	}
 
-
+	
 	cameras.clear();
 	lights.clear();
-	activeLights.clear();	
+	activeLights.clear();
 	notShadowObjects.clear();
-	//delete gestorRecursos;
-	//gestorRecursos = new TGestorRecursos();
+
+	
+	delete gestorRecursos;
 
 }
 
@@ -614,12 +622,10 @@ void TMotor::draw() {
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK); //No dibujamos las caras traseras de los objetos
 	}
-
 	//Si el shader deferred esta activado...
 	if (strcmp(shaderName, "shaderDeferred") == 0) {
 		usingShaderDeferred();
 	}
-
 	//Si el shader cartoon esta activado...
 	if (strcmp(shaderName, "shaderCartoon") == 0) {
 		usingShaderCartoon();
@@ -627,6 +633,7 @@ void TMotor::draw() {
 
 	//Desactivamos el Face Culling para que no afecte al resto de elementos dibujados
 	glDisable(GL_CULL_FACE);
+
 }
 
 // ---- DIBUJADO DE LA CAMARA ACTIVA ---- 
@@ -861,7 +868,6 @@ void TMotor::drawDebugBullet() {
 void TMotor::usingShaderCartoon() {
 
 	//1º RENDERIZADO = se renderizan todos los objetos de forma normal con sus texturas con un estilo cartoon
-
 	//Se activa el shader para el renderizado 3D
 	shaderCartoon->use();
 	//Calcular posicion de la camara y pasarsela al fragment shader
@@ -886,7 +892,6 @@ void TMotor::usingShaderCartoon() {
 	}
 	//Dibujamos los distintos nodos del arbol
 	scene->draw(shaderCartoon);
-
 	//2º RENDERIZADO = se renderizan los objetos en modo wireframe (solo las caras ocultas) para crear la silueta de los mismos
 
 	//Se activa el shader para el renderizado 3D

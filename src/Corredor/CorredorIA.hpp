@@ -17,7 +17,7 @@ class CorredorIA : public Corredor
 {
 public:
 	CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo);
-	~CorredorIA() override;
+	~CorredorIA();
 	void deleteArbol();
 
 	virtual void movimiento() override;

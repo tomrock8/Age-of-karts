@@ -12,7 +12,7 @@ class CajaFalsa : public Item
     float alturaLanzamiento,int idNodo);
     virtual void lanzarItem(int direccion,btVector3 orientacion,btTransform objeto) override;
     virtual void updateHijos() override;
-    virtual void deleteHijos() override;
+    ~CajaFalsa();
     //void soltarItem();
     //btRigidBody *inicializarFisicas();
 

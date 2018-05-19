@@ -78,8 +78,7 @@ void Turbo::setTurboTocado(bool s) {
 Turbo::~Turbo() {
 	cout << "ENTRO DELETE TURBO: " << this->getID();
 
-	// Los rigid body se borran desde el motor de fisicas
-	// delete rigidBody;
+	delete turbo;
 
 	cout << " SALGO DELETE TURBO\n";
 }

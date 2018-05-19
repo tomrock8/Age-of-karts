@@ -9,6 +9,14 @@ GestorCarrera::GestorCarrera() {
 	acum=1;
 	jugadores->setJugadores(pj1);
 }
+
+GestorCarrera::~GestorCarrera(){
+	pj1.clear();
+	pj2.clear();
+	pj_aux=nullptr;
+	jugadores=nullptr;
+}
+
 bool GestorCarrera::update() {
 
 	jugadores = GestorJugadores::getInstancia();

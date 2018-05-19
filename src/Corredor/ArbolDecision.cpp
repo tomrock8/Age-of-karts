@@ -17,6 +17,7 @@ ArbolDecision::~ArbolDecision(){
     arrayNodos.clear();
     NodoRuta=nullptr;
     }else{
+        NodoRuta=nullptr;
       //  cout<<"out of range"<<endl;
     }
 }

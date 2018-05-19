@@ -10,6 +10,7 @@ class GestorColisiones
 {
 public:
 	GestorColisiones() {};
+	~GestorColisiones();
 	void ComprobarColisiones();
 	bool JugadorCaja(std::vector<Caja*> cajas);
 	bool JugadorTurbo();

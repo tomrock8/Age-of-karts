@@ -412,6 +412,8 @@ int Client::ReceivePackets() {
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			bsIn.Read(parambool);
+			cout<<"id jugador: "<<id <<endl;
+			cout<<"inicial tipo: "<<clientes.at(id).tipoCorredor <<endl;
 			if (id < clientes.size() && id != -1) {
 				param = clientes.at(id).tipoCorredor;	//a partir de ahora param es el tipo de jugador
 				if (param == 0 && parambool == false) {
@@ -428,7 +430,7 @@ int Client::ReceivePackets() {
 				}
 				clientes.at(id).tipoCorredor = param;
 			}
-
+			cout<<"final tipo: "<<clientes.at(id).tipoCorredor <<endl;
 			break;
 
 
@@ -856,7 +858,7 @@ void Client::setNetloaded(bool b) {
 }
 
 void Client::setArrayClients(std::string ip, int tipo, bool rdy, bool corredorJ, int nuevo) {
-	controlPlayer = clientes.size();
+	
 	structClientes clientAux;
 	clientAux.ip = ip;
 	clientAux.tipoCorredor = tipo;
@@ -868,6 +870,7 @@ void Client::setArrayClients(std::string ip, int tipo, bool rdy, bool corredorJ,
 	else {
 		clientes.push_back(clientAux);
 	}
+	controlPlayer = clientes.size()-1;
 
 }
 

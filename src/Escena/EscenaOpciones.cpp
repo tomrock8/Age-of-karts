@@ -174,10 +174,22 @@ void EscenaOpciones::update() {
 }
 
 Escena::tipo_escena EscenaOpciones::comprobarInputs() {
+	int id=0;
+	bool mandoConectado=false;
+	const unsigned char *buttons = nullptr;
+	const float *axes = nullptr;
+	if (1 == glfwJoystickPresent(id)) {
+		mandoConectado = true;
+		int buttonCount;
+		buttons = glfwGetJoystickButtons(id, &buttonCount);
+		int axesCount;
+		axes = glfwGetJoystickAxes(id, &axesCount);
+		//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
+	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end) {
 		return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 	}
-	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[1]))) {
 		end = true;
 	}
 	else end = false;

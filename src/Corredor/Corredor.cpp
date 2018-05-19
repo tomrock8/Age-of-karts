@@ -125,11 +125,8 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	fuenteMotor->setLoop(true);
 	fuenteMotor->setPitch(pitchMotor);
 	fuenteMotor->volume(1 * TMotor::instancia().getGestorSonido()->getVolEfectos());
-	fuenteMotor->play(SOUND_ENGINE);
-	fuenteFrenos = new AlSource();
-	fuenteFrenos->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
 	fuenteItem = new AlSource();
-	fuenteItem->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
+	fuenteItem->volume(0.5 * TMotor::instancia().getGestorSonido()->getVolEfectos());
 }
 
 void Corredor::setParametrosDebug(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo, float velocidadLimiteGiro) {
@@ -620,7 +617,6 @@ void Corredor::setPosicionSources() {
 	pos[2] = cuboNodo->getPosition().z;
 	fuenteMotor->setPitch(pitchMotor);
 	fuenteMotor->setPosition(pos);
-	fuenteFrenos->setPosition(pos);
 	fuenteItem->setPosition(pos);
 }
 
@@ -964,7 +960,6 @@ void Corredor::resetFuerzas() {
 }
 void Corredor::soltarItem() {
 	setTipoObj(EstadosJugador::estado_objeto::NADA);
-	fuenteItem->play(SOUND_THROW);
 	setLimite(getLimite() + 10);
 }
 
@@ -1222,9 +1217,6 @@ void Corredor::frenodemano(bool activo, bool objeto) {
 					limite += 1;
 			}
 		}
-
-		fuenteFrenos->volume(10 * TMotor::instancia().getGestorSonido()->getVolEfectos());
-		fuenteFrenos->play(SOUND_DRIFT);
 
 		estado->setEstadoMovimiento(EstadosJugador::estado_movimiento::DERRAPA);
 		FuerzaGiro = btScalar(0.45);
@@ -1722,7 +1714,6 @@ Corredor::~Corredor() {
 	cout << "\nENTRO DESTRUCTOR CORREDOR. ";
 	delete fuenteMotor;
 	delete fuenteItem;
-	delete fuenteFrenos;
 	delete vehiculo;
 	delete cuboNodo;
 

@@ -11,7 +11,7 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 	animacionPrevia = NULL;
 	/*iniciarAnimacion(PARADO, animacionPrevia,NULL);*/
 
-
+	fuenteMotor->play(SOUND_ENGINE);
 }
 
 /**
@@ -181,11 +181,9 @@ void CorredorJugador::actualizarItem() {
 	{
 		if (getTipoObj() != 0 && !checkItem)
 		{
+			if(getTipoObj() != 3 && getTipoObj() != 8)
+				fuenteItem->play(SOUND_THROW);
 			setCheckItem(true);
-			//Para saber si se ha lanzado el item desde un jugador en red
-			Client *client = Client::getInstancia();
-			if (client->getConnected())
-				client->PlayerThrowObject();
 			//Llama a la funcion de la clase padre
 		/*	iniciarAnimacion(LANZAROBJETO, animacionPrevia, NULL);
 			animacionPrevia = getLanzarObjeto();*/

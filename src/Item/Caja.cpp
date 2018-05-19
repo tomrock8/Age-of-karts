@@ -87,7 +87,8 @@ void Caja::romper(Corredor *pj1Col) {
 		if (nodoActual->getID() == id) {
 			btRigidBody *Object = objetos.at(i);
 
-			fuenteCaja->play(SOUND_CRACK);
+			if(strcmp(pj1Col->getNodo()->getName(), "Jugador") == 0)
+				fuenteCaja->play(SOUND_CRACK);
 
 			// Delete irrlicht node
 			obj3D *Node = static_cast<obj3D *>(Object->getUserPointer());

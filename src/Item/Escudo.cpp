@@ -43,6 +43,8 @@ void Escudo::movimiento() {
 }
 
 
-void Escudo::deleteHijos() {
-	//delete objetoHabilidad;
+
+
+Escudo::~Escudo(){
+	NodoVehiculo=nullptr;
 }

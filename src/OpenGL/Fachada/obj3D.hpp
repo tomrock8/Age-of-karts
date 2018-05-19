@@ -39,6 +39,7 @@ public:
 	void setName(const char *nombre);
 	void setVisible(bool visible);
 
+
 private:
 	GLuint id;
 	glm::vec3 position;

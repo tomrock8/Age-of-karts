@@ -44,7 +44,6 @@ comprobarAltura(0.1);
 
 }
 
-void Proyectil::deleteHijos(){
-	
+Proyectil::~Proyectil(){
+	cout<<"HOLAaaaaaaaaaaa"<<endl;
 }
-

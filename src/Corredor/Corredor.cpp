@@ -1753,6 +1753,10 @@ Corredor::~Corredor() {
 	//PARTICULAS HUMO
 	p=nullptr;
 
+
+	actual=nullptr;
+	siguiente=nullptr;
+	siguiente_aux=nullptr;
 	//delete actual; // Punto Actual
 	//delete siguiente; // Punto Siguiente
 	//delete siguiente_aux; // Punto Siguiente

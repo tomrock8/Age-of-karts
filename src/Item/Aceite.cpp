@@ -28,4 +28,6 @@ void Aceite::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto)
 
 }
 void Aceite::updateHijos() {}
-void Aceite::deleteHijos() {}
+Aceite::~Aceite(){
+	
+}

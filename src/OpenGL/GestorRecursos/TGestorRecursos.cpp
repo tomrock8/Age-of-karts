@@ -2,11 +2,13 @@
 #define STB_IMAGE_IMPLEMENTATION    
 #include "stb_image.h"
 
-TGestorRecursos::TGestorRecursos() {}
+TGestorRecursos::TGestorRecursos() {
+
+}
 
 TGestorRecursos::~TGestorRecursos() {
 	cout << "Entro al destructor de gestor de recursos...";
-
+	
 	// Destruimos el vector de mallas
 	if (recursoMallas.size() > 0) {
 		for (int i = 0; i < recursoMallas.size(); i++) {
@@ -39,6 +41,9 @@ TGestorRecursos::~TGestorRecursos() {
 		objMeshes.clear();
 	}
 
+	dir=nullptr;
+	textures.clear();
+	
 	cout << " SALGO \n";
 }
 

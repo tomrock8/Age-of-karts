@@ -38,7 +38,11 @@ Pista::~Pista() {
 	}
 	Items.clear();
 	}
-	
+
+	//delete nameMap;
+	//delete path;
+	//delete wayPoints;
+	delete Mapa;
 	instancia = nullptr;
 	cout << "Destructor de PISTA. Salgo.\n";
 }

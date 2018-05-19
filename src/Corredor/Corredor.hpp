@@ -35,7 +35,7 @@ public:
 	void resetFuerzas();
 	void limitadorVelocidad();
 	// Destructor
-	~Corredor();
+	virtual ~Corredor();
 
 	void acelerar();
 	void recolocarWaypoint();

@@ -75,6 +75,7 @@ TRecursoMalla::~TRecursoMalla() {
 	indices.clear();
 	faces.clear();
 
+	delete nombre;
 }
 
 void TRecursoMalla::activeVAO() {glBindVertexArray(VAO); }

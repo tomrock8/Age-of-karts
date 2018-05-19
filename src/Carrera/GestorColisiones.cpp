@@ -5,6 +5,17 @@
 void GestorColisiones::IniciarTimer() {
 	tiempoInicio = glfwGetTime();
 }
+
+
+GestorColisiones::~GestorColisiones(){
+
+	pj1.clear();
+	nodoA=nullptr;
+	nodoB=nullptr;
+
+}
+
+
 void GestorColisiones::ComprobarColisiones() {
 	btDynamicsWorld *mundo = MotorFisicas::getInstancia()->getMundo();
 	pj1 = GestorJugadores::getInstancia()->getJugadores();

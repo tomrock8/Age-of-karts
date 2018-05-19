@@ -8,10 +8,14 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 	giroDer = false;
 	giroIzq = false;
 	//control de animaciones
-	animacionPrevia = NULL;
+	animacionPrevia = nullptr;
 	/*iniciarAnimacion(PARADO, animacionPrevia,NULL);*/
 
 
+}
+
+CorredorJugador::~CorredorJugador(){
+	animacionPrevia=nullptr;
 }
 
 /**
@@ -21,8 +25,6 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 void CorredorJugador::movimiento() {
 
 	bool comprobadorMovimiento = false;
-	
-
 
 	//Comprobador de de mando y recoleccion de inputs
 	bool mandoConectado = false;

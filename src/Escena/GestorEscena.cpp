@@ -12,14 +12,16 @@ GestorEscena::GestorEscena() {
 }
 
 Escena::tipo_escena GestorEscena::update() {
-
+	
 	//Se comprueban los inputs de la escena activa
 	cambioEscena = escenaActiva->comprobarInputs();
 
 	if (cambioEscena == escenaActiva->getTipoEscena()) {
 		//Se actualiza la escena
+		
 		escenaActiva->update();
 		//Y se dibuja la escena
+		
 		escenaActiva->dibujar();
 	}
 	else { //La escena ha cambiado a otra
@@ -120,11 +122,13 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion,
 		borraEscena(tipo); // Ya hay una escena de ese tipo y es borrada
 	}
 
-	delete TMotor::instancia().getSceneNode(); // Vacia el arbol completo del motor
+	
 	TMotor::instancia().cleanScene();
 	TMotor::instancia().nuevaEscenaRaiz(); // Crea la escena raiz de donde cuelgan todos los nodos
+	TMotor::instancia().newGestorRecursos();
+	
 
-
+	
 	switch (tipo) { // Crear la escena dependiendo del tipo
 	case Escena::tipo_escena::CARGA:
 		//escenaActiva = new EscenaCarga(Escena::tipo_escena::CARGA);
@@ -231,6 +235,7 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 	}
 
 
+	
 	return false;
 }
 

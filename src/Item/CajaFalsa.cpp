@@ -16,6 +16,10 @@ CajaFalsa::CajaFalsa(btVector3 posicion, btVector3 escala, btScalar masa, float 
 	rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
+CajaFalsa::~CajaFalsa(){
+	
+}
+
 void CajaFalsa::lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) {
 
 	btTransform posObj= rigidBody->getCenterOfMassTransform();
@@ -25,4 +29,3 @@ void CajaFalsa::lanzarItem(int direccion, btVector3 orientacion,btTransform obje
 
 }
 void CajaFalsa::updateHijos() {}
-void CajaFalsa::deleteHijos() {}

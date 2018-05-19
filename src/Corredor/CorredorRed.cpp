@@ -5,6 +5,7 @@ CorredorRed::CorredorRed(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(
 	nombre = "JugadorRed";
 	cuboNodo->setName(nombre);
 }
+CorredorRed::~CorredorRed(){}
 
 void CorredorRed::updateHijos() {}
 void CorredorRed::movimiento() {

@@ -7,7 +7,9 @@ mesh::mesh() {
 }
 mesh::~mesh() {
 	//std::cout << "Destructor de mesh\n";
-	
+	meshe =nullptr;
+	mat=nullptr;
+	text=nullptr;
 }
 
 void mesh::setMesh(TRecursoMalla *m) {

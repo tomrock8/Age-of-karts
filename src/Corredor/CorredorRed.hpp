@@ -12,6 +12,7 @@ private:
 
 public:
 	CorredorRed(btVector3 pos, Corredor::tipo_jugador tipo);
+	~CorredorRed();
 	//virtual void update() override;
 	virtual void updateHijos() override;
 	virtual void movimiento() override;

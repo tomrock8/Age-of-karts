@@ -81,8 +81,12 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf", 28.0f);
 	ImGui::StyleColorsLight();
-
-	
+	if (!mando){
+		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return1", "assets/HUD/LobbyMenu/return.png");	
+	}else{
+		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return1", "assets/HUD/LobbyMenu/return_xbox.png");	
+	}
+	returnB->traslacion(-0.8f, -0.9f);
 }
 
 EscenaLobby::~EscenaLobby() {
@@ -735,6 +739,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 
 		if (empiezaCarrera) {
+			fondo = TMotor::instancia().getActiveHud()->addElementHud(2, 2, "fondo2", "assets/HUD/LobbyMenu/offline/fondoMulti.png");
 			if (index_mapa == 1) {
 				Pista::getInstancia()->setNombreMapa("pirata");
 			}
@@ -1110,7 +1115,7 @@ void EscenaLobby::iniciarCarrera() {
 }
 
 void EscenaLobby::crearHUD() {
-
+	
 	if (offline) {
 		if (!offline_split) {
 			//fondo pantalla
@@ -1130,14 +1135,11 @@ void EscenaLobby::crearHUD() {
 			checkLAPS->traslacion(0.74f, -0.45f);
 			if (!mando){
 				start = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "start", "assets/HUD/LobbyMenu/start.png");
-				returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return", "assets/HUD/LobbyMenu/return.png");	
 				selectB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "select", "assets/HUD/LobbyMenu/enter.png");
 			}else{
 				start = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "start", "assets/HUD/LobbyMenu/start_xbox.png");
-				returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return", "assets/HUD/LobbyMenu/return_xbox.png");	
 				selectB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "select", "assets/HUD/LobbyMenu/enter_xbox.png");
 			}
-			returnB->traslacion(-0.8f, -0.9f);
 			start->traslacion(0.8f, -0.9f);
 			selectB->traslacion(0.0f, -0.9f);
 			mapa = TMotor::instancia().getActiveHud()->addElementHud(0.65, 0.65, "mapa", "assets/HUD/LobbyMenu/offline/Isla.png");
@@ -1187,6 +1189,12 @@ void EscenaLobby::crearHUD() {
 		mapa->traslacion(-0.250f, -0.50);
 
 	}
+	if (!mando){
+		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return", "assets/HUD/LobbyMenu/return.png");	
+	}else{
+		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return", "assets/HUD/LobbyMenu/return_xbox.png");	
+	}
+	returnB->traslacion(-0.8f, -0.9f);
 }
 
 std::string EscenaLobby::getIpConexion() { return ipConexion; }

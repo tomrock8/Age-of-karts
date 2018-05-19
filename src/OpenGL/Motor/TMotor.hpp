@@ -27,7 +27,7 @@
 class TMotor {
 public:
 	//INSTANCIA DEL MOTOR
-	static TMotor &instancia(); 
+	static TMotor &instancia();
 
 	void resizeScreen(int w, int h);
 
@@ -126,7 +126,7 @@ public:
 
 protected:
 	//Ventana de GLFW donde se renderiza el motor
-	GLFWwindow *ventana;
+	GLFWwindow * ventana;
 	int screenHEIGHT = 900; //Alto de la ventana
 	int screenWIDTH = 1600; //Ancho de la ventana
 

@@ -14,6 +14,8 @@
 class GestorEscena {
 public:
 
+	~GestorEscena();
+
 	Escena::tipo_escena update(); // Actualizacion del gestor de escenas
 	bool cambiaEscena(Escena::tipo_escena escena); // Modifica la escena actual
 	bool borraEscena(Escena::tipo_escena tipo); // Limpia y borra la escena del tipo seleccionado

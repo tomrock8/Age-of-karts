@@ -112,21 +112,18 @@ void TMotor::getInputs() {
 void TMotor::nuevaEscenaRaiz() {
 	scene = new TNodo("escena_raiz"); // Creacion del nodo raiz (Escena)
 }
-void TMotor::newGestorRecursos(){
+void TMotor::newGestorRecursos() {
 	gestorRecursos = new TGestorRecursos();
 }
 
 //Funcion que cierra correctamente el motor
 void TMotor::close() {
-	//Se termina la libreria IMGUI
-	//ImGui_ImplGlfwGL3_Shutdown();
-	//ImGui::DestroyContext();
-	//Se termina GLFW
-	//glfwTerminate();					
+
+
 	//Se eliminan distintos elementos usados por el motor
-	delete scene;
-	delete gestorRecursos; //Gestor de recursos
+
 	delete gestorSonido; //Gestor de sonidos
+
 	//Hud y Menus
 	for (int i = 0; i < HUDs.size(); i++) {
 		delete HUDs[i];
@@ -140,10 +137,26 @@ void TMotor::close() {
 		delete particleSystems[i];
 	}
 
+	cleanScene(); // Limpiado de diferentes elementos de la escena
+
+	delete shader; // Shader que se usa en el motor en la parte 3D
+	delete shaderHUD; //Shader que usa el motor para el dibujado del HUD
+	delete shaderProjectedShadows; //Shader para el calculo de de las sombras proyectadas
+	delete shaderDirectionalDepth; //Shader para el calculo de las sombras de las luces dirigidas
+	delete shaderPointDepth; //Shader para el calculo de las sombras de las luces puntuales
+	delete shaderSkybox; //Shader para el dibujado del skybox
+	delete shaderDebugBbox; //Shader para el modo debug de Bullet
+	delete shaderCartoon; //Shader para el efecto cartoon
+	delete shaderSilhouette; //Shader para crear el contorno de los objetos en el efecto cartoon
+	delete shaderBillboard; //Shader para dibujar los diferentes billboards 
+	delete shaderParticles; //Shader para el dibujado de las particulas
+	delete shaderClouds; //Shader para el dibujado de las nubes
+	delete shaderGbuffer; //Shader para renderizar la escena en el buffer que despues se usara en el deferred shading
+	delete shaderDeferred;
 }
 
 //Funcion para cambiar la resolucion de la pantalla
-void TMotor::changeResolution(int w, int h){
+void TMotor::changeResolution(int w, int h) {
 	//Guardamos el ancho y alto nuevos
 	screenWIDTH = w;
 	screenHEIGHT = h;
@@ -183,12 +196,12 @@ void TMotor::cleanHUD() {
 
 //Funcion para limpiar todos los objetos en cualquier momento
 void TMotor::cleanScene() {
-	
 
-	delete scene;
+	if (scene)
+		delete scene;
 
 	//Billboards 
-	if(billboards.size() > 0){
+	if (billboards.size() > 0) {
 		for (int i = 0; i < billboards.size(); i++) {
 			delete billboards[i];
 		}
@@ -196,7 +209,7 @@ void TMotor::cleanScene() {
 	}
 
 	//Sistemas de particulas
-	if(particleSystems.size() > 0){
+	if (particleSystems.size() > 0) {
 		for (int i = 0; i < particleSystems.size(); i++) {
 			delete particleSystems[i];
 		}
@@ -204,21 +217,27 @@ void TMotor::cleanScene() {
 	}
 
 	//Hud y Menus
-	if(HUDs.size() > 0){
+	if (HUDs.size() > 0) {
 		for (int i = 0; i < HUDs.size(); i++) {
 			delete HUDs[i];
 		}
 		HUDs.clear();
 	}
 
-	
+
 	cameras.clear();
 	lights.clear();
 	activeLights.clear();
 	notShadowObjects.clear();
 
-	
-	delete gestorRecursos;
+	if (skybox)
+		delete skybox;
+
+	if (nubes)
+		delete nubes;
+
+	if (gestorRecursos)
+		delete gestorRecursos;
 
 }
 
@@ -322,8 +341,8 @@ obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* paren
 	// N O D O
 	TMalla *malla = TMotor::instancia().createMesh(path, sta);
 	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
-	
-	if (strcmp(name, "mapa") == 0 || strcmp(name, "elementos") == 0 || strcmp(name, "rueda1") == 0 
+
+	if (strcmp(name, "mapa") == 0 || strcmp(name, "elementos") == 0 || strcmp(name, "rueda1") == 0
 		|| strcmp(name, "rueda2") == 0 || strcmp(name, "rueda3") == 0 || strcmp(name, "rueda4") == 0) {
 		obj3D *obj = new obj3D(nodo, name, contID);
 		notShadowObjects.push_back(obj);
@@ -365,7 +384,7 @@ particleSystem *TMotor::newParticleSystem() {
 }
 
 // --- NUBES ---
-void TMotor::newClouds(int minW, int maxW, int minH, int maxH, int minL, int maxL, int numC){
+void TMotor::newClouds(int minW, int maxW, int minH, int maxH, int minL, int maxL, int numC) {
 	//Se crea una area de nubes con los parametros especificados
 	nubes = new cloudGenerator(minW, maxW, minH, maxH, minL, maxL, numC);
 }
@@ -560,8 +579,8 @@ void TMotor::setFaceCulling(bool b) {
 	faceCulling = b;
 }
 //Funcion para activar/desactivar el anti-aliasing
-void TMotor::setAntialiasing(bool b){
-	if ( b == true ){
+void TMotor::setAntialiasing(bool b) {
+	if (b == true) {
 		glEnable(GL_MULTISAMPLE);
 	}
 	else {
@@ -569,20 +588,20 @@ void TMotor::setAntialiasing(bool b){
 	}
 }
 //Funcion para activar/desactivar la distancia de dibujado y establecer su nivel
-void TMotor::setDrawingDistance(bool b, float f){
+void TMotor::setDrawingDistance(bool b, float f) {
 	drawingDistance = b;
 	levelOfDrawingDistance = f; //Nivel de clipping
 }
 //Funcion para activar/desactivar las sombras
-void TMotor::setShadows(bool b){
+void TMotor::setShadows(bool b) {
 	projectedShadows = b;
 }
 //Funcion para activar/desactivar el level of detail
-void TMotor::setLevelOfDetail(bool b){
+void TMotor::setLevelOfDetail(bool b) {
 	levelOfDetail = b;
 }
 //Funcion para activar/desactivar las nubes
-void TMotor::setClouds(bool b){
+void TMotor::setClouds(bool b) {
 	clouds = b;
 }
 obj3D* TMotor::getObjActiveCamera() {
@@ -754,9 +773,9 @@ void TMotor::drawParticles() {
 
 // ---- DIBUJADO DE LAS NUBES ----
 //Funcion que dibuja las nubes del motor
-void TMotor::drawClouds(){
+void TMotor::drawClouds() {
 	//Si las nubes estan activadas, las dibujamos...
-	if ( clouds == true ){
+	if (clouds == true) {
 		//Activamos el shader especifico de las nubes
 		shaderClouds->use();
 		//Dibujamos las nubes
@@ -766,27 +785,27 @@ void TMotor::drawClouds(){
 
 // ---- DIBUJADO DE LAS SOMBRAS PROYECTADAS ----
 //Funcion que dibuja las sombras de los objetos a partir de la tecnica de las sombras proyectadas
-void TMotor::drawProjectedShadows(){
-	if ( projectedShadows == true){ //Si las sombras estan activadas...
+void TMotor::drawProjectedShadows() {
+	if (projectedShadows == true) { //Si las sombras estan activadas...
 		//No dibujamos aquellos elementos que no queremos que proyecten sombras
-		for (int i = 0; i < notShadowObjects.size(); i++){
+		for (int i = 0; i < notShadowObjects.size(); i++) {
 			notShadowObjects.at(i)->setVisible(false);
 		}
 		//Activamos el shader especifico para dibujar las sombras proyectadas
 		shaderProjectedShadows->use();
 		if (lights.size() > 0) {
 			for (int i = 0; i < lights.size(); i++) {
-				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true){
+				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true) {
 					//Le pasamos al shader la matriz view
 					shaderProjectedShadows->setMat4("view", activeViewMatrix);
 					//Le pasamos la matriz proyeccion de la luz (perspectiva)
-					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)screenWIDTH/(float)screenHEIGHT, 0.01f, 10000.0f);
+					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)screenWIDTH / (float)screenHEIGHT, 0.01f, 10000.0f);
 					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
 					//Le pasamos la posicion de la luz al shader
 					shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());
 					shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz *>(lights[i]->getEntidad())->getDirection());
 					glm::mat4 sc;
-					sc = scale(sc, glm::vec3(1.1,1,1.1));
+					sc = scale(sc, glm::vec3(1.1, 1, 1.1));
 					//sc = glm::translate(sc, glm::vec3())
 					shaderProjectedShadows->setMat4("scale", sc);
 					//Dibujamos la escena con el shader de sombras proyectadas
@@ -795,7 +814,7 @@ void TMotor::drawProjectedShadows(){
 			}
 		}
 		//Reactivamos el dibujado de los elementos 
-		for (int i = 0; i < notShadowObjects.size(); i++){
+		for (int i = 0; i < notShadowObjects.size(); i++) {
 			notShadowObjects.at(i)->setVisible(true);
 		}
 	}
@@ -1047,75 +1066,75 @@ void TMotor::setDeferredBuffers() {
 //---------------------------------
 
 /* El Level Of Detail no esta completo en su totatildad, solo es una simple muestra. Como los modelos de nuestro juego ya son low-poly, realmente no era algo
-imprescindible para hacerlo funcionar correctamente. Es por eso, que para cumplir con los terminos presupuestados, hemos implementado 
-un level of detail basico, que simplemente, en funcion de la distancia de dibujado seteada en el motor, sustituye las mallas por un simple cubo. Sigue 
+imprescindible para hacerlo funcionar correctamente. Es por eso, que para cumplir con los terminos presupuestados, hemos implementado
+un level of detail basico, que simplemente, en funcion de la distancia de dibujado seteada en el motor, sustituye las mallas por un simple cubo. Sigue
 el mismo principio que cualquier Level Of Detail, pero sin usar modelos con menos poligonos de las mallas */
 
 //Funcion que establece los buffers de OpenGL para el dibujado de un cubo
-void TMotor::setBuffersCube(){
+void TMotor::setBuffersCube() {
 	//Array con la posicion de los vertices del cubo
 	const float vertices_cubo[] = {
-        -0.5f, -0.5f, -0.5f, 
-         0.5f, -0.5f, -0.5f, 
-         0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f, -0.5f,  
-        -0.5f,  0.5f, -0.5f,  
-        -0.5f, -0.5f, -0.5f, 
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
 
-        -0.5f, -0.5f,  0.5f,  
-         0.5f, -0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f, 
-        -0.5f, -0.5f,  0.5f,  
+		-0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
 
-        -0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f, -0.5f,  
-        -0.5f, -0.5f, -0.5f,  
-        -0.5f, -0.5f, -0.5f,  
-        -0.5f, -0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f,  
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
 
-         0.5f,  0.5f,  0.5f, 
-         0.5f,  0.5f, -0.5f,  
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
 
-        -0.5f, -0.5f, -0.5f, 
-         0.5f, -0.5f, -0.5f,  
-         0.5f, -0.5f,  0.5f,  
-         0.5f, -0.5f,  0.5f,  
-        -0.5f, -0.5f,  0.5f,  
-        -0.5f, -0.5f, -0.5f, 
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f, -0.5f,
 
-        -0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f, -0.5f
-    };
+		-0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f
+	};
 
 	//Establecemos los buffers que pasaran los datos anteriores a los shaders para su dibujado
-    //Creamos un VAO y un VBO
-    glGenVertexArrays(1, &VAO_cube);
-    glGenBuffers(1, &VBO_cube);
-    //Activamos el VAO
-    glBindVertexArray(VAO_cube);
-    //Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
-    glBindBuffer(GL_ARRAY_BUFFER, VBO_cube);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_cubo), vertices_cubo, GL_STATIC_DRAW);
-    //POSICION
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-    glEnableVertexAttribArray(0);
-    //Desactivamos el VAO hasta que dibujemos
-    glBindVertexArray(0);
+	//Creamos un VAO y un VBO
+	glGenVertexArrays(1, &VAO_cube);
+	glGenBuffers(1, &VBO_cube);
+	//Activamos el VAO
+	glBindVertexArray(VAO_cube);
+	//Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_cube);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_cubo), vertices_cubo, GL_STATIC_DRAW);
+	//POSICION
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+	glEnableVertexAttribArray(0);
+	//Desactivamos el VAO hasta que dibujemos
+	glBindVertexArray(0);
 }
 
 //Funcion para dibujar un cubo
-void TMotor::drawCube(glm::mat4 modelMatrixObject, glm::vec3 centerPos){
+void TMotor::drawCube(glm::mat4 modelMatrixObject, glm::vec3 centerPos) {
 	//Activamos el shader debug para el dibujado del cubo (no queremos el mismo shader que para el resto de objetos)
 	shaderDebugBbox->use();
 	//Calculamos la matriz model del cubo
@@ -1124,15 +1143,15 @@ void TMotor::drawCube(glm::mat4 modelMatrixObject, glm::vec3 centerPos){
 	model = modelMatrixObject * model; //Y por ultimo, lo traslamos al lugar que ocupa la malla en el mundo
 	//Calculamos la matriz mvp a partir de la projection y view de la camara activa
 	glm::mat4 mvp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getActiveViewMatrix() * model;
-    //Pasamos los datos necesarios al shader 
-    TMotor::instancia().getShaderSkybox()->setMat4("mvp", mvp); //Matriz mvp
+	//Pasamos los datos necesarios al shader 
+	TMotor::instancia().getShaderSkybox()->setMat4("mvp", mvp); //Matriz mvp
 	//Pasamos un color transparente, no queremos pintar los cubos
 	TMotor::instancia().getShaderDebugBbox()->setVec4("color", glm::vec4(0.0, 0.0, 0.0, 0.0));
-    //Activamos el VAO que hemos seteado antes
-    glBindVertexArray(VAO_cube);
-    //Dibujamos el cubo
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    //Desactivamos el VAO
-    glBindVertexArray(0);
+	//Activamos el VAO que hemos seteado antes
+	glBindVertexArray(VAO_cube);
+	//Dibujamos el cubo
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	//Desactivamos el VAO
+	glBindVertexArray(0);
 }
 

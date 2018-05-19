@@ -7,6 +7,15 @@ Skybox::Skybox(){
     setCubeVertices();
 }
 
+Skybox::~Skybox() {
+	freeImages();
+
+	//Eliminar los distintos buffers utilizados por OpenGL
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteTextures(1, &skyboxCubeTexture);
+}
+
 //Funcion que carga una imagen a partir de la libreria stb
 unsigned char *Skybox::loadImage(const char* p, int i){
     //Cargamos la imagen, guardando los distintos datos de la misma en la posicion de los arrays que pertoque

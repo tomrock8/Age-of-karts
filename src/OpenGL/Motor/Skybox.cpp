@@ -8,7 +8,6 @@ Skybox::Skybox(){
 }
 
 Skybox::~Skybox() {
-	freeImages();
 
 	//Eliminar los distintos buffers utilizados por OpenGL
 	glDeleteVertexArrays(1, &VAO);

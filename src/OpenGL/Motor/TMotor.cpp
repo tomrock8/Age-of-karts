@@ -233,8 +233,7 @@ void TMotor::cleanScene() {
 	if (skybox)
 		delete skybox;
 
-	if (nubes)
-		delete nubes;
+	//if (nubes) delete nubes;
 
 	if (gestorRecursos)
 		delete gestorRecursos;

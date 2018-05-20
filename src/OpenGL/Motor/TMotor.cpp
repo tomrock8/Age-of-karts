@@ -138,6 +138,8 @@ void TMotor::close() {
 	}
 
 	cleanScene(); // Limpiado de diferentes elementos de la escena
+	if (skybox) delete skybox;
+	if (nubes) delete nubes;
 
 	delete shader; // Shader que se usa en el motor en la parte 3D
 	delete shaderHUD; //Shader que usa el motor para el dibujado del HUD
@@ -230,10 +232,7 @@ void TMotor::cleanScene() {
 	activeLights.clear();
 	notShadowObjects.clear();
 
-	if (skybox)
-		delete skybox;
 
-	//if (nubes) delete nubes;
 
 	if (gestorRecursos)
 		delete gestorRecursos;

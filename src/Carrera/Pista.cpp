@@ -33,9 +33,10 @@ Pista::~Pista() {
 
 	if (Items.size() > 0) {
 		//destroy items
-		for (int i = 0; i < Items.size(); i++) {
+		/*for (int i = 0; i < Items.size(); i++) {
 			delete Items.at(i);
 		}
+		*/
 		Items.clear();
 	}
 

@@ -159,12 +159,6 @@ Escena::tipo_escena EscenaPodio::comprobarInputs() {
 		pulsados = false;
 	}
 
-	//cout<<"POSICION EN X::::"<< x <<endl;
-	//cout<<"POSICION EN Z::::"<< z <<endl;
-	//cout<<"POSICION EN Y::::"<< y <<endl;
-
-
-
 
 	return Escena::tipo_escena::PODIO;
 
@@ -192,6 +186,7 @@ void EscenaPodio::init() {
 
 	luces.push_back(TMotor::instancia().newLightNode("light_3", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz"));
 	luces.at(3)->translate(glm::vec3(0.0f, 12.0f, 300.0f));
+	
 	//-----------------------------
 	//	PARTICULAS
 	//-----------------------------

@@ -11,6 +11,13 @@ GestorEscena::GestorEscena() {
 	}
 }
 
+GestorEscena::~GestorEscena() {
+	for (int i = 0; i < Escena::nTipos; i++) {
+		if (escenas[i]) // Comprobar que existe el tipo de escena
+			borraEscena(escenas[i]->getTipoEscena()); // Borrado de la escena
+	}
+}
+
 Escena::tipo_escena GestorEscena::update() {
 
 	//Se comprueban los inputs de la escena activa
@@ -18,8 +25,10 @@ Escena::tipo_escena GestorEscena::update() {
 
 	if (cambioEscena == escenaActiva->getTipoEscena()) {
 		//Se actualiza la escena
+
 		escenaActiva->update();
 		//Y se dibuja la escena
+
 		escenaActiva->dibujar();
 	}
 	else { //La escena ha cambiado a otra
@@ -120,9 +129,11 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion,
 		borraEscena(tipo); // Ya hay una escena de ese tipo y es borrada
 	}
 
-	delete TMotor::instancia().getSceneNode(); // Vacia el arbol completo del motor
+
 	TMotor::instancia().cleanScene();
 	TMotor::instancia().nuevaEscenaRaiz(); // Crea la escena raiz de donde cuelgan todos los nodos
+	TMotor::instancia().newGestorRecursos();
+
 
 
 	switch (tipo) { // Crear la escena dependiendo del tipo
@@ -185,7 +196,7 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 	if (!getEscena(tipo)) // Comprobamos que exista la escena en el array
 		return false; // No existe la escena y terminamos
 
-	
+
 	int indice = indiceEscena(tipo); // Recogemos el indice donde se encuentra el tipo de escena
 
 	if (tipo == Escena::tipo_escena::CARRERA || tipo == Escena::tipo_escena::ONLINE) {
@@ -229,6 +240,7 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
 		return true;
 	}
+
 
 
 	return false;

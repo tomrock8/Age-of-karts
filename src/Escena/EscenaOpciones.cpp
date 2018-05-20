@@ -114,9 +114,11 @@ void EscenaOpciones::update() {
 			ImGui::Checkbox("Level Of Detail", &levelOfDetail);
 			ImGui::SameLine();
 			ImGui::Checkbox("Clouds", &clouds);
-			ImGui::Text("Drawing Distance", &drawingDistance);
-			ImGui::ListBox("", &listbox_item_current_2, listbox_items, IM_ARRAYSIZE(listbox_items), 3);
+			ImGui::ListBox("Drawing Distance", &listbox_item_current_2, listbox_items, IM_ARRAYSIZE(listbox_items), 3);
 		}
+		const char* listboxResolution_items[] = { "1440x900p", "1600x900p", "1280x960p", "1600x1024p", "1920x1080p"};
+		static int listbox_item_current_resolution = 1;
+		ImGui::ListBox("Screen Resolution", &listbox_item_current_resolution, listboxResolution_items, IM_ARRAYSIZE(listboxResolution_items), 2);
 
 		//Ajustamos los parametros graficos del motor en funcion del nivel grafico seleccionado
 		if (personalisedGraphics == false){
@@ -165,6 +167,17 @@ void EscenaOpciones::update() {
 		TMotor::instancia().setDrawingDistance(drawingDistance, levelOfDrawingDistance);
 		TMotor::instancia().setLevelOfDetail(levelOfDetail);
 		TMotor::instancia().setClouds(clouds);
+		if ( listbox_item_current_resolution == 0){
+			TMotor::instancia().changeResolution(1440, 900);
+		} else if ( listbox_item_current_resolution == 1){
+			TMotor::instancia().changeResolution(1600, 900);
+		} else if ( listbox_item_current_resolution == 2){
+			TMotor::instancia().changeResolution(1280, 960);
+		} else if ( listbox_item_current_resolution == 3){
+			TMotor::instancia().changeResolution(1600, 1024);;
+		} else {
+			TMotor::instancia().changeResolution(1920, 1080);
+		}
 	}
 
 	ImGui::End();

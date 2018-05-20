@@ -37,11 +37,11 @@ EscenaJuego::~EscenaJuego() {
 	}
 	camera.clear();
 
-
 	delete Pista::getInstancia();
-	delete MotorFisicas::getInstancia();
 	delete GestorJugadores::getInstancia();
-
+	delete colisiones;
+	delete gc;
+	delete MotorFisicas::getInstancia();
 
 
 	cout << "Destructor de Escena JUEGO. Salgo" << endl;
@@ -504,8 +504,6 @@ void EscenaJuego::renderDebug(int i) {
 						debugPlot(i, AUXILIAR->getVehiculo()->getCurrentSpeedKmHour(), "Velocidad");
 						sr += AUXILIAR->toString();
 						ImGui::Text(sr.c_str());
-
-
 					}
 				}
 
@@ -636,23 +634,19 @@ void EscenaJuego::update() {
 		if (items.at(i)->getLanzado()) {
 
 			if (items.at(i)->update()) {
-
 				if (strcmp("Escudo", items.at(i)->getNombre()) == 0) {
 					pj.at(items.at(i)->getIDPadre())->setProteccion(false);
 				}
-
 				if (strcmp("HabilidadPirata", items.at(i)->getNombre()) == 0
 					|| strcmp("HabilidadVikingo", items.at(i)->getNombre()) == 0
 					|| strcmp("HabilidadGladiador", items.at(i)->getNombre()) == 0
 					|| strcmp("HabilidadChino", items.at(i)->getNombre()) == 0)
 				{
 					pj.at(items.at(i)->getIDPadre())->setHabilidad(false);
-
 				}
-
-				items.at(i)->Delete();
+				delete items.at(i);
 				items.erase(items.begin() + i);
-				pistaca->setItems(items);
+				pistaca->setItems(items);			
 				break;
 			}
 			else {

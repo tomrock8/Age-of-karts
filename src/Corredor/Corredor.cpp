@@ -98,12 +98,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	rueda2->setRotation(glm::vec3(1, 0, 0), 180);
 	rueda4->setRotation(glm::vec3(1, 0, 0), 180);
-	/*
-		rueda1->setVisible(false);//alante derecha
-		rueda2->setVisible(false);//delante izquierda
-		rueda3->setVisible(false);//atras derecha
-		rueda4->setVisible(false);//atras izquierda
-	*/
+
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
 		cuboNodo->setScale(1, 1, 1.5);
@@ -125,11 +120,8 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 	fuenteMotor->setLoop(true);
 	fuenteMotor->setPitch(pitchMotor);
 	fuenteMotor->volume(1 * TMotor::instancia().getGestorSonido()->getVolEfectos());
-	fuenteMotor->play(SOUND_ENGINE);
-	fuenteFrenos = new AlSource();
-	fuenteFrenos->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
 	fuenteItem = new AlSource();
-	fuenteItem->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
+	fuenteItem->volume(0.5 * TMotor::instancia().getGestorSonido()->getVolEfectos());
 }
 
 void Corredor::setParametrosDebug(float fuerza, float velocidadMedia, float velocidadMaximaTurbo, float velocidadMaxima, float masa, float indiceGiroAlto, float indiceGiroBajo, float velocidadLimiteGiro) {
@@ -191,7 +183,7 @@ void Corredor::setParametros() {
 
 	//cambiar parametros en funcion del tipo
 	int num = 0;
-	
+
 	switch (tipojugador) {
 	case GLADIADOR:
 
@@ -226,14 +218,15 @@ void Corredor::setParametros() {
 
 
 		/* Nodos de animacion */
-		
+
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "escena_raiz", false);
-		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "quieto");
-		//lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/LanzamientoOBJ/pirataLanzamiento_000", 639, 652), "LanzarObj");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 162, 176), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 176, 187), "GiroDerFin");
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroIzq/pirataGiroIzq_000", 162, 176), "GiroIzqIni");
 		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroIzq/pirataGiroIzq_000", 176, 187), "GiroIzqFin");
+
+		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "quieto");
+		//lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/LanzamientoOBJ/pirataLanzamiento_000", 639, 652), "LanzarObj");
 		//animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Habilidad/PirataHabilidad_000", 165, 202), "Habilidad");
 		//vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Vacile/VacilePirata_000", 500, 551), "Vacile");
 
@@ -255,7 +248,7 @@ void Corredor::setParametros() {
 		num = 2;
 		break;
 	case VIKINGO:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000534.obj","escena_raiz",false);
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000534.obj", "escena_raiz", false);
 		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000534.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000", 534, 555), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000", 555, 566), "GiroDerFin");
@@ -284,7 +277,7 @@ void Corredor::setParametros() {
 
 	case CHINO:
 
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/Animacion/Chino/giroDer/ChinoGiroDer_000179.obj","escena_raiz",false);
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Chino/giroDer/ChinoGiroDer_000179.obj", "escena_raiz", false);
 		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Chino/giroDer/ChinoGiroDer_000179.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroDer/ChinoGiroDer_000", 179, 190), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroDer/ChinoGiroDer_000", 190, 201), "GiroDerFin");
@@ -336,10 +329,8 @@ void Corredor::InicializarFisicasRuedas() {
 	transRueda.setRotation(quaternion);
 
 	//Motionstate
-	motionStateRueda1 = new btDefaultMotionState(transRueda); //motionState = interpolacion
-
-	//FormaColisionR1 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	FormaColisionR1 = new btSphereShape(radio);
+	btDefaultMotionState *motionStateRueda1 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+	btCollisionShape *FormaColisionR1 = new btSphereShape(radio);
 
 	// Add mass
 	btVector3 LocalInertia;
@@ -364,24 +355,19 @@ void Corredor::InicializarFisicasRuedas() {
 	transRueda.setRotation(quaternion);
 
 	//Motionstate
-	motionStateRueda2 = new btDefaultMotionState(transRueda); //motionState = interpolacion
-
-	//FormaColisionR2 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	FormaColisionR2 = new btSphereShape(radio);
+	btDefaultMotionState *motionStateRueda2 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+	btCollisionShape *FormaColisionR2 = new btSphereShape(radio);
 
 	CuerpoColisionRueda2 = new btRigidBody(masar, motionStateRueda2, FormaColisionR2, LocalInertia);
 	CuerpoColisionRueda2->setUserPointer((void *)(rueda2));
-
 	CuerpoColisionRueda2->setActivationState(DISABLE_DEACTIVATION);
-	//CuerpoColisionRueda2->setCollisionFlags(CuerpoColisionRueda2->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda2);
 	objetos.push_back(CuerpoColisionRueda2);
 
 
-
 	// rueda 3
-
 	transRueda.setIdentity();
 	posTransRueda = btVector3(rueda3->getPosition().x, rueda3->getPosition().y, rueda3->getPosition().z);
 	transRueda.setOrigin(posTransRueda);
@@ -389,22 +375,18 @@ void Corredor::InicializarFisicasRuedas() {
 	transRueda.setRotation(quaternion);
 
 	//Motionstate
-	motionStateRueda3 = new btDefaultMotionState(transRueda); //motionState = interpolacion
-
-	//FormaColisionR3 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	FormaColisionR3 = new btSphereShape(radio);
+	btDefaultMotionState *motionStateRueda3 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+	btCollisionShape *FormaColisionR3 = new btSphereShape(radio);
 
 	CuerpoColisionRueda3 = new btRigidBody(masar, motionStateRueda3, FormaColisionR3, LocalInertia);
 	CuerpoColisionRueda3->setUserPointer((void *)(rueda3));
-
 	CuerpoColisionRueda3->setActivationState(DISABLE_DEACTIVATION);
-	//CuerpoColisionRueda3->setCollisionFlags(CuerpoColisionRueda3->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda3);
 	objetos.push_back(CuerpoColisionRueda3);
 
 	// rueda 4
-
 	transRueda.setIdentity();
 	posTransRueda = btVector3(rueda4->getPosition().x, rueda4->getPosition().y, rueda4->getPosition().z);
 	transRueda.setOrigin(posTransRueda);
@@ -412,16 +394,13 @@ void Corredor::InicializarFisicasRuedas() {
 	transRueda.setRotation(quaternion);
 
 	//Motionstate
-	motionStateRueda4 = new btDefaultMotionState(transRueda); //motionState = interpolacion
-
-	//FormaColisionR4 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	FormaColisionR4 = new btSphereShape(radio);
+	btDefaultMotionState *motionStateRueda4 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+	btCollisionShape *FormaColisionR4 = new btSphereShape(radio);
 
 	CuerpoColisionRueda4 = new btRigidBody(masar, motionStateRueda4, FormaColisionR4, LocalInertia);
 	CuerpoColisionRueda4->setUserPointer((void *)(rueda4));
-
 	CuerpoColisionRueda4->setActivationState(DISABLE_DEACTIVATION);
-	//CuerpoColisionRueda4->setCollisionFlags(CuerpoColisionRueda4->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda4);
 	objetos.push_back(CuerpoColisionRueda4);
@@ -433,18 +412,13 @@ void Corredor::InicializarFisicasRuedas() {
 	btVector3 pivotA(3.f, 5.f, 3.f);
 	btVector3 pivotB(0.f, 0.f, 0.f);
 
-	restriccion1 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda1, pivotA, pivotB, axisA, axisB, false);
+	btHingeConstraint *restriccion1 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda1, pivotA, pivotB, axisA, axisB, false);
 	pivotA = btVector3(-3.f, 5.f, 3.f);
-	restriccion2 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda2, pivotA, pivotB, axisA, axisB, false);
+	btHingeConstraint *restriccion2 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda2, pivotA, pivotB, axisA, axisB, false);
 	pivotA = btVector3(-3.f, 5.f, -3.f);
-	restriccion3 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda3, pivotA, pivotB, axisA, axisB, false);
+	btHingeConstraint *restriccion3 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda3, pivotA, pivotB, axisA, axisB, false);
 	pivotA = btVector3(3.f, 5.f, -3.f);
-	restriccion4 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda4, pivotA, pivotB, axisA, axisB, false);
-
-	//restriccion1->enableAngularMotor(true, 1, 0);
-	//restriccion2->enableAngularMotor(true, 1, 0);
-	//restriccion3->enableAngularMotor(true, 1, 0);
-	//restriccion4->enableAngularMotor(true, 1, 0);
+	btHingeConstraint *restriccion4 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda4, pivotA, pivotB, axisA, axisB, false);
 
 	mundo->addConstraint(restriccion1, true);
 	mundo->addConstraint(restriccion2, true);
@@ -471,20 +445,15 @@ void Corredor::InicializarFisicas() {
 	quaternion.setEulerZYX(cuboNodo->getRotation().z* PI / 180, cuboNodo->getRotation().y * PI / 180, cuboNodo->getRotation().x* PI / 180);
 	transCoche.setRotation(quaternion);
 
-	//Motionstate
-	motionStateCoche = new btDefaultMotionState(transCoche); //motionState = interpolacion
-
 	//establecemos su centro de gravedad
 	btTransform localTransform;
 	localTransform.setIdentity();
 	localTransform.setOrigin(btVector3(0, 1.5, 0));
-	CentroGravedad = new btCompoundShape();
+	btCompoundShape *CentroGravedad = new btCompoundShape();
 
 	//Forma Colision
-	//btVector3 TamanyoFormaColision(cuboNodo->getScale().X, cuboNodo->getScale().Y, cuboNodo->getScale().Z * 2);
 	btVector3 TamanyoFormaColision(cuboNodo->getScale().x * 2, cuboNodo->getScale().y * 1.2, cuboNodo->getScale().z * 2);
-	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
-	FormaColision = new btBoxShape(TamanyoFormaColision);
+	btCollisionShape *FormaColision = new btBoxShape(TamanyoFormaColision);
 	//masa coche
 	btVector3 Inercia(0, 0, 0);
 	FormaColision->calculateLocalInertia(Masa, Inercia);
@@ -492,7 +461,7 @@ void Corredor::InicializarFisicas() {
 	CentroGravedad->addChildShape(localTransform, FormaColision);
 
 	//rigidbody del coche
-	CuerpoColisionChasis = new btRigidBody(Masa, motionStateCoche, CentroGravedad, Inercia);
+	CuerpoColisionChasis = new btRigidBody(Masa, new btDefaultMotionState(transCoche), CentroGravedad, Inercia);
 	CuerpoColisionChasis->setFriction(1110);
 	CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
 
@@ -501,20 +470,16 @@ void Corredor::InicializarFisicas() {
 	btRaycastVehicle::btVehicleTuning tuning;
 
 	vehiculo = new btRaycastVehicle(tuning, CuerpoColisionChasis, RayCastVehiculo);
-
 	CuerpoColisionChasis->setActivationState(DISABLE_DEACTIVATION);
-
 	mundo->addVehicle(vehiculo);
-	//vehiculo->setActivationState(DISABLE_DEACTIVATION);
-	//almacenar el puntero al nodo irrlicht  para poder actualizar sus valores
+
 	objetos.push_back(CuerpoColisionChasis);
 	CrearRuedas(vehiculo, tuning);
 	mundo->addRigidBody(CuerpoColisionChasis);
 	bullet->setObjetos(objetos);
-	//CuerpoColisionChasis->applyGravity();
 
-	// luego declaramos sus ruedas
-	// inicializamos la posicion de las ruedas
+	// Desasignacion de punteros
+	CentroGravedad = nullptr;
 }
 
 void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning) {
@@ -620,7 +585,6 @@ void Corredor::setPosicionSources() {
 	pos[2] = cuboNodo->getPosition().z;
 	fuenteMotor->setPitch(pitchMotor);
 	fuenteMotor->setPosition(pos);
-	fuenteFrenos->setPosition(pos);
 	fuenteItem->setPosition(pos);
 }
 
@@ -964,7 +928,6 @@ void Corredor::resetFuerzas() {
 }
 void Corredor::soltarItem() {
 	setTipoObj(EstadosJugador::estado_objeto::NADA);
-	fuenteItem->play(SOUND_THROW);
 	setLimite(getLimite() + 10);
 }
 
@@ -1223,9 +1186,6 @@ void Corredor::frenodemano(bool activo, bool objeto) {
 			}
 		}
 
-		fuenteFrenos->volume(10 * TMotor::instancia().getGestorSonido()->getVolEfectos());
-		fuenteFrenos->play(SOUND_DRIFT);
-
 		estado->setEstadoMovimiento(EstadosJugador::estado_movimiento::DERRAPA);
 		FuerzaGiro = btScalar(0.45);
 
@@ -1348,10 +1308,6 @@ void Corredor::update() {
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 
-	/*
-	if(strcmp(cuboNodo->getName(),"Jugador")==0)
-	cout<<actual->getID()-7<<endl;
-	*/
 	if (vueltas > maxvueltas) {
 		estado->setEstadoCarrera(EstadosJugador::estado_carrera::FIN);
 	}
@@ -1437,14 +1393,10 @@ void Corredor::updateTimerObstaculos() {
 }
 
 void Corredor::actualizarRuedas() {
-
 	float altura = 0.5;
 	btVector3 zeroVector(0, 0, 0);
 	glm::vec3 axis(0, 0, 0);
 	float angle = 0;
-
-
-
 
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
 
@@ -1517,8 +1469,7 @@ void Corredor::lanzarHabilidad() {
 		btScalar radio = 12;
 		float alt = 10;
 
-		Habilidad * habilidadJugador = NULL;
-
+		Habilidad * habilidadJugador = nullptr;
 		switch (tipojugador) {
 
 		case PIRATA:
@@ -1574,9 +1525,8 @@ void Corredor::lanzarHabilidad() {
 		pista->setItems(items);
 		setLimite(0);
 	}
-	else {
-		cout << "No puedes usar la habilidad si tu limite no es 100 o mas" << endl;
-	}
+	//else cout << "No puedes usar la habilidad si tu limite no es 100 o mas" << endl;
+
 }
 
 void Corredor::updateEstado() {
@@ -1617,33 +1567,19 @@ void Corredor::updateVectorDireccion() {
 //------------------------------------------------------------------//
 //---------------------ANIMACION------------------------------------//
 //------------------------------------------------------------------//
-TNodo *Corredor::getGiroDerIni() {
-	return giroDerIni;
-}
-TNodo *Corredor::getGiroDerFin() {
-	return giroDerFin;
-}
-
-TNodo *Corredor::getGiroIzqIni() {
-	return giroIzqIni;
-}
-TNodo *Corredor::getGiroIzqFin() {
-	return giroIzqFin;
-}
-/*
-TNodo *Corredor::getHabilidadAnim() {
-	return animHabilidad;
-}*/
+TNodo *Corredor::getGiroDerIni() { return giroDerIni; }
+TNodo *Corredor::getGiroDerFin() { return giroDerFin; }
+TNodo *Corredor::getGiroIzqIni() { return giroIzqIni; }
+TNodo *Corredor::getGiroIzqFin() { return giroIzqFin; }
 TNodo *Corredor::getAnimQuieto() {
 	static_cast<TMalla*>(quieto->getEntidad())->setVisible(true);
 	return quieto;
-}/*
-TNodo *Corredor::getLanzarObjeto() {
-	return lanzarObjeto;
-}*/
-/*TNodo *Corredor::getVacile() {
-	return vacile;
 }
+
+/*
+TNodo *Corredor::getLanzarObjeto() { return lanzarObjeto; }
+TNodo *Corredor::getVacile() { return vacile; }
+TNodo *Corredor::getHabilidadAnim() { return animHabilidad; }
 */
 /*Metodo para cambiar entre animaciones cuando se pulsan los botones
 mov = ESTADO DE LA ANIMACION
@@ -1661,18 +1597,18 @@ void Corredor::iniciarAnimacion(movimiento_jugador mov, TNodo* previo, TNodo *pr
 		static_cast<TAnimacion*>(previoGiro->getEntidad())->ResetAnimation();
 	}
 
-if(previo == NULL){
-	static_cast<TMalla*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
-}
-/*	if (mov != movimiento_jugador::PARADO) {
-		static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
-	}*/
+	if (previo == NULL) {
+		static_cast<TMalla*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
+	}
+	/*	if (mov != movimiento_jugador::PARADO) {
+			static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
+		}*/
 
 
 	switch (mov) {
-	/*case movimiento_jugador::PARADO:
-		cuboNodo->setNode(quieto);
-		break;*/
+		/*case movimiento_jugador::PARADO:
+			cuboNodo->setNode(quieto);
+			break;*/
 	case movimiento_jugador::GIRODERINI:
 		cuboNodo->setNode(giroDerIni);
 		break;
@@ -1685,74 +1621,87 @@ if(previo == NULL){
 	case movimiento_jugador::GIROIZQFIN:
 		cuboNodo->setNode(giroIzqFin);
 		break;
-	/*case movimiento_jugador::HABILIDAD:
-		cuboNodo->setNode(animHabilidad);
-		break;
-
-	case movimiento_jugador::LANZAROBJETO:
-		cuboNodo->setNode(lanzarObjeto);
-		break;
-	case movimiento_jugador::VACILE:
-			cuboNodo->setNode(vacile);
+		/*case movimiento_jugador::HABILIDAD:
+			cuboNodo->setNode(animHabilidad);
 			break;
-		*/
+
+		case movimiento_jugador::LANZAROBJETO:
+			cuboNodo->setNode(lanzarObjeto);
+			break;
+		case movimiento_jugador::VACILE:
+				cuboNodo->setNode(vacile);
+				break;
+			*/
 	}
 	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(true);
 	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setPlaying(true);
-	/*
-	cout << "||||||||||||||||||||||||||||||||||||||||||||" << endl;
-	cout << "visibilidad de los nodos : " << endl;
-
-	cout << "PARADO       : " << static_cast<TMalla*>(quieto->getEntidad())->isVisible() << endl;
-	cout << "GIRO DER INI : " << static_cast<TAnimacion*>(giroDerIni->getEntidad())->isVisible() << endl;
-	cout << "GIRO DER FIN : " << static_cast<TAnimacion*>(giroDerFin->getEntidad())->isVisible() << endl;
-	cout << "GIRO IZQ INI : " << static_cast<TAnimacion*>(giroIzqIni->getEntidad())->isVisible() << endl;
-	cout << "GIRO IZQ FIN : " << static_cast<TAnimacion*>(giroIzqFin->getEntidad())->isVisible() << endl;
-	cout << "HABILIDAD    : " << static_cast<TAnimacion*>(animHabilidad->getEntidad())->isVisible() << endl;
-	cout << "--------------------------------------------" << endl;
-	*/
-
-
 }
 
 //---------------------------------------//
 //--------------DESTRUCTOR---------------//
 //---------------------------------------//
 Corredor::~Corredor() {
-	cout << "\nENTRO DESTRUCTOR CORREDOR. ";
-	delete fuenteMotor;
-	delete fuenteItem;
-	delete fuenteFrenos;
-	delete vehiculo;
+	// Modelos 3D
 	delete cuboNodo;
-
 	delete rueda1;
 	delete rueda2;
 	delete rueda3;
 	delete rueda4;
 
-	delete restriccion1;
-	delete restriccion2;
-	delete restriccion3;
-	delete restriccion4;
+	// Animaciones
+	giroDerIni = nullptr;
+	giroDerFin = nullptr;
+	giroIzqIni = nullptr;
+	giroIzqFin = nullptr;
+	quieto = nullptr;
 
-	nombre=nullptr;
-	delete estado;
+	// Sonido
+	delete fuenteMotor;
+	delete fuenteItem;
+
+	// Fisicas
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(CuerpoColisionRueda1);
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(CuerpoColisionRueda2);
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(CuerpoColisionRueda3);
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(CuerpoColisionRueda4);
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(vehiculo->getRigidBody());
+
+	
+	delete vehiculo->getRigidBody()->getCollisionShape();
+	delete CuerpoColisionRueda4->getCollisionShape();
+	delete CuerpoColisionRueda3->getCollisionShape();
+	delete CuerpoColisionRueda2->getCollisionShape();
+	delete CuerpoColisionRueda1->getCollisionShape();
+	
+	delete vehiculo->getRigidBody()->getMotionState();
+	delete CuerpoColisionRueda4->getMotionState();
+	delete CuerpoColisionRueda3->getMotionState();
+	delete CuerpoColisionRueda2->getMotionState();
+	delete CuerpoColisionRueda1->getMotionState();
+	
+
+	delete vehiculo;
 	delete RayCastVehiculo;
-	giroDerIni=nullptr;
-	//TNodo *lanzarObjeto;
-	giroDerFin=nullptr;
-	giroIzqIni=nullptr;
-	giroIzqFin=nullptr;;
-	//TNodo *animHabilidad;
-	quieto=nullptr;
+	// Se borrarn los cuerpos de colision en el destructor del motor de fisicas
+	//	delete CuerpoColisionRueda4;
+	//	delete CuerpoColisionRueda3;
+	//	delete CuerpoColisionRueda2;
+	//	delete CuerpoColisionRueda1;
+
+	
+
+	nombre = nullptr;
+	delete estado;
 
 	//BILLBOARD
-	b=nullptr;
+	b = nullptr;
 
 	//PARTICULAS HUMO
-	p=nullptr;
+	p = nullptr;
 
+	actual = nullptr;
+	siguiente = nullptr;
+	siguiente_aux = nullptr;
 	//delete actual; // Punto Actual
 	//delete siguiente; // Punto Siguiente
 	//delete siguiente_aux; // Punto Siguiente
@@ -1764,7 +1713,4 @@ Corredor::~Corredor() {
 		delete giroIzqFin;
 		delete animHabilidad;
 		delete quieto;*/
-
-
-	cout << "SALGO DESTRUCTOR CORREDOR\n";
 }

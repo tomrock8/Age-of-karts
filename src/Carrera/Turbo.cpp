@@ -9,32 +9,27 @@ Turbo::Turbo(btVector3 pos, bool estado) {
 	turboActivo = estado;
 	turboTocado = estado;
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	
+
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
-	turbo = TMotor::instancia().newMeshNode("Turbo"," ","escena_raiz",false);
-	escala = btVector3(2.5f, 0.2f, 1.25f);
-	//turbo->setScale(vector3df(escala.getX(), escala.getY(), escala.getZ()));
-	//turbo->setMaterialFlag(EMF_LIGHTING, false);
-	//turbo->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+	turbo = TMotor::instancia().newMeshNode("Turbo", " ", "escena_raiz", false);
+	btVector3 escala = btVector3(2.5f, 0.2f, 1.25f);
+
 	GestorIDs::instancia().setIdentifier(turbo, "Turbo");
 	id = turbo->getID();
-	//asignar un color , a falta de ponerle una textura 
+
 	//posicion origen 
-	transform;
+	btTransform transform;
 	transform.setIdentity();
 	transform.setOrigin(pos);
 
-
-	MotionState = new btDefaultMotionState(transform);
-
 	// Create the shape
-	halfExtents = btVector3(escala.getX() * 2, escala.getY() + 5, escala.getZ() * 2);
-	Shape = new btBoxShape(halfExtents);
+	btCollisionShape *Shape = new btBoxShape(btVector3(escala.getX() * 2, escala.getY() + 5, escala.getZ() * 2));
+
 	// sin masa
-	localInertia;
+	btVector3 localInertia;
 	Shape->calculateLocalInertia(0, localInertia);
 	//Crear el rigidbody
-	rigidBody = new btRigidBody(0, MotionState, Shape, localInertia);
+	rigidBody = new btRigidBody(0, new btDefaultMotionState(transform), Shape, localInertia);
 	rigidBody->setActivationState(DISABLE_DEACTIVATION);
 	//ACTIVA LA COLISION SIN COLISIONAR CON EL OBJETO
 	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
@@ -45,15 +40,25 @@ Turbo::Turbo(btVector3 pos, bool estado) {
 	bullet->getMundo()->addRigidBody(rigidBody);
 	objetos.push_back(rigidBody);
 	bullet->setObjetos(objetos);
+
+	Shape = nullptr;
 }
 
-int Turbo::getID() {
-	return id;
+//destructor
+Turbo::~Turbo() {
+	delete turbo; // Modelo 3D
+
+	delete rigidBody->getCollisionShape();
+	delete rigidBody->getMotionState();
+
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(rigidBody);
+	delete rigidBody;
 }
-bool Turbo::getTurboActivo() {
-	//cout<<"esta activo ? :"<<turboActivo<<endl;
-	return turboActivo;
-}
+
+int Turbo::getID() { return id; }
+bool Turbo::getTurboActivo() { return turboActivo; }
+int Turbo::getTiempoTurbo() { return tiempo; }
+void Turbo::setTurboTocado(bool s) { s = turboTocado; }
 void Turbo::setTurboActivo(Corredor *c, bool s) {
 	//cout << "TURBO ACTIVADO" << endl;
 	turboActivo = s;
@@ -66,20 +71,4 @@ void Turbo::setTurboActivo(Corredor *c, bool s) {
 	}
 	else c->SetFuerzaVelocidad(100000);
 	turboTocado = false;
-}
-
-int Turbo::getTiempoTurbo() {
-	return tiempo;
-}
-void Turbo::setTurboTocado(bool s) {
-	s = turboTocado;
-}
-//destructor
-Turbo::~Turbo() {
-	cout << "ENTRO DELETE TURBO: " << this->getID();
-
-	// Los rigid body se borran desde el motor de fisicas
-	// delete rigidBody;
-
-	cout << " SALGO DELETE TURBO\n";
 }

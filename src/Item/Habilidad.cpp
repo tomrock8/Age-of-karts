@@ -51,6 +51,10 @@ Habilidad::Habilidad(int tipo, btRigidBody* n, btVector3 posicion, btVector3 esc
 
 }
 
+Habilidad::~Habilidad(){
+	NodoVehiculo=nullptr;
+}
+
 void Habilidad::lanzarItem(int direccion, btVector3 orientacion, btTransform objeto) {
 	this->orientacion = orientacion;
 
@@ -128,5 +132,3 @@ void Habilidad::movimiento() {
 	}
 }
 
-
-void Habilidad::deleteHijos() {}

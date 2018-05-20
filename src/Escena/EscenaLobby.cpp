@@ -559,7 +559,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			iniciar = false;
 			iniciado = false;
 			ipConexion = "";
-
+			delete mandoConectado;
 			return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 		}
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS && id == 0 || (mandoConectado[id] && (GLFW_PRESS == buttons[1]) && id == 0)) {
@@ -726,6 +726,16 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		if (iniciado)
 			if (client->getStarted()) {
 				//if (empiezaCarrera)
+				if (pantallaCarga){
+					if (!mando){
+						fondo_final = TMotor::instancia().getActiveHud()->addElementHud(2, 2, "fondo3", "assets/HUD/LobbyMenu/load.png");
+					}else{
+						fondo_final = TMotor::instancia().getActiveHud()->addElementHud(2, 2, "fondo3", "assets/HUD/LobbyMenu/load_xbox.png");
+					}
+					pantallaCarga=false;
+					delete mandoConectado;
+					return Escena::tipo_escena::LOBBY;
+				}
 				if (index_mapa == 1) {
 					Pista::getInstancia()->setNombreMapa("pirata");
 				}
@@ -733,6 +743,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 					Pista::getInstancia()->setNombreMapa("gladiador");
 				}
 				Pista::getInstancia()->setNumVueltas(laps);
+				delete mandoConectado;
 				return Escena::tipo_escena::ONLINE;
 			}
 
@@ -744,6 +755,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 					fondo_final = TMotor::instancia().getActiveHud()->addElementHud(2, 2, "fondo3", "assets/HUD/LobbyMenu/load_xbox.png");
 				}
 				pantallaCarga=false;
+				delete mandoConectado;
 				return Escena::tipo_escena::LOBBY;
 			}
 			fondo = TMotor::instancia().getActiveHud()->addElementHud(2, 2, "fondo2", "assets/HUD/LobbyMenu/offline/fondoMulti.png");
@@ -762,6 +774,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 			//Pista::getInstancia()->setNombreMapa(str1.c_str());
 			Pista::getInstancia()->setNumVueltas(laps);
+			delete mandoConectado;
 			return Escena::tipo_escena::CARRERA;		//Iniciar la partida offline
 
 		}

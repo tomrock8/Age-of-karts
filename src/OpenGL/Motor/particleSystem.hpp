@@ -35,6 +35,7 @@ class particleSystem
         void setSize(float s);
         void setColor(glm::vec3 c);
         void setType(int i);
+        void setDistanceHeight(glm::vec3 d);
 
     private:
         // --- VARIABLES ---
@@ -48,6 +49,7 @@ class particleSystem
         glm::vec3 oriParticle; //Orientacion del sistema de particulas
         float sizeParticle; //Tamanyo del sistema de particulas
         glm::vec3 colorParticle; //Color del sistema de particulas
+        glm::vec3 distanceHeight = glm::vec3(-7.0, -1.0, -7.0); //Distancia respecto al centro del sistema
 
         int typeParticle = 0; //Tipo de sistema de particulas // | 0 == normal | 1 == hacia arriba
         float reduceLife = 0.1f; //Reduccion a la vida de las particulas en cada iteracion

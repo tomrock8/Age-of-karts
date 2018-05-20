@@ -302,6 +302,8 @@ void Corredor::setParametros() {
 		//Masa = btScalar(1200);
 		//-----HABILIDAD-----
 		num = 4;
+		
+		//-----PARTICULAS----
 		break;
 	}
 	//camara asignada al jugador
@@ -1351,6 +1353,16 @@ void Corredor::update() {
 			p->setSize(0.075f); //Si esta parado, el tamanyo es mas pequeño
 		}
 		p->setColor(glm::vec3(1.0f, 1.0f, 1.0f)); //Se le pasa un color blanco
+	}
+	//DISTANCIA Y ALTURA
+	if ( getTipoJugador() == tipo_jugador::GLADIADOR ){
+		p->setDistanceHeight(glm::vec3(-7.5, 0.75, -7.5));
+	} else if ( getTipoJugador() == tipo_jugador::PIRATA ){
+		p->setDistanceHeight(glm::vec3(-7.5, 0.75, -7.5));
+	} else if ( getTipoJugador() == tipo_jugador::VIKINGO ){
+		p->setDistanceHeight(glm::vec3(-7.5, 0.75, -7.5));
+	} else {
+		p->setDistanceHeight(glm::vec3(-7.5, 0.75, -7.5));
 	}
 }
 

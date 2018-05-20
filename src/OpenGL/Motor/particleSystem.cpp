@@ -99,13 +99,11 @@ int particleSystem::findLastDeadParticle(){
 
 //Funcion que inicializa una nueva particula del sistema
 void particleSystem::rebirthParticle(Particula *p){
-    //Parametros de cada particula
-    float dist = -7.0f; //Distancia donde se moveran las particulas
-    float altura = -1.0f; //Altura donde se situaran las particulas
     //Establecemos la posicion de la particula en funcion de su posicion y orientacion
     float random = (rand() % 100 - 1) / 50.0f; //Valor random para modificar la posicion de las particulas dentro de un area
-    dist += random; //Se lo sumamos a la distancia
-    p->position = glm::vec3(posParticle.x + dist * oriParticle.x, posParticle.y - altura, posParticle.z + dist * oriParticle.z);
+    float dist_x = distanceHeight[0] + random; //Distancia en x
+    float dist_z = distanceHeight[2] + random; //Distancia en z
+    p->position = glm::vec3(posParticle.x + dist_x * oriParticle.x, posParticle.y - distanceHeight[1], posParticle.z + dist_z * oriParticle.z);
     //Reseteamos la vida y el tamaño de la particula
     p->life = 1.0f;
     p->size = 0.65f;
@@ -129,6 +127,11 @@ void particleSystem::setSize(float s){
 //Funcion para setear el color del sistema de particulas
 void particleSystem::setColor(glm::vec3 c){
     colorParticle = c;
+}
+
+//Funcion para setear la distancia y altura relativa del sistema de particulas
+void particleSystem::setDistanceHeight(glm::vec3 d){
+    distanceHeight = d;
 }
 
 //Funcion para setear el tipo de sistema de particulas

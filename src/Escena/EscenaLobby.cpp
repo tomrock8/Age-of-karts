@@ -531,9 +531,8 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a imagen (tipo
 
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	
-	cout << "EscenaLobby::comprobarInputs() HAY QUE CAMBIAR ESTO AQUI!!";
 	//bool mandoConectado[numPantallas];
-	bool mandoConectado[1];
+	bool *mandoConectado=new bool[numPantallas];
 	for (int id = 0; id < numPantallas; id++) {
 		//Comprobador de de mando y recoleccion de inputs
 		mandoConectado[id] = false;
@@ -767,6 +766,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 		}
 	}
+	delete mandoConectado;
 	return Escena::tipo_escena::LOBBY;
 }
 

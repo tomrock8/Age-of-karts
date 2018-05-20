@@ -37,11 +37,11 @@ EscenaJuego::~EscenaJuego() {
 	}
 	camera.clear();
 
-	delete MotorFisicas::getInstancia();
 	delete Pista::getInstancia();
 	delete GestorJugadores::getInstancia();
 	delete colisiones;
 	delete gc;
+	delete MotorFisicas::getInstancia();
 
 
 	cout << "Destructor de Escena JUEGO. Salgo" << endl;

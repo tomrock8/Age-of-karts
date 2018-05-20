@@ -188,7 +188,7 @@ void Corredor::setParametros() {
 
 	//cambiar parametros en funcion del tipo
 	int num = 0;
-	
+
 	switch (tipojugador) {
 	case GLADIADOR:
 
@@ -223,7 +223,7 @@ void Corredor::setParametros() {
 
 
 		/* Nodos de animacion */
-		
+
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "escena_raiz", false);
 		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "quieto");
 		//lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/LanzamientoOBJ/pirataLanzamiento_000", 639, 652), "LanzarObj");
@@ -252,7 +252,7 @@ void Corredor::setParametros() {
 		num = 2;
 		break;
 	case VIKINGO:
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000534.obj","escena_raiz",false);
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000534.obj", "escena_raiz", false);
 		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000534.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000", 534, 555), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Vikingo/giroDer/vikingoGiroDer_000", 555, 566), "GiroDerFin");
@@ -281,7 +281,7 @@ void Corredor::setParametros() {
 
 	case CHINO:
 
-		cuboNodo = TMotor::instancia().newMeshNode("Jugador","assets/Animacion/Chino/giroDer/ChinoGiroDer_000179.obj","escena_raiz",false);
+		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Chino/giroDer/ChinoGiroDer_000179.obj", "escena_raiz", false);
 		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Chino/giroDer/ChinoGiroDer_000179.obj", "quieto");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroDer/ChinoGiroDer_000", 179, 190), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Chino/giroDer/ChinoGiroDer_000", 190, 201), "GiroDerFin");
@@ -1340,10 +1340,6 @@ void Corredor::update() {
 	distanciaWaypoint = getDistanciaPunto(siguiente->getPosicion());
 	distanciaWaypointActual = getDistanciaPunto(actual->getPosicion());
 
-	/*
-	if(strcmp(cuboNodo->getName(),"Jugador")==0)
-	cout<<actual->getID()-7<<endl;
-	*/
 	if (vueltas > maxvueltas) {
 		estado->setEstadoCarrera(EstadosJugador::estado_carrera::FIN);
 	}
@@ -1429,14 +1425,10 @@ void Corredor::updateTimerObstaculos() {
 }
 
 void Corredor::actualizarRuedas() {
-
 	float altura = 0.5;
 	btVector3 zeroVector(0, 0, 0);
 	glm::vec3 axis(0, 0, 0);
 	float angle = 0;
-
-
-
 
 	btTransform ruedas = vehiculo->getWheelTransformWS(0);
 
@@ -1509,8 +1501,7 @@ void Corredor::lanzarHabilidad() {
 		btScalar radio = 12;
 		float alt = 10;
 
-		Habilidad * habilidadJugador = NULL;
-
+		Habilidad * habilidadJugador = nullptr;
 		switch (tipojugador) {
 
 		case PIRATA:
@@ -1566,9 +1557,8 @@ void Corredor::lanzarHabilidad() {
 		pista->setItems(items);
 		setLimite(0);
 	}
-	else {
-		cout << "No puedes usar la habilidad si tu limite no es 100 o mas" << endl;
-	}
+	//else cout << "No puedes usar la habilidad si tu limite no es 100 o mas" << endl;
+
 }
 
 void Corredor::updateEstado() {
@@ -1609,33 +1599,19 @@ void Corredor::updateVectorDireccion() {
 //------------------------------------------------------------------//
 //---------------------ANIMACION------------------------------------//
 //------------------------------------------------------------------//
-TNodo *Corredor::getGiroDerIni() {
-	return giroDerIni;
-}
-TNodo *Corredor::getGiroDerFin() {
-	return giroDerFin;
-}
-
-TNodo *Corredor::getGiroIzqIni() {
-	return giroIzqIni;
-}
-TNodo *Corredor::getGiroIzqFin() {
-	return giroIzqFin;
-}
-/*
-TNodo *Corredor::getHabilidadAnim() {
-	return animHabilidad;
-}*/
+TNodo *Corredor::getGiroDerIni() { return giroDerIni; }
+TNodo *Corredor::getGiroDerFin() { return giroDerFin; }
+TNodo *Corredor::getGiroIzqIni() { return giroIzqIni; }
+TNodo *Corredor::getGiroIzqFin() { return giroIzqFin; }
 TNodo *Corredor::getAnimQuieto() {
 	static_cast<TMalla*>(quieto->getEntidad())->setVisible(true);
 	return quieto;
-}/*
-TNodo *Corredor::getLanzarObjeto() {
-	return lanzarObjeto;
-}*/
-/*TNodo *Corredor::getVacile() {
-	return vacile;
 }
+
+/*
+TNodo *Corredor::getLanzarObjeto() { return lanzarObjeto; }
+TNodo *Corredor::getVacile() { return vacile; }
+TNodo *Corredor::getHabilidadAnim() { return animHabilidad; }
 */
 /*Metodo para cambiar entre animaciones cuando se pulsan los botones
 mov = ESTADO DE LA ANIMACION
@@ -1653,18 +1629,18 @@ void Corredor::iniciarAnimacion(movimiento_jugador mov, TNodo* previo, TNodo *pr
 		static_cast<TAnimacion*>(previoGiro->getEntidad())->ResetAnimation();
 	}
 
-if(previo == NULL){
-	static_cast<TMalla*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
-}
-/*	if (mov != movimiento_jugador::PARADO) {
-		static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
-	}*/
+	if (previo == NULL) {
+		static_cast<TMalla*>(cuboNodo->getNode()->getEntidad())->setVisible(false);
+	}
+	/*	if (mov != movimiento_jugador::PARADO) {
+			static_cast<TMalla*>(quieto->getEntidad())->setVisible(false);
+		}*/
 
 
 	switch (mov) {
-	/*case movimiento_jugador::PARADO:
-		cuboNodo->setNode(quieto);
-		break;*/
+		/*case movimiento_jugador::PARADO:
+			cuboNodo->setNode(quieto);
+			break;*/
 	case movimiento_jugador::GIRODERINI:
 		cuboNodo->setNode(giroDerIni);
 		break;
@@ -1677,45 +1653,30 @@ if(previo == NULL){
 	case movimiento_jugador::GIROIZQFIN:
 		cuboNodo->setNode(giroIzqFin);
 		break;
-	/*case movimiento_jugador::HABILIDAD:
-		cuboNodo->setNode(animHabilidad);
-		break;
-
-	case movimiento_jugador::LANZAROBJETO:
-		cuboNodo->setNode(lanzarObjeto);
-		break;
-	case movimiento_jugador::VACILE:
-			cuboNodo->setNode(vacile);
+		/*case movimiento_jugador::HABILIDAD:
+			cuboNodo->setNode(animHabilidad);
 			break;
-		*/
+
+		case movimiento_jugador::LANZAROBJETO:
+			cuboNodo->setNode(lanzarObjeto);
+			break;
+		case movimiento_jugador::VACILE:
+				cuboNodo->setNode(vacile);
+				break;
+			*/
 	}
 	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setVisible(true);
 	static_cast<TAnimacion*>(cuboNodo->getNode()->getEntidad())->setPlaying(true);
-	/*
-	cout << "||||||||||||||||||||||||||||||||||||||||||||" << endl;
-	cout << "visibilidad de los nodos : " << endl;
-
-	cout << "PARADO       : " << static_cast<TMalla*>(quieto->getEntidad())->isVisible() << endl;
-	cout << "GIRO DER INI : " << static_cast<TAnimacion*>(giroDerIni->getEntidad())->isVisible() << endl;
-	cout << "GIRO DER FIN : " << static_cast<TAnimacion*>(giroDerFin->getEntidad())->isVisible() << endl;
-	cout << "GIRO IZQ INI : " << static_cast<TAnimacion*>(giroIzqIni->getEntidad())->isVisible() << endl;
-	cout << "GIRO IZQ FIN : " << static_cast<TAnimacion*>(giroIzqFin->getEntidad())->isVisible() << endl;
-	cout << "HABILIDAD    : " << static_cast<TAnimacion*>(animHabilidad->getEntidad())->isVisible() << endl;
-	cout << "--------------------------------------------" << endl;
-	*/
-
-
 }
 
 //---------------------------------------//
 //--------------DESTRUCTOR---------------//
 //---------------------------------------//
 Corredor::~Corredor() {
-	cout << "\nENTRO DESTRUCTOR CORREDOR. ";
 	delete fuenteMotor;
 	delete fuenteItem;
 	delete vehiculo;
-	delete cuboNodo;
+	delete cuboNodo; // modelo 3d
 
 	delete rueda1;
 	delete rueda2;
@@ -1727,27 +1688,27 @@ Corredor::~Corredor() {
 	delete restriccion3;
 	delete restriccion4;
 
-	nombre=nullptr;
+	nombre = nullptr;
 	delete estado;
 	delete RayCastVehiculo;
-	giroDerIni=nullptr;
-	//TNodo *lanzarObjeto;
-	giroDerFin=nullptr;
-	giroIzqIni=nullptr;
-	giroIzqFin=nullptr;;
-	//TNodo *animHabilidad;
-	quieto=nullptr;
+	giroDerIni = nullptr;
+
+	giroDerFin = nullptr;
+	giroIzqIni = nullptr;
+	giroIzqFin = nullptr;;
+
+	quieto = nullptr;
 
 	//BILLBOARD
-	b=nullptr;
+	b = nullptr;
 
 	//PARTICULAS HUMO
-	p=nullptr;
+	p = nullptr;
 
 
-	actual=nullptr;
-	siguiente=nullptr;
-	siguiente_aux=nullptr;
+	actual = nullptr;
+	siguiente = nullptr;
+	siguiente_aux = nullptr;
 	//delete actual; // Punto Actual
 	//delete siguiente; // Punto Siguiente
 	//delete siguiente_aux; // Punto Siguiente

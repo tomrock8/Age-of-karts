@@ -36,8 +36,6 @@ private:
 	Waypoint *siguiente; // Siguiente punto
 
 	//fisicas
-	btDefaultMotionState *MotionState;
-	btCollisionShape *Shape;
 	btRigidBody * rigidBody;
 
 	//vectores

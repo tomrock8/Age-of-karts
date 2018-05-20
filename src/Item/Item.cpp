@@ -23,7 +23,6 @@ Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesc
 }
 
 Item::~Item() {
-
 	MotorFisicas *bullet = MotorFisicas::getInstancia();
 	btDynamicsWorld *mundo = bullet->getMundo();
 	std::vector<btRigidBody *> objetos = bullet->getObjetos();
@@ -38,14 +37,12 @@ Item::~Item() {
 			mundo->removeRigidBody(Object);
 
 			// Free memory
-
 			delete Object->getCollisionShape();
 			delete Object->getMotionState();
 			delete Object;
 
 			objetos.erase(objetos.begin() + i);
 			bullet->setObjetos(objetos);
-
 		}
 	}
 
@@ -60,10 +57,10 @@ void Item::inicializarFisicas() {
 	btTransform Transform;
 	Transform.setIdentity();
 	Transform.setOrigin(posicion);
-	MotionState = new btDefaultMotionState(Transform);
 	btVector3 HalfExtents(escala.getX(), escala.getY(), escala.getZ());
 	//btVector3 HalfExtents(1, 1, 1);
 	// Create the shape
+	btCollisionShape *Shape = nullptr;
 	switch (fcolision) {
 
 	case CUBO:
@@ -85,10 +82,7 @@ void Item::inicializarFisicas() {
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
 	// Create the rigid body object
-	rigidBody = new btRigidBody(masa, MotionState, Shape, LocalInertia);
-
-
-
+	rigidBody = new btRigidBody(masa, new btDefaultMotionState(Transform), Shape, LocalInertia);
 	rigidBody->setUserPointer((void *)(nodo));
 
 	// Add it to the world
@@ -96,16 +90,6 @@ void Item::inicializarFisicas() {
 	objetos.push_back(rigidBody);
 	bullet->setObjetos(objetos);
 
-}
-
-void Item::setLanzado(bool b) {
-	lanzado = b;
-	tiempoLanzado = clock();
-}
-
-bool Item::getLanzado()
-{
-	return lanzado;
 }
 
 bool Item::comprobarDestructor() {
@@ -119,35 +103,18 @@ bool Item::comprobarDestructor() {
 
 
 bool Item::update() {
-	//cout<<nodo->getRotation().y<<endl;
-	if (comprobarDestructor()) {
-
+	if (comprobarDestructor())
 		return true;
-	}
-	else {
 
-		return false;
-	}
+	return false;
 }
 
-
-void Item::Delete() {
-	
-
-	
-	
-}
-
-
-
-
+void Item::Delete() {}
 
 //COmprobar distancias con el suelo
 void Item::ajustarAltura() {
-
 	btTransform posObj = rigidBody->getCenterOfMassTransform();
 	float altura = 0;
-
 
 	if (subir) {
 		altura = (alturaItem - indiceAltura) / diferencia;
@@ -158,13 +125,10 @@ void Item::ajustarAltura() {
 		posObj.setOrigin(btVector3(posObj.getOrigin().getX(), posObj.getOrigin().getY() - altura, posObj.getOrigin().getZ()));
 	}
 
-
 	rigidBody->setCenterOfMassTransform(posObj);
 
 	subir = false;
 	bajar = false;
-
-
 }
 
 void Item::comprobarAltura(float altura) {
@@ -186,65 +150,41 @@ void Item::comprobarAltura(float altura) {
 	mundo->rayTest(inicio, fin, RayCast1);
 
 
-	if (RayCast1.hasHit())
-	{
-
-		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++)
-		{
+	if (RayCast1.hasHit()) {
+		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++) {
 			if (i < RayCast1.m_hitFractions.size() - 1) {
 				indiceAltura = RayCast1.m_hitFractions[i];
 
 				if (RayCast1.m_hitFractions[i] < altura) {
 					subir = true;
-
 				}
 				if (RayCast1.m_hitFractions[i] > altura) {
-
 				}
 				if (RayCast1.m_hitFractions[i] > altura) {
-
 					bajar = true;
-
 				}
 			}
 		}
 	}
-
 }
 
-btRigidBody *Item::getRigidBody()
-{
-	return rigidBody;
-}
-obj3D *Item::getNodo()
-{
-	return nodo;
+// METODOS GET
+btRigidBody *Item::getRigidBody() { return rigidBody; }
+obj3D *Item::getNodo() { return nodo; }
+const char* Item::getNombre() { return nombre; }
+int Item::getID() { return id; }
+int Item::getIDPadre() { return idNodoPadre; }
+bool Item::getLanzado() { return lanzado; }
 
-}
-const char* Item::getNombre() {
-	return nombre;
-}
-int Item::getID() {
-	return id;
-}
-
-int Item::getIDPadre() {
-	return idNodoPadre;
-}
-
-void Item::setNombre(const char* nombre) {
-	this->nombre = nombre;
-}
-void Item::setMasa(btScalar masa) {
-	this->masa = masa;
-}
-
-void Item::setIDPadre(int id) {
-	idNodoPadre = id;
-}
-
+// METODOS SET
+void Item::setNombre(const char* nombre) { this->nombre = nombre; }
+void Item::setMasa(btScalar masa) { this->masa = masa; }
+void Item::setIDPadre(int id) { idNodoPadre = id; }
 void Item::setColision(int id) {
 	idwaypoint = id;
-	//cout<<"idwaypoint: "<<idwaypoint-7<<endl;
 	colision = true;
+}
+void Item::setLanzado(bool b) {
+	lanzado = b;
+	tiempoLanzado = clock();
 }

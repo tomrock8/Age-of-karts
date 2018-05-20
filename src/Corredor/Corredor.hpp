@@ -126,7 +126,7 @@ public:
 	void iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *previoGiro);
 
 protected:
-	obj3D * cuboNodo;
+	obj3D *cuboNodo;
 	obj3D *rueda1;
 	obj3D *rueda2;
 	obj3D *rueda3;

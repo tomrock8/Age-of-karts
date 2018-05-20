@@ -26,7 +26,7 @@ public:
 	virtual ~Item();
 
 	void inicializarFisicas();
-	virtual void lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) = 0;
+	virtual void lanzarItem(int direccion, btVector3 orientacion, btTransform objeto) = 0;
 	virtual void updateHijos() = 0;
 	void ajustarAltura();
 	void comprobarAltura(float altura);
@@ -55,11 +55,8 @@ protected:
 
 	//NODO
 	obj3D * nodo;
-
-	//Propiedades rigidbody
 	btRigidBody *rigidBody;
-	btDefaultMotionState *MotionState;
-	btCollisionShape *Shape;
+
 	btScalar masa;
 	btVector3 escala;
 	btVector3 posicion;

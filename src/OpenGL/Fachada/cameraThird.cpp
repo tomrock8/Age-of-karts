@@ -4,7 +4,7 @@
 cameraThird::cameraThird(const char *name, const char *parentName) {
 	camara = TMotor::instancia().newCameraNode(name, parentName);
 	camara->rotate(glm::vec3(0, 1, 0), 180);
-	auxX=0;
+	auxX = 0;
 	//this->nodo = nodo;
 	//parentNode = parent;
 
@@ -53,17 +53,17 @@ void cameraThird::lookAt(glm::vec3 posicion) {
 	static_cast<TTransform*>(camara->getNode()->getPadre()->getEntidad())->setMatriz(lookAtCamara);
 
 }
-void cameraThird::setPositionStatic(glm::vec3 posicion){
+void cameraThird::setPositionStatic(glm::vec3 posicion) {
 
-camara->setPosition(posicion.x,posicion.y,posicion.z);
+	camara->setPosition(posicion.x, posicion.y, posicion.z);
 
 }
 void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 direccion) {
 
 	float zoom = 15;
-	float altura =7;
-	float maximoRetardo=8;
-	float retardo=0.25;
+	float altura = 7;
+	float maximoRetardo = 8;
+	float retardo = 0.25;
 	bool mandoConectado = false;
 	const unsigned char *buttons = nullptr;
 	const float *axes = nullptr;
@@ -76,70 +76,63 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 		//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
 	}
 
-// || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))
+	// || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))
 
-		if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L) || (mandoConectado && (GLFW_PRESS == buttons[3]))){
-		camara->setPosition(posicion.x + direccion.getX()*zoom, posicion.y + altura,posicion.z + direccion.getZ()*zoom);
-	
-		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_E) == GLFW_PRESS || (mandoConectado && -0.8f >= axes[3])) {
-			
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L) || (mandoConectado && (GLFW_PRESS == buttons[3]))) {
+		camara->setPosition(posicion.x + direccion.getX()*zoom, posicion.y + altura, posicion.z + direccion.getZ()*zoom);
+
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_E) == GLFW_PRESS || (mandoConectado && -0.8f >= axes[3])) {
+
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), -90 * M_PI / 180);
-		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
-		
-		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_Q) == GLFW_PRESS  || (mandoConectado && 0.8f <= axes[3] )) {
+		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura, posicion.z - direccion2.getZ()*zoom);
+
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_Q) == GLFW_PRESS || (mandoConectado && 0.8f <= axes[3])) {
 
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), 90 * M_PI / 180);
-		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
+		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura, posicion.z - direccion2.getZ()*zoom);
 
-		}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))){
-		
-		if(auxX<=maximoRetardo)
-		auxX+=retardo;	
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
 
-		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
-		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);	
-		
-		}else if(glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))){
-		
-		if(auxX>=-maximoRetardo)
-		auxX-=retardo;
+		if (auxX <= maximoRetardo)
+			auxX += retardo;
 
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
-		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);		
-		
-		}
-		else{
+		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura, posicion.z - direccion2.getZ()*zoom);
+
+	}
+	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) {
+
+		if (auxX >= -maximoRetardo)
+			auxX -= retardo;
+
+		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
+		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura, posicion.z - direccion2.getZ()*zoom);
+
+	}
+	else {
 
 		if (auxX > 0) {
-			auxX-=retardo;
-		}else if (auxX < 0){
-			auxX+=retardo;
+			auxX -= retardo;
+		}
+		else if (auxX < 0) {
+			auxX += retardo;
 		}
 
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
-		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura,posicion.z - direccion2.getZ()*zoom);
-		
-		}
-		
-}
+		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura, posicion.z - direccion2.getZ()*zoom);
 
-void cameraThird::comprobarInputs(){
-
-
+	}
 
 }
 
-
-obj3D* cameraThird::getNodo(){
-
-	return camara;
-
-}
+void cameraThird::comprobarInputs() {}
+obj3D* cameraThird::getNodo() { return camara; }
 
 btRigidBody *cameraThird::initializePhysics() {
-	
+
 	btVector3 escala(5, 5, 5);
 	btVector3 posicion(-10, 10, 31);
 	btScalar masa = btScalar(10);
@@ -167,7 +160,6 @@ btRigidBody *cameraThird::initializePhysics() {
 	btRigidBody *rigidBody = new btRigidBody(masa, MotionState, Shape, LocalInertia);
 	btTransform t;
 	rigidBody->getMotionState()->getWorldTransform(t);
-	// Store a pointer to the irrlicht node so we can update it later
 	rigidBody->setUserPointer((void *)(camara));
 
 	rigidBody->setActivationState(DISABLE_DEACTIVATION);
@@ -177,7 +169,7 @@ btRigidBody *cameraThird::initializePhysics() {
 	//bullet->setObjetos(objetos);
 	rigidBody->setGravity(btVector3(0, 0, 0));
 	return rigidBody;
-	
+
 
 }
 

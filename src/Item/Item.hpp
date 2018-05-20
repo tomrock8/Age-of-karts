@@ -31,7 +31,6 @@ public:
 	void ajustarAltura();
 	void comprobarAltura(float altura);
 	bool update();
-	void Delete();
 
 
 	obj3D *getNodo();

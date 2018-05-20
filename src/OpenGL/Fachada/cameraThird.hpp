@@ -42,12 +42,10 @@ public:
 	
 
 private:
-
 	GLuint id;
 	glm::mat4 position;
 	glm::mat4 rotation;
 	const char *name;
-	//Corredor* nodo;
 	obj3D* camara;
 
 	float direction;
@@ -56,8 +54,7 @@ private:
 	btVector3 direccion2;
 
 	float auxX;
-	btDefaultMotionState *MotionState;
-	btCollisionShape *Shape;
+	
 	btRigidBody *rigidBody;
 
 };

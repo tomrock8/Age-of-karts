@@ -8,35 +8,36 @@ Pista::Pista() {
 Pista::~Pista() {
 	cout << "Destructor de PISTA. Entro.\n";
 	//destroy waypoint
-	if(arrayWaypoints.size()>0){
-	for (int i = 0; i < tamWaypoints; i++) {
-		delete arrayWaypoints.at(i);
+	if (arrayWaypoints.size() > 0) {
+		for (int i = 0; i < tamWaypoints; i++) {
+			delete arrayWaypoints.at(i);
+		}
+		arrayWaypoints.clear();
 	}
-	arrayWaypoints.clear();
-	}
-	if(arrayCajas.size()>0){
-	//destroy cajas
-	for (int i = 0; i < tamCajas; i++) {
-		delete arrayCajas.at(i);
-	}
-	arrayCajas.clear();
+	if (arrayCajas.size() > 0) {
+		//destroy cajas
+		for (int i = 0; i < tamCajas; i++) {
+			delete arrayCajas.at(i);
+		}
+		arrayCajas.clear();
 	}
 	//delete arrayCajas;
-	if(arrayTurbos.size()>0){
-	//destroy turbo
-	for (int i = 0; i < tamTurbos; i++) {
-		delete arrayTurbos.at(i);
-	}
-	arrayTurbos.clear();
+	if (arrayTurbos.size() > 0) {
+		//destroy turbo
+		for (int i = 0; i < tamTurbos; i++) {
+			delete arrayTurbos.at(i);
+		}
+		arrayTurbos.clear();
 	}
 	//delete arrayTurbos;
 
-	if(Items.size()>0){
-	//destroy items
-	for (int i = 0; i < Items.size(); i++) {
-		delete Items.at(i);
-	}
-	Items.clear();
+	if (Items.size() > 0) {
+		//destroy items
+		/*for (int i = 0; i < Items.size(); i++) {
+			delete Items.at(i);
+		}
+		*/
+		Items.clear();
 	}
 
 	//delete nameMap;
@@ -49,7 +50,7 @@ Pista::~Pista() {
 
 
 
-	
+
 Pista *Pista::getInstancia() {
 	if (instancia == NULL)
 		instancia = new Pista();

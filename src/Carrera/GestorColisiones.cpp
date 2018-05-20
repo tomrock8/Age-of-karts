@@ -7,12 +7,10 @@ void GestorColisiones::IniciarTimer() {
 }
 
 
-GestorColisiones::~GestorColisiones(){
-
+GestorColisiones::~GestorColisiones() {
 	pj1.clear();
-	nodoA=nullptr;
-	nodoB=nullptr;
-
+	nodoA = nullptr;
+	nodoB = nullptr;
 }
 
 
@@ -129,14 +127,14 @@ bool GestorColisiones::habilidadVShabilidad() {
 
 			for (int j = 0; j < items.size(); j++) {
 				if (items.at(j)->getID() == idA) {
-					items.at(j)->Delete();
+					delete items.at(j);
 					items.erase(items.begin() + j);
 				}
 			}
 
 			for (int i = 0; i < items.size(); i++) {
 				if (items.at(i)->getID() == idB) {
-					items.at(i)->Delete();
+					delete items.at(i);
 					items.erase(items.begin() + i);
 
 				}
@@ -156,14 +154,14 @@ bool GestorColisiones::habilidadVShabilidad() {
 
 			for (int j = 0; j < items.size(); j++) {
 				if (items.at(j)->getID() == idA) {
-					items.at(j)->Delete();
+					delete items.at(j);
 					items.erase(items.begin() + j);
 				}
 			}
 
 			for (int i = 0; i < items.size(); i++) {
 				if (items.at(i)->getID() == idB) {
-					items.at(i)->Delete();
+					delete items.at(i);
 					items.erase(items.begin() + i);
 
 				}
@@ -184,14 +182,14 @@ bool GestorColisiones::habilidadVShabilidad() {
 
 			for (int j = 0; j < items.size(); j++) {
 				if (items.at(j)->getID() == idA) {
-					items.at(j)->Delete();
+					delete items.at(j);
 					items.erase(items.begin() + j);
 				}
 			}
 
 			for (int i = 0; i < items.size(); i++) {
 				if (items.at(i)->getID() == idB) {
-					items.at(i)->Delete();
+					delete items.at(i);
 					items.erase(items.begin() + i);
 
 				}
@@ -211,14 +209,14 @@ bool GestorColisiones::habilidadVShabilidad() {
 
 			for (int j = 0; j < items.size(); j++) {
 				if (items.at(j)->getID() == idA) {
-					items.at(j)->Delete();
+					delete items.at(j);
 					items.erase(items.begin() + j);
 				}
 			}
 
 			for (int i = 0; i < items.size(); i++) {
 				if (items.at(i)->getID() == idB) {
-					items.at(i)->Delete();
+					delete items.at(i);
 					items.erase(items.begin() + i);
 
 				}
@@ -339,13 +337,13 @@ bool GestorColisiones::Escudoitems() {
 			}
 			else {
 
-				items.at(idEscudo)->Delete();
+				delete items.at(idEscudo);
 				items.erase(items.begin() + idEscudo);
 
 				if (strcmp("Estatico", nodoB->getName()) == 0 || strcmp("Proyectil", nodoB->getName()) == 0) {
 					for (int i = 0; i < items.size(); i++) {
 						if (items.at(i)->getID() == idB) {
-							items.at(i)->Delete();
+							delete items.at(i);
 							items.erase(items.begin() + i);
 
 						}
@@ -387,12 +385,12 @@ bool GestorColisiones::Escudoitems() {
 
 			}
 			else {
-				items.at(idEscudo)->Delete();
+				delete items.at(idEscudo);
 				items.erase(items.begin() + idEscudo);
 				if (strcmp("Estatico", nodoA->getName()) == 0 || strcmp("Proyectil", nodoA->getName()) == 0) {
 					for (int i = 0; i < items.size(); i++) {
 						if (items.at(i)->getID() == idA) {
-							items.at(i)->Delete();
+							delete items.at(i);
 							items.erase(items.begin() + i);
 						}
 					}
@@ -440,7 +438,7 @@ bool GestorColisiones::HabilidadesItems() {
 				return false;
 			}
 			else {
-				items.at(idObjeto)->Delete();
+				delete items.at(idObjeto);
 				items.erase(items.begin() + idObjeto);
 				Pista::getInstancia()->setItems(items);
 				return true;
@@ -475,7 +473,7 @@ bool GestorColisiones::HabilidadesItems() {
 				return false;
 			}
 			else {
-				items.at(idObjeto)->Delete();
+				delete items.at(idObjeto);
 				items.erase(items.begin() + idObjeto);
 				Pista::getInstancia()->setItems(items);
 				return true;
@@ -549,10 +547,9 @@ bool GestorColisiones::JugadorEstatico() {
 						}
 					}
 					protegido = false;
-					items.at(i)->Delete();
+					delete items.at(i);
 					items.erase(items.begin() + i);
 					Pista::getInstancia()->setItems(items);
-
 					return true;
 				}
 			}
@@ -570,7 +567,7 @@ bool GestorColisiones::JugadorEstatico() {
 		Item *it = NULL;
 		for (int i = 0; i < items.size(); i++) {
 			if (items.at(i)->getID() == idA) {
-				items.at(i)->Delete();
+				delete items.at(i);
 				items.erase(items.begin() + i);
 				Pista::getInstancia()->setItems(items);
 				b = true;
@@ -580,7 +577,7 @@ bool GestorColisiones::JugadorEstatico() {
 		if (b == true) {
 			for (int j = 0; j < items.size(); j++) {
 				if (items.at(j)->getID() == idB) {
-					items.at(j)->Delete();
+					delete items.at(j);
 					items.erase(items.begin() + j);
 					Pista::getInstancia()->setItems(items);
 					return true;
@@ -628,7 +625,7 @@ bool GestorColisiones::JugadorProyectil() {
 						}
 					}
 					protegido = false;
-					items.at(i)->Delete();
+					delete items.at(i);
 					items.erase(items.begin() + i);
 					Pista::getInstancia()->setItems(items);
 

@@ -132,6 +132,9 @@ void EscenaJuego::init() {
 				numPantallas++;
 			}
 		}
+		if (numPantallas>4){
+			numPantallas=4;
+		}
 		int num_jugadores=0;
 		client = Client::getInstancia();
 		for (int i=0;i<client->getClientes().size();i++){
@@ -144,7 +147,6 @@ void EscenaJuego::init() {
 			numPantallas=1;
 			
 		}else{
-			cout<<"peto1\n";
 			for (int i=1;i<numPantallas;i++){
 				crearHUD(i);
 				habilidad.push_back(0);
@@ -260,6 +262,7 @@ void EscenaJuego::init() {
 
 	for (int x = 0; x < numPantallas; x++) {
 		cameraThird *c = new cameraThird("camara_jugador3apersona", "escena_raiz");
+		c->setID(x);
 		camera.push_back(c);
 	}
 	cout << "Camaras creadas.\n";

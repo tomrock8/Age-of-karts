@@ -111,6 +111,18 @@ void EscenaMenu::update() {}
 std::string EscenaMenu::getIpConexion() { return ipConexion; }
 
 Escena::tipo_escena EscenaMenu::comprobarInputs() {
+	int id=0;
+	bool mandoConectado=false;
+	const unsigned char *buttons = nullptr;
+	const float *axes = nullptr;
+	if (1 == glfwJoystickPresent(id)) {
+		mandoConectado = true;
+		int buttonCount;
+		buttons = glfwGetJoystickButtons(id, &buttonCount);
+		int axesCount;
+		axes = glfwGetJoystickAxes(id, &axesCount);
+		//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
+	}
 	//Si se pulsa ESCAPE se sale directamente del juego - para poder salir de todos los sitios, despues se quitara
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		if (!pressed) {
@@ -118,7 +130,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 		}
 	}else if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) { //Inputs para el menu principal
 		//Segun se toque arriba o abajo, el usuario se va moviendo entre los distintos botones del menu
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS) {
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[14] || 0.5f <= axes[1]))) {
 			if (!pressed) {
 				fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 				if (optionMenu == 3) {
@@ -130,7 +142,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 				pressed = true;
 			}
 		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS) {
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[13] || -0.5f >= axes[1]))) {
 			if (!pressed) {
 				fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 				if (optionMenu == 0) {
@@ -143,7 +155,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			}
 			//Si se pulsa intro se comprueba en que opcion del menu se encuentra el usuario y se cambia a la escena correspondiente
 		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS) {
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[0]))) {
 			fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 			if (optionMenu == 0) {
 				cout << "LOCAL\n";
@@ -188,7 +200,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 	//Inputs para el menu de juego local
 	if (strcmp(TMotor::instancia().getActiveHud()->getName(), "LocalMenuHUD") == 0) {
 		//Si se pulsa ESCAPE se sale al menu principal
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_BACKSPACE) == GLFW_PRESS) {
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_BACKSPACE) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[1]))) {
 			if (!pressed) {
 				TMotor::instancia().setActiveHud("MainMenuHUD");
 				optionMenu = 0;
@@ -196,20 +208,20 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 		}
 
 		//Segun se toque derecha o izquierda, el usuario se va moviendo entre los dos botones del menu local
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_RIGHT) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
 			if (!pressed) {
 				optionMenu = 1;
 				pressed = true;
 			}
 		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS) {
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) {
 			if (!pressed) {
 				optionMenu = 0;
 				pressed = true;
 			}
 			//Si se pulsa intro se comprueba en que opcion del menu se encuentra el usuario y se cambia a la escena correspondiente
 		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS) {
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[0]))) {
 			if (optionMenu == 0) {
 				if (!pressed) {
 					cout << "UN JUGADOR\n";

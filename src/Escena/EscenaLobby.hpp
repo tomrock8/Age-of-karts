@@ -23,11 +23,10 @@ public:
 	void mostrarInfoLobby(int indice);
 	void mostrarInfoLobbyPropia();
 	Escena::tipo_escena comprobarInputs();
-	void movimientoHorizontal1Player(int k, bool dcha);
 	void mostrarTipoPersonaje(int i);
 	int character_callback(GLFWwindow *window, unsigned int codepoint);
 	void movimientoVertical(bool interno);
-	void movimientoHorizontal(int k,bool dcha);
+	void movimientoHorizontal(int k,bool dcha,int id);
 	void actualizarSelector();
 	void iniciarCarrera();
 	void crearHUD();
@@ -50,7 +49,7 @@ private:
 	bool conectado;
 	bool lanzado;
 	int count;
-	bool pressed;
+	bool pressed[6];
 	bool firstInit;
 	Timer *time;
 	int laps;
@@ -59,8 +58,9 @@ private:
 	bool offline;
 	bool offline_split;
 	bool end;
-    	bool checkReady;
+    bool checkReady;
 	bool checkCPU;
+	bool mando;
 
 	bool checkfocus;
 	bool show_config;

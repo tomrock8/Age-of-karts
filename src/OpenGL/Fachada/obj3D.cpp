@@ -11,7 +11,6 @@ obj3D::obj3D(TNodo *m, const char *n, GLuint i) {
 }
 
 obj3D::~obj3D() {
-	cout << "Delete obj3D \n";
 	setVisible(false);
 	node->deleteNode();
 }

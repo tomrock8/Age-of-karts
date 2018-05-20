@@ -11,6 +11,7 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	connecting = "";
 	show_config = true;
 	empiezaCarrera = false;
+	pantallaCarga=true;
 	end = false;
 	checkfocus=true;
 	infoLobby= new std::string("");
@@ -571,7 +572,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS && id==0 || (mandoConectado[id] && (GLFW_PRESS == buttons[7]) && id==0)) && !selection_online) {
 			//Space==Control de ready/Iniciar partida
 			if (!pressed[id]) {
-				pressed[id] = true;
+				pressed[id] = true;				
 				//Si todos estan con la seleccion , se carga el juego
 				if (checkReady && offline_split) iniciarCarrera();
 				if (offline && !offline_split) iniciarCarrera();
@@ -581,18 +582,10 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 		}
 		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS && id==0 || (mandoConectado[id] && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) && !selection_online) {
 			//Left==change character (one side)
-			if (id!=0){
-				cout<<"entro "<<id<<"\n";
-			}
+
 			if (!pressed[id]) {
-				if (id!=0){
-				cout<<"pressed superado "<<id<<"\n";
-			}
 				pressed[id] = true;
 				if (index_selected) {
-					if (id!=0){
-						cout<<"index selected "<<id<<"\n";
-					}
 					movimientoHorizontal(index, false,id);
 				}
 				else if(!index_selected && id==0){
@@ -739,6 +732,15 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 
 		if (empiezaCarrera) {
+			if (pantallaCarga){
+				if (!mando){
+					fondo_final = TMotor::instancia().getActiveHud()->addElementHud(2, 2, "fondo3", "assets/HUD/LobbyMenu/load.png");
+				}else{
+					fondo_final = TMotor::instancia().getActiveHud()->addElementHud(2, 2, "fondo3", "assets/HUD/LobbyMenu/load_xbox.png");
+				}
+				pantallaCarga=false;
+				return Escena::tipo_escena::LOBBY;
+			}
 			fondo = TMotor::instancia().getActiveHud()->addElementHud(2, 2, "fondo2", "assets/HUD/LobbyMenu/offline/fondoMulti.png");
 			if (index_mapa == 1) {
 				Pista::getInstancia()->setNombreMapa("pirata");
@@ -1059,24 +1061,20 @@ void EscenaLobby::actualizarSelector() {
 	}
 	else if (index_selected) {
 		if (index_interno == 1) {
-			cout << "Ni idea de donde estoy, pero mas abajo" << endl;
 
 			//TMotor::instancia().getActiveHud()->traslateElement(str1.c_str(), 0.27f,  0.45f);
 			//TMotor::instancia().getActiveHud()->traslateElement(str2.c_str(), 0.9f,  0.45f);
 		}
 		else {
-			cout << "Ni idea de donde estoy, pero mas abajo 2" << endl;
 
 			//TMotor::instancia().getActiveHud()->traslateElement(str1.c_str(), 0.27f,  0.18f);
 			//TMotor::instancia().getActiveHud()->traslateElement(str2.c_str(), 0.75f,  0.18f);
 		}
-		cout << "Ni idea de donde estoy, pero mas abajo 3" << endl;
 
 		//TMotor::instancia().getActiveHud()->scaleElement(str1.c_str(), 0.5f, 0.3f);
 		//TMotor::instancia().getActiveHud()->scaleElement(str2.c_str(), 0.5f, 0.3f);
 	}
 	else {
-		cout << "Ni idea de donde estoy, pero mas abajo 4" << endl;
 
 		//TMotor::instancia().getActiveHud()->traslateElement(str1.c_str(), 0.27f,  0.28f);
 		//TMotor::instancia().getActiveHud()->traslateElement(str2.c_str(), 0.9f,  0.28f);
@@ -1086,7 +1084,6 @@ void EscenaLobby::actualizarSelector() {
 
 void EscenaLobby::iniciarCarrera() {
 	if (conectado) {
-		cout << "Entro en espacio\n";
 		client->RaceStart();
 		//return Escena::tipo_escena::ONLINE;		//Iniciar la partida
 	}

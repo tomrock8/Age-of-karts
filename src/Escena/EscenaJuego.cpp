@@ -114,6 +114,9 @@ void EscenaJuego::init() {
 	TMotor::instancia().getActiveHud()->traslateElement("habilidad", 0.8f, -0.5f);
 	TMotor::instancia().getActiveHud()->addElement(0.06f, 0.09f, "indicador_habilidad", "assets/HUD/juego/indicador_habilidad.png");
 	TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f);
+	TMotor::instancia().getActiveHud()->addElement(0.18f, 0.1f, "max_habilidad", "assets/HUD/juego/max.png");
+	TMotor::instancia().getActiveHud()->traslateElement("max_habilidad", 0.8, -0.1f);
+	TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 0);
 
 	//Variable en funcion de mandos conectados
 	objeto = 0;
@@ -285,7 +288,7 @@ void EscenaJuego::init() {
 	//	IMGUI
 	// -----------------------
 	debug_Jugador = false;
-	muestraDebug = true;
+	muestraDebug = false;
 	muestraDebugIA = false;
 	TMotor::instancia().initDebugWindow();
 	ImGuiIO& io = ImGui::GetIO();
@@ -1049,20 +1052,37 @@ void EscenaJuego::updateHUD(int i) {
 		}
 	}
 	//UPDATE INDICADOR HABILIDAD
+	TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 0);
 	if (pj.at(i)->getLimite() != habilidad.at(i)){
 		if (pj.at(i)->getLimite() - habilidad.at(i) > 0){
-			if (pj.at(i)->getLimite()<=100){
+			if (pj.at(i)->getLimite()<100){
 				if (pj.at(i)->getLimite() - habilidad.at(i) == 1){
 					inc_habilidad.at(i)+=0.0065;			
 				}else if (pj.at(i)->getLimite() - habilidad.at(i) == 10){
 					inc_habilidad.at(i)+=0.065;		
 				}
+			}else{
+				if (pj.at(i)->getLimite()==100){
+					if (pj.at(i)->getLimite() - habilidad.at(i) == 1){
+						inc_habilidad.at(i)+=0.0065;			
+					}else if (pj.at(i)->getLimite() - habilidad.at(i) == 10){
+						inc_habilidad.at(i)+=0.065;		
+					}
+				}
+				TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 1);
 			}
 		}else{
 			inc_habilidad.at(i)=0;
+			TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 0);
 		}
 		
 		habilidad.at(i)=pj.at(i)->getLimite();
+	}else{
+		if (pj.at(i)->getLimite()<100){
+			TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 0);
+		}else{
+			TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 1);	
+		}
 	}
 	TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f+inc_habilidad.at(i));
 }
@@ -1184,5 +1204,8 @@ void EscenaJuego::crearHUD(int i){
 	TMotor::instancia().getActiveHud()->traslateElement("habilidad", 0.8f, -0.5f);
 	TMotor::instancia().getActiveHud()->addElement(0.06f, 0.09f, "indicador_habilidad", "assets/HUD/juego/indicador_habilidad.png");
 	TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f);
+	TMotor::instancia().getActiveHud()->addElement(0.18f, 0.1f, "max_habilidad", "assets/HUD/juego/max.png");
+	TMotor::instancia().getActiveHud()->traslateElement("max_habilidad", 0.8, -0.1f);
+	TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 0);
 
 }

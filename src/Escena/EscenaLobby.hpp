@@ -61,7 +61,7 @@ private:
     bool checkReady;
 	bool checkCPU;
 	bool mando;
-
+	bool pantallaCarga;
 	bool checkfocus;
 	bool show_config;
 	int index;
@@ -74,6 +74,7 @@ private:
 	int numPantallas;
 	//elementos del hud
 	elementoHud *fondo;
+	elementoHud *fondo_final;
 	elementoHud *personajeOff;
 	elementoHud *flechaIzq;
 	elementoHud *flechaDer;

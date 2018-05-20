@@ -29,24 +29,31 @@ Item::~Item() {
 
 	for (int i = 0; i < objetos.size(); i++) {
 		obj3D *nodoActual = static_cast<obj3D *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
-		if (nodoActual->getID() == id && strcmp(nodoActual->getName(), "rueda1") != 0 && strcmp(nodoActual->getName(), "rueda2") != 0 && strcmp(nodoActual->getName(), "rueda3") != 0
-			&& strcmp(nodoActual->getName(), "rueda4") != 0) {
-			btRigidBody *Object = objetos.at(i);
+		if (nodoActual) {
+			if (nodoActual->getID() == id &&
+				strcmp(nodoActual->getName(), "rueda1") != 0 &&
+				strcmp(nodoActual->getName(), "rueda2") != 0 &&
+				strcmp(nodoActual->getName(), "rueda3") != 0 &&
+				strcmp(nodoActual->getName(), "rueda4") != 0)
+			{
+				btRigidBody *Object = objetos.at(i);
 
-			// Remove the object from the world
-			mundo->removeRigidBody(Object);
+				// Remove the object from the world
+				mundo->removeRigidBody(Object);
 
-			// Free memory
-			delete Object->getCollisionShape();
-			delete Object->getMotionState();
-			delete Object;
+				// Free memory
+				delete Object->getCollisionShape();
+				delete Object->getMotionState();
+				delete Object;
 
-			objetos.erase(objetos.begin() + i);
-			bullet->setObjetos(objetos);
+				objetos.erase(objetos.begin() + i);
+				bullet->setObjetos(objetos);
+			}
 		}
 	}
-
-	delete nodo;
+	
+	if (nodo)
+		delete nodo;
 }
 
 void Item::inicializarFisicas() {
@@ -108,8 +115,6 @@ bool Item::update() {
 
 	return false;
 }
-
-void Item::Delete() {}
 
 //COmprobar distancias con el suelo
 void Item::ajustarAltura() {

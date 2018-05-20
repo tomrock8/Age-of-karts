@@ -51,8 +51,8 @@ Habilidad::Habilidad(int tipo, btRigidBody* n, btVector3 posicion, btVector3 esc
 
 }
 
-Habilidad::~Habilidad(){
-	NodoVehiculo=nullptr;
+Habilidad::~Habilidad() {
+	NodoVehiculo = nullptr;
 }
 
 void Habilidad::lanzarItem(int direccion, btVector3 orientacion, btTransform objeto) {
@@ -62,9 +62,7 @@ void Habilidad::lanzarItem(int direccion, btVector3 orientacion, btTransform obj
 		rigidBody->setActivationState(DISABLE_DEACTIVATION);
 		rigidBody->setGravity(btVector3(0, -300, 0));
 		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 300, 1.0f, orientacion.getZ() * 300));
-
 	}
-
 }
 
 void Habilidad::updateHijos() {

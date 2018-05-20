@@ -42,15 +42,9 @@ EscenaJuego::~EscenaJuego() {
 	delete colisiones;
 	delete gc;
 	delete MotorFisicas::getInstancia();
-
-
-	cout << "Destructor de Escena JUEGO. Salgo" << endl;
 }
 
 void EscenaJuego::init() {
-
-
-
 	// LUCES PUNTUALES
 	luzPuntual_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, true, "escena_raiz");
 	luzPuntual_0->translate(glm::vec3(100.0f, 700.0f, 0.0f));

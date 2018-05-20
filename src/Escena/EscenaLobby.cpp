@@ -12,10 +12,10 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	show_config = true;
 	empiezaCarrera = false;
 	end = false;
-	checkfocus=true;
-	infoLobby= new std::string("");
+	checkfocus = true;
+	infoLobby = new std::string("");
 	time = Timer::getInstancia();
-	mando=false;
+	mando = false;
 
 	laps = 3;
 	index = 1;
@@ -52,7 +52,7 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 		firstInit = false;
 	}
 
-	pressed[0]=true;pressed[1]=true;pressed[2]=true;pressed[3]=true;pressed[4]=true;pressed[5]=true;
+	pressed[0] = true; pressed[1] = true; pressed[2] = true; pressed[3] = true; pressed[4] = true; pressed[5] = true;
 	lanzado = false;
 	conectado = false;
 
@@ -81,10 +81,11 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf", 28.0f);
 	ImGui::StyleColorsLight();
-	if (!mando){
-		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return1", "assets/HUD/LobbyMenu/return.png");	
-	}else{
-		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return1", "assets/HUD/LobbyMenu/return_xbox.png");	
+	if (!mando) {
+		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return1", "assets/HUD/LobbyMenu/return.png");
+	}
+	else {
+		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return1", "assets/HUD/LobbyMenu/return_xbox.png");
 	}
 	returnB->traslacion(-0.8f, -0.9f);
 }
@@ -180,12 +181,13 @@ void EscenaLobby::update() {
 						ImGui::Text("Connection failed! \nTry to introduce the IP again to start an online race: ");
 					}
 					ImGui::InputInt4("Introduce IP", vec4a);
-					if (checkfocus){
-					ImGui::SetKeyboardFocusHere();
-					checkfocus=false;
+					if (checkfocus) {
+						ImGui::SetKeyboardFocusHere();
+						checkfocus = false;
 					}
-				}else{
-					if (ImGui::Button("Start with 127.0.0.1")){
+				}
+				else {
+					if (ImGui::Button("Start with 127.0.0.1")) {
 						selection_online = false;
 						iniciar = true;
 						ipConexion = "127.0.0.1";
@@ -204,7 +206,7 @@ void EscenaLobby::update() {
 				ImGui::Text(infoLobby->c_str());
 
 
-				ImGui::SetNextWindowPos(ImVec2(ImGui::GetWindowSize().x*3/4, ImGui::GetWindowSize().y*2.5/4));
+				ImGui::SetNextWindowPos(ImVec2(ImGui::GetWindowSize().x * 3 / 4, ImGui::GetWindowSize().y*2.5 / 4));
 				ImGui::SetNextWindowSize(ImVec2((float)display_w / 2, (float)display_h / 2));
 
 				ImGui::SetNextWindowBgAlpha(0.0f);
@@ -223,10 +225,10 @@ void EscenaLobby::update() {
 					if (conectado) {
 						infoLobby->clear();
 						infoLobby->append("ONLINE!\n");
-						infoLobby->append("Connection stablished!\n"); 
+						infoLobby->append("Connection stablished!\n");
 						crearFicheroIP();
 					}
-					
+
 					ImGui::End();
 			}
 
@@ -412,17 +414,19 @@ void EscenaLobby::mostrarInfoLobbyPropia() {
 		playersReady.at(0)->cambiarTransparencia(true, 1);
 	}*/
 	if (!checkReady) {
-		if (!mando){
-		start->cambiarTextura("assets/HUD/LobbyMenu/ready.png");
-		}else{
-		start->cambiarTextura("assets/HUD/LobbyMenu/ready_xbox.png");
+		if (!mando) {
+			start->cambiarTextura("assets/HUD/LobbyMenu/ready.png");
+		}
+		else {
+			start->cambiarTextura("assets/HUD/LobbyMenu/ready_xbox.png");
 		}
 	}
-	else{ 
-		if (!mando){
-		start->cambiarTextura("assets/HUD/LobbyMenu/ready_final.png");
-		}else{
-		start->cambiarTextura("assets/HUD/LobbyMenu/ready_final_xbox.png");
+	else {
+		if (!mando) {
+			start->cambiarTextura("assets/HUD/LobbyMenu/ready_final.png");
+		}
+		else {
+			start->cambiarTextura("assets/HUD/LobbyMenu/ready_final_xbox.png");
 		}
 	}
 
@@ -509,15 +513,15 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a imagen (tipo
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, true, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/GladiMultiplayerReady.png");
 		}
-		else if (client->getClientes().at(i).tipoCorredor == 1 && index != 1 && offline  || client->getClientes().at(i).tipoCorredor == 1 && !offline && checkReady) {
+		else if (client->getClientes().at(i).tipoCorredor == 1 && index != 1 && offline || client->getClientes().at(i).tipoCorredor == 1 && !offline && checkReady) {
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, true, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/PirataMultiplayerReady.png");
 		}
-		else if (client->getClientes().at(i).tipoCorredor == 2 && index != 1 && offline  || client->getClientes().at(i).tipoCorredor == 2 && !offline && checkReady) {
+		else if (client->getClientes().at(i).tipoCorredor == 2 && index != 1 && offline || client->getClientes().at(i).tipoCorredor == 2 && !offline && checkReady) {
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, true, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/VikMultiplayerReady.png");
 		}
-		else if (client->getClientes().at(i).tipoCorredor == 3 && index != 1 && offline  || client->getClientes().at(i).tipoCorredor == 3 && !offline && checkReady) {
+		else if (client->getClientes().at(i).tipoCorredor == 3 && index != 1 && offline || client->getClientes().at(i).tipoCorredor == 3 && !offline && checkReady) {
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, true, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/ChinoMultiplayerReady.png");
 		}
@@ -525,9 +529,11 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a imagen (tipo
 }
 
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
-
-	bool mandoConectado[numPantallas];
-	for (int id=0;id<numPantallas;id++){
+	
+	cout << "EscenaLobby::comprobarInputs() HAY QUE CAMBIAR ESTO AQUI!!";
+	//bool mandoConectado[numPantallas];
+	bool mandoConectado[1];
+	for (int id = 0; id < numPantallas; id++) {
 		//Comprobador de de mando y recoleccion de inputs
 		mandoConectado[id] = false;
 		const unsigned char *buttons = nullptr;
@@ -540,7 +546,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			axes = glfwGetJoystickAxes(id, &axesCount);
 			//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
 		}
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && id==0 && end == true) {
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && id == 0 && end == true) {
 			//if(conectado)
 			if (offline) {
 				client->BorrarClientes();
@@ -556,7 +562,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 			return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 		}
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS && id==0 || (mandoConectado[id] && (GLFW_PRESS == buttons[1]) && id==0)) {
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS && id == 0 || (mandoConectado[id] && (GLFW_PRESS == buttons[1]) && id == 0)) {
 			if (!pressed[id]) {
 				if (index_selected) {
 					index_selected = false;
@@ -568,7 +574,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				pressed[id] = true;
 			}
 		}
-		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS && id==0 || (mandoConectado[id] && (GLFW_PRESS == buttons[7]) && id==0)) && !selection_online) {
+		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS && id == 0 || (mandoConectado[id] && (GLFW_PRESS == buttons[7]) && id == 0)) && !selection_online) {
 			//Space==Control de ready/Iniciar partida
 			if (!pressed[id]) {
 				pressed[id] = true;
@@ -579,41 +585,41 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 			}
 		}
-		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS && id==0 || (mandoConectado[id] && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) && !selection_online) {
+		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS && id == 0 || (mandoConectado[id] && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) && !selection_online) {
 			//Left==change character (one side)
-			if (id!=0){
-				cout<<"entro "<<id<<"\n";
+			if (id != 0) {
+				cout << "entro " << id << "\n";
 			}
 			if (!pressed[id]) {
-				if (id!=0){
-				cout<<"pressed superado "<<id<<"\n";
-			}
+				if (id != 0) {
+					cout << "pressed superado " << id << "\n";
+				}
 				pressed[id] = true;
 				if (index_selected) {
-					if (id!=0){
-						cout<<"index selected "<<id<<"\n";
+					if (id != 0) {
+						cout << "index selected " << id << "\n";
 					}
-					movimientoHorizontal(index, false,id);
+					movimientoHorizontal(index, false, id);
 				}
-				else if(!index_selected && id==0){
-					movimientoHorizontal(-1, false,-1);
+				else if (!index_selected && id == 0) {
+					movimientoHorizontal(-1, false, -1);
 				}
 			}
 
 		}
-		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_RIGHT) == GLFW_PRESS && id==0 || (mandoConectado[id] && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) && !selection_online) {
+		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_RIGHT) == GLFW_PRESS && id == 0 || (mandoConectado[id] && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) && !selection_online) {
 			//Right==change character (other side)
 			if (!pressed[id]) {
 				pressed[id] = true;
 				if (index_selected) {
-					movimientoHorizontal(index, true,id);
+					movimientoHorizontal(index, true, id);
 				}
-				else if(!index_selected && id==0){
-					movimientoHorizontal(-1, false,-1);
+				else if (!index_selected && id == 0) {
+					movimientoHorizontal(-1, false, -1);
 				}
 			}
 		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS && id==0 || (mandoConectado[id] && (GLFW_PRESS == buttons[0]) && id==0)) {
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS && id == 0 || (mandoConectado[id] && (GLFW_PRESS == buttons[0]) && id == 0)) {
 			if (!pressed[0]) {
 				if (!selection_online && !offline) {
 					iniciar = true;					//Conectar con el servidor de la IP
@@ -687,7 +693,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				pressed[id] = true;
 			}
 		}
-		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS && id==0 || (mandoConectado[id] && (GLFW_PRESS == buttons[14] || 0.5f <= axes[1]))) && !selection_online) {
+		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS && id == 0 || (mandoConectado[id] && (GLFW_PRESS == buttons[14] || 0.5f <= axes[1]))) && !selection_online) {
 			if (!pressed[0]) {
 				/*if (client->getClientes().size() - 1 > count) {
 					count++;
@@ -695,7 +701,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				else {
 					count = 0;
 				}*/
-				if (!index_selected && id==0) {
+				if (!index_selected && id == 0) {
 					movimientoVertical(false);
 				}
 				else if (index_selected && index == 4 && !conectado) {
@@ -704,7 +710,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				pressed[id] = true;
 			}
 		}
-		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS && id==0 || (mandoConectado[id] && (GLFW_PRESS == buttons[13] || -0.5f >= axes[1]))) && !selection_online) {
+		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS && id == 0 || (mandoConectado[id] && (GLFW_PRESS == buttons[13] || -0.5f >= axes[1]))) && !selection_online) {
 			//Moverse entre jugadores para cambiar opciones de seleccion en cada uno
 			if (!pressed[0]) {
 				/*if (count > 0) {
@@ -713,7 +719,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				else {
 					count = client->getClientes().size() - 1;
 				}*/
-				if (!index_selected && id==0) {
+				if (!index_selected && id == 0) {
 					movimientoVertical(false);
 				}
 				else if (index_selected && index == 4 && !conectado) {
@@ -762,7 +768,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 	return Escena::tipo_escena::LOBBY;
 }
 
-void EscenaLobby::movimientoHorizontal(int k, bool dcha,int id) {
+void EscenaLobby::movimientoHorizontal(int k, bool dcha, int id) {
 
 	if (k == -1) {//movimiento a la izq
 		if (index == 1) {
@@ -913,7 +919,7 @@ void EscenaLobby::movimientoHorizontal(int k, bool dcha,int id) {
 				}
 
 			}
-			if (!offline_split){
+			if (!offline_split) {
 				switch (int l = client->getClientes().size() - 1) {
 				case 3:
 					CPU->cambiarTextura("assets/HUD/LobbyMenu/offline/CPU3.png");
@@ -930,7 +936,7 @@ void EscenaLobby::movimientoHorizontal(int k, bool dcha,int id) {
 		}
 	}
 	else if (k == 3) {
-		if (offline){
+		if (offline) {
 			if (index_mapa == 1) {
 				index_mapa = 2;
 				mapa->cambiarTextura("assets/HUD/LobbyMenu/offline/Coliseo.png");
@@ -1115,7 +1121,7 @@ void EscenaLobby::iniciarCarrera() {
 }
 
 void EscenaLobby::crearHUD() {
-	
+
 	if (offline) {
 		if (!offline_split) {
 			//fondo pantalla
@@ -1133,10 +1139,11 @@ void EscenaLobby::crearHUD() {
 			CPU->traslacion(0.74f, -0.255f);
 			checkLAPS = TMotor::instancia().getActiveHud()->addElementHud(0.20, 0.09, "LAPS", "assets/HUD/LobbyMenu/offline/LAP3.png");
 			checkLAPS->traslacion(0.74f, -0.45f);
-			if (!mando){
+			if (!mando) {
 				start = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "start", "assets/HUD/LobbyMenu/start.png");
 				selectB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "select", "assets/HUD/LobbyMenu/enter.png");
-			}else{
+			}
+			else {
 				start = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "start", "assets/HUD/LobbyMenu/start_xbox.png");
 				selectB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "select", "assets/HUD/LobbyMenu/enter_xbox.png");
 			}
@@ -1151,9 +1158,10 @@ void EscenaLobby::crearHUD() {
 
 	//Carga de elementos para la escena de pantalla partida
 	if (offline_split || !offline) {
-		if (offline_split){
+		if (offline_split) {
 			fondo = TMotor::instancia().getActiveHud()->addElementHud(2, 2, "fondo", "assets/HUD/LobbyMenu/Multiplayer/fondoMulti.png");
-		}else{
+		}
+		else {
 			fondo = TMotor::instancia().getActiveHud()->addElementHud(2, 2, "fondo", "assets/HUD/LobbyMenu/Multiplayer/HUD_Multiplayer.png");
 		}
 		players.push_back(TMotor::instancia().getActiveHud()->addElementHud(0.445, 0.945, "player1", "assets/HUD/LobbyMenu/Multiplayer/ChinoMultiplayer.png"));
@@ -1168,7 +1176,7 @@ void EscenaLobby::crearHUD() {
 
 		seleccion = TMotor::instancia().getActiveHud()->addElementHud(1.88, 0.96, "seleccion", "assets/HUD/LobbyMenu/offline/seleccionOFF.png");
 		seleccion->traslacion(0.012f, 0.355f);
-		if (offline_split){
+		if (offline_split) {
 			CPU = TMotor::instancia().getActiveHud()->addElementHud(0.20, 0.09, "CPU", "assets/HUD/LobbyMenu/Multiplayer/CPUSPLITOFF.png");
 			CPU->traslacion(0.74f, -0.315f);
 			checkLAPS = TMotor::instancia().getActiveHud()->addElementHud(0.20, 0.09, "LAPS", "assets/HUD/LobbyMenu/offline/LAP3.png");
@@ -1178,10 +1186,11 @@ void EscenaLobby::crearHUD() {
 		flechaIzq = TMotor::instancia().getActiveHud()->addElementHud(0.15, 0.15, "PressedLeft", "assets/HUD/LobbyMenu/offline/flechaIzqNoPulsada.png");
 		flechaDer->traslacion(0.15f, -0.53f);
 		flechaIzq->traslacion(-0.65f, -0.53f);
-		if (!mando){
-		start = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "start", "assets/HUD/LobbyMenu/ready.png");
-		}else{
-		start = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "start", "assets/HUD/LobbyMenu/ready_xbox.png");
+		if (!mando) {
+			start = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "start", "assets/HUD/LobbyMenu/ready.png");
+		}
+		else {
+			start = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "start", "assets/HUD/LobbyMenu/ready_xbox.png");
 		}
 		start->traslacion(0.8f, -0.9f);
 		//mapa
@@ -1189,10 +1198,11 @@ void EscenaLobby::crearHUD() {
 		mapa->traslacion(-0.250f, -0.50);
 
 	}
-	if (!mando){
-		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return", "assets/HUD/LobbyMenu/return.png");	
-	}else{
-		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return", "assets/HUD/LobbyMenu/return_xbox.png");	
+	if (!mando) {
+		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return", "assets/HUD/LobbyMenu/return.png");
+	}
+	else {
+		returnB = TMotor::instancia().getActiveHud()->addElementHud(0.25, 0.15, "return", "assets/HUD/LobbyMenu/return_xbox.png");
 	}
 	returnB->traslacion(-0.8f, -0.9f);
 }
@@ -1202,7 +1212,7 @@ std::string EscenaLobby::getIpConexion() { return ipConexion; }
 void EscenaLobby::addControllers() {
 	numPantallas = 1;
 	if (glfwJoystickPresent(0) == 1) {
-		mando=true;
+		mando = true;
 	}
 	if (offline_split) {
 		for (int mandos = 1; mandos < 4; mandos++) {
@@ -1243,8 +1253,8 @@ void EscenaLobby::addControllers() {
 				}
 			}
 		}
-		if (numPantallas>4){
-			numPantallas=4;
+		if (numPantallas > 4) {
+			numPantallas = 4;
 		}
 	}
 }

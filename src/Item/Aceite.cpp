@@ -12,19 +12,6 @@ Aceite::Aceite(btVector3 posicion, btVector3 escala, btScalar masa, float tiempo
 	rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
-Aceite::~Aceite() {
-	delete nodo; // Modelo 3D
-
-	delete rigidBody->getCollisionShape();
-	delete rigidBody->getMotionState();
-
-	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(rigidBody);
-	delete rigidBody; // Fisicas del motor de fisicas
-
-
-
-}
-
 void Aceite::lanzarItem(int direccion, btVector3 orientacion, btTransform objeto) {
 	btTransform posObj = rigidBody->getCenterOfMassTransform();
 	posObj.setOrigin(btVector3(posicion.getX(), posicion.getY(), posicion.getZ()));

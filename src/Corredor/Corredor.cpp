@@ -98,12 +98,7 @@ Corredor::Corredor(btVector3 pos, tipo_jugador tipo) {
 
 	rueda2->setRotation(glm::vec3(1, 0, 0), 180);
 	rueda4->setRotation(glm::vec3(1, 0, 0), 180);
-	/*
-		rueda1->setVisible(false);//alante derecha
-		rueda2->setVisible(false);//delante izquierda
-		rueda3->setVisible(false);//atras derecha
-		rueda4->setVisible(false);//atras izquierda
-	*/
+
 	if (cuboNodo) {
 		cuboNodo->setPosition(pos.getX(), pos.getY(), pos.getZ());
 		cuboNodo->setScale(1, 1, 1.5);
@@ -225,12 +220,13 @@ void Corredor::setParametros() {
 		/* Nodos de animacion */
 
 		cuboNodo = TMotor::instancia().newMeshNode("Jugador", "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "escena_raiz", false);
-		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "quieto");
-		//lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/LanzamientoOBJ/pirataLanzamiento_000", 639, 652), "LanzarObj");
 		giroDerIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 162, 176), "GiroDerIni");
 		giroDerFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroDer/pirataGiroDer_000", 176, 187), "GiroDerFin");
 		giroIzqIni = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroIzq/pirataGiroIzq_000", 162, 176), "GiroIzqIni");
 		giroIzqFin = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/GiroIzq/pirataGiroIzq_000", 176, 187), "GiroIzqFin");
+
+		//quieto = TMotor::instancia().createStaticMeshNode(cuboNodo->getNode()->getPadre(), "assets/Animacion/Pirata/GiroDer/pirataGiroDer_000162.obj", "quieto");
+		//lanzarObjeto = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/LanzamientoOBJ/pirataLanzamiento_000", 639, 652), "LanzarObj");
 		//animHabilidad = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Habilidad/PirataHabilidad_000", 165, 202), "Habilidad");
 		//vacile = TMotor::instancia().createAnimationNode(cuboNodo->getNode()->getPadre(), TMotor::instancia().createAnimation("assets/Animacion/Pirata/Vacile/VacilePirata_000", 500, 551), "Vacile");
 
@@ -333,10 +329,8 @@ void Corredor::InicializarFisicasRuedas() {
 	transRueda.setRotation(quaternion);
 
 	//Motionstate
-	motionStateRueda1 = new btDefaultMotionState(transRueda); //motionState = interpolacion
-
-	//FormaColisionR1 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	FormaColisionR1 = new btSphereShape(radio);
+	btDefaultMotionState *motionStateRueda1 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+	btCollisionShape *FormaColisionR1 = new btSphereShape(radio);
 
 	// Add mass
 	btVector3 LocalInertia;
@@ -361,24 +355,19 @@ void Corredor::InicializarFisicasRuedas() {
 	transRueda.setRotation(quaternion);
 
 	//Motionstate
-	motionStateRueda2 = new btDefaultMotionState(transRueda); //motionState = interpolacion
-
-	//FormaColisionR2 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	FormaColisionR2 = new btSphereShape(radio);
+	btDefaultMotionState *motionStateRueda2 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+	btCollisionShape *FormaColisionR2 = new btSphereShape(radio);
 
 	CuerpoColisionRueda2 = new btRigidBody(masar, motionStateRueda2, FormaColisionR2, LocalInertia);
 	CuerpoColisionRueda2->setUserPointer((void *)(rueda2));
-
 	CuerpoColisionRueda2->setActivationState(DISABLE_DEACTIVATION);
-	//CuerpoColisionRueda2->setCollisionFlags(CuerpoColisionRueda2->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda2);
 	objetos.push_back(CuerpoColisionRueda2);
 
 
-
 	// rueda 3
-
 	transRueda.setIdentity();
 	posTransRueda = btVector3(rueda3->getPosition().x, rueda3->getPosition().y, rueda3->getPosition().z);
 	transRueda.setOrigin(posTransRueda);
@@ -386,22 +375,18 @@ void Corredor::InicializarFisicasRuedas() {
 	transRueda.setRotation(quaternion);
 
 	//Motionstate
-	motionStateRueda3 = new btDefaultMotionState(transRueda); //motionState = interpolacion
-
-	//FormaColisionR3 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	FormaColisionR3 = new btSphereShape(radio);
+	btDefaultMotionState *motionStateRueda3 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+	btCollisionShape *FormaColisionR3 = new btSphereShape(radio);
 
 	CuerpoColisionRueda3 = new btRigidBody(masar, motionStateRueda3, FormaColisionR3, LocalInertia);
 	CuerpoColisionRueda3->setUserPointer((void *)(rueda3));
-
 	CuerpoColisionRueda3->setActivationState(DISABLE_DEACTIVATION);
-	//CuerpoColisionRueda3->setCollisionFlags(CuerpoColisionRueda3->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda3);
 	objetos.push_back(CuerpoColisionRueda3);
 
 	// rueda 4
-
 	transRueda.setIdentity();
 	posTransRueda = btVector3(rueda4->getPosition().x, rueda4->getPosition().y, rueda4->getPosition().z);
 	transRueda.setOrigin(posTransRueda);
@@ -409,16 +394,13 @@ void Corredor::InicializarFisicasRuedas() {
 	transRueda.setRotation(quaternion);
 
 	//Motionstate
-	motionStateRueda4 = new btDefaultMotionState(transRueda); //motionState = interpolacion
-
-	//FormaColisionR4 = new btCylinderShapeX(btVector3(ancho, radio, radio));
-	FormaColisionR4 = new btSphereShape(radio);
+	btDefaultMotionState *motionStateRueda4 = new btDefaultMotionState(transRueda); //motionState = interpolacion
+	btCollisionShape *FormaColisionR4 = new btSphereShape(radio);
 
 	CuerpoColisionRueda4 = new btRigidBody(masar, motionStateRueda4, FormaColisionR4, LocalInertia);
 	CuerpoColisionRueda4->setUserPointer((void *)(rueda4));
-
 	CuerpoColisionRueda4->setActivationState(DISABLE_DEACTIVATION);
-	//CuerpoColisionRueda4->setCollisionFlags(CuerpoColisionRueda4->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
 	// Add it to the world
 	mundo->addRigidBody(CuerpoColisionRueda4);
 	objetos.push_back(CuerpoColisionRueda4);
@@ -430,18 +412,13 @@ void Corredor::InicializarFisicasRuedas() {
 	btVector3 pivotA(3.f, 5.f, 3.f);
 	btVector3 pivotB(0.f, 0.f, 0.f);
 
-	restriccion1 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda1, pivotA, pivotB, axisA, axisB, false);
+	btHingeConstraint *restriccion1 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda1, pivotA, pivotB, axisA, axisB, false);
 	pivotA = btVector3(-3.f, 5.f, 3.f);
-	restriccion2 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda2, pivotA, pivotB, axisA, axisB, false);
+	btHingeConstraint *restriccion2 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda2, pivotA, pivotB, axisA, axisB, false);
 	pivotA = btVector3(-3.f, 5.f, -3.f);
-	restriccion3 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda3, pivotA, pivotB, axisA, axisB, false);
+	btHingeConstraint *restriccion3 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda3, pivotA, pivotB, axisA, axisB, false);
 	pivotA = btVector3(3.f, 5.f, -3.f);
-	restriccion4 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda4, pivotA, pivotB, axisA, axisB, false);
-
-	//restriccion1->enableAngularMotor(true, 1, 0);
-	//restriccion2->enableAngularMotor(true, 1, 0);
-	//restriccion3->enableAngularMotor(true, 1, 0);
-	//restriccion4->enableAngularMotor(true, 1, 0);
+	btHingeConstraint *restriccion4 = new btHingeConstraint(*CuerpoColisionChasis, *CuerpoColisionRueda4, pivotA, pivotB, axisA, axisB, false);
 
 	mundo->addConstraint(restriccion1, true);
 	mundo->addConstraint(restriccion2, true);
@@ -468,20 +445,15 @@ void Corredor::InicializarFisicas() {
 	quaternion.setEulerZYX(cuboNodo->getRotation().z* PI / 180, cuboNodo->getRotation().y * PI / 180, cuboNodo->getRotation().x* PI / 180);
 	transCoche.setRotation(quaternion);
 
-	//Motionstate
-	motionStateCoche = new btDefaultMotionState(transCoche); //motionState = interpolacion
-
 	//establecemos su centro de gravedad
 	btTransform localTransform;
 	localTransform.setIdentity();
 	localTransform.setOrigin(btVector3(0, 1.5, 0));
-	CentroGravedad = new btCompoundShape();
+	btCompoundShape *CentroGravedad = new btCompoundShape();
 
 	//Forma Colision
-	//btVector3 TamanyoFormaColision(cuboNodo->getScale().X, cuboNodo->getScale().Y, cuboNodo->getScale().Z * 2);
 	btVector3 TamanyoFormaColision(cuboNodo->getScale().x * 2, cuboNodo->getScale().y * 1.2, cuboNodo->getScale().z * 2);
-	//btVector3 TamanyoFormaColision(1,btScalar(0.5),2);
-	FormaColision = new btBoxShape(TamanyoFormaColision);
+	btCollisionShape *FormaColision = new btBoxShape(TamanyoFormaColision);
 	//masa coche
 	btVector3 Inercia(0, 0, 0);
 	FormaColision->calculateLocalInertia(Masa, Inercia);
@@ -489,7 +461,7 @@ void Corredor::InicializarFisicas() {
 	CentroGravedad->addChildShape(localTransform, FormaColision);
 
 	//rigidbody del coche
-	CuerpoColisionChasis = new btRigidBody(Masa, motionStateCoche, CentroGravedad, Inercia);
+	CuerpoColisionChasis = new btRigidBody(Masa, new btDefaultMotionState(transCoche), CentroGravedad, Inercia);
 	CuerpoColisionChasis->setFriction(1110);
 	CuerpoColisionChasis->setUserPointer((void *)(cuboNodo));
 
@@ -498,20 +470,16 @@ void Corredor::InicializarFisicas() {
 	btRaycastVehicle::btVehicleTuning tuning;
 
 	vehiculo = new btRaycastVehicle(tuning, CuerpoColisionChasis, RayCastVehiculo);
-
 	CuerpoColisionChasis->setActivationState(DISABLE_DEACTIVATION);
-
 	mundo->addVehicle(vehiculo);
-	//vehiculo->setActivationState(DISABLE_DEACTIVATION);
-	//almacenar el puntero al nodo irrlicht  para poder actualizar sus valores
+
 	objetos.push_back(CuerpoColisionChasis);
 	CrearRuedas(vehiculo, tuning);
 	mundo->addRigidBody(CuerpoColisionChasis);
 	bullet->setObjetos(objetos);
-	//CuerpoColisionChasis->applyGravity();
 
-	// luego declaramos sus ruedas
-	// inicializamos la posicion de las ruedas
+	// Desasignacion de punteros
+	CentroGravedad = nullptr;
 }
 
 void Corredor::CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning) {
@@ -1673,38 +1641,63 @@ void Corredor::iniciarAnimacion(movimiento_jugador mov, TNodo* previo, TNodo *pr
 //--------------DESTRUCTOR---------------//
 //---------------------------------------//
 Corredor::~Corredor() {
-	delete fuenteMotor;
-	delete fuenteItem;
-	delete vehiculo;
-	delete cuboNodo; // modelo 3d
-
+	// Modelos 3D
+	delete cuboNodo;
 	delete rueda1;
 	delete rueda2;
 	delete rueda3;
 	delete rueda4;
 
-	delete restriccion1;
-	delete restriccion2;
-	delete restriccion3;
-	delete restriccion4;
+	// Animaciones
+	giroDerIni = nullptr;
+	giroDerFin = nullptr;
+	giroIzqIni = nullptr;
+	giroIzqFin = nullptr;
+	quieto = nullptr;
+
+	// Sonido
+	delete fuenteMotor;
+	delete fuenteItem;
+
+	// Fisicas
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(CuerpoColisionRueda1);
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(CuerpoColisionRueda2);
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(CuerpoColisionRueda3);
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(CuerpoColisionRueda4);
+
+	delete CuerpoColisionRueda1->getCollisionShape();
+	delete CuerpoColisionRueda1->getMotionState();
+	delete CuerpoColisionRueda1;
+
+	delete CuerpoColisionRueda2->getCollisionShape();
+	delete CuerpoColisionRueda2->getMotionState();
+	delete CuerpoColisionRueda2;
+
+	delete CuerpoColisionRueda3->getCollisionShape();
+	delete CuerpoColisionRueda3->getMotionState();
+	delete CuerpoColisionRueda3;
+
+	delete CuerpoColisionRueda4->getCollisionShape();
+	delete CuerpoColisionRueda4->getMotionState();
+	delete CuerpoColisionRueda4;
+
+	
+	delete vehiculo->getRigidBody()->getCollisionShape();
+	delete vehiculo->getRigidBody()->getMotionState();
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(vehiculo->getRigidBody());
+	delete vehiculo;
+	delete RayCastVehiculo;
+
+	
 
 	nombre = nullptr;
 	delete estado;
-	delete RayCastVehiculo;
-	giroDerIni = nullptr;
-
-	giroDerFin = nullptr;
-	giroIzqIni = nullptr;
-	giroIzqFin = nullptr;;
-
-	quieto = nullptr;
 
 	//BILLBOARD
 	b = nullptr;
 
 	//PARTICULAS HUMO
 	p = nullptr;
-
 
 	actual = nullptr;
 	siguiente = nullptr;

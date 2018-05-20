@@ -1664,29 +1664,29 @@ Corredor::~Corredor() {
 	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(CuerpoColisionRueda2);
 	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(CuerpoColisionRueda3);
 	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(CuerpoColisionRueda4);
-
-	delete CuerpoColisionRueda1->getCollisionShape();
-	delete CuerpoColisionRueda1->getMotionState();
-	delete CuerpoColisionRueda1;
-
-	delete CuerpoColisionRueda2->getCollisionShape();
-	delete CuerpoColisionRueda2->getMotionState();
-	delete CuerpoColisionRueda2;
-
-	delete CuerpoColisionRueda3->getCollisionShape();
-	delete CuerpoColisionRueda3->getMotionState();
-	delete CuerpoColisionRueda3;
-
-	delete CuerpoColisionRueda4->getCollisionShape();
-	delete CuerpoColisionRueda4->getMotionState();
-	delete CuerpoColisionRueda4;
+	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(vehiculo->getRigidBody());
 
 	
 	delete vehiculo->getRigidBody()->getCollisionShape();
+	delete CuerpoColisionRueda4->getCollisionShape();
+	delete CuerpoColisionRueda3->getCollisionShape();
+	delete CuerpoColisionRueda2->getCollisionShape();
+	delete CuerpoColisionRueda1->getCollisionShape();
+	
 	delete vehiculo->getRigidBody()->getMotionState();
-	MotorFisicas::getInstancia()->getMundo()->removeCollisionObject(vehiculo->getRigidBody());
+	delete CuerpoColisionRueda4->getMotionState();
+	delete CuerpoColisionRueda3->getMotionState();
+	delete CuerpoColisionRueda2->getMotionState();
+	delete CuerpoColisionRueda1->getMotionState();
+	
+
 	delete vehiculo;
 	delete RayCastVehiculo;
+	// Se borrarn los cuerpos de colision en el destructor del motor de fisicas
+	//	delete CuerpoColisionRueda4;
+	//	delete CuerpoColisionRueda3;
+	//	delete CuerpoColisionRueda2;
+	//	delete CuerpoColisionRueda1;
 
 	
 
@@ -1713,7 +1713,4 @@ Corredor::~Corredor() {
 		delete giroIzqFin;
 		delete animHabilidad;
 		delete quieto;*/
-
-
-	cout << "SALGO DESTRUCTOR CORREDOR\n";
 }

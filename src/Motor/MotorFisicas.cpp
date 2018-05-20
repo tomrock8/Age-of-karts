@@ -17,7 +17,6 @@ MotorFisicas::MotorFisicas() {
 }
 
 MotorFisicas::~MotorFisicas() {
-	cout << "Hay " << mundo->getNumCollisionObjects() << " objetos y";
 	for (int i = mundo->getNumCollisionObjects()-1; i >=0; i--) {
 		btCollisionObject* obj = mundo->getCollisionObjectArray()[i];
 		if (obj) {
@@ -26,7 +25,6 @@ MotorFisicas::~MotorFisicas() {
 			delete obj;
 		}
 	}
-	cout << "siguen habiendo " << mundo->getNumCollisionObjects() << " porque no me apetece borrarlos.\n";
 
 	delete mundo;
 	delete solver;
@@ -67,8 +65,7 @@ void MotorFisicas::initializePhysics(TRecursoMalla * mesh) {
 	fileName += ".bullet";
 	FILE * fileBullet;
 	fileBullet = fopen(fileName.c_str(), "r");
-	if (fileBullet != NULL)
-	{
+	if (fileBullet != NULL)	{
 		//Si detecta fichero se carga, disminuyendo considerablemente la carga del mapa.
 		btBulletWorldImporter* fileLoader = new btBulletWorldImporter(mundo);
 		fileLoader->loadFile(fileName.c_str());

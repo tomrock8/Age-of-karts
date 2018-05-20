@@ -262,6 +262,7 @@ void EscenaJuego::init() {
 
 	for (int x = 0; x < numPantallas; x++) {
 		cameraThird *c = new cameraThird("camara_jugador3apersona", "escena_raiz");
+		c->setID(x);
 		camera.push_back(c);
 	}
 	cout << "Camaras creadas.\n";

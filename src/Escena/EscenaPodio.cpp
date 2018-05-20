@@ -24,40 +24,44 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 	animacionGladiador = nullptr;
 	animacionChino = nullptr;
 	animacionElegida = nullptr;
+	time= Timer::getInstancia();
+	end=false;
+	tm=time->getTimer();
+
 	for (int i = 0; i < jugadores.size(); i++) {
 
 		switch (jugadores.at(i)) {//recogemos cual sera la animacion que tocara en caso de que esten en el podio
-		case Corredor::tipo_jugador::PIRATA:
-			if (animacionPirata == nullptr) {
-				animacionPirata = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Pirata/Celebracion/PirataCelebracion_000", 122, 242), "BailePirata");
-			}
-			animacionElegida = animacionPirata;
-			break;
+			case Corredor::tipo_jugador::PIRATA:
+				if (animacionPirata == nullptr) {
+					animacionPirata = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Pirata/Celebracion/PirataCelebracion_000", 122, 242), "BailePirata");
+				}
+				animacionElegida = animacionPirata;
+				break;
 
-		case Corredor::tipo_jugador::VIKINGO:
-			if (animacionVikingo == nullptr) {
-				animacionVikingo = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Celebracion/VikingoCelebracion_000", 443, 537), "BaileVikingo");
+			case Corredor::tipo_jugador::VIKINGO:
+				if (animacionVikingo == nullptr) {
+					animacionVikingo = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Celebracion/VikingoCelebracion_000", 443, 537), "BaileVikingo");
 
-			}
-			animacionElegida = animacionVikingo;
-			break;
+				}
+				animacionElegida = animacionVikingo;
+				break;
 
-		case Corredor::tipo_jugador::GLADIADOR:
-			if (animacionGladiador == nullptr) {
-				animacionGladiador = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Celebracion/GladiatorCelebracion_000", 435, 594), "BaileGladiador");
+			case Corredor::tipo_jugador::GLADIADOR:
+				if (animacionGladiador == nullptr) {
+					animacionGladiador = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Celebracion/GladiatorCelebracion_000", 435, 594), "BaileGladiador");
 
-			}
-			animacionElegida = animacionGladiador;
-			break;
+				}
+				animacionElegida = animacionGladiador;
+				break;
 
-		case Corredor::tipo_jugador::CHINO:
-			if (animacionChino == nullptr) {
-				animacionChino = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Chino/Celebracion/ChinoCelebracion_000", 228, 317), "BaileChino");
-			}
-			animacionElegida = animacionChino;
-			break;
-		default:
-			break;
+			case Corredor::tipo_jugador::CHINO:
+				if (animacionChino == nullptr) {
+					animacionChino = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Chino/Celebracion/ChinoCelebracion_000", 228, 317), "BaileChino");
+				}
+				animacionElegida = animacionChino;
+				break;
+			default:
+				break;
 		}
 		if (i == 0) {//asignamos el nodo padre en funcion de su posicion y despues le asignamos el nodo a el objeto 
 			TMotor::instancia().addPadre(primero->getNode()->getPadre(), animacionElegida);
@@ -74,7 +78,6 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 			tercerPuesto = true;
 		}
 	}
-
 
 	incremento = 0;
 
@@ -97,7 +100,7 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 	poszPodio = 13;
 
 	altura = 4;
-
+	entra=false;
 	podio = TMotor::instancia().newMeshNode("podio", "assets/MapaCelebracion/victoria.obj", "escena_raiz", false);
 
 	init();
@@ -108,6 +111,31 @@ EscenaPodio::~EscenaPodio() {
 }
 
 Escena::tipo_escena EscenaPodio::comprobarInputs() {
+	bool mandoConectado = false;
+	const unsigned char *buttons = nullptr;
+	const float *axes = nullptr;
+	int id=0;
+	
+	if (1 == glfwJoystickPresent(id)) {
+		mandoConectado = true;
+		int buttonCount;
+		buttons = glfwGetJoystickButtons(id, &buttonCount);
+		int axesCount;
+		axes = glfwGetJoystickAxes(id, &axesCount);
+		//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
+	}
+	if (time->getTimer()-tm>4){
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end == true) {
+
+			return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
+		}
+
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[0]))) {
+			return Escena::tipo_escena::MENU;
+		}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[1]) )) {
+			end = true;
+		}
+	}
 
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS) {
 
@@ -212,20 +240,6 @@ void EscenaPodio::init() {
 	particulas.at(3)->setColor(glm::vec3(1.0, 0.5, 0.0));
 
 
-	//activamos animaciones
-	//primero
-	static_cast<TAnimacion*>(primero->getNode()->getEntidad())->setVisible(true);
-	static_cast<TAnimacion*>(primero->getNode()->getEntidad())->setPlaying(true);
-	//segundo
-	if (segundoPuesto) {
-		static_cast<TAnimacion*>(segundo->getNode()->getEntidad())->setVisible(true);
-		static_cast<TAnimacion*>(segundo->getNode()->getEntidad())->setPlaying(true);
-	}
-	//tercero
-	if (tercerPuesto) {
-		static_cast<TAnimacion*>(tercero->getNode()->getEntidad())->setVisible(true);
-		static_cast<TAnimacion*>(tercero->getNode()->getEntidad())->setPlaying(true);
-	}
 
 
 
@@ -247,6 +261,26 @@ void EscenaPodio::limpiar() {
 }
 
 void EscenaPodio::update() {
+	
+	if ((time->getTimer()-tm)>2 && !entra){
+		entra=true;
+		//activamos animaciones
+		//primero
+		static_cast<TAnimacion*>(primero->getNode()->getEntidad())->setVisible(true);
+		static_cast<TAnimacion*>(primero->getNode()->getEntidad())->setPlaying(true);
+		//segundo
+		if (segundoPuesto) {
+			static_cast<TAnimacion*>(segundo->getNode()->getEntidad())->setVisible(true);
+			static_cast<TAnimacion*>(segundo->getNode()->getEntidad())->setPlaying(true);
+		}
+		//tercero
+		if (tercerPuesto) {
+			static_cast<TAnimacion*>(tercero->getNode()->getEntidad())->setVisible(true);
+			static_cast<TAnimacion*>(tercero->getNode()->getEntidad())->setPlaying(true);
+		}
+
+	}
+
 
 	float velocidad = 0.05;
 

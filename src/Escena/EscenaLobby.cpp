@@ -176,6 +176,7 @@ void EscenaLobby::update() {
 
 
 			if (!iniciar) {
+				fondo = fondo = TMotor::instancia().getActiveHud()->addElementHud(2, 2, "fondo2", "assets/HUD/MainMenu/fondo.png");
 				ImGui::Text("ONLINE!");
 				if (!selection_online) {
 					if (connecting.compare("") != 0 && !conectado) {

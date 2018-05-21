@@ -60,8 +60,8 @@ void Habilidad::lanzarItem(int direccion, btVector3 orientacion, btTransform obj
 
 	if (tipoHabilidad == 1) { // PIRATA
 		rigidBody->setActivationState(DISABLE_DEACTIVATION);
-		rigidBody->setGravity(btVector3(0, -300, 0));
-		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 300, 0.5f, orientacion.getZ() * 300));
+		rigidBody->setGravity(btVector3(0, -1000, 0));
+		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 410, 0.5f, orientacion.getZ() * 410));
 	}
 }
 

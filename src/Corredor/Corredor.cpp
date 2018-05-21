@@ -1540,7 +1540,7 @@ void Corredor::lanzarHabilidad() {
 			masa = 100;
 			radio = 12;
 			alt = 10;
-			tamanyoNodo = btVector3(7, 7, 7);
+			tamanyoNodo = btVector3(12, 12, 12);
 			posicion.setY(posicion.getY() + alt);
 			habilidadJugador = new Habilidad(1, CuerpoColisionChasis, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
 			habilidadJugador->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE

@@ -874,7 +874,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 			client->BorrarClientes();
 		}
 
-		std::cout << "Aqui? " << end << std::endl;
+		//std::cout << "Aqui? " << end << std::endl;
 
 		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
 	}
@@ -890,7 +890,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		muestraDebug = false;
 	}
 
-	std::cout << "Salgo comprobar: " << tipoEscena << std::endl;
+	//std::cout << "Salgo comprobar: " << tipoEscena << std::endl;
 
 	return tipoEscena; // Significa que debe seguir ejecutando
 }

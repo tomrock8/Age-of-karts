@@ -764,6 +764,8 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 			else if (index_mapa == 2) {
 				Pista::getInstancia()->setNombreMapa("gladiador");
+				TMotor::instancia().setDrawingDistance(true, 1100.0f);
+				TMotor::instancia().setFaceCulling(false);
 			}
 			if (checkCPU) {
 				int r = 2;

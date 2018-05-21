@@ -108,8 +108,8 @@ void Habilidad::movimiento() {
 
 		nodo->setPosition(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY(), NodoVehiculo->getCenterOfMassPosition().getZ());
 
-		if (nodo->getScale().x <= 10){
-			nodo->setScale(nodo->getScale().x + 1, nodo->getScale().x, nodo->getScale().x + 1);
+		if (cont2 > 0){
+			nodo->setScale(nodo->getScale().x + 2, tamanyoNodo.getY(), nodo->getScale().z + 2);
 
 		}	
 		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY() + 2, NodoVehiculo->getCenterOfMassPosition().getZ()));

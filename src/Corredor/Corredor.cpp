@@ -1561,8 +1561,8 @@ void Corredor::lanzarHabilidad() {
 			break;
 
 		case GLADIADOR:
-			tamanyoNodo = btVector3(2, 0.5, 2);
-			escala = btVector3(30, 0.5, 30);
+			tamanyoNodo = btVector3(2, 1, 2);
+			escala = btVector3(30, 5 , 30);
 			tiempoDestruccion = 3;
 			habilidadJugador = new Habilidad(3, CuerpoColisionChasis, posicion, escala, masa, tiempoDestruccion, CILINDRO, tamanyoNodo, radio, alt, cuboNodo->getID());
 			habilidadJugador->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE

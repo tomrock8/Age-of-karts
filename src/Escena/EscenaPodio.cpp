@@ -108,6 +108,30 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 
 EscenaPodio::~EscenaPodio() {
 
+	
+	delete podio;
+
+    camera = nullptr;
+	
+	for(int i =0; i< luces.size();i++){
+		delete luces.at(i);
+	}
+
+	particulas.clear();		
+	
+	delete primero;
+	delete segundo;
+	delete tercero;
+
+	animacionPirata=nullptr;
+	animacionVikingo=nullptr;
+	animacionChino=nullptr;
+	animacionGladiador=nullptr;
+	animacionElegida=nullptr;
+	
+	delete time;
+
+
 }
 
 Escena::tipo_escena EscenaPodio::comprobarInputs() {

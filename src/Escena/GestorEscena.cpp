@@ -132,7 +132,7 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion,
 
 	TMotor::instancia().cleanScene();
 	TMotor::instancia().nuevaEscenaRaiz(); // Crea la escena raiz de donde cuelgan todos los nodos
-	TMotor::instancia().newGestorRecursos();
+	//TMotor::instancia().newGestorRecursos();
 
 
 
@@ -235,7 +235,7 @@ bool GestorEscena::borraEscena(Escena::tipo_escena tipo) {
 	}
 
 	if (tipo == Escena::tipo_escena::PODIO) {
-		EscenaLobby *e = static_cast<EscenaLobby *>(escenas[indice]);// Convertimos la escena en su tipo
+		EscenaPodio *e = static_cast<EscenaPodio *>(escenas[indice]);// Convertimos la escena en su tipo
 		delete e; // Eliminamos la escena que hemos recogido del array
 		escenas[indice] = nullptr; // Ponemos el indice del array que hemos borrado a null
 		return true;

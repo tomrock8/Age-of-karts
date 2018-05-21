@@ -1519,7 +1519,7 @@ void Corredor::lanzarHabilidad() {
 
 		case CHINO:
 			posicion = btVector3(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
-			tamanyoNodo = btVector3(5, 5, 5);
+			tamanyoNodo = btVector3(1, 1, 1);
 			escala = btVector3(5, 7, 10);
 			masa = 100;
 			alt = 2;

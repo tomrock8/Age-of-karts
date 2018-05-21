@@ -59,10 +59,8 @@ void EscenaMenu::initHud() {
 	TMotor::instancia().newHud("LocalMenuHUD");
 	
 	//Se añaden los distintos elementos del hud y se posicionan correctamente
-	//--TEXTO ELEGIR MODO--
-	TMotor::instancia().getActiveHud()->addElement(1.0f, 1.0f, "elegirModo", "assets/HUD/MainMenu/elegirModo.png");
-	TMotor::instancia().getActiveHud()->scaleElement("elegirModo", 1.0f, 0.80f);
-	TMotor::instancia().getActiveHud()->traslateElement("elegirModo", 0.0f, 0.50f);
+	//--FONDO PARA LA SELECCION DE MODO--
+	TMotor::instancia().getActiveHud()->addElement(2.0f, 2.0f, "fondopantallaPartida", "assets/HUD/MainMenu/fondo.png");
 	//--BOTONES--
 	TMotor::instancia().getActiveHud()->addElement(0.4f, 0.15f, "unJugador", "assets/HUD/MainMenu/btn_unJugador_normal.png");
 	TMotor::instancia().getActiveHud()->scaleElement("unJugador", 1.50f, 1.75f);
@@ -274,6 +272,8 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 
 	//Si esta activa el menu de juego local, se realizan los siguientes cambios
 	if (strcmp(TMotor::instancia().getActiveHud()->getName(), "LocalMenuHUD") == 0) {
+		//fondo para el menu
+		
 		TMotor::instancia().getActiveHud()->changeTextureElement("unJugador", "assets/HUD/MainMenu/btn_unJugador_normal.png");
 		TMotor::instancia().getActiveHud()->changeTextureElement("pantallaPartida", "assets/HUD/MainMenu/btn_pantallaPartida_normal.png");
 

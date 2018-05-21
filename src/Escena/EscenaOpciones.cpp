@@ -25,6 +25,8 @@ EscenaOpciones::~EscenaOpciones() {
 
 void EscenaOpciones::init() {}
 void EscenaOpciones::dibujar() {
+	TMotor::instancia().getActiveHud()->addElement(2, 2, "fondo2", "assets/HUD/MainMenu/fondo.png");
+
 	//Limpiamos el dibujado anterior asignando un color de fondo
 	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);
 	//Establecemos la zona de renderizado

@@ -1,0 +1,4 @@
+Shader basico que recoge los colores del material para cada uno de los componentes
+de la luz, asi como su brillo, y calcula la posicion y el color final del pixel.
+No trata texturas.
+Permite definir un numero ilimitado de luces (preestablecido en 8), tanto de tipo puntual como dirigidas.

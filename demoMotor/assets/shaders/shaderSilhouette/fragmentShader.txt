@@ -1,0 +1,30 @@
+//Especificar version de Opengl a utilizar
+#version 330 core
+
+// Variable de salida del Fragment
+out vec4 FragColor; //Color final del fragmento
+
+//Uniforms
+uniform vec3 posCamera; //Posicion de la camara
+uniform bool drawingDistance; //Booleano para la activacion/desactivacion de la distancia de dibujado
+uniform float levelOfDrawingDistance; //Distancia dentro de la cual se dibujan los objetos
+
+//Variables de entrada desde el Vertex shader
+in vec3 worldPos;
+
+void main(){
+    // *** Dibujamos la silueta de color negro ***
+    
+    //Si la distancia de dibujado esta activada...
+    if ( drawingDistance == true ){
+        //Si la distancia entre la camara y el objeto es menor que la predefinida, entonces se dibuja
+        if (abs(length(posCamera - worldPos)) < levelOfDrawingDistance){
+            FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        } else{
+            //Si no se descarta
+            discard;
+        }
+    } else { //Si no esta activado, asignamos el color negro directamente
+        FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+}

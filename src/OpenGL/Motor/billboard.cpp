@@ -56,27 +56,34 @@ void billboard::setImage(const char* p){
     path = p;
 }
 
+//Funcion para activar/desactivar el billboard
+void billboard::setActive(bool b){
+    active = b;
+}
+
 //Funcion para dibujar el billboard encima del elemento 
 void billboard::draw(Shader* s){
+    //Si el billboard esta activado...
+    if (active == true){
+        //Activamos la textura 0 y enlazamos la imagen del elemento hud
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, TGestorImagenes::getInstancia()->cargarImagen(path)->getID());
+        //Le pasamos la textura al shader
+        s->setInt("image", 0);
 
-    //Activamos la textura 0 y enlazamos la imagen del elemento hud
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, TGestorImagenes::getInstancia()->cargarImagen(path)->getID());
-    //Le pasamos la textura al shader
-    s->setInt("image", 0);
+        //Calculamos la matriz viewProjection y se la pasamos al shader
+        glm::mat4 vp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getActiveViewMatrix();
+        s->setMat4("vp", vp);
+        //Le pasamos la posicion del objeto sobre el que se situara el billboard
+        s->setVec3("objPosition", elemento->getPosition());
 
-    //Calculamos la matriz viewProjection y se la pasamos al shader
-    glm::mat4 vp = TMotor::instancia().getActiveCamera()->getEntidad()->getProjectionMatrix() * TMotor::instancia().getActiveViewMatrix();
-    s->setMat4("vp", vp);
-    //Le pasamos la posicion del objeto sobre el que se situara el billboard
-    s->setVec3("objPosition", elemento->getPosition());
+        //Enlazamos el VAO que antes hemos rellenado
+        glBindVertexArray(VAO);
+        //Dibujamos el billboard
+        glDrawArrays(GL_TRIANGLES, 0, 18);
 
-    //Enlazamos el VAO que antes hemos rellenado
-    glBindVertexArray(VAO);
-    //Dibujamos el billboard
-    glDrawArrays(GL_TRIANGLES, 0, 18);
-
-    //Desenlazamos el VAO y la textura de la imagen usada hasta el siguiente dibujado
-    glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
+        //Desenlazamos el VAO y la textura de la imagen usada hasta el siguiente dibujado
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 }

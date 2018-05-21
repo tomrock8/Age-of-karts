@@ -347,6 +347,8 @@ void EscenaJuego::dibujar() {
 	//Limpiamos el dibujado anterior asignando un color de fondo
 	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);
 	for (int i = 0; i < numPantallas; i++) {
+		//Desactivamos el billboard del jugador activo
+		TMotor::instancia().getBillboards().at(i)->setActive(false);
 		//Establecemos la zona de renderizado
 		if (numPantallas > 1) {
 			if (i == 0) {
@@ -387,6 +389,8 @@ void EscenaJuego::dibujar() {
 		TMotor::instancia().drawHudMenus();
 		//Dibujamos IMGUI
 		TMotor::instancia().drawIMGUI();
+		//Activamos el billboard del jugador activo
+		TMotor::instancia().getBillboards().at(i)->setActive(true);
 	}
 
 }

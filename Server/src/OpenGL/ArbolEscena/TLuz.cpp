@@ -222,7 +222,7 @@ void TLuz::configureDirectionalShadow(Shader *s){
 	//Le pasamos al shader la textura con el mapa de profundidad
 	string n = "shadowMap_";
 	n+=numLight;
-	glUniform1i(glGetUniformLocation(s->ID, n.c_str()), 8 + text);
+	glUniform1i(glGetUniformLocation(s->getID(), n.c_str()), 8 + text);
 }
 
 // ----- LUZ PUNTUAL -----
@@ -324,7 +324,7 @@ void TLuz::configurePointShadow(Shader *s){
 	//Le pasamos al shader la textura con el mapa de profundidad
 	string n = "shadowCube_";
 	n+=numLight;
-	glUniform1i(glGetUniformLocation(s->ID, n.c_str()), 3 + text);
+	glUniform1i(glGetUniformLocation(s->getID(), n.c_str()), 3 + text);
 	//Pasamo el plano lejano al shader
 	s->setFloat("planoLejano", 200.0f);
 }

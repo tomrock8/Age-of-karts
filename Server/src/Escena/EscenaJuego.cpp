@@ -384,7 +384,7 @@ void EscenaJuego::update() {
 
 				}
 
-				items.at(i)->Delete();
+				delete items.at(i);
 				items.erase(items.begin() + i);
 				pistaca->setItems(items);
 				break;

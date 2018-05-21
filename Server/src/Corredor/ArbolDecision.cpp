@@ -15,8 +15,9 @@ ArbolDecision::~ArbolDecision(){
 	delete arrayNodos.at(0);	
     //cout<<"HE BORRADO EL ARBOL"<<endl;
     arrayNodos.clear();
-    NodoRuta=NULL;
+    NodoRuta=nullptr;
     }else{
+        NodoRuta=nullptr;
       //  cout<<"out of range"<<endl;
     }
 }

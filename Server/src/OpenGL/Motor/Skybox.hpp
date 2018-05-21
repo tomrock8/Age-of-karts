@@ -10,6 +10,7 @@ class Skybox{
 
 public:
     Skybox(); //Constructor
+	~Skybox(); // Destructor
 
     unsigned char *loadImage(const char* path, int i); 
     void createCubeMap();

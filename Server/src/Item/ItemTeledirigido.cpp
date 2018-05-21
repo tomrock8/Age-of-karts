@@ -27,6 +27,10 @@ ItemTeledirigido::ItemTeledirigido(btVector3 posicion, btVector3 escala, btScala
 
 
 
+ItemTeledirigido::~ItemTeledirigido() {
+	actual = nullptr;
+	siguiente = nullptr;
+}
 
 void ItemTeledirigido::lanzarItem(int direccion, btVector3 orientacion, btTransform objeto) {
 	this->orientacion = orientacion;
@@ -284,6 +288,3 @@ void ItemTeledirigido::movimiento() {
 }
 
 
-void ItemTeledirigido::deleteHijos() {
-
-}

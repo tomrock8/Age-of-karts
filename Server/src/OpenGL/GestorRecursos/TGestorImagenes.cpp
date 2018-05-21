@@ -3,7 +3,7 @@
 TGestorImagenes *TGestorImagenes::instancia = NULL;
 
 //Funcion que devuelve el gestor de imagenes. Si es la primera vez que de accede, lo inicializa y lo devuelve
-TGestorImagenes *TGestorImagenes::getInstacia() {
+TGestorImagenes *TGestorImagenes::getInstancia() {
 	if (instancia == NULL)
 		instancia = new TGestorImagenes();
 

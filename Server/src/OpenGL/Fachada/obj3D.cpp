@@ -11,8 +11,8 @@ obj3D::obj3D(TNodo *m, const char *n, GLuint i) {
 }
 
 obj3D::~obj3D() {
-	cout << "Delete obj3D \n";
 	setVisible(false);
+	node->deleteNode();
 }
 void obj3D::setNode(TNodo *m) {
 	node = m;
@@ -54,7 +54,7 @@ void obj3D::setRotation(float X, float Y, float Z) {
 // METODOS GET
 GLuint obj3D::getID() { return id; }
 const char *obj3D::getName() { return name; }
-TNodo *obj3D::getNode() { return node; }
+TNodo *obj3D::getNode(){ return node; }
 glm::vec3 obj3D::getScale() { return escala; }
 bool obj3D::isVisible() { return static_cast<TMalla*>(node->getEntidad())->isVisible(); }
 
@@ -93,3 +93,4 @@ void obj3D::setScale(float x, float y, float z) {
 	static_cast<TTransform*>(node->getPadre()->getPadre()->getPadre()->getEntidad())->setScale(x, y, z);
 	escala = glm::vec3(x, y, z);
 }
+

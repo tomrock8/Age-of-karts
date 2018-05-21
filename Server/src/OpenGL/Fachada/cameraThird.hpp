@@ -23,6 +23,7 @@ public:
 	void moveCamera(btRigidBody * pj1, btVector3 dir);
 	void movefpsCamera(btRigidBody * pj1);
 	void moveCameraControl(btRigidBody * pj1);
+	obj3D* getNodo();
 
 	// METODOS GET
 	GLuint getID();
@@ -41,12 +42,10 @@ public:
 	
 
 private:
-
 	GLuint id;
 	glm::mat4 position;
 	glm::mat4 rotation;
 	const char *name;
-	//Corredor* nodo;
 	obj3D* camara;
 
 	float direction;
@@ -55,8 +54,7 @@ private:
 	btVector3 direccion2;
 
 	float auxX;
-	btDefaultMotionState *MotionState;
-	btCollisionShape *Shape;
+	
 	btRigidBody *rigidBody;
 
 };

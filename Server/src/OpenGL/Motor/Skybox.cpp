@@ -7,6 +7,14 @@ Skybox::Skybox(){
     setCubeVertices();
 }
 
+Skybox::~Skybox() {
+
+	//Eliminar los distintos buffers utilizados por OpenGL
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteTextures(1, &skyboxCubeTexture);
+}
+
 //Funcion que carga una imagen a partir de la libreria stb
 unsigned char *Skybox::loadImage(const char* p, int i){
     //Cargamos la imagen, guardando los distintos datos de la misma en la posicion de los arrays que pertoque
@@ -142,7 +150,7 @@ void Skybox::drawSkyBox(){
 
     //Pasamos los datos necesarios al shader 
     TMotor::instancia().getShaderSkybox()->setMat4("mvp", mvp); //Matriz mvp
-	glUniform1i(glGetUniformLocation(TMotor::instancia().getShaderSkybox()->ID, "skybox"), 0); //Cubo de texturas
+	glUniform1i(glGetUniformLocation(TMotor::instancia().getShaderSkybox()->getID(), "skybox"), 0); //Cubo de texturas
     //Activamos el VAO que hemos seteado antes
     glBindVertexArray(VAO);
     //Dibujamos el skybox

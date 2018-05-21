@@ -930,7 +930,7 @@ void Corredor::resetFuerzas() {
 }
 void Corredor::soltarItem() {
 	setTipoObj(EstadosJugador::estado_objeto::NADA);
-	setLimite(getLimite() + 10);
+	setLimite(getLimite() + 25);
 }
 
 /*
@@ -959,6 +959,7 @@ void Corredor::usarObjetos() {
 	float alt = 1;
 
 	if (getTipoObj() == 1) {		// PROYECTIL
+		posicion.setY(cuboNodo->getPosition().y);
 		Proyectil *pro = new Proyectil(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
 		pro->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro->setLanzado(true);
@@ -1053,9 +1054,12 @@ void Corredor::usarObjetos() {
 	else if (tipoObj == 7)	//FLECHA TELEDIRIGIDA
 	{
 		//cout << "Teledirigido de Jugador " << this->getID() << " - posicion: " << posicionCarrera << endl;
+		tiempoDestruccion = 100;
 		alt = 1;
 		posicion.setY(posicion.getY() + alt);
-		ItemTeledirigido *pt = new ItemTeledirigido(posicion, escala, masa, 50, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
+		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * -20);
+		posicion.setZ(cuboNodo->getPosition().z - orientacion.getZ() * -20);
+		ItemTeledirigido *pt = new ItemTeledirigido(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
 		pt->setWaypoint(actual);
 		pt->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pt->setLanzado(true);

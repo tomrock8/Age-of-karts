@@ -1087,17 +1087,11 @@ void EscenaJuego::updateHUD(int i) {
 			if (pj.at(i)->getLimite()<100){
 				if (pj.at(i)->getLimite() - habilidad.at(i) == 1){
 					inc_habilidad.at(i)+=0.0065;			
-				}else if (pj.at(i)->getLimite() - habilidad.at(i) == 10){
-					inc_habilidad.at(i)+=0.065;		
+				}else if (pj.at(i)->getLimite() - habilidad.at(i) == 25){
+					inc_habilidad.at(i)+=0.16;		
 				}
 			}else{
-				if (pj.at(i)->getLimite()==100){
-					if (pj.at(i)->getLimite() - habilidad.at(i) == 1){
-						inc_habilidad.at(i)+=0.0065;			
-					}else if (pj.at(i)->getLimite() - habilidad.at(i) == 10){
-						inc_habilidad.at(i)+=0.065;		
-					}
-				}
+				inc_habilidad.at(i)=0.64f;
 				TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 1);
 			}
 		}else{

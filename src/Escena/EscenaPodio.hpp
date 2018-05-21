@@ -2,7 +2,7 @@
 #define ESCENAPODIO_H
 
 #include "Escena.hpp"
-
+#include "Timer.hpp"
 #include <iostream>
 
 class EscenaPodio: public Escena {
@@ -33,12 +33,15 @@ private:
 	obj3D *tercero;
 	bool segundoPuesto;
 	bool tercerPuesto;
-
+	bool end;
+	bool entra;
 	TNodo *animacionPirata;
 	TNodo *animacionVikingo;
 	TNodo *animacionChino;
 	TNodo *animacionGladiador;
 	TNodo *animacionElegida;
+	Timer *time;
+	float tm;
 
 };
 

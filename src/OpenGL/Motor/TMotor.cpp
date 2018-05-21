@@ -518,6 +518,7 @@ glm::mat4 TMotor::getActiveViewMatrix() { return activeViewMatrix; }
 bool TMotor::getBoundingBoxes() { return boundingBoxes; }
 float TMotor::getDrawingDistance() { return levelOfDrawingDistance; }
 bool TMotor::getLevelOfDetail() { return levelOfDetail; }
+std::vector <billboard *> TMotor::getBillboards() { return billboards; }
 //Funcion que devuelve un hud a partir del nombre
 hud* TMotor::getHud(const char* n) {
 	hud* h = NULL;
@@ -752,7 +753,7 @@ void TMotor::drawBillboards() {
 	//Activamos el shader para el dibujado de los billboards
 	shaderBillboard->use();
 	//Recorremos los diferentes billboards y los dibujamos
-	for (int i = 1; i < billboards.size(); i++) {
+	for (int i = 0; i < billboards.size(); i++) {
 		billboards.at(i)->draw(shaderBillboard);
 	}
 	//Reactivamos el z-buffer, para controlar la profundidad

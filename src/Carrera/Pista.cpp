@@ -67,7 +67,9 @@ void Pista::setMapa() {
 		loadPirateMapElements();
 	}
 	else if (strcmp(nameMap, "gladiador") == 0) {
-		//Cargar mapa gladiador
+		path = "assets/MapaGladiador/CarreteraGladiador.obj";
+		wayPoints = "assets/MapaGladiador/WPCol.obj";
+		TMotor::instancia().newMeshNode("elementos", "assets/MapaGladiador/Coliseo.obj", "escena_raiz", false);
 	}
 	if (nameMap != NULL) {
 		createMap(path);

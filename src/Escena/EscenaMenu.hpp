@@ -30,6 +30,7 @@ private:
 	AlSource *fuenteMenu;
 
 	void initHud();
+	elementoHud *fondo;
 };
 
 #endif /* ESCENAMENU_H */

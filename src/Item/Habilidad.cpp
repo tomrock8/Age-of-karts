@@ -11,13 +11,13 @@ Habilidad::Habilidad(int tipo, btRigidBody* n, btVector3 posicion, btVector3 esc
 	switch (tipoHabilidad) {
 
 	case 1:
-		nodo = TMotor::instancia().newMeshNode("HabilidadPirata", strEscudo, "escena_raiz", false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadPirata","assets/Habilidades/Pirata/HabilidadPirata.obj","escena_raiz", false);
 		nombre = "HabilidadPirata";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadPirata");
 		break;
 
 	case 2:
-		nodo = TMotor::instancia().newMeshNode("HabilidadVikingo", strEscudo, "escena_raiz", false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadVikingo", "assets/hacha/hacha.obj", "escena_raiz", false);
 		nombre = "HabilidadVikingo";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadVikingo");
 		break;

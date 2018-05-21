@@ -1,0 +1,22 @@
+//Especificar version de Opengl a utilizar
+#version 330
+
+//Color final de la linea
+out vec4 fragColor;
+
+//Variable de entrada desde el vertex shader
+in vec2 textCoords;
+
+//Uniform
+uniform sampler2D image; //Textura de la nube
+ 
+void main (void) {
+    //Asignamos la textura de cada nube
+    if (texture(image, textCoords).w > 0.0){
+        fragColor = texture(image, textCoords);
+    }else{
+        //Descartamos el fragmento si la transparencia de la imagen es 0, para que no borre nada de debajo
+        discard;
+    }
+    //fragColor = texture(image, textCoords);
+}

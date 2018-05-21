@@ -10,9 +10,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\MapaPirataCarretera_diffusa.png
-map_Bump texturas\\MapaPirataCarretera_normal.png
-map_Ks texturas\\MapaPirataCarretera_specular.png
+map_Kd texturas/MapaPirataCarretera_diffusa.png
+map_Bump texturas/MapaPirataCarretera_normal.png
+map_Ks texturas/MapaPirataCarretera_specular.png
 
 newmtl ColiseoM.003
 Ns 94.117647
@@ -23,6 +23,6 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\coliseo_diffuse.png
-map_Bump texturas\\coliseo_normal.png
-map_Ks texturas\\coliseo_specular.png
+map_Kd texturas/coliseo_diffuse.png
+map_Bump texturas/coliseo_normal.png
+map_Ks texturas/coliseo_specular.png

@@ -987,7 +987,7 @@ void Corredor::usarObjetos() {
 		alt = 3;
 		masa = 30;
 		tiempoDestruccion = 0;
-		escala = btVector3(2, 2, 2);
+		escala = btVector3(2, 0.5, 2);
 		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * 10);
 		posicion.setZ(cuboNodo->getPosition().z - orientacion.getZ() * 10);
 		posicion.setY(cuboNodo->getPosition().y + alt);

@@ -143,8 +143,8 @@ btCollisionShape  *MotorFisicas::CreateCollisionShape(const char *name) {
 		shape->setLocalScaling(scale);
 	}
 
-	delete mesh;
-	delete triangleMesh;
+	mesh = nullptr;
+	triangleMesh = nullptr;
 
 	return shape;
 }

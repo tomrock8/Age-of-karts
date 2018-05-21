@@ -23,13 +23,13 @@ Habilidad::Habilidad(int tipo, btRigidBody* n, btVector3 posicion, btVector3 esc
 		break;
 
 	case 3:
-		nodo = TMotor::instancia().newMeshNode("HabilidadGladiador", strEscudo, "escena_raiz", false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadGladiador", "assets/Habilidades/Gladiador/HabGladiador.obj", "escena_raiz", false);
 		nombre = "HabilidadGladiador";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadGladiador");
 		break;
 
 	case 4:
-		nodo = TMotor::instancia().newMeshNode("HabilidadChino", strEscudo, "escena_raiz", false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadChino", "assets/Habilidades/Chino/habChino.obj", "escena_raiz", false);
 		nombre = "HabilidadChino";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadChino");
 		break;

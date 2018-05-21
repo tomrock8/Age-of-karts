@@ -541,8 +541,12 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			id_player=8;
 		}
 	}
+	if (conectado){
+		numPantallas=4;
+	}
 	//bool mandoConectado[numPantallas];
 	bool *mandoConectado=new bool[numPantallas];
+	
 	for (int id = 0; id < numPantallas; id++) {
 		//Comprobador de de mando y recoleccion de inputs
 		mandoConectado[id] = false;
@@ -621,7 +625,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				}
 			}
 		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS && id == 0 || (mandoConectado[id] && (GLFW_PRESS == buttons[0]) && id == 0) && (offline || conectado)) {
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS && (id == id_player || id_player==8) || (mandoConectado[id] && (GLFW_PRESS == buttons[0]) && id == id_player) ) {
 			if (!pressed[0]) {
 				if (!selection_online && !offline) {
 					iniciar = true;					//Conectar con el servidor de la IP

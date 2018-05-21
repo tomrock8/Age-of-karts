@@ -109,7 +109,6 @@ void Habilidad::movimiento() {
 		nodo->setPosition(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY(), NodoVehiculo->getCenterOfMassPosition().getZ());
 
 		if (nodo->getScale().x <= 10){
-			cout<<"pene"<<endl;
 			nodo->setScale(nodo->getScale().x + 1, nodo->getScale().x, nodo->getScale().x + 1);
 
 		}	

@@ -1,0 +1,22 @@
+//Especificar version de Opengl a utilizar
+#version 330 core
+
+//Recoger los datos de los vertices en los buffers correctamente (segun orden de envio en el programa)
+layout (location = 0) in vec3 aPos; //Posicion 
+layout (location = 1) in vec2 aTexCoords; //Coordenadas de textura
+layout (location = 2) in vec3 aNormal; //Normal
+layout (location = 3) in vec3 aTangents; //Tangentes
+layout (location = 4) in vec3 aBitangents; //Bitangentes
+
+//Variables de salida del Vertex al Fragment shader
+out data{
+    vec2 textCoords; //Coordenadas de textura
+} vs_out;
+
+void main(){
+    //Coordenadas de textura == a que punto de la textura corresponde el vertice tratado en cada llamada al shader
+    vs_out.textCoords = aTexCoords; 
+
+    //Asignamos directamente los vertices a la posicion, ya que estamos dibujando un simple quad
+    gl_Position = vec4(aPos, 1.0);
+}

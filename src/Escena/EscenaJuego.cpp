@@ -547,12 +547,12 @@ void EscenaJuego::renderDebug(int i) {
 			relativeY = 200;
 
 			if (i == 2) {
-				relativeX = 900;
+				relativeX = 300;
 				relativeY = 600;
 
 			}
 			else if (i == 3) {
-				relativeX = 200;
+				relativeX = 900;
 				relativeY = 600;
 			}
 			else if (i == 1) {
@@ -566,8 +566,10 @@ void EscenaJuego::renderDebug(int i) {
 			}
 			else {
 				if (fin_carrera) {
+					if (i==0){
 					ImGui::SetNextWindowPos(ImVec2((display_w - relativeX) / 4, (display_h - relativeY) / 4));
 					ImGui::SetNextWindowSize(ImVec2((float)450, (float)120));
+					}
 				}
 				else {
 					ImGui::SetNextWindowSize(ImVec2((float)290, (float)40));
@@ -575,39 +577,54 @@ void EscenaJuego::renderDebug(int i) {
 			}
 		}
 		ImGui::SetNextWindowBgAlpha(0.6f);
+		if (vueltas.at(i) > Pista::getInstancia()->getNumVueltas()) {
+			Corredor *pj1 = GestorJugadores::getInstancia()->getJugadores().at(i);
+			TMotor::instancia().getActiveHud()->traslateElement("puesto", 0.0f, 0.3f);
+			if (fin_carrera && i==0) {
+				ImGui::Begin("Another Window" + i, &show_another_window[i], ImGuiWindowFlags_NoResize
+			| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
+			| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard
+			| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal);
+				ImGui::Text("RACE FINISHED!");
+				ImGui::Text("PRESS F TO RETURN");
+				ImGui::End();
 
+			}
+		}else{
 		ImGui::Begin("Another Window" + i, &show_another_window[i], ImGuiWindowFlags_NoResize
 			| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
 			| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard
 			| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal);
-		if (numPantallas > 1)
 			//fontsize
-			cout << vueltas.at(i) << " max: " << Pista::getInstancia()->getNumVueltas();
-		if (vueltas.at(i) <= Pista::getInstancia()->getNumVueltas()) {
-			Corredor *pj1 = GestorJugadores::getInstancia()->getJugadores().at(i);
-			ImGui::Text("Tiempo vuelta: ");
-			ImGui::Text(to_string(pj1->getTiempoVuelta()).c_str());
-		}
-		else {
-			if (fin_carrera) {
-				ImGui::Text("CARRERA FINALIZADA!");
-				ImGui::Text("PULSA F PARA VOLVER");
+			if (vueltas.at(i) <= Pista::getInstancia()->getNumVueltas()) {
+				ImGui::Text("LAP TIME: ");
+				Corredor *pj1 = GestorJugadores::getInstancia()->getJugadores().at(i);
+				ImGui::Text(to_string(pj1->getTiempoVuelta()).c_str());
+			}
+			else {
+			if (fin_carrera && i==0) {
+				ImGui::Text("RACE FINISHED!");
+				ImGui::Text("PRESS F TO RETURN");
 
 			}
 			if (vueltas.at(i) > Pista::getInstancia()->getNumVueltas()) {
-				ImGui::Text("Has quedado: ");
-				TMotor::instancia().getActiveHud()->traslateElement("puesto", 0.0f, 0.3f);
+				if (numPantallas==1){
+					ImGui::Text("YOU ARRIVED: ");
+				}
+				
+
 			}
 			muestra_tiempo.at(i) = t->getTimer();
 
 			//ImGui::Text(to_string(jugador->getPosicionCarrera()).c_str());
-		}
-		vueltas_aux.at(i) = vueltas.at(i);
-		if (t->getTimer() - muestra_tiempo.at(i) >= 4) {
-			show_another_window[i] = false;
-		}
-
+			}
+			vueltas_aux.at(i) = vueltas.at(i);
+			if (t->getTimer() - muestra_tiempo.at(i) >= 4) {
+				show_another_window[i] = false;
+			}
+		
 		ImGui::End();
+		}
 
 	}
 	ImGui::PopFont();
@@ -710,16 +727,17 @@ void EscenaJuego::update() {
 				}
 			}
 		}
-	}
-
-	if (t->getTimer() < 8 && t->getTimer() >= 5) {
+		if (t->getTimer() < 8 && t->getTimer() >= 5) {
 		TMotor::instancia().getActiveHud()->deleteElement("cuentaAtras");
 		for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
 			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
 		}
 		if (t->getTimer() >= 5 && t->getTimer() < 6)
 			colisiones->IniciarTimer();
+		}
 	}
+
+	
 
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 

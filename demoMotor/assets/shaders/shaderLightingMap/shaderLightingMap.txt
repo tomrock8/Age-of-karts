@@ -1,0 +1,4 @@
+Shader que recoge las diferentes texturas presentes en la malla: textura difusa, textura especular y textura o mapa de normales.
+A partir del mapa de normales, saca la normal de cada vertice y la utiliza para los calculos de la luz.
+Usa, tambien, los datos de tangentes y bitangentes que proporciona assimp a partir del .obj para estos calculos.
+Permite definir un numero ilimitado de luces (preestablecido en 8), tanto de tipo puntual como dirigidas.

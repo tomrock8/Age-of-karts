@@ -2,6 +2,7 @@
 #define STB_IMAGE_IMPLEMENTATION    
 #include "stb_image.h"
 
+
 TGestorRecursos::TGestorRecursos() {
 
 }
@@ -44,6 +45,8 @@ TGestorRecursos::~TGestorRecursos() {
 	dir=nullptr;
 	textures.clear();
 	
+
+
 	cout << " SALGO \n";
 }
 

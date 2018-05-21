@@ -88,7 +88,7 @@ void Habilidad::movimiento() {
 		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX() + orientacion.getX() * 15, NodoVehiculo->getCenterOfMassPosition().getY() + 5, NodoVehiculo->getCenterOfMassPosition().getZ() + orientacion.getZ() * 15));
 
 		orientacion = orientacion.rotate(btVector3(0, 1, 0), giro * PI / 180);
-		//nodo->setRotation(nodo->getRotation().x, cont, nodo->getRotation().z);
+		nodo->rotate(glm::vec3(0,1,0), cont);
 		//quaternion.setEulerZYX(0, nodo->getRotation().y * PI / 180, 0);
 
 		trans.setRotation(NodoVehiculo->getCenterOfMassTransform().getRotation());
@@ -108,9 +108,11 @@ void Habilidad::movimiento() {
 
 		nodo->setPosition(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY(), NodoVehiculo->getCenterOfMassPosition().getZ());
 
-		if (nodo->getScale().x <= 10)
+		if (nodo->getScale().x <= 10){
+			cout<<"pene"<<endl;
 			nodo->setScale(nodo->getScale().x + 1, nodo->getScale().x, nodo->getScale().x + 1);
 
+		}	
 		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY() + 2, NodoVehiculo->getCenterOfMassPosition().getZ()));
 		trans.setRotation(NodoVehiculo->getCenterOfMassTransform().getRotation());
 		rigidBody->setCenterOfMassTransform(trans);

@@ -85,6 +85,7 @@ public:
 	TNodo *getCameraByIndex(int i);
 	float getDrawingDistance();
 	bool getLevelOfDetail();
+	std::vector <billboard *> getBillboards();
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);

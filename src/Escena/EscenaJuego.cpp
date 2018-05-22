@@ -357,17 +357,27 @@ void EscenaJuego::dibujar() {
 		TMotor::instancia().getBillboards().at(i)->setActive(false);
 		//Establecemos la zona de renderizado
 		if (numPantallas > 1) {
-			if (i == 0) {
-				TMotor::instancia().setViewport(0, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-izquierda
-			}
-			else if (i == 1) {
-				TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-derecha
-			}
-			else if (i == 2) {
-				TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-izquierda				
-			}
-			else {
-				TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-derecha				
+			if(numPantallas == 2){
+				if (i == 0) {
+					TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight()); //Arriba-izquierda
+				}
+				else if (i == 1) {
+					TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight()); //Arriba-derecha
+				}
+			}	
+			else{
+				if (i == 0) {
+					TMotor::instancia().setViewport(0, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-izquierda
+				}
+				else if (i == 1) {
+					TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-derecha
+				}
+				else if (i == 2) {
+					TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-izquierda				
+				}
+				else {
+					TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-derecha				
+				}
 			}
 		}
 		else {

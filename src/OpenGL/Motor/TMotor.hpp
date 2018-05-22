@@ -128,8 +128,8 @@ public:
 protected:
 	//Ventana de GLFW donde se renderiza el motor
 	GLFWwindow * ventana;
-	int screenHEIGHT = 900; //Alto de la ventana
-	int screenWIDTH = 1600; //Ancho de la ventana
+	int screenHEIGHT = 768; //Alto de la ventana
+	int screenWIDTH = 1024; //Ancho de la ventana
 
 	//Nodo Raiz del arbol de la escena
 	TNodo * scene;

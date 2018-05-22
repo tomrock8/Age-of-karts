@@ -40,7 +40,7 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 
 			case Corredor::tipo_jugador::VIKINGO:
 				if (animacionVikingo == nullptr) {
-					animacionVikingo = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Celebracion/VikingoCelebracion_000", 443, 537), "BaileVikingo");
+					animacionVikingo = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Celebracion/vikingoCelebracionobj_000", 462, 547), "BaileVikingo");
 
 				}
 				animacionElegida = animacionVikingo;

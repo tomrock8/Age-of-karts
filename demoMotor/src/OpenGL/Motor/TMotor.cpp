@@ -123,24 +123,28 @@ void TMotor::close() {
 	//Se eliminan distintos elementos usados por el motor
 
 	delete gestorSonido; //Gestor de sonidos
-
+	
 	//Hud y Menus
 	for (int i = 0; i < HUDs.size(); i++) {
 		delete HUDs[i];
 	}
+	HUDs.clear();
 	//Billboards
 	for (int i = 0; i < billboards.size(); i++) {
 		delete billboards[i];
 	}
+	billboards.clear();
 	//Sistemas de particulas
 	for (int i = 0; i < particleSystems.size(); i++) {
 		delete particleSystems[i];
 	}
-
+	particleSystems.clear();
+	
 	cleanScene(); // Limpiado de diferentes elementos de la escena
+	
 	if (skybox) delete skybox;
 	if (nubes) delete nubes;
-
+	
 	delete shader; // Shader que se usa en el motor en la parte 3D
 	delete shaderHUD; //Shader que usa el motor para el dibujado del HUD
 	delete shaderProjectedShadows; //Shader para el calculo de de las sombras proyectadas
@@ -201,7 +205,7 @@ void TMotor::cleanScene() {
 
 	if (scene)
 		delete scene;
-
+	
 	//Billboards 
 	if (billboards.size() > 0) {
 		for (int i = 0; i < billboards.size(); i++) {
@@ -209,7 +213,7 @@ void TMotor::cleanScene() {
 		}
 		billboards.clear();
 	}
-
+	
 	//Sistemas de particulas
 	if (particleSystems.size() > 0) {
 		for (int i = 0; i < particleSystems.size(); i++) {
@@ -217,15 +221,15 @@ void TMotor::cleanScene() {
 		}
 		particleSystems.clear();
 	}
-
+	
 	//Hud y Menus
+	
 	if (HUDs.size() > 0) {
 		for (int i = 0; i < HUDs.size(); i++) {
 			delete HUDs[i];
 		}
 		HUDs.clear();
 	}
-
 
 	cameras.clear();
 	lights.clear();
@@ -602,6 +606,10 @@ void TMotor::setLevelOfDetail(bool b) {
 //Funcion para activar/desactivar las nubes
 void TMotor::setClouds(bool b) {
 	clouds = b;
+}
+//Funcion para activar/desactivar el skybox
+void TMotor::setActiveSky(bool b){
+	skyboxActive = b;
 }
 obj3D* TMotor::getObjActiveCamera() {
 	if (cameras.size() > 0)

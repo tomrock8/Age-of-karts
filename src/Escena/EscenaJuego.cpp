@@ -148,11 +148,7 @@ void EscenaJuego::init() {
 
 		}
 		else {
-			int numHUD = numPantallas;
-			if(tipoEscena == Escena::tipo_escena::ONLINE){
-				numHUD = num_jugadores;
-			}
-			for (int i = 1; i < numHUD; i++) {
+			for (int i = 1; i < numPantallas; i++) {
 				crearHUD(i);
 				habilidad.push_back(0);
 				inc_habilidad.push_back(0);
@@ -161,6 +157,16 @@ void EscenaJuego::init() {
 				show_another_window[i] = false;
 				muestra_tiempo.push_back(0);
 			}
+		}
+	}else{
+		for(int i = 1; i < client->getClientes().size(); i++){
+			crearHUD(i);
+			habilidad.push_back(0);
+			inc_habilidad.push_back(0);
+			vueltas.push_back(1);
+			vueltas_aux.push_back(1);
+			show_another_window[i] = false;
+			muestra_tiempo.push_back(0);			
 		}
 	}
 

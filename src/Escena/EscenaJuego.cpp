@@ -324,6 +324,9 @@ void EscenaJuego::init() {
 	countDown1 = false;
 	countDownGo = false;
 
+	if(tipoEscena == Escena::tipo_escena::ONLINE){
+		client->GameLoad();
+	}
 }
 
 void EscenaJuego::dibujar() {

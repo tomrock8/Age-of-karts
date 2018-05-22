@@ -1,18 +1,5 @@
-# Blender MTL File: 'mapaGladiador4.0.blend'
-# Material Count: 6
-
-newmtl AcueductoMAT
-Ns 96.078431
-Ka 1.000000 1.000000 1.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Bump texturas/acueducto_normal.png
-map_Kd texturas/acueducto_diffusa.png
-map_Ks texturas/acueducto_specular.png
+# Blender MTL File: 'mapaGladiador4.0HUD.blend'
+# Material Count: 15
 
 newmtl ColiseoMAT
 Ns 94.117647
@@ -23,9 +10,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd texturas\coliseo_diffuse.png
-map_Bump texturas/coliseo_normal.png
-map_Ks texturas/coliseo_specular.png
+map_Kd coliseo_diffuse.png
+map_Bump coliseo_normal.png
+map_Ks coliseo_specular.png
 
 newmtl ColumnaMAt
 Ns 96.078431
@@ -36,9 +23,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump texturas/Columna_normal.png
-map_Kd texturas/Columna_diffuse.png
-map_Ks texturas/Columna_specular.png
+map_Bump Columna_normal.png
+map_Kd Columna_diffuse.png
+map_Ks Columna_specular.png
 
 newmtl SueloMat
 Ns 96.078431
@@ -49,9 +36,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump texturas/suelo_normal.png
-map_Kd texturas/suelo_diffuse.png
-map_Ks texturas/suelo_specular.png
+map_Bump suelo_normal.png
+map_Kd suelo_diffuse.png
+map_Ks suelo_specular.png
 
 newmtl metaMAT
 Ns 96.078431
@@ -62,9 +49,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump texturas/meta_normal.png
-map_Kd texturas/meta_diffuse.png
-map_Ks texturas/meta_specular.png
+map_Bump meta_normal.png
+map_Kd meta_diffuse.png
+map_Ks meta_specular.png
 
 newmtl parrillaMAT
 Ns 96.078431
@@ -75,6 +62,136 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Bump texturas/parrilla_normal.png
-map_Kd texturas/parrilla_diffuse.png
-map_Ks texturas/parrilla_specular.png
+map_Bump parrilla_normal.png
+map_Kd parrilla_diffuse.png
+map_Ks parrilla_specular.png
+
+newmtl turboMAT
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd turbo_diffuse.png
+map_Bump turbo_normal.png
+map_Ks turbo_specular.png
+
+newmtl turboMAT.001
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd turbo_diffuse.png
+map_Bump turbo_normal.png
+map_Ks turbo_specular.png
+
+newmtl turboMAT.002
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd turbo_diffuse.png
+map_Bump turbo_normal.png
+map_Ks turbo_specular.png
+
+newmtl turboMAT.003
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd turbo_diffuse.png
+map_Bump turbo_normal.png
+map_Ks turbo_specular.png
+
+newmtl turboMAT.004
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd turbo_diffuse.png
+map_Bump turbo_normal.png
+map_Ks turbo_specular.png
+
+newmtl turboMAT.005
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd turbo_diffuse.png
+map_Bump turbo_normal.png
+map_Ks turbo_specular.png
+
+newmtl turboMAT.006
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd turbo_diffuse.png
+map_Bump turbo_normal.png
+map_Ks turbo_specular.png
+
+newmtl turboMAT.007
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd turbo_diffuse.png
+map_Bump turbo_normal.png
+map_Ks turbo_specular.png
+
+newmtl turboMAT.008
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd turbo_diffuse.png
+map_Bump turbo_normal.png
+map_Ks turbo_specular.png
+
+newmtl turboMAT.010
+Ns 94.117647
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd turbo_diffuse.png
+map_Bump turbo_normal.png
+map_Ks turbo_specular.png

@@ -1,8 +1,8 @@
 #include "cameraThird.hpp"
 #include "TMotor.hpp"
 
-cameraThird::cameraThird(const char *name, const char *parentName) {
-	camara = TMotor::instancia().newCameraNode(name, parentName);
+cameraThird::cameraThird(const char *name, const char *parentName, float aspectRatio) {
+	camara = TMotor::instancia().newCameraNode(name, parentName, aspectRatio);
 	camara->rotate(glm::vec3(0, 1, 0), 180);
 	auxX = 0;
 	//this->nodo = nodo;

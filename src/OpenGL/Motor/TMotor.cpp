@@ -251,7 +251,7 @@ void TMotor::resizeScreen(int w, int h) {
 // ---------------------------------------
 
 // ---- CAMARAS ----
-obj3D *TMotor::newCameraNode(const char *name, const char* parentNode) {
+obj3D *TMotor::newCameraNode(const char *name, const char* parentNode, float aspectRatio) {
 	// R O T A C I O N
 	string *nameRot = new string("rotacion_" + (string)name);
 	TTransform *rotacion = createTransformation();
@@ -266,7 +266,7 @@ obj3D *TMotor::newCameraNode(const char *name, const char* parentNode) {
 
 	// N O D O
 	TCamara *camara = createCam();
-	camara->setPerspective(screenHEIGHT, screenWIDTH, 0.01f, 10000.0f, 70.0f);
+	camara->setPerspective(screenHEIGHT, screenWIDTH, 0.01f, 10000.0f, 70.0f, aspectRatio);
 	TNodo *nodo = createCamNode(traslacionNodo, camara, name);
 	contID++;
 	return new obj3D(nodo, name, contID);

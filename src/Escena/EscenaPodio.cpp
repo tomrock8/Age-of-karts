@@ -112,6 +112,8 @@ EscenaPodio::~EscenaPodio() {
 	delete podio;
 
     camera = nullptr;
+
+	delete fuentePodio;
 	
 	for(int i =0; i< luces.size();i++){
 		delete luces.at(i);
@@ -291,6 +293,10 @@ void EscenaPodio::limpiar() {
 void EscenaPodio::update() {
 	
 	if ((time->getTimer()-tm)>2 && !entra){
+		fuentePodio = new AlSource();
+		fuentePodio->setLoop(true);
+		fuentePodio->volume(TMotor::instancia().getGestorSonido()->getVolMusica());
+		fuentePodio->play(SOUND_PODIO);
 		entra=true;
 		//activamos animaciones
 		//primero

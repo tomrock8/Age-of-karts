@@ -41,6 +41,7 @@ private:
 	TNodo *animacionElegida;
 	Timer *time;
 	float tm;
+	AlSource *fuentePodio;
 
 };
 

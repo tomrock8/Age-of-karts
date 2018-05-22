@@ -104,6 +104,7 @@ public:
 	void setClouds(bool b);
 	void setLevelOfDetail(bool b);
 	void setViewport(int x, int y, int width, int height);
+	void setActiveSky(bool b);
 
 	// DIBUJADO
 	void clean(float r, float g, float b, float a);

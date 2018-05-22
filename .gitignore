@@ -1,6 +1,8 @@
 # EJECUTABLES
 exec
 exec2
+release
+imgui.ini
 Server/exec2
 Server/exec
 *.exe

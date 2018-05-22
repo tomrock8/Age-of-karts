@@ -9,53 +9,22 @@ RUTAS :=  -I./include/raknet -I./include/bullet -I./include -I./include/assimp -
 RUTAS_INTERNAS := -I./src -I./src/Carrera -I./src/Corredor -I./src/Escena -I./src/Item -I./src/Motor -I./src/imgui -I./src/OpenGL/Motor -I./src/OpenGL/ArbolEscena -I./src/OpenGL/Fachada -I./src/OpenGL/Shader -I./src/OpenGL/GestorRecursos -I./src/OpenGL
 
 CFLAGS := -ggdb -std=c++11 
+DEBUG := -g
 .PHONY: objdir info all 
 
 all: objdir exec
-
-run: all run
-
-alt: objdir exec2 
-
-runalt: objdir exec2 altRun
-
-exec2: $(OBJETOS)
-	@g++ -o $@ $^ $(RUTAS2) $(RUTAS_INTERNAS)  $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS)
-	@echo "Generado ejecutable. Ejecutar ./$@"
-
-exportAlt: 
-	export LD_LIBRARY_PATH="/usr/local/lib"
-
-
-altRun:
-	@./exec2 
-	@echo "Ejecutando." 
-
-run:
-	@./exec 
-	@echo "Ejecutando." 
-
-export: 
-	LD_LIBRARY_PATH=./lib
-	export LD_LIBRARY_PATH
+release: changeRelease objdir exec
 
 exec: $(OBJETOS)
-	#export RUTA_LIB=${HOME}:${RUTA_LIB}
-	#export RUTA_LIB=$(HOME):$(RUTA_LIB)
-	#export PATH=$PATH:/usr/local/bin
-	#echo "$PATH"
-	#sudo cp lib/*.so.2.88 /usr/local/lib
-	export RUTA_LIB=/usr/local/lib
-
-	
-	g++ -g -o $@ $^  $(RUTAS) $(RUTAS_INTERNAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS)	
-
-	LD_LIBRARY_PATH=./lib
+	@g++ $(DEBUG) -o $@ $^  $(RUTAS) $(RUTAS_INTERNAS) $(LIBRERIAS) $(LIBRERIAS_BULLET) $(CFLAGS)	
 	@echo "Generado ejecutable."
 
 obj/%.o : src/%.cpp
-	@g++ -g -o $@ -c $^ $(RUTAS) $(RUTAS_INTERNAS)  $(CFLAGS)
+	@g++ $(DEBUG) -o $@ -c $^ $(RUTAS) $(RUTAS_INTERNAS)  $(CFLAGS)
 	@echo "Compilado $@."
+
+changeRelease:
+	$(eval DEBUG := -O2)
 
 objdir:
 	@mkdir -p obj/
@@ -91,11 +60,3 @@ help:
 	@echo "- make runalt: para compilar con make alt y ejecutar"
 	@echo "- make clean: para eliminar la carpeta de objetos y los ejecutables"
 	@echo "- make info: para ver la informacion de los archivos de src"
-
-#TODO:
-#  Comandos para compilar en release
-#  Comandos para compilar para Windows 
-#  Buscar en subcarpetas en src como pueda ser src/fachada
-#  Comando para compilar y ejecutar de una
-# libtarget.so: main.o
-#   gcc -shared  -o libtarget.so main.o

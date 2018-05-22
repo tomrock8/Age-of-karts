@@ -58,7 +58,6 @@ void EscenaJuego::init() {
 
 	luzPuntual_3 = TMotor::instancia().newLightNode("light_3", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
 	luzPuntual_3->translate(glm::vec3(0.0f, 12.0f, 300.0f));
-	//cout << "Luces cargadas.\n";
 	//LUCES DIRIGIDAS
 	/*
 	obj3D * luzDirigida_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(1.0f, -1.0f, 0.0f, 1.0f), 0.001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
@@ -128,7 +127,6 @@ void EscenaJuego::init() {
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		for (int mandos = 1; mandos < 4; mandos++) {
 			if (glfwJoystickPresent(mandos) == 1) {
-				//std::cout << "Mando " << mandos << " detectado!" << std::endl;
 				numPantallas++;
 			}
 		}
@@ -157,6 +155,16 @@ void EscenaJuego::init() {
 				show_another_window[i] = false;
 				muestra_tiempo.push_back(0);
 			}
+		}
+	}else{
+		for(int i = 1; i < client->getClientes().size(); i++){
+			crearHUD(i);
+			habilidad.push_back(0);
+			inc_habilidad.push_back(0);
+			vueltas.push_back(1);
+			vueltas_aux.push_back(1);
+			show_another_window[i] = false;
+			muestra_tiempo.push_back(0);			
 		}
 	}
 
@@ -206,8 +214,6 @@ void EscenaJuego::init() {
 
 
 	int numClients = client->getClientes().size();
-	//cout<<"numClients "<<numClients<<endl;
-	//cout<<"controlplayer "<<controlPlayer<<endl;
 	Corredor::tipo_jugador tj;
 
 	for (int i = 0; i < numClients; i++) {
@@ -248,10 +254,8 @@ void EscenaJuego::init() {
 		pj.push_back(jugador);
 
 		GestorJugadores::getInstancia()->aumentarJugadores();
-	//	cout << "Creado corredor. ";
 	}
-	//cout << "Corredores creados.\n";
-
+	
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		client->setNetloaded(true);
 	}
@@ -268,7 +272,6 @@ void EscenaJuego::init() {
 		c->setID(x);
 		camera.push_back(c);
 	}
-	//cout << "Camaras creadas.\n";
 
 	//-----------------------------
 	//	GESTOR COLISIONES
@@ -354,23 +357,37 @@ void EscenaJuego::dibujar() {
 		TMotor::instancia().getBillboards().at(i)->setActive(false);
 		//Establecemos la zona de renderizado
 		if (numPantallas > 1) {
-			if (i == 0) {
-				TMotor::instancia().setViewport(0, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-izquierda
-			}
-			else if (i == 1) {
-				TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-derecha
-			}
-			else if (i == 2) {
-				TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-izquierda				
-			}
-			else {
-				TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-derecha				
+			if(numPantallas == 2){
+				if (i == 0) {
+					TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight()); //Arriba-izquierda
+				}
+				else if (i == 1) {
+					TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight()); //Arriba-derecha
+				}
+			}	
+			else{
+				if (i == 0) {
+					TMotor::instancia().setViewport(0, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-izquierda
+				}
+				else if (i == 1) {
+					TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-derecha
+				}
+				else if (i == 2) {
+					TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-izquierda				
+				}
+				else {
+					TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-derecha				
+				}
 			}
 		}
 		else {
 			TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
 		}
-		updateHUD(i);
+		if(tipoEscena == Escena::tipo_escena::ONLINE){
+			updateHUD(controlPlayer);
+		}else{
+			updateHUD(i);
+		}
 		renderDebug(i);
 		//Especificamos la camara activa
 		TMotor::instancia().setActiveCamera(TMotor::instancia().getCameraByIndex(i));
@@ -775,9 +792,6 @@ void EscenaJuego::update() {
 			pj.at(i)->update();
 		}
 
-
-		std::cout << "Entro update3\n";
-
 		//textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 		//if (jugadores->getNumJugadores() != 0)
 			//textoDebug->agregar(pj.at(controlPlayer)->toString());
@@ -793,9 +807,6 @@ void EscenaJuego::update() {
 			//client->PlayerAction();
 			client->UpdateNetworkKeyboard();
 		}
-
-	//	std::cout << "Entro update4\n";
-
 	}
 	if (GestorJugadores::getInstancia()->getNumJugadores() != 0)
 		if (gc->update())

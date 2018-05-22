@@ -162,7 +162,7 @@ void EscenaJuego::init() {
 	TMotor::instancia().initDebugWindow();
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontDefault();
-	io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
+	//io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
 	if (GestorJugadores::getInstancia()->getJugadores().size()>0)
 		Server::getInstancia()->setStarted(false);
 }
@@ -207,10 +207,11 @@ void EscenaJuego::dibujar() {
 	}
 
 	//if (tipoEscena != Escena::tipo_escena::ONLINE) 
-		renderDebug();
+		//renderDebug();
 }
 
 void EscenaJuego::renderDebug() {
+	
 	// ------------------------------
 	// -------- IMGUI ---------------
 	// ------------------------------
@@ -221,16 +222,16 @@ void EscenaJuego::renderDebug() {
 
 	ImGui_ImplGlfwGL3_NewFrame();
 	if (show_another_window){
-		ImFontAtlas* atlas = ImGui::GetIO().Fonts;
+		//ImFontAtlas* atlas = ImGui::GetIO().Fonts;
 		ImGui::StyleColorsLight(); 
 		ImGuiIO& io = ImGui::GetIO();
-
+/*
 		if (io.Fonts->Fonts.Size>1){
 			ImGui::PushFont(io.Fonts->Fonts[1]);
 		}else{
 			ImGui::PushFont(io.Fonts->Fonts[0]);
 
-		}
+		}*/
 	}else{
 
 		ImGui::StyleColorsClassic();
@@ -523,7 +524,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		TMotor::instancia().initDebugWindow();
 		ImGuiIO& io = ImGui::GetIO();
 		io.Fonts->AddFontDefault();
-		io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
+		//io.Fonts->AddFontFromFileTTF("assets/font/OCRAStd.ttf",30.0f);
 		muestraDebug = false;
 	}
 

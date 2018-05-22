@@ -858,7 +858,7 @@ void Client::setNetloaded(bool b) {
 }
 
 void Client::setArrayClients(std::string ip, int tipo, bool rdy, bool corredorJ, int nuevo) {
-	
+
 	structClientes clientAux;
 	clientAux.ip = ip;
 	clientAux.tipoCorredor = tipo;
@@ -868,9 +868,10 @@ void Client::setArrayClients(std::string ip, int tipo, bool rdy, bool corredorJ,
 		clientes.at(nuevo) = clientAux;
 	}
 	else {
+		controlPlayer = clientes.size();
 		clientes.push_back(clientAux);
 	}
-	controlPlayer = clientes.size()-1;
+	
 
 }
 

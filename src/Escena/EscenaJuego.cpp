@@ -6,13 +6,14 @@
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;
 	ipConexion = "";
-
+	tipoEscena=tipo;
 	init();
 }
 
 EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo) {
+	end = false;
 	this->ipConexion = ipConexion;
-	TMotor::instancia().newHud("OnGameHUD0");
+	tipoEscena=tipo;
 	init();
 }
 
@@ -205,6 +206,8 @@ void EscenaJuego::init() {
 
 
 	int numClients = client->getClientes().size();
+	cout<<"numClients "<<numClients<<endl;
+	cout<<"controlplayer "<<controlPlayer<<endl;
 	Corredor::tipo_jugador tj;
 
 	for (int i = 0; i < numClients; i++) {

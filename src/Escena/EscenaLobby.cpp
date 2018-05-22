@@ -494,36 +494,36 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a imagen (tipo
 		players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/NoPlayer.png");
 
 
-		if (client->getClientes().at(i).tipoCorredor == 0 && offline || client->getClientes().at(i).tipoCorredor == 0 && !offline && !checkReady) {
+		if (client->getClientes().at(i).tipoCorredor == 0 && offline || client->getClientes().at(i).tipoCorredor == 0 && !offline && !checkReady && client->getClientes().at(i).ready == false) {
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, false, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/GladiMultiplayer.png");
 		}
-		else if (client->getClientes().at(i).tipoCorredor == 1 && offline || client->getClientes().at(i).tipoCorredor == 1 && !offline && !checkReady) {
+		else if (client->getClientes().at(i).tipoCorredor == 1 && offline || client->getClientes().at(i).tipoCorredor == 1 && !offline && client->getClientes().at(i).ready == false) {
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, false, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/PirataMultiplayer.png");
 		}
-		else if (client->getClientes().at(i).tipoCorredor == 2 && offline || client->getClientes().at(i).tipoCorredor == 2 && !offline && !checkReady) {
+		else if (client->getClientes().at(i).tipoCorredor == 2 && offline || client->getClientes().at(i).tipoCorredor == 2 && !offline && client->getClientes().at(i).ready == false) {
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, false, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/VikMultiplayer.png");
 		}
-		else if (client->getClientes().at(i).tipoCorredor == 3 && offline || client->getClientes().at(i).tipoCorredor == 3 && !offline && !checkReady) {
+		else if (client->getClientes().at(i).tipoCorredor == 3 && offline || client->getClientes().at(i).tipoCorredor == 3 && !offline && client->getClientes().at(i).ready == false) {
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, false, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/ChinoMultiplayer.png");
 		}
 		//ready
-		if (client->getClientes().at(i).tipoCorredor == 0 && index != 1 && offline || client->getClientes().at(i).tipoCorredor == 0 && !offline && checkReady) {
+		if (client->getClientes().at(i).tipoCorredor == 0 && index != 1 && offline || client->getClientes().at(i).tipoCorredor == 0  && !offline && client->getClientes().at(i).ready == true) {
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, true, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/GladiMultiplayerReady.png");
 		}
-		else if (client->getClientes().at(i).tipoCorredor == 1 && index != 1 && offline || client->getClientes().at(i).tipoCorredor == 1 && !offline && checkReady) {
+		else if (client->getClientes().at(i).tipoCorredor == 1 && index != 1 && offline || client->getClientes().at(i).tipoCorredor == 1 && !offline && client->getClientes().at(i).ready == true) {
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, true, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/PirataMultiplayerReady.png");
 		}
-		else if (client->getClientes().at(i).tipoCorredor == 2 && index != 1 && offline || client->getClientes().at(i).tipoCorredor == 2 && !offline && checkReady) {
+		else if (client->getClientes().at(i).tipoCorredor == 2 && index != 1 && offline || client->getClientes().at(i).tipoCorredor == 2 && !offline && client->getClientes().at(i).ready == true) {
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, true, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/VikMultiplayerReady.png");
 		}
-		else if (client->getClientes().at(i).tipoCorredor == 3 && index != 1 && offline || client->getClientes().at(i).tipoCorredor == 3 && !offline && checkReady) {
+		else if (client->getClientes().at(i).tipoCorredor == 3 && index != 1 && offline || client->getClientes().at(i).tipoCorredor == 3 && !offline && client->getClientes().at(i).ready == true) {
 			client->setArrayClients(client->getClientes().at(i).ip, client->getClientes().at(i).tipoCorredor, true, true, i);
 			players.at(i)->cambiarTextura("assets/HUD/LobbyMenu/Multiplayer/ChinoMultiplayerReady.png");
 		}
@@ -531,20 +531,7 @@ void EscenaLobby::mostrarTipoPersonaje(int i) {		//traduce de int a imagen (tipo
 }
 
 Escena::tipo_escena EscenaLobby::comprobarInputs() {
-	int id_player;
-	if (offline) {
-		id_player = 0;
-	}
-	else {
-		if (conectado){
-			id_player = client->getControlPlayer();
-		}else{
-			id_player=8;
-		}
-	}
-	if (conectado){
-		numPantallas=4;
-	}
+
 	//bool mandoConectado[numPantallas];
 	bool *mandoConectado=new bool[numPantallas];
 	
@@ -561,7 +548,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			axes = glfwGetJoystickAxes(id, &axesCount);
 			//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
 		}
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && (id == id_player || id_player==8) && end == true) {
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && (offline && id == 0 || !offline) && end == true) {
 			//if(conectado)
 			if (offline) {
 				client->BorrarClientes();
@@ -577,7 +564,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			delete mandoConectado;
 			return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
 		}
-		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS && (id == id_player || id_player==8)  || (mandoConectado[id] && (GLFW_PRESS == buttons[1]) && id == id_player)) {
+		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS && (offline && id == 0 || !offline)  || (mandoConectado[id] && (GLFW_PRESS == buttons[1]) && (offline && id == 0 || !offline))) {
 			if (!pressed[id]) {
 				if (index_selected) {
 					index_selected = false;
@@ -589,7 +576,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				pressed[id] = true;
 			}
 		}
-		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS && id == id_player || (mandoConectado[id] && (GLFW_PRESS == buttons[7]) && id == id_player)) && !selection_online && (offline || conectado)) {
+		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS && (offline && id == 0 || !offline) || (mandoConectado[id] && (GLFW_PRESS == buttons[7]) && (offline && id == 0 || !offline))) && !selection_online && (offline || conectado)) {
 			//Space==Control de ready/Iniciar partida
 			if (!pressed[id]) {
 				pressed[id] = true;				
@@ -600,7 +587,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 
 			}
 		}
-		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS && id == id_player || (mandoConectado[id] && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) && !selection_online && (offline || conectado)) {
+		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_LEFT) == GLFW_PRESS && (offline && id == 0 || !offline) || (mandoConectado[id] && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) && !selection_online && (offline || conectado)) {
 			//Left==change character (one side)
 
 			if (!pressed[id]) {
@@ -608,25 +595,25 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				if (index_selected) {
 					movimientoHorizontal(index, false,id);
 				}
-				else if (!index_selected && id == id_player) {
+				else if (!index_selected && (offline && id == 0 || !offline)) {
 					movimientoHorizontal(-1, false, -1);
 				}
 			}
 
 		}
-		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_RIGHT) == GLFW_PRESS && id == id_player || (mandoConectado[id] && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) && !selection_online && (offline || conectado)) {
+		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_RIGHT) == GLFW_PRESS && (offline && id == 0 || !offline) || (mandoConectado[id] && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) && !selection_online && (offline || conectado)) {
 			//Right==change character (other side)
 			if (!pressed[id]) {
 				pressed[id] = true;
 				if (index_selected) {
 					movimientoHorizontal(index, true, id);
 				}
-				else if (!index_selected && id == id_player) {
+				else if (!index_selected && (offline && id == 0 || !offline)) {
 					movimientoHorizontal(-1, false, -1);
 				}
 			}
 		}
-		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS && (id == id_player || id_player==8) || (mandoConectado[id] && (GLFW_PRESS == buttons[0]) && id == id_player) ) {
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS && (offline && id == 0 || !offline) || (mandoConectado[id] && (GLFW_PRESS == buttons[0]) && (offline && id == 0 || !offline)) ) {
 			if (!pressed[0]) {
 				if (!selection_online && !offline) {
 					iniciar = true;					//Conectar con el servidor de la IP
@@ -644,7 +631,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 			}
 
 		}
-		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS && id == id_player || (mandoConectado[id] && (GLFW_PRESS == buttons[14] || 0.5f <= axes[1]))) && !selection_online && (offline || conectado)) {
+		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS && (offline && id == 0 || !offline) || (mandoConectado[id] && (GLFW_PRESS == buttons[14] || 0.5f <= axes[1]))) && !selection_online && (offline || conectado)) {
 			if (!pressed[0]) {
 				/*if (client->getClientes().size() - 1 > count) {
 					count++;
@@ -652,7 +639,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				else {
 					count = 0;
 				}*/
-				if (!index_selected && id == id_player) {
+				if (!index_selected && (offline && id == 0 || !offline)) {
 					movimientoVertical(false);
 				}
 				else if (index_selected && index == 4 && !conectado) {
@@ -661,7 +648,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				pressed[id] = true;
 			}
 		}
-		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS && id == id_player || (mandoConectado[id] && (GLFW_PRESS == buttons[13] || -0.5f >= axes[1]))) && !selection_online && (offline || conectado)) {
+		else if ((glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_UP) == GLFW_PRESS && (offline && id == 0 || !offline) || (mandoConectado[id] && (GLFW_PRESS == buttons[13] || -0.5f >= axes[1]))) && !selection_online && (offline || conectado)) {
 			//Moverse entre jugadores para cambiar opciones de seleccion en cada uno
 			if (!pressed[0]) {
 				/*if (count > 0) {
@@ -670,7 +657,7 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				else {
 					count = client->getClientes().size() - 1;
 				}*/
-				if (!index_selected && id == id_player) {
+				if (!index_selected && (offline && id == 0 || !offline)) {
 					movimientoVertical(false);
 				}
 				else if (index_selected && index == 4 && !conectado) {

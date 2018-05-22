@@ -271,6 +271,7 @@ void EscenaPodio::init() {
 }
 
 void EscenaPodio::dibujar() {
+	TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
 	//cout << "dibujando el podio" << endl;
 	//Limpiamos el dibujado anterior asignando un color de fondo
 	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);

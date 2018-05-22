@@ -108,7 +108,7 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 
 EscenaPodio::~EscenaPodio() {
 
-	
+	if(podio)
 	delete podio;
 
     camera = nullptr;
@@ -119,8 +119,11 @@ EscenaPodio::~EscenaPodio() {
 
 	particulas.clear();		
 	
+	if(primero)
 	delete primero;
+	if(segundo)
 	delete segundo;
+	if(tercero)
 	delete tercero;
 
 	animacionPirata=nullptr;

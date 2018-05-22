@@ -17,44 +17,23 @@ MotorFisicas::MotorFisicas() {
 }
 
 MotorFisicas::~MotorFisicas() {
-	//cout << "ENTRO DESTRUCTOR MOTOR DE FISICAS\n";
-	//
-	//cout << "Destruyendo Objetos del mundo. Son " << mundo->getNumCollisionObjects() << "\n";
-	for (int i = 0; i < mundo->getNumCollisionObjects(); i++) {
-		cout << "EL " << i;
+	for (int i = mundo->getNumCollisionObjects()-1; i >=0; i--) {
 		btCollisionObject* obj = mundo->getCollisionObjectArray()[i];
-		btCollisionShape* shape = obj->getCollisionShape();
-		mundo->removeCollisionObject(obj);
-		//cout << " borro collision obj, ";
-		delete obj;
-		//cout << " borro collision shape";
-		delete shape;
-		//cout << "\n";
+		if (obj) {
+			delete obj->getCollisionShape();
+			mundo->removeCollisionObject(obj);
+			delete obj;
+		}
 	}
-	//	cout << "Objetos del mundo destruidos.\n";
 
-		//cout << "Destruyendo mundo";
 	delete mundo;
-	cout << "\n";
-
-	//cout << "Destruyendo solver";
 	delete solver;
-	//cout << "\n";
-
-	//cout << "Destruyendo dispatcher";
 	delete dispatcher;
-	//cout << "\n";
-
-	//cout << "Destruyendo confColision";
 	delete confColision;
-	//cout << "\n";
-
-	//cout << "Destruyendo broadPhase";
 	delete broadPhase;
-	//cout << "\n";
 
+	objetos.clear();
 	instancia = nullptr;
-	//	cout << "SALGO DESTRUCTOR MOTOR DE FISICAS\n";
 }
 
 MotorFisicas *MotorFisicas::getInstancia() {
@@ -86,8 +65,7 @@ void MotorFisicas::initializePhysics(TRecursoMalla * mesh) {
 	fileName += ".bullet";
 	FILE * fileBullet;
 	fileBullet = fopen(fileName.c_str(), "r");
-	if (fileBullet != NULL)
-	{
+	if (fileBullet != NULL)	{
 		//Si detecta fichero se carga, disminuyendo considerablemente la carga del mapa.
 		btBulletWorldImporter* fileLoader = new btBulletWorldImporter(mundo);
 		fileLoader->loadFile(fileName.c_str());
@@ -145,11 +123,7 @@ btCollisionShape  *MotorFisicas::CreateCollisionShape(const char *name) {
 	btTriangleMesh *triangleMesh = new btTriangleMesh{};
 	TRecursoMalla *mesh = TMotor::instancia().getGR()->getMalla(name);
 
-
 	if (mesh != NULL) {
-
-
-
 		for (unsigned i{ 0 }; i < mesh->getIndices().size(); i += 3) {
 			btVector3 vertex_1{
 				mesh->getVertex()[mesh->getIndices()[i]].x,
@@ -165,28 +139,12 @@ btCollisionShape  *MotorFisicas::CreateCollisionShape(const char *name) {
 				mesh->getVertex()[mesh->getIndices()[i + 2]].z };
 			triangleMesh->addTriangle(vertex_1, vertex_2, vertex_3);
 		}
-		////int numTriangles = mesh->getIndices().size();
-		//	int numTriangles = mesh->getIndices().size();
-		//	int numVertex = mesh->getVertex().size();
-		//
-		////antes de crear el shape comprobamos que realmente haya algo para crear
-		//if (numTriangles < 1 || numVertex < 3) {
-
-
-		//btTriangleIndexVertexArray* nain = new btTriangleIndexVertexArray(numTriangles / 3, (int*)(&mesh->getIndices()[0]), sizeof(unsigned short) * 3,
-		//numVertex, (btScalar*)(&mesh->getVertex()[0]), sizeof(glm::vec3));
 		shape = new btBvhTriangleMeshShape(triangleMesh, true, true);
 		shape->setLocalScaling(scale);
-
 	}
+
+	delete mesh;
+	delete triangleMesh;
 
 	return shape;
 }
-//void MotorFisicas::setMapaFisicas(stringw mapa){
-//	fileLoader->loadFile("fisicas/carretera.bullet");
-//}
-//btBulletWorldImporter *MotorFisicas::getFisicas() {
-//	return fisicasMapa;
-//}
-
-	

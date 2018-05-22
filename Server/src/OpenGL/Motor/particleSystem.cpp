@@ -99,13 +99,11 @@ int particleSystem::findLastDeadParticle(){
 
 //Funcion que inicializa una nueva particula del sistema
 void particleSystem::rebirthParticle(Particula *p){
-    //Parametros de cada particula
-    float dist = -7.0f; //Distancia donde se moveran las particulas
-    float altura = -1.0f; //Altura donde se situaran las particulas
     //Establecemos la posicion de la particula en funcion de su posicion y orientacion
     float random = (rand() % 100 - 1) / 50.0f; //Valor random para modificar la posicion de las particulas dentro de un area
-    dist += random; //Se lo sumamos a la distancia
-    p->position = glm::vec3(posParticle.x + dist * oriParticle.x, posParticle.y - altura, posParticle.z + dist * oriParticle.z);
+    float dist_x = distanceHeight[0] + random; //Distancia en x
+    float dist_z = distanceHeight[2] + random; //Distancia en z
+    p->position = glm::vec3(posParticle.x + dist_x * oriParticle.x, posParticle.y - distanceHeight[1], posParticle.z + dist_z * oriParticle.z);
     //Reseteamos la vida y el tamaño de la particula
     p->life = 1.0f;
     p->size = 0.65f;
@@ -131,6 +129,24 @@ void particleSystem::setColor(glm::vec3 c){
     colorParticle = c;
 }
 
+//Funcion para setear la distancia y altura relativa del sistema de particulas
+void particleSystem::setDistanceHeight(glm::vec3 d){
+    distanceHeight = d;
+}
+
+//Funcion para setear el tipo de sistema de particulas
+void particleSystem::setType(int i){
+    typeParticle = i;
+    //Modificamos los parametros segun el tipo de sistema definido
+    if ( i == 0){
+        reduceLife = 0.1f;
+        newParticlesPerIteration = 5;
+    } else {
+        reduceLife = 0.02f;
+        newParticlesPerIteration = 6;
+    }
+}
+
 //Funcion que actualiza el contenedor de particulas en cada iteracion para producir el ciclo de vida/muerte de las mismas
 void particleSystem::update(){
     //Primero, añadimos las nuevas particulas de cada iteracion
@@ -143,11 +159,12 @@ void particleSystem::update(){
 
     for (int i = 0; i < numMaxParticles; i++){
         Particula *p = particulas.at(i); //Recogemos la particula del contenedor
-        p->life -= 0.1; //Reducimos su vida
+        p->life -= reduceLife; //Reducimos su vida
 
 
         if (p->life > 0.0f){ //Si aun sigue viva...
             p->size += sizeParticle; //Modificamos el tamaño de la particulas con el tiempo
+            if ( typeParticle == 1) p->position[1] += 0.5; //Si el sistema es de tipo 1, modificamos la 1 de las particulas para que vayan hacia arriba
             //Llenamos los buffers que anteriormente hemos declarado
             // --- POSICION Y TAMANYO ---
             position_data[4*particlesAlive+0] = p->position[0];
@@ -168,7 +185,7 @@ void particleSystem::draw(Shader *s){
 
     //Activamos la textura 0 y enlazamos la imagen del elemento hud
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, TGestorImagenes::getInstacia()->cargarImagen("assets/smoke.png")->getID());
+    glBindTexture(GL_TEXTURE_2D, TGestorImagenes::getInstancia()->cargarImagen("assets/smoke.png")->getID());
     //Le pasamos la textura al shader
     s->setInt("image", 0);
 

@@ -35,7 +35,7 @@ public:
 	void resetFuerzas();
 	void limitadorVelocidad();
 	// Destructor
-	~Corredor();
+	virtual ~Corredor();
 
 	void acelerar();
 	void recolocarWaypoint();
@@ -126,7 +126,7 @@ public:
 	void iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *previoGiro);
 
 protected:
-	obj3D * cuboNodo;
+	obj3D *cuboNodo;
 	obj3D *rueda1;
 	obj3D *rueda2;
 	obj3D *rueda3;
@@ -137,8 +137,6 @@ protected:
 
 	//PARTICULAS HUMO
 	particleSystem *p;
-
-	//cameraThird *camara3Persona;
 
 	//VARIABLES OPENAL SONIDO
 
@@ -161,33 +159,19 @@ protected:
 
 	//bullet
 	btRaycastVehicle *vehiculo;
-	btDefaultMotionState *motionStateCoche; //interpolacion
-	btCollisionShape *FormaColision;		//contornoB
 	btRigidBody *CuerpoColisionChasis;
-	btCompoundShape *CentroGravedad;
+	
+	//raycast
+	btVehicleRaycaster *RayCastVehiculo;
+	btVector3 orientacion;
 
 	//RUEDAS
-	btDefaultMotionState *motionStateRueda1; //interpolacion
-	btCollisionShape *FormaColisionR1;		//contornoB
 	btRigidBody *CuerpoColisionRueda1;
-
-	btDefaultMotionState *motionStateRueda2; //interpolacion
-	btCollisionShape *FormaColisionR2;		//contornoB
 	btRigidBody *CuerpoColisionRueda2;
-
-	btDefaultMotionState *motionStateRueda3; //interpolacion
-	btCollisionShape *FormaColisionR3;		//contornoB
 	btRigidBody *CuerpoColisionRueda3;
-
-	btDefaultMotionState *motionStateRueda4; //interpolacion
-	btCollisionShape *FormaColisionR4;		//contornoB
 	btRigidBody *CuerpoColisionRueda4;
 
-	btHingeConstraint *restriccion1;
-	btHingeConstraint *restriccion2;
-	btHingeConstraint *restriccion3;
-	btHingeConstraint *restriccion4;
-
+	
 	const char* nombre;
 	int id;
 	int cargador;
@@ -245,24 +229,16 @@ protected:
 	//escudo
 	bool proteccion;
 
-	//raycast
-	btVehicleRaycaster *RayCastVehiculo;
-	btVector3 orientacion;
-
 
 	//Animaciones
-
-	//TNodo *vacile;
+	TNodo *quieto;
 	TNodo *giroDerIni;
-	//TNodo *lanzarObjeto;
 	TNodo *giroDerFin;
 	TNodo *giroIzqIni;
 	TNodo *giroIzqFin;
+	//TNodo *vacile;
 	//TNodo *animHabilidad;
-	TNodo *quieto;
-
-
-
+	//TNodo *lanzarObjeto;
 
 	void CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning);
 	void BorrarFisicas();
@@ -286,13 +262,10 @@ protected:
 	TNodo * getGiroDerFin();
 	TNodo * getGiroIzqIni();
 	TNodo * getGiroIzqFin();
-	//TNodo * getHabilidadAnim();
 	TNodo * getAnimQuieto();
+	//TNodo * getHabilidadAnim();
 	//TNodo * getLanzarObjeto();
 	//TNodo * getVacile();
-
-
-
 };
 
 #endif /* CORREDOR_H */

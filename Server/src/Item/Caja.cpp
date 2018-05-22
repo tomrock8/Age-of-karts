@@ -87,7 +87,8 @@ void Caja::romper(Corredor *pj1Col) {
 		if (nodoActual->getID() == id) {
 			btRigidBody *Object = objetos.at(i);
 
-			fuenteCaja->play(SOUND_CRACK);
+			if(strcmp(pj1Col->getNodo()->getName(), "Jugador") == 0)
+				fuenteCaja->play(SOUND_CRACK);
 
 			// Delete irrlicht node
 			obj3D *Node = static_cast<obj3D *>(Object->getUserPointer());
@@ -113,7 +114,8 @@ void Caja::Delete() {
 		obj3D *nodoActual = static_cast<obj3D *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
 		if (nodoActual->getID() == id) {
 			btRigidBody *Object = objetos.at(i);
-			obj3D *Node = static_cast<obj3D *>(Object->getUserPointer());
+		
+			
 
 			// Remove the object from the world
 			mundo->removeRigidBody(Object);
@@ -131,9 +133,12 @@ void Caja::Delete() {
 			break;
 		}
 	}
+	
 }
 
-Caja::~Caja() {}
+Caja::~Caja() {
+	delete nodo;
+}
 int Caja::getID() { return id; }
 obj3D *Caja::getNodo() { return nodo; }
 btRigidBody *Caja::getRigidBody() { return rigidBody; }

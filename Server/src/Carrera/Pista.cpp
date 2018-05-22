@@ -8,44 +8,49 @@ Pista::Pista() {
 Pista::~Pista() {
 	cout << "Destructor de PISTA. Entro.\n";
 	//destroy waypoint
-	if(arrayWaypoints.size()>0){
-	for (int i = 0; i < tamWaypoints; i++) {
-		delete arrayWaypoints.at(i);
+	if (arrayWaypoints.size() > 0) {
+		for (int i = 0; i < tamWaypoints; i++) {
+			delete arrayWaypoints.at(i);
+		}
+		arrayWaypoints.clear();
 	}
-	arrayWaypoints.clear();
-	}
-	if(arrayCajas.size()>0){
-	//destroy cajas
-	for (int i = 0; i < tamCajas; i++) {
-		delete arrayCajas.at(i);
-	}
-	arrayCajas.clear();
+	if (arrayCajas.size() > 0) {
+		//destroy cajas
+		for (int i = 0; i < tamCajas; i++) {
+			delete arrayCajas.at(i);
+		}
+		arrayCajas.clear();
 	}
 	//delete arrayCajas;
-	if(arrayTurbos.size()>0){
-	//destroy turbo
-	for (int i = 0; i < tamTurbos; i++) {
-		delete arrayTurbos.at(i);
-	}
-	arrayTurbos.clear();
+	if (arrayTurbos.size() > 0) {
+		//destroy turbo
+		for (int i = 0; i < tamTurbos; i++) {
+			delete arrayTurbos.at(i);
+		}
+		arrayTurbos.clear();
 	}
 	//delete arrayTurbos;
 
-	if(Items.size()>0){
-	//destroy items
-	for (int i = 0; i < Items.size(); i++) {
-		delete Items.at(i);
+	if (Items.size() > 0) {
+		//destroy items
+		/*for (int i = 0; i < Items.size(); i++) {
+			delete Items.at(i);
+		}
+		*/
+		Items.clear();
 	}
-	Items.clear();
-	}
-	
+
+	//delete nameMap;
+	//delete path;
+	//delete wayPoints;
+	delete Mapa;
 	instancia = nullptr;
 	cout << "Destructor de PISTA. Salgo.\n";
 }
 
 
 
-	
+
 Pista *Pista::getInstancia() {
 	if (instancia == NULL)
 		instancia = new Pista();
@@ -62,7 +67,9 @@ void Pista::setMapa() {
 		loadPirateMapElements();
 	}
 	else if (strcmp(nameMap, "gladiador") == 0) {
-		//Cargar mapa gladiador
+		path = "assets/MapaGladiador/CarreteraGladiador.obj";
+		wayPoints = "assets/MapaGladiador/WPCol.obj";
+		TMotor::instancia().newMeshNode("elementos", "assets/MapaGladiador/Coliseo.obj", "escena_raiz", false);
 	}
 	if (nameMap != NULL) {
 		createMap(path);

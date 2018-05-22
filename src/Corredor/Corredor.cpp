@@ -930,7 +930,7 @@ void Corredor::resetFuerzas() {
 }
 void Corredor::soltarItem() {
 	setTipoObj(EstadosJugador::estado_objeto::NADA);
-	setLimite(getLimite() + 10);
+	setLimite(getLimite() + 25);
 }
 
 /*
@@ -959,6 +959,7 @@ void Corredor::usarObjetos() {
 	float alt = 1;
 
 	if (getTipoObj() == 1) {		// PROYECTIL
+		posicion.setY(cuboNodo->getPosition().y);
 		Proyectil *pro = new Proyectil(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
 		pro->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pro->setLanzado(true);
@@ -986,7 +987,7 @@ void Corredor::usarObjetos() {
 		alt = 3;
 		masa = 30;
 		tiempoDestruccion = 0;
-		escala = btVector3(2, 2, 2);
+		escala = btVector3(2, 0.5, 2);
 		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * 10);
 		posicion.setZ(cuboNodo->getPosition().z - orientacion.getZ() * 10);
 		posicion.setY(cuboNodo->getPosition().y + alt);
@@ -1053,9 +1054,12 @@ void Corredor::usarObjetos() {
 	else if (tipoObj == 7)	//FLECHA TELEDIRIGIDA
 	{
 		//cout << "Teledirigido de Jugador " << this->getID() << " - posicion: " << posicionCarrera << endl;
+		tiempoDestruccion = 100;
 		alt = 1;
 		posicion.setY(posicion.getY() + alt);
-		ItemTeledirigido *pt = new ItemTeledirigido(posicion, escala, masa, 50, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
+		posicion.setX(cuboNodo->getPosition().x - orientacion.getX() * -20);
+		posicion.setZ(cuboNodo->getPosition().z - orientacion.getZ() * -20);
+		ItemTeledirigido *pt = new ItemTeledirigido(posicion, escala, masa, tiempoDestruccion, CUBO, tamanyoNodo, radio, alt, cuboNodo->getID());
 		pt->setWaypoint(actual);
 		pt->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
 		pt->setLanzado(true);
@@ -1409,47 +1413,94 @@ void Corredor::actualizarRuedas() {
 	btVector3 zeroVector(0, 0, 0);
 	glm::vec3 axis(0, 0, 0);
 	float angle = 0;
+	float distanciax =0.5;
+	float distanciaxatras =0.5;
+	float distanciaix =0.5;
+	float distanciaixatras =0.5;
+	float largo=2;
+	float largoatras=1;
 
-	btTransform ruedas = vehiculo->getWheelTransformWS(0);
+
+	switch (tipojugador) {
+	case GLADIADOR:
+
+	distanciax =0.7;
+	distanciaxatras =0.7;
+	largo=0.4;
+	largoatras=0.2;
+	rueda1->setScale(2,2,2);
+	rueda2->setScale(2,2,2);
+	rueda3->setScale(2,2,2);
+	rueda4->setScale(2,2,2);
+	altura=1.3;
+
+	distanciaix =0.5;
+	distanciaixatras =0.5;
+
+	break;
+	
+	case PIRATA:
+	distanciax =0.8;
+	distanciaxatras =1.2;
+	largo=2;
+	largoatras=3;
+
+	distanciaix =0.4;
+	distanciaixatras =0.8;	
+	break;
+	case VIKINGO:
+
+	distanciax =0.4;
+	distanciaxatras =0.02;
+	largo=2;
+	largoatras=2;
+
+	distanciaix =0.3;
+	distanciaixatras =0.01;
+
+	break;
+
+	}
+	btTransform ruedas = vehiculo->getWheelTransformWS(1);
 
 	//rueda1
 
 	CuerpoColisionRueda1->setCenterOfMassTransform(ruedas);
-	rueda1->setPosition(ruedas.getOrigin().getX(), ruedas.getOrigin().getY() + altura, ruedas.getOrigin().getZ());
+	rueda1->setPosition(ruedas.getOrigin().getX() + orientacion.getZ() * -distanciax + orientacion.getX()*largo, ruedas.getOrigin().getY() + altura , ruedas.getOrigin().getZ() + orientacion.getX() * distanciax + orientacion.getZ()*largo);
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda1->setRotation(axis, angle);
 	//rueda1->setRotation(180,0,0);
 	//rueda2
-	ruedas = vehiculo->getWheelTransformWS(1);
+	ruedas = vehiculo->getWheelTransformWS(0);
 
 
 	CuerpoColisionRueda2->setCenterOfMassTransform(ruedas);
-	rueda2->setPosition(ruedas.getOrigin().getX(), ruedas.getOrigin().getY() + altura, ruedas.getOrigin().getZ());
+	rueda2->setPosition(ruedas.getOrigin().getX() + orientacion.getZ() * distanciaix + orientacion.getX()*largo, ruedas.getOrigin().getY() + altura , ruedas.getOrigin().getZ() + orientacion.getX() * -distanciaix + orientacion.getZ()*largo);
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda2->setRotation(axis, angle);
 
 
 	//rueda3
-	ruedas = vehiculo->getWheelTransformWS(2);
+	ruedas = vehiculo->getWheelTransformWS(3);
 
 
 	//CuerpoColisionRueda4->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda4->setCenterOfMassTransform(ruedas);
-	rueda4->setPosition(ruedas.getOrigin().getX(), ruedas.getOrigin().getY() + altura, ruedas.getOrigin().getZ());
+	rueda4->setPosition(ruedas.getOrigin().getX() + orientacion.getZ() * -distanciaxatras + orientacion.getX()*largoatras, ruedas.getOrigin().getY() + altura  , ruedas.getOrigin().getZ() + orientacion.getX() * distanciaxatras + orientacion.getZ()*largoatras);
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda4->setRotation(axis, angle);
 
 
 	//rueda4
-	ruedas = vehiculo->getWheelTransformWS(3);
+	ruedas = vehiculo->getWheelTransformWS(2);
 
 
 	//CuerpoColisionRueda3->setAngularVelocity(zeroVector);
 	CuerpoColisionRueda3->setCenterOfMassTransform(ruedas);
-	rueda3->setPosition(ruedas.getOrigin().getX(), ruedas.getOrigin().getY() + altura, ruedas.getOrigin().getZ());
+	rueda3->setPosition(ruedas.getOrigin().getX() + orientacion.getZ() * distanciaixatras + orientacion.getX()*largoatras, ruedas.getOrigin().getY() + altura  , ruedas.getOrigin().getZ() + orientacion.getX() * -distanciaixatras + orientacion.getZ()*largoatras);
 	axis = glm::vec3(ruedas.getRotation().getAxis().getX(), ruedas.getRotation().getAxis().getY(), ruedas.getRotation().getAxis().getZ());
 	angle = ruedas.getRotation().getAngle() * RADTODEG;
 	rueda3->setRotation(axis, angle);
@@ -1489,7 +1540,7 @@ void Corredor::lanzarHabilidad() {
 			masa = 100;
 			radio = 12;
 			alt = 10;
-
+			tamanyoNodo = btVector3(12, 12, 12);
 			posicion.setY(posicion.getY() + alt);
 			habilidadJugador = new Habilidad(1, CuerpoColisionChasis, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
 			habilidadJugador->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
@@ -1502,7 +1553,7 @@ void Corredor::lanzarHabilidad() {
 			masa = 0;
 			radio = 8;
 			alt = 2;
-
+			tamanyoNodo = btVector3(0.5, 0.5, 0.5);
 			posicion.setY(posicion.getY() + alt);
 			habilidadJugador = new Habilidad(2, CuerpoColisionChasis, posicion, escala, masa, tiempoDestruccion, ESFERA, tamanyoNodo, radio, alt, cuboNodo->getID());
 			habilidadJugador->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE
@@ -1510,7 +1561,8 @@ void Corredor::lanzarHabilidad() {
 			break;
 
 		case GLADIADOR:
-			escala = btVector3(30, 2, 30);
+			tamanyoNodo = btVector3(2, 1, 2);
+			escala = btVector3(30, 5 , 30);
 			tiempoDestruccion = 3;
 			habilidadJugador = new Habilidad(3, CuerpoColisionChasis, posicion, escala, masa, tiempoDestruccion, CILINDRO, tamanyoNodo, radio, alt, cuboNodo->getID());
 			habilidadJugador->lanzarItem(1, orientacion, CuerpoColisionChasis->getCenterOfMassTransform());// por defecto sera siempre 1, (cambiar esto para eliminarlo del constructor) PENDIENTE

@@ -2,11 +2,13 @@
 #define STB_IMAGE_IMPLEMENTATION    
 #include "stb_image.h"
 
-TGestorRecursos::TGestorRecursos() {}
+TGestorRecursos::TGestorRecursos() {
+
+}
 
 TGestorRecursos::~TGestorRecursos() {
 	cout << "Entro al destructor de gestor de recursos...";
-
+	
 	// Destruimos el vector de mallas
 	if (recursoMallas.size() > 0) {
 		for (int i = 0; i < recursoMallas.size(); i++) {
@@ -39,6 +41,9 @@ TGestorRecursos::~TGestorRecursos() {
 		objMeshes.clear();
 	}
 
+	dir=nullptr;
+	textures.clear();
+	
 	cout << " SALGO \n";
 }
 
@@ -73,9 +78,9 @@ void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 	//procesar todas las mallas que se encuentren en el fichero
 
 	for (GLuint i = 0; i < scene->mRootNode->mNumChildren; i++) {
-		TRecursoMalla *meshAux = NULL;
-		TRecursoMaterial *MatAux = NULL;
-		TRecursoTextura *TextAux = NULL;
+		TRecursoMalla *meshAux = nullptr;
+		TRecursoMaterial *MatAux = nullptr;
+		TRecursoTextura *TextAux = nullptr;
 		mesh *meshAcumulated = new mesh();
 		aiMesh *mesh = scene->mMeshes[i];		//se recoje la malla de la escena
 
@@ -111,6 +116,10 @@ void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 			meshAcumulated->setMat(MatAux);
 			meshAcumulated->setTex(TextAux);
 			objMeshes.push_back(meshAcumulated);
+			meshAcumulated = nullptr;
+			meshAux = nullptr;
+			MatAux = nullptr;
+			TextAux = nullptr;
 
 		}
 		//lo mismo para los hijos que pueda tener
@@ -152,7 +161,7 @@ TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mes
 		std::string nameRecMalla = recMalla->getNombre();
 		////cout << "compruebo Malla : " << nameExt << "   VS   " << nameRecMalla << endl;
 		//if (strcmp(fichName->c_str(), recursoMallas.at(i)->getNombre()) == 0) {
-		if (nameExt.compare(nameRecMalla) == 0) {
+ 		if (nameExt.compare(nameRecMalla) == 0) {
 			recMalla = (TRecursoMalla*)recursoMallas.at(i);
 			////cout << "He encontrado el recurso Malla: " << recMalla->getNombre() << " y lo asigno a la mallaAux" << endl;
 			encontrado = true;
@@ -192,7 +201,7 @@ TRecursoMaterial *TGestorRecursos::getRecursoMaterial(const char * nombre, const
 		if (nameExt.compare(nameRecMaterial) == 0) {
 			////cout << " he comprobado material y he visto que hay uno igual" << endl;
 			recMaterial = (TRecursoMaterial*)recursoMaterials.at(i);
-			encontrado = false;
+			encontrado = true;
 			return recMaterial;
 		}
 	}

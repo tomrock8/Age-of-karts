@@ -12,6 +12,21 @@ TGestorImagenes *TGestorImagenes::getInstancia() {
 
 TGestorImagenes::TGestorImagenes(){}
 
+
+TGestorImagenes::~TGestorImagenes(){
+       
+        if(images.size()>0){
+
+            for(int i = 0; i< images.size();i++){
+              
+                delete images[i];
+            }
+            images.clear();
+        }
+       instancia=nullptr; //Un unico gestor de imagenes por cada ejecucion del programa
+
+}
+
 TRecursoImagen *TGestorImagenes::cargarImagen(const char* path){
     TRecursoImagen *image = NULL; //Recurso imagen a devolver
     bool isHere = false; //Booleano para comprobar si la imagen ya esta creada en el gestor

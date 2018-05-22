@@ -23,16 +23,14 @@ public:
 	Item(btVector3 posicion, btVector3 escala, btScalar masa,
 		float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo,
 		btScalar radio, float alturaLanzamiento, int idNodo);
-	~Item();
+	virtual ~Item();
 
 	void inicializarFisicas();
-	virtual void lanzarItem(int direccion, btVector3 orientacion,btTransform objeto) = 0;
+	virtual void lanzarItem(int direccion, btVector3 orientacion, btTransform objeto) = 0;
 	virtual void updateHijos() = 0;
-	virtual void deleteHijos() = 0;
 	void ajustarAltura();
 	void comprobarAltura(float altura);
 	bool update();
-	void Delete();
 
 
 	obj3D *getNodo();
@@ -56,11 +54,8 @@ protected:
 
 	//NODO
 	obj3D * nodo;
-
-	//Propiedades rigidbody
 	btRigidBody *rigidBody;
-	btDefaultMotionState *MotionState;
-	btCollisionShape *Shape;
+
 	btScalar masa;
 	btVector3 escala;
 	btVector3 posicion;

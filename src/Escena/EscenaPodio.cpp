@@ -108,6 +108,30 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 
 EscenaPodio::~EscenaPodio() {
 
+	
+	delete podio;
+
+    camera = nullptr;
+	
+	for(int i =0; i< luces.size();i++){
+		delete luces.at(i);
+	}
+
+	particulas.clear();		
+	
+	delete primero;
+	delete segundo;
+	delete tercero;
+
+	animacionPirata=nullptr;
+	animacionVikingo=nullptr;
+	animacionChino=nullptr;
+	animacionGladiador=nullptr;
+	animacionElegida=nullptr;
+	
+	delete time;
+
+
 }
 
 Escena::tipo_escena EscenaPodio::comprobarInputs() {
@@ -247,6 +271,7 @@ void EscenaPodio::init() {
 }
 
 void EscenaPodio::dibujar() {
+	TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
 	//cout << "dibujando el podio" << endl;
 	//Limpiamos el dibujado anterior asignando un color de fondo
 	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);

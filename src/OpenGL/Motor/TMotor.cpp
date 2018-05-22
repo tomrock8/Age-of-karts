@@ -237,6 +237,7 @@ void TMotor::cleanScene() {
 	//if (gestorRecursos)
 		//delete gestorRecursos;
 
+	//delete TGestorImagenes::getInstancia();
 }
 
 void TMotor::resizeScreen(int w, int h) {

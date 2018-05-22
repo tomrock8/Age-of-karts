@@ -21,7 +21,6 @@ private:
 
 	float x,y,z,altura,posxPodio,posyPodio,poszPodio,incremento;
 	bool pulsadoa,pulsadoz,pulsadow,pulsados,pulsadod,pulsadoc,aumento,decremento;
-    std::vector<obj3D*> personajes;
     obj3D *podio;
     cameraThird *camera;
 	//Luces

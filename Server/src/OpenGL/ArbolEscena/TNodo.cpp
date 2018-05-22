@@ -9,32 +9,21 @@ TNodo::TNodo(const char* n) {
 }
 
 TNodo::~TNodo() {
-//	std::cout << "Destructor de TNodo: " << *name << "\n";
 	padre = nullptr; // Eliminamos el enlace con el padre
-
-	
 	//Borrado de hijos
 	if (hijos.size() > 0) {
-//		cout<<"Numero de HIJOS::::"<<hijos.size()<<endl;
 		for (GLuint i = 0; i < hijos.size(); i++) {
-//			cout<<"Soy el hijo::"<< i << "ME voy a intentar borrar BORRO JUEPUTAS"<<endl;
 			delete hijos.at(i);
-			
 		}
 		hijos.clear();
-	}else{
-//	cout<<"NO TENGO HIJOS::::"<<endl;
-	
-
-	if (entidad){	
-//	cout<<"VOY A BORRAR SU ENTIDAD"<<endl;
-	delete entidad;
-//	cout<<"ENTIDAD BORRADA"<<endl;
-	}		
-	delete name;
-//	cout<<"ME BORRO"<<endl;
 	}
+	else {
+		if (entidad)
+			delete entidad;
 
+		if (name)
+			delete name;
+	}
 }
 
 // MANEJO DE HIJOS
@@ -94,7 +83,7 @@ TNodo *TNodo::getNode(const char* nombre) {
 std::vector<TNodo *>TNodo::getHijos() {
 
 	return hijos;
-	
+
 }
 
 
@@ -106,7 +95,7 @@ void TNodo::draw(Shader *shader) {
 	string n = name->c_str();
 	if (entidad != NULL) {
 		//if (n.find("escena") == std::string::npos)
-			getEntidad()->beginDraw(shader);
+		getEntidad()->beginDraw(shader);
 	}
 	for (GLuint i = 0; i < hijos.size(); i++) {
 		hijos.at(i)->draw(shader);
@@ -117,9 +106,38 @@ void TNodo::draw(Shader *shader) {
 	// }
 	if (entidad != NULL) {
 		//if (n.find("escena") == std::string::npos) {
-			entidad->endDraw();
+		entidad->endDraw();
 		//}
 	}
 }
 
+void TNodo::deleteNode() {
+	TNodo *padreaux = padre;
+	TNodo *padreaux2 = nullptr;
+	std::vector<TNodo*> nodos;
+	if (padre) {
+		while (padreaux && padreaux->getPadre()->getHijos().size() == 1) {
+			padreaux = padreaux->getPadre();
+		}
 
+		padreaux2 = padreaux->getPadre();
+		nodos = padreaux2->getHijos();
+		for (int i = 0; i < nodos.size(); i++) {
+			if (nodos[i] == padreaux) {
+				nodos.erase(nodos.begin() + i);
+			}
+		}
+		padreaux2->setArrayHijos(nodos);
+		delete padreaux;
+
+		padreaux = nullptr;
+		padreaux2 = nullptr;
+		nodos.clear();
+	}
+}
+
+
+void TNodo::setArrayHijos(std::vector<TNodo*> miel) {
+	hijos.clear();
+	hijos = miel;
+}

@@ -15,7 +15,7 @@ class TGestorImagenes
     public:
         TGestorImagenes(); //Constructor del gestor de imagenes
 
-        static TGestorImagenes *getInstacia(); //Para recoger la instancia del gestor de imagenes desde cualquier punto del programa
+        static TGestorImagenes *getInstancia(); //Para recoger la instancia del gestor de imagenes desde cualquier punto del programa
         TRecursoImagen *cargarImagen(const char* path); //Cargar las distintas imagenes
 
     private:

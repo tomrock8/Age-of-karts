@@ -24,13 +24,10 @@
 #define _USE_MATH_DEFINES // for C++  
 #endif
 
-#define WIDTH 1600
-#define HEIGHT 900
-
 class TMotor {
 public:
 	//INSTANCIA DEL MOTOR
-	static TMotor &instancia(); 
+	static TMotor &instancia();
 
 	void resizeScreen(int w, int h);
 
@@ -38,6 +35,7 @@ public:
 	void swapBuffers(); //Intercambiar buffers de dibujado de GLFW
 	void getInputs(); //Control de inputs
 	void close(); //Cierre del motor
+	void changeResolution(int w, int h); //Cambiar resolucion de pantalla
 	void initDebugWindow(); //|
 	void closeDebugWindow();//|inicializacion y cierre de IMGUI 
 	void cleanHUD(); //Limpieza de HUDs
@@ -56,8 +54,10 @@ public:
 	//CREACION DE ANIMACIONES
 	TNodo * createStaticMeshNode(TNodo * padre, const char * path, const char * name);
 	TNodo * createAnimationNode(TNodo * padre, TAnimacion * mesh, const char * name);
+	void addPadre(TNodo * padre, TNodo * hijo);
 	TAnimacion * createAnimation(const char * path, int framesIni, int framesFin);
 	obj3D *newAnimation(const char * name, const char * path, const char * parentNode, int framesIni, int framesFin);
+	void newGestorRecursos();
 
 	// METODOS GET
 	GLFWwindow *getVentana();
@@ -85,6 +85,7 @@ public:
 	TNodo *getCameraByIndex(int i);
 	float getDrawingDistance();
 	bool getLevelOfDetail();
+	std::vector <billboard *> getBillboards();
 
 	// METODOS SET
 	void setActiveCamera(TNodo *c);
@@ -126,9 +127,9 @@ public:
 
 protected:
 	//Ventana de GLFW donde se renderiza el motor
-	GLFWwindow *ventana;
-	int screenHEIGHT; //Alto de la ventana
-	int screenWIDTH; //Ancho de la ventana
+	GLFWwindow * ventana;
+	int screenHEIGHT = 900; //Alto de la ventana
+	int screenWIDTH = 1600; //Ancho de la ventana
 
 	//Nodo Raiz del arbol de la escena
 	TNodo * scene;
@@ -206,11 +207,9 @@ protected:
 	bool faceCulling = true; //FACE CULLING activado por defecto
 	bool drawingDistance = true; //Distancia de dibujado de los objetos
 	float levelOfDrawingDistance = 750.0f; //Distancia maxima entre la camara y objeto a partir de la cual se deja de dibujar este ultimo
-	bool shadows = false; //Sombras
+	bool projectedShadows = false; //Sombras desactivadas por defecto
 	bool levelOfDetail = true; //LEVEL OF DETAIL activado por defecto
 	bool clouds = false; //NUBES desactivadas por defecto
-
-	
 
 	// ----------------------
 	//  METODOS PRIVADOS

@@ -28,5 +28,5 @@ Timer *Timer::getInstancia() {
 }
 
 Timer::~Timer() {
-	delete instancia;
+	instancia = nullptr;
 }

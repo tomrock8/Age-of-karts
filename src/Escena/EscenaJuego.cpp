@@ -6,13 +6,14 @@
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;
 	ipConexion = "";
-
+	tipoEscena=tipo;
 	init();
 }
 
 EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo) {
+	end = false;
 	this->ipConexion = ipConexion;
-	TMotor::instancia().newHud("OnGameHUD0");
+	tipoEscena=tipo;
 	init();
 }
 
@@ -205,6 +206,8 @@ void EscenaJuego::init() {
 
 
 	int numClients = client->getClientes().size();
+	cout<<"numClients "<<numClients<<endl;
+	cout<<"controlplayer "<<controlPlayer<<endl;
 	Corredor::tipo_jugador tj;
 
 	for (int i = 0; i < numClients; i++) {
@@ -866,7 +869,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_U) == GLFW_PRESS) {
 		return Escena::tipo_escena::PODIO;
 	}
-	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end == true) {
+	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end) {
 		if (tipoEscena == Escena::tipo_escena::ONLINE) {
 			client->ShutDownClient();
 		}
@@ -874,9 +877,10 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 			client->BorrarClientes();
 		}
 
+		//std::cout << "Aqui? " << end << std::endl;
+
 		return Escena::tipo_escena::MENU; // Esto deberia cargar la escena de carga - menu
 	}
-
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_9) == GLFW_PRESS) {
 		muestraDebug = true;
 	}
@@ -889,6 +893,7 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 		muestraDebug = false;
 	}
 
+	//std::cout << "Salgo comprobar: " << tipoEscena << std::endl;
 
 	return tipoEscena; // Significa que debe seguir ejecutando
 }
@@ -1085,17 +1090,11 @@ void EscenaJuego::updateHUD(int i) {
 			if (pj.at(i)->getLimite()<100){
 				if (pj.at(i)->getLimite() - habilidad.at(i) == 1){
 					inc_habilidad.at(i)+=0.0065;			
-				}else if (pj.at(i)->getLimite() - habilidad.at(i) == 10){
-					inc_habilidad.at(i)+=0.065;		
+				}else if (pj.at(i)->getLimite() - habilidad.at(i) == 25){
+					inc_habilidad.at(i)+=0.16;		
 				}
 			}else{
-				if (pj.at(i)->getLimite()==100){
-					if (pj.at(i)->getLimite() - habilidad.at(i) == 1){
-						inc_habilidad.at(i)+=0.0065;			
-					}else if (pj.at(i)->getLimite() - habilidad.at(i) == 10){
-						inc_habilidad.at(i)+=0.065;		
-					}
-				}
+				inc_habilidad.at(i)=0.64f;
 				TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 1);
 			}
 		}else{

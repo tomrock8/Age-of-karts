@@ -148,7 +148,11 @@ void EscenaJuego::init() {
 
 		}
 		else {
-			for (int i = 1; i < numPantallas; i++) {
+			int numHUD = numPantallas;
+			if(tipoEscena == Escena::tipo_escena::ONLINE){
+				numHUD = num_jugadores;
+			}
+			for (int i = 1; i < numHUD; i++) {
 				crearHUD(i);
 				habilidad.push_back(0);
 				inc_habilidad.push_back(0);

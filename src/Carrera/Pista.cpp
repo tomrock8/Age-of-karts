@@ -6,7 +6,7 @@ Pista::Pista() {
 }
 
 Pista::~Pista() {
-	cout << "Destructor de PISTA. Entro.\n";
+	//cout << "Destructor de PISTA. Entro.\n";
 	//destroy waypoint
 	if (arrayWaypoints.size() > 0) {
 		for (int i = 0; i < tamWaypoints; i++) {
@@ -45,7 +45,7 @@ Pista::~Pista() {
 	//delete wayPoints;
 	delete Mapa;
 	instancia = nullptr;
-	cout << "Destructor de PISTA. Salgo.\n";
+//	cout << "Destructor de PISTA. Salgo.\n";
 }
 
 

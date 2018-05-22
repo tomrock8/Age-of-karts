@@ -28,6 +28,10 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 	end=false;
 	tm=time->getTimer();
 
+	objTrol = TMotor::instancia().newMeshNode("HabilidadPirata","assets/Habilidades/Pirata/HabilidadPirata.obj","escena_raiz", false);
+	objTrol->setPosition(500,500,500);
+
+
 	for (int i = 0; i < jugadores.size(); i++) {
 
 		switch (jugadores.at(i)) {//recogemos cual sera la animacion que tocara en caso de que esten en el podio
@@ -115,10 +119,11 @@ EscenaPodio::~EscenaPodio() {
 
 	delete fuentePodio;
 	
+	if(luces.size()>0){
 	for(int i =0; i< luces.size();i++){
 		delete luces.at(i);
 	}
-
+	}
 	particulas.clear();		
 	
 	if(primero)
@@ -128,6 +133,9 @@ EscenaPodio::~EscenaPodio() {
 	if(tercero)
 	delete tercero;
 
+	if(objTrol)
+	delete objTrol;
+	//cout<<"borro el objeto"<<endl;
 	animacionPirata=nullptr;
 	animacionVikingo=nullptr;
 	animacionChino=nullptr;
@@ -136,7 +144,7 @@ EscenaPodio::~EscenaPodio() {
 	
 	delete time;
 
-
+	//cout<<"Salgo del destructor"<<endl;
 }
 
 Escena::tipo_escena EscenaPodio::comprobarInputs() {

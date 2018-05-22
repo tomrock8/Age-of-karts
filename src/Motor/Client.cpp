@@ -57,7 +57,7 @@ void Client::CreateClientInterface()
 	//sino se ha podido crear el cliente, se muestra un mensaje de error por pantalla
 	if (!client)
 	{
-		std::cout << "Error N02: Failed to Create Client Interface\n";
+		//std::cout << "Error N02: Failed to Create Client Interface\n";
 	}
 
 	RakNet::SystemAddress clientID = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
@@ -99,7 +99,7 @@ void Client::ClientStartup()
 
 
 	//si todo el proceso tiene exito, se avisa al usuario de que el cliente se ha creado y conectado al servidor
-	std::cout << "Cliente creado!\n";
+	//std::cout << "Cliente creado!\n";
 }
 
 /*======================================================================
@@ -157,7 +157,7 @@ void Client::UpdateNetworkKeyboard()
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS) {
 			if (!pressed3) {
 				if (GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getLimite() > 99) {
-					std::cout << "Ulti lanzada\n";
+					//std::cout << "Ulti lanzada\n";
 					ulti = true;
 					pressed3 = true;
 				}
@@ -184,7 +184,7 @@ void Client::UpdateNetworkKeyboard()
 // en caso de no ser el host de la partida el servidor te lo comunica
 //===========================================================================
 void Client::RaceStart() {
-	std::cout << "Mandando iniciar carrera\n";
+	//std::cout << "Mandando iniciar carrera\n";
 
 	typeID = ID_RACE_START;
 	RakNet::BitStream bsOut;
@@ -199,17 +199,17 @@ void Client::RaceStart() {
 //	Manda un mensaje al servidor con la direccion a la que quiere cambiar el personaje, izq o dcha
 //===========================================================================
 void Client::ChangeCharacter(bool i) {
-	std::cout << "Cambiando personaje\n";
+	//std::cout << "Cambiando personaje\n";
 
 	typeID = ID_CHANGE_CHARACTER;
-	std::cout << "Cambiando personaje2\n";
+	//std::cout << "Cambiando personaje2\n";
 	RakNet::BitStream bsOut;
 	bsOut.Write(typeID);
 	bsOut.Write(controlPlayer);
 	bsOut.Write(i);	//false == izquierda ;; true == derecha
-	std::cout << "Cambiando personaje3\n";
+	//std::cout << "Cambiando personaje3\n";
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-	std::cout << "Cambiando personaje4\n";
+	//std::cout << "Cambiando personaje4\n";
 }
 //==================================================================================================================
 // funcion que recoge los paquetes recibidos por el cliente y realiza unas acciones u otras segun su identificador
@@ -277,14 +277,14 @@ int Client::ReceivePackets() {
 
 			//uno de los clientes se ha desconectado del servidor
 		case ID_DISCONNECTION_NOTIFICATION:
-			std::cout << "ID_DISCONNECTION_NOTIFICATION de " << p->systemAddress.ToString(true) << std::endl;
+			//std::cout << "ID_DISCONNECTION_NOTIFICATION de " << p->systemAddress.ToString(true) << std::endl;
 			disconnection = true;
 			packetName = "ID_DISCONNECTION_NOTIFICATION";
 			break;
 
 			//el cliente ya esta conectado (en caso de realizar un connect)
 		case ID_ALREADY_CONNECTED:
-			std::cout << "ID_ALREADY_CONNECTED\n";
+			//std::cout << "ID_ALREADY_CONNECTED\n";
 			packetName = "ID_ALREADY_CONNECTED";
 			/*typeID = ID_ALREADY_CONNECTED;
 			bsOut.Write(typeID);
@@ -302,64 +302,64 @@ int Client::ReceivePackets() {
 
 			//un nuevo cliente se ha conectado al servidor
 		case ID_NEW_INCOMING_CONNECTION:
-			std::cout << "ID_NEWServer_INCOMING_CONNECTION\n";
+			//std::cout << "ID_NEWServer_INCOMING_CONNECTION\n";
 			packetName = "ID_NEW_INCOMING_CONNECTION";
 			break;
 
 			//cliente y servidor no comparten el mismo tipo de protocolo (IPv4-IPv6)
 		case ID_INCOMPATIBLE_PROTOCOL_VERSION:
-			std::cout << "ID_INCOMPATIBLE_PROTOCOL_VERSION\n";
+			//std::cout << "ID_INCOMPATIBLE_PROTOCOL_VERSION\n";
 			packetName = "ID_INCOMPATIBLE_PROTOCOL_VERSION";
 			break;
 
 		case ID_REMOTE_DISCONNECTION_NOTIFICATION:
-			std::cout << "ID_REMOTE_DISCONNECTION_NOTIFICATION\n";
+			//std::cout << "ID_REMOTE_DISCONNECTION_NOTIFICATION\n";
 			packetName = "ID_REMOTE_DISCONNECTION_NOTIFICATION";
 			break;
 		case ID_REMOTE_NEW_INCOMING_CONNECTION:
-			std::cout << "ID_REMOTE_NEW_INCOMING_CONNECTION\n";
+			//std::cout << "ID_REMOTE_NEW_INCOMING_CONNECTION\n";
 			packetName = "ID_REMOTE_NEW_INCOMING_CONNECTION";
 			break;
 
 			//se le notifica al cliente que ha sido expulsado del servidor por x motivos
 		case ID_CONNECTION_BANNED:
 			packetName = "ID_CONNECTION_BANNED";
-			std::cout << "Has sido baneado del server!\n";
+			//std::cout << "Has sido baneado del server!\n";
 			return 1;
 			break;
 
 			//la conexion del cliente con el servidor ha fallado
 		case ID_CONNECTION_ATTEMPT_FAILED:
 			packetName = "ID_CONNECTION_ATTEMPT_FAILED";
-			std::cout << "La conexion no ha tenido exito!\n";
+			//std::cout << "La conexion no ha tenido exito!\n";
 			return 1;
 			break;
 
 			//se ha perdido la conexion con uno de los clientes
 		case ID_CONNECTION_LOST:
 			packetName = "ID_CONNECTION_LOST";
-			std::cout << "ID_CONNECTION_LOST de " << p->systemAddress.ToString(true) << std::endl;
+			//std::cout << "ID_CONNECTION_LOST de " << p->systemAddress.ToString(true) << std::endl;
 			return 2;
 			break;
 
 			//se le notifica al cliente que el servidor ya ha alcanzado su numero maximo de usuarios y, por lo tanto, no puede acceder
 		case ID_NO_FREE_INCOMING_CONNECTIONS:
 			packetName = "ID_NO_FREE_INCOMING_CONNECTIONS";
-			std::cout << "Lo sentimos, el servidor ya esta lleno\n";
+			//std::cout << "Lo sentimos, el servidor ya esta lleno\n";
 			return 1;
 			break;
 
 			//el cliente ha proporcionado una contrasenya de acceso incorrecta
 		case ID_INVALID_PASSWORD:
 			packetName = "ID_INVALID_PASSWORD";
-			std::cout << "Acceso denegado! Introduzca la clave correcta\n";
+			//std::cout << "Acceso denegado! Introduzca la clave correcta\n";
 			return 1;
 			break;
 
 			//se ha aceptado la conexion con un cliente
 		case ID_CONNECTION_REQUEST_ACCEPTED:
 			packetName = "ID_CONNECTION_REQUEST_ACCEPTED";
-			std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
+			//std::cout << "Tu conexion ha sido aceptada a " << p->systemAddress.ToString(true) << " con GUID " << p->guid.ToString() << std::endl;
 			connected = true;
 			controlPlayer = -1;
 			aux = 0;
@@ -402,18 +402,18 @@ int Client::ReceivePackets() {
 			if (controlPlayer == -1) controlPlayer = numClients - 1;
 			*/
 			if (controlPlayer == -1) controlPlayer = numClients - 1;
-			cout << "Clientes: " << numClients << endl;
+			//cout << "Clientes: " << numClients << endl;
 			break;
 
 			//Algun cliente ha cambiado de personaje en el lobby
 		case ID_CHANGE_CHARACTER:
 			packetName = "ID_CHANGE_CHARACTER";
-			std::cout << "ID_CHANGE_CHARACTER_CLIENT\n";
+			//std::cout << "ID_CHANGE_CHARACTER_CLIENT\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
 			bsIn.Read(parambool);
-			cout<<"id jugador: "<<id <<endl;
-			cout<<"inicial tipo: "<<clientes.at(id).tipoCorredor <<endl;
+			//cout<<"id jugador: "<<id <<endl;
+			//cout<<"inicial tipo: "<<clientes.at(id).tipoCorredor <<endl;
 			if (id < clientes.size() && id != -1) {
 				param = clientes.at(id).tipoCorredor;	//a partir de ahora param es el tipo de jugador
 				if (param == 0 && parambool == false) {
@@ -430,7 +430,7 @@ int Client::ReceivePackets() {
 				}
 				clientes.at(id).tipoCorredor = param;
 			}
-			cout<<"final tipo: "<<clientes.at(id).tipoCorredor <<endl;
+			//cout<<"final tipo: "<<clientes.at(id).tipoCorredor <<endl;
 			break;
 
 
@@ -453,7 +453,7 @@ int Client::ReceivePackets() {
 			//Iniciamos la partida por orden el servidor
 		case ID_RACE_START:
 			packetName = "ID_RACE_START";
-			cout << "ID_RACE_START\n";
+			//cout << "ID_RACE_START\n";
 			started = true;
 			break;
 		case ID_RETURN_LOBBY:
@@ -496,14 +496,14 @@ int Client::ReceivePackets() {
 			//Podria utilizarse para pruebas del servidor
 		case ID_SPAWN_PLAYER:
 			packetName = "ID_SPAWN_PLAYER";
-			cout << "ID_SPAWN_PLAYER\n";
+			//cout << "ID_SPAWN_PLAYER\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(x);
 			bsIn.Read(y);
 			bsIn.Read(z);
 			bsIn.Read(id);
 			bsIn.Read(playerNetworkID);
-			std::cout << "Creando jugador en pos: " << x << " - " << y << " - " << z << " - " << std::endl;
+			//std::cout << "Creando jugador en pos: " << x << " - " << y << " - " << z << " - " << std::endl;
 			pos.setX(x);
 			pos.setY(y);
 			pos.setZ(z);
@@ -522,7 +522,7 @@ int Client::ReceivePackets() {
 			//Caso desactualizado: Cargar los jugadores conectados actualmente a la partida
 		case ID_LOAD_CURRENT_PLAYERS:
 			packetName = "ID_LOAD_CURRENT_PLAYERS";
-			//std::cout << "YA NO DEBERIA DE ENTRAR AQUI\n";
+			////std::cout << "YA NO DEBERIA DE ENTRAR AQUI\n";
 			int i;
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(numPlayers);
@@ -552,7 +552,7 @@ int Client::ReceivePackets() {
 			y = pos.getY();
 			z = pos.getZ();
 			bsOut.Write(typeID);
-			cout << x << " - " << y << " - " << z << endl;
+			//cout << x << " - " << y << " - " << z << endl;
 			bsOut.Write(x); //Posicion X
 			bsOut.Write(y); //Posicion Y
 			bsOut.Write(z); //Posicion Z
@@ -636,7 +636,7 @@ int Client::ReceivePackets() {
 
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(id);
-				cout << " el jugador " << id << " lanza el objeto" << endl;
+				//cout << " el jugador " << id << " lanza el objeto" << endl;
 				//players.at(id)->lanzarItemRed();
 			}
 			break;
@@ -698,7 +698,7 @@ int Client::ReceivePackets() {
 			//Un cliente ha cerrado la aplicacion y manda el mensaje con su ControlPlayer
 		case ID_PLAYER_DISCONNECT:
 			packetName = "ID_PLAYER_DISCONNECT";
-			std::cout << "Jugador desconectado \n";
+			//std::cout << "Jugador desconectado \n";
 			int playerDisconnect;
 
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -790,7 +790,7 @@ void Client::PlayerMovement() {
 //==================================================================================
 void Client::ShutDownClient()
 {
-	std::cout << "Cerrando cliente\n";
+	//std::cout << "Cerrando cliente\n";
 	/*
 	clientes.erase(clientes.begin()+controlPlayer);
 	typeID = ID_PLAYER_DISCONNECT;
@@ -805,7 +805,7 @@ void Client::ShutDownClient()
 	disconnection = true;
 	client->Shutdown(300);
 	RakNet::RakPeerInterface::DestroyInstance(client);
-	std::cout << "Cerrando cliente2\n";
+	//std::cout << "Cerrando cliente2\n";
 }
 
 void Client::FinalizarCarrera() {
@@ -876,19 +876,19 @@ void Client::setArrayClients(std::string ip, int tipo, bool rdy, bool corredorJ,
 }
 
 void Client::ActualizarClienteConectado() {
-	cout << "voy a actualizar el cliente conectado\n";
+	//cout << "voy a actualizar el cliente conectado\n";
 	RakNet::BitStream bsOut;
 	typeID = ID_CHECK_ALREADY_CONNECTED;
 	bsOut.Write(typeID);
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 void Client::BorrarClientes() {
-	cout << "borro clientes\n";
+	//cout << "borro clientes\n";
 	clientes.clear();
 	clientes.resize(0);
 }
 void Client::BorrarCliente(int i) {
-	cout << "borro cliente " << i << endl;
+	//cout << "borro cliente " << i << endl;
 	clientes.erase(clientes.begin() + i);
 }
 
@@ -964,7 +964,7 @@ void Client::PlayerAction() {
 void Client::PlayerSetObject(int tipo) {
 	//typeID = ID_PLAYER_SET_OBJECT;
 	RakNet::BitStream bsOut;
-	cout << "He cogido el objeto ---" << tipo << " --- y lo comparto con los demas" << endl;
+	//cout << "He cogido el objeto ---" << tipo << " --- y lo comparto con los demas" << endl;
 	bsOut.Write(typeID);
 	bsOut.Write(tipo);
 	bsOut.Write(controlPlayer);
@@ -977,7 +977,7 @@ void Client::PlayerSetObject(int tipo) {
 void Client::PlayerThrowObject() {
 	typeID = ID_PLAYER_THROW_OBJECT;
 	RakNet::BitStream bsOut;
-	cout << "He lanzado el objeto!" << endl;
+	//cout << "He lanzado el objeto!" << endl;
 	bsOut.Write(typeID);
 	bsOut.Write(controlPlayer);
 	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);

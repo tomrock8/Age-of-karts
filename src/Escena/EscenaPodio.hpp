@@ -27,6 +27,7 @@ private:
 	std::vector<obj3D*> luces;	
 	//particulas
 	std::vector<particleSystem*> particulas;	
+	obj3D *objTrol;
 	obj3D *primero;
 	obj3D *segundo;
 	obj3D *tercero;

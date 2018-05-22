@@ -31,9 +31,9 @@ EscenaCreditos::EscenaCreditos() : Escena(Escena::tipo_escena::CREDITOS) {
 }
 
 EscenaCreditos::~EscenaCreditos() {
-	cout << "Destructor ESCENA CREDITOS. Entro.";
+	//cout << "Destructor ESCENA CREDITOS. Entro.";
 	limpiar();
-	cout << "Salgo.\n";
+	//cout << "Salgo.\n";
 }
 
 void EscenaCreditos::init() {
@@ -66,11 +66,11 @@ Escena::tipo_escena EscenaCreditos::comprobarInputs() {
 	}
 	else {
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_KP_1) == GLFW_PRESS){
-			cout << "SINGLE PLAYER\n";
+			//cout << "SINGLE PLAYER\n";
 		}
 		else {
 			if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_KP_2) == GLFW_PRESS){
-				cout << "MULTI PLAYER\n";
+				//cout << "MULTI PLAYER\n";
 			}
 		}
 	}

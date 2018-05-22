@@ -232,12 +232,13 @@ void TMotor::cleanScene() {
 	activeLights.clear();
 	notShadowObjects.clear();
 
+	if(TGestorImagenes::getInstancia());
+	delete TGestorImagenes::getInstancia();
+	
+	if (gestorRecursos)
+		delete gestorRecursos;
 
-
-	//if (gestorRecursos)
-		//delete gestorRecursos;
-
-	//delete TGestorImagenes::getInstancia();
+	
 }
 
 void TMotor::resizeScreen(int w, int h) {

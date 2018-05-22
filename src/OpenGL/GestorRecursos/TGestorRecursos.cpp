@@ -8,7 +8,7 @@ TGestorRecursos::TGestorRecursos() {
 }
 
 TGestorRecursos::~TGestorRecursos() {
-	cout << "Entro al destructor de gestor de recursos...";
+	//cout << "Entro al destructor de gestor de recursos...";
 	
 	// Destruimos el vector de mallas
 	if (recursoMallas.size() > 0) {
@@ -47,7 +47,7 @@ TGestorRecursos::~TGestorRecursos() {
 	
 
 
-	cout << " SALGO \n";
+	//cout << " SALGO \n";
 }
 
 

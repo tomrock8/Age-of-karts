@@ -32,22 +32,22 @@ obj3D* luzSolar; //Luz del sol
 	bool axe = false;
 	float axe_position[] = {0.0f, 0.0f, 0.0f};
 	float axe_rotation[] = {0.0f, 0.0f, 0.0f};
-	float axe_scale[] = {1.0f, 1.0f, 1.0f};
+	float axe_scale[] = {100.0f, 100.0f, 100.0f};
 	//CAJA
 	bool box = false;
 	float box_position[] = {0.0f, 0.0f, 0.0f};
 	float box_rotation[] = {0.0f, 0.0f, 0.0f};
-	float box_scale[] = {1.0f, 1.0f, 1.0f};
+	float box_scale[] = {100.0f, 100.0f, 100.0f};
 	//PIRATA
 	bool pirate = false;
 	float pirate_position[] = {0.0f, 0.0f, 0.0f};
 	float pirate_rotation[] = {0.0f, 0.0f, 0.0f};
-	float pirate_scale[] = {1.0f, 1.0f, 1.0f};
+	float pirate_scale[] = {100.0f, 100.0f, 100.0f};
 	//COCHE
 	bool car = false;
 	float car_position[] = {0.0f, 0.0f, 0.0f};
 	float car_rotation[] = {0.0f, 0.0f, 0.0f};
-	float car_scale[] = {1.0f, 1.0f, 1.0f};
+	float car_scale[] = {100.0f, 100.0f, 100.0f};
 
 // **** LUCES ****
 	//LUCES PUNTUALES
@@ -92,7 +92,7 @@ obj3D* luzSolar; //Luz del sol
 		
 // **** Shaders ****
 		const char* listbox_shaders[] = { "Material Shader", "Texture Shader", "Cartoon Shader", "Lighting Map Shader", "Deferred Shader"};
-		static int listbox_shader_current = 2;
+		static int listbox_shader_current = 1;
 	
 // **** Otras Funciones ****
 	//SKYBOX
@@ -283,6 +283,8 @@ void updateIMGUI(){
 	ImGui::Separator();
 	ImGui::Text(" > ENGINE DEMO < ");
 	ImGui::Text("-----------------");
+	ImGui::Text("Direction keys for camera movement.");
+	ImGui::Text("W-A-S-D for camera rotation.");
 
 	//**** Creacion de Objetos ****
 	if (ImGui::CollapsingHeader("Object Creation")) {
@@ -312,7 +314,7 @@ void updateIMGUI(){
 			//Rotacion
 			ImGui::SliderFloat3("Rotation Axe", axe_rotation, 0, 360, "%.0f", 1.0f);
 			//Escalado
-			ImGui::SliderFloat3("Scale Axe", axe_scale, -10, 10, "%.0f", 1.0f);
+			ImGui::SliderFloat3("Scale Axe", axe_scale, 1, 200, "%.0f", 1.0f);
 		}
 
 		//CAJA
@@ -323,7 +325,7 @@ void updateIMGUI(){
 			//Rotacion
 			ImGui::SliderFloat3("Rotation Box", box_rotation, 0, 360, "%.0f", 1.0f);
 			//Escalado
-			ImGui::SliderFloat3("Scale Box", box_scale, -10, 10, "%.0f", 1.0f);
+			ImGui::SliderFloat3("Scale Box", box_scale,  1, 200, "%.0f", 1.0f);
 		}
 
 		//PIRATA
@@ -334,7 +336,7 @@ void updateIMGUI(){
 			//Rotacion
 			ImGui::SliderFloat3("Rotation Pirate", pirate_rotation, 0, 360, "%.0f", 1.0f);
 			//Escalado
-			ImGui::SliderFloat3("Scale Pirate", pirate_scale, -10, 10, "%.0f", 1.0f);
+			ImGui::SliderFloat3("Scale Pirate", pirate_scale,  1, 200, "%.0f", 1.0f);
 		}
 
 		//COCHE
@@ -345,7 +347,7 @@ void updateIMGUI(){
 			//Rotacion
 			ImGui::SliderFloat3("Rotation Car", car_rotation, 0, 360, "%.0f", 1.0f);
 			//Escalado
-			ImGui::SliderFloat3("Scale Car", car_scale, -10, 10, "%.0f", 1.0f);
+			ImGui::SliderFloat3("Scale Car", car_scale,  1, 200, "%.0f", 1.0f);
 		}
 
 	}
@@ -395,62 +397,64 @@ void updateIMGUI(){
 			}
 		}
 		//LUCES DIRIGIDAS
-		if (ImGui::CollapsingHeader("Directional Lights/Spotlights")) {
-			//LUZ DIRIGIDA 1
-			ImGui::Checkbox("Spotlight 1", &spotlight_1);
-			if (spotlight_1){
-				ImGui::SliderFloat3("Position Spotlight 1", spotlight1_position, -100, 100, "%.0f", 1.0f);
-				ImGui::SliderFloat("Angle of Radius Spotlight 1", &spotlight1_angle, 0, 90, "%.0f", 1.0f);
-				if (listbox_shader_current == 0 || listbox_shader_current == 1 || listbox_shader_current == 3)
-				ImGui::Checkbox("Shadows Spotlight 1", &spotlight1_shadows);
-				ImGui::Text("Direction Spotlight 1");
-				if (ImGui::Button("Axis X Positive"))
-				static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-				ImGui::SameLine();
-				if (ImGui::Button("Axis X Negative"))
-				static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f));
-				if (ImGui::Button("Axis Y Positive"))
-				static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-				ImGui::SameLine();
-				if (ImGui::Button("Axis Y Negative"))
-				static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, -1.0f, 0.0f, 1.0f));
-				if (ImGui::Button("Axis Z Positive"))
-				static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-				ImGui::SameLine();
-				if (ImGui::Button("Axis Z Negative"))
-				static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 0.0f, -1.0f, 1.0f));
-				ImGui::Text("Light Components");
-				ImGui::SliderFloat3("Ambient Spotlight 1", spotlight1_ambient, 0, 100, "%.0f", 1.0f);
-				ImGui::SliderFloat3("Diffuse Spotlight 1", spotlight1_diffuse, 0, 100, "%.0f", 1.0f);
-				ImGui::SliderFloat3("Specular Spotlight 1", spotlight1_specular, 0, 100, "%.0f", 1.0f);
-			}
-			//LUZ DIRIGIDA 2
-			ImGui::Checkbox("Spotlight 2", &spotlight_2);
-			if (spotlight_2){
-				ImGui::SliderFloat3("Position Spotlight 2", spotlight2_position, -100, 100, "%.0f", 1.0f);
-				ImGui::SliderFloat("Angle of Radius Spotlight 2", &spotlight2_angle, 0, 90, "%.0f", 1.0f);
-				if (listbox_shader_current == 0 || listbox_shader_current == 1 || listbox_shader_current == 3)
-				ImGui::Checkbox("Shadows Spotlight 2", &spotlight2_shadows);
-				ImGui::Text("Direction Spotlight 2");
-				if (ImGui::Button("Axis X Positive (2)"))
-				static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-				ImGui::SameLine();
-				if (ImGui::Button("Axis X Negative (2)"))
-				static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f));
-				if (ImGui::Button("Axis Y Positive (2)"))
-				static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-				ImGui::SameLine();
-				if (ImGui::Button("Axis Y Negative (2)"))
-				static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, -1.0f, 0.0f, 1.0f));
-				if (ImGui::Button("Axis Z Positive (2)"))
-				static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-				ImGui::SameLine();
-				if (ImGui::Button("Axis Z Negative (2)"))
-				static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 0.0f, -1.0f, 1.0f));
-				ImGui::Text("Light Components");
-				ImGui::SliderFloat3("Ambient Spotlight 2", spotlight2_ambient, 0, 100, "%.0f", 1.0f);
-				ImGui::SliderFloat3("Diffuse Spotlight 2", spotlight2_diffuse, 0, 100, "%.0f", 1.0f);
-				ImGui::SliderFloat3("Specular Spotlight 2", spotlight2_specular, 0, 100, "%.0f", 1.0f);
+		if (listbox_shader_current != 4){
+			if (ImGui::CollapsingHeader("Directional Lights/Spotlights")) {
+				//LUZ DIRIGIDA 1
+				ImGui::Checkbox("Spotlight 1", &spotlight_1);
+				if (spotlight_1){
+					ImGui::SliderFloat3("Position Spotlight 1", spotlight1_position, -100, 100, "%.0f", 1.0f);
+					ImGui::SliderFloat("Angle of Radius Spotlight 1", &spotlight1_angle, 0, 90, "%.0f", 1.0f);
+					if (listbox_shader_current == 0 || listbox_shader_current == 1 || listbox_shader_current == 3)
+					ImGui::Checkbox("Shadows Spotlight 1", &spotlight1_shadows);
+					ImGui::Text("Direction Spotlight 1");
+					if (ImGui::Button("Axis X Positive"))
+					static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+					ImGui::SameLine();
+					if (ImGui::Button("Axis X Negative"))
+					static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f));
+					if (ImGui::Button("Axis Y Positive"))
+					static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+					ImGui::SameLine();
+					if (ImGui::Button("Axis Y Negative"))
+					static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, -1.0f, 0.0f, 1.0f));
+					if (ImGui::Button("Axis Z Positive"))
+					static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+					ImGui::SameLine();
+					if (ImGui::Button("Axis Z Negative"))
+					static_cast<TLuz *>(findSpotLight("light_0")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 0.0f, -1.0f, 1.0f));
+					ImGui::Text("Light Components");
+					ImGui::SliderFloat3("Ambient Spotlight 1", spotlight1_ambient, 0, 100, "%.0f", 1.0f);
+					ImGui::SliderFloat3("Diffuse Spotlight 1", spotlight1_diffuse, 0, 100, "%.0f", 1.0f);
+					ImGui::SliderFloat3("Specular Spotlight 1", spotlight1_specular, 0, 100, "%.0f", 1.0f);
+				}
+				//LUZ DIRIGIDA 2
+				ImGui::Checkbox("Spotlight 2", &spotlight_2);
+				if (spotlight_2){
+					ImGui::SliderFloat3("Position Spotlight 2", spotlight2_position, -100, 100, "%.0f", 1.0f);
+					ImGui::SliderFloat("Angle of Radius Spotlight 2", &spotlight2_angle, 0, 90, "%.0f", 1.0f);
+					if (listbox_shader_current == 0 || listbox_shader_current == 1 || listbox_shader_current == 3)
+					ImGui::Checkbox("Shadows Spotlight 2", &spotlight2_shadows);
+					ImGui::Text("Direction Spotlight 2");
+					if (ImGui::Button("Axis X Positive (2)"))
+					static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+					ImGui::SameLine();
+					if (ImGui::Button("Axis X Negative (2)"))
+					static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f));
+					if (ImGui::Button("Axis Y Positive (2)"))
+					static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+					ImGui::SameLine();
+					if (ImGui::Button("Axis Y Negative (2)"))
+					static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, -1.0f, 0.0f, 1.0f));
+					if (ImGui::Button("Axis Z Positive (2)"))
+					static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+					ImGui::SameLine();
+					if (ImGui::Button("Axis Z Negative (2)"))
+					static_cast<TLuz *>(findSpotLight("light_1")->getNode()->getEntidad())->setDirection(glm::vec4(0.0f, 0.0f, -1.0f, 1.0f));
+					ImGui::Text("Light Components");
+					ImGui::SliderFloat3("Ambient Spotlight 2", spotlight2_ambient, 0, 100, "%.0f", 1.0f);
+					ImGui::SliderFloat3("Diffuse Spotlight 2", spotlight2_diffuse, 0, 100, "%.0f", 1.0f);
+					ImGui::SliderFloat3("Specular Spotlight 2", spotlight2_specular, 0, 100, "%.0f", 1.0f);
+				}
 			}
 		}
 		ImGui::Spacing();
@@ -508,22 +512,22 @@ void updateIMGUI(){
 	findObject("Hacha")->setVisible(axe);
 	findObject("Hacha")->setPosition(axe_position[0], axe_position[1], axe_position[2]);
 	findObject("Hacha")->setRotation(axe_rotation[0], axe_rotation[1], axe_rotation[2]);
-	findObject("Hacha")->setScale(axe_scale[0], axe_scale[1], axe_scale[2]);
+	findObject("Hacha")->setScale(axe_scale[0]/100.0f, axe_scale[1]/100.0f, axe_scale[2]/100.0f);
 	//CAJA
 	findObject("Caja")->setVisible(box);
 	findObject("Caja")->setPosition(box_position[0], box_position[1], box_position[2]);
 	findObject("Caja")->setRotation(box_rotation[0], box_rotation[1], box_rotation[2]);
-	findObject("Caja")->setScale(box_scale[0], box_scale[1], box_scale[2]);
+	findObject("Caja")->setScale(box_scale[0]/100.0f, box_scale[1]/100.0f, box_scale[2]/100.0f);
 	//PIRATA
 	findObject("Pirata")->setVisible(pirate);
 	findObject("Pirata")->setPosition(pirate_position[0], pirate_position[1], pirate_position[2]);
 	findObject("Pirata")->setRotation(pirate_rotation[0], pirate_rotation[1], pirate_rotation[2]);
-	findObject("Pirata")->setScale(pirate_scale[0], pirate_scale[1], pirate_scale[2]);
+	findObject("Pirata")->setScale(pirate_scale[0]/100.0f, pirate_scale[1]/100.0f, pirate_scale[2]/100.0f);
 	//COCHE
 	findObject("Coche")->setVisible(car);
 	findObject("Coche")->setPosition(car_position[0], car_position[1], car_position[2]);
 	findObject("Coche")->setRotation(car_rotation[0], car_rotation[1], car_rotation[2]);
-	findObject("Coche")->setScale(car_scale[0], car_scale[1], car_scale[2]);
+	findObject("Coche")->setScale(car_scale[0]/100.0f, car_scale[1]/100.0f, car_scale[2]/100.0f);
 
 	//**** Luces ****
 	//LUCES PUNTUALES

@@ -44,7 +44,7 @@ public:
 
 	//CREACION DE OBJETOS
 	obj3D *newMeshNode(const char * name, const char * path, const char* parentNode, bool sta); //Nuevo Objeto 3D
-	obj3D *newCameraNode(const char * name, const char* parentNode); //Nueva Camara
+	obj3D *newCameraNode(const char * name, const char* parentNode, float aspectRatio); //Nueva Camara
 	obj3D *newLightNode(const char * name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode); //Nueva Luz
 	void newHud(const char* n); //Nuevo HUD-Menu
 	billboard *newBillboard(obj3D *o); //Nuevo Billboard

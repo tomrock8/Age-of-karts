@@ -450,6 +450,10 @@ int Client::ReceivePackets() {
 
 			break;
 
+		case ID_CLIENTS_LOADED:
+			std::cout << "Empezamos partida ahora!\n";
+			break;
+
 			//Iniciamos la partida por orden el servidor
 		case ID_RACE_START:
 			packetName = "ID_RACE_START";
@@ -740,6 +744,20 @@ unsigned char Client::GetPacketIdentifier(RakNet::Packet *p)
 	}
 	else
 		return (unsigned char)p->data[0];
+}
+
+
+//==========================================================================================
+// Cuando el cliente ha cargado todos los modelos, manda al server la señal
+//==========================================================================================
+void Client::GameLoad(){
+	typeID = ID_CLIENT_LOAD;
+	RakNet::BitStream bsOut;
+	bsOut.Write(typeID);
+	bsOut.Write(controlPlayer);
+
+	client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
 }
 
 //===========================================================================

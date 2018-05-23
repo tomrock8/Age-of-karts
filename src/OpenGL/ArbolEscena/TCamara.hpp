@@ -17,7 +17,7 @@ public:
 	// METODOS SET
 	void setActive(bool s);
 	// matriz de proyeccion
-	void setPerspective(GLfloat Height, GLfloat Widht, GLfloat corteCercano, GLfloat corteLejano, GLfloat grados);
+	void setPerspective(GLfloat Height, GLfloat Widht, GLfloat corteCercano, GLfloat corteLejano, GLfloat grados, float aspectRatio);
 	void setParalela(GLfloat Height, GLfloat Width, GLfloat corteCercano, GLfloat corteLejano, GLfloat grados);
 
 	// DIBUJADO

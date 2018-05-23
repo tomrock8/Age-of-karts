@@ -944,9 +944,15 @@ void TMotor::usingShaderCartoon() {
 // ---- SHADER DEFERRED ----
 //Funcion que renderiza usando un shader deferred
 void TMotor::usingShaderDeferred() {
-	glDisable(GL_BLEND);
+
 	//1º DIBUJADO = se guardan los datos de posicion, normales y color de los distintos objetos en el buffer mediante las texturas
 
+	//Reseteamos el color a negro y desactivamos la transparencia
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glDisable(GL_BLEND);
+	//No dibujamos las caras traseras
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	//Enlazamos el buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, defBuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -956,51 +962,34 @@ void TMotor::usingShaderDeferred() {
 	scene->draw(shaderGbuffer);
 	//Desenlazamos el buffer usado
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glEnable(GL_BLEND);
 
 	//2º DIBUJADO = se renderiza la imagen por pantalla en un quad a partir de los datos anteriores
-
+	//Desactivamos el face culling
+	glDisable(GL_CULL_FACE);
 	//Se limpian los buffers de color y profundidad de OpenGL
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//Activamos el shader
 	shaderDeferred->use();
 	//Se activan las texturas con los datos de los objetos y se le pasan al shader
 	//POSICION
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, defPosition);
-	glUniform1i(glGetUniformLocation(shaderDeferred->getID(), "texture_position"), 0);
+	shaderDeferred->setInt("texture_position", 0);
 	//NORMALES
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, defNormal);
-	glUniform1i(glGetUniformLocation(shaderDeferred->getID(), "texture_normal"), 1);
+	shaderDeferred->setInt("texture_normal", 1);
 	//COLOR DIFUSO Y BRILLO
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, defDiffuseSpecular);
-	glUniform1i(glGetUniformLocation(shaderDeferred->getID(), "texture_diffuseSpecular"), 2);
+	shaderDeferred->setInt("texture_diffuseSpecular", 2);
 	//Establecemos los datos de las distintas luces
 	drawLight(shaderDeferred);
 	//Calcular posicion de la camara y pasarsela al fragment shader
 	glm::vec4 defaultVector(0, 0, 0, 1);
-	glm::vec4 posC = activeViewMatrix * defaultVector;
+	glm::vec4 posC = glm::inverse(activeViewMatrix) * defaultVector;
 	shaderDeferred->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
-	unsigned int quadVAO, quadVBO;
-	float quadVertices[] = {
-		// positions        // texture Coords
-		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-		1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-	};
-	// setup plane VAO
-	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &quadVBO);
-	glBindVertexArray(quadVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	//Dibujamos el quad, activando su VAO
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
@@ -1060,6 +1049,32 @@ void TMotor::setDeferredBuffers() {
 
 	//Desenlazamos el buffer hasta el dibujado
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+//Funcion que establece los buffers de OpenGL para la creacion del quad
+void TMotor::setBuffersQuad(){
+	//Posicion de los vertices y coordenadas de textura del quad
+	const float vertices[] = {
+		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+		1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+		1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+	};
+	//Establecemos los buffers que pasaran los datos anteriores a los shaders para su dibujado
+	//Creamos el VAO y el VBO para el quad
+	glGenVertexArrays(1, &quadVAO);
+	glGenBuffers(1, &quadVBO);
+	//Activamos el VAO
+	glBindVertexArray(quadVAO);
+	//Activamos el VBO, al que se le pasan los datos de posicion de cada vertice
+	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//POSICION
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	//COORDENADAS DE TEXTURA
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 }
 
 //---------------------------------

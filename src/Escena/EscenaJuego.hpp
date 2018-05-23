@@ -72,6 +72,8 @@ private:
 	bool show_another_window[6];
 	bool muestraDebugIA;
 	std::string sr;
+
+	bool waitingPlayers;
 	
 	//SONIDO 
 	AlSource *fuenteCarrera;

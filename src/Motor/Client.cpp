@@ -29,6 +29,7 @@ Client::Client(int maxPlay)
 	aux = 0;
 	timeStamp = 1;		//Variable para controlar la prediccion de movimiento por parte del cliente
 	controlPlayer = 0;
+	allPlayerLoaded = false;
 }
 
 //==================================================================================
@@ -452,6 +453,7 @@ int Client::ReceivePackets() {
 
 		case ID_CLIENTS_LOADED:
 			std::cout << "Empezamos partida ahora!\n";
+			allPlayerLoaded = true;
 			break;
 
 			//Iniciamos la partida por orden el servidor
@@ -866,6 +868,10 @@ int Client::getMaxPlayers() {
 
 std::vector<structClientes> Client::getClientes() {
 	return clientes;
+}
+
+bool Client::getPlayersLoaded(){
+	return allPlayerLoaded;
 }
 
 //===========================================================================

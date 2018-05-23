@@ -54,6 +54,8 @@ class Server
         int numPlayers;
         bool spawned;
 
+        bool allPlayerLoaded;
+
         int timeStamp;
 
         bool started;
@@ -84,6 +86,7 @@ class Server
         void AddSend(RakNet::BitStream *bitstreamStruct, PacketPriority priority, PacketReliability reliability, int desconocido, RakNet::AddressOrGUID receptor, bool envio);
         void Update();
         void aumentarTimestamp();
+	    bool getPlayersLoaded();
 
         std::string getStringClients();
 

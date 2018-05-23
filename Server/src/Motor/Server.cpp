@@ -29,6 +29,7 @@ Server::Server(int maxPlay)
     maxPlayers = maxPlay; //asignacion del numero max de jugadores
     serverPort = "6001"; //puerto que va a usar el servidor
 	timeStamp = 0;
+	allPlayerLoaded = false;
 }
 
 //=======================================================================================
@@ -476,11 +477,14 @@ void Server::ReceivePackets()
 			bsIn.Read(id);			//CONTROLPLAYER
 			std::cout << "Cliente cargado: " << id << std::endl;
 			parambool = false;
+			clientes.at(id).load = true;
 			for(int i = 0; i < clientes.size(); i++){
 				if(!clientes.at(i).load)
 					parambool = true;
 			}
 			if(!parambool){
+				std::cout << "Todos los clientes cargados\n";
+				allPlayerLoaded = true;
 				typeID = ID_CLIENTS_LOADED;
 				bsOut.Write(typeID);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
@@ -1039,4 +1043,9 @@ std::string Server::getStringClients(){
 			ret.append("\n - NO LISTO\n");
 	}
 	return ret;
+}
+
+
+bool Server::getPlayersLoaded(){
+	return allPlayerLoaded;
 }

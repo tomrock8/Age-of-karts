@@ -70,6 +70,8 @@ private:
 	bool show_another_window;
 	bool muestraDebugIA;
 	std::string sr;
+
+	bool waitingPlayers;
 	
 
 	int puesto;

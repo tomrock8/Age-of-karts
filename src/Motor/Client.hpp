@@ -53,6 +53,7 @@ public:
 	std::vector<structClientes> getClientes();
 	bool getStarted();
 	std::string getClientStats(int i);
+	bool getPlayersLoaded();
 
 	//METODOS SET
 	void setNetloaded(bool b);
@@ -96,8 +97,9 @@ private:
 	bool pressed;
 	bool pressed2;
 	bool pressed3;
+	bool allPlayerLoaded;
 	std::vector<structClientes> clientes;
-	
+
 	unsigned char GetPacketIdentifier(RakNet::Packet *p);
 
 };

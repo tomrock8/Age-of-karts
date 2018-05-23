@@ -19,6 +19,7 @@ struct structClients{
     int tipoCorredor;
     bool ready;
     std::vector<structPrediccion> prediccion;
+    bool load;
 };
 
 struct structPaquetes{

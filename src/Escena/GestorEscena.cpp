@@ -48,21 +48,21 @@ bool GestorEscena::cambiaEscena(Escena::tipo_escena tipo) {
 	if (anterior) { // Hay una escena activa actualmente
 		if (anterior->getTipoEscena() == Escena::tipo_escena::LOBBY && tipo == Escena::tipo_escena::ONLINE) {
 			ipConexion = static_cast<EscenaLobby*>(anterior)->getIpConexion();
-			cout << ipConexion << "\n";
+		//	cout << ipConexion << "\n";
 		}
 		if (anterior->getTipoEscena() == Escena::tipo_escena::ONLINE && tipo == Escena::tipo_escena::LOBBY) {
 			ipConexion = static_cast<EscenaJuego*>(anterior)->getIpConexion();
-			cout << ipConexion << "\n";
+		//	cout << ipConexion << "\n";
 		}
 		if (anterior->getTipoEscena() == Escena::tipo_escena::MENU && tipo == Escena::tipo_escena::LOBBY) {
 			ipConexion = static_cast<EscenaMenu*>(anterior)->getIpConexion();
-			cout << "De menu a lobby: " << ipConexion << "\n";
+		//	cout << "De menu a lobby: " << ipConexion << "\n";
 		}
 
 		if (tipo == Escena::tipo_escena::PODIO) {
 			ipConexion = static_cast<EscenaJuego*>(anterior)->getIpConexion();
 			jugadores = static_cast<EscenaJuego*>(anterior)->getJugadores();
-			cout << "De menu a lobby: " << ipConexion << "\n";
+		//	cout << "De menu a lobby: " << ipConexion << "\n";
 		}
 
 		escenaActiva->limpiar();
@@ -104,7 +104,7 @@ bool GestorEscena::agregaEscena(Escena *escena) {
 	int indice = indiceEscena(tipo); // Escena para comprobar si existe ya una escena de ese tipo
 
 	if (indice != -1) { // Ya existe una escena del tipo
-		cout << "Ya hay una escena creada de ese tipo y va a ser borrada";
+		//cout << "Ya hay una escena creada de ese tipo y va a ser borrada";
 		borraEscena(tipo);	// Se borra la escena ya existente
 		escenas[indice] = escena; // Se almacena en el array de escena la nueva escena
 		return true; // La escena ha sido agregada al array y termina el proceso correctamente
@@ -129,11 +129,11 @@ bool GestorEscena::nuevaEscena(Escena::tipo_escena tipo, std::string ipConexion,
 		borraEscena(tipo); // Ya hay una escena de ese tipo y es borrada
 	}
 
-
+//cout<<"voy a crear una nueva escenar"<<endl;
 	TMotor::instancia().cleanScene();
 	TMotor::instancia().nuevaEscenaRaiz(); // Crea la escena raiz de donde cuelgan todos los nodos
-	//TMotor::instancia().newGestorRecursos();
-
+	TMotor::instancia().newGestorRecursos();
+//cout<<"Hola he creado todo voy a ver donde muero ahora"<<endl;
 
 
 	switch (tipo) { // Crear la escena dependiendo del tipo

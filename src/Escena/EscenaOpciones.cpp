@@ -38,7 +38,7 @@ void EscenaOpciones::dibujar() {
 }
 
 void EscenaOpciones::limpiar() {
-	std::cout << "Limpio escena opciones\n";
+	//std::cout << "Limpio escena opciones\n";
 	TMotor::instancia().closeDebugWindow();
 }
 

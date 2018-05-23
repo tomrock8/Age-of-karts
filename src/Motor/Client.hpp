@@ -42,6 +42,7 @@ public:
 	void FinalizarCarrera();
 	void ActualizarClienteConectado();
 	void aumentarTimestamp();
+	void GameLoad();
 	
 	//METODOS GET
 	int getControlPlayer();

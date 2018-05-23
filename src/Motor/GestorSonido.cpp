@@ -29,6 +29,7 @@ GestorSonido::GestorSonido() {
 	cargarSonido("assets/Sounds/race1.wav");
 	cargarSonido("assets/Sounds/crack.wav");
 	cargarSonido("assets/Sounds/drift_loop.wav");
+	cargarSonido("assets/Sounds/podio.wav");
 
 	//Iniciamos los volumenes por defecto
 	volGeneral = 1.0f;

@@ -11,7 +11,7 @@
 
 class cameraThird {
 public:
-	cameraThird(const char *name, const char *parentName);
+	cameraThird(const char *name, const char *parentName, float aspectRatio);
 	~cameraThird();
 
 	void setPosition(glm::vec3 posicion,glm::vec3 rotacion,btVector3 direccion);

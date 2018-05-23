@@ -6,14 +6,14 @@
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;
 	ipConexion = "";
-	tipoEscena=tipo;
+	tipoEscena = tipo;
 	init();
 }
 
 EscenaJuego::EscenaJuego(tipo_escena tipo, std::string ipConexion) : Escena(tipo) {
 	end = false;
 	this->ipConexion = ipConexion;
-	tipoEscena=tipo;
+	tipoEscena = tipo;
 	init();
 }
 
@@ -58,7 +58,6 @@ void EscenaJuego::init() {
 
 	luzPuntual_3 = TMotor::instancia().newLightNode("light_3", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
 	luzPuntual_3->translate(glm::vec3(0.0f, 12.0f, 300.0f));
-	cout << "Luces cargadas.\n";
 	//LUCES DIRIGIDAS
 	/*
 	obj3D * luzDirigida_0 = TMotor::instancia().newLightNode("light_0", glm::vec4(1.0f, -1.0f, 0.0f, 1.0f), 0.001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz");
@@ -113,7 +112,7 @@ void EscenaJuego::init() {
 	TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f);
 	TMotor::instancia().getActiveHud()->addElement(0.18f, 0.1f, "max_habilidad", "assets/HUD/juego/max.png");
 	TMotor::instancia().getActiveHud()->traslateElement("max_habilidad", 0.8, -0.1f);
-	TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 0);
+	TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad", true, 0);
 
 	//Variable en funcion de mandos conectados
 	objeto = 0;
@@ -128,7 +127,6 @@ void EscenaJuego::init() {
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		for (int mandos = 1; mandos < 4; mandos++) {
 			if (glfwJoystickPresent(mandos) == 1) {
-				std::cout << "Mando " << mandos << " detectado!" << std::endl;
 				numPantallas++;
 			}
 		}
@@ -157,6 +155,17 @@ void EscenaJuego::init() {
 				show_another_window[i] = false;
 				muestra_tiempo.push_back(0);
 			}
+		}
+	}
+	else {
+		for (int i = 1; i < client->getClientes().size(); i++) {
+			crearHUD(i);
+			habilidad.push_back(0);
+			inc_habilidad.push_back(0);
+			vueltas.push_back(1);
+			vueltas_aux.push_back(1);
+			show_another_window[i] = false;
+			muestra_tiempo.push_back(0);
 		}
 	}
 
@@ -206,8 +215,6 @@ void EscenaJuego::init() {
 
 
 	int numClients = client->getClientes().size();
-	cout<<"numClients "<<numClients<<endl;
-	cout<<"controlplayer "<<controlPlayer<<endl;
 	Corredor::tipo_jugador tj;
 
 	for (int i = 0; i < numClients; i++) {
@@ -248,9 +255,7 @@ void EscenaJuego::init() {
 		pj.push_back(jugador);
 
 		GestorJugadores::getInstancia()->aumentarJugadores();
-		cout << "Creado corredor. ";
 	}
-	cout << "Corredores creados.\n";
 
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 		client->setNetloaded(true);
@@ -262,13 +267,16 @@ void EscenaJuego::init() {
 	//-----------------------------
 	//	CAMARA
 	//-----------------------------
-
 	for (int x = 0; x < numPantallas; x++) {
-		cameraThird *c = new cameraThird("camara_jugador3apersona", "escena_raiz");
+		float aspectRatio = 16.0f / 9.0f;
+
+		if (numPantallas == 2)
+			aspectRatio = 4.0f / 3.0f;
+
+		cameraThird *c = new cameraThird("camara_jugador3apersona", "escena_raiz", aspectRatio);
 		c->setID(x);
 		camera.push_back(c);
 	}
-	cout << "Camaras creadas.\n";
 
 	//-----------------------------
 	//	GESTOR COLISIONES
@@ -316,6 +324,9 @@ void EscenaJuego::init() {
 	countDown1 = false;
 	countDownGo = false;
 
+	if(tipoEscena == Escena::tipo_escena::ONLINE){
+		client->GameLoad();
+	}
 }
 
 void EscenaJuego::dibujar() {
@@ -354,23 +365,38 @@ void EscenaJuego::dibujar() {
 		TMotor::instancia().getBillboards().at(i)->setActive(false);
 		//Establecemos la zona de renderizado
 		if (numPantallas > 1) {
-			if (i == 0) {
-				TMotor::instancia().setViewport(0, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-izquierda
-			}
-			else if (i == 1) {
-				TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-derecha
-			}
-			else if (i == 2) {
-				TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-izquierda				
+			if (numPantallas == 2) {
+				if (i == 0) {
+					TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight()); //Arriba-izquierda
+				}
+				else if (i == 1) {
+					TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight()); //Arriba-derecha
+				}
 			}
 			else {
-				TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-derecha				
+				if (i == 0) {
+					TMotor::instancia().setViewport(0, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-izquierda
+				}
+				else if (i == 1) {
+					TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Arriba-derecha
+				}
+				else if (i == 2) {
+					TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-izquierda				
+				}
+				else {
+					TMotor::instancia().setViewport(TMotor::instancia().getWidth() / 2, 0, TMotor::instancia().getWidth() / 2, TMotor::instancia().getHeight() / 2); //Abajo-derecha				
+				}
 			}
 		}
 		else {
 			TMotor::instancia().setViewport(0, 0, TMotor::instancia().getWidth(), TMotor::instancia().getHeight()); //Pantalla completa
 		}
-		updateHUD(i);
+		if (tipoEscena == Escena::tipo_escena::ONLINE) {
+			updateHUD(controlPlayer);
+		}
+		else {
+			updateHUD(i);
+		}
 		renderDebug(i);
 		//Especificamos la camara activa
 		TMotor::instancia().setActiveCamera(TMotor::instancia().getCameraByIndex(i));
@@ -569,9 +595,9 @@ void EscenaJuego::renderDebug(int i) {
 			}
 			else {
 				if (fin_carrera) {
-					if (i==0){
-					ImGui::SetNextWindowPos(ImVec2((display_w - relativeX) / 4, (display_h - relativeY) / 4));
-					ImGui::SetNextWindowSize(ImVec2((float)450, (float)120));
+					if (i == 0) {
+						ImGui::SetNextWindowPos(ImVec2((display_w - relativeX) / 4, (display_h - relativeY) / 4));
+						ImGui::SetNextWindowSize(ImVec2((float)450, (float)120));
 					}
 				}
 				else {
@@ -583,21 +609,22 @@ void EscenaJuego::renderDebug(int i) {
 		if (vueltas.at(i) > Pista::getInstancia()->getNumVueltas()) {
 			Corredor *pj1 = GestorJugadores::getInstancia()->getJugadores().at(i);
 			TMotor::instancia().getActiveHud()->traslateElement("puesto", 0.0f, 0.3f);
-			if (fin_carrera && i==0) {
+			if (fin_carrera && i == 0) {
 				ImGui::Begin("Another Window" + i, &show_another_window[i], ImGuiWindowFlags_NoResize
-			| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
-			| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard
-			| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal);
+					| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
+					| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard
+					| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal);
 				ImGui::Text("RACE FINISHED!");
 				ImGui::Text("PRESS F TO RETURN");
 				ImGui::End();
 
 			}
-		}else{
-		ImGui::Begin("Another Window" + i, &show_another_window[i], ImGuiWindowFlags_NoResize
-			| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
-			| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard
-			| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal);
+		}
+		else {
+			ImGui::Begin("Another Window" + i, &show_another_window[i], ImGuiWindowFlags_NoResize
+				| ImGuiTreeNodeFlags_CollapsingHeader | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
+				| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard
+				| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal);
 			//fontsize
 			if (vueltas.at(i) <= Pista::getInstancia()->getNumVueltas()) {
 				ImGui::Text("LAP TIME: ");
@@ -605,28 +632,28 @@ void EscenaJuego::renderDebug(int i) {
 				ImGui::Text(to_string(pj1->getTiempoVuelta()).c_str());
 			}
 			else {
-			if (fin_carrera && i==0) {
-				ImGui::Text("RACE FINISHED!");
-				ImGui::Text("PRESS F TO RETURN");
+				if (fin_carrera && i == 0) {
+					ImGui::Text("RACE FINISHED!");
+					ImGui::Text("PRESS F TO RETURN");
 
-			}
-			if (vueltas.at(i) > Pista::getInstancia()->getNumVueltas()) {
-				if (numPantallas==1){
-					ImGui::Text("YOU ARRIVED: ");
 				}
-				
+				if (vueltas.at(i) > Pista::getInstancia()->getNumVueltas()) {
+					if (numPantallas == 1) {
+						ImGui::Text("YOU ARRIVED: ");
+					}
 
-			}
-			muestra_tiempo.at(i) = t->getTimer();
 
-			//ImGui::Text(to_string(jugador->getPosicionCarrera()).c_str());
+				}
+				muestra_tiempo.at(i) = t->getTimer();
+
+				//ImGui::Text(to_string(jugador->getPosicionCarrera()).c_str());
 			}
 			vueltas_aux.at(i) = vueltas.at(i);
 			if (t->getTimer() - muestra_tiempo.at(i) >= 4) {
 				show_another_window[i] = false;
 			}
-		
-		ImGui::End();
+
+			ImGui::End();
 		}
 
 	}
@@ -731,16 +758,16 @@ void EscenaJuego::update() {
 			}
 		}
 		if (t->getTimer() < 8 && t->getTimer() >= 5) {
-		TMotor::instancia().getActiveHud()->deleteElement("cuentaAtras");
-		for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
-			pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
-		}
-		if (t->getTimer() >= 5 && t->getTimer() < 6)
-			colisiones->IniciarTimer();
+			TMotor::instancia().getActiveHud()->deleteElement("cuentaAtras");
+			for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
+				pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
+			}
+			if (t->getTimer() >= 5 && t->getTimer() < 6)
+				colisiones->IniciarTimer();
 		}
 	}
 
-	
+
 
 	if (tipoEscena != Escena::tipo_escena::ONLINE) {
 
@@ -775,9 +802,6 @@ void EscenaJuego::update() {
 			pj.at(i)->update();
 		}
 
-
-		std::cout << "Entro update3\n";
-
 		//textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
 		//if (jugadores->getNumJugadores() != 0)
 			//textoDebug->agregar(pj.at(controlPlayer)->toString());
@@ -793,9 +817,6 @@ void EscenaJuego::update() {
 			//client->PlayerAction();
 			client->UpdateNetworkKeyboard();
 		}
-
-		std::cout << "Entro update4\n";
-
 	}
 	if (GestorJugadores::getInstancia()->getNumJugadores() != 0)
 		if (gc->update())
@@ -1084,30 +1105,35 @@ void EscenaJuego::updateHUD(int i) {
 		}
 	}
 	//UPDATE INDICADOR HABILIDAD
-	TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 0);
-	if (pj.at(i)->getLimite() != habilidad.at(i)){
-		if (pj.at(i)->getLimite() - habilidad.at(i) > 0){
-			if (pj.at(i)->getLimite()<100){
-				if (pj.at(i)->getLimite() - habilidad.at(i) == 1){
-					inc_habilidad.at(i)+=0.0065;			
-				}else if (pj.at(i)->getLimite() - habilidad.at(i) == 25){
-					inc_habilidad.at(i)+=0.16;		
+	TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad", true, 0);
+	if (pj.at(i)->getLimite() != habilidad.at(i)) {
+		if (pj.at(i)->getLimite() - habilidad.at(i) > 0) {
+			if (pj.at(i)->getLimite() < 100) {
+				if (pj.at(i)->getLimite() - habilidad.at(i) == 1) {
+					inc_habilidad.at(i) += 0.0065;
 				}
-			}else{
-				inc_habilidad.at(i)=0.64f;
-				TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 1);
+				else if (pj.at(i)->getLimite() - habilidad.at(i) == 25) {
+					inc_habilidad.at(i) += 0.16;
+				}
 			}
-		}else{
-			inc_habilidad.at(i)=0;
-			TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 0);
+			else {
+				inc_habilidad.at(i) = 0.64f;
+				TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad", true, 1);
+			}
 		}
-		
-		habilidad.at(i)=pj.at(i)->getLimite();
-	}else{
-		if (pj.at(i)->getLimite()<100){
-			TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 0);
-		}else{
-			TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 1);	
+		else {
+			inc_habilidad.at(i) = 0;
+			TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad", true, 0);
+		}
+
+		habilidad.at(i) = pj.at(i)->getLimite();
+	}
+	else {
+		if (pj.at(i)->getLimite() < 100) {
+			TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad", true, 0);
+		}
+		else {
+			TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad", true, 1);
 		}
 	}
 	TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f + inc_habilidad.at(i));
@@ -1234,6 +1260,6 @@ void EscenaJuego::crearHUD(int i) {
 	TMotor::instancia().getActiveHud()->traslateElement("indicador_habilidad", 0.85f, -0.8f);
 	TMotor::instancia().getActiveHud()->addElement(0.18f, 0.1f, "max_habilidad", "assets/HUD/juego/max.png");
 	TMotor::instancia().getActiveHud()->traslateElement("max_habilidad", 0.8, -0.1f);
-	TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad",true, 0);
+	TMotor::instancia().getActiveHud()->changeTransparencyElement("max_habilidad", true, 0);
 
 }

@@ -3,7 +3,7 @@
 
 EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_jugador> jugadores) : Escena(tipo) {
 
-	camera = new cameraThird("camara_jugador3apersona", "escena_raiz");
+	camera = new cameraThird("camara_jugador3apersona", "escena_raiz", 16/9);
 	//obj3D para las poles
 	primero = TMotor::instancia().newMeshNode("primeraPosicion", " ", "escena_raiz", false); //textura cualquiera pues se eliminara
 	segundo = TMotor::instancia().newMeshNode("segundaPosicion", " ", "escena_raiz", false); //textura cualquiera pues se eliminara
@@ -28,6 +28,10 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 	end=false;
 	tm=time->getTimer();
 
+	objTrol = TMotor::instancia().newMeshNode("HabilidadPirata","assets/Habilidades/Pirata/HabilidadPirata.obj","escena_raiz", false);
+	objTrol->setPosition(500,500,500);
+
+
 	for (int i = 0; i < jugadores.size(); i++) {
 
 		switch (jugadores.at(i)) {//recogemos cual sera la animacion que tocara en caso de que esten en el podio
@@ -40,7 +44,7 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 
 			case Corredor::tipo_jugador::VIKINGO:
 				if (animacionVikingo == nullptr) {
-					animacionVikingo = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Celebracion/VikingoCelebracion_000", 443, 537), "BaileVikingo");
+					animacionVikingo = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Celebracion/vikingoCelebracionobj_000", 462, 547), "BaileVikingo");
 
 				}
 				animacionElegida = animacionVikingo;
@@ -108,21 +112,30 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 
 EscenaPodio::~EscenaPodio() {
 
-	
+	if(podio)
 	delete podio;
 
     camera = nullptr;
+
+	delete fuentePodio;
 	
+	if(luces.size()>0){
 	for(int i =0; i< luces.size();i++){
 		delete luces.at(i);
 	}
-
+	}
 	particulas.clear();		
 	
+	if(primero)
 	delete primero;
+	if(segundo)
 	delete segundo;
+	if(tercero)
 	delete tercero;
 
+	if(objTrol)
+	delete objTrol;
+	//cout<<"borro el objeto"<<endl;
 	animacionPirata=nullptr;
 	animacionVikingo=nullptr;
 	animacionChino=nullptr;
@@ -131,7 +144,7 @@ EscenaPodio::~EscenaPodio() {
 	
 	delete time;
 
-
+	//cout<<"Salgo del destructor"<<endl;
 }
 
 Escena::tipo_escena EscenaPodio::comprobarInputs() {
@@ -288,6 +301,10 @@ void EscenaPodio::limpiar() {
 void EscenaPodio::update() {
 	
 	if ((time->getTimer()-tm)>2 && !entra){
+		fuentePodio = new AlSource();
+		fuentePodio->setLoop(true);
+		fuentePodio->volume(TMotor::instancia().getGestorSonido()->getVolMusica());
+		fuentePodio->play(SOUND_PODIO);
 		entra=true;
 		//activamos animaciones
 		//primero

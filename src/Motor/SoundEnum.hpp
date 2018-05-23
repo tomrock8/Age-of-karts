@@ -7,5 +7,6 @@ enum GameSounds
     SOUND_THROW         = 5,
     SOUND_RACE          = 6,
     SOUND_CRACK         = 7,
-    SOUND_DRIFT         = 8
+    SOUND_DRIFT         = 8,
+    SOUND_PODIO         = 9
 };

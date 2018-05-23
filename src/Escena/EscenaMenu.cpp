@@ -83,12 +83,12 @@ void EscenaMenu::initHud() {
 }
 
 EscenaMenu::~EscenaMenu() {
-	cout << "Destructor ESCENA MENU. Entro.";
+	//cout << "Destructor ESCENA MENU. Entro.";
 	limpiar();
 	TMotor::instancia().cleanHUD();
 	delete fuenteMenu;
 	delete fuenteOpcion;
-	cout << "Salgo.\n";
+	//cout << "Salgo.\n";
 }
 
 void EscenaMenu::init() {}
@@ -156,22 +156,22 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[0]))) {
 			fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
 			if (optionMenu == 0) {
-				cout << "LOCAL\n";
+				//cout << "LOCAL\n";
 				TMotor::instancia().setActiveHud("LocalMenuHUD");
 				pressed = true;
 			}
 			else if (optionMenu == 1) {
-				cout << "MULTIPLAYER\n";
+				//cout << "MULTIPLAYER\n";
 				ipConexion = "";
 
 				return Escena::tipo_escena::LOBBY;
 			}
 			else if (optionMenu == 2) {
-				cout << "OPCIONES\n";
+				//cout << "OPCIONES\n";
 				return Escena::tipo_escena::OPCIONES;
 			}
 			else {
-				cout << "SALIR\n";
+				//cout << "SALIR\n";
 
 				return Escena::tipo_escena::SALIR;
 			}
@@ -180,11 +180,11 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			if (!pressed) {
 
 				if (fuenteMenu->isPlaying()) {
-					cout << "Musica desactivada.\n";
+					//cout << "Musica desactivada.\n";
 					fuenteMenu->stop(SOUND_MENU);
 				}
 				else {
-					cout << "Musica activada.\n";
+					//cout << "Musica activada.\n";
 					fuenteMenu->play(SOUND_MENU);
 				}
 
@@ -222,7 +222,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[0]))) {
 			if (optionMenu == 0) {
 				if (!pressed) {
-					cout << "UN JUGADOR\n";
+					//cout << "UN JUGADOR\n";
 					ipConexion = "offline";
 					return Escena::tipo_escena::LOBBY;
 				}
@@ -230,7 +230,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			else if (optionMenu == 1) {
 				ipConexion = "offline_split";
 				return Escena::tipo_escena::LOBBY;
-				cout << "PANTALLA PARTIDA\n";
+				//cout << "PANTALLA PARTIDA\n";
 			}
 		}
 

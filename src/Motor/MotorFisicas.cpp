@@ -59,7 +59,7 @@ void MotorFisicas::initializePhysics(TRecursoMalla * mesh) {
 	//Las Fisicas se cargan la primera vez que se ejecuta el juego,
 	//guardando en un fichero .bullet con el nombre de la malla.
 	//El resto de veces se comprobara antes de crear el archivo que no exista su .bullet, de lo contrario se cargara el archivo directamente.
-	cout << "creando las fisicas para :" << mesh->getNombre() << endl;
+	//cout << "creando las fisicas para :" << mesh->getNombre() << endl;
 	std::string fileName = mesh->getNombre();
 	fileName = "assets/fisicas/" + fileName;
 	fileName += ".bullet";
@@ -71,7 +71,7 @@ void MotorFisicas::initializePhysics(TRecursoMalla * mesh) {
 		fileLoader->loadFile(fileName.c_str());
 	}
 	else {
-		cout << "El fichero no existe, CREO fisicas" << endl;
+		//cout << "El fichero no existe, CREO fisicas" << endl;
 		//En caso de que no exista el fichero, se crearan las fisicas 
 		std::vector<btRigidBody *> obje = getObjetos();
 		// posicion inicial del obj

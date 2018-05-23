@@ -9,10 +9,10 @@ TCamara::~TCamara() {
 bool TCamara::getActive() { return active; }
 void TCamara::setActive(bool s) { active = s; }
 
-void TCamara::setPerspective(GLfloat Height, GLfloat Width, GLfloat corteCercano, GLfloat corteLejano, GLfloat grados) {
+void TCamara::setPerspective(GLfloat Height, GLfloat Width, GLfloat corteCercano, GLfloat corteLejano, GLfloat grados, float aspectRatio) {
 	projectionMatrix = glm::perspective(
 		glm::radians(grados), 			// El campo de vision vertical:zoom 90 (extra ancho) y 30 (zoom aumentado)
-		Width / Height,					// Proporcion ventana 4/3 == 800/600 
+		static_cast<GLfloat>(aspectRatio),					// Proporcion ventana 4/3 == 800/600 
 		corteCercano,					// Plano de corte cercano. Tan grande como sea posible o tendras problemas de precision.
 		corteLejano						// Plano de corte lejano. Tan enano como se pueda.
 	);

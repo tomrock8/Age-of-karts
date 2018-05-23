@@ -92,10 +92,10 @@ EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tip
 }
 
 EscenaLobby::~EscenaLobby() {
-	cout << "\nDestructor ESCENA LOBBY. Entro.";
+	//cout << "\nDestructor ESCENA LOBBY. Entro.";
 	limpiar();
 	TMotor::instancia().cleanHUD();
-	cout << "Salgo.\n";
+	//cout << "Salgo.\n";
 }
 
 void EscenaLobby::init() {}
@@ -197,7 +197,7 @@ void EscenaLobby::update() {
 
 					if (ImGui::Button("Introduce IP")) {
 						selection_online = false;
-						cout << "Introduce IP to begin an online race: ";
+						//cout << "Introduce IP to begin an online race: ";
 					}
 				}
 			}
@@ -714,10 +714,10 @@ Escena::tipo_escena EscenaLobby::comprobarInputs() {
 				TMotor::instancia().setFaceCulling(false);
 			}
 			if (checkCPU) {
-				int r = 2;
-				client->setArrayClients("", 3 - r, true, false, -1);
-				r = 3;
-				client->setArrayClients("", 3 - r, true, false, -1);
+			
+				client->setArrayClients("", 1, true, false, -1);
+			
+				//client->setArrayClients("", 0, true, false, -1);
 
 			}
 			//Pista::getInstancia()->setNombreMapa(str1.c_str());
@@ -1175,7 +1175,7 @@ void EscenaLobby::addControllers() {
 	if (offline_split) {
 		for (int mandos = 1; mandos < 4; mandos++) {
 			if (glfwJoystickPresent(mandos) == 1) {
-				std::cout << "Mando " << mandos << " detectado!" << std::endl;
+				//std::cout << "Mando " << mandos << " detectado!" << std::endl;
 				numPantallas++;
 			}
 		}

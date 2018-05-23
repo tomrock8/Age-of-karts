@@ -252,6 +252,7 @@ void Server::ReceivePackets()
                     client.ip = p->systemAddress.ToString(true);
                     client.tipoCorredor = 3;
                     client.ready = false;
+					client.load = false;
                     clientes.push_back(client);
                     numConnections=10;
                     server->GetConnectionList((RakNet::SystemAddress*) &systems, &numConnections);
@@ -468,6 +469,22 @@ void Server::ReceivePackets()
 
 			std::cout << "Jugador creado, en total: " << numPlayers << std::endl;
 */
+			break;
+
+		case ID_CLIENT_LOAD:
+			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+			bsIn.Read(id);			//CONTROLPLAYER
+			std::cout << "Cliente cargado: " << id << std::endl;
+			parambool = false;
+			for(int i = 0; i < clientes.size(); i++){
+				if(!clientes.at(i).load)
+					parambool = true;
+			}
+			if(!parambool){
+				typeID = ID_CLIENTS_LOADED;
+				bsOut.Write(typeID);
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+			}
 			break;
 
 		case ID_PLAYER_MOVE:

@@ -33,7 +33,7 @@ GestorSonido::GestorSonido() {
 
 	//Iniciamos los volumenes por defecto
 	volGeneral = 1.0f;
-	volMusica = .06f;
+	volMusica = .5f;
 	volEfectos = .7f;
 }
 

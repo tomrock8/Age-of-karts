@@ -57,6 +57,13 @@ TLuz::~TLuz(){
 // METODOS SET
 void TLuz::setLightPosition(glm::vec3 pos) { lightPosition = pos; }
 void TLuz::setActive(bool active) { this->active = active; }
+void TLuz::setAmbient(glm::vec3 a) { this->ambiente = a;}
+void TLuz::setDiffuse(glm::vec3 d) { this->difusa = d;}
+void TLuz::setSpecular(glm::vec3 s) { this->especular = s;}
+void TLuz::setAttenuation(float a) { this->attenuation = a;}
+void TLuz::setAngle(float a) { this->cut = glm::cos(glm::radians(a));}
+void TLuz::setDirection(glm::vec4 v) { this->lightDirection = v;}
+void TLuz::setShadow(bool b) { this->sombras = b;}
 
 // METODOS GET
 bool TLuz::getActive() { return active; }
@@ -173,7 +180,7 @@ void TLuz::calculateDepthMap(){
 //Funcion que calcular la matriz de luz necesaria para calcular el mapa de profundidad
 void TLuz::calculateLightMatrix(){
 	//Calculamos la matriz proyeccion = no necesitamos perspectiva ya que la luz es dirigida y los rayos son paralelos
-	glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float)DEPTH_WIDTH/(float)DEPTH_HEIGHT, 2.0f, 50.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float)DEPTH_WIDTH/(float)DEPTH_HEIGHT, 1.0f, 50.0f);
 	int nZeros = 0;
 	glm::vec3 lDir;
 	if (lightDirection.x == 0.0f) nZeros++;
@@ -266,7 +273,7 @@ void TLuz::calculateCubeDepthMap(){
 //Funcion para calcular las matrices de luz del cubo de profundidad
 void TLuz::calculateLightMatrixes(){
 	//Calculamos la matriz proyeccion = esta vez se usa la perspectiva ya que al ser luz puntual la luz sale en todas las direcciones
-	glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float)DEPTH_WIDTH/(float)DEPTH_HEIGHT, 0.1f, 200.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float)DEPTH_WIDTH/(float)DEPTH_HEIGHT, 1.0f, 50.0f);
 
 	//Calculamos la matriz view a partir de la posicion de la luz (una para cada lado del cubo)
 	lightMatrixes.clear();
@@ -280,7 +287,7 @@ void TLuz::calculateLightMatrixes(){
 	view = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	lightMatrixes.push_back(projection * view);
 	// --- Cara en el eje y negativo ---
-	view = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	view = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
 	lightMatrixes.push_back(projection * view);
 	// --- Cara en el eje z positivo ---
 	view = glm::lookAt(lightPosition, lightPosition + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));

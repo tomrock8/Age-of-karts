@@ -16,11 +16,10 @@ out data{
     mat3 tbnMatrix; //Inversa de la matriz TBN
 } vs_out;
 
-//Uniforms para las distintas matrices necesarias para calcular la MVP
+//Uniforms para la matriz MVP
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-uniform mat4 lightMatrix; //Matriz de luz para calcular las sombras
+uniform mat4 transInvModel;
+uniform mat4 mvp;
 
 void main()
 { 
@@ -33,7 +32,7 @@ void main()
     //Pasar el vector normal a coordenadas del mundo
     //Multiplicarlo por la traspuesta de la inversa de la esq. izq. superior de la matriz model
     //Aplicarle a la normal las transformaciones de la malla para adaptarla a estas
-    vs_out.worldNormal = mat3(transpose(inverse(model))) * aNormal;
+    vs_out.worldNormal = mat3(transInvModel) * aNormal;
 
     //Crear la matriz TBN (tangentes - bitangentes - normales), que posteriormente usaremos para pasar los datos al espacio tangente y realizar los calculos de la luz en el fragment
     //Primero, pasamos los tres vectores a las coordenadas del sistema, similar a como hemos hecho con la posicion del vertice antes
@@ -45,5 +44,5 @@ void main()
     vs_out.tbnMatrix = transpose(TBN);
 
     //Calcular posicion final del pixel a partir de la multiplicacion de la MVP por la posicion del  vertice
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    gl_Position = mvp * vec4(aPos, 1.0);
 }

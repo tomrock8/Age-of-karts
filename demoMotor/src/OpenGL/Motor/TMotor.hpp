@@ -69,7 +69,7 @@ public:
 	obj3D *getObjActiveCamera();
 	hud *getHud(const char* n);
 	hud *getActiveHud();
-	Shader *getShader();
+	Shader *getShaderMaterial();
 	Shader *getShaderHUD();
 	Shader *getShaderProjectedShadows();
 	Shader *getShaderDirectionalDepth();
@@ -123,7 +123,10 @@ public:
 	void drawCube(glm::mat4 modelMatrixObject, glm::vec3 centerPos);
 
 	// DIBUJADO SEGUN SHADER ACTIVO
+	void usingShaderMaterial();
+	void usingShaderTexture();
 	void usingShaderCartoon();
+	void usingShaderLighting();
 	void usingShaderDeferred();
 
 protected:
@@ -136,7 +139,9 @@ protected:
 	TNodo * scene;
 
 	//Shaders
-	Shader *shader; // Shader que se usa en el motor en la parte 3D
+	Shader *shaderMaterial; //Shader que dibuja los materiales de los objetos
+	Shader *shaderTexture; //Shader que dibuja las texturas de los objetos
+	Shader *shaderLighting; //Shader que dibuja las texturas de los objetos, aplicando la textura normal
 	Shader *shaderHUD; //Shader que usa el motor para el dibujado del HUD
 	Shader *shaderProjectedShadows; //Shader para el calculo de de las sombras proyectadas
 	Shader *shaderDirectionalDepth; //Shader para el calculo de las sombras de las luces dirigidas

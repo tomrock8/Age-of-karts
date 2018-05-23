@@ -35,6 +35,13 @@ public:
 	void setLuz(Shader *shader, const char* nombre);
 	void setActive(bool active);
 	void setLightPosition(glm::vec3 pos);
+	void setAmbient(glm::vec3 a);
+	void setDiffuse(glm::vec3 d);
+	void setSpecular(glm::vec3 s);
+	void setAttenuation(float a);
+	void setAngle(float a);
+	void setDirection(glm::vec4 v);
+	void setShadow(bool b);
 
 	// DIBUJADO
 	virtual void beginDraw(Shader *shader) override;

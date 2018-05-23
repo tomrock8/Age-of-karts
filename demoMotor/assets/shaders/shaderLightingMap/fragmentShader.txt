@@ -40,17 +40,14 @@ struct Material{
     float brightness; //Brillo del material -> para el calculo de la la componente especular de la luz
 };
 
-const int numLights = 4;
+const int numLights = 3;
 uniform Light point_lights[numLights]; //Vector de luces puntuales
 uniform samplerCube shadowCube_0; //Cubo de profundidad para el calculo de las sombras de la luz puntual 0
 uniform samplerCube shadowCube_1; //Cubo de profundidad para el calculo de las sombras de la luz puntual 1
 uniform samplerCube shadowCube_2; //Cubo de profundidad para el calculo de las sombras de la luz puntual 2
-uniform samplerCube shadowCube_3; //Cubo de profundidad para el calculo de las sombras de la luz puntual 3
 uniform Light spot_lights[numLights]; //Vector de luces dirigidas
 uniform sampler2D shadowMap_0; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 0
 uniform sampler2D shadowMap_1; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 1
-uniform sampler2D shadowMap_2; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 2
-uniform sampler2D shadowMap_3; //Textura con el mapa de profundidad para el calculo de las sombras de la luz dirigida 3
 
 uniform Material material; //Material de la malla para cada vertice
 uniform vec3 posCamera; //Posicion de la camara
@@ -58,6 +55,8 @@ uniform sampler2D texture_diffuse; //Textura difusa de la malla
 uniform sampler2D texture_specular; //Textura especular de la malla
 uniform sampler2D texture_normal; //Textura de normales de la malla
 uniform float planoLejano; //Plano lejano de la matriz de proyeccion perspectiva usada para renderizar el cubo de profundidad
+uniform bool drawingDistance; //Booleano para la activacion/desactivacion de la distancia de dibujado
+uniform float levelOfDrawingDistance; //Distancia dentro de la cual se dibujan los objetos
 
 //Declaracion de funciones
 vec3 calculatePointLight(int i, vec3 N);
@@ -82,12 +81,24 @@ void main()
     //======================================================
     vec3 result = vec3(0.0, 0.0, 0.0);
 
-    //Bucle que recorre las luces puntuales
+   //Bucle que recorre las luces puntuales
     for (int i = 0; i < numLights; i++){
         result = vec3(0.0, 0.0, 0.0);
         //Si la luz esta activa, se calcula su influencia sobre el fragmento
         if ( point_lights[i].activa == true){
-            result = calculatePointLight(i, N);
+            //Si la distancia de dibujado esta activada...
+            if ( drawingDistance == true ){
+                //Si la distancia entre la camara y el objeto es menor que la predefinida, entonces se dibuja
+                if (abs(length(posCamera - fs_in.worldPos)) < levelOfDrawingDistance){
+                    result = calculatePointLight(i, N);
+                } else{
+                    //Si no se descarta
+                    discard;
+                }
+            } else { //Si no esta activado, calculamos el model de Phong como siempre
+                result = calculatePointLight(i, N);
+            }
+            
         }
         //Luz resultante: ambient+diffuse+specular (se va acumulando)
         finalColor = finalColor + result;
@@ -98,7 +109,19 @@ void main()
         result = vec3(0.0, 0.0, 0.0);
         //Si la luz esta activa, se calcula su influencia sobre el fragmento
         if ( spot_lights[i].activa == true){
-            result = calculateSpotlight(i, N);
+            //Si la distancia de dibujado esta activada...
+            if ( drawingDistance == true ){
+                //Si la distancia entre la camara y el objeto es menor que la predefinida, entonces se dibuja
+                if (abs(length(posCamera - fs_in.worldPos)) < levelOfDrawingDistance){
+                    result = calculateSpotlight(i, N);
+                } else{
+                    //Si no se descarta
+                    discard;
+                }
+            } else { //Si no esta activado, calculamos el model de Phong como siempre
+                result = calculateSpotlight(i, N);
+            }
+            
         }
         //Luz resultante: ambient+diffuse+specular (se va acumulando)
         finalColor = finalColor + result;
@@ -149,22 +172,19 @@ vec3 calculatePointLight(int i, vec3 N){
         vec3 specular = point_lights[i].specular * S * vec3(texture(texture_specular, fs_in.textCoords));
         specular *= attenuation;
 
-        // ---- SOMBRAS ----
+         // ---- SOMBRAS ----
         //Calculamos el valor de la sombra
         float shadow = 0.0;
         //Segun la luz que estemos tratando, se usa el cubo de profundidad correspondiente, siempre que se requiera que la luz tenga sombras
         if ( i == 0 ){
             if ( point_lights[i].sombra == true )
-            shadow = calculatePointShadows(shadowCube_0, i, N);
+            shadow = calculatePointShadows(shadowCube_0, i, normalize(fs_in.worldNormal));
         } else if ( i == 1 ){
             if ( point_lights[i].sombra == true )
-            shadow = calculatePointShadows(shadowCube_1, i, N);
+            shadow = calculatePointShadows(shadowCube_1, i, normalize(fs_in.worldNormal));
         } else if ( i == 2 ){
             if ( point_lights[i].sombra == true )
-            shadow = calculatePointShadows(shadowCube_2, i, N);
-        } else if ( i == 3 ){
-            if ( point_lights[i].sombra == true )
-            shadow = calculatePointShadows(shadowCube_3, i, N);
+            shadow = calculatePointShadows(shadowCube_2, i, normalize(fs_in.worldNormal));
         }
         //Lo multiplicamos por las componentes difusa y especular
         diffuse = (1.0 - shadow) * diffuse;
@@ -235,16 +255,10 @@ vec3 calculateSpotlight(int i, vec3 N){
             //Segun la luz que estemos tratando, se usa el cubo de profundidad correspondiente, siempre que se requiera que la luz tenga sombras
             if ( i == 0 ){
                 if ( spot_lights[i].sombra == true )
-                shadow = calculateDirectionalShadows(shadowMap_0, i, N);
+                shadow = calculateDirectionalShadows(shadowMap_0, i, normalize(fs_in.worldNormal));
             } else if ( i == 1 ){
                 if ( spot_lights[i].sombra == true )
-                shadow = calculateDirectionalShadows(shadowMap_1, i, N);
-            } else if ( i == 2 ){
-                if ( spot_lights[i].sombra == true )
-                shadow = calculateDirectionalShadows(shadowMap_2, i, N);
-            } else if ( i == 3 ){
-                if ( spot_lights[i].sombra == true )
-                shadow = calculateDirectionalShadows(shadowMap_3, i, N);
+                shadow = calculateDirectionalShadows(shadowMap_1, i, normalize(fs_in.worldNormal));
             }
             //Lo multiplicamos por las componentes difusa y especular
             diffuse = (1.0 - shadow) * diffuse;
@@ -261,6 +275,7 @@ vec3 calculateSpotlight(int i, vec3 N){
 
         return r;
 }
+
 
 //Funcion para el calculo de las sombras de una luz dirigida. Devuelve un float (grado de penumbra) que se multiplica por las 
 //componentes difusa y especular de la luz 

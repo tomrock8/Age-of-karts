@@ -66,7 +66,9 @@ TMotor::TMotor() {
 	initDebugWindow();
 
 	//Creamos los distintos shaders que se van a usar para algun aspecto del motor
-	shader = new Shader("shader", "assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
+	shaderMaterial = new Shader("shader", "assets/shaders/shaderBasico/vertexShader.txt", "assets/shaders/shaderBasico/fragmentShader.txt", nullptr);
+	shaderTexture = new Shader("shader", "assets/shaders/shaderTextura/vertexShader.txt", "assets/shaders/shaderTextura/fragmentShader.txt", nullptr);
+	shaderLighting = new Shader("shader", "assets/shaders/shaderLightingMap/vertexShader.txt", "assets/shaders/shaderLightingMap/fragmentShader.txt", nullptr);
 	shaderHUD = new Shader("shaderHUD", "assets/shaders/shaderHUD/vertexShader.txt", "assets/shaders/shaderHUD/fragmentShader.txt", nullptr);
 	shaderProjectedShadows = new Shader("shaderProjectedShadows", "assets/shaders/shaderProjectedShadows/vertexShader.txt", "assets/shaders/shaderProjectedShadows/fragmentShader.txt", nullptr);
 	shaderDirectionalDepth = new Shader("shaderDirectionalDepth", "assets/shaders/shaderDepth/shaderLuzDirigida/vertexShader.txt", "assets/shaders/shaderDepth/shaderLuzDirigida/fragmentShader.txt", nullptr);
@@ -145,7 +147,9 @@ void TMotor::close() {
 	if (skybox) delete skybox;
 	if (nubes) delete nubes;
 	
-	delete shader; // Shader que se usa en el motor en la parte 3D
+	delete shaderMaterial; // Shader que se usa en el motor en la parte 3D
+	delete shaderTexture;
+	delete shaderLighting;
 	delete shaderHUD; //Shader que usa el motor para el dibujado del HUD
 	delete shaderProjectedShadows; //Shader para el calculo de de las sombras proyectadas
 	delete shaderDirectionalDepth; //Shader para el calculo de las sombras de las luces dirigidas
@@ -508,7 +512,7 @@ TNodo *TMotor::getNode(const char* nombre) { return scene->getNode(nombre); }
 TNodo *TMotor::getSceneNode() { return scene; }
 TNodo *TMotor::getActiveCamera() { return activeCamera; }
 std::vector <TNodo*> TMotor::getActiveLights() { return activeLights; }
-Shader *TMotor::getShader() { return shader; }
+Shader *TMotor::getShaderMaterial() { return shaderMaterial; }
 Shader *TMotor::getShaderHUD() { return shaderHUD; }
 Shader *TMotor::getShaderProjectedShadows() { return shaderProjectedShadows; }
 Shader *TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
@@ -648,13 +652,26 @@ void TMotor::draw() {
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK); //No dibujamos las caras traseras de los objetos
 	}
-	//Si el shader deferred esta activado...
-	if (strcmp(shaderName, "shaderDeferred") == 0) {
-		usingShaderDeferred();
+
+	//Si el shader mateial esta activado...
+	if (strcmp(shaderName, "shaderMaterial") == 0) {
+		usingShaderMaterial();
+	}
+	//Si el shader textura esta activado...
+	if (strcmp(shaderName, "shaderTexture") == 0) {
+		usingShaderTexture();
+	}
+	//Si el shader lighting map esta activado...
+	if (strcmp(shaderName, "shaderLighting") == 0) {
+		usingShaderLighting();
 	}
 	//Si el shader cartoon esta activado...
 	if (strcmp(shaderName, "shaderCartoon") == 0) {
 		usingShaderCartoon();
+	}
+	//Si el shader deferred esta activado...
+	if (strcmp(shaderName, "shaderDeferred") == 0) {
+		usingShaderDeferred();
 	}
 
 	//Desactivamos el Face Culling para que no afecte al resto de elementos dibujados
@@ -889,6 +906,78 @@ void TMotor::drawDebugBullet() {
 // D I B U J A D O   S E G U N   S H A D E R   A C T I V O
 //---------------------------------------------------------
 
+// ---- SHADER MATERIAL ----
+//Funcion que renderiza la escena aplicandole los materiales de los objetos
+void TMotor::usingShaderMaterial(){
+	//Se activa el shader para el renderizado 3D
+	shaderMaterial->use();
+	//Calcular posicion de la camara y pasarsela al fragment shader
+	glm::vec4 defaultVector(0, 0, 0, 1);
+	glm::vec4 posC = glm::inverse(activeViewMatrix) * defaultVector;
+	shaderMaterial->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
+	//Le pasamos al shader si la distancia de dibujado esta o no activada y el nivel del mismo
+	shaderMaterial->setBool("drawingDistance", drawingDistance);
+	shaderMaterial->setFloat("levelOfDrawingDistance", levelOfDrawingDistance);
+	//Establecemos los datos de las distintas luces
+	drawLight(shaderMaterial);
+	//Configuramos las sombras
+	if (lights.size() > 0) {
+		for (int i = 0; i < lights.size(); i++) {
+			static_cast<TLuz *>(lights.at(i)->getEntidad())->configureShadow(shaderMaterial);
+		}
+	}
+	//Dibujamos los distintos nodos del arbol
+	scene->draw(shaderMaterial);
+}
+
+// ---- SHADER TEXTURA ----
+//Funcion que renderiza la escena aplicandole las texturas de los objetos
+void TMotor::usingShaderTexture(){
+	//Se activa el shader para el renderizado 3D
+	shaderTexture->use();
+	//Calcular posicion de la camara y pasarsela al fragment shader
+	glm::vec4 defaultVector(0, 0, 0, 1);
+	glm::vec4 posC = glm::inverse(activeViewMatrix) * defaultVector;
+	shaderTexture->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
+	//Le pasamos al shader si la distancia de dibujado esta o no activada y el nivel del mismo
+	shaderTexture->setBool("drawingDistance", drawingDistance);
+	shaderTexture->setFloat("levelOfDrawingDistance", levelOfDrawingDistance);
+	//Establecemos los datos de las distintas luces
+	drawLight(shaderTexture);
+	//Configuramos las sombras
+	if (lights.size() > 0) {
+		for (int i = 0; i < lights.size(); i++) {
+			static_cast<TLuz *>(lights.at(i)->getEntidad())->configureShadow(shaderTexture);
+		}
+	}
+	//Dibujamos los distintos nodos del arbol
+	scene->draw(shaderTexture);
+}
+
+// ---- SHADER LIGHTING MAP  ----
+//Funcion que renderiza la escena aplicandole las texturas de los objetos, junto con la normal
+void TMotor::usingShaderLighting(){
+	//Se activa el shader para el renderizado 3D
+	shaderLighting->use();
+	//Calcular posicion de la camara y pasarsela al fragment shader
+	glm::vec4 defaultVector(0, 0, 0, 1);
+	glm::vec4 posC = glm::inverse(activeViewMatrix) * defaultVector;
+	shaderLighting->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
+	//Le pasamos al shader si la distancia de dibujado esta o no activada y el nivel del mismo
+	shaderLighting->setBool("drawingDistance", drawingDistance);
+	shaderLighting->setFloat("levelOfDrawingDistance", levelOfDrawingDistance);
+	//Establecemos los datos de las distintas luces
+	drawLight(shaderLighting);
+	//Configuramos las sombras
+	if (lights.size() > 0) {
+		for (int i = 0; i < lights.size(); i++) {
+			static_cast<TLuz *>(lights.at(i)->getEntidad())->configureShadow(shaderLighting);
+		}
+	}
+	//Dibujamos los distintos nodos del arbol
+	scene->draw(shaderLighting);
+}
+
 // ---- SHADER CARTOON ----
 //Funcion que renderiza la escena aplicandole un estilo cartoon
 void TMotor::usingShaderCartoon() {
@@ -918,6 +1007,7 @@ void TMotor::usingShaderCartoon() {
 	}
 	//Dibujamos los distintos nodos del arbol
 	scene->draw(shaderCartoon);
+
 	//2º RENDERIZADO = se renderizan los objetos en modo wireframe (solo las caras ocultas) para crear la silueta de los mismos
 
 	//Se activa el shader para el renderizado 3D
@@ -952,7 +1042,7 @@ void TMotor::usingShaderCartoon() {
 void TMotor::usingShaderDeferred() {
 	glDisable(GL_BLEND);
 	//1º DIBUJADO = se guardan los datos de posicion, normales y color de los distintos objetos en el buffer mediante las texturas
-
+	glClearColor(0.0, 0.0, 0.0, 0.0);
 	//Enlazamos el buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, defBuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -962,12 +1052,12 @@ void TMotor::usingShaderDeferred() {
 	scene->draw(shaderGbuffer);
 	//Desenlazamos el buffer usado
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 
 	//2º DIBUJADO = se renderiza la imagen por pantalla en un quad a partir de los datos anteriores
 
 	//Se limpian los buffers de color y profundidad de OpenGL
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//Activamos el shader
 	shaderDeferred->use();
 	//Se activan las texturas con los datos de los objetos y se le pasan al shader
@@ -987,7 +1077,7 @@ void TMotor::usingShaderDeferred() {
 	drawLight(shaderDeferred);
 	//Calcular posicion de la camara y pasarsela al fragment shader
 	glm::vec4 defaultVector(0, 0, 0, 1);
-	glm::vec4 posC = activeViewMatrix * defaultVector;
+	glm::vec4 posC = glm::inverse(activeViewMatrix) * defaultVector;
 	shaderDeferred->setVec3("posCamera", glm::vec3(posC[0], posC[1], posC[2]));
 	unsigned int quadVAO, quadVBO;
 	float quadVertices[] = {

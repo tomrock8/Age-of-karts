@@ -149,7 +149,7 @@ int main(int argc, char* argv[]) {
 	objetos.push_back(TMotor::instancia().newMeshNode("Hacha","assets/hacha/hacha.obj", "escena_raiz", false)); 
 	objetos.push_back(TMotor::instancia().newMeshNode("Caja","assets/wall/wall.obj", "escena_raiz", false));
 	objetos.push_back(TMotor::instancia().newMeshNode("Pirata","assets/Pirata/p2.obj", "escena_raiz", false));
-	objetos.push_back(TMotor::instancia().newMeshNode("Coche","assets/Karts/Pirata/kart_pirata.obj", "escena_raiz", false));
+	objetos.push_back(TMotor::instancia().newMeshNode("Coche","assets/Karts/Vikingo/kart_vikingo.obj", "escena_raiz", false));
 
 	suelo = TMotor::instancia().newMeshNode("Suelo","assets/suelo/wall.obj", "escena_raiz", false);
 	suelo->setScale(15.0, 1.0, 15.0);

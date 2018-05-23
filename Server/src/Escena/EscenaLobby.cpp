@@ -64,7 +64,6 @@ void EscenaLobby::limpiar() {
 }
 
 void EscenaLobby::update() {
-	
 	Server::getInstancia()->ReceivePackets();
 
 	infoLobby->clear();

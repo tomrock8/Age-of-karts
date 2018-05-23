@@ -44,6 +44,8 @@ EscenaJuego::~EscenaJuego() {
 	delete colisiones;
 	delete gc;
 	delete MotorFisicas::getInstancia();
+	delete cuentaAtras;
+
 }
 
 void EscenaJuego::init() {
@@ -328,6 +330,9 @@ void EscenaJuego::init() {
 	if(tipoEscena == Escena::tipo_escena::ONLINE){
 		client->GameLoad();
 	}
+
+	cuentaAtras = TMotor::instancia().getActiveHud()->addElementHud(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtrasNotLoad.png");
+	cuentaAtras->traslacion(0.0f, 0.80f);
 }
 
 void EscenaJuego::dibujar() {
@@ -728,45 +733,33 @@ void EscenaJuego::update() {
 		if(tipoEscena == Escena::tipo_escena::ONLINE){
 			if(!client->getPlayersLoaded()){
 				t->restartTimer();
-					if(!waitingPlayers){
-						TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtrasNotLoad.png");
-						TMotor::instancia().getActiveHud()->traslateElement("cuentaAtras", 0.0f, 0.80f);
-						waitingPlayers = true;
-					}else{
-						TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtrasNotLoad.png");
-					}
 			}
 		}
 
 		if (t->getTimer() <= 4 && t->getTimer() >= 0) {
 			if (t->getTimer() == 1) {
-				if(tipoEscena == Escena::tipo_escena::ONLINE && waitingPlayers){
-					TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtras3.png");
-				}else{
-					TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtras3.png");
-					TMotor::instancia().getActiveHud()->traslateElement("cuentaAtras", 0.0f, 0.80f);
-				}
+				cuentaAtras->cambiarTextura("assets/HUD/juego/CuentaAtras3.png");	
 				if (!countDown3) {
 					fuenteCountDown->play(SOUND_OPCION);
 					countDown3 = true;
 				}
 			}
 			else if (t->getTimer() == 2) {
-				TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtras2.png");
+				cuentaAtras->cambiarTextura("assets/HUD/juego/CuentaAtras2.png");
 				if (!countDown2) {
 					fuenteCountDown->play(SOUND_OPCION);
 					countDown2 = true;
 				}
 			}
 			else if (t->getTimer() == 3) {
-				TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtras1.png");
+				cuentaAtras->cambiarTextura("assets/HUD/juego/CuentaAtras1.png");
 				if (!countDown1) {
 					fuenteCountDown->play(SOUND_OPCION);
 					countDown1 = true;
 				}
 			}
 			else if (t->getTimer() == 4) {
-				TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtrasGo.png");
+				cuentaAtras->cambiarTextura("assets/HUD/juego/CuentaAtrasGo.png");
 				if (!countDownGo) {
 					countDownGo = true;
 					fuenteCountDown->stop(SOUND_OPCION);
@@ -776,7 +769,7 @@ void EscenaJuego::update() {
 			}
 		}
 		if (t->getTimer() < 8 && t->getTimer() >= 5) {
-			TMotor::instancia().getActiveHud()->deleteElement("cuentaAtras");
+			 cuentaAtras->cambiarTransparencia(true,0);
 			for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
 				pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
 			}

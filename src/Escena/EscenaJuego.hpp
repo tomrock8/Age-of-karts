@@ -100,6 +100,7 @@ private:
 	//corredores
 	std::vector<Corredor*> pj;
 	Corredor* jugador;
+	elementoHud *cuentaAtras;
 	
 };
 

@@ -120,26 +120,6 @@ void Client::UpdateNetworkKeyboard()
 		typeID = ID_SEND_KEY_PRESS;		//id para el paquete
 		RakNet::BitStream bsOut;
 		bsOut.Write(typeID);
-		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) { // Acelera
-				pressed = true;
-				estadoMovimiento = 1;
-		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){ //Frena
-				pressed = true;
-				estadoMovimiento = 2;
-		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){ //Freno de mano
-				pressed = true;
-				estadoMovimiento = 4;
-		} else {
-			estadoMovimiento = 5;
-		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){ //Giro izq
-				pressed = true;
-				direccionMovimiento = 1;
-		} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){ //Giro dcha
-				pressed = true;
-				direccionMovimiento = 2;
-		}*/
 
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_R) == GLFW_PRESS) { //ResetWaypoint
 			reset = true;
@@ -157,11 +137,11 @@ void Client::UpdateNetworkKeyboard()
 
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS) {
 			if (!pressed3) {
-				if (GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getLimite() > 99) {
-					//std::cout << "Ulti lanzada\n";
+				//if (GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getLimite() >= 25) {
+					std::cout << "Ulti lanzada\n";
 					ulti = true;
 					pressed3 = true;
-				}
+				//}
 			}
 		}
 		else {
@@ -169,8 +149,6 @@ void Client::UpdateNetworkKeyboard()
 		}
 		if (lanzar || reset || ulti) {
 			bsOut.Write(controlPlayer);
-			//bsOut.Write(estadoMovimiento);
-			//bsOut.Write(direccionMovimiento);
 			bsOut.Write(reset);
 			bsOut.Write(lanzar);
 			bsOut.Write(ulti);

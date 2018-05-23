@@ -398,17 +398,12 @@ void Server::ReceivePackets()
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;	
 		case ID_SEND_KEY_PRESS:
-			//std::cout << "ID_SEND_KEY_PRESS\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
-			//bsIn.Read(param);
-			//bsIn.Read(param2);
 			bsIn.Read(reset);
 			bsIn.Read(lanzar);
 			bsIn.Read(ulti);
 			
-			//players.at(id)->getEstados()->setEstadoMovimiento(param);
-			//players.at(id)->getEstados()->setDireccionMovimiento(param2);
 			if(reset){
 				players.at(id)->recolocarWaypoint();
 			}
@@ -419,7 +414,6 @@ void Server::ReceivePackets()
 				std::cout << "Ulti lanzada\n";
 				players.at(id)->lanzarHabilidad();
 			}
-			//player[id]->setAccion(param);
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;
 

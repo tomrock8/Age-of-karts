@@ -820,20 +820,13 @@ void EscenaJuego::update() {
 			pj.at(i)->update();
 		}
 
-		//textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-		//if (jugadores->getNumJugadores() != 0)
-			//textoDebug->agregar(pj.at(controlPlayer)->toString());
-
 		if (GestorJugadores::getInstancia()->getNumJugadores() != 0) {
 			float tiempoActual = glfwGetTime();
 			float timediff_sec = tiempoActual - tiempoRefresco;
 
-			//if (timediff_sec >= 0.01) {
+			client->UpdateNetworkKeyboard();
 			client->PlayerMovement();
 			tiempoRefresco = glfwGetTime();
-			//}
-			//client->PlayerAction();
-			client->UpdateNetworkKeyboard();
 		}
 	}
 	if (GestorJugadores::getInstancia()->getNumJugadores() != 0)

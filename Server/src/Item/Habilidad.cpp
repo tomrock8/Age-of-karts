@@ -11,25 +11,25 @@ Habilidad::Habilidad(int tipo, btRigidBody* n, btVector3 posicion, btVector3 esc
 	switch (tipoHabilidad) {
 
 	case 1:
-		nodo = TMotor::instancia().newMeshNode("HabilidadPirata", strEscudo, "escena_raiz", false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadPirata","assets/Habilidades/Pirata/HabilidadPirata.obj","escena_raiz", false);
 		nombre = "HabilidadPirata";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadPirata");
 		break;
 
 	case 2:
-		nodo = TMotor::instancia().newMeshNode("HabilidadVikingo", strEscudo, "escena_raiz", false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadVikingo", "assets/hacha/hacha.obj", "escena_raiz", false);
 		nombre = "HabilidadVikingo";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadVikingo");
 		break;
 
 	case 3:
-		nodo = TMotor::instancia().newMeshNode("HabilidadGladiador", strEscudo, "escena_raiz", false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadGladiador", "assets/Habilidades/Gladiador/HabGladiador.obj", "escena_raiz", false);
 		nombre = "HabilidadGladiador";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadGladiador");
 		break;
 
 	case 4:
-		nodo = TMotor::instancia().newMeshNode("HabilidadChino", strEscudo, "escena_raiz", false);
+		nodo = TMotor::instancia().newMeshNode("HabilidadChino", "assets/Habilidades/Chino/habChino.obj", "escena_raiz", false);
 		nombre = "HabilidadChino";
 		GestorIDs::instancia().setIdentifier(nodo, "HabilidadChino");
 		break;
@@ -60,8 +60,8 @@ void Habilidad::lanzarItem(int direccion, btVector3 orientacion, btTransform obj
 
 	if (tipoHabilidad == 1) { // PIRATA
 		rigidBody->setActivationState(DISABLE_DEACTIVATION);
-		rigidBody->setGravity(btVector3(0, -300, 0));
-		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 300, 1.0f, orientacion.getZ() * 300));
+		rigidBody->setGravity(btVector3(0, -1000, 0));
+		rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 410, 0.5f, orientacion.getZ() * 410));
 	}
 }
 
@@ -88,7 +88,7 @@ void Habilidad::movimiento() {
 		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX() + orientacion.getX() * 15, NodoVehiculo->getCenterOfMassPosition().getY() + 5, NodoVehiculo->getCenterOfMassPosition().getZ() + orientacion.getZ() * 15));
 
 		orientacion = orientacion.rotate(btVector3(0, 1, 0), giro * PI / 180);
-		//nodo->setRotation(nodo->getRotation().x, cont, nodo->getRotation().z);
+		nodo->rotate(glm::vec3(0,1,0), cont);
 		//quaternion.setEulerZYX(0, nodo->getRotation().y * PI / 180, 0);
 
 		trans.setRotation(NodoVehiculo->getCenterOfMassTransform().getRotation());
@@ -108,9 +108,10 @@ void Habilidad::movimiento() {
 
 		nodo->setPosition(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY(), NodoVehiculo->getCenterOfMassPosition().getZ());
 
-		if (nodo->getScale().x <= 10)
-			nodo->setScale(nodo->getScale().x + 1, nodo->getScale().x, nodo->getScale().x + 1);
+		if (cont2 > 0){
+			nodo->setScale(nodo->getScale().x + 2, tamanyoNodo.getY(), nodo->getScale().z + 2);
 
+		}	
 		trans.setOrigin(btVector3(NodoVehiculo->getCenterOfMassPosition().getX(), NodoVehiculo->getCenterOfMassPosition().getY() + 2, NodoVehiculo->getCenterOfMassPosition().getZ()));
 		trans.setRotation(NodoVehiculo->getCenterOfMassTransform().getRotation());
 		rigidBody->setCenterOfMassTransform(trans);

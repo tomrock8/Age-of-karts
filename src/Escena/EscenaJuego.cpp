@@ -728,20 +728,19 @@ void EscenaJuego::update() {
 		if(tipoEscena == Escena::tipo_escena::ONLINE){
 			if(!client->getPlayersLoaded()){
 				t->restartTimer();
+					if(!waitingPlayers){
+						TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtrasNotLoad.png");
+						TMotor::instancia().getActiveHud()->traslateElement("cuentaAtras", 0.0f, 0.80f);
+						waitingPlayers = true;
+					}else{
+						TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtrasNotLoad.png");
+					}
 			}
 		}
 
 		if (t->getTimer() <= 4 && t->getTimer() >= 0) {
-			if(t->getTimer() == 0){	
-				if(!waitingPlayers){
-					TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtrasNotLoad.png");
-					TMotor::instancia().getActiveHud()->traslateElement("cuentaAtras", 0.0f, 0.80f);
-					waitingPlayers = true;
-				}else{
-					TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtrasNotLoad.png");
-				}
-			} else if (t->getTimer() == 1) {
-				if(tipoEscena == Escena::tipo_escena::ONLINE){
+			if (t->getTimer() == 1) {
+				if(tipoEscena == Escena::tipo_escena::ONLINE && waitingPlayers){
 					TMotor::instancia().getActiveHud()->changeTextureElement("cuentaAtras", "assets/HUD/juego/CuentaAtras3.png");
 				}else{
 					TMotor::instancia().getActiveHud()->addElement(0.3f, 0.3f, "cuentaAtras", "assets/HUD/juego/CuentaAtras3.png");
@@ -821,20 +820,13 @@ void EscenaJuego::update() {
 			pj.at(i)->update();
 		}
 
-		//textoDebug->agregar("\n ---- CORREDOR 1 JUGADOR ----\n");
-		//if (jugadores->getNumJugadores() != 0)
-			//textoDebug->agregar(pj.at(controlPlayer)->toString());
-
 		if (GestorJugadores::getInstancia()->getNumJugadores() != 0) {
 			float tiempoActual = glfwGetTime();
 			float timediff_sec = tiempoActual - tiempoRefresco;
 
-			//if (timediff_sec >= 0.01) {
+			client->UpdateNetworkKeyboard();
 			client->PlayerMovement();
 			tiempoRefresco = glfwGetTime();
-			//}
-			//client->PlayerAction();
-			client->UpdateNetworkKeyboard();
 		}
 	}
 	if (GestorJugadores::getInstancia()->getNumJugadores() != 0)

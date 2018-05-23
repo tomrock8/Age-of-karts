@@ -1142,7 +1142,7 @@ void CorredorIA::actualizarItem() {
 }
 
 CorredorIA::~CorredorIA() {
-	cout<<"ENTRO AL DSTRUCTOR IA"<<endl;
+	//cout<<"ENTRO AL DSTRUCTOR IA"<<endl;
 	delete arbolconduccion;
 	delete arbolobjetos;
 	animacionPrevia=nullptr;

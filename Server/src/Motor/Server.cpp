@@ -272,28 +272,6 @@ void Server::ReceivePackets()
                 }else{
                     playerDisconnection(p->systemAddress.ToString(true));               
                 }
-                /*
-                 typeID = ID_LOAD_CURRENT_PLAYERS;
-                 bsOut.Write(typeID);
-                 bsOut.Woniririte(numPlayers);
-                 
-                 std::cout << "Numero de jugadores actuales: " << numPlayers << std::endl;
-                 
-                 for (int i = 0; i < numPlayers; i++)
-                 {
-                 posicion[0] = player[i]->getPosition()[0];
-                 posicion[1] = player[i]->getPosition()[1];
-                 posicion[2] = player[i]->getPosition()[2];
-                 int id = player[i]->getID();
-                 bsOut.Write(posicion[0]);
-                 bsOut.Write(posicion[1]);
-                 bsOut.Write(posicion[2]);
-                 bsOut.Write(id);
-                 bsOut.Write(player[i]->GetNetworkID());
-                 }
-                 //														 Ip del emisor, false para enviar a todos menos a la ip
-                 server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
-                 */
                 break;
                 
 		//cliente y servidor no comparten el mismo tipo de protocolo (IPv4-IPv6)
@@ -420,17 +398,12 @@ void Server::ReceivePackets()
 			server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;	
 		case ID_SEND_KEY_PRESS:
-			//std::cout << "ID_SEND_KEY_PRESS\n";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			bsIn.Read(id);
-			//bsIn.Read(param);
-			//bsIn.Read(param2);
 			bsIn.Read(reset);
 			bsIn.Read(lanzar);
 			bsIn.Read(ulti);
 			
-			//players.at(id)->getEstados()->setEstadoMovimiento(param);
-			//players.at(id)->getEstados()->setDireccionMovimiento(param2);
 			if(reset){
 				players.at(id)->recolocarWaypoint();
 			}
@@ -441,7 +414,6 @@ void Server::ReceivePackets()
 				std::cout << "Ulti lanzada\n";
 				players.at(id)->lanzarHabilidad();
 			}
-			//player[id]->setAccion(param);
 			server->Send(&bsIn, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 			break;
 

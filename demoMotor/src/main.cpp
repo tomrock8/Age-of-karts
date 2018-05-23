@@ -112,7 +112,7 @@ obj3D* luzSolar; //Luz del sol
 	bool hud = false;
 	float hud_position[] = {0.0f, 0.0f};
 	float hud_rotation = 0.0f;
-	float hud_scale[] = {1.0f, 1.0f};
+	float hud_scale[] = {100.0f, 100.0f};
 
 // **** Optimizaciones ****
 	//FACE CULLING
@@ -468,34 +468,38 @@ void updateIMGUI(){
 	}
 
 	// **** Otras Funciones ****
-	if (ImGui::CollapsingHeader("Another Functions")) {
-		ImGui::Checkbox("SkyBox", &sky);
-		ImGui::Checkbox("Bounding Boxes", &bbox);
-		ImGui::Checkbox("Billboards", &billboard);
-		ImGui::Checkbox("Particles", &particles);
-		if (particles == true){
-			ImGui::SliderFloat3("Position Particles", particles_position, -100, 100, "%.0f", 1.0f);
-			ImGui::SliderFloat3("Color Particles", particles_color, 0, 100, "%.0f", 1.0f);
-			ImGui::SliderFloat("Size Particles", &particles_size, 0, 100, "%.0f", 1.0f);
-		}
-		ImGui::Checkbox("Clouds", &clouds);
-		ImGui::Checkbox("HUD Example", &hud);
-		if (hud == true){ 
-			ImGui::SliderFloat2("Position HUD", hud_position, -100, 100, "%.0f", 1.0f);
-			ImGui::SliderFloat("Rotation HUD", &hud_rotation, 0, 360, "%.0f", 1.0f);
-			ImGui::SliderFloat2("Scale HUD", hud_scale, -10, 10, "%.0f", 1.0f);
+	if (listbox_shader_current != 4){
+		if (ImGui::CollapsingHeader("Another Functions")) {
+			ImGui::Checkbox("SkyBox", &sky);
+			ImGui::Checkbox("Bounding Boxes", &bbox);
+			ImGui::Checkbox("Billboards", &billboard);
+			ImGui::Checkbox("Particles", &particles);
+			if (particles == true){
+				ImGui::SliderFloat3("Position Particles", particles_position, -100, 100, "%.0f", 1.0f);
+				ImGui::SliderFloat3("Color Particles", particles_color, 0, 100, "%.0f", 1.0f);
+				ImGui::SliderFloat("Size Particles", &particles_size, 0, 100, "%.0f", 1.0f);
+			}
+			ImGui::Checkbox("Clouds", &clouds);
+			ImGui::Checkbox("HUD Example", &hud);
+			if (hud == true){ 
+				ImGui::SliderFloat2("Position HUD", hud_position, -100, 100, "%.0f", 1.0f);
+				ImGui::SliderFloat("Rotation HUD", &hud_rotation, 0, 360, "%.0f", 1.0f);
+				ImGui::SliderFloat2("Scale HUD", hud_scale, 1, 200, "%.0f", 1.0f);
+			}
 		}
 	}
 
 	// **** Optimizaciones ****
-	if (ImGui::CollapsingHeader("Optimizations")) {
-		ImGui::Checkbox("Face Culling", &faceCulling);
-		ImGui::Checkbox("Anti-Aliasing", &antialiasing);
-		ImGui::Checkbox("Drawing Distance", &drawingDistance);
-		if (drawingDistance == true){
-			ImGui::SliderFloat("Distance", &levelOfDrawingDistance, 1.0f, 200.0f, "%.1f", 1.0f);
+	if (listbox_shader_current != 4){
+		if (ImGui::CollapsingHeader("Optimizations")) {
+			ImGui::Checkbox("Face Culling", &faceCulling);
+			ImGui::Checkbox("Anti-Aliasing", &antialiasing);
+			ImGui::Checkbox("Drawing Distance", &drawingDistance);
+			if (drawingDistance == true){
+				ImGui::SliderFloat("Distance", &levelOfDrawingDistance, 1.0f, 200.0f, "%.1f", 1.0f);
+			}
+			
 		}
-		
 	}
 
 	//Llamado de funciones del motor
@@ -597,7 +601,7 @@ void updateIMGUI(){
 	//HUD
 	TMotor::instancia().getActiveHud()->traslateElement("ej", hud_position[0]/100.0f, hud_position[1]/100.0f);
 	TMotor::instancia().getActiveHud()->rotateElement("ej", hud_rotation);
-	TMotor::instancia().getActiveHud()->scaleElement("ej", hud_scale[0], hud_scale[1]);
+	TMotor::instancia().getActiveHud()->scaleElement("ej", hud_scale[0]/100.0f, hud_scale[1]/100.0f);
 
 	// **** Optimizaciones ****
 	//FACE CULLING

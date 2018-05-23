@@ -170,11 +170,11 @@ void EscenaOpciones::update() {
 		TMotor::instancia().setLevelOfDetail(levelOfDetail);
 		TMotor::instancia().setClouds(clouds);
 		if ( listbox_item_current_resolution == 0){
-			TMotor::instancia().changeResolution(1440, 900);
+			//TMotor::instancia().changeResolution(1440, 900);
 		} else if ( listbox_item_current_resolution == 1){
-			TMotor::instancia().changeResolution(1600, 900);
+			//TMotor::instancia().changeResolution(1600, 900);
 		} else if ( listbox_item_current_resolution == 2){
-			TMotor::instancia().changeResolution(1280, 960);
+			//TMotor::instancia().changeResolution(1280, 960);
 		} else if ( listbox_item_current_resolution == 3){
 			TMotor::instancia().changeResolution(1600, 1024);;
 		} else {

@@ -202,7 +202,8 @@ protected:
 	//Deferred shading
 	GLuint defBuffer; //Buffer que contendra todas las texturas con las posicion, normales y colores para renderizar posterioremente mediante deferred shading
 	GLuint defPosition, defNormal, defDiffuseSpecular; //Cada una de las texturas que contendran la informacion anterior
-
+	GLuint quadVAO, quadVBO; //Buffers para la creacion del quad
+	
 	//IMGUI
 	bool renderDebug; //Booleano para controlar el renderizado de las ventanas de IMGUI
 
@@ -238,6 +239,7 @@ protected:
 	void initializeBuffersDebugBullet();
 	//Deferred shading
 	void setDeferredBuffers();
+	void setBuffersQuad();
 	//Level Of Detail
 	void setBuffersCube();
 };

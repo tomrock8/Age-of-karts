@@ -32,7 +32,7 @@ struct Light {
     mat4 lightMatrix; //Matriz de luz para cada luz dirigida
 };
 
-const int numLights = 4;
+const int numLights = 3;
 uniform Light point_lights[numLights]; //Vector de luces puntuales
 uniform vec3 posCamera; //Posicion de la camara
 

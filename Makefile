@@ -9,7 +9,7 @@ RUTAS :=  -I./include/raknet -I./include/bullet -I./include -I./include/assimp -
 RUTAS_INTERNAS := -I./src -I./src/Carrera -I./src/Corredor -I./src/Escena -I./src/Item -I./src/Motor -I./src/imgui -I./src/OpenGL/Motor -I./src/OpenGL/ArbolEscena -I./src/OpenGL/Fachada -I./src/OpenGL/Shader -I./src/OpenGL/GestorRecursos -I./src/OpenGL
 
 CFLAGS := -ggdb -std=c++11 
-DEBUG := -g
+DEBUG := -O
 .PHONY: objdir info all 
 
 all: objdir exec

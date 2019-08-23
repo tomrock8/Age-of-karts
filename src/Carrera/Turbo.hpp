@@ -1,9 +1,10 @@
 #ifndef TURBO_H
 #define TURBO_H
 
-#include "btBulletDynamicsCommon.h"
-#include "obj3D.hpp"
-#include "Corredor.hpp"
+class btRigidBody;
+class btVector3;
+class Corredor;
+class obj3D;
 
 class Turbo {
 public:
@@ -11,7 +12,7 @@ public:
 	~Turbo();
 
 	// METODOS SET
-	void setTurboActivo(Corredor *corredor, bool s);
+	void setTurboActivo(Corredor* corredor, bool s);
 	//void setFrenadaActivo(Corredor *corredor, bool s);
 	//void setTurbo(bool valor);
 	void setTurboTocado(bool s);
@@ -22,8 +23,8 @@ public:
 	int getID();
 
 private:
-	obj3D * turbo;
-	btRigidBody *rigidBody;
+	obj3D* turbo;
+	btRigidBody* rigidBody;
 	bool turboActivo;
 	bool turboTocado;//para que solo se active la comprobacion 1 vez
 	int tiempo;

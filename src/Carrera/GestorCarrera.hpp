@@ -1,9 +1,10 @@
 #ifndef GESTORCARRERA_H
 #define GESTORCARRERA_H
 
-#include "GestorJugadores.hpp"
-#include "Corredor.hpp"
 #include <vector>
+
+class Corredor;
+class GestorJugadores;
 
 class GestorCarrera {
 public:

@@ -1,4 +1,6 @@
 #include "CajaFalsa.hpp"
+#include "TMotor.hpp"
+#include "GestorIDs.hpp"
 
 CajaFalsa::CajaFalsa(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
 	float alturaLanzamiento, int idNodo) : Item(posicion, escala, masa, tiempoDesctruccion, fcolision, tamanyoNodo, radio, alturaLanzamiento, idNodo) {

@@ -8,8 +8,7 @@
 #include "btBulletCollisionCommon.h"
 #include "BulletWorldImporter/btBulletWorldImporter.h"
 #include "obj3D.hpp"
-
-using namespace std;
+class TRecursoMalla;
 
 class MotorFisicas
 {

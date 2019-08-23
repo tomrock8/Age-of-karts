@@ -2,14 +2,15 @@
 #define GESTORCOLISIONES_H
 
 #include <vector>
-#include "obj3D.hpp"
-#include "GestorJugadores.hpp"
-#include "Caja.hpp"
+
+class Corredor;
+class obj3D;
+class Caja;
 
 class GestorColisiones
 {
 public:
-	GestorColisiones() {};
+	GestorColisiones();
 	~GestorColisiones();
 	void ComprobarColisiones();
 	bool JugadorCaja(std::vector<Caja*> cajas);

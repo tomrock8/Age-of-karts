@@ -2,6 +2,7 @@
 #include "CorredorJugador.hpp"
 #include "CorredorIA.hpp"
 #include "CorredorRed.hpp"
+#include "Corredor.hpp"
 
 GestorJugadores *GestorJugadores::instancia = NULL;
 

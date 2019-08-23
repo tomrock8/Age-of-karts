@@ -1,17 +1,19 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-#include "btBulletDynamicsCommon.h"
-#include "btBulletCollisionCommon.h"
 
 #include "MotorFisicas.hpp"
-#include "GestorIDs.hpp"
-#include "Timer.hpp"
+
 #include <iostream>
 #include <vector>
 #include <ctime>
-#include "TMotor.hpp"
-#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+
+
+class btVector3;
+class btTransform;
+class btRigidBody;
+class obj3D;
+
 
 using namespace std;
 

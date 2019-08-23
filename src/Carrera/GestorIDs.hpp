@@ -1,14 +1,14 @@
 #ifndef GESTORIDS_H
 #define GESTORIDS_H
 
-#include "obj3D.hpp"
+class obj3D;
 
 class GestorIDs {
 public:
-	void setIdentifier(obj3D *nodo, const char *nombre);
+	void setIdentifier(obj3D* nodo, const char* nombre);
 	int getIDLibre();
 	void restartID();
-	static GestorIDs &instancia();
+	static GestorIDs& instancia();
 
 private:
 	GestorIDs(void);

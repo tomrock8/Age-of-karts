@@ -1,6 +1,10 @@
 #include "ItemTeledirigido.hpp"
 #include "Pista.hpp"
 #include "math.h"
+#include "TMotor.hpp"
+#include "GestorIDs.hpp"
+#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+
 #ifdef _WIN32
 #define _USE_MATH_DEFINES // for C++  4
 #endif

@@ -2,14 +2,14 @@
 #define GESTORJUGADORES_H
 
 #include <vector>
-#include "Corredor.hpp"
-#include "GestorJugadores.hpp"
+
+class Corredor;
 
 class GestorJugadores {
 public:
 	~GestorJugadores(void);
 
-	static GestorJugadores *getInstancia();
+	static GestorJugadores* getInstancia();
 	std::vector<Corredor*> getJugadores();
 	int getNumJugadores();
 
@@ -20,7 +20,7 @@ public:
 
 private:
 	GestorJugadores(void);
-	static GestorJugadores *instancia;
+	static GestorJugadores* instancia;
 	std::vector<Corredor*> pj;
 	int numJugadores;
 };

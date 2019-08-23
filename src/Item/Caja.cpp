@@ -1,4 +1,6 @@
 #include "Caja.hpp"
+#include "TMotor.hpp"
+#include "GestorIDs.hpp"
 
 Caja::Caja(btVector3 posicionCaja) {
 

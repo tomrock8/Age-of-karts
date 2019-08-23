@@ -1,11 +1,18 @@
 #include "GestorColisiones.hpp"
 #include "Pista.hpp"
 #include "Item.hpp"
+#include "obj3D.hpp"
+#include "GestorJugadores.hpp"
+#include "Caja.hpp"
 
 void GestorColisiones::IniciarTimer() {
 	tiempoInicio = glfwGetTime();
 }
 
+
+GestorColisiones::GestorColisiones()
+{
+}
 
 GestorColisiones::~GestorColisiones() {
 	pj1.clear();

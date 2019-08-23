@@ -1,6 +1,9 @@
 #include "Pista.hpp"
+#include "Turbo.hpp"
+#include "Caja.hpp"
 
-Pista *Pista::instancia = NULL;
+
+Pista* Pista::instancia = NULL;
 
 Pista::Pista() {
 }
@@ -45,13 +48,13 @@ Pista::~Pista() {
 	//delete wayPoints;
 	delete Mapa;
 	instancia = nullptr;
-//	cout << "Destructor de PISTA. Salgo.\n";
+	//	cout << "Destructor de PISTA. Salgo.\n";
 }
 
 
 
 
-Pista *Pista::getInstancia() {
+Pista* Pista::getInstancia() {
 	if (instancia == NULL)
 		instancia = new Pista();
 
@@ -79,7 +82,7 @@ void Pista::setMapa() {
 
 }
 
-void Pista::createMap(const char *path) {
+void Pista::createMap(const char* path) {
 	Mapa = TMotor::instancia().newMeshNode("mapa", path, "escena_raiz", true);
 	GestorIDs::instancia().setIdentifier(Mapa, "mapa");
 }
@@ -119,7 +122,7 @@ void Pista::loadWaypoints(const char* waypoints) {
 				getline(myfile, pZ, ' ');//posiciones para cajas turbo y posiciones
 			}
 			if (tipoObj == 0) {//WAYPOINT
-				Waypoint *w = new Waypoint();
+				Waypoint* w = new Waypoint();
 				arrayWaypoints.push_back(w);
 				//=========================================//
 				//orientacion con respecto a la carretera  //
@@ -176,19 +179,19 @@ void Pista::loadWaypoints(const char* waypoints) {
 				arrayWaypoints.at(arrayWaypoints.size() - 1)->setPosicion(stof(pX), stof(pY), stof(pZ));
 				arrayWaypoints.at(arrayWaypoints.size() - 1)->setOrientacion(orientacion);//orientacion del waypoint
 				arrayWaypoints.at(arrayWaypoints.size() - 1)->inicializarFisicas();
-				obj3D *im = arrayWaypoints.at(arrayWaypoints.size() - 1)->getWaypoint();
+				obj3D* im = arrayWaypoints.at(arrayWaypoints.size() - 1)->getWaypoint();
 				GestorIDs::instancia().setIdentifier(im, im->getName());
 				arrayWaypoints.at(arrayWaypoints.size() - 1)->setID(GestorIDs::instancia().getIDLibre() - 1);
 				tamWaypoints++;
 			}
 			if (tipoObj == 1) {//CAJA
-				Caja *cj = new Caja(btVector3(stof(pX), stof(pY), stof(pZ)));
+				Caja* cj = new Caja(btVector3(stof(pX), stof(pY), stof(pZ)));
 				arrayCajas.push_back(cj);
 				tamCajas++;
 
 			}
 			if (tipoObj == 2) {//TURBO
-				Turbo *tb = new Turbo(btVector3(stof(pX), stof(pY), stof(pZ)), false);
+				Turbo* tb = new Turbo(btVector3(stof(pX), stof(pY), stof(pZ)), false);
 				arrayTurbos.push_back(tb);
 				tamTurbos++;
 			}
@@ -208,7 +211,7 @@ void Pista::loadWaypoints(const char* waypoints) {
 
 
 void Pista::loadPirateMapElements() {
-	TNodo *aux = NULL;
+	TNodo* aux = NULL;
 	std::string pX, pY, pZ, num;
 	float posX, posY, posZ;
 	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/elementos.obj", "escena_raiz", false);
@@ -238,10 +241,10 @@ void Pista::loadPirateMapElements() {
 */
 }
 
-std::vector<Item *> Pista::getItems() { return Items; }
+std::vector<Item*> Pista::getItems() { return Items; }
 void Pista::setNumVueltas(int n) { vueltas = n; }
-void Pista::setNombreMapa(const char *name) { nameMap = name; }
-void Pista::setItems(std::vector<Item *> itemMetodo) { Items = itemMetodo; }
+void Pista::setNombreMapa(const char* name) { nameMap = name; }
+void Pista::setItems(std::vector<Item*> itemMetodo) { Items = itemMetodo; }
 std::vector<Waypoint*> Pista::getArrayWaypoints() { return arrayWaypoints; }
 std::vector<Caja*> Pista::getArrayCaja() { return arrayCajas; }
 std::vector<glm::vec3> Pista::getParrilla() { return parrilla; }
@@ -251,7 +254,7 @@ std::vector<Turbo*>Pista::getArrayTurbo() { return arrayTurbos; }
 int Pista::getTamArrayWaypoints() { return tamWaypoints; }
 int Pista::getNumVueltas() { return vueltas; }
 
-Turbo *Pista::getTurbo() {
+Turbo* Pista::getTurbo() {
 	for (int i = 0; i < tamTurbos; i++) {
 		if (arrayTurbos.at(i)->getTurboActivo() == true) {
 			return arrayTurbos.at(i);
@@ -261,7 +264,7 @@ Turbo *Pista::getTurbo() {
 	return NULL;
 }
 
-Turbo *Pista::getTurbo(int id) {
+Turbo* Pista::getTurbo(int id) {
 	for (int i = 0; i < tamTurbos; i++) {
 		if (arrayTurbos.at(i)->getID() == id) {
 			return arrayTurbos.at(i);

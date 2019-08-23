@@ -1,4 +1,12 @@
 #include "Item.hpp"
+
+#include "obj3D.hpp"
+#include "Timer.hpp"
+#include "MotorFisicas.hpp"
+#include "btBulletDynamicsCommon.h"
+#include "btBulletCollisionCommon.h"
+#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
+
 Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
 	float alturaLanzamiento, int idNodo)
 {

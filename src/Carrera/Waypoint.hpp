@@ -2,7 +2,8 @@
 #define WAYPOINT_H
 
 #include "btBulletDynamicsCommon.h"
-#include "obj3D.hpp"
+
+class obj3D;
 
 class Waypoint {
 public:

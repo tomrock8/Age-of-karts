@@ -4,12 +4,13 @@
 #include "math.h"
 #include "ArbolDecision.hpp"
 #include "NodoDecision.hpp"
+#include "Waypoint.hpp"
 
 #ifdef _WIN32
 #define _USE_MATH_DEFINES // for C++  
 #endif
 
-CorredorIA::CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(pos, tipo){
+CorredorIA::CorredorIA(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(pos, tipo) {
 	nombre = "JugadorIA";
 	cuboNodo->setName(nombre);
 	caja = false;
@@ -393,7 +394,7 @@ void CorredorIA::seguirWaypoint() {
 	btScalar distanciaLado2 = btScalar(0);
 	btScalar distanciaLado3 = btScalar(0);
 	btScalar distanciaLado4 = btScalar(0);
-	int valor;	
+	int valor;
 	//vector 1 y 4 son los puntos de los extremos
 	btVector3 posCoche(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
 	distanciaCentro = getDistanciaPunto(siguiente->getPosicion());
@@ -401,55 +402,55 @@ void CorredorIA::seguirWaypoint() {
 	distanciaLado2 = getDistanciaPunto(siguiente->getVector2());
 	distanciaLado3 = getDistanciaPunto(siguiente->getVector3());
 	distanciaLado4 = getDistanciaPunto(siguiente->getVector4());
-	
 
-	
+
+
 	if (distanciaCentro < distanciaLado1 && distanciaCentro < distanciaLado2 && distanciaCentro < distanciaLado3 && distanciaCentro < distanciaLado4) {
 		//if(posCoche.distance(siguiente->getPosicion())>50)
-		if(!enemigo)
-		valor=0;
-		else{
+		if (!enemigo)
+			valor = 0;
+		else {
 			int random = rand() % 100 + 1;
-			if(random>50)
-			valor=1;
+			if (random > 50)
+				valor = 1;
 			else
-			valor=2;
+				valor = 2;
 		}
 	}
-	
-		/*
-		if (distanciaLado1 < distanciaCentro && distanciaLado1 < distanciaLado2 && distanciaLado1 < distanciaLado3 && distanciaLado1 < distanciaLado4) {
-			calculoAnguloGiro(siguiente->getVector1());
-		}*/
-		if (distanciaLado2 < distanciaCentro /*&& distanciaLado2 < distanciaLado1*/ && distanciaLado2 < distanciaLado3 /*&& distanciaLado2 < distanciaLado4*/) {
-			//if(posCoche.distance(siguiente->getVector2())>50)	
-			valor =1;
-		}
-		if (distanciaLado3 < distanciaCentro && distanciaLado3 < distanciaLado1 /*&& distanciaLado3 < distanciaLado2 && distanciaLado3 < distanciaLado4*/) {
-			//if(posCoche.distance(siguiente->getVector3())>50)
-			valor=2;
-		}/*
-		if (distanciaLado4 < distanciaCentro && distanciaLado4 < distanciaLado1 && distanciaLado4 < distanciaLado3 && distanciaLado4 < distanciaLado2) {
-			calculoAnguloGiro(siguiente->getVector4());
 
-		}*/
-	switch(valor){
+	/*
+	if (distanciaLado1 < distanciaCentro && distanciaLado1 < distanciaLado2 && distanciaLado1 < distanciaLado3 && distanciaLado1 < distanciaLado4) {
+		calculoAnguloGiro(siguiente->getVector1());
+	}*/
+	if (distanciaLado2 < distanciaCentro /*&& distanciaLado2 < distanciaLado1*/ && distanciaLado2 < distanciaLado3 /*&& distanciaLado2 < distanciaLado4*/) {
+		//if(posCoche.distance(siguiente->getVector2())>50)	
+		valor = 1;
+	}
+	if (distanciaLado3 < distanciaCentro && distanciaLado3 < distanciaLado1 /*&& distanciaLado3 < distanciaLado2 && distanciaLado3 < distanciaLado4*/) {
+		//if(posCoche.distance(siguiente->getVector3())>50)
+		valor = 2;
+	}/*
+	if (distanciaLado4 < distanciaCentro && distanciaLado4 < distanciaLado1 && distanciaLado4 < distanciaLado3 && distanciaLado4 < distanciaLado2) {
+		calculoAnguloGiro(siguiente->getVector4());
 
-		case 0:
-		if(posCoche.distance(siguiente->getPosicion())>20)
-		calculoAnguloGiro(siguiente->getPosicion());
-			
+	}*/
+	switch (valor) {
+
+	case 0:
+		if (posCoche.distance(siguiente->getPosicion()) > 20)
+			calculoAnguloGiro(siguiente->getPosicion());
+
 		//cout<<posCoche.distance(siguiente->getPosicion())<<endl;
 		break;
-		case 1:
-		if(posCoche.distance(siguiente->getVector2())>20)
-		calculoAnguloGiro(siguiente->getVector2());
+	case 1:
+		if (posCoche.distance(siguiente->getVector2()) > 20)
+			calculoAnguloGiro(siguiente->getVector2());
 
 		//cout<<posCoche.distance(siguiente->getVector2())<<endl;
 		break;
-		case 2:
-		if(posCoche.distance(siguiente->getVector3())>20)
-		calculoAnguloGiro(siguiente->getVector3());
+	case 2:
+		if (posCoche.distance(siguiente->getVector3()) > 20)
+			calculoAnguloGiro(siguiente->getVector3());
 
 		//cout<<posCoche.distance(siguiente->getVector3())<<endl;
 		break;
@@ -458,7 +459,7 @@ void CorredorIA::seguirWaypoint() {
 
 }
 void CorredorIA::reposicionar() {
-	Timer *time = Timer::getInstancia();
+	Timer* time = Timer::getInstancia();
 	//cout<<"TIEMPO: "<<time->getTimer()-timerRecolocar<<endl;
 	if (time->getTimer() - timerRecolocar == 1) {
 		posicion_aux = btVector3(cuboNodo->getPosition().x, cuboNodo->getPosition().y, cuboNodo->getPosition().z);
@@ -568,7 +569,7 @@ void CorredorIA::logicaDifusa() {
 	}
 
 	if (pertenenciaNoGiro > pertenenciaGiroFlojoDerecha && pertenenciaNoGiro > pertenenciaGiroFlojoIzquierda
-		&&pertenenciaNoGiro > pertenenciaGiroFuerteDerecha && pertenenciaNoGiro > pertenenciaGiroFuerteIzquierda) {
+		&& pertenenciaNoGiro > pertenenciaGiroFuerteDerecha && pertenenciaNoGiro > pertenenciaGiroFuerteIzquierda) {
 		giroFuerteDerecha = false;
 		giroFlojoDerecha = false;
 		noGiro = true;
@@ -596,7 +597,7 @@ void CorredorIA::logicaDifusa() {
 		//cout<<"GIROFUERTE"<<endl;
 	}
 
-	if (pertenenciaGiroFlojoIzquierda > pertenenciaNoGiro &&  pertenenciaGiroFlojoIzquierda > pertenenciaGiroFuerteIzquierda
+	if (pertenenciaGiroFlojoIzquierda > pertenenciaNoGiro && pertenenciaGiroFlojoIzquierda > pertenenciaGiroFuerteIzquierda
 		&& pertenenciaGiroFlojoIzquierda > pertenenciaGiroFlojoDerecha && pertenenciaGiroFlojoIzquierda > pertenenciaGiroFuerteDerecha) {
 		giroFuerteDerecha = false;
 		giroFlojoDerecha = false;
@@ -665,8 +666,8 @@ double CorredorIA::FuncionTriangular(double valor, double a, double b, double c)
 
 void CorredorIA::ActualizarRaytest() {
 	double MPI = 3.14159265358979323846;
-	MotorFisicas *mun = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = mun->getMundo();
+	MotorFisicas* mun = MotorFisicas::getInstancia();
+	btDynamicsWorld* mundo = mun->getMundo();
 	mundo->updateAabbs();
 	mundo->computeOverlappingPairs();
 
@@ -685,8 +686,8 @@ void CorredorIA::ActualizarRaytest() {
 
 
 	// Raycast central1
-	btVector3 inicio(cuboNodo->getPosition().x + orientacion.getX()*distanciaCoche, cuboNodo->getPosition().y - 1, cuboNodo->getPosition().z + orientacion.getZ()*distanciaCoche);
-	btVector3 fin(cuboNodo->getPosition().x + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().y - 1, cuboNodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
+	btVector3 inicio(cuboNodo->getPosition().x + orientacion.getX() * distanciaCoche, cuboNodo->getPosition().y - 1, cuboNodo->getPosition().z + orientacion.getZ() * distanciaCoche);
+	btVector3 fin(cuboNodo->getPosition().x + orientacion.getX() * distanciaRaycast, cuboNodo->getPosition().y - 1, cuboNodo->getPosition().z + orientacion.getZ() * distanciaRaycast);
 
 	if (debugFisicas)
 		mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -697,8 +698,8 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->rayTest(inicio, fin, RayCast1);
 	// Raycast central2 derecha
 	//inicio = btVector3(3*orientacion.Z+cuboNodo->getPosition().x,cuboNodo->getPosition().y+1,orientacion.X*-3+cuboNodo->getPosition().z);
-	inicio = btVector3(Raycast23*orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycast23 + cuboNodo->getPosition().z + orientacion.getZ());
-	fin = btVector3(Raycast23*orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycast23 + cuboNodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
+	inicio = btVector3(Raycast23 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX() * -Raycast23 + cuboNodo->getPosition().z + orientacion.getZ());
+	fin = btVector3(Raycast23 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX() * -Raycast23 + cuboNodo->getPosition().z + orientacion.getZ() * distanciaRaycast);
 
 	if (debugFisicas)
 		mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -710,8 +711,8 @@ void CorredorIA::ActualizarRaytest() {
 
 
 	// Raycast central3 izquierda
-	inicio = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX()*Raycast23 + cuboNodo->getPosition().z + orientacion.getZ());
-	fin = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX()*Raycast23 + cuboNodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
+	inicio = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX() * Raycast23 + cuboNodo->getPosition().z + orientacion.getZ());
+	fin = btVector3(-Raycast23 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX() * Raycast23 + cuboNodo->getPosition().z + orientacion.getZ() * distanciaRaycast);
 
 	if (debugFisicas)
 		mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -723,8 +724,8 @@ void CorredorIA::ActualizarRaytest() {
 
 
 	// Raycast central4 derecha
-	inicio = btVector3(Raycast45*orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycast45 + cuboNodo->getPosition().z + orientacion.getZ());
-	fin = btVector3(Raycast45*orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycast45 + cuboNodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
+	inicio = btVector3(Raycast45 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX() * -Raycast45 + cuboNodo->getPosition().z + orientacion.getZ());
+	fin = btVector3(Raycast45 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX() * -Raycast45 + cuboNodo->getPosition().z + orientacion.getZ() * distanciaRaycast);
 
 	if (debugFisicas)
 		mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -735,8 +736,8 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->rayTest(inicio, fin, RayCast4);
 
 	// Raycast central5 izquierda
-	inicio = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX()*Raycast45 + cuboNodo->getPosition().z + orientacion.getZ());
-	fin = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX()*distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX()*Raycast45 + cuboNodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
+	inicio = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX(), cuboNodo->getPosition().y - 1, orientacion.getX() * Raycast45 + cuboNodo->getPosition().z + orientacion.getZ());
+	fin = btVector3(-Raycast45 * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * distanciaRaycast, cuboNodo->getPosition().y - 1, orientacion.getX() * Raycast45 + cuboNodo->getPosition().z + orientacion.getZ() * distanciaRaycast);
 
 	if (debugFisicas)
 		mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -747,10 +748,10 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->rayTest(inicio, fin, RayCast5);
 
 	// Raycast izquierda1
-	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*Raycastlados + cuboNodo->getPosition().z + orientacion.getZ()*RaycastladosY);
+	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX() * Raycastlados + cuboNodo->getPosition().z + orientacion.getZ() * RaycastladosY);
 	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * MPI / 180);
-	fingirado.setX(fingirado.getX()*-distanciaRaycastLados + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY);
-	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().z + orientacion.getZ() * RaycastladosY);
+	fingirado.setX(fingirado.getX() * -distanciaRaycastLados + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ() * -distanciaRaycastLados + cuboNodo->getPosition().z + orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 
 	if (debugFisicas)
@@ -763,10 +764,10 @@ void CorredorIA::ActualizarRaytest() {
 
 
 	// Raycast izquierda2 
-	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*Raycastlados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
+	inicio = btVector3(-Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX() * Raycastlados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
 	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * MPI / 180);
-	fingirado.setX(fingirado.getX()*-distanciaRaycastLados + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY);
-	fingirado.setZ(fingirado.getZ()*-distanciaRaycastLados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
+	fingirado.setX(fingirado.getX() * -distanciaRaycastLados + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ() * -distanciaRaycastLados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 
 	if (debugFisicas)
@@ -778,10 +779,10 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->rayTest(inicio, fingirado, RayCast7);
 
 	// Raycast derecha1 
-	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycastlados + cuboNodo->getPosition().z + orientacion.getZ() * RaycastladosY);
+	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX() * -Raycastlados + cuboNodo->getPosition().z + orientacion.getZ() * RaycastladosY);
 	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * MPI / 180);
-	fingirado.setX(fingirado.getX()*distanciaRaycastLados + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY);
-	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().z + orientacion.getZ() * RaycastladosY);
+	fingirado.setX(fingirado.getX() * distanciaRaycastLados + cuboNodo->getPosition().x + orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ() * distanciaRaycastLados + cuboNodo->getPosition().z + orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 
 	if (debugFisicas)
@@ -793,10 +794,10 @@ void CorredorIA::ActualizarRaytest() {
 	mundo->rayTest(inicio, fingirado, RayCast8);
 
 	// Raycast derecha2 
-	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX()*-Raycastlados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
+	inicio = btVector3(Raycastlados * orientacion.getZ() + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY, cuboNodo->getPosition().y - 1, orientacion.getX() * -Raycastlados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
 	fingirado = orientacion.rotate(btVector3(0, 1, 0), 90 * MPI / 180);
-	fingirado.setX(fingirado.getX()*distanciaRaycastLados + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY);
-	fingirado.setZ(fingirado.getZ()*distanciaRaycastLados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
+	fingirado.setX(fingirado.getX() * distanciaRaycastLados + cuboNodo->getPosition().x - orientacion.getX() * RaycastladosY);
+	fingirado.setZ(fingirado.getZ() * distanciaRaycastLados + cuboNodo->getPosition().z - orientacion.getZ() * RaycastladosY);
 	fingirado.setY(inicio.getY());
 
 	if (debugFisicas)
@@ -824,7 +825,7 @@ void CorredorIA::ActualizarRaytest() {
 
 	if (RayCast1.hasHit()) {
 		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast1.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast1.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
 
 				if (strcmp(Node->getName(), "Caja") == 0 && Node->isVisible()
@@ -843,7 +844,7 @@ void CorredorIA::ActualizarRaytest() {
 
 		for (int i = 0; i < RayCast2.m_hitFractions.size(); i++)
 		{
-			obj3D *Node = static_cast<obj3D *>(RayCast2.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast2.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
 
 
@@ -862,7 +863,7 @@ void CorredorIA::ActualizarRaytest() {
 	}
 	if (RayCast3.hasHit()) {
 		for (int i = 0; i < RayCast3.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast3.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast3.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
 
 				if (strcmp(Node->getName(), "Caja") == 0 && Node->isVisible()
@@ -879,7 +880,7 @@ void CorredorIA::ActualizarRaytest() {
 	if (RayCast4.hasHit()) {
 
 		for (int i = 0; i < RayCast4.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast4.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast4.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
 
 
@@ -898,7 +899,7 @@ void CorredorIA::ActualizarRaytest() {
 
 	if (RayCast5.hasHit()) {
 		for (int i = 0; i < RayCast5.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast5.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast5.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
 				if (strcmp(Node->getName(), "Caja") == 0 && Node->isVisible()
 					|| strcmp(Node->getName(), "Turbo") == 0
@@ -915,7 +916,7 @@ void CorredorIA::ActualizarRaytest() {
 	if (RayCast6.hasHit()) {
 
 		for (int i = 0; i < RayCast6.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast6.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast6.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
 				if (strcmp(Node->getName(), "Jugador") == 0
 					|| strcmp(Node->getName(), "JugadorIA") == 0) {
@@ -929,7 +930,7 @@ void CorredorIA::ActualizarRaytest() {
 
 	if (RayCast7.hasHit()) {
 		for (int i = 0; i < RayCast7.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast7.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast7.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
 				if (strcmp(Node->getName(), "Jugador") == 0
 					|| strcmp(Node->getName(), "JugadorIA") == 0) {
@@ -945,7 +946,7 @@ void CorredorIA::ActualizarRaytest() {
 	if (RayCast8.hasHit()) {
 
 		for (int i = 0; i < RayCast8.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast8.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast8.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
 				if (strcmp(Node->getName(), "Jugador") == 0
 					|| strcmp(Node->getName(), "JugadorIA") == 0) {
@@ -960,7 +961,7 @@ void CorredorIA::ActualizarRaytest() {
 
 	if (RayCast9.hasHit()) {
 		for (int i = 0; i < RayCast9.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast9.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast9.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
 				if (strcmp(Node->getName(), "Jugador") == 0
 					|| strcmp(Node->getName(), "JugadorIA") == 0) {
@@ -1038,8 +1039,8 @@ void CorredorIA::ActualizarRaytest() {
 				Vision = true;
 			}
 		}
-		if(enemigo){
-			enemigo=true;
+		if (enemigo) {
+			enemigo = true;
 		}
 
 	}
@@ -1048,7 +1049,7 @@ void CorredorIA::ActualizarRaytest() {
 }
 
 
-void CorredorIA::vision(btScalar distancia, obj3D *nodo) {
+void CorredorIA::vision(btScalar distancia, obj3D* nodo) {
 	if (strcmp(nodo->getName(), "Caja") == 0) {
 		btScalar aux = getDistanciaPunto(btVector3(nodo->getPosition().x, nodo->getPosition().y, nodo->getPosition().z));
 
@@ -1113,7 +1114,7 @@ void CorredorIA::updateHijos() {
 
 	debugIA();
 	//if (!debugFisicas)
-		ActualizarRaytest();
+	ActualizarRaytest();
 
 	if (tipoObj != 0) {
 		Objeto = true;
@@ -1135,8 +1136,8 @@ void CorredorIA::updateHijos() {
 
 void CorredorIA::deleteArbol() {
 
-	
-	
+
+
 
 }
 
@@ -1148,7 +1149,7 @@ CorredorIA::~CorredorIA() {
 	//cout<<"ENTRO AL DSTRUCTOR IA"<<endl;
 	delete arbolconduccion;
 	delete arbolobjetos;
-	animacionPrevia=nullptr;
+	animacionPrevia = nullptr;
 }
 
 
@@ -1157,7 +1158,7 @@ void CorredorIA::setDebugFisicas(bool activo) {
 }
 
 bool CorredorIA::getDebugFisicas() {
-	
+
 	return debugFisicas;
 
 }
@@ -1165,13 +1166,13 @@ bool CorredorIA::getDebugFisicas() {
 
 void CorredorIA::debugIA() {
 
-	
+
 	std::string agrega;
-	texto="";
-	texto+=("WAYPOINT ACTUAL: " + to_string(actual->getID() - 7));
-	texto+=("\n");
-	texto+="WAYPOINT SIGUIENTE: " + to_string(siguiente->getID() - 7);
-	texto+="\n";
+	texto = "";
+	texto += ("WAYPOINT ACTUAL: " + to_string(actual->getID() - 7));
+	texto += ("\n");
+	texto += "WAYPOINT SIGUIENTE: " + to_string(siguiente->getID() - 7);
+	texto += "\n";
 
 	if (noGiro)
 		agrega = "NO GIRO // ";
@@ -1224,8 +1225,8 @@ void CorredorIA::debugIA() {
 
 	}
 
-	texto+="ACCION CONDUCCION: " + agrega;
-	texto+="\n";
+	texto += "ACCION CONDUCCION: " + agrega;
+	texto += "\n";
 
 	switch (accionActualObjetos) {
 
@@ -1290,34 +1291,34 @@ void CorredorIA::debugIA() {
 
 
 	}
-	texto+="ACCION DECISION ACTUAL: " + agrega;
-	texto+="\n";
+	texto += "ACCION DECISION ACTUAL: " + agrega;
+	texto += "\n";
 }
 
-std::string CorredorIA::getDebugIA(){
+std::string CorredorIA::getDebugIA() {
 	return texto;
 }
 
 
-void CorredorIA::animacionIzquierda(){
-		iniciarAnimacion(GIROIZQINI, animacionPrevia, getGiroIzqFin());
-		//animacionPrevia = getGiroIzqIni();
-		giroIzq = true;
+void CorredorIA::animacionIzquierda() {
+	iniciarAnimacion(GIROIZQINI, animacionPrevia, getGiroIzqFin());
+	//animacionPrevia = getGiroIzqIni();
+	giroIzq = true;
 }
-void CorredorIA::animacionDerecha(){
-		iniciarAnimacion(GIRODERINI, animacionPrevia, getGiroDerFin());
-		
-		giroDer = true;
+void CorredorIA::animacionDerecha() {
+	iniciarAnimacion(GIRODERINI, animacionPrevia, getGiroDerFin());
+
+	giroDer = true;
 }
-void CorredorIA::finAnimacion(){
+void CorredorIA::finAnimacion() {
 	if (giroDer) {
-	
-		iniciarAnimacion(GIRODERFIN, animacionPrevia,getGiroDerIni());
+
+		iniciarAnimacion(GIRODERFIN, animacionPrevia, getGiroDerIni());
 		animacionPrevia = getGiroDerFin();
 		giroDer = false;
 	}
 	if (giroIzq) {
-	
+
 		iniciarAnimacion(GIROIZQFIN, animacionPrevia, getGiroIzqIni());
 		animacionPrevia = getGiroIzqFin();
 		giroIzq = false;

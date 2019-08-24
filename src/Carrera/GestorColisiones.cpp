@@ -4,6 +4,7 @@
 #include "obj3D.hpp"
 #include "GestorJugadores.hpp"
 #include "Caja.hpp"
+#include "Waypoint.hpp"
 
 void GestorColisiones::IniciarTimer() {
 	tiempoInicio = glfwGetTime();
@@ -22,17 +23,17 @@ GestorColisiones::~GestorColisiones() {
 
 
 void GestorColisiones::ComprobarColisiones() {
-	btDynamicsWorld *mundo = MotorFisicas::getInstancia()->getMundo();
+	btDynamicsWorld* mundo = MotorFisicas::getInstancia()->getMundo();
 	pj1 = GestorJugadores::getInstancia()->getJugadores();
 	int numManifolds = mundo->getDispatcher()->getNumManifolds();
 
 	for (int i = 0; i < numManifolds; i++) {
-		btPersistentManifold *contactManifold = mundo->getDispatcher()->getManifoldByIndexInternal(i);
-		const btCollisionObject *obA = contactManifold->getBody0();
-		const btCollisionObject *obB = contactManifold->getBody1();
+		btPersistentManifold* contactManifold = mundo->getDispatcher()->getManifoldByIndexInternal(i);
+		const btCollisionObject* obA = contactManifold->getBody0();
+		const btCollisionObject* obB = contactManifold->getBody1();
 
-		nodoA = static_cast<obj3D *>(obA->getUserPointer());
-		nodoB = static_cast<obj3D *>(obB->getUserPointer());
+		nodoA = static_cast<obj3D*>(obA->getUserPointer());
+		nodoB = static_cast<obj3D*>(obB->getUserPointer());
 
 		if (nodoA != 0 && nodoB != 0) {
 			if (ItemTeledirigidoWaypoint())continue;
@@ -81,7 +82,7 @@ bool GestorColisiones::JugadorWaypoint() {
 
 
 bool GestorColisiones::ItemTeledirigidoWaypoint() {
-	std::vector<Item *> items = Pista::getInstancia()->getItems();
+	std::vector<Item*> items = Pista::getInstancia()->getItems();
 
 	if (strcmp("Estatico", nodoA->getName()) == 0) {
 		if (strcmp("Waypoint", nodoB->getName()) == 0) {
@@ -122,7 +123,7 @@ bool GestorColisiones::ItemTeledirigidoWaypoint() {
 
 
 bool GestorColisiones::habilidadVShabilidad() {
-	std::vector<Item *> items = Pista::getInstancia()->getItems();
+	std::vector<Item*> items = Pista::getInstancia()->getItems();
 
 	if (strcmp("HabilidadPirata", nodoA->getName()) == 0) {
 		if (strcmp("HabilidadVikingo", nodoB->getName()) == 0
@@ -239,7 +240,7 @@ bool GestorColisiones::habilidadVShabilidad() {
 
 
 bool GestorColisiones::HabilidadesJugadores() {
-	std::vector<Item *> items = Pista::getInstancia()->getItems();
+	std::vector<Item*> items = Pista::getInstancia()->getItems();
 	int idPadreUlti = 0;
 
 	if (strcmp("Jugador", nodoA->getName()) == 0 ||
@@ -307,7 +308,7 @@ bool GestorColisiones::HabilidadesJugadores() {
 }
 
 bool GestorColisiones::Escudoitems() {
-	std::vector<Item *> items = Pista::getInstancia()->getItems();
+	std::vector<Item*> items = Pista::getInstancia()->getItems();
 
 	int idEscudo = 0;
 	int idObjeto = 0;
@@ -413,7 +414,7 @@ bool GestorColisiones::Escudoitems() {
 
 
 bool GestorColisiones::HabilidadesItems() {
-	std::vector<Item *> items = Pista::getInstancia()->getItems();
+	std::vector<Item*> items = Pista::getInstancia()->getItems();
 	int idUlti = 0;
 	int idObjeto = 0;
 	int idPadreUlti = 0;
@@ -511,8 +512,8 @@ bool GestorColisiones::JugadorTurbo() {
 
 // Comprobar colisiones entre Jugador y Estatico
 bool GestorColisiones::JugadorEstatico() {
-	std::vector<Item *> items = Pista::getInstancia()->getItems();
-	std::vector<btRigidBody *> objetos = MotorFisicas::getInstancia()->getObjetos();
+	std::vector<Item*> items = Pista::getInstancia()->getItems();
+	std::vector<btRigidBody*> objetos = MotorFisicas::getInstancia()->getObjetos();
 
 	bool protegido = false;
 	bool aceite = false;
@@ -571,7 +572,7 @@ bool GestorColisiones::JugadorEstatico() {
 		int idB = nodoB->getID();
 		int idA = nodoA->getID();
 		bool b = false;
-		Item *it = NULL;
+		Item* it = NULL;
 		for (int i = 0; i < items.size(); i++) {
 			if (items.at(i)->getID() == idA) {
 				delete items.at(i);
@@ -597,8 +598,8 @@ bool GestorColisiones::JugadorEstatico() {
 
 // Comprobar colisiones entre Jugador y Proyectil
 bool GestorColisiones::JugadorProyectil() {
-	std::vector<Item *> items = Pista::getInstancia()->getItems();
-	std::vector<btRigidBody *> objetos = MotorFisicas::getInstancia()->getObjetos();
+	std::vector<Item*> items = Pista::getInstancia()->getItems();
+	std::vector<btRigidBody*> objetos = MotorFisicas::getInstancia()->getObjetos();
 	bool protegido = false;
 
 	if (strcmp("Jugador", nodoA->getName()) == 0 ||

@@ -1,6 +1,7 @@
 #include "GestorCarrera.hpp"
 #include "GestorJugadores.hpp"
 #include "Corredor.hpp"
+#include "Waypoint.hpp"
 
 GestorCarrera::GestorCarrera() {
 	vueltas = 3;

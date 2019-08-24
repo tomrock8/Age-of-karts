@@ -1,6 +1,10 @@
 #ifndef CORREDOR_H
 #define CORREDOR_H
 
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for C++  
+#endif
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -14,20 +18,24 @@
 #include "RaknetIncludes.hpp"
 
 #include "EstadosJugador.hpp"
-#include "obj3D.hpp"
-#include "Waypoint.hpp"
+
+
 #include "GestorSonido.hpp"
 #include "billboard.hpp"
 #include "particleSystem.hpp"
 
+class obj3D;
+class Waypoint;
+
+
 class Corredor : public RakNet::NetworkIDObject
 {
 public:
-	typedef enum { GLADIADOR, PIRATA, VIKINGO, CHINO } tipo_jugador;
+	enum tipo_jugador { GLADIADOR, PIRATA, VIKINGO, CHINO };
 	/* Animacion de burla /vacile comentada para ahorrar memoria
 	typedef enum { PARADO, GIRODERINI, GIRODERFIN, GIROIZQINI, GIROIZQFIN,HABILIDAD,LANZAROBJETO,VACILE} movimiento_jugador;
 	*/
-	typedef enum { PARADO, GIRODERINI, GIRODERFIN, GIROIZQINI, GIROIZQFIN, HABILIDAD, LANZAROBJETO } movimiento_jugador;
+	enum movimiento_jugador { PARADO, GIRODERINI, GIRODERFIN, GIROIZQINI, GIROIZQFIN, HABILIDAD, LANZAROBJETO };
 	Corredor(btVector3 pos, tipo_jugador tipo);
 
 	void InicializarFisicas();

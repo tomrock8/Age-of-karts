@@ -9,6 +9,13 @@
 #include "TAnimacion.hpp"
 #include "hud.hpp"
 #include "Skybox.hpp"
+#include "TMalla.hpp"
+#include "TCamara.hpp"
+#include "TLuz.hpp"
+#include "TTransform.hpp"
+#include "hud.hpp"
+#include "billboard.hpp"
+#include "particleSystem.hpp"
 
 // ---------------------------------------
 //  I N S T A N C I A   D E L   M O T O R

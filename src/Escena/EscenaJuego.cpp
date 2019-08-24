@@ -4,6 +4,7 @@
 #include "CorredorRed.hpp"
 #include "hud.hpp"
 #include "elementoHud.hpp"
+#include "cameraThird.hpp"
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;
@@ -278,7 +279,7 @@ void EscenaJuego::init() {
 		if (numPantallas == 2)
 			aspectRatio = 4.0f / 3.0f;
 
-		cameraThird *c = new cameraThird("camara_jugador3apersona", "escena_raiz", aspectRatio);
+		cameraThird* c = new cameraThird("camara_jugador3apersona", "escena_raiz", aspectRatio);
 		c->setID(x);
 		camera.push_back(c);
 	}
@@ -329,7 +330,7 @@ void EscenaJuego::init() {
 	countDown1 = false;
 	countDownGo = false;
 
-	if(tipoEscena == Escena::tipo_escena::ONLINE){
+	if (tipoEscena == Escena::tipo_escena::ONLINE) {
 		client->GameLoad();
 	}
 
@@ -344,7 +345,7 @@ void EscenaJuego::dibujar() {
 	if (debug) {
 		for (int i = 0; i < pj.size(); i++) {
 			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
-				CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+				CorredorIA* AUXILIAR = static_cast<CorredorIA*> (pj.at(i));
 				AUXILIAR->setDebugFisicas(true);
 				AUXILIAR->ActualizarRaytest();
 			}
@@ -354,7 +355,7 @@ void EscenaJuego::dibujar() {
 	else {
 		for (int i = 0; i < pj.size(); i++) {
 			if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
-				CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+				CorredorIA* AUXILIAR = static_cast<CorredorIA*> (pj.at(i));
 				if (!AUXILIAR->getDebugFisicas()) {
 					i = pj.size();
 				}
@@ -499,8 +500,8 @@ void EscenaJuego::renderDebug(int i) {
 				ImGui::SliderFloat("indiceGiroBajo", &indiceGiroBajo, 0.0f, 1.0f, "%.4f", 0.01f);
 				jugador->setParametrosDebug(fuerza, velocidadMedia, velocidadMaximaTurbo, velocidadMaxima, masa, indiceGiroAlto, indiceGiroBajo, velocidadLimiteGiro);
 
-				static float *posicion = new float[3];
-				float *resetOri = new float[3];
+				static float* posicion = new float[3];
+				float* resetOri = new float[3];
 				resetOri[0] = jugador->getNodo()->getRotation().z;
 				resetOri[1] = jugador->getNodo()->getRotation().y;
 				resetOri[2] = jugador->getNodo()->getRotation().x;
@@ -536,7 +537,7 @@ void EscenaJuego::renderDebug(int i) {
 				for (int i = 0; i < pj.size(); i++) {
 					if (strcmp("JugadorIA", pj.at(i)->getNodo()->getName()) == 0) {
 
-						CorredorIA *AUXILIAR = static_cast<CorredorIA *> (pj.at(i));
+						CorredorIA* AUXILIAR = static_cast<CorredorIA*> (pj.at(i));
 						ImGui::Text("--------------");
 						ImGui::Text("IA %i:", i);
 						sr = AUXILIAR->getDebugIA();
@@ -615,7 +616,7 @@ void EscenaJuego::renderDebug(int i) {
 		}
 		ImGui::SetNextWindowBgAlpha(0.6f);
 		if (vueltas.at(i) > Pista::getInstancia()->getNumVueltas()) {
-			Corredor *pj1 = GestorJugadores::getInstancia()->getJugadores().at(i);
+			Corredor* pj1 = GestorJugadores::getInstancia()->getJugadores().at(i);
 			TMotor::instancia().getActiveHud()->traslateElement("puesto", 0.0f, 0.3f);
 			if (fin_carrera && i == 0) {
 				ImGui::Begin("Another Window" + i, &show_another_window[i], ImGuiWindowFlags_NoResize
@@ -636,7 +637,7 @@ void EscenaJuego::renderDebug(int i) {
 			//fontsize
 			if (vueltas.at(i) <= Pista::getInstancia()->getNumVueltas()) {
 				ImGui::Text("LAP TIME: ");
-				Corredor *pj1 = GestorJugadores::getInstancia()->getJugadores().at(i);
+				Corredor* pj1 = GestorJugadores::getInstancia()->getJugadores().at(i);
 				ImGui::Text(to_string(pj1->getTiempoVuelta()).c_str());
 			}
 			else {
@@ -675,8 +676,8 @@ void EscenaJuego::limpiar() {
 
 void EscenaJuego::update() {
 
-	Pista *pistaca = Pista::getInstancia();
-	std::vector<Item *> items = pistaca->getItems();
+	Pista* pistaca = Pista::getInstancia();
+	std::vector<Item*> items = pistaca->getItems();
 	pj = GestorJugadores::getInstancia()->getJugadores();
 
 	if (tipoEscena == Escena::tipo_escena::ONLINE) {
@@ -732,15 +733,15 @@ void EscenaJuego::update() {
 		else {
 			TMotor::instancia().setActiveHud(chr->c_str());
 		}
-		if(tipoEscena == Escena::tipo_escena::ONLINE){
-			if(!client->getPlayersLoaded()){
+		if (tipoEscena == Escena::tipo_escena::ONLINE) {
+			if (!client->getPlayersLoaded()) {
 				t->restartTimer();
 			}
 		}
 
 		if (t->getTimer() <= 4 && t->getTimer() >= 0) {
 			if (t->getTimer() == 1) {
-				cuentaAtras->cambiarTextura("assets/HUD/juego/CuentaAtras3.png");	
+				cuentaAtras->cambiarTextura("assets/HUD/juego/CuentaAtras3.png");
 				if (!countDown3) {
 					fuenteCountDown->play(SOUND_OPCION);
 					countDown3 = true;
@@ -771,7 +772,7 @@ void EscenaJuego::update() {
 			}
 		}
 		if (t->getTimer() < 8 && t->getTimer() >= 5) {
-			 cuentaAtras->cambiarTransparencia(true,0);
+			cuentaAtras->cambiarTransparencia(true, 0);
 			for (int i = 0; i < GestorJugadores::getInstancia()->getNumJugadores(); i++) {
 				pj.at(i)->getEstados()->setEstadoCarrera(CARRERA);
 			}
@@ -792,7 +793,7 @@ void EscenaJuego::update() {
 				pj.at(i)->actualizarItem();
 				pj.at(i)->update();
 				if (strcmp(pj.at(i)->getNodo()->getName(), "JugadorIA") == 0) {
-					CorredorIA *IA = static_cast<CorredorIA *>(pj.at(i));
+					CorredorIA* IA = static_cast<CorredorIA*>(pj.at(i));
 					IA->updateHijos();
 
 				}
@@ -878,12 +879,12 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 			cambioCamara = false;
 	}
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_T) == GLFW_PRESS) {
-		float *resetPos = new float[3];
+		float* resetPos = new float[3];
 		resetPos[0] = pos.getX();
 		resetPos[1] = pos.getY() + 30;
 		resetPos[2] = pos.getZ();
 
-		float *resetOri = new float[3];
+		float* resetOri = new float[3];
 		resetOri[0] = pj.at(0)->getNodo()->getRotation().z;
 		resetOri[1] = pj.at(0)->getNodo()->getRotation().y;
 		resetOri[2] = pj.at(0)->getNodo()->getRotation().x;
@@ -927,9 +928,9 @@ Escena::tipo_escena EscenaJuego::comprobarInputs() {
 
 void EscenaJuego::UpdatePhysics(unsigned int TDeltaTime) {
 	//TDeltaTime= TDeltaTime*2;
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
-	std::vector<btRigidBody *> objetos = bullet->getObjetos();
+	MotorFisicas* bullet = MotorFisicas::getInstancia();
+	btDynamicsWorld* mundo = bullet->getMundo();
+	std::vector<btRigidBody*> objetos = bullet->getObjetos();
 	mundo->stepSimulation(TDeltaTime * 0.001f, 30);
 	int c = 0;
 	for (int i = 0; i < objetos.size(); i++) {
@@ -939,12 +940,12 @@ void EscenaJuego::UpdatePhysics(unsigned int TDeltaTime) {
 }
 
 // Passes bullet's orientation to irrlicht
-void EscenaJuego::UpdateRender(btRigidBody *TObject) {
-	obj3D *Node = static_cast<obj3D *>(TObject->getUserPointer());
+void EscenaJuego::UpdateRender(btRigidBody* TObject) {
+	obj3D* Node = static_cast<obj3D*>(TObject->getUserPointer());
 	// Set position
 	btVector3 Point = TObject->getCenterOfMassPosition();
 
-	Pista *mapa = Pista::getInstancia();
+	Pista* mapa = Pista::getInstancia();
 
 	//btTransform t;
 	//TObject->getMotionState()->getWorldTransform(t);	

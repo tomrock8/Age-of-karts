@@ -4,6 +4,7 @@
 #include "TRecursoImagen.hpp"
 #include "TGestorImagenes.hpp"
 #include "TNodo.hpp"
+#include "TEntidad.hpp"
 
 //Constructor que establece todos los parametros del area de nubes y la posicion individual de cada nube dentro del area
 cloudGenerator::cloudGenerator(int minW, int maxW, int minH, int maxH, int minL, int maxL, int numC) {

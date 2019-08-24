@@ -1,13 +1,7 @@
 #pragma once
 #include "libGL.hpp"
 
-#include "TMalla.hpp"
-#include "TCamara.hpp"
-#include "TLuz.hpp"
-#include "TTransform.hpp"
-
-#include "cameraThird.hpp"
-
+#include <vector>
 #include <iostream>
 #include <stack>
 #include <math.h>
@@ -18,17 +12,26 @@
 #define _USE_MATH_DEFINES // for C++  
 #endif
 
-class Shader;
+
+class GestorSonido;
 class TGestorRecursos;
+
+// Elementos graficos
 class obj3D;
 class billboard;
 class particleSystem;
 class cloudGenerator;
-class GestorSonido;
-class TAnimacion;
-class TNodo;
+class Shader;
 class hud;
 class Skybox;
+
+// Nodos del motor grafico
+class TAnimacion;
+class TNodo;
+class TLuz;
+class TMalla;
+class TCamara;
+class TTransform;
 
 class TMotor {
 public:

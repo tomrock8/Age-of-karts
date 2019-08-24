@@ -6,11 +6,12 @@
 #include <iostream>
 
 class obj3D;
+class cameraThird;
 
-class EscenaPodio: public Escena {
+class EscenaPodio : public Escena {
 public:
 
-    EscenaPodio(Escena::tipo_escena tipo,std::vector<Corredor::tipo_jugador> jugadores);
+	EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_jugador> jugadores);
 	~EscenaPodio();
 
 	virtual void init() override;
@@ -21,30 +22,30 @@ public:
 
 private:
 
-	float x,y,z,altura,posxPodio,posyPodio,poszPodio,incremento;
-	bool pulsadoa,pulsadoz,pulsadow,pulsados,pulsadod,pulsadoc,aumento,decremento;
-    obj3D *podio;
-    cameraThird *camera;
+	float x, y, z, altura, posxPodio, posyPodio, poszPodio, incremento;
+	bool pulsadoa, pulsadoz, pulsadow, pulsados, pulsadod, pulsadoc, aumento, decremento;
+	obj3D* podio;
+	cameraThird* camera;
 	//Luces
-	std::vector<obj3D*> luces;	
+	std::vector<obj3D*> luces;
 	//particulas
-	std::vector<particleSystem*> particulas;	
-	obj3D *objTrol;
-	obj3D *primero;
-	obj3D *segundo;
-	obj3D *tercero;
+	std::vector<particleSystem*> particulas;
+	obj3D* objTrol;
+	obj3D* primero;
+	obj3D* segundo;
+	obj3D* tercero;
 	bool segundoPuesto;
 	bool tercerPuesto;
 	bool end;
 	bool entra;
-	TNodo *animacionPirata;
-	TNodo *animacionVikingo;
-	TNodo *animacionChino;
-	TNodo *animacionGladiador;
-	TNodo *animacionElegida;
-	Timer *time;
+	TNodo* animacionPirata;
+	TNodo* animacionVikingo;
+	TNodo* animacionChino;
+	TNodo* animacionGladiador;
+	TNodo* animacionElegida;
+	Timer* time;
 	float tm;
-	AlSource *fuentePodio;
+	AlSource* fuentePodio;
 
 };
 

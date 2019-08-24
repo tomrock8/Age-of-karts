@@ -1,6 +1,10 @@
 #ifndef ESCENAJUEGO_H
 #define ESCENAJUEGO_H
 
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for C++  4
+#endif
+
 #include "Escena.hpp"
 #include "DebugFisicas.hpp"
 #include "GestorColisiones.hpp"
@@ -8,7 +12,10 @@
 #include "Timer.hpp"
 #include <vector>
 
+class Corredor;
 class elementoHud;
+class cameraThird;
+class AlSource;
 
 class EscenaJuego : public Escena {
 public:
@@ -23,6 +30,7 @@ public:
 	virtual void update() override;
 	Escena::tipo_escena comprobarInputs();
 	std::vector<Corredor::tipo_jugador> getJugadores();
+
 	// METODOS GET
 	std::string getIpConexion();
 

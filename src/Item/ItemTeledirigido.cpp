@@ -5,10 +5,6 @@
 #include "GestorIDs.hpp"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 
-#ifdef _WIN32
-#define _USE_MATH_DEFINES // for C++  4
-#endif
-
 ItemTeledirigido::ItemTeledirigido(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
 	float alturaLanzamiento, int idNodo) : Item(posicion, escala, masa, tiempoDesctruccion, fcolision, tamanyoNodo, radio, alturaLanzamiento, idNodo) {
 

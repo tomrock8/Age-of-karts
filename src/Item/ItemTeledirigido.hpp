@@ -1,6 +1,10 @@
 #ifndef ITEMTELEDIRIGIDO_H
 #define ITEMTELEDIRIGIDO_H
 
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for C++  4
+#endif
+
 #include "Item.hpp"
 #include "Waypoint.hpp"
 

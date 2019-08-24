@@ -3,13 +3,20 @@
 #include "stb_image.h"
 
 
-TGestorRecursos::TGestorRecursos() {
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
-}
+#include "mesh.hpp"
+#include "TRecurso.hpp"
+#include "TRecursoMalla.hpp"
+#include "TRecursoMaterial.hpp"
+#include "TRecursoTextura.hpp"
+#include "MotorFisicas.hpp"
 
 TGestorRecursos::~TGestorRecursos() {
 	//cout << "Entro al destructor de gestor de recursos...";
-	
+
 	// Destruimos el vector de mallas
 	if (recursoMallas.size() > 0) {
 		for (int i = 0; i < recursoMallas.size(); i++) {
@@ -42,16 +49,14 @@ TGestorRecursos::~TGestorRecursos() {
 		objMeshes.clear();
 	}
 
-	dir=nullptr;
+	dir = nullptr;
 	textures.clear();
-	
-
 
 	//cout << " SALGO \n";
 }
 
 
-std::vector<mesh*> TGestorRecursos::loadMesh(const char *path,bool sta,bool anim) {
+std::vector<mesh*> TGestorRecursos::loadMesh(const char* path, bool sta, bool anim) {
 	//primero limpiamos los vectores de mesh
 	int  i = objMeshes.size();
 	if (objMeshes.size() > 0) {
@@ -59,7 +64,7 @@ std::vector<mesh*> TGestorRecursos::loadMesh(const char *path,bool sta,bool anim
 	}
 	statico = sta;
 	Assimp::Importer import;
-	const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		//cout << "(TRecursoTextura::loadModel) Error cargando assimp" << import.GetErrorString() << endl;
 		return objMeshes;
@@ -77,15 +82,15 @@ std::vector<mesh*> TGestorRecursos::loadMesh(const char *path,bool sta,bool anim
 	return objMeshes;
 }
 
-void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
+void TGestorRecursos::processNode(aiNode* node, const aiScene* scene) {
 	//procesar todas las mallas que se encuentren en el fichero
 
 	for (GLuint i = 0; i < scene->mRootNode->mNumChildren; i++) {
-		TRecursoMalla *meshAux = nullptr;
-		TRecursoMaterial *MatAux = nullptr;
-		TRecursoTextura *TextAux = nullptr;
-		mesh *meshAcumulated = new mesh();
-		aiMesh *mesh = scene->mMeshes[i];		//se recoje la malla de la escena
+		TRecursoMalla* meshAux = nullptr;
+		TRecursoMaterial* MatAux = nullptr;
+		TRecursoTextura* TextAux = nullptr;
+		mesh* meshAcumulated = new mesh();
+		aiMesh* mesh = scene->mMeshes[i];		//se recoje la malla de la escena
 
 		//--------------------------------------------procesar la malla---------------------------------------------------------
 		////cout << "________________________________________________________________________________________" << endl;
@@ -96,7 +101,7 @@ void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 
 			meshAux = getRecursoMalla(scene->mRootNode->mChildren[i]->mName.C_Str(), mesh, scene);
 			if (statico == true) {
-				MotorFisicas *bullet = MotorFisicas::getInstancia();
+				MotorFisicas* bullet = MotorFisicas::getInstancia();
 				bullet->initializePhysics(meshAux);
 				//cout << "salgo de crear las fisicas para : " << meshAux->getNombre() << endl;
 			}
@@ -138,16 +143,16 @@ void TGestorRecursos::processNode(aiNode *node, const aiScene *scene) {
 //------------------------------------TRECURSOMALLA----------------------------------------------//
 //-----------------------------------------------------------------------------------------------//
 
-TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mesh, const aiScene *scene) {
+TRecursoMalla* TGestorRecursos::getRecursoMalla(const char* nombre, aiMesh* mesh, const aiScene* scene) {
 	/*cout << "\nContenido de mallas en Gestor de recursos\n";
 	for (int i = 0; i < recursoMallas.size(); i++) {
 		cout << "MALLA GR: " << recursoMallas.at(i)->getNombre() << "\n";
 	}*/
 
-	
+
 
 	bool encontrado = false;
-	TRecursoMalla *recMalla = NULL;
+	TRecursoMalla* recMalla = NULL;
 	std::string nameExt = nombre;
 	//gestor de recursos no e aplica animaciones
 	if (animation) {
@@ -158,13 +163,13 @@ TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mes
 		return recMalla;
 	}
 
-	
+
 	for (GLuint i = 0; i < recursoMallas.size(); i++) {
-		recMalla = (TRecursoMalla *)recursoMallas.at(i);
+		recMalla = (TRecursoMalla*)recursoMallas.at(i);
 		std::string nameRecMalla = recMalla->getNombre();
 		////cout << "compruebo Malla : " << nameExt << "   VS   " << nameRecMalla << endl;
 		//if (strcmp(fichName->c_str(), recursoMallas.at(i)->getNombre()) == 0) {
- 		if (nameExt.compare(nameRecMalla) == 0) {
+		if (nameExt.compare(nameRecMalla) == 0) {
 			recMalla = (TRecursoMalla*)recursoMallas.at(i);
 			////cout << "He encontrado el recurso Malla: " << recMalla->getNombre() << " y lo asigno a la mallaAux" << endl;
 			encontrado = true;
@@ -183,10 +188,11 @@ TRecursoMalla *TGestorRecursos::getRecursoMalla(const char * nombre, aiMesh *mes
 
 	return recMalla;
 }
+
 std::vector<TRecurso*> TGestorRecursos::getRecursoMallas() {
 	return recursoMallas;
 }
-TRecursoMalla *TGestorRecursos::processMesh(aiMesh *mesh, const aiScene *scene, const char *nombre) {
+TRecursoMalla* TGestorRecursos::processMesh(aiMesh* mesh, const aiScene* scene, const char* nombre) {
 	return new TRecursoMalla(mesh, nombre);;
 }
 
@@ -194,9 +200,9 @@ TRecursoMalla *TGestorRecursos::processMesh(aiMesh *mesh, const aiScene *scene, 
 //-------------------------------------TRECURSOMATERIAL------------------------------------------//
 //-----------------------------------------------------------------------------------------------//
 
-TRecursoMaterial *TGestorRecursos::getRecursoMaterial(const char * nombre, const aiMaterial *mat) {
+TRecursoMaterial* TGestorRecursos::getRecursoMaterial(const char* nombre, const aiMaterial* mat) {
 	bool encontrado = false;
-	TRecursoMaterial *recMaterial = NULL;
+	TRecursoMaterial* recMaterial = NULL;
 	std::string nameExt = nombre;
 	for (GLuint i = 0; i < recursoMaterials.size(); i++) {
 		std::string nameRecMaterial = recursoMaterials.at(i)->getNombre();
@@ -215,8 +221,8 @@ TRecursoMaterial *TGestorRecursos::getRecursoMaterial(const char * nombre, const
 	}
 	return recMaterial;
 }
-TRecursoMaterial *TGestorRecursos::processMaterial(aiMesh *mesh, const aiScene *scene) {
-	TRecursoMaterial *recMat = NULL;
+TRecursoMaterial* TGestorRecursos::processMaterial(aiMesh* mesh, const aiScene* scene) {
+	TRecursoMaterial* recMat = NULL;
 	int numMaterials = scene->mNumMaterials - 1;
 	//cargar todas las texturas	que hay en la malla con nNumMaterials, que contiene el numero de materiales
 	//for (GLuint i = 0; i < numMaterials; i++) {
@@ -232,7 +238,7 @@ TRecursoMaterial *TGestorRecursos::processMaterial(aiMesh *mesh, const aiScene *
 		}
 		else {
 			//auxliliar solo para guardar el nombre y comprobarlo
-			TRecursoMaterial *recMatAux = new TRecursoMaterial(mat);
+			TRecursoMaterial* recMatAux = new TRecursoMaterial(mat);
 			////cout << " ________________________________________________________________________________________" << endl;
 			////cout << "|-----------------------PROCESANDO EL MATERIAL : "<< (string)recMatAux->getNombre() <<"----------------------|" << endl;
 			////cout << " ________________________________________________________________________________________" << endl;
@@ -249,31 +255,31 @@ TRecursoMaterial *TGestorRecursos::processMaterial(aiMesh *mesh, const aiScene *
 //-----------------------------------------------------------------------------------------------------//
 //-----------------------------------TGESTORTEXTURAS---------------------------------------------------//
 //-----------------------------------------------------------------------------------------------------//
-TRecursoTextura *TGestorRecursos::getRecursoTextura(const char * nombre, aiMesh *mesh, const aiScene *scene) {
+TRecursoTextura* TGestorRecursos::getRecursoTextura(const char* nombre, aiMesh* mesh, const aiScene* scene) {
 	bool encontrado = false;
-	TRecursoTextura *recTextura = NULL;
+	TRecursoTextura* recTextura = NULL;
 	//recoger textura solo si existe
 	if (nombre != NULL) {
 		std::string nameExt = nombre;
 		nameExt = nameExt.substr(0, nameExt.find_first_of('_'));
 		for (GLuint i = 0; i < recursoTexturas.size(); i++) {
 			//if (recursoTexturas.at(i) != NULL && recursoTexturas.at(i)->getNombre() != NULL) {
-				std::string nameRecText = recursoTexturas.at(i)->getNombre();
-				nameRecText = nameRecText.substr(0, nameRecText.find_first_of('_'));
-				//cout << "compruebo Textura : " << nameExt << "   VS   " << nameRecText << endl;
-				if (nameExt.compare(nameRecText) == 0) {
-					//cout << " He encontrado una textura igual , la devuelvo" << endl;
-					recTextura = (TRecursoTextura*)recursoTexturas.at(i);
-					encontrado = true;
-					return recTextura;
-				}
+			std::string nameRecText = recursoTexturas.at(i)->getNombre();
+			nameRecText = nameRecText.substr(0, nameRecText.find_first_of('_'));
+			//cout << "compruebo Textura : " << nameExt << "   VS   " << nameRecText << endl;
+			if (nameExt.compare(nameRecText) == 0) {
+				//cout << " He encontrado una textura igual , la devuelvo" << endl;
+				recTextura = (TRecursoTextura*)recursoTexturas.at(i);
+				encontrado = true;
+				return recTextura;
+			}
 			//}
 		}
 	}
 	return recTextura;
 }
-TRecursoTextura *TGestorRecursos::processTextures(aiMesh *mesh, const aiScene *scene) {
-	TRecursoTextura * recText = NULL;
+TRecursoTextura* TGestorRecursos::processTextures(aiMesh* mesh, const aiScene* scene) {
+	TRecursoTextura* recText = NULL;
 	int numMaterials = scene->mNumMaterials - 1;
 	//	for (GLuint i = 0; i < numMaterials; i++) {
 		//la primera vez que entre se creara el recurso de texturas
@@ -294,8 +300,8 @@ TRecursoTextura *TGestorRecursos::processTextures(aiMesh *mesh, const aiScene *s
 	}
 	else {
 		////auxliar solo para comprobar el nombre
-		TRecursoTextura *recTextAux = new TRecursoTextura(mat);
-		const char *mal = recTextAux->getNombre();
+		TRecursoTextura* recTextAux = new TRecursoTextura(mat);
+		const char* mal = recTextAux->getNombre();
 		//cout << "El nombre sale mal: " << mal <<endl;
 
 		//comprobar 
@@ -326,7 +332,7 @@ TRecursoTextura *TGestorRecursos::processTextures(aiMesh *mesh, const aiScene *s
 
 	return recText;
 }
-void TGestorRecursos::loadTexture(const aiScene *scene, const aiMesh *mesh, aiTextureType textureType, GLuint &texture, TRecursoTextura *recText) {
+void TGestorRecursos::loadTexture(const aiScene* scene, const aiMesh* mesh, aiTextureType textureType, GLuint& texture, TRecursoTextura* recText) {
 	if (mesh->mMaterialIndex >= 0) { //obtener el material correspondiente
 		const aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
 		//cout << mat->GetTextureCount(textureType) << endl;
@@ -334,7 +340,7 @@ void TGestorRecursos::loadTexture(const aiScene *scene, const aiMesh *mesh, aiTe
 			aiString path;
 			if (mat->GetTexture(textureType, i, &path) == AI_SUCCESS) {
 				const string texturePath = path.C_Str();
-				std::string *TextureName = new string(texturePath.substr(0, texturePath.find_first_of('_')));
+				std::string* TextureName = new string(texturePath.substr(0, texturePath.find_first_of('_')));
 				if (recText->getNombre() == NULL) {
 					//cout << "he entrado aqui porque no existia una textura igual" << endl;
 					recText->setNombre(TextureName->c_str());
@@ -366,11 +372,11 @@ GLuint TGestorRecursos::textureFromFile(const std::string& file) {
 	GLuint idTexture;
 	glGenTextures(1, &idTexture);
 
-	stbi_set_flip_vertically_on_load(false); 
+	stbi_set_flip_vertically_on_load(false);
 
 	int width, height, comp;
 	//cout << file << std::endl;
-	unsigned char *imgTexture = stbi_load(file.c_str(), &width, &height, &comp, 3);
+	unsigned char* imgTexture = stbi_load(file.c_str(), &width, &height, &comp, 3);
 
 	glBindTexture(GL_TEXTURE_2D, idTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imgTexture);
@@ -386,8 +392,8 @@ GLuint TGestorRecursos::textureFromFile(const std::string& file) {
 	return idTexture;
 }
 
-TRecursoMalla *TGestorRecursos::getMalla(const char *name) {
-	
+TRecursoMalla* TGestorRecursos::getMalla(const char* name) {
+
 	for (int i = 0; i < recursoMallas.size(); i++) {
 		if (strcmp(name, recursoMallas.at(i)->getNombre()) == 0) {
 			return static_cast<TRecursoMalla*>(recursoMallas.at(i));

@@ -3,6 +3,9 @@
 #include "mesh.hpp"
 #include "boundingBox.hpp"
 #include "libGL.hpp" 
+#include "TRecursoMalla.hpp"
+#include "TRecursoMaterial.hpp"
+#include "TRecursoTextura.hpp"
 
 TMalla::TMalla(std::vector <mesh *> m) {
 	//Los vertices e indices son punteros a TRecursoMalla 

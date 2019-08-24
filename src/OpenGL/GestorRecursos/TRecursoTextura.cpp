@@ -1,6 +1,10 @@
 #include  "TRecursoTextura.hpp"
 #include "Shader.hpp"
 
+#include "TRecurso.hpp"
+#include <stdio.h>
+#include <string.h>
+
 TRecursoTextura::TRecursoTextura(const aiMaterial* mat) {
 
 	if (mat->GetTexture(aiTextureType_DIFFUSE, 0, &name) == AI_SUCCESS) {

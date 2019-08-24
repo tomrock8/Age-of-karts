@@ -2,6 +2,8 @@
 #include "TRecursoMalla.hpp" 
 #include "TRecursoMaterial.hpp" 
 #include "TRecursoTextura.hpp" 
+#include "TRecursoMaterial.hpp" 
+#include "TRecursoTextura.hpp" 
 
 mesh::mesh() {
 	meshe = nullptr;

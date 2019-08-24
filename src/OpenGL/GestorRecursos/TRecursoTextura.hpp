@@ -1,17 +1,14 @@
 #ifndef TRECURSOTEXTURA_H
 #define TRECURSOTEXTURA_H
 
-
-#include "libGL.hpp"
-#include <iostream>
-#include <vector>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "TRecurso.hpp"
-#include <stdio.h>
-#include <string.h>
+#include "libGL.hpp"
+#include <iostream>
+#include <vector>
 #include <map>
+#include "TRecurso.hpp"
 
 class Shader;
 

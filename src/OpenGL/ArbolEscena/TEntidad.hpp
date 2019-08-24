@@ -2,8 +2,9 @@
 #define TENTIDAD_H
 
 #include "libGL.hpp"
-#include "Shader.hpp"
 #include <stack>
+
+class Shader;
 
 class TEntidad {
 public:

@@ -3,7 +3,10 @@
 
 #include <vector>
 #include "TEntidad.hpp"
-#include "TMalla.hpp"
+
+class TMalla;
+class Shader;
+
 
 class TAnimacion : public TEntidad
 {

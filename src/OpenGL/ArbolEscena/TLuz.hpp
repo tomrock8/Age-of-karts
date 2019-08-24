@@ -2,7 +2,8 @@
 #define TLUZ_H
 
 #include "TEntidad.hpp"
-#include "Shader.hpp"
+
+class Shader;
 
 class TLuz : public TEntidad {
 public:
@@ -13,17 +14,19 @@ public:
 	// SOMBRAS
 	void renderMap();
 	void unbindDepthBuffer();
-	void configureShadow(Shader *s);
+	void configureShadow(Shader* s);
+
 	// --- LUZ DIRIGIDA ---
 	void calculateDepthMap();
 	void calculateLightMatrix();
 	void renderDepthMap();
-	void configureDirectionalShadow(Shader *s);
+	void configureDirectionalShadow(Shader* s);
+
 	// --- LUZ PUNTUAL ---
 	void calculateCubeDepthMap();
 	void calculateLightMatrixes();
 	void renderCubeDepthMap();
-	void configurePointShadow(Shader *s);
+	void configurePointShadow(Shader* s);
 
 	// METODOS GET
 	bool getActive();
@@ -32,12 +35,12 @@ public:
 	glm::vec4 getDirection();
 
 	// METODOS SET
-	void setLuz(Shader *shader, const char* nombre);
+	void setLuz(Shader* shader, const char* nombre);
 	void setActive(bool active);
 	void setLightPosition(glm::vec3 pos);
 
 	// DIBUJADO
-	virtual void beginDraw(Shader *shader) override;
+	virtual void beginDraw(Shader* shader) override;
 	virtual void endDraw() override;
 
 private:

@@ -3,7 +3,8 @@
 
 #include "libGL.hpp"
 #include "TEntidad.hpp"
-#include "Shader.hpp"
+
+class Shader;
 
 class TCamara : public TEntidad
 {

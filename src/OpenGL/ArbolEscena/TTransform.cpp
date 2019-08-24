@@ -1,4 +1,5 @@
 #include "TTransform.hpp"
+#include <iostream>
 
 TTransform::TTransform() {//la inicializacion sera la de identidad
 	identidad();

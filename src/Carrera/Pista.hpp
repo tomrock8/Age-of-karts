@@ -47,7 +47,7 @@ public:
 
 
 private:
-	Pista(void);
+	Pista();
 	static Pista* instancia;
 
 	obj3D* Mapa;

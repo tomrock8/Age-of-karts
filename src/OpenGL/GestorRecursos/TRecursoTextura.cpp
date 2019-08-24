@@ -1,7 +1,8 @@
 #include  "TRecursoTextura.hpp"
+#include "Shader.hpp"
 
-TRecursoTextura::TRecursoTextura(const aiMaterial *mat) {
-	
+TRecursoTextura::TRecursoTextura(const aiMaterial* mat) {
+
 	if (mat->GetTexture(aiTextureType_DIFFUSE, 0, &name) == AI_SUCCESS) {
 		this->setNombre(name.C_Str());
 	}
@@ -12,7 +13,7 @@ TRecursoTextura::~TRecursoTextura() {
 	delete nombre;
 }
 
-void TRecursoTextura::activeTexture(Shader *shader) {
+void TRecursoTextura::activeTexture(Shader* shader) {
 	if (textures.size() > 0) {
 		//Recuperamos el id de la textura difusa
 		GLuint id = textures.at("texture_diffuse");
@@ -57,7 +58,7 @@ void TRecursoTextura::disableTexture() {
 }
 
 // METODOS SET
-void TRecursoTextura::setNombre(const char *s) { nombre = new std::string(s); }
+void TRecursoTextura::setNombre(const char* s) { nombre = new std::string(s); }
 void TRecursoTextura::setTexture(std::string texturePath, GLuint texture) {
 	textures.insert(
 		{
@@ -68,7 +69,7 @@ void TRecursoTextura::setTexture(std::string texturePath, GLuint texture) {
 }
 
 // METODOS GET
-const char *TRecursoTextura::getNombre() { return nombre->c_str(); }
+const char* TRecursoTextura::getNombre() { return nombre->c_str(); }
 GLuint TRecursoTextura::getDiffuseTextureID() { return diffuseTexture; }
 GLuint TRecursoTextura::getSpecularTextureID() { return specularTexture; }
 GLuint TRecursoTextura::getNormalTextureID() { return normalTexture; }

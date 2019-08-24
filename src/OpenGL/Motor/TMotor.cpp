@@ -4,7 +4,7 @@
 //  I N S T A N C I A   D E L   M O T O R
 // ---------------------------------------
 
-TMotor &TMotor::instancia() {
+TMotor& TMotor::instancia() {
 	static TMotor _instancia; //la primera vez llamara a el constructor de motor
 	return _instancia;
 }
@@ -232,13 +232,13 @@ void TMotor::cleanScene() {
 	activeLights.clear();
 	notShadowObjects.clear();
 
-	if(TGestorImagenes::getInstancia());
-	delete TGestorImagenes::getInstancia();
-	
+	if (TGestorImagenes::getInstancia())
+		delete TGestorImagenes::getInstancia();
+
 	if (gestorRecursos)
 		delete gestorRecursos;
 
-	
+
 }
 
 void TMotor::resizeScreen(int w, int h) {
@@ -251,100 +251,100 @@ void TMotor::resizeScreen(int w, int h) {
 // ---------------------------------------
 
 // ---- CAMARAS ----
-obj3D *TMotor::newCameraNode(const char *name, const char* parentNode, float aspectRatio) {
+obj3D* TMotor::newCameraNode(const char* name, const char* parentNode, float aspectRatio) {
 	// R O T A C I O N
-	string *nameRot = new string("rotacion_" + (string)name);
-	TTransform *rotacion = createTransformation();
+	string* nameRot = new string("rotacion_" + (string)name);
+	TTransform* rotacion = createTransformation();
 	if (strcmp(parentNode, "escena_raiz") != 0)	rotacion->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getPadre()->getEntidad())->getMatriz());
-	TNodo *rotacionNodo = createTransformationNode(getNode(parentNode), rotacion, nameRot->c_str());
+	TNodo* rotacionNodo = createTransformationNode(getNode(parentNode), rotacion, nameRot->c_str());
 
 	// T R A S L A C I O N
-	string *nameTras = new string("traslacion_" + (string)name);
-	TTransform *traslacion = createTransformation();
+	string* nameTras = new string("traslacion_" + (string)name);
+	TTransform* traslacion = createTransformation();
 	if (strcmp(parentNode, "escena_raiz") != 0)	traslacion->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getEntidad())->getMatriz());
-	TNodo *traslacionNodo = createTransformationNode(rotacionNodo, traslacion, nameTras->c_str());
+	TNodo* traslacionNodo = createTransformationNode(rotacionNodo, traslacion, nameTras->c_str());
 
 	// N O D O
-	TCamara *camara = createCam();
+	TCamara* camara = createCam();
 	camara->setPerspective(screenHEIGHT, screenWIDTH, 0.01f, 10000.0f, 70.0f, aspectRatio);
-	TNodo *nodo = createCamNode(traslacionNodo, camara, name);
+	TNodo* nodo = createCamNode(traslacionNodo, camara, name);
 	contID++;
 	return new obj3D(nodo, name, contID);
 
 }
 
 // ---- LUCES ----
-obj3D *TMotor::newLightNode(const char *name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode) {
+obj3D* TMotor::newLightNode(const char* name, glm::vec4 dir, float att, float corte, bool shadow, bool active, const char* parentNode) {
 	// R O T A C I O N
-	string *nameRot = new string("rotacion_" + (string)name);
-	TTransform *rotacion = createTransformation();
-	TNodo *rotacionNodo = createTransformationNode(getNode(parentNode), rotacion, nameRot->c_str());
+	string* nameRot = new string("rotacion_" + (string)name);
+	TTransform* rotacion = createTransformation();
+	TNodo* rotacionNodo = createTransformationNode(getNode(parentNode), rotacion, nameRot->c_str());
 
 	// T R A S L A C I O N
-	string *nameTras = new string("traslacion_" + (string)name);
-	TTransform *traslacion = createTransformation();
-	TNodo *traslacionNodo = createTransformationNode(rotacionNodo, traslacion, nameTras->c_str());
+	string* nameTras = new string("traslacion_" + (string)name);
+	TTransform* traslacion = createTransformation();
+	TNodo* traslacionNodo = createTransformationNode(rotacionNodo, traslacion, nameTras->c_str());
 
 	// N O D O
-	TLuz  *luz = new TLuz(glm::vec3(.2f), glm::vec3(.7f), glm::vec3(0.8f), dir, att, corte, shadow, active);
-	TNodo *nodo = createLightNode(traslacionNodo, luz, name);
+	TLuz* luz = new TLuz(glm::vec3(.2f), glm::vec3(.7f), glm::vec3(0.8f), dir, att, corte, shadow, active);
+	TNodo* nodo = createLightNode(traslacionNodo, luz, name);
 	contID++;
 	return new obj3D(nodo, name, contID);
 }
 
 //---- ANIMACIONES ----
-obj3D *TMotor::newAnimation(const char *name, const char *path, const char* parentNode, int framesIni, int framesFin) {
+obj3D* TMotor::newAnimation(const char* name, const char* path, const char* parentNode, int framesIni, int framesFin) {
 	// E S C A L A D O
-	string *nameEsc = new string("escalado_" + (string)name);
-	TTransform *scaleMesh = createTransformation();
-	TNodo *scaleNodeMesh = createTransformationNode(getNode(parentNode), scaleMesh, nameEsc->c_str());
+	string* nameEsc = new string("escalado_" + (string)name);
+	TTransform* scaleMesh = createTransformation();
+	TNodo* scaleNodeMesh = createTransformationNode(getNode(parentNode), scaleMesh, nameEsc->c_str());
 
 	// R O T A C I O N
-	string *nameRot = new string("rotacion_" + (string)name);
-	TTransform *rotateMesh = createTransformation();
+	string* nameRot = new string("rotacion_" + (string)name);
+	TTransform* rotateMesh = createTransformation();
 	if (strcmp(parentNode, "escena_raiz") != 0)	rotateMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getPadre()->getEntidad())->getMatriz());
-	TNodo *rotationNodeMesh = createTransformationNode(scaleNodeMesh, rotateMesh, nameRot->c_str());
+	TNodo* rotationNodeMesh = createTransformationNode(scaleNodeMesh, rotateMesh, nameRot->c_str());
 
 	// T R A S L A C I O N
-	string *nameTras = new string("traslacion_" + (string)name);
-	TTransform *traslationMesh = createTransformation();
+	string* nameTras = new string("traslacion_" + (string)name);
+	TTransform* traslationMesh = createTransformation();
 	if (strcmp(parentNode, "escena_raiz") != 0)	traslationMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getEntidad())->getMatriz());
-	TNodo *traslationNodeMesh = createTransformationNode(rotationNodeMesh, traslationMesh, nameTras->c_str());
+	TNodo* traslationNodeMesh = createTransformationNode(rotationNodeMesh, traslationMesh, nameTras->c_str());
 
 	// N O D O
-	TAnimacion *anim = TMotor::instancia().createAnimation(path, framesIni, framesFin);
-	TNodo  *nodo = TMotor::instancia().createAnimationNode(traslationNodeMesh, anim, name);
+	TAnimacion* anim = TMotor::instancia().createAnimation(path, framesIni, framesFin);
+	TNodo* nodo = TMotor::instancia().createAnimationNode(traslationNodeMesh, anim, name);
 	contID++;
 	return new obj3D(nodo, name, contID);
 
 }
 
 // ---- OBJETOS 3D ----
-obj3D *TMotor::newMeshNode(const char *name, const char *path, const char* parentNode, bool sta) {
+obj3D* TMotor::newMeshNode(const char* name, const char* path, const char* parentNode, bool sta) {
 	// E S C A L A D O
-	string *nameEsc = new string("escalado_" + (string)name);
-	TTransform *scaleMesh = createTransformation();
-	TNodo *scaleNodeMesh = createTransformationNode(getNode(parentNode), scaleMesh, nameEsc->c_str());
+	string* nameEsc = new string("escalado_" + (string)name);
+	TTransform* scaleMesh = createTransformation();
+	TNodo* scaleNodeMesh = createTransformationNode(getNode(parentNode), scaleMesh, nameEsc->c_str());
 
 	// R O T A C I O N
-	string *nameRot = new string("rotacion_" + (string)name);
-	TTransform *rotateMesh = createTransformation();
+	string* nameRot = new string("rotacion_" + (string)name);
+	TTransform* rotateMesh = createTransformation();
 	if (strcmp(parentNode, "escena_raiz") != 0)	rotateMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getPadre()->getEntidad())->getMatriz());
-	TNodo *rotationNodeMesh = createTransformationNode(scaleNodeMesh, rotateMesh, nameRot->c_str());
+	TNodo* rotationNodeMesh = createTransformationNode(scaleNodeMesh, rotateMesh, nameRot->c_str());
 
 	// T R A S L A C I O N
-	string *nameTras = new string("traslacion_" + (string)name);
-	TTransform *traslationMesh = createTransformation();
+	string* nameTras = new string("traslacion_" + (string)name);
+	TTransform* traslationMesh = createTransformation();
 	if (strcmp(parentNode, "escena_raiz") != 0)	traslationMesh->setMatriz(static_cast<TTransform*>(getNode(parentNode)->getPadre()->getEntidad())->getMatriz());
-	TNodo *traslationNodeMesh = createTransformationNode(rotationNodeMesh, traslationMesh, nameTras->c_str());
+	TNodo* traslationNodeMesh = createTransformationNode(rotationNodeMesh, traslationMesh, nameTras->c_str());
 
 	// N O D O
-	TMalla *malla = TMotor::instancia().createMesh(path, sta);
-	TNodo  *nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
+	TMalla* malla = TMotor::instancia().createMesh(path, sta);
+	TNodo* nodo = TMotor::instancia().createMeshNode(traslationNodeMesh, malla, name);
 
 	if (strcmp(name, "mapa") == 0 || strcmp(name, "elementos") == 0 || strcmp(name, "rueda1") == 0
 		|| strcmp(name, "rueda2") == 0 || strcmp(name, "rueda3") == 0 || strcmp(name, "rueda4") == 0) {
-		obj3D *obj = new obj3D(nodo, name, contID);
+		obj3D* obj = new obj3D(nodo, name, contID);
 		notShadowObjects.push_back(obj);
 		return obj;
 	}
@@ -364,7 +364,7 @@ void TMotor::newHud(const char* n) {
 }
 
 // --- BILLBOARDS ---
-billboard *TMotor::newBillboard(obj3D *o) {
+billboard* TMotor::newBillboard(obj3D* o) {
 	//Creamos el nuevo billboard con su nombre
 	billboard* b = new billboard(o);
 	//Lo añadimos al array de billboards
@@ -374,9 +374,9 @@ billboard *TMotor::newBillboard(obj3D *o) {
 }
 
 // --- SISTEMAS DE PARTICULAS ---
-particleSystem *TMotor::newParticleSystem() {
+particleSystem* TMotor::newParticleSystem() {
 	//Creamos el nuevo billboard con su nombre
-	particleSystem *p = new particleSystem();
+	particleSystem* p = new particleSystem();
 	//Lo añadimos al array de billboards
 	particleSystems.push_back(p);
 	//Lo devolvemos
@@ -393,20 +393,20 @@ void TMotor::newClouds(int minW, int maxW, int minH, int maxH, int minL, int max
 // M A L L A S
 // -------------------------------
 
-TMalla *TMotor::createMesh(const char *fich, bool sta) {
+TMalla* TMotor::createMesh(const char* fich, bool sta) {
 	return new TMalla(gestorRecursos->loadMesh(fich, sta, false));
 }
 
-TNodo  *TMotor::createMeshNode(TNodo *padre, TMalla *mesh, const char* name) {
-	TNodo *nodo = new TNodo(name);
+TNodo* TMotor::createMeshNode(TNodo* padre, TMalla* mesh, const char* name) {
+	TNodo* nodo = new TNodo(name);
 	nodo->setPadre(padre);
 	nodo->setEntidad(mesh);
 	padre->addHijo(nodo);
 	return nodo;
 }
 
-TNodo  *TMotor::createStaticMeshNode(TNodo*padre, const char* path, const char* name) {
-	TNodo *nodo = new TNodo(name);
+TNodo* TMotor::createStaticMeshNode(TNodo* padre, const char* path, const char* name) {
+	TNodo* nodo = new TNodo(name);
 	nodo->setPadre(padre);
 	nodo->setEntidad(createMesh(path, false));
 	padre->addHijo(nodo);
@@ -418,10 +418,10 @@ TNodo  *TMotor::createStaticMeshNode(TNodo*padre, const char* path, const char* 
 // T R A N S F O R M A C I O N E S
 //---------------------------------------------
 
-TTransform *TMotor::createTransformation() { return new TTransform(); }
+TTransform* TMotor::createTransformation() { return new TTransform(); }
 
-TNodo *TMotor::createTransformationNode(TNodo *padre, TTransform *transf, const char* name) {
-	TNodo *nodo = new TNodo(name);
+TNodo* TMotor::createTransformationNode(TNodo* padre, TTransform* transf, const char* name) {
+	TNodo* nodo = new TNodo(name);
 	nodo->setPadre(padre);
 	nodo->setEntidad(transf);
 	padre->addHijo(nodo);
@@ -432,10 +432,10 @@ TNodo *TMotor::createTransformationNode(TNodo *padre, TTransform *transf, const 
 // C A M A R A 
 //-----------------------
 
-TCamara *TMotor::createCam() { return new TCamara(); }
+TCamara* TMotor::createCam() { return new TCamara(); }
 
-TNodo *TMotor::createCamNode(TNodo *padre, TCamara *cam, const char* name) {//crear y registrar camara en la aplicacion
-	TNodo *nodo = new TNodo(name);
+TNodo* TMotor::createCamNode(TNodo* padre, TCamara* cam, const char* name) {//crear y registrar camara en la aplicacion
+	TNodo* nodo = new TNodo(name);
 	nodo->setPadre(padre);//Se asigna el nodo padre
 	nodo->setEntidad(cam);
 	padre->addHijo(nodo);
@@ -449,10 +449,10 @@ TNodo *TMotor::createCamNode(TNodo *padre, TCamara *cam, const char* name) {//cr
 // L U C E S
 //--------------------
 
-TLuz *TMotor::createLight() { return new TLuz(); }
+TLuz* TMotor::createLight() { return new TLuz(); }
 
-TNodo *TMotor::createLightNode(TNodo *padre, TLuz *luz, const char* name) {
-	TNodo *nodo = new TNodo(name);
+TNodo* TMotor::createLightNode(TNodo* padre, TLuz* luz, const char* name) {
+	TNodo* nodo = new TNodo(name);
 	nodo->setPadre(padre); //Se asigna el nodo padre
 	nodo->setEntidad(luz);
 	padre->addHijo(nodo);
@@ -466,8 +466,8 @@ TNodo *TMotor::createLightNode(TNodo *padre, TLuz *luz, const char* name) {
 // A N I M A C I O N E S
 //------------------------
 
-TNodo  *TMotor::createAnimationNode(TNodo *padre, TAnimacion *mesh, const char* name) {
-	TNodo *nodo = new TNodo(name);
+TNodo* TMotor::createAnimationNode(TNodo* padre, TAnimacion* mesh, const char* name) {
+	TNodo* nodo = new TNodo(name);
 	nodo->setEntidad(mesh);
 	if (padre != NULL) {
 		nodo->setPadre(padre);
@@ -475,13 +475,13 @@ TNodo  *TMotor::createAnimationNode(TNodo *padre, TAnimacion *mesh, const char* 
 	}
 	return nodo;
 }
-void TMotor::addPadre(TNodo *padre, TNodo *hijo) {
+void TMotor::addPadre(TNodo* padre, TNodo* hijo) {
 	hijo->setPadre(padre);
 	padre->addHijo(hijo);
 }
 
-TAnimacion *TMotor::createAnimation(const char *path, int framesIni, int framesFin) {
-	const char * obj = ".obj";
+TAnimacion* TMotor::createAnimation(const char* path, int framesIni, int framesFin) {
+	const char* obj = ".obj";
 	string ruta = path;
 	ruta += to_string(framesIni);
 	ruta += obj;
@@ -501,25 +501,25 @@ TAnimacion *TMotor::createAnimation(const char *path, int framesIni, int framesF
 
 GLfloat TMotor::getWidth() { return screenWIDTH; }
 GLfloat TMotor::getHeight() { return screenHEIGHT; }
-GLFWwindow *TMotor::getVentana() { return ventana; }
-TNodo *TMotor::getNode(const char* nombre) { return scene->getNode(nombre); }
-TNodo *TMotor::getSceneNode() { return scene; }
-TNodo *TMotor::getActiveCamera() { return activeCamera; }
+GLFWwindow* TMotor::getVentana() { return ventana; }
+TNodo* TMotor::getNode(const char* nombre) { return scene->getNode(nombre); }
+TNodo* TMotor::getSceneNode() { return scene; }
+TNodo* TMotor::getActiveCamera() { return activeCamera; }
 std::vector <TNodo*> TMotor::getActiveLights() { return activeLights; }
-Shader *TMotor::getShader() { return shader; }
-Shader *TMotor::getShaderHUD() { return shaderHUD; }
-Shader *TMotor::getShaderProjectedShadows() { return shaderProjectedShadows; }
-Shader *TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
-Shader *TMotor::getShaderPointDepth() { return shaderPointDepth; }
-Shader *TMotor::getShaderSkybox() { return shaderSkybox; }
-Shader *TMotor::getShaderDebugBbox() { return shaderDebugBbox; }
-Shader *TMotor::getShaderSilhouette() { return shaderSilhouette; }
-GestorSonido *TMotor::getGestorSonido() { return gestorSonido; }
+Shader* TMotor::getShader() { return shader; }
+Shader* TMotor::getShaderHUD() { return shaderHUD; }
+Shader* TMotor::getShaderProjectedShadows() { return shaderProjectedShadows; }
+Shader* TMotor::getShaderDirectionalDepth() { return shaderDirectionalDepth; }
+Shader* TMotor::getShaderPointDepth() { return shaderPointDepth; }
+Shader* TMotor::getShaderSkybox() { return shaderSkybox; }
+Shader* TMotor::getShaderDebugBbox() { return shaderDebugBbox; }
+Shader* TMotor::getShaderSilhouette() { return shaderSilhouette; }
+GestorSonido* TMotor::getGestorSonido() { return gestorSonido; }
 glm::mat4 TMotor::getActiveViewMatrix() { return activeViewMatrix; }
 bool TMotor::getBoundingBoxes() { return boundingBoxes; }
 float TMotor::getDrawingDistance() { return levelOfDrawingDistance; }
 bool TMotor::getLevelOfDetail() { return levelOfDetail; }
-std::vector <billboard *> TMotor::getBillboards() { return billboards; }
+std::vector <billboard*> TMotor::getBillboards() { return billboards; }
 //Funcion que devuelve un hud a partir del nombre
 hud* TMotor::getHud(const char* n) {
 	hud* h = NULL;
@@ -534,9 +534,9 @@ hud* TMotor::getHud(const char* n) {
 }
 //Funcion para devolver el hud activo
 hud* TMotor::getActiveHud() { return activeHud; }
-TGestorRecursos *TMotor::getGR() { return gestorRecursos; }
+TGestorRecursos* TMotor::getGR() { return gestorRecursos; }
 //Funcion qude devuelve una camara del array a partir de su posicion en el mismo
-TNodo *TMotor::getCameraByIndex(int i) {
+TNodo* TMotor::getCameraByIndex(int i) {
 	return cameras.at(i);
 }
 
@@ -544,8 +544,8 @@ TNodo *TMotor::getCameraByIndex(int i) {
 //  M E T O D O S   S E T
 // ------------------------
 
-void TMotor::setActiveCamera(TNodo *cam) { activeCamera = cam; drawCamera(); }
-void TMotor::setActiveLight(TNodo *light) { activeLights.push_back(light); }
+void TMotor::setActiveCamera(TNodo* cam) { activeCamera = cam; drawCamera(); }
+void TMotor::setActiveLight(TNodo* light) { activeLights.push_back(light); }
 void TMotor::setRenderDebug(bool renderDebug) { this->renderDebug = renderDebug; }
 void TMotor::setDebugBullet(bool b) { debugBullet = b; }
 //Funcion que recibe dos puntos para dibujar una linea y los mete en el array de vertices para el debug de Bullet
@@ -662,10 +662,10 @@ void TMotor::drawCamera() {
 	//recorrer el nodo a la inversa hasta la raiz y guardar las matrices que se obtienen de sus entidades
 	//para luego multiplicarlas en orden inverso
 	std::vector<glm::mat4> matrixAux;
-	TNodo *aux = activeCamera->getPadre();
+	TNodo* aux = activeCamera->getPadre();
 	int cont = 0;
 	while (aux != scene) {
-		matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
+		matrixAux.push_back(static_cast<TTransform*>(aux->getEntidad())->getMatriz());
 		cont++;
 		aux = aux->getPadre();
 	}
@@ -682,7 +682,7 @@ void TMotor::drawCamera() {
 
 // ---- DIBUJADO DE LAS LUCES ---- 
 //Funcion que establece los datos de cada luz del motor para su dibujado
-void TMotor::drawLight(Shader *s) {
+void TMotor::drawLight(Shader* s) {
 	//recorrer el nodo a la inversa hasta la raiz y guardar las matrices que se obtienen de sus entidades
 	//para luego multiplicarlas en orden inverso
 	glm::vec4 defaultVector(0, 0, 0, 1);
@@ -690,11 +690,11 @@ void TMotor::drawLight(Shader *s) {
 	for (int i = 0; i < activeLights.size(); i++) {
 		std::vector<glm::mat4> matrixAux;
 		glm::mat4 lightMatrix;
-		TNodo *aux = activeLights.at(i)->getPadre();
+		TNodo* aux = activeLights.at(i)->getPadre();
 
 		while (aux != scene) {
 			//recorrer y guardar en un vector de matrices las transformaciones
-			matrixAux.push_back(static_cast<TTransform *>(aux->getEntidad())->getMatriz());
+			matrixAux.push_back(static_cast<TTransform*>(aux->getEntidad())->getMatriz());
 			aux = aux->getPadre();
 		}
 
@@ -705,8 +705,8 @@ void TMotor::drawLight(Shader *s) {
 
 		glm::vec4 lPos = lightMatrix * defaultVector;
 		glm::vec3 pos(lPos.x, lPos.y, lPos.z);
-		static_cast<TLuz *> (activeLights.at(i)->getEntidad())->setLightPosition(pos);
-		static_cast<TLuz *> (activeLights.at(i)->getEntidad())->setLuz(s, activeLights.at(i)->getName());
+		static_cast<TLuz*> (activeLights.at(i)->getEntidad())->setLightPosition(pos);
+		static_cast<TLuz*> (activeLights.at(i)->getEntidad())->setLuz(s, activeLights.at(i)->getName());
 	}
 }
 
@@ -796,15 +796,15 @@ void TMotor::drawProjectedShadows() {
 		shaderProjectedShadows->use();
 		if (lights.size() > 0) {
 			for (int i = 0; i < lights.size(); i++) {
-				if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true) {
+				if (static_cast<TLuz*>(lights[i]->getEntidad())->getActive() == true) {
 					//Le pasamos al shader la matriz view
 					shaderProjectedShadows->setMat4("view", activeViewMatrix);
 					//Le pasamos la matriz proyeccion de la luz (perspectiva)
 					glm::mat4 projectionLight = glm::perspective(glm::radians(70.0f), (float)screenWIDTH / (float)screenHEIGHT, 0.01f, 10000.0f);
 					shaderProjectedShadows->setMat4("projectionLight", projectionLight);
 					//Le pasamos la posicion de la luz al shader
-					shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz *>(lights[i]->getEntidad())->getPosition());
-					shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz *>(lights[i]->getEntidad())->getDirection());
+					shaderProjectedShadows->setVec3("lightPosition", static_cast<TLuz*>(lights[i]->getEntidad())->getPosition());
+					shaderProjectedShadows->setVec4("lightDirection", static_cast<TLuz*>(lights[i]->getEntidad())->getDirection());
 					glm::mat4 sc;
 					sc = scale(sc, glm::vec3(1.1, 1, 1.1));
 					//sc = glm::translate(sc, glm::vec3())
@@ -827,14 +827,14 @@ void TMotor::drawMappingShadows() {
 	//Llamamos al render de las luces para calcular el depth map que se usara para calcular las sombras
 	if (lights.size() > 0) {
 		for (int i = 0; i < lights.size(); i++) {
-			if (static_cast<TLuz *>(lights[i]->getEntidad())->getActive() == true) {
-				static_cast<TLuz *>(lights[i]->getEntidad())->renderMap();
+			if (static_cast<TLuz*>(lights[i]->getEntidad())->getActive() == true) {
+				static_cast<TLuz*>(lights[i]->getEntidad())->renderMap();
 				glEnable(GL_CULL_FACE); //Activamos el face culling
 				//Para evitar el efecto del peter panning. Debido a la utilizacion de un bias (rango), se pueden producir fallos 
 				//en las sombras al quedar en algunos casos separadas de los objetos que las producen
 				glCullFace(GL_FRONT);
 				//Segun el tipo de luz (puntual o dirigida), usamos un shader diferente para calcular el mapa de profundidad
-				if (static_cast<TLuz *>(lights[i]->getEntidad())->getLightType() < 0.1) {
+				if (static_cast<TLuz*>(lights[i]->getEntidad())->getLightType() < 0.1) {
 					scene->draw(shaderPointDepth);
 				}
 				else {
@@ -842,7 +842,7 @@ void TMotor::drawMappingShadows() {
 				}
 
 				glDisable(GL_CULL_FACE);//Desactivamos el face culling
-				static_cast<TLuz *>(lights[i]->getEntidad())->unbindDepthBuffer();//Desactivamos el framebuffer usado para el mapa de profundidad
+				static_cast<TLuz*>(lights[i]->getEntidad())->unbindDepthBuffer();//Desactivamos el framebuffer usado para el mapa de profundidad
 			}
 		}
 	}
@@ -1052,7 +1052,7 @@ void TMotor::setDeferredBuffers() {
 }
 
 //Funcion que establece los buffers de OpenGL para la creacion del quad
-void TMotor::setBuffersQuad(){
+void TMotor::setBuffersQuad() {
 	//Posicion de los vertices y coordenadas de textura del quad
 	const float vertices[] = {
 		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,

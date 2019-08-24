@@ -1,5 +1,6 @@
 #ifndef TRECURSO_H
 #define TRECURSO_H
+
 #include  <iostream>
 
 class TRecurso

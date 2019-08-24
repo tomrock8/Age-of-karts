@@ -3,16 +3,14 @@
 
 
 #include "libGL.hpp"
-#include <iostream>
 #include <vector>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "TRecurso.hpp"
-#include "Shader.hpp"
 #include <map>
 
-using namespace std;
+class Shader;
 
 class TRecursoMaterial : public TRecurso
 {

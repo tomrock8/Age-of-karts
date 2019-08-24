@@ -211,14 +211,15 @@ void Pista::loadWaypoints(const char* waypoints) {
 
 
 void Pista::loadPirateMapElements() {
-	TNodo* aux = NULL;
-	std::string pX, pY, pZ, num;
-	float posX, posY, posZ;
 	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/elementos.obj", "escena_raiz", false);
 	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/Turbos.obj", "escena_raiz", false);
 	TMotor::instancia().newMeshNode("elementos", "assets/MapaPirata/parrilla.obj", "escena_raiz", false);
 	//lectura de las palmeras y su creacion 
 	/*
+	TNodo* aux = NULL;
+	std::string pX, pY, pZ, num;
+	float posX, posY, posZ;
+
 	ifstream myfile("assets/MapaPirata/palmeras1.txt");
 	std::string palm = "palmeras";
 	int i = 0;

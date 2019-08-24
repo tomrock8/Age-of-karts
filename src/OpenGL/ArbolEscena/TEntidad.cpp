@@ -1,4 +1,6 @@
 #include "TEntidad.hpp"
+#include "Shader.hpp"
+
 
 std::stack<glm::mat4> TEntidad::matStack;
 glm::mat4 TEntidad::modelMatrix;

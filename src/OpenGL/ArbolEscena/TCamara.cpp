@@ -1,4 +1,5 @@
 #include "TCamara.hpp"
+#include "Shader.hpp"
 
 TCamara::TCamara() {}
 TCamara::~TCamara() {

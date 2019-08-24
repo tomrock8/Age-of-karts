@@ -7,8 +7,6 @@
 #include "TRecursoMaterial.hpp" 
 #include "TRecursoTextura.hpp" 
 
-using namespace std;
-
 class mesh
 {
 public:

@@ -14,9 +14,6 @@ class btTransform;
 class btRigidBody;
 class obj3D;
 
-
-using namespace std;
-
 typedef enum { CUBO, ESFERA, CILINDRO } forma_Colision;
 
 class Item
@@ -35,8 +32,8 @@ public:
 	bool update();
 
 
-	obj3D *getNodo();
-	btRigidBody *getRigidBody();
+	obj3D* getNodo();
+	btRigidBody* getRigidBody();
 	int getID();
 	int getIDPadre();
 	void setIDPadre(int id);
@@ -55,8 +52,8 @@ public:
 protected:
 
 	//NODO
-	obj3D * nodo;
-	btRigidBody *rigidBody;
+	obj3D* nodo;
+	btRigidBody* rigidBody;
 
 	btScalar masa;
 	btVector3 escala;
@@ -70,7 +67,7 @@ protected:
 	btScalar radio;
 	btVector3 tamanyoNodo;
 	float tiempoDesctruccion;
-	const char *nombre;
+	const char* nombre;
 	int id;
 	bool lanzado;
 	bool colision;

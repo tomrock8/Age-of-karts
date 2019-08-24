@@ -1,4 +1,5 @@
 #include "TMotor.hpp"
+#include "Shader.hpp"
 
 /*
 COMPONENTES DE LUZ:

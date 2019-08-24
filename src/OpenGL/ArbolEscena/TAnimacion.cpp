@@ -1,17 +1,19 @@
 #include "TAnimacion.hpp"
 #include "Timer.hpp"
+#include "TMalla.hpp"
 
-TAnimacion::TAnimacion(std::vector<TMalla *> frames) {
+TAnimacion::TAnimacion(std::vector<TMalla*> frames) {
 	TAnimacion(frames, 0, frames.size());
+
 	visible = false;
 	isPlaying = false;
 }
 
 
 
-TAnimacion::TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFrame) {
+TAnimacion::TAnimacion(std::vector<TMalla*> frames, int firstFrame, int lastFrame) {
 	this->frames = frames;
-	totalFrames = frames.size();
+	totalFrames = (unsigned short) frames.size();
 	setFirstFrame(firstFrame);
 	setLastFrame(lastFrame);
 	actualFrame = this->firstFrame;
@@ -36,13 +38,13 @@ TAnimacion::~TAnimacion() {
 	frames.clear();
 }
 
-void TAnimacion::beginDraw(Shader *shader) {
+void TAnimacion::beginDraw(Shader* shader) {
 	if (visible)
 		draw(shader);
 }
 
 
-void TAnimacion::draw(Shader *shader) {
+void TAnimacion::draw(Shader* shader) {
 	// Reproducir el frame actual
 	if (isPlaying) {
 		//cout << "animando con el frame: " << actualFrame << endl;

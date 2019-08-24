@@ -9,14 +9,11 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "TRecurso.hpp"
-#include "Shader.hpp"
 #include <stdio.h>
 #include <string.h>
 #include <map>
 
-
-
-using namespace std;
+class Shader;
 
 class TRecursoTextura : public TRecurso
 {

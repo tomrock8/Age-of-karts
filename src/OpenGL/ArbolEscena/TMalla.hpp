@@ -6,7 +6,7 @@
 #include "mesh.hpp"
 #include "boundingBox.hpp"
 
-using namespace std;
+class Shader;
 
 class TMalla : public TEntidad
 {

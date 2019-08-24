@@ -3,6 +3,7 @@
 #include "obj3D.hpp"
 #include "Timer.hpp"
 #include "MotorFisicas.hpp"
+
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 #include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
@@ -31,12 +32,12 @@ Item::Item(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesc
 }
 
 Item::~Item() {
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
-	std::vector<btRigidBody *> objetos = bullet->getObjetos();
+	MotorFisicas* bullet = MotorFisicas::getInstancia();
+	btDynamicsWorld* mundo = bullet->getMundo();
+	std::vector<btRigidBody*> objetos = bullet->getObjetos();
 
 	for (int i = 0; i < objetos.size(); i++) {
-		obj3D *nodoActual = static_cast<obj3D *>(static_cast<btRigidBody *>(objetos.at(i))->getUserPointer());
+		obj3D* nodoActual = static_cast<obj3D*>(static_cast<btRigidBody*>(objetos.at(i))->getUserPointer());
 		if (nodoActual) {
 			if (nodoActual->getID() == id &&
 				strcmp(nodoActual->getName(), "rueda1") != 0 &&
@@ -44,7 +45,7 @@ Item::~Item() {
 				strcmp(nodoActual->getName(), "rueda3") != 0 &&
 				strcmp(nodoActual->getName(), "rueda4") != 0)
 			{
-				btRigidBody *Object = objetos.at(i);
+				btRigidBody* Object = objetos.at(i);
 
 				// Remove the object from the world
 				mundo->removeRigidBody(Object);
@@ -59,15 +60,15 @@ Item::~Item() {
 			}
 		}
 	}
-	
+
 	if (nodo)
 		delete nodo;
 }
 
 void Item::inicializarFisicas() {
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
-	std::vector<btRigidBody *> objetos = bullet->getObjetos();
+	MotorFisicas* bullet = MotorFisicas::getInstancia();
+	btDynamicsWorld* mundo = bullet->getMundo();
+	std::vector<btRigidBody*> objetos = bullet->getObjetos();
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
@@ -75,7 +76,7 @@ void Item::inicializarFisicas() {
 	btVector3 HalfExtents(escala.getX(), escala.getY(), escala.getZ());
 	//btVector3 HalfExtents(1, 1, 1);
 	// Create the shape
-	btCollisionShape *Shape = nullptr;
+	btCollisionShape* Shape = nullptr;
 	switch (fcolision) {
 
 	case CUBO:
@@ -98,7 +99,7 @@ void Item::inicializarFisicas() {
 
 	// Create the rigid body object
 	rigidBody = new btRigidBody(masa, new btDefaultMotionState(Transform), Shape, LocalInertia);
-	rigidBody->setUserPointer((void *)(nodo));
+	rigidBody->setUserPointer((void*)(nodo));
 
 	// Add it to the world
 	mundo->addRigidBody(rigidBody);
@@ -147,8 +148,8 @@ void Item::ajustarAltura() {
 void Item::comprobarAltura(float altura) {
 
 	alturaItem = altura;
-	MotorFisicas *mun = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = mun->getMundo();
+	MotorFisicas* mun = MotorFisicas::getInstancia();
+	btDynamicsWorld* mundo = mun->getMundo();
 	mundo->updateAabbs();
 	mundo->computeOverlappingPairs();
 
@@ -182,8 +183,8 @@ void Item::comprobarAltura(float altura) {
 }
 
 // METODOS GET
-btRigidBody *Item::getRigidBody() { return rigidBody; }
-obj3D *Item::getNodo() { return nodo; }
+btRigidBody* Item::getRigidBody() { return rigidBody; }
+obj3D* Item::getNodo() { return nodo; }
 const char* Item::getNombre() { return nombre; }
 int Item::getID() { return id; }
 int Item::getIDPadre() { return idNodoPadre; }
@@ -193,6 +194,7 @@ bool Item::getLanzado() { return lanzado; }
 void Item::setNombre(const char* nombre) { this->nombre = nombre; }
 void Item::setMasa(btScalar masa) { this->masa = masa; }
 void Item::setIDPadre(int id) { idNodoPadre = id; }
+
 void Item::setColision(int id) {
 	idwaypoint = id;
 	colision = true;

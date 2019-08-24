@@ -2,17 +2,11 @@
 #define TRECURSOMALLA_H
 
 #include "libGL.hpp"
-#include <iostream>
 #include <vector>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "TRecurso.hpp"
-#include "Shader.hpp"
-
-using namespace std;
-
-
 
 class TRecursoMalla :public TRecurso
 {

@@ -1,14 +1,10 @@
 #ifndef TRECURSOMATERIAL_H
 #define TRECURSOMATERIAL_H
 
-
-#include "libGL.hpp"
-#include <vector>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "TRecurso.hpp"
-#include <map>
 
 class Shader;
 

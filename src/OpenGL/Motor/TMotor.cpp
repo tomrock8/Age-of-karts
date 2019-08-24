@@ -1,4 +1,5 @@
 #include "TMotor.hpp"
+#include "TGestorImagenes.hpp"
 
 // ---------------------------------------
 //  I N S T A N C I A   D E L   M O T O R

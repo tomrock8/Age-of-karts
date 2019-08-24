@@ -1,12 +1,8 @@
 #ifndef TGESTORRECURSOS_H
 #define TGESTORRECURSOS_H
 
-
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include <iostream>
-#include <fstream>
+
 #include <vector>
 #include <map>
 #include "libGL.hpp"
@@ -17,6 +13,11 @@ class TRecursoTextura;
 class TRecursoMaterial;
 class mesh;
 
+struct aiNode;
+struct aiScene;
+struct aiMesh;
+struct aiMaterial;
+enum aiTextureType;
 
 class TGestorRecursos
 {

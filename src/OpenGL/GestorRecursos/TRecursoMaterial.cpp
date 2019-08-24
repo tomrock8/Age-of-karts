@@ -1,6 +1,7 @@
 #include  "TRecursoMaterial.hpp"
 #include "Shader.hpp"
 
+
 TRecursoMaterial::TRecursoMaterial(const aiMaterial *mat) {
 	if (mat->Get(AI_MATKEY_NAME, name) == AI_SUCCESS) {
 		setNombre(name.C_Str());

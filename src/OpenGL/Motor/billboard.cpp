@@ -1,5 +1,6 @@
 #include "TMotor.hpp"
 #include "TGestorImagenes.hpp"
+#include "TRecursoImagen.hpp"
 
 //Constructor que crea un billboard enlazandolo a un objeto
 billboard::billboard(obj3D *o){

@@ -1,3 +1,4 @@
+#include "billboard.hpp"
 #include "TMotor.hpp"
 #include "TGestorImagenes.hpp"
 #include "TRecursoImagen.hpp"

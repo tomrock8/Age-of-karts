@@ -5,6 +5,8 @@
 #include "Timer.hpp"
 #include <iostream>
 
+class obj3D;
+
 class EscenaPodio: public Escena {
 public:
 

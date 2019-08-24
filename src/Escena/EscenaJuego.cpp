@@ -2,6 +2,8 @@
 #include "CorredorJugador.hpp"
 #include "CorredorIA.hpp"
 #include "CorredorRed.hpp"
+#include "hud.hpp"
+#include "elementoHud.hpp"
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;

@@ -1,9 +1,10 @@
 #include "EscenaPodio.hpp"
-
+#include "obj3D.hpp"
+#include "TAnimacion.hpp"
 
 EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_jugador> jugadores) : Escena(tipo) {
 
-	camera = new cameraThird("camara_jugador3apersona", "escena_raiz", 16/9);
+	camera = new cameraThird("camara_jugador3apersona", "escena_raiz", 16 / 9);
 	//obj3D para las poles
 	primero = TMotor::instancia().newMeshNode("primeraPosicion", " ", "escena_raiz", false); //textura cualquiera pues se eliminara
 	segundo = TMotor::instancia().newMeshNode("segundaPosicion", " ", "escena_raiz", false); //textura cualquiera pues se eliminara
@@ -24,48 +25,48 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 	animacionGladiador = nullptr;
 	animacionChino = nullptr;
 	animacionElegida = nullptr;
-	time= Timer::getInstancia();
-	end=false;
-	tm=time->getTimer();
+	time = Timer::getInstancia();
+	end = false;
+	tm = time->getTimer();
 
-	objTrol = TMotor::instancia().newMeshNode("HabilidadPirata","assets/Habilidades/Pirata/HabilidadPirata.obj","escena_raiz", false);
-	objTrol->setPosition(500,500,500);
+	objTrol = TMotor::instancia().newMeshNode("HabilidadPirata", "assets/Habilidades/Pirata/HabilidadPirata.obj", "escena_raiz", false);
+	objTrol->setPosition(500, 500, 500);
 
 
 	for (int i = 0; i < jugadores.size(); i++) {
 
 		switch (jugadores.at(i)) {//recogemos cual sera la animacion que tocara en caso de que esten en el podio
-			case Corredor::tipo_jugador::PIRATA:
-				if (animacionPirata == nullptr) {
-					animacionPirata = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Pirata/Celebracion/PirataCelebracion_000", 122, 242), "BailePirata");
-				}
-				animacionElegida = animacionPirata;
-				break;
+		case Corredor::tipo_jugador::PIRATA:
+			if (animacionPirata == nullptr) {
+				animacionPirata = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Pirata/Celebracion/PirataCelebracion_000", 122, 242), "BailePirata");
+			}
+			animacionElegida = animacionPirata;
+			break;
 
-			case Corredor::tipo_jugador::VIKINGO:
-				if (animacionVikingo == nullptr) {
-					animacionVikingo = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Celebracion/vikingoCelebracionobj_000", 462, 547), "BaileVikingo");
+		case Corredor::tipo_jugador::VIKINGO:
+			if (animacionVikingo == nullptr) {
+				animacionVikingo = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Vikingo/Celebracion/vikingoCelebracionobj_000", 462, 547), "BaileVikingo");
 
-				}
-				animacionElegida = animacionVikingo;
-				break;
+			}
+			animacionElegida = animacionVikingo;
+			break;
 
-			case Corredor::tipo_jugador::GLADIADOR:
-				if (animacionGladiador == nullptr) {
-					animacionGladiador = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Celebracion/GladiatorCelebracion_000", 435, 594), "BaileGladiador");
+		case Corredor::tipo_jugador::GLADIADOR:
+			if (animacionGladiador == nullptr) {
+				animacionGladiador = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Gladiador/Celebracion/GladiatorCelebracion_000", 435, 594), "BaileGladiador");
 
-				}
-				animacionElegida = animacionGladiador;
-				break;
+			}
+			animacionElegida = animacionGladiador;
+			break;
 
-			case Corredor::tipo_jugador::CHINO:
-				if (animacionChino == nullptr) {
-					animacionChino = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Chino/Celebracion/ChinoCelebracion_000", 228, 317), "BaileChino");
-				}
-				animacionElegida = animacionChino;
-				break;
-			default:
-				break;
+		case Corredor::tipo_jugador::CHINO:
+			if (animacionChino == nullptr) {
+				animacionChino = TMotor::instancia().createAnimationNode(NULL, TMotor::instancia().createAnimation("assets/Animacion/Chino/Celebracion/ChinoCelebracion_000", 228, 317), "BaileChino");
+			}
+			animacionElegida = animacionChino;
+			break;
+		default:
+			break;
 		}
 		if (i == 0) {//asignamos el nodo padre en funcion de su posicion y despues le asignamos el nodo a el objeto 
 			TMotor::instancia().addPadre(primero->getNode()->getPadre(), animacionElegida);
@@ -104,7 +105,7 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 	poszPodio = 13;
 
 	altura = 4;
-	entra=false;
+	entra = false;
 	podio = TMotor::instancia().newMeshNode("podio", "assets/MapaCelebracion/victoria.obj", "escena_raiz", false);
 
 	init();
@@ -112,36 +113,36 @@ EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_ju
 
 EscenaPodio::~EscenaPodio() {
 
-	if(podio)
-	delete podio;
+	if (podio)
+		delete podio;
 
-    camera = nullptr;
+	camera = nullptr;
 
 	delete fuentePodio;
-	
-	if(luces.size()>0){
-	for(int i =0; i< luces.size();i++){
-		delete luces.at(i);
-	}
-	}
-	particulas.clear();		
-	
-	if(primero)
-	delete primero;
-	if(segundo)
-	delete segundo;
-	if(tercero)
-	delete tercero;
 
-	if(objTrol)
-	delete objTrol;
+	if (luces.size() > 0) {
+		for (int i = 0; i < luces.size(); i++) {
+			delete luces.at(i);
+		}
+	}
+	particulas.clear();
+
+	if (primero)
+		delete primero;
+	if (segundo)
+		delete segundo;
+	if (tercero)
+		delete tercero;
+
+	if (objTrol)
+		delete objTrol;
 	//cout<<"borro el objeto"<<endl;
-	animacionPirata=nullptr;
-	animacionVikingo=nullptr;
-	animacionChino=nullptr;
-	animacionGladiador=nullptr;
-	animacionElegida=nullptr;
-	
+	animacionPirata = nullptr;
+	animacionVikingo = nullptr;
+	animacionChino = nullptr;
+	animacionGladiador = nullptr;
+	animacionElegida = nullptr;
+
 	delete time;
 
 	//cout<<"Salgo del destructor"<<endl;
@@ -149,10 +150,10 @@ EscenaPodio::~EscenaPodio() {
 
 Escena::tipo_escena EscenaPodio::comprobarInputs() {
 	bool mandoConectado = false;
-	const unsigned char *buttons = nullptr;
-	const float *axes = nullptr;
-	int id=0;
-	
+	const unsigned char* buttons = nullptr;
+	const float* axes = nullptr;
+	int id = 0;
+
 	if (1 == glfwJoystickPresent(id)) {
 		mandoConectado = true;
 		int buttonCount;
@@ -161,7 +162,7 @@ Escena::tipo_escena EscenaPodio::comprobarInputs() {
 		axes = glfwGetJoystickAxes(id, &axesCount);
 		//  || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]) ) 
 	}
-	if (time->getTimer()-tm>4){
+	if (time->getTimer() - tm > 4) {
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_RELEASE && end == true) {
 
 			return Escena::tipo_escena::MENU; // Devuelve el estado de las escenas para que salga
@@ -169,7 +170,8 @@ Escena::tipo_escena EscenaPodio::comprobarInputs() {
 
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ENTER) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[0]))) {
 			return Escena::tipo_escena::MENU;
-		}else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[1]) )) {
+		}
+		else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_ESCAPE) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[1]))) {
 			end = true;
 		}
 	}
@@ -251,7 +253,7 @@ void EscenaPodio::init() {
 
 	luces.push_back(TMotor::instancia().newLightNode("light_3", glm::vec4(-1.0f, -1.f, -1.0f, 0.0f), 0.000000001f, glm::cos(glm::radians(60.0f)), false, false, "escena_raiz"));
 	luces.at(3)->translate(glm::vec3(0.0f, 12.0f, 300.0f));
-	
+
 	//-----------------------------
 	//	PARTICULAS
 	//-----------------------------
@@ -299,13 +301,13 @@ void EscenaPodio::limpiar() {
 }
 
 void EscenaPodio::update() {
-	
-	if ((time->getTimer()-tm)>2 && !entra){
+
+	if ((time->getTimer() - tm) > 2 && !entra) {
 		fuentePodio = new AlSource();
 		fuentePodio->setLoop(true);
 		fuentePodio->volume(TMotor::instancia().getGestorSonido()->getVolMusica());
 		fuentePodio->play(SOUND_PODIO);
-		entra=true;
+		entra = true;
 		//activamos animaciones
 		//primero
 		static_cast<TAnimacion*>(primero->getNode()->getEntidad())->setVisible(true);

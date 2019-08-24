@@ -1,6 +1,7 @@
 #include "cameraThird.hpp"
 #include "TMotor.hpp"
 #include "MotorFisicas.hpp"
+#include "obj3D.hpp"
 
 cameraThird::cameraThird(const char *name, const char *parentName, float aspectRatio) {
 	camara = TMotor::instancia().newCameraNode(name, parentName, aspectRatio);

@@ -1,5 +1,8 @@
 #include "TNodo.hpp"
 #include "TMotor.hpp"
+#include "TEntidad.hpp"
+#include "Shader.hpp"
+#include <fstream>
 
 TNodo::TNodo(const char* n) {
 	name = new std::string(n);
@@ -27,12 +30,12 @@ TNodo::~TNodo() {
 }
 
 // MANEJO DE HIJOS
-int TNodo::addHijo(TNodo *n) {//1 == ha agregado hijos
+int TNodo::addHijo(TNodo* n) {//1 == ha agregado hijos
 	hijos.push_back(n);
 	return 1;
 }
 
-int TNodo::remHijo(TNodo*n) {//1 == ha borrado hijos 
+int TNodo::remHijo(TNodo* n) {//1 == ha borrado hijos 
 	for (GLuint i = 0; i < hijos.size(); i++) {
 		if (hijos.at(i) == n) {
 			delete(hijos.at(i));
@@ -45,9 +48,9 @@ int TNodo::remHijo(TNodo*n) {//1 == ha borrado hijos
 //-----------------
 // METODOS SET
 //-----------------
-void TNodo::setPadre(TNodo *p) { padre = p; }
-void TNodo::setName(const char*n) { name = new std::string(n); }
-void TNodo::setEntidad(TEntidad *n) {
+void TNodo::setPadre(TNodo* p) { padre = p; }
+void TNodo::setName(const char* n) { name = new std::string(n); }
+void TNodo::setEntidad(TEntidad* n) {
 	if (n != NULL) {
 		entidad = n;
 	}
@@ -56,12 +59,12 @@ void TNodo::setEntidad(TEntidad *n) {
 //-----------------
 // METODOS GET
 //-----------------
-TEntidad *TNodo::getEntidad() { return entidad; }
-TNodo *TNodo::getPadre() { return padre; }
-const char *TNodo::getName() { return name->c_str(); }
+TEntidad* TNodo::getEntidad() { return entidad; }
+TNodo* TNodo::getPadre() { return padre; }
+const char* TNodo::getName() { return name->c_str(); }
 
-TNodo *TNodo::getNode(const char* nombre) {
-	TNodo *aux = nullptr;
+TNodo* TNodo::getNode(const char* nombre) {
+	TNodo* aux = nullptr;
 
 	//Si su nombre es el que se busca, devolverse a si mismo
 	if (strcmp(name->c_str(), nombre) == 0)
@@ -80,7 +83,7 @@ TNodo *TNodo::getNode(const char* nombre) {
 }
 
 
-std::vector<TNodo *>TNodo::getHijos() {
+std::vector<TNodo*>TNodo::getHijos() {
 
 	return hijos;
 
@@ -91,8 +94,8 @@ std::vector<TNodo *>TNodo::getHijos() {
 // DIBUJADO DEL LOS NODOS
 //	RECORRIDO EN PREORDEN
 //----------------------------
-void TNodo::draw(Shader *shader) {
-	string n = name->c_str();
+void TNodo::draw(Shader* shader) {
+	std::string n = name->c_str();
 	if (entidad != NULL) {
 		//if (n.find("escena") == std::string::npos)
 		getEntidad()->beginDraw(shader);
@@ -112,8 +115,8 @@ void TNodo::draw(Shader *shader) {
 }
 
 void TNodo::deleteNode() {
-	TNodo *padreaux = padre;
-	TNodo *padreaux2 = nullptr;
+	TNodo* padreaux = padre;
+	TNodo* padreaux2 = nullptr;
 	std::vector<TNodo*> nodos;
 	if (padre) {
 		while (padreaux && padreaux->getPadre()->getHijos().size() == 1) {

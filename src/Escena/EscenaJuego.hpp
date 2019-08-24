@@ -8,6 +8,8 @@
 #include "Timer.hpp"
 #include <vector>
 
+class elementoHud;
+
 class EscenaJuego : public Escena {
 public:
 	EscenaJuego(tipo_escena tipo);
@@ -16,7 +18,7 @@ public:
 
 	virtual void init() override;
 	virtual void dibujar() override;
-	
+
 	virtual void limpiar() override;
 	virtual void update() override;
 	Escena::tipo_escena comprobarInputs();
@@ -29,39 +31,38 @@ public:
 private:
 
 	std::string ipConexion;
-	std::string *chr = new std::string("OnGameHUD");
+	std::string* chr = new std::string("OnGameHUD");
 	void UpdatePhysics(unsigned int TDeltaTime);
-	void UpdateRender(btRigidBody *TObject);
+	void UpdateRender(btRigidBody* TObject);
 	void renderDebug(int i);
 	void debugRageIA(int k);
-	void debugPlot(int j,float k,std::string str);
+	void debugPlot(int j, float k, std::string str);
 	void updateHUD(int i);
 	void crearHUD(int i);
-	
+
 	int numPantallas; //Numero de mandos conectados
 
 	bool debug;
 
-	DebugDraw *debugDraw;
+	DebugDraw* debugDraw;
 
 	int controlPlayer;
-	std::vector<cameraThird *> camera;
+	std::vector<cameraThird*> camera;
 	int tipoCamara;
 	bool cambioCamara;
-	GestorColisiones *colisiones;
+	GestorColisiones* colisiones;
 
 	int lastFPS;
 	std::uint32_t TimeStamp;
 	std::uint32_t DeltaTime;
 
-	Client *client;
+	Client* client;
 	btVector3 pos;
-	
 
 	float tiempoRefresco;
-	GestorCarrera *gc;
+	GestorCarrera* gc;
 	bool fin_carrera;
-	Timer *t;
+	Timer* t;
 
 	float gravedad;
 
@@ -74,10 +75,10 @@ private:
 	std::string sr;
 
 	bool waitingPlayers;
-	
+
 	//SONIDO 
-	AlSource *fuenteCarrera;
-	AlSource *fuenteCountDown;
+	AlSource* fuenteCarrera;
+	AlSource* fuenteCountDown;
 	bool countDown3;
 	bool countDown2;
 	bool countDown1;
@@ -92,16 +93,16 @@ private:
 	std::vector<float> muestra_tiempo;
 
 	//LUCES
-	obj3D * luzPuntual_0;
-	obj3D * luzPuntual_1;
-	obj3D * luzPuntual_2;
-	obj3D * luzPuntual_3;
+	obj3D* luzPuntual_0;
+	obj3D* luzPuntual_1;
+	obj3D* luzPuntual_2;
+	obj3D* luzPuntual_3;
 
 	//corredores
 	std::vector<Corredor*> pj;
 	Corredor* jugador;
-	elementoHud *cuentaAtras;
-	
+	elementoHud* cuentaAtras;
+
 };
 
 #endif /* ESCENAJUEGO_H */

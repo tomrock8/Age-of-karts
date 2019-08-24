@@ -1,4 +1,5 @@
 #include "EscenaOpciones.hpp"
+#include "hud.hpp"
 
 EscenaOpciones::EscenaOpciones(Escena::tipo_escena tipo) : Escena(tipo) {
 	end = false;
@@ -14,8 +15,6 @@ EscenaOpciones::EscenaOpciones(Escena::tipo_escena tipo) : Escena(tipo) {
 	fuenteMusica->play(SOUND_MENU);
 	fuenteEfectos = new AlSource();
 	fuenteEfectos->volume(TMotor::instancia().getGestorSonido()->getVolEfectos());
-
-
 }
 
 EscenaOpciones::~EscenaOpciones() {
@@ -63,14 +62,14 @@ void EscenaOpciones::update() {
 		| ImGuiWindowFlags_NoTitleBar | ImGuiConfigFlags_NavEnableKeyboard
 		| ImGuiConfigFlags_NavEnableGamepad | ImGuiInputTextFlags_CharsHexadecimal)) {
 
-		ImGui::SameLine(TMotor::instancia().getWidth()/2.75);
+		ImGui::SameLine(TMotor::instancia().getWidth() / 2.75);
 		ImGui::SetWindowFontScale(2.0f);
 		if (display_w < 1250) {
 			ImGui::SetWindowFontScale(1.0f);
 		}
 		ImGui::Text("OPTIONS");
 		ImGui::Text("");
-		ImGui::SameLine(TMotor::instancia().getWidth()/2.75);
+		ImGui::SameLine(TMotor::instancia().getWidth() / 2.75);
 		ImGui::Text("-------");
 
 		ImGui::SetWindowFontScale(1.25f);
@@ -98,14 +97,14 @@ void EscenaOpciones::update() {
 		if (display_w < 1250) {
 			ImGui::SetWindowFontScale(0.5f);
 		}
-		const char* listbox_items[] = { "Low", "Medium", "High"};
+		const char* listbox_items[] = { "Low", "Medium", "High" };
 		static int listbox_item_current = 0;
 		static int listbox_item_current_2 = 0;
-		if (personalisedGraphics == false){
+		if (personalisedGraphics == false) {
 			ImGui::ListBox("Graphic Level", &listbox_item_current, listbox_items, IM_ARRAYSIZE(listbox_items), 3);
 		}
 		ImGui::Checkbox("Personalised Graphics", &personalisedGraphics);
-		if (personalisedGraphics == true){
+		if (personalisedGraphics == true) {
 			ImGui::Text("");
 			ImGui::Checkbox("Shadows", &shadows);
 			ImGui::SameLine();
@@ -118,13 +117,13 @@ void EscenaOpciones::update() {
 			ImGui::Checkbox("Clouds", &clouds);
 			ImGui::ListBox("Drawing Distance", &listbox_item_current_2, listbox_items, IM_ARRAYSIZE(listbox_items), 3);
 		}
-		const char* listboxResolution_items[] = { "1440x900p", "1600x900p", "1280x960p", "1600x1024p", "1920x1080p"};
+		const char* listboxResolution_items[] = { "1440x900p", "1600x900p", "1280x960p", "1600x1024p", "1920x1080p" };
 		static int listbox_item_current_resolution = 1;
 		ImGui::ListBox("Screen Resolution", &listbox_item_current_resolution, listboxResolution_items, IM_ARRAYSIZE(listboxResolution_items), 2);
 
 		//Ajustamos los parametros graficos del motor en funcion del nivel grafico seleccionado
-		if (personalisedGraphics == false){
-			if (listbox_item_current == 0){
+		if (personalisedGraphics == false) {
+			if (listbox_item_current == 0) {
 				shadows = false; //No hay sombras
 				msaa = false; //Sin MSAA
 				faceCulling = true; //Con Face Culling
@@ -132,7 +131,8 @@ void EscenaOpciones::update() {
 				drawingDistance = true; //Con distancia de dibujado
 				levelOfDrawingDistance = 750; //Nivel de distancia de dibujado = 750
 				clouds = false; //Sin nubes
-			} else if (listbox_item_current == 1){
+			}
+			else if (listbox_item_current == 1) {
 				shadows = true; //Hay sombras
 				msaa = false; //Sin MSAA
 				faceCulling = true; //Con Face Culling
@@ -140,7 +140,8 @@ void EscenaOpciones::update() {
 				drawingDistance = true; //Con distancia de dibujado
 				levelOfDrawingDistance = 1000; //Nivel de distancia de dibujado = 1000
 				clouds = false; //Sin nubes
-			} else {
+			}
+			else {
 				shadows = true; //No hay sombras
 				msaa = true; //Con MSAA
 				faceCulling = false; //Sin Face Culling
@@ -149,19 +150,22 @@ void EscenaOpciones::update() {
 				levelOfDrawingDistance = 5000; //Nivel de distancia de dibujado = ninguno
 				clouds = true; //Con nubes
 			}
-		}else{
-			if (listbox_item_current_2 == 0){
+		}
+		else {
+			if (listbox_item_current_2 == 0) {
 				drawingDistance = true; //Con distancia de dibujado
 				levelOfDrawingDistance = 750; //Nivel de distancia de dibujado = 750
-			} else if (listbox_item_current_2 == 1){
+			}
+			else if (listbox_item_current_2 == 1) {
 				drawingDistance = true; //Con distancia de dibujado
 				levelOfDrawingDistance = 750; //Nivel de distancia de dibujado = 750
-			} else {
+			}
+			else {
 				drawingDistance = false; //Sin distancia de dibujado
 				levelOfDrawingDistance = 5000; //Nivel de distancia de dibujado = ninguno
 			}
 		}
-		
+
 		//Modificamos los parametros graficos del motor
 		TMotor::instancia().setShadows(shadows);
 		TMotor::instancia().setAntialiasing(msaa);
@@ -169,15 +173,19 @@ void EscenaOpciones::update() {
 		TMotor::instancia().setDrawingDistance(drawingDistance, levelOfDrawingDistance);
 		TMotor::instancia().setLevelOfDetail(levelOfDetail);
 		TMotor::instancia().setClouds(clouds);
-		if ( listbox_item_current_resolution == 0){
+		if (listbox_item_current_resolution == 0) {
 			//TMotor::instancia().changeResolution(1440, 900);
-		} else if ( listbox_item_current_resolution == 1){
+		}
+		else if (listbox_item_current_resolution == 1) {
 			//TMotor::instancia().changeResolution(1600, 900);
-		} else if ( listbox_item_current_resolution == 2){
+		}
+		else if (listbox_item_current_resolution == 2) {
 			//TMotor::instancia().changeResolution(1280, 960);
-		} else if ( listbox_item_current_resolution == 3){
+		}
+		else if (listbox_item_current_resolution == 3) {
 			TMotor::instancia().changeResolution(1600, 1024);;
-		} else {
+		}
+		else {
 			TMotor::instancia().changeResolution(1920, 1080);
 		}
 	}
@@ -189,10 +197,10 @@ void EscenaOpciones::update() {
 }
 
 Escena::tipo_escena EscenaOpciones::comprobarInputs() {
-	int id=0;
-	bool mandoConectado=false;
-	const unsigned char *buttons = nullptr;
-	const float *axes = nullptr;
+	int id = 0;
+	bool mandoConectado = false;
+	const unsigned char* buttons = nullptr;
+	const float* axes = nullptr;
 	if (1 == glfwJoystickPresent(id)) {
 		mandoConectado = true;
 		int buttonCount;

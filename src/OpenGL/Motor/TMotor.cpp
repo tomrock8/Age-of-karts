@@ -1,5 +1,14 @@
 #include "TMotor.hpp"
 #include "TGestorImagenes.hpp"
+#include "TGestorRecursos.hpp"
+#include "billboard.hpp"
+#include "particleSystem.hpp"
+#include "cloudGenerator.hpp"
+#include "GestorSonido.hpp"
+#include "TNodo.hpp"
+#include "TAnimacion.hpp"
+#include "hud.hpp"
+#include "Skybox.hpp"
 
 // ---------------------------------------
 //  I N S T A N C I A   D E L   M O T O R

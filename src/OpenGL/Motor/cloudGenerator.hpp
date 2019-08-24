@@ -1,6 +1,9 @@
 #ifndef CLOUDGENERATOR_H
 #define CLOUDGENERATOR_H
 
+#include <vector>
+#include "libGL.hpp"
+
 class Shader;
 
 /* Clase que crea un area cubica, especificando ancho, alto y largo,

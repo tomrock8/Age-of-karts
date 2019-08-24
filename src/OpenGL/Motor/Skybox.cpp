@@ -2,6 +2,8 @@
 #include <iostream>
 #include "Skybox.hpp"
 #include "stb_image.h"
+#include "Shader.hpp"
+#include "TNodo.hpp"
 
 //Constructor de la clase Skybox que se encarga del creado del mismo
 Skybox::Skybox() {

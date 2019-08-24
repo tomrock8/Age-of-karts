@@ -8,6 +8,8 @@
 #include "Escena.hpp"
 #include "Timer.hpp"
 
+class elementoHud;
+
 class EscenaLobby : public Escena {
 public:
 	EscenaLobby(Escena::tipo_escena tipo, std::string ipC);

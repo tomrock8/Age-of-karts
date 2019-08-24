@@ -3,6 +3,9 @@
 
 #include "Escena.hpp"
 
+class elementoHud;
+class AlSource;
+
 class EscenaMenu : public Escena {
 public:
 	EscenaMenu();
@@ -26,11 +29,11 @@ private:
 
 	int optionMenu;
 
-	AlSource *fuenteOpcion;
-	AlSource *fuenteMenu;
+	AlSource* fuenteOpcion;
+	AlSource* fuenteMenu;
 
 	void initHud();
-	elementoHud *fondo;
+	elementoHud* fondo;
 };
 
 #endif /* ESCENAMENU_H */

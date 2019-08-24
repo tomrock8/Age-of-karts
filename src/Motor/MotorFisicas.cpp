@@ -1,6 +1,7 @@
 #include "MotorFisicas.hpp"
 #include "TMotor.hpp"
 #include "TRecursoMalla.hpp"
+#include "TGestorRecursos.hpp"
 
 //------------------------------\*
 //---CONSTRUCTOR Motorfisicas---\*

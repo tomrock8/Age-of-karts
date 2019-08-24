@@ -1,4 +1,5 @@
 #include "EscenaMenu.hpp"
+#include "hud.hpp"
 
 EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	initHud(); // Inicializacion del hud

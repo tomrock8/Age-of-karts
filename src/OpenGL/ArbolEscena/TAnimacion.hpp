@@ -7,7 +7,6 @@
 class TMalla;
 class Shader;
 
-
 class TAnimacion : public TEntidad
 {
 public:

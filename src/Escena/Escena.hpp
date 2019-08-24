@@ -4,6 +4,7 @@
 #include "Client.hpp"
 #include "GestorSonido.hpp"
 #include "TMotor.hpp"
+
 class Escena {
 public:
 	typedef enum { MENU, CARRERA, ONLINE, CARGA, LOBBY, OPCIONES, CREDITOS, SALIR, PODIO } tipo_escena; // Definicion de los diferentes tipos de escenas

@@ -59,10 +59,10 @@ public:
 	void setTurbo(bool activo, bool objeto, int valor, int tiempo);
 	void setInmunidad(bool activo);
 	void setHabilidad(bool activo);
-	void setWaypointActual(obj3D *nodo);
+	void setWaypointActual(obj3D* nodo);
 	void setProteccion(bool s);
-	void setPosicion(float *pos, float *ori);
-	void setPosicionBullet(float *pos, btQuaternion ori);
+	void setPosicion(float* pos, float* ori);
+	void setPosicionBullet(float* pos, btQuaternion ori);
 	void setPosicionSources();
 	void setLimite(int s);
 	void setTipoJugador(int tj);
@@ -82,8 +82,8 @@ public:
 	float getMaxVuetas();
 	float getTiempoVueltaTotal();
 	float getTiempoVuelta();
-	void getParametrosDebug(float * fuerza, float * velocidadMedia, float * velocidadMaximaTurbo, float * velocidadMaxima, float * masa, float * indiceGiroAlto, float * indiceGiroBajo, float * velocidadLimiteGiro);
-	void getParametrosRuedasDebug(float * suspensionStiffness, float * DampingCompression, float * DampingRelaxation, float * frictionSlip, float * rollInfluence, float * suspForce, float * suspTravelCm);
+	void getParametrosDebug(float* fuerza, float* velocidadMedia, float* velocidadMaximaTurbo, float* velocidadMaxima, float* masa, float* indiceGiroAlto, float* indiceGiroBajo, float* velocidadLimiteGiro);
+	void getParametrosRuedasDebug(float* suspensionStiffness, float* DampingCompression, float* DampingRelaxation, float* frictionSlip, float* rollInfluence, float* suspForce, float* suspTravelCm);
 
 	// Update
 	void update();
@@ -95,19 +95,19 @@ public:
 	virtual void actualizarItem() = 0;
 
 	// Metodos GET
-	obj3D *getNodo();
-	btRaycastVehicle *getVehiculo();
-	btRigidBody *getRigidBody();
+	obj3D* getNodo();
+	btRaycastVehicle* getVehiculo();
+	btRigidBody* getRigidBody();
 	btVector3 getVectorDireccion();
 	const char* getNombre();
 	int getID();
 	int getCargador();
 	int getTipoObj();
 	bool getTurbo();
-	Waypoint *getWaypointActual();
-	Waypoint *getWaypointSiguiente();
+	Waypoint* getWaypointActual();
+	Waypoint* getWaypointSiguiente();
 	bool getProteccion();
-	EstadosJugador *getEstados();
+	EstadosJugador* getEstados();
 	int getLimite();
 	bool getAceiteActivado();
 	tipo_jugador getTipoJugador();
@@ -123,32 +123,32 @@ public:
 	std::string toString();
 
 	//movimiento de animaciones
-	void iniciarAnimacion(movimiento_jugador mov,TNodo* previo,TNodo *previoGiro);
+	void iniciarAnimacion(movimiento_jugador mov, TNodo* previo, TNodo* previoGiro);
 
 protected:
-	obj3D *cuboNodo;
-	obj3D *rueda1;
-	obj3D *rueda2;
-	obj3D *rueda3;
-	obj3D *rueda4;
+	obj3D* cuboNodo;
+	obj3D* rueda1;
+	obj3D* rueda2;
+	obj3D* rueda3;
+	obj3D* rueda4;
 
 	//BILLBOARD
 	billboard* b;
 
 	//PARTICULAS HUMO
-	particleSystem *p;
+	particleSystem* p;
 
 	//VARIABLES OPENAL SONIDO
 
-	AlSource *fuenteMotor;
-	AlSource *fuenteItem;
-	AlSource *fuenteFrenos;
+	AlSource* fuenteMotor;
+	AlSource* fuenteItem;
+	AlSource* fuenteFrenos;
 	float pitchMotor;
 
 	//WAYPOINTS
-	Waypoint *actual; // Punto Actual
-	Waypoint *siguiente; // Punto Siguiente
-	Waypoint *siguiente_aux; // Punto Siguiente
+	Waypoint* actual; // Punto Actual
+	Waypoint* siguiente; // Punto Siguiente
+	Waypoint* siguiente_aux; // Punto Siguiente
 	int vueltas;
 	int posicionCarrera;
 	int maxvueltas;
@@ -158,20 +158,20 @@ protected:
 	btScalar distanciaWaypointActual;
 
 	//bullet
-	btRaycastVehicle *vehiculo;
-	btRigidBody *CuerpoColisionChasis;
-	
+	btRaycastVehicle* vehiculo;
+	btRigidBody* CuerpoColisionChasis;
+
 	//raycast
-	btVehicleRaycaster *RayCastVehiculo;
+	btVehicleRaycaster* RayCastVehiculo;
 	btVector3 orientacion;
 
 	//RUEDAS
-	btRigidBody *CuerpoColisionRueda1;
-	btRigidBody *CuerpoColisionRueda2;
-	btRigidBody *CuerpoColisionRueda3;
-	btRigidBody *CuerpoColisionRueda4;
+	btRigidBody* CuerpoColisionRueda1;
+	btRigidBody* CuerpoColisionRueda2;
+	btRigidBody* CuerpoColisionRueda3;
+	btRigidBody* CuerpoColisionRueda4;
 
-	
+
 	const char* nombre;
 	int id;
 	int cargador;
@@ -193,7 +193,7 @@ protected:
 	float tiempoVueltaTotal;
 	//objetos estaticos y dinamicos
 
-	EstadosJugador *estado;
+	EstadosJugador* estado;
 	btVector3 posDisparo;
 
 	//tipo jugador
@@ -231,16 +231,16 @@ protected:
 
 
 	//Animaciones
-	TNodo *quieto;
-	TNodo *giroDerIni;
-	TNodo *giroDerFin;
-	TNodo *giroIzqIni;
-	TNodo *giroIzqFin;
+	TNodo* quieto;
+	TNodo* giroDerIni;
+	TNodo* giroDerFin;
+	TNodo* giroIzqIni;
+	TNodo* giroIzqFin;
 	//TNodo *vacile;
 	//TNodo *animHabilidad;
 	//TNodo *lanzarObjeto;
 
-	void CrearRuedas(btRaycastVehicle *vehiculo, btRaycastVehicle::btVehicleTuning tuning);
+	void CrearRuedas(btRaycastVehicle* vehiculo, btRaycastVehicle::btVehicleTuning tuning);
 	void BorrarFisicas();
 
 	// Movimiento del corredor
@@ -257,12 +257,12 @@ protected:
 	// UPDATES
 	void actualizarRuedas();
 	void updateVectorDireccion();
-	
-	TNodo * getGiroDerIni();
-	TNodo * getGiroDerFin();
-	TNodo * getGiroIzqIni();
-	TNodo * getGiroIzqFin();
-	TNodo * getAnimQuieto();
+
+	TNodo* getGiroDerIni();
+	TNodo* getGiroDerFin();
+	TNodo* getGiroIzqIni();
+	TNodo* getGiroIzqFin();
+	TNodo* getAnimQuieto();
 	//TNodo * getHabilidadAnim();
 	//TNodo * getLanzarObjeto();
 	//TNodo * getVacile();

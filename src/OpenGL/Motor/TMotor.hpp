@@ -12,7 +12,6 @@
 #define _USE_MATH_DEFINES // for C++  
 #endif
 
-
 class GestorSonido;
 class TGestorRecursos;
 

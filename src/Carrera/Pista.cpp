@@ -1,7 +1,7 @@
 #include "Pista.hpp"
 #include "Turbo.hpp"
 #include "Caja.hpp"
-
+#include "Item.hpp"
 
 Pista* Pista::instancia = NULL;
 

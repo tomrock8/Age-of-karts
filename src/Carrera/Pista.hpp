@@ -1,8 +1,8 @@
 #ifndef PISTA_H
 #define PISTA_H
 
+#include "libGL.hpp" 
 #include <vector>
-#include "Item.hpp"
 
 class Item;
 class Caja;
@@ -43,8 +43,6 @@ public:
 	Turbo* getTurbo();
 	Turbo* getTurbo(int id);
 	int getNumVueltas();
-
-
 
 private:
 	Pista();

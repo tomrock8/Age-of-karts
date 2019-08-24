@@ -2,6 +2,9 @@
 #include "Timer.hpp"
 #include "MotorFisicas.hpp"
 #include "math.h"
+#include "ArbolDecision.hpp"
+#include "NodoDecision.hpp"
+
 #ifdef _WIN32
 #define _USE_MATH_DEFINES // for C++  
 #endif

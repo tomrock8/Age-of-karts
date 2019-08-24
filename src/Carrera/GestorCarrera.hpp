@@ -21,13 +21,13 @@ public:
 
 	// METODOS SET
 	void setVueltas(int i);
-	
+
 private:
-	
+
 	std::vector<Corredor*> pj1;
 	std::vector<Corredor*> pj2;
-	Corredor *pj_aux;
-	GestorJugadores *jugadores;
+	Corredor* pj_aux;
+	GestorJugadores* jugadores;
 	int vueltas;
 	int acum;
 };

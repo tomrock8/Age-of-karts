@@ -2,7 +2,10 @@
 #define CORREDORIA_H
 
 #include "Corredor.hpp"
-#include "ArbolDecision.hpp"
+
+class ArbolDecision;
+class TNodo;
+class obj3D;
 
 typedef enum {
 	NADA1, ACELERAR, FRENAR,
@@ -23,16 +26,16 @@ public:
 	virtual void movimiento() override;
 	virtual void updateHijos() override;
 	virtual void actualizarItem() override;
-	
+
 	void reposicionar();
 	void calculoAnguloGiro(btVector3 posicion);
 	void ActualizarRaytest();
-	void comprobarDireccion(obj3D *nodo);
+
 	//Logica difusa
 	void logicaDifusa();
 	double FuncionTrapezoidal(double valor, double a, double b, double c, double d);
 	double FuncionTriangular(double valor, double a, double b, double c);
-	void vision(btScalar distancia, obj3D *nodo);
+	void vision(btScalar distancia, obj3D* nodo);
 	void seguirWaypoint();
 	void setDebugFisicas(bool activo);
 	bool getDebugFisicas();
@@ -62,8 +65,8 @@ private:
 
 	btScalar distanciaCaja, distanciaTurbo, distanciaEnemigo;
 
-	ArbolDecision *arbolconduccion;
-	ArbolDecision *arbolobjetos;
+	ArbolDecision* arbolconduccion;
+	ArbolDecision* arbolobjetos;
 
 	int accionActualConduccion;
 	int accionActualObjetos;
@@ -75,10 +78,9 @@ private:
 	std::string texto;
 	float valorGiroFuerte;
 
-
 	bool giroDer;
 	bool giroIzq;
-	TNodo *animacionPrevia;
+	TNodo* animacionPrevia;
 };
 
 #endif /* CORREDORIA_H */

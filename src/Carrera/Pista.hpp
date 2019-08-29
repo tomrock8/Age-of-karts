@@ -3,6 +3,10 @@
 
 #include "libGL.hpp" 
 #include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 class Item;
 class Caja;

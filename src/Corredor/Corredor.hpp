@@ -16,17 +16,14 @@
 #include "BulletDynamics/ConstraintSolver/btHingeConstraint.h"
 
 #include "RaknetIncludes.hpp"
-
 #include "EstadosJugador.hpp"
-
-
-#include "GestorSonido.hpp"
-#include "billboard.hpp"
-#include "particleSystem.hpp"
 
 class obj3D;
 class Waypoint;
-
+class TNodo;
+class particleSystem;
+class billboard;
+class AlSource;
 
 class Corredor : public RakNet::NetworkIDObject
 {

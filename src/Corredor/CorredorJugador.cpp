@@ -1,5 +1,6 @@
 #include "CorredorJugador.hpp"
 #include "Client.hpp"
+#include "obj3D.hpp"
 
 CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(pos, tipo) {
 	checkItem = false;
@@ -14,8 +15,8 @@ CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : C
 	fuenteMotor->play(SOUND_ENGINE);
 }
 
-CorredorJugador::~CorredorJugador(){
-	animacionPrevia=nullptr;
+CorredorJugador::~CorredorJugador() {
+	animacionPrevia = nullptr;
 }
 
 /**
@@ -23,13 +24,12 @@ CorredorJugador::~CorredorJugador(){
 	TODO: Modificar para detectar el input que se recibe.
 */
 void CorredorJugador::movimiento() {
-
 	bool comprobadorMovimiento = false;
 
 	//Comprobador de de mando y recoleccion de inputs
 	bool mandoConectado = false;
-	const unsigned char *buttons = nullptr;
-	const float *axes = nullptr;
+	const unsigned char* buttons = nullptr;
+	const float* axes = nullptr;
 	if (1 == glfwJoystickPresent(id)) {
 		mandoConectado = true;
 		int buttonCount;
@@ -52,20 +52,19 @@ void CorredorJugador::movimiento() {
 	}
 	//GIRAR DERECHA
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
-		
+
 		girarDerecha();
-		
+
 		iniciarAnimacion(GIRODERINI, animacionPrevia, getGiroDerFin());
-		
+
 		giroDer = true;
 		comprobadorMovimiento = true;
-		
 	}
-	
+
 	//GIRAR IZQUIERDA
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) {
 		girarIzquierda();
-	
+
 		iniciarAnimacion(GIROIZQINI, animacionPrevia, getGiroIzqFin());
 		//animacionPrevia = getGiroIzqIni();
 		giroIzq = true;
@@ -74,6 +73,7 @@ void CorredorJugador::movimiento() {
 	else {
 		estado->setDireccionMovimiento(EstadosJugador::direccion_movimiento::RECTO);
 	}
+
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_SPACE) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[1])) {
 		frenodemano(true, false);
 		comprobadorMovimiento = true;
@@ -81,6 +81,7 @@ void CorredorJugador::movimiento() {
 	else {
 		frenodemano(false, false);
 	}
+
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_R) == GLFW_PRESS || (mandoConectado && GLFW_PRESS == buttons[5])) {
 		recolocarWaypoint();
 	}
@@ -92,18 +93,17 @@ void CorredorJugador::movimiento() {
 	}
 
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_RELEASE && giroDer) {
-	
-		iniciarAnimacion(GIRODERFIN, animacionPrevia,getGiroDerIni());
+		iniciarAnimacion(GIRODERFIN, animacionPrevia, getGiroDerIni());
 		animacionPrevia = getGiroDerFin();
 		giroDer = false;
 	}
+
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_RELEASE && giroIzq) {
-	
 		iniciarAnimacion(GIROIZQFIN, animacionPrevia, getGiroIzqIni());
 		animacionPrevia = getGiroIzqFin();
 		giroIzq = false;
 	}
-	
+
 
 
 }
@@ -170,7 +170,7 @@ void CorredorJugador::actualizarItem() {
 
 	//Comprobador de de mando y recoleccion de inputs
 	bool mandoConectado = false;
-	const unsigned char *buttons = nullptr;
+	const unsigned char* buttons = nullptr;
 	if (1 == glfwJoystickPresent(id))
 	{
 		mandoConectado = true;
@@ -183,7 +183,7 @@ void CorredorJugador::actualizarItem() {
 	{
 		if (getTipoObj() != 0 && !checkItem)
 		{
-			if(getTipoObj() != 3 && getTipoObj() != 8)
+			if (getTipoObj() != 3 && getTipoObj() != 8)
 				fuenteItem->play(SOUND_THROW);
 			setCheckItem(true);
 			//Llama a la funcion de la clase padre
@@ -202,7 +202,7 @@ void CorredorJugador::actualizarItem() {
 		animacionPrevia = getHabilidadAnim();*/
 		lanzarHabilidad();
 	}
-	
+
 }
 
 bool CorredorJugador::setComprobadorMovimiento(bool s) {

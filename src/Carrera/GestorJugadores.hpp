@@ -1,6 +1,7 @@
 #ifndef GESTORJUGADORES_H
 #define GESTORJUGADORES_H
 
+#include <iostream>
 #include <vector>
 
 class Corredor;

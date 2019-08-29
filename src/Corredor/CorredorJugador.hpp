@@ -1,13 +1,9 @@
 #ifndef CORREDORJUGADOR_H
 #define CORREDORJUGADOR_H
 
-#include <iostream>
-#include "Pista.hpp"
 #include "Corredor.hpp"
-#include "Turbo.hpp"
-#include "Caja.hpp"
 
-using namespace std;
+class TNodo;
 
 class CorredorJugador : public Corredor {
 public:
@@ -28,7 +24,7 @@ private:
 	//controlador para las animaciones
 	bool giroDer;
 	bool giroIzq;
-	TNodo *animacionPrevia;
+	TNodo* animacionPrevia;
 };
 
 #endif /* CORREDORJUGADOR_H */

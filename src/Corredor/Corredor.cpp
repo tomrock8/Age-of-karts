@@ -18,6 +18,9 @@
 #include "GestorSonido.hpp"
 #include "billboard.hpp"
 #include "particleSystem.hpp"
+#include "TNodo.hpp"
+#include "billboard.hpp"
+#include "GestorSonido.hpp"
 
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*

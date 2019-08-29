@@ -5,6 +5,7 @@
 #include "hud.hpp"
 #include "elementoHud.hpp"
 #include "cameraThird.hpp"
+#include "billboard.hpp"
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;

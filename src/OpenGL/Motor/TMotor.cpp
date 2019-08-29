@@ -16,6 +16,8 @@
 #include "hud.hpp"
 #include "billboard.hpp"
 #include "particleSystem.hpp"
+#include "obj3D.hpp"
+#include "Shader.hpp"
 
 // ---------------------------------------
 //  I N S T A N C I A   D E L   M O T O R

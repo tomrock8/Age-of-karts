@@ -2,6 +2,7 @@
 #include "obj3D.hpp"
 #include "TAnimacion.hpp"
 #include "cameraThird.hpp"
+#include "particleSystem.hpp"
 
 EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_jugador> jugadores) : Escena(tipo) {
 	camera = new cameraThird("camara_jugador3apersona", "escena_raiz", 16 / 9);

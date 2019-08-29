@@ -10,7 +10,6 @@ GestorJugadores::GestorJugadores() {
 	numJugadores = 0;
 }
 
-
 GestorJugadores::~GestorJugadores() {
 //	cout << "ENTRO DESTRUCTOR DE GESTOR JUGADORES\n";
 //	cout << "Poco a poco, que son " << numJugadores << "\n";

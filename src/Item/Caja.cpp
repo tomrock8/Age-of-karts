@@ -1,6 +1,10 @@
 #include "Caja.hpp"
 #include "TMotor.hpp"
 #include "GestorIDs.hpp"
+#include "Corredor.hpp"
+#include "MotorFisicas.hpp"
+#include "Timer.hpp"
+#include "GestorSonido.hpp"
 
 Caja::Caja(btVector3 posicionCaja) {
 

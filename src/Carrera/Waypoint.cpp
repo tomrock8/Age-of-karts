@@ -4,11 +4,6 @@
 #include "math.h"
 #include "obj3D.hpp"
 
-
-#ifdef _WIN32
-#define _USE_MATH_DEFINES // for C++  
-#endif
-
 Waypoint::Waypoint() {
 	waypoint = TMotor::instancia().newMeshNode("Waypoint", "assets/wall/wall.obj", "escena_raiz", false);
 	waypoint->setVisible(false);

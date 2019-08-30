@@ -3,6 +3,9 @@
 #include "Caja.hpp"
 #include "Item.hpp"
 #include "Waypoint.hpp"
+#include "TMotor.hpp"
+#include "GestorIDs.hpp"
+#include "Obj3D.hpp"
 
 Pista* Pista::instancia = NULL;
 
@@ -206,7 +209,7 @@ void Pista::loadWaypoints(const char* waypoints) {
 		myfile.close();
 	}
 	else {
-		cout << "Error abriendo archivo";
+		std::cout << "Error abriendo archivo";
 	}
 }
 

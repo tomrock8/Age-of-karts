@@ -1,6 +1,7 @@
 #include "Habilidad.hpp"
 #include "TMotor.hpp"
 #include "GestorIDs.hpp"
+#include "Obj3D.hpp"
 
 Habilidad::Habilidad(int tipo, btRigidBody* n, btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
 	float alturaLanzamiento, int idNodo) : Item(posicion, escala, masa, tiempoDesctruccion, fcolision, tamanyoNodo, radio, alturaLanzamiento, idNodo) {

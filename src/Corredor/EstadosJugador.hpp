@@ -1,4 +1,3 @@
-
 #ifndef ESTADOSJUGADOR_H
 #define ESTADOSJUGADOR_H
 

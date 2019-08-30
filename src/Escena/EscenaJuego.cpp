@@ -18,6 +18,7 @@
 #include "Timer.hpp"
 #include "Obj3D.hpp"
 #include "Client.hpp"
+#include "GestorSonido.hpp"
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;

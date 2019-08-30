@@ -5,22 +5,20 @@
 #include "GestorJugadores.hpp"
 #include "Caja.hpp"
 #include "Waypoint.hpp"
+#include "Corredor.hpp"
+#include "MotorFisicas.hpp"
 
 void GestorColisiones::IniciarTimer() {
 	tiempoInicio = glfwGetTime();
 }
 
-
-GestorColisiones::GestorColisiones()
-{
-}
+GestorColisiones::GestorColisiones() { }
 
 GestorColisiones::~GestorColisiones() {
 	pj1.clear();
 	nodoA = nullptr;
 	nodoB = nullptr;
 }
-
 
 void GestorColisiones::ComprobarColisiones() {
 	btDynamicsWorld* mundo = MotorFisicas::getInstancia()->getMundo();
@@ -51,7 +49,6 @@ void GestorColisiones::ComprobarColisiones() {
 	}
 	GestorJugadores::getInstancia()->setJugadores(pj1);
 }
-
 
 
 bool GestorColisiones::JugadorWaypoint() {

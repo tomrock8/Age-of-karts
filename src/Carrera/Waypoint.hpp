@@ -1,6 +1,10 @@
 #ifndef WAYPOINT_H
 #define WAYPOINT_H
 
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for C++  
+#endif
+
 #include "btBulletDynamicsCommon.h"
 
 class obj3D;

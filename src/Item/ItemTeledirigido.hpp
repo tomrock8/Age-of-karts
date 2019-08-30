@@ -7,6 +7,7 @@
 
 #include "Item.hpp"
 #include "Waypoint.hpp"
+#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 
 class ItemTeledirigido : public Item
 {

@@ -1,20 +1,17 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-
-#include "MotorFisicas.hpp"
-
 #include <iostream>
 #include <vector>
 #include <ctime>
 
+#include "btBulletDynamicsCommon.h"
+#include "btBulletCollisionCommon.h"
+#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 
-class btVector3;
-class btTransform;
-class btRigidBody;
 class obj3D;
 
-typedef enum { CUBO, ESFERA, CILINDRO } forma_Colision;
+enum forma_Colision { CUBO, ESFERA, CILINDRO };
 
 class Item
 {

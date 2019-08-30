@@ -1,6 +1,8 @@
 #include "CorredorJugador.hpp"
 #include "Client.hpp"
 #include "obj3D.hpp"
+#include "TMotor.hpp"
+#include "GestorSonido.hpp"
 
 CorredorJugador::CorredorJugador(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(pos, tipo) {
 	checkItem = false;

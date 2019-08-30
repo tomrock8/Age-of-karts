@@ -4,10 +4,12 @@
 
 #include "CorredorJugador.hpp"
 #include "CorredorRed.hpp"
+#include "Obj3D.hpp"
+#include "TMotor.hpp"
 
 #define DEBUG_BUILD
 
-Client *Client::instancia = NULL;
+Client* Client::instancia = NULL;
 
 //==================================================================================
 // constructor que inicializa los valores de las variables requeridad por el cliente
@@ -36,7 +38,7 @@ Client::Client(int maxPlay)
 // coger instancia del singleton
 //==================================================================================
 
-Client *Client::getInstancia() {
+Client* Client::getInstancia() {
 	if (instancia == NULL)
 		instancia = new Client(4);
 
@@ -138,9 +140,9 @@ void Client::UpdateNetworkKeyboard()
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_O) == GLFW_PRESS) {
 			if (!pressed3) {
 				//if (GestorJugadores::getInstancia()->getJugadores().at(controlPlayer)->getLimite() >= 25) {
-					std::cout << "Ulti lanzada\n";
-					ulti = true;
-					pressed3 = true;
+				std::cout << "Ulti lanzada\n";
+				ulti = true;
+				pressed3 = true;
 				//}
 			}
 		}
@@ -194,7 +196,7 @@ void Client::ChangeCharacter(bool i) {
 // funcion que recoge los paquetes recibidos por el cliente y realiza unas acciones u otras segun su identificador
 //==================================================================================================================
 int Client::ReceivePackets() {
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	GestorJugadores* jugadores = GestorJugadores::getInstancia();
 	//bucle que trata todos los paquetes recibidos en esta iteracion
 	if (disconnection) {
 		return 1;
@@ -202,7 +204,7 @@ int Client::ReceivePackets() {
 	for (p = client->Receive(); p; client->DeallocatePacket(p), p = client->Receive())
 	{
 		players = jugadores->getJugadores();
-		Corredor *playerAux;
+		Corredor* playerAux;
 		//se coge el identificador del paquete recibido para los casos del switch
 		packetIdentifier = GetPacketIdentifier(p);
 
@@ -531,7 +533,7 @@ int Client::ReceivePackets() {
 			typeID = ID_SPAWN_PLAYER;
 			players.at(i)->SetNetworkIDManager(&networkIDManager);
 			playerNetworkID = players.at(i)->GetNetworkID();
-			assert(networkIDManager.GET_OBJECT_FROM_ID<CorredorJugador *>(playerNetworkID) == players.at(numPlayers));
+			assert(networkIDManager.GET_OBJECT_FROM_ID<CorredorJugador*>(playerNetworkID) == players.at(numPlayers));
 			x = pos.getX();
 			y = pos.getY();
 			z = pos.getZ();
@@ -554,8 +556,8 @@ int Client::ReceivePackets() {
 			packetName = "ID_PLAYER_MOVE";
 			if (started)
 			{
-				float *pos = new float[3];
-				float *ori = new float[3];
+				float* pos = new float[3];
+				float* ori = new float[3];
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(pos[0]);
 				bsIn.Read(pos[1]);
@@ -583,7 +585,7 @@ int Client::ReceivePackets() {
 				bsIn.Read(estado3);
 				bsIn.Read(estado4);
 				bsIn.Read(id);
-				EstadosJugador *estados = players.at(id)->getEstados();
+				EstadosJugador* estados = players.at(id)->getEstados();
 
 				estados->setEstadoMovimiento(estado1);
 				estados->setDireccionMovimiento(estado2);
@@ -598,8 +600,8 @@ int Client::ReceivePackets() {
 			packetName = "ID_PLAYER_REFRESH";
 			if (started)
 			{
-				float *pos = new float[3];
-				float *ori = new float[3];
+				float* pos = new float[3];
+				float* ori = new float[3];
 				bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 				bsIn.Read(pos[0]);
 				bsIn.Read(pos[1]);
@@ -631,8 +633,8 @@ int Client::ReceivePackets() {
 			packetName = "ID_REFRESH_SERVER";
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
 			if (started) {
-				float *pos = new float[3];
-				float *ori = new float[3];
+				float* pos = new float[3];
+				float* ori = new float[3];
 				for (int i = 0; i < players.size(); i++) {
 					bsIn.Read(id);			//CONTROLPLAYER
 					bsIn.Read(pos[0]); //POSICION ACTUAL
@@ -712,7 +714,7 @@ int Client::ReceivePackets() {
 //====================================================================================================
 // Se recoge el identificador del paquete que se le pasa por parametro (se llama desde ReceivePackets)
 //====================================================================================================
-unsigned char Client::GetPacketIdentifier(RakNet::Packet *p)
+unsigned char Client::GetPacketIdentifier(RakNet::Packet* p)
 {
 	if (p == 0)
 		return 255;
@@ -730,7 +732,7 @@ unsigned char Client::GetPacketIdentifier(RakNet::Packet *p)
 //==========================================================================================
 // Cuando el cliente ha cargado todos los modelos, manda al server la señal
 //==========================================================================================
-void Client::GameLoad(){
+void Client::GameLoad() {
 	typeID = ID_CLIENT_LOAD;
 	RakNet::BitStream bsOut;
 	bsOut.Write(typeID);
@@ -755,9 +757,9 @@ void Client::GameLoad(){
 void Client::PlayerMovement() {
 
 	if (started) {
-		GestorJugadores *jugadores = GestorJugadores::getInstancia();
+		GestorJugadores* jugadores = GestorJugadores::getInstancia();
 		players = jugadores->getJugadores();
-		EstadosJugador *estados = players.at(controlPlayer)->getEstados();
+		EstadosJugador* estados = players.at(controlPlayer)->getEstados();
 		RakNet::BitStream bsOut;
 		typeID = ID_PLAYER_MOVE;
 		bsOut.Write(typeID);
@@ -807,7 +809,7 @@ void Client::ShutDownClient()
 }
 
 void Client::FinalizarCarrera() {
-	GestorJugadores *jugadores = GestorJugadores::getInstancia();
+	GestorJugadores* jugadores = GestorJugadores::getInstancia();
 	players = jugadores->getJugadores();
 	typeID = ID_RETURN_LOBBY;
 	RakNet::BitStream bsOut;
@@ -848,7 +850,7 @@ std::vector<structClientes> Client::getClientes() {
 	return clientes;
 }
 
-bool Client::getPlayersLoaded(){
+bool Client::getPlayersLoaded() {
 	return allPlayerLoaded;
 }
 
@@ -873,7 +875,7 @@ void Client::setArrayClients(std::string ip, int tipo, bool rdy, bool corredorJ,
 		controlPlayer = clientes.size();
 		clientes.push_back(clientAux);
 	}
-	
+
 
 }
 

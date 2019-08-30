@@ -3,6 +3,11 @@
 #include "TAnimacion.hpp"
 #include "cameraThird.hpp"
 #include "particleSystem.hpp"
+#include "TMotor.hpp"
+#include "Corredor.hpp"
+#include "GestorSonido.hpp"
+#include "TNodo.hpp"
+#include "Timer.hpp"
 
 EscenaPodio::EscenaPodio(Escena::tipo_escena tipo, std::vector<Corredor::tipo_jugador> jugadores) : Escena(tipo) {
 	camera = new cameraThird("camara_jugador3apersona", "escena_raiz", 16 / 9);
@@ -227,16 +232,11 @@ Escena::tipo_escena EscenaPodio::comprobarInputs() {
 		pulsados = false;
 	}
 
-
 	return Escena::tipo_escena::PODIO;
-
 }
 
 void EscenaPodio::init() {
-
-
 	TMotor::instancia().initDebugWindow();
-
 
 	podio->setPosition(0, 0, 0);
 	podio->setScale(1, 1, 1);
@@ -279,11 +279,6 @@ void EscenaPodio::init() {
 	particulas.at(3)->setType(1);
 	particulas.at(3)->setColor(glm::vec3(1.0, 0.5, 0.0));
 
-
-
-
-
-
 }
 
 void EscenaPodio::dibujar() {
@@ -297,12 +292,9 @@ void EscenaPodio::dibujar() {
 	TMotor::instancia().drawIMGUI();
 }
 
-void EscenaPodio::limpiar() {
-
-}
+void EscenaPodio::limpiar() {}
 
 void EscenaPodio::update() {
-
 	if ((time->getTimer() - tm) > 2 && !entra) {
 		fuentePodio = new AlSource();
 		fuentePodio->setLoop(true);
@@ -323,12 +315,9 @@ void EscenaPodio::update() {
 			static_cast<TAnimacion*>(tercero->getNode()->getEntidad())->setVisible(true);
 			static_cast<TAnimacion*>(tercero->getNode()->getEntidad())->setPlaying(true);
 		}
-
 	}
 
-
 	float velocidad = 0.05;
-
 
 	if (incremento <= -20) {
 		aumento = true;
@@ -340,7 +329,6 @@ void EscenaPodio::update() {
 		aumento = false;
 		//cout<<"voy a restar"<<endl;
 	}
-
 
 	if (aumento)
 		incremento += velocidad;

@@ -3,6 +3,8 @@
 #include "elementoHud.hpp"
 #include "TMotor.hpp"
 #include "hud.hpp"
+#include "Timer.hpp"
+#include "Client.hpp"
 
 EscenaLobby::EscenaLobby(Escena::tipo_escena tipo, std::string ipC) : Escena(tipo) {
 

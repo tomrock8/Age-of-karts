@@ -1,5 +1,5 @@
 #include "CorredorRed.hpp"
-
+#include "Obj3D.hpp"
 
 CorredorRed::CorredorRed(btVector3 pos, Corredor::tipo_jugador tipo) : Corredor(pos, tipo) {
 	nombre = "JugadorRed";

@@ -1,4 +1,5 @@
 #include "EscenaCreditos.hpp"
+#include "TMotor.hpp"
 
 EscenaCreditos::EscenaCreditos() : Escena(Escena::tipo_escena::CREDITOS) {
 	/*texto = L"Autores:\n\n";

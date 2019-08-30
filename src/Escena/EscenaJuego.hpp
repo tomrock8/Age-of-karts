@@ -6,16 +6,23 @@
 #endif
 
 #include "Escena.hpp"
-#include "DebugFisicas.hpp"
-#include "GestorColisiones.hpp"
-#include "GestorCarrera.hpp"
-#include "Timer.hpp"
+#include "Corredor.hpp"
+
+#include <iostream>
+#include <string>
 #include <vector>
 
-class Corredor;
+#include "btBulletDynamicsCommon.h"
+
 class elementoHud;
 class cameraThird;
 class AlSource;
+class DebugDraw;
+class GestorColisiones;
+class GestorCarrera;
+class Client;
+class Timer;
+class obj3D;
 
 class EscenaJuego : public Escena {
 public:
@@ -28,7 +35,7 @@ public:
 
 	virtual void limpiar() override;
 	virtual void update() override;
-	Escena::tipo_escena comprobarInputs();
+	tipo_escena comprobarInputs();
 	std::vector<Corredor::tipo_jugador> getJugadores();
 
 	// METODOS GET

@@ -1,5 +1,7 @@
 #include "EscenaOpciones.hpp"
 #include "hud.hpp"
+#include "GestorSonido.hpp"
+#include "TMotor.hpp"
 
 EscenaOpciones::EscenaOpciones(Escena::tipo_escena tipo) : Escena(tipo) {
 	end = false;

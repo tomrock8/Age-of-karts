@@ -3,6 +3,9 @@
 
 #include "Escena.hpp"
 
+#include <iostream>
+#include <string>
+
 class elementoHud;
 class AlSource;
 

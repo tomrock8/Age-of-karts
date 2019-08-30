@@ -6,6 +6,18 @@
 #include "elementoHud.hpp"
 #include "cameraThird.hpp"
 #include "billboard.hpp"
+#include "Pista.hpp"
+#include "MotorFisicas.hpp"
+#include "GestorIDs.hpp"
+#include "Item.hpp"
+#include "Caja.hpp"
+#include "DebugFisicas.hpp"
+#include "GestorColisiones.hpp"
+#include "GestorCarrera.hpp"
+#include "GestorJugadores.hpp"
+#include "Timer.hpp"
+#include "Obj3D.hpp"
+#include "Client.hpp"
 
 EscenaJuego::EscenaJuego(tipo_escena tipo) : Escena(tipo) {
 	end = false;
@@ -150,7 +162,6 @@ void EscenaJuego::init() {
 
 		if (numPantallas != num_jugadores) {
 			numPantallas = 1;
-
 		}
 		else {
 			for (int i = 1; i < numPantallas; i++) {
@@ -1215,15 +1226,11 @@ void EscenaJuego::debugPlot(int j, float k, std::string str) {		//Funcion que si
 
 }
 
-
 std::vector<Corredor::tipo_jugador> EscenaJuego::getJugadores() {
 	pj = GestorJugadores::getInstancia()->getJugadores();
 	std::vector<Corredor::tipo_jugador> tipoJugadores;
 
-
-
 	for (int i = 0; i < pj.size(); i++) {
-
 		if (tipoJugadores.size() == 0) {
 			if (pj.at(i)->getPosicionCarrera() == 1) {
 				tipoJugadores.push_back(pj.at(i)->getTipoJugador());

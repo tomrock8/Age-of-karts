@@ -21,6 +21,7 @@
 #include "TNodo.hpp"
 #include "billboard.hpp"
 #include "GestorSonido.hpp"
+#include "TMotor.hpp"
 
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*

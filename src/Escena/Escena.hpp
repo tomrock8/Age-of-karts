@@ -1,16 +1,12 @@
 #ifndef ESCENA_H
 #define ESCENA_H
 
-#include "Client.hpp"
-#include "GestorSonido.hpp"
-#include "TMotor.hpp"
-
 class Escena {
 public:
-	typedef enum { MENU, CARRERA, ONLINE, CARGA, LOBBY, OPCIONES, CREDITOS, SALIR, PODIO } tipo_escena; // Definicion de los diferentes tipos de escenas
+	enum tipo_escena { MENU, CARRERA, ONLINE, CARGA, LOBBY, OPCIONES, CREDITOS, SALIR, PODIO }; // Definicion de los diferentes tipos de escenas
 	static const int nTipos = 6; // Numero de tipos de escenas que pueden haber
 
-	typedef enum { CAMBIO, CORRIENDO, CARGANDO } estado_escena; // Definicion del estado actual de la escena
+	enum estado_escena { CAMBIO, CORRIENDO, CARGANDO }; // Definicion del estado actual de la escena
 
 	Escena(tipo_escena tipo);
 	~Escena();

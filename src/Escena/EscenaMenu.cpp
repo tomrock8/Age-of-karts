@@ -1,5 +1,8 @@
 #include "EscenaMenu.hpp"
 #include "hud.hpp"
+#include "TMotor.hpp"
+#include "GestorSonido.hpp"
+#include "Client.hpp"
 
 EscenaMenu::EscenaMenu() : Escena(Escena::tipo_escena::MENU) {
 	initHud(); // Inicializacion del hud
@@ -58,7 +61,7 @@ void EscenaMenu::initHud() {
 
 	//Se crea el hud del menu local
 	TMotor::instancia().newHud("LocalMenuHUD");
-	
+
 	//Se añaden los distintos elementos del hud y se posicionan correctamente
 	//--FONDO PARA LA SELECCION DE MODO--
 	TMotor::instancia().getActiveHud()->addElement(2.0f, 2.0f, "fondopantallaPartida", "assets/HUD/MainMenu/fondo.png");
@@ -94,7 +97,7 @@ EscenaMenu::~EscenaMenu() {
 
 void EscenaMenu::init() {}
 
-void EscenaMenu::dibujar() {	
+void EscenaMenu::dibujar() {
 	//Limpiamos el dibujado anterior asignando un color de fondo
 	TMotor::instancia().clean(0.16f, 0.533f, 0.698f, 0.0f);
 	//Establecemos la zona de renderizado
@@ -110,10 +113,10 @@ void EscenaMenu::update() {}
 std::string EscenaMenu::getIpConexion() { return ipConexion; }
 
 Escena::tipo_escena EscenaMenu::comprobarInputs() {
-	int id=0;
-	bool mandoConectado=false;
-	const unsigned char *buttons = nullptr;
-	const float *axes = nullptr;
+	int id = 0;
+	bool mandoConectado = false;
+	const unsigned char* buttons = nullptr;
+	const float* axes = nullptr;
 	if (1 == glfwJoystickPresent(id)) {
 		mandoConectado = true;
 		int buttonCount;
@@ -127,8 +130,9 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 		if (!pressed) {
 			return Escena::tipo_escena::SALIR;
 		}
-	}else if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) { //Inputs para el menu principal
-		//Segun se toque arriba o abajo, el usuario se va moviendo entre los distintos botones del menu
+	}
+	else if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) { //Inputs para el menu principal
+	   //Segun se toque arriba o abajo, el usuario se va moviendo entre los distintos botones del menu
 		if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_DOWN) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[14] || 0.5f <= axes[1]))) {
 			if (!pressed) {
 				fuenteOpcion->play(SOUND_OPCION); //Reproducimos sonido opcion;
@@ -239,9 +243,9 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 
 	}
 
-		//MODIFICAMOS LA INTERFAZ EN FUNCION DE LAS ACCIONES DEL USUARIO
+	//MODIFICAMOS LA INTERFAZ EN FUNCION DE LAS ACCIONES DEL USUARIO
 
-	//Si esta activo el menu principal, se tienen en cuenta los siguientes inputs
+//Si esta activo el menu principal, se tienen en cuenta los siguientes inputs
 	if (strcmp(TMotor::instancia().getActiveHud()->getName(), "MainMenuHUD") == 0) {
 		TMotor::instancia().getActiveHud()->changeTextureElement("local", "assets/HUD/MainMenu/btn_local_normal.png");
 		TMotor::instancia().getActiveHud()->changeTextureElement("online", "assets/HUD/MainMenu/btn_online_normal.png");
@@ -274,7 +278,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 	//Si esta activa el menu de juego local, se realizan los siguientes cambios
 	if (strcmp(TMotor::instancia().getActiveHud()->getName(), "LocalMenuHUD") == 0) {
 		//fondo para el menu
-		
+
 		TMotor::instancia().getActiveHud()->changeTextureElement("unJugador", "assets/HUD/MainMenu/btn_unJugador_normal.png");
 		TMotor::instancia().getActiveHud()->changeTextureElement("pantallaPartida", "assets/HUD/MainMenu/btn_pantallaPartida_normal.png");
 
@@ -290,7 +294,7 @@ Escena::tipo_escena EscenaMenu::comprobarInputs() {
 			TMotor::instancia().getActiveHud()->scaleElement("pantallaPartida", 1.75f, 2.0f);
 		}
 	}
-	
+
 	//Se retorna la escena Menu (donde estamos) en caso de que no se haya cambiado de pantalla
 	return Escena::tipo_escena::MENU;
 

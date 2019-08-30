@@ -6,7 +6,7 @@ GestorSonido::GestorSonido() {
 	device = alcOpenDevice(NULL);
 	if (device == NULL) {
 		// Handle Exception
-		cout << "DEVICE IS NULL\n";
+		std::cout << "DEVICE IS NULL\n";
 	}
 	//Create a context
 	context = alcCreateContext(device, NULL);
@@ -38,7 +38,7 @@ GestorSonido::GestorSonido() {
 }
 
 int GestorSonido::cargarSonido(std::string file) {
-	const char * c = file.c_str();
+	const char* c = file.c_str();
 	//cargamos el archivo de audio
 	alutLoadWAVFile((ALbyte*)c, &alFormatBuffer, &alBuffer, &alBufferLen, &alFreqBuffer, &alLoop);
 	alGenBuffers(1, &bufferAux);
@@ -78,7 +78,7 @@ float GestorSonido::getVolGeneral() { return volGeneral; }
 float GestorSonido::getVolMusica() { return volMusica; }
 float GestorSonido::getVolEfectos() { return volEfectos; }
 
-void GestorSonido::getParametros(float * general, float * musica, float * efectos) {
+void GestorSonido::getParametros(float* general, float* musica, float* efectos) {
 	*general = volGeneral;
 	*musica = volMusica;
 	*efectos = volEfectos;

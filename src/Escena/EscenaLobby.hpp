@@ -1,14 +1,18 @@
 #ifndef ESCENALOBBY_H
 #define ESCENALOBBY_H
+
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include <string>
 #include <stdio.h>
 
 #include "Escena.hpp"
-#include "Timer.hpp"
+#include "libGL.hpp"
 
 class elementoHud;
+class Client;
+class Timer;
 
 class EscenaLobby : public Escena {
 public:
@@ -26,9 +30,9 @@ public:
 	void mostrarInfoLobbyPropia();
 	Escena::tipo_escena comprobarInputs();
 	void mostrarTipoPersonaje(int i);
-	int character_callback(GLFWwindow *window, unsigned int codepoint);
+	int character_callback(GLFWwindow* window, unsigned int codepoint);
 	void movimientoVertical(bool interno);
-	void movimientoHorizontal(int k,bool dcha,int id);
+	void movimientoHorizontal(int k, bool dcha, int id);
 	void actualizarSelector();
 	void iniciarCarrera();
 	void crearHUD();
@@ -44,7 +48,7 @@ private:
 	int nElementos; // Numeros para la IP (los ultimos 3)
 	int nElementos2;
 	std::string ipConexion;
-	Client *client;
+	Client* client;
 	bool iniciar;
 	bool empiezaCarrera;
 	bool iniciado;
@@ -53,14 +57,14 @@ private:
 	int count;
 	bool pressed[6];
 	bool firstInit;
-	Timer *time;
+	Timer* time;
 	int laps;
 
 	bool selection_online;
 	bool offline;
 	bool offline_split;
 	bool end;
-    bool checkReady;
+	bool checkReady;
 	bool checkCPU;
 	bool mando;
 	bool pantallaCarga;
@@ -72,26 +76,28 @@ private:
 	int index_mapa;
 	std::string iphost;
 	std::string connecting;
-	std::string *infoLobby;
+	std::string* infoLobby;
 	int numPantallas;
+
 	//elementos del hud
-	elementoHud *fondo;
-	elementoHud *fondo_final;
-	elementoHud *personajeOff;
-	elementoHud *flechaIzq;
-	elementoHud *flechaDer;
-	elementoHud *seleccion;
+	elementoHud* fondo;
+	elementoHud* fondo_final;
+	elementoHud* personajeOff;
+	elementoHud* flechaIzq;
+	elementoHud* flechaDer;
+	elementoHud* seleccion;
 	//elementos del hud:: seleccion de CPU
 
-	elementoHud *CPU;
-	elementoHud *checkLAPS;
+	elementoHud* CPU;
+	elementoHud* checkLAPS;
 	//elementos HUD comunes
-	elementoHud *mapa;
+	elementoHud* mapa;
 
 	//elemtentos HUD Botones
-	elementoHud *start;
-	elementoHud *returnB;
-	elementoHud *selectB;
+	elementoHud* start;
+	elementoHud* returnB;
+	elementoHud* selectB;
+
 	//elementos HUD multiplayer
 	std::vector<elementoHud*> players;
 	std::vector<elementoHud*> playersReady;

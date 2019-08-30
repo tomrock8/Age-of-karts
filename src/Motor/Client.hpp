@@ -9,10 +9,10 @@
 
 #define MAX_PLAYERS 10
 
-struct structClientes{
-    std::string ip;
-    int tipoCorredor;
-    bool ready;
+struct structClientes {
+	std::string ip;
+	int tipoCorredor;
+	bool ready;
 	bool corredorJugador;
 };
 
@@ -25,7 +25,7 @@ public:
 
 	~Client(void);
 
-	static Client *getInstancia();
+	static Client* getInstancia();
 	void CreateClientInterface();
 	void SetIP(std::string ipConexion);
 	void ClientStartup();
@@ -43,7 +43,7 @@ public:
 	void ActualizarClienteConectado();
 	void aumentarTimestamp();
 	void GameLoad();
-	
+
 	//METODOS GET
 	int getControlPlayer();
 	bool getConnected();
@@ -57,14 +57,14 @@ public:
 
 	//METODOS SET
 	void setNetloaded(bool b);
-	void setArrayClients(std::string ip,int tipo,bool rdy,bool corredorJ,int nuevo);
+	void setArrayClients(std::string ip, int tipo, bool rdy, bool corredorJ, int nuevo);
 	void BorrarClientes();
 	void BorrarCliente(int i);
-	
+
 private:
 	Client(int maxPlay);
 
-	static Client *instancia;
+	static Client* instancia;
 
 	int numSockets;
 	int numIPs;
@@ -81,8 +81,8 @@ private:
 	RakNet::NetworkIDManager networkIDManager;
 	RakNet::NetworkID playerNetworkID;
 	RakNet::MessageID typeID;
-	RakNet::Packet *p;
-	RakNet::RakPeerInterface *client;
+	RakNet::Packet* p;
+	RakNet::RakPeerInterface* client;
 
 	std::string serverPort;
 	std::string clientPort;
@@ -100,7 +100,7 @@ private:
 	bool allPlayerLoaded;
 	std::vector<structClientes> clientes;
 
-	unsigned char GetPacketIdentifier(RakNet::Packet *p);
+	unsigned char GetPacketIdentifier(RakNet::Packet* p);
 
 };
 

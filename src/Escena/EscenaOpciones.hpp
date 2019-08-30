@@ -3,6 +3,8 @@
 
 #include "Escena.hpp"
 
+class AlSource;
+
 class EscenaOpciones : public Escena {
 public:
 
@@ -14,8 +16,8 @@ public:
 	virtual void limpiar() override;
 	virtual void update() override;
 	Escena::tipo_escena comprobarInputs();
-	AlSource *fuenteMusica;
-	AlSource *fuenteEfectos;
+	AlSource* fuenteMusica;
+	AlSource* fuenteEfectos;
 
 	// METODOS GET
 

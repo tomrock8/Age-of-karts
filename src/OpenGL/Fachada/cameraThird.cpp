@@ -2,8 +2,10 @@
 #include "TMotor.hpp"
 #include "MotorFisicas.hpp"
 #include "obj3D.hpp"
+#include "TNodo.hpp"
+#include "TTransform.hpp"
 
-cameraThird::cameraThird(const char *name, const char *parentName, float aspectRatio) {
+cameraThird::cameraThird(const char* name, const char* parentName, float aspectRatio) {
 	camara = TMotor::instancia().newCameraNode(name, parentName, aspectRatio);
 	camara->rotate(glm::vec3(0, 1, 0), 180);
 	auxX = 0;
@@ -51,24 +53,22 @@ void cameraThird::lookAt(glm::vec3 posicion) {
 		camara->getPosition().x, camara->getPosition().y, camara->getPosition().z, 1.0f);
 
 
-	glm::mat4 lookAtCamara(camara->getNode()->getEntidad()->getModelViewMatrix()* M);
+	glm::mat4 lookAtCamara(camara->getNode()->getEntidad()->getModelViewMatrix() * M);
 	static_cast<TTransform*>(camara->getNode()->getPadre()->getEntidad())->setMatriz(lookAtCamara);
-
 }
+
 void cameraThird::setPositionStatic(glm::vec3 posicion) {
-
 	camara->setPosition(posicion.x, posicion.y, posicion.z);
-
 }
-void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 direccion) {
 
+void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 direccion) {
 	float zoom = 15;
 	float altura = 7;
 	float maximoRetardo = 8;
 	float retardo = 0.25;
 	bool mandoConectado = false;
-	const unsigned char *buttons = nullptr;
-	const float *axes = nullptr;
+	const unsigned char* buttons = nullptr;
+	const float* axes = nullptr;
 	if (1 == glfwJoystickPresent(id)) {
 		mandoConectado = true;
 		int buttonCount;
@@ -81,41 +81,34 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 	// || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))
 
 	if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_L) || (mandoConectado && (GLFW_PRESS == buttons[3]))) {
-		camara->setPosition(posicion.x + direccion.getX()*zoom, posicion.y + altura, posicion.z + direccion.getZ()*zoom);
+		camara->setPosition(posicion.x + direccion.getX() * zoom, posicion.y + altura, posicion.z + direccion.getZ() * zoom);
 
 	}
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_E) == GLFW_PRESS || (mandoConectado && -0.8f >= axes[3])) {
-
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), -90 * M_PI / 180);
-		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura, posicion.z - direccion2.getZ()*zoom);
-
+		camara->setPosition(posicion.x - direccion2.getX() * zoom, posicion.y + altura, posicion.z - direccion2.getZ() * zoom);
 	}
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_Q) == GLFW_PRESS || (mandoConectado && 0.8f <= axes[3])) {
-
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), 90 * M_PI / 180);
-		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura, posicion.z - direccion2.getZ()*zoom);
-
+		camara->setPosition(posicion.x - direccion2.getX() * zoom, posicion.y + altura, posicion.z - direccion2.getZ() * zoom);
 	}
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_D) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[12] || 0.5f <= axes[0]))) {
-
-		if (auxX <= maximoRetardo)
+		if (auxX <= maximoRetardo) {
 			auxX += retardo;
+		}
 
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
-		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura, posicion.z - direccion2.getZ()*zoom);
-
+		camara->setPosition(posicion.x - direccion2.getX() * zoom, posicion.y + altura, posicion.z - direccion2.getZ() * zoom);
 	}
 	else if (glfwGetKey(TMotor::instancia().getVentana(), GLFW_KEY_A) == GLFW_PRESS || (mandoConectado && (GLFW_PRESS == buttons[11] || -0.5f >= axes[0]))) {
-
-		if (auxX >= -maximoRetardo)
+		if (auxX >= -maximoRetardo) {
 			auxX -= retardo;
+		}
 
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
-		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura, posicion.z - direccion2.getZ()*zoom);
-
+		camara->setPosition(posicion.x - direccion2.getX() * zoom, posicion.y + altura, posicion.z - direccion2.getZ() * zoom);
 	}
 	else {
-
 		if (auxX > 0) {
 			auxX -= retardo;
 		}
@@ -124,33 +117,31 @@ void cameraThird::setPosition(glm::vec3 posicion, glm::vec3 rotacion, btVector3 
 		}
 
 		direccion2 = direccion.rotate(btVector3(0, 1, 0), auxX * M_PI / 180);
-		camara->setPosition(posicion.x - direccion2.getX()*zoom, posicion.y + altura, posicion.z - direccion2.getZ()*zoom);
-
+		camara->setPosition(posicion.x - direccion2.getX() * zoom, posicion.y + altura, posicion.z - direccion2.getZ() * zoom);
 	}
-
 }
 
 void cameraThird::comprobarInputs() {}
 obj3D* cameraThird::getNodo() { return camara; }
 
-btRigidBody *cameraThird::initializePhysics() {
+btRigidBody* cameraThird::initializePhysics() {
 
 	btVector3 escala(5, 5, 5);
 	btVector3 posicion(-10, 10, 31);
 	btScalar masa = btScalar(10);
-	MotorFisicas *bullet = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = bullet->getMundo();
+	MotorFisicas* bullet = MotorFisicas::getInstancia();
+	btDynamicsWorld* mundo = bullet->getMundo();
 	//std::vector<btRigidBody *> objetos = bullet->getObjetos();
 	// Set the initial position of the object
 	btTransform Transform;
 	Transform.setIdentity();
 
 	Transform.setOrigin(posicion);
-	btDefaultMotionState *MotionState = new btDefaultMotionState(Transform);
+	btDefaultMotionState* MotionState = new btDefaultMotionState(Transform);
 
 	// Create the shape
 	btVector3 HalfExtents(escala.getX(), escala.getY(), escala.getZ());
-	btBoxShape *Shape = new btBoxShape(HalfExtents);
+	btBoxShape* Shape = new btBoxShape(HalfExtents);
 
 	// Add mass
 	btVector3 LocalInertia;
@@ -159,10 +150,10 @@ btRigidBody *cameraThird::initializePhysics() {
 	Shape->calculateLocalInertia(masa, LocalInertia);
 
 	// Create the rigid body object
-	btRigidBody *rigidBody = new btRigidBody(masa, MotionState, Shape, LocalInertia);
+	btRigidBody* rigidBody = new btRigidBody(masa, MotionState, Shape, LocalInertia);
 	btTransform t;
 	rigidBody->getMotionState()->getWorldTransform(t);
-	rigidBody->setUserPointer((void *)(camara));
+	rigidBody->setUserPointer((void*)(camara));
 
 	rigidBody->setActivationState(DISABLE_DEACTIVATION);
 	// Add it to the world
@@ -171,11 +162,9 @@ btRigidBody *cameraThird::initializePhysics() {
 	//bullet->setObjetos(objetos);
 	rigidBody->setGravity(btVector3(0, 0, 0));
 	return rigidBody;
-
-
 }
 
-void cameraThird::moveCamera(btRigidBody * pj1, btVector3 dir) {
+void cameraThird::moveCamera(btRigidBody* pj1, btVector3 dir) {
 	/*
 		cout << "estoy en moveCamera(64) en cameraThird" << endl;
 		glm::vec3 RelativeToCar;
@@ -278,7 +267,7 @@ void cameraThird::moveCamera(btRigidBody * pj1, btVector3 dir) {
 		//}
 		*/
 }
-void cameraThird::movefpsCamera(btRigidBody * pj1) {
+void cameraThird::movefpsCamera(btRigidBody* pj1) {
 	/*
 	camera = Motor3d::instancia().getDevice()->getSceneManager()->getActiveCamera();
 	vector3df RelativeToCar(0,1,0);
@@ -325,7 +314,7 @@ void cameraThird::movefpsCamera(btRigidBody * pj1) {
 
 	*/
 }
-void cameraThird::moveCameraControl(btRigidBody *pj1) {
+void cameraThird::moveCameraControl(btRigidBody* pj1) {
 	/*
 		TNodo *camera = node;
 		position = getParentPosition();
@@ -372,7 +361,7 @@ void cameraThird::moveCameraControl(btRigidBody *pj1) {
 
 
 GLuint cameraThird::getID() { return id; }
-const char *cameraThird::getName() { return name; }
+const char* cameraThird::getName() { return name; }
 /*
 glm::mat4 cameraThird::getParentPosition() {x
 	glm::mat4 aux = (static_cast<TTransform*>(parentNode->getPadre()->getEntidad())->getMatriz());
@@ -385,17 +374,14 @@ glm::mat4 cameraThird::getParentRotation() {
 }
 */
 
-
 void cameraThird::setID(GLuint id) {
 	this->id = id;
 }
 
-void cameraThird::setName(const char *nombre) {
+void cameraThird::setName(const char* nombre) {
 	name = nombre;
 	//node->setName(nombre);
 }
-
-
 
 void cameraThird::setRotation(glm::vec3 axis, GLfloat angle) {
 

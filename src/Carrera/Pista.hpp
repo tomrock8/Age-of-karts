@@ -15,9 +15,7 @@ class Waypoint;
 class obj3D;
 
 class Pista {
-
 public:
-
 	//Destructor
 	~Pista();
 	void createMap(const char* path);

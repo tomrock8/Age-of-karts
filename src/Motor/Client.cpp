@@ -351,7 +351,7 @@ int Client::ReceivePackets() {
 			//Actualiza los clientes conectados en el servidor para cambiar los datos del lobby
 		case ID_LOAD_CURRENT_CLIENTS:
 			packetName = "ID_LOAD_CURRENT_CLIENTS";
-			cout << "ID_LOAD_CURRENT_CLIENTS\n";
+			std::cout << "ID_LOAD_CURRENT_CLIENTS\n";
 			param2 = numClients;
 			clientes.clear();
 			bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -991,7 +991,7 @@ void Client::PlayerThrowObject() {
 
 std::string Client::getClientStats(int i) {
 	if (i == 0) {
-		return to_string(client->GetAveragePing(client->GetSystemAddressFromIndex(0)));
+		return std::to_string(client->GetAveragePing(client->GetSystemAddressFromIndex(0)));
 	}
 	else if (i == 1) {
 		char msj[2048];

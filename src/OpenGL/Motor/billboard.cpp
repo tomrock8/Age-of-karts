@@ -4,7 +4,8 @@
 #include "TRecursoImagen.hpp"
 #include "obj3D.hpp"
 #include "Shader.hpp"
-
+#include "TNodo.hpp"
+#include "TEntidad.hpp"
 
 //Constructor que crea un billboard enlazandolo a un objeto
 billboard::billboard(obj3D* o) {

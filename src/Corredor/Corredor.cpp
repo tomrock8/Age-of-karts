@@ -23,6 +23,7 @@
 #include "GestorSonido.hpp"
 #include "TMotor.hpp"
 #include "MotorFisicas.hpp"
+#include "TMalla.hpp"
 
 //-------------------------\*
 //---CONSTRUCTOR CORREDOR--\*
@@ -779,7 +780,7 @@ void Corredor::setWaypointActual(obj3D* nodo) {
 		if (siguiente_aux->getID() - 7 == 0) {
 			//cout<<"HAS DADO UNA VUELTA"<<endl;
 			if (getMaxVuetas() >= getVueltas()) {
-				cout << "VUELTA: " << tiempoVuelta << endl;
+				std::cout << "VUELTA: " << tiempoVuelta << std::endl;
 			}
 			vueltas++;
 			actual = siguiente_aux;
@@ -1384,24 +1385,22 @@ void Corredor::update() {
 std::string Corredor::toString() {
 	std::string resultado = "";
 
-	resultado += "\nJugador " + to_string(this->getID());
-	resultado += "\nVELOCIDAD: " + to_string((int)vehiculo->getCurrentSpeedKmHour()) + " km/h";
+	resultado += "\nJugador " + std::to_string(this->getID());
+	resultado += "\nVELOCIDAD: " + std::to_string((int)vehiculo->getCurrentSpeedKmHour()) + " km/h";
 	if (direccionContraria != 0) {
-		resultado += "\nVAS EN DIRECCION CONTRARIA, JUGADOR: " + to_string(this->getID()) + "\n";
+		resultado += "\nVAS EN DIRECCION CONTRARIA, JUGADOR: " + std::to_string(this->getID()) + "\n";
 	}
 
-	resultado += "\nPOSICION: " + to_string(posicionCarrera);
-	resultado += "\nVUELTAS: " + to_string(vueltas);
+	resultado += "\nPOSICION: " + std::to_string(posicionCarrera);
+	resultado += "\nVUELTAS: " + std::to_string(vueltas);
 	if (vueltas > maxvueltas)
-		resultado += "HA LLEGADO " + to_string(posicionCarrera) + "!\n";
+		resultado += "HA LLEGADO " + std::to_string(posicionCarrera) + "!\n";
 
 	if (tiempoVuelta != 0)
-		resultado += "\nTIEMPO DE VUELTA: " + to_string(tiempoVuelta);
+		resultado += "\nTIEMPO DE VUELTA: " + std::to_string(tiempoVuelta);
 
-	resultado += "\nOBJETO: " + to_string(EstadosJugador::estado_objeto(tipoObj));
-	resultado += "\nHabilidad: " + to_string(limite) + "/100\n";
-
-
+	resultado += "\nOBJETO: " + std::to_string(EstadosJugador::estado_objeto(tipoObj));
+	resultado += "\nHabilidad: " + std::to_string(limite) + "/100\n";
 
 	return resultado;
 }

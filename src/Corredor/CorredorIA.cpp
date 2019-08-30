@@ -1169,9 +1169,9 @@ void CorredorIA::debugIA() {
 
 	std::string agrega;
 	texto = "";
-	texto += ("WAYPOINT ACTUAL: " + to_string(actual->getID() - 7));
+	texto += ("WAYPOINT ACTUAL: " + std::to_string(actual->getID() - 7));
 	texto += ("\n");
-	texto += "WAYPOINT SIGUIENTE: " + to_string(siguiente->getID() - 7);
+	texto += "WAYPOINT SIGUIENTE: " + std::to_string(siguiente->getID() - 7);
 	texto += "\n";
 
 	if (noGiro)

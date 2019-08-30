@@ -1,22 +1,26 @@
 #include "obj3D.hpp"
 #include "TMotor.hpp"
+#include "TMalla.hpp" 
+#include "TTransform.hpp" 
+#include "TNodo.hpp" 
 
-obj3D::obj3D(TNodo *m, const char *n, GLuint i) {
+obj3D::obj3D(TNodo* m, const char* n, GLuint i) {
 	node = m;
 	position = getPosition();
 	rotation = glm::vec3(0.0f);
 	name = n;
 	id = i;
-
 }
 
 obj3D::~obj3D() {
 	setVisible(false);
 	node->deleteNode();
 }
-void obj3D::setNode(TNodo *m) {
+
+void obj3D::setNode(TNodo* m) {
 	node = m;
 }
+
 void obj3D::rotate(glm::vec3 axis, GLfloat angle) {
 	rotation.x += angle * axis.x;
 	rotation.y += angle * axis.y;
@@ -35,7 +39,6 @@ void obj3D::scale(float x, float y, float z) {
 	escala = glm::vec3(x, y, z);
 }
 
-
 // METODOS SET
 void obj3D::setRotation(glm::vec3 axis, GLfloat angle) {
 	rotation.x = angle * axis.x;
@@ -53,8 +56,8 @@ void obj3D::setRotation(float X, float Y, float Z) {
 
 // METODOS GET
 GLuint obj3D::getID() { return id; }
-const char *obj3D::getName() { return name; }
-TNodo *obj3D::getNode(){ return node; }
+const char* obj3D::getName() { return name; }
+TNodo* obj3D::getNode() { return node; }
 glm::vec3 obj3D::getScale() { return escala; }
 bool obj3D::isVisible() { return static_cast<TMalla*>(node->getEntidad())->isVisible(); }
 
@@ -78,7 +81,7 @@ glm::vec3 obj3D::getRotation() {
 void obj3D::setID(GLuint id) { this->id = id; }
 void obj3D::setVisible(bool visible) { static_cast<TMalla*>(node->getEntidad())->setVisible(visible); }
 
-void obj3D::setName(const char *nombre) {
+void obj3D::setName(const char* nombre) {
 	name = nombre;
 	node->setName(nombre);
 }

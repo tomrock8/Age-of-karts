@@ -4,6 +4,8 @@
 #include "obj3D.hpp"
 #include "Shader.hpp"
 #include "TGestorImagenes.hpp"
+#include "TNodo.hpp"
+#include "TEntidad.hpp"
 
 //Constructor que crea un sistema de particulas que siguen a un objeto
 particleSystem::particleSystem() {

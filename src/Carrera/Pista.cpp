@@ -7,10 +7,10 @@
 #include "GestorIDs.hpp"
 #include "Obj3D.hpp"
 
+
 Pista* Pista::instancia = NULL;
 
-Pista::Pista() {
-}
+Pista::Pista() { }
 
 Pista::~Pista() {
 	//cout << "Destructor de PISTA. Entro.\n";
@@ -55,16 +55,12 @@ Pista::~Pista() {
 	//	cout << "Destructor de PISTA. Salgo.\n";
 }
 
-
-
-
 Pista* Pista::getInstancia() {
 	if (instancia == NULL)
 		instancia = new Pista();
 
 	return instancia;
 }
-
 
 void Pista::setMapa() {
 	//void Pista::setMapa(const char* mapa, const char *fisicas, const char *waypoints) {
@@ -104,8 +100,7 @@ void Pista::loadWaypoints(const char* waypoints) {
 	tamCajas = 0;
 	float orientacion = 0.0f;
 
-
-	ifstream myfile(waypoints);
+	std::ifstream myfile(waypoints);
 
 	if (myfile.is_open()) {
 		//crear el array de waypoints para almacenar el path
@@ -163,22 +158,22 @@ void Pista::loadWaypoints(const char* waypoints) {
 				getline(myfile, pX, ' ');//posiciones central wp
 				getline(myfile, pY, ' ');//posiciones central wp
 				getline(myfile, pZ, ' ');//posiciones central wp
-			 //=========================================//
-			 //			rellenar los waypoints		   //
-			 //=========================================//
-			 //comento lo de la id de los waypoints porq da conflico con las cajas
+
+										 //=========================================//
+				//			rellenar los waypoints		   //
+				//=========================================//
+				//comento lo de la id de los waypoints porq da conflico con las cajas
 				arrayWaypoints.at(arrayWaypoints.size() - 1)->getWaypoint()->setID(arrayWaypoints.size() - 1);
 
 				if (arrayWaypoints.size() - 1 > 0 && arrayWaypoints.size() - 1 <= (stoi(tamanyoArrayWaypoints) - 2))
 				{
 					arrayWaypoints.at(arrayWaypoints.size() - 1 - 1)->setSiguiente(arrayWaypoints.at(arrayWaypoints.size() - 1));
-
 				}
 				else if (arrayWaypoints.size() - 1 == (stoi(tamanyoArrayWaypoints) - 1)) {
 					arrayWaypoints.at(arrayWaypoints.size() - 1 - 1)->setSiguiente(arrayWaypoints.at(arrayWaypoints.size() - 1));
 					arrayWaypoints.at(arrayWaypoints.size() - 1)->setSiguiente(arrayWaypoints[0]);
-
 				}
+
 				//cambiar a float y almacenar array de waypoints
 				arrayWaypoints.at(arrayWaypoints.size() - 1)->setPosicion(stof(pX), stof(pY), stof(pZ));
 				arrayWaypoints.at(arrayWaypoints.size() - 1)->setOrientacion(orientacion);//orientacion del waypoint
@@ -188,20 +183,22 @@ void Pista::loadWaypoints(const char* waypoints) {
 				arrayWaypoints.at(arrayWaypoints.size() - 1)->setID(GestorIDs::instancia().getIDLibre() - 1);
 				tamWaypoints++;
 			}
+
 			if (tipoObj == 1) {//CAJA
 				Caja* cj = new Caja(btVector3(stof(pX), stof(pY), stof(pZ)));
 				arrayCajas.push_back(cj);
 				tamCajas++;
 
 			}
+
 			if (tipoObj == 2) {//TURBO
 				Turbo* tb = new Turbo(btVector3(stof(pX), stof(pY), stof(pZ)), false);
 				arrayTurbos.push_back(tb);
 				tamTurbos++;
 			}
+
 			if (tipoObj == 3) {//POSICION PARRILLA
 				parrilla.push_back(glm::vec3(stof(pX), stof(pY), stof(pZ)));
-
 			}
 			//cout << line << endl;
 		}

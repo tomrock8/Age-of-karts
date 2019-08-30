@@ -74,7 +74,7 @@ std::vector<mesh*> TGestorRecursos::loadMesh(const char* path, bool sta, bool an
 	if (animation) {
 		animationCount = 0;
 	}
-	dir = new string(std::string(path).substr(0, std::string(path).find_last_of('/') + 1));
+	dir = new std::string(std::string(path).substr(0, std::string(path).find_last_of('/') + 1));
 	////cout << " directorio " << dir->c_str() << endl;
 
 	processNode(scene->mRootNode, scene);
@@ -339,8 +339,8 @@ void TGestorRecursos::loadTexture(const aiScene* scene, const aiMesh* mesh, aiTe
 		for (GLuint i = 0; i < mat->GetTextureCount(textureType); i++) {
 			aiString path;
 			if (mat->GetTexture(textureType, i, &path) == AI_SUCCESS) {
-				const string texturePath = path.C_Str();
-				std::string* TextureName = new string(texturePath.substr(0, texturePath.find_first_of('_')));
+				const std::string texturePath = path.C_Str();
+				std::string* TextureName = new std::string(texturePath.substr(0, texturePath.find_first_of('_')));
 				if (recText->getNombre() == NULL) {
 					//cout << "he entrado aqui porque no existia una textura igual" << endl;
 					recText->setNombre(TextureName->c_str());
@@ -348,7 +348,7 @@ void TGestorRecursos::loadTexture(const aiScene* scene, const aiMesh* mesh, aiTe
 
 				//cout << "-----------------------------------------------------------" << endl;
 				//con la textura recogida comprobar que no esta guardada antes de crearla
-				string typeText; //tipo de textura
+				std::string typeText; //tipo de textura
 				//Segun el tipo de textura, se le asigna un nombre para recuperar posteriormente su id a la hora de dibujarla
 				if (textureType == aiTextureType_DIFFUSE) {
 					typeText = "texture_diffuse";

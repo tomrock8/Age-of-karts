@@ -2,11 +2,8 @@
 #define TOBJ3D_H 
 
 #include "libGL.hpp" 
-#include "TMalla.hpp" 
-#include "TTransform.hpp" 
-#include "TNodo.hpp" 
 
-using namespace std;
+class TNodo;
 
 class obj3D {
 public:

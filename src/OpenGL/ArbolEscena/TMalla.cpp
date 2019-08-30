@@ -21,7 +21,6 @@ TMalla::TMalla(std::vector <mesh*> m) {
 			bBoxes.push_back(b);
 		}
 	}
-
 }
 
 TMalla::~TMalla() {
@@ -43,7 +42,6 @@ TMalla::~TMalla() {
 		}
 		bBoxes.clear();
 	}
-
 }
 
 // METODOS GET

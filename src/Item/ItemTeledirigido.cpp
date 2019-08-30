@@ -6,6 +6,7 @@
 
 #include "Obj3D.hpp"
 #include "MotorFisicas.hpp"
+#include "Waypoint.hpp"
 
 ItemTeledirigido::ItemTeledirigido(btVector3 posicion, btVector3 escala, btScalar masa, float tiempoDesctruccion, forma_Colision fcolision, btVector3 tamanyoNodo, btScalar radio,
 	float alturaLanzamiento, int idNodo) : Item(posicion, escala, masa, tiempoDesctruccion, fcolision, tamanyoNodo, radio, alturaLanzamiento, idNodo) {
@@ -26,8 +27,6 @@ ItemTeledirigido::ItemTeledirigido(btVector3 posicion, btVector3 escala, btScala
 	anguloGiro = 0;
 	rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 }
-
-
 
 ItemTeledirigido::~ItemTeledirigido() {
 	actual = nullptr;
@@ -56,18 +55,15 @@ void ItemTeledirigido::updateHijos() {
 
 	ajustarAltura();
 	comprobarAltura(0.1);
-
 }
 
-
-void ItemTeledirigido::setWaypoint(Waypoint *waypoint) {
+void ItemTeledirigido::setWaypoint(Waypoint* waypoint) {
 	actual = waypoint;
 	siguiente = waypoint->getNextWaypoint();
-
 }
 
 void ItemTeledirigido::setWaypointActual() {
-	Pista *mapa = Pista::getInstancia();
+	Pista* mapa = Pista::getInstancia();
 	actual = mapa->getArrayWaypoints()[0];
 
 	if (colision && idwaypoint > actual->getWaypoint()->getID() || colision && idwaypoint == 7) {
@@ -78,15 +74,11 @@ void ItemTeledirigido::setWaypointActual() {
 		else {
 			siguiente = actual->getNextWaypoint();
 		}
-
-
 	}
 	colision = false;
-
 }
 
 void ItemTeledirigido::direccionGiro(btVector3 posicion) {
-
 
 	btVector3 orientacionCoche(orientacion.getX(), orientacion.getY(), orientacion.getZ());
 	btVector3 direccion = btVector3(posicion.getX() - nodo->getPosition().x,
@@ -102,16 +94,12 @@ void ItemTeledirigido::direccionGiro(btVector3 posicion) {
 
 	if (angulo2 > anguloGiro)
 		anguloGiro = -anguloGiro;
-
 }
-
-
-
 
 void ItemTeledirigido::ActualizarRaytest() {
 
-	MotorFisicas *mun = MotorFisicas::getInstancia();
-	btDynamicsWorld *mundo = mun->getMundo();
+	MotorFisicas* mun = MotorFisicas::getInstancia();
+	btDynamicsWorld* mundo = mun->getMundo();
 	mundo->updateAabbs();
 	mundo->computeOverlappingPairs();
 
@@ -124,8 +112,8 @@ void ItemTeledirigido::ActualizarRaytest() {
 	enemigo = false;
 
 	// Raycast central1
-	btVector3 inicio(nodo->getPosition().x + orientacion.getX()*distanciaCoche, nodo->getPosition().y - 2, nodo->getPosition().z + orientacion.getZ()*distanciaCoche);
-	btVector3 fin(nodo->getPosition().x + orientacion.getX()*distanciaRaycast, nodo->getPosition().y - 2, nodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
+	btVector3 inicio(nodo->getPosition().x + orientacion.getX() * distanciaCoche, nodo->getPosition().y - 2, nodo->getPosition().z + orientacion.getZ() * distanciaCoche);
+	btVector3 fin(nodo->getPosition().x + orientacion.getX() * distanciaRaycast, nodo->getPosition().y - 2, nodo->getPosition().z + orientacion.getZ() * distanciaRaycast);
 
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
@@ -136,7 +124,7 @@ void ItemTeledirigido::ActualizarRaytest() {
 	// Raycast central2 derecha
 	//inicio = btVector3(3*orientacion.Z+nodo->getPosition().x,nodo->getPosition().y+1,orientacion.X*-3+nodo->getPosition().z);
 	//inicio = btVector3(Raycast23*orientacion.getZ() + nodo->getPosition().x + orientacion.getX(), nodo->getPosition().y - 1, orientacion.getX()*-Raycast23 + nodo->getPosition().z + orientacion.getZ() );
-	fin = btVector3(Raycast23*orientacion.getZ() + nodo->getPosition().x + orientacion.getX()*distanciaRaycast, nodo->getPosition().y - 2, orientacion.getX()*-Raycast23 + nodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
+	fin = btVector3(Raycast23 * orientacion.getZ() + nodo->getPosition().x + orientacion.getX() * distanciaRaycast, nodo->getPosition().y - 2, orientacion.getX() * -Raycast23 + nodo->getPosition().z + orientacion.getZ() * distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast2(inicio, fin);
@@ -147,7 +135,7 @@ void ItemTeledirigido::ActualizarRaytest() {
 
 	// Raycast central3 izquierda
 	//inicio = btVector3(-Raycast23 * orientacion.getZ() + nodo->getPosition().x + orientacion.getX(), nodo->getPosition().y - 1, orientacion.getX()*Raycast23 + nodo->getPosition().z + orientacion.getZ() );
-	fin = btVector3(-Raycast23 * orientacion.getZ() + nodo->getPosition().x + orientacion.getX()*distanciaRaycast, nodo->getPosition().y - 2, orientacion.getX()*Raycast23 + nodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
+	fin = btVector3(-Raycast23 * orientacion.getZ() + nodo->getPosition().x + orientacion.getX() * distanciaRaycast, nodo->getPosition().y - 2, orientacion.getX() * Raycast23 + nodo->getPosition().z + orientacion.getZ() * distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast3(inicio, fin);
@@ -156,7 +144,7 @@ void ItemTeledirigido::ActualizarRaytest() {
 	mundo->rayTest(inicio, fin, RayCast3);
 
 	//RAycast 4 izquierda
-	fin = btVector3(-Raycast45 * orientacion.getZ() + nodo->getPosition().x + orientacion.getX()*distanciaRaycast, nodo->getPosition().y - 2, orientacion.getX()*Raycast45 + nodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
+	fin = btVector3(-Raycast45 * orientacion.getZ() + nodo->getPosition().x + orientacion.getX() * distanciaRaycast, nodo->getPosition().y - 2, orientacion.getX() * Raycast45 + nodo->getPosition().z + orientacion.getZ() * distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast4(inicio, fin);
@@ -165,7 +153,7 @@ void ItemTeledirigido::ActualizarRaytest() {
 	mundo->rayTest(inicio, fin, RayCast4);
 
 	// Raycast central5 derecha
-	fin = btVector3(Raycast45*orientacion.getZ() + nodo->getPosition().x + orientacion.getX()*distanciaRaycast, nodo->getPosition().y - 2, orientacion.getX()*-Raycast45 + nodo->getPosition().z + orientacion.getZ() *distanciaRaycast);
+	fin = btVector3(Raycast45 * orientacion.getZ() + nodo->getPosition().x + orientacion.getX() * distanciaRaycast, nodo->getPosition().y - 2, orientacion.getX() * -Raycast45 + nodo->getPosition().z + orientacion.getZ() * distanciaRaycast);
 
 	mundo->getDebugDrawer()->drawLine(inicio, fin, btVector4(0, 0, 1, 1));
 	btCollisionWorld::AllHitsRayResultCallback RayCast5(inicio, fin);
@@ -174,12 +162,9 @@ void ItemTeledirigido::ActualizarRaytest() {
 	mundo->rayTest(inicio, fin, RayCast5);
 
 
-	if (RayCast1.hasHit())
-	{
-
-		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++)
-		{
-			obj3D *Node = static_cast<obj3D *>(RayCast1.m_collisionObjects[i]->getUserPointer());
+	if (RayCast1.hasHit()) {
+		for (int i = 0; i < RayCast1.m_hitFractions.size(); i++) {
+			obj3D* Node = static_cast<obj3D*>(RayCast1.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
 
 				if (strcmp(Node->getName(), "Jugador") == 0
@@ -191,14 +176,12 @@ void ItemTeledirigido::ActualizarRaytest() {
 				}
 			}
 		}
-
 	}
+
 	if (RayCast2.hasHit()) {
 		for (int i = 0; i < RayCast2.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast2.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast2.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
-
-
 				if (strcmp(Node->getName(), "Jugador") == 0
 					|| strcmp(Node->getName(), "JugadorIA") == 0
 					|| strcmp(Node->getName(), "JugadorRed") == 0) {
@@ -210,11 +193,11 @@ void ItemTeledirigido::ActualizarRaytest() {
 		}
 
 	}
+
 	if (RayCast3.hasHit()) {
 		for (int i = 0; i < RayCast3.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast3.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast3.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
-
 				if (strcmp(Node->getName(), "Jugador") == 0
 					|| strcmp(Node->getName(), "JugadorIA") == 0
 					|| strcmp(Node->getName(), "JugadorRed") == 0) {
@@ -225,11 +208,11 @@ void ItemTeledirigido::ActualizarRaytest() {
 			}
 		}
 	}
+
 	if (RayCast4.hasHit()) {
 		for (int i = 0; i < RayCast4.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast4.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast4.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
-
 				if (strcmp(Node->getName(), "Jugador") == 0
 					|| strcmp(Node->getName(), "JugadorIA") == 0
 					|| strcmp(Node->getName(), "JugadorRed") == 0) {
@@ -240,9 +223,10 @@ void ItemTeledirigido::ActualizarRaytest() {
 			}
 		}
 	}
+
 	if (RayCast5.hasHit()) {
 		for (int i = 0; i < RayCast5.m_hitFractions.size(); i++) {
-			obj3D *Node = static_cast<obj3D *>(RayCast5.m_collisionObjects[i]->getUserPointer());
+			obj3D* Node = static_cast<obj3D*>(RayCast5.m_collisionObjects[i]->getUserPointer());
 			if (Node) {
 
 				if (strcmp(Node->getName(), "Jugador") == 0
@@ -257,11 +241,7 @@ void ItemTeledirigido::ActualizarRaytest() {
 	}
 }
 
-
 void ItemTeledirigido::movimiento() {
-
-
-
 	int giro = 3;
 
 	btTransform trans;
@@ -273,20 +253,17 @@ void ItemTeledirigido::movimiento() {
 		quaternion.setEulerZYX(0, (nodo->getRotation().y + giro) * M_PI / 180, 0);
 		//cout<< "derecha" << endl;
 	}
-
 	else {
 		orientacion = orientacion.rotate(btVector3(0, 1, 0), (-giro) * M_PI / 180);
 		quaternion.setEulerZYX(0, (nodo->getRotation().y - giro) * M_PI / 180, 0);
 
 		//cout<< "izquierda" << endl;
 	}
+
 	trans.setRotation(quaternion);
 	rigidBody->setCenterOfMassTransform(trans);
 	rigidBody->setLinearVelocity(btVector3(orientacion.getX() * 150, 0, orientacion.getZ() * 150));
 	//cout<< anguloGiro << endl;
-
-
-
 }
 
 

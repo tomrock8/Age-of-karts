@@ -1,6 +1,10 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for C++  4
+#endif
+
 #include <iostream>
 #include <vector>
 #include <ctime>

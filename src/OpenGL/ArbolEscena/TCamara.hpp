@@ -1,7 +1,6 @@
 #ifndef TCAMARA_H
 #define TCAMARA_H
 
-#include "libGL.hpp"
 #include "TEntidad.hpp"
 
 class Shader;

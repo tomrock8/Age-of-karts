@@ -1,4 +1,5 @@
 #include "Camara3persona.hpp"
+#include "Corredor.hpp"
 
 Camara3persona::Camara3persona() {
 	/*

@@ -1,7 +1,6 @@
 #ifndef TLUZ_H
 #define TLUZ_H
 
-#include "libGL.hpp"
 #include "TEntidad.hpp"
 #include <vector>
 

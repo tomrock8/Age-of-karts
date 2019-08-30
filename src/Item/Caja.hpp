@@ -1,7 +1,6 @@
 #ifndef CAJA_H
 #define CAJA_H
 
-#include <iostream>
 #include "btBulletDynamicsCommon.h"
 #include "btBulletCollisionCommon.h"
 

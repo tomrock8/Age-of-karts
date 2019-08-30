@@ -25,7 +25,7 @@ public:
 	void setScale(GLfloat x, GLfloat y, GLfloat z);
 
 	// DIBUJADO
-	virtual void beginDraw(Shader *shader) override;
+	virtual void beginDraw(Shader* shader) override;
 	virtual void endDraw() override;
 
 private:

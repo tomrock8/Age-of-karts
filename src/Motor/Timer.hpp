@@ -5,8 +5,7 @@
 #include <ctime>
 #include <cstdlib>
 
-class Timer
-{
+class Timer {
 public:
 	~Timer();
 
@@ -17,15 +16,14 @@ public:
 
 	// METODOS GET
 	int getTimer();
-	static Timer *getInstancia();
-
+	static Timer* getInstancia();
 
 private:
 	Timer();
 
 	std::clock_t tiempo_inicial;
 	int tiempo_transcurrido;
-	static Timer *instancia;
+	static Timer* instancia;
 
 };
 

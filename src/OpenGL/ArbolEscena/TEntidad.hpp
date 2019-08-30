@@ -23,7 +23,7 @@ public:
 	glm::mat4 getViewMatrix();
 
 	// DIBUJADO
-	virtual void beginDraw(Shader *shader) = 0; //se ejecuta cuando se baja un nivel en el arbol de la escena
+	virtual void beginDraw(Shader* shader) = 0; //se ejecuta cuando se baja un nivel en el arbol de la escena
 	virtual void endDraw() = 0; //se ejecuta cuando se sube un nivel en el arbol de la escena
 
 protected://las matrices tienen que ser estaticas como las pilas (compartidas por todas las entidades)

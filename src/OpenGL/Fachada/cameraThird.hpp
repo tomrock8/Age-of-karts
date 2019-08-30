@@ -1,12 +1,13 @@
 #ifndef CAMERATHIRD_H 
 #define CAMERATHIRD_H 
 
-#include "libGL.hpp" 
-#include "btBulletDynamicsCommon.h"
 #ifdef _WIN32
 #define _USE_MATH_DEFINES // for C++  
 #include <cmath>  
 #endif
+
+#include "libGL.hpp" 
+#include "btBulletDynamicsCommon.h"
 
 class obj3D;
 class TNodo;

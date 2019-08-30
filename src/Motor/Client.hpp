@@ -3,11 +3,11 @@
 
 #include <iostream>
 #include <vector>
-#include "Corredor.hpp"
-#include "GestorJugadores.hpp"
-#include "Escena.hpp"
+#include "RaknetIncludes.hpp"
 
 #define MAX_PLAYERS 10
+
+class Corredor;
 
 struct structClientes {
 	std::string ip;
@@ -16,13 +16,9 @@ struct structClientes {
 	bool corredorJugador;
 };
 
-
-
 class Client
 {
-
 public:
-
 	~Client(void);
 
 	static Client* getInstancia();
@@ -101,7 +97,6 @@ private:
 	std::vector<structClientes> clientes;
 
 	unsigned char GetPacketIdentifier(RakNet::Packet* p);
-
 };
 
 #endif

@@ -1,11 +1,13 @@
 #include "Client.hpp"
 #include "NetworkEnums.hpp"
-#include <iostream>
-
+#include "Corredor.hpp"
 #include "CorredorJugador.hpp"
 #include "CorredorRed.hpp"
 #include "Obj3D.hpp"
 #include "TMotor.hpp"
+#include "GestorJugadores.hpp"
+#include "Escena.hpp"
+
 
 #define DEBUG_BUILD
 

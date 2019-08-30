@@ -10,10 +10,10 @@ using namespace std;
 
 class obj3D {
 public:
-	obj3D(TNodo *mesh, const char *name, GLuint id);
+	obj3D(TNodo* mesh, const char* name, GLuint id);
 	~obj3D();
 
-	void setNode(TNodo * m);
+	void setNode(TNodo* m);
 
 	void translate(glm::vec3);
 	void rotate(glm::vec3 axis, GLfloat angle);
@@ -23,10 +23,10 @@ public:
 
 	// METODOS GET
 	GLuint getID();
-	const char * getName();
+	const char* getName();
 	glm::vec3 getPosition();
 	glm::vec3 getRotation();
-	TNodo * getNode();
+	TNodo* getNode();
 	glm::vec3 getScale();
 	bool isVisible();
 
@@ -36,7 +36,7 @@ public:
 	void setPosition(float X, float Y, float Z);
 	void setRotation(float X, float Y, float Z);
 	void setScale(float X, float Y, float Z);
-	void setName(const char *nombre);
+	void setName(const char* nombre);
 	void setVisible(bool visible);
 
 
@@ -45,7 +45,7 @@ private:
 	glm::vec3 position;
 	glm::vec3 rotation;
 	glm::vec3 escala;
-	const char *name;
-	TNodo *node;
+	const char* name;
+	TNodo* node;
 };
 #endif

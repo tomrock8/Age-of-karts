@@ -3,15 +3,14 @@
 
 #include <vector>
 #include "TEntidad.hpp"
-#include "mesh.hpp"
-#include "boundingBox.hpp"
 
 class Shader;
+class mesh;
+class boundingBox;
 
-class TMalla : public TEntidad
-{
+class TMalla : public TEntidad {
 public:
-	TMalla(std::vector<mesh *> m);
+	TMalla(std::vector<mesh*> m);
 	~TMalla() override;
 
 	// VISIBILIDAD DEL OBJETO
@@ -19,14 +18,14 @@ public:
 	void setVisible(bool visible);
 
 	// DIBUJADO
-	virtual void beginDraw(Shader *shader) override;
+	virtual void beginDraw(Shader* shader) override;
 	virtual void endDraw() override;
-	void draw(Shader *shader);
+	void draw(Shader* shader);
 
 private:
 	// --- VARIABLES ---
-	std::vector<mesh *> malla; //Vector de mallas
+	std::vector<mesh*> malla; //Vector de mallas
 	bool visible; //Visibilidad de la malla
-	std::vector<boundingBox *> bBoxes; //Vector de bounding boxes de la malla
+	std::vector<boundingBox*> bBoxes; //Vector de bounding boxes de la malla
 };
 #endif

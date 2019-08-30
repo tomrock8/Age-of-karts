@@ -10,8 +10,8 @@ class Shader;
 class TAnimacion : public TEntidad
 {
 public:
-	TAnimacion(std::vector<TMalla *> frames);
-	TAnimacion(std::vector<TMalla *> frames, int firstFrame, int lastFrame);
+	TAnimacion(std::vector<TMalla*> frames);
+	TAnimacion(std::vector<TMalla*> frames, int firstFrame, int lastFrame);
 	~TAnimacion() override;
 	void ResetAnimation();
 
@@ -26,15 +26,15 @@ public:
 	void setFirstFrame(int firstFrame);
 	void setLastFrame(int lastFrame);
 	void setVisible(bool visible);
-	
+
 
 	// DIBUJADO
-	virtual void beginDraw(Shader *shader) override;
+	virtual void beginDraw(Shader* shader) override;
 	virtual void endDraw() override;
-	void draw(Shader *shader);
+	void draw(Shader* shader);
 
 private:
-	std::vector<TMalla *> frames; // Todos los frames de la animacion
+	std::vector<TMalla*> frames; // Todos los frames de la animacion
 
 	int lastFramePlayed; // Tiempo del ultimo frame reproducido
 	unsigned short framesPerSecond; // Valor temporal para cambio de animaciones
